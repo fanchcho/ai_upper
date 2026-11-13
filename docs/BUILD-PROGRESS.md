@@ -115,6 +115,8 @@ a269fae build: 记录本应用的运行依赖并补齐 deva_app 包标记
 aafac0e docs: 应用骨架说明
 ad1105d test(qt): 真实 PySide6 offscreen 界面冒烟脚本
 2f8fb17 fix(build): 模板 dependencies 恢复为空，应用依赖只写 app/requirements.txt
+c70b0ec docs: 构建进度台账
+145b431 chore: 清理未使用的 import 与动态 import
 ```
 
 上一轮（迁移计划）：`76d4009 docs: Deva→py_upper 迁移计划（158 通道契约主轴）`
