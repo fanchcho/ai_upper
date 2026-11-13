@@ -153,6 +153,55 @@ def test_config_changes_take_effect_on_the_next_turn(gateway):
     assert provider.name == "openai"
 
 
+def test_list_models_probes_the_configured_provider(tmp_path, monkeypatch):
+    """设置页的「拉取模型」：地址/适配器/密钥都从配置与密钥库现取，结果与 Deva 同形。"""
+    import asyncio
+    import json as jsonlib
+
+    from tests.scripted_transport import ScriptedTransport
+
+    monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
+    settings = SettingsService(tmp_path)
+    settings.set_config({"models": MODELS})
+    vault = SecretsVault(tmp_path)
+    vault.set_secret("p1", "sk-test-123")
+    transport = ScriptedTransport(
+        chunks=[
+            jsonlib.dumps(
+                {"data": [{"id": "claude-sonnet-5-5"}, {"id": "claude-haiku-5-5"}]}
+            ).encode()
+        ]
+    )
+    gw = ModelGateway(settings, vault, transport)
+
+    result = asyncio.run(gw.list_models("p1"))
+
+    assert result.ok is True
+    # 与 Deva 一致：去重后按名称排序
+    assert result.models == ("claude-haiku-5-5", "claude-sonnet-5-5")
+    call = transport.calls[-1]
+    assert call["url"] == "https://api.anthropic.com/v1/models"
+    assert call["headers"]["x-api-key"] == "sk-test-123"
+
+
+def test_list_models_failure_is_reported_not_raised(tmp_path, monkeypatch):
+    """探针失败只回 ok=False，界面据此退回手动输入（不是崩溃，也不是假成功）。"""
+    import asyncio
+
+    from tests.scripted_transport import ScriptedTransport
+
+    monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
+    settings = SettingsService(tmp_path)
+    settings.set_config({"models": MODELS})
+    gw = ModelGateway(
+        settings, SecretsVault(tmp_path), ScriptedTransport(connect_error="连接被拒绝")
+    )
+    result = asyncio.run(gw.list_models("p2"))
+    assert result.ok is False
+    assert result.kind == "network"
+    assert "连接被拒绝" in (result.message or "")
+
+
 def test_compaction_section_is_read_from_config(tmp_path):
     settings = SettingsService(tmp_path)
     settings.set_config({"compaction": {"enabled": False, "triggerRatio": 0.5}})

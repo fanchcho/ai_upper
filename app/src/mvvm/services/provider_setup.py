@@ -19,7 +19,9 @@ from mvvm.services.http_client import ProxyConfig
 from mvvm.services.model_resolve import ResolvedModel, resolve_default_model, resolve_ref
 from mvvm.services.provider_gateway import Provider
 from mvvm.services.provider_registry import (
+    ListModelsResult,
     build_provider,
+    list_models,
     normalized_not_configured,
 )
 from mvvm.services.provider_gateway import ProviderError
@@ -156,6 +158,36 @@ class ModelGateway:
         if not adapter:
             return None
         return effort_request(adapter, model, base_url, self.effort_level(session_effort))
+
+    async def list_models(
+        self,
+        provider_id: str,
+        adapter: Optional[str] = None,
+        base_url: Optional[str] = None,
+    ) -> ListModelsResult:
+        """拉某个服务商的模型清单（设置页「拉取模型」按钮）。
+
+        地址与适配器默认从配置里现查；探针失败只回 `ok=False`，界面据此退回手动输入。
+        """
+        target = self._provider_entry(provider_id)
+        adapter = adapter or target.get("adapter") or "anthropic"
+        base_url = base_url or target.get("apiHost") or ""
+        return await list_models(
+            adapter,
+            base_url,
+            self.api_key(provider_id),
+            self._transport or build_transport(self.settings.proxy()),
+            run_id=f"models-{provider_id}",
+        )
+
+    def _provider_entry(self, provider_id: str) -> dict[str, Any]:
+        models = self.settings.models_section()
+        providers = models.get("providers")
+        if isinstance(providers, list):
+            for provider in providers:
+                if isinstance(provider, dict) and provider.get("id") == provider_id:
+                    return provider
+        return {}
 
     def compaction_settings(self) -> Any:
         """`config.json` 的 compaction 段 → 配置对象（非法值回落默认）。"""
