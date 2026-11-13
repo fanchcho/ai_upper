@@ -161,7 +161,12 @@ class ChatViewModel(BaseViewModel):
         self.busy_property = ObservableProperty(False)
         self._register_property("busy", self.busy_property)
 
+        # 正在流式输出的助手正文（未落盘）。界面把它画在时间线末尾，回合结束时清空。
+        self.streaming_property = PropertyFactory.create("", "streaming")
+        self._register_property("streaming", self.streaming_property)
+
         self.send_command = RelayCommand(execute=self.send, can_execute=self.can_send)
+        self.stop_command = RelayCommand(execute=self.cancel, can_execute=lambda _=None: self.busy)
 
     # ── 只读视图 ──────────────────────────────────────────────────────────
     @property
@@ -183,6 +188,11 @@ class ChatViewModel(BaseViewModel):
     @property
     def busy(self) -> bool:
         return bool(self.busy_property.get_value())
+
+    @property
+    def streaming(self) -> str:
+        """本轮已经收到、但还没落盘的助手正文（流式刷新的数据源）。"""
+        return str(self.streaming_property.get_value() or "")
 
     @property
     def session_id(self) -> str:
@@ -278,6 +288,18 @@ class ChatViewModel(BaseViewModel):
             self._cancel.cancel()
             self.status_property.set_value("正在停止…")
 
+    # ── 流式刷新 ──────────────────────────────────────────────────────────
+    def _push_streaming(self, text: str) -> None:
+        """把本轮已收到的正文推给界面（未落盘）。后台线程调用时经队列转到 UI 线程。"""
+        self._ui(lambda: self.streaming_property.set_value(text))
+
+    def _clear_streaming(self) -> None:
+        def apply() -> None:
+            if self.streaming_property.get_value():
+                self.streaming_property.set_value("")
+
+        self._ui(apply)
+
     # ── 回合 ──────────────────────────────────────────────────────────────
     def _provider_for(
         self, cancel: Optional[CancelToken], session_id: str, session_model: Optional[str]
@@ -313,6 +335,7 @@ class ChatViewModel(BaseViewModel):
             raise RuntimeError("没有打开会话：先调用 open_session()")
         self._ui(lambda: self.busy_property.set_value(True))
         self._ui(lambda: self.error_property.set_value(""))
+        self._ui(lambda: self.streaming_property.set_value(""))
         self._ui(lambda: self.status_property.set_value("思考中…"))
         try:
             session = self.store.ensure_session(self._session_id)
@@ -330,10 +353,12 @@ class ChatViewModel(BaseViewModel):
                 session.id, provider=provider, model=model, cancel=cancel
             )
             if answer:
-                self.store.append_message(
-                    session.id, Message(role="assistant", content=[TextPart(text=answer)])
-                )
-                self._append_display("assistant", answer)
+                # 中止时 `_agent_loop` 已经落盘并展示过半截正文；这里只补正常结束的最终回复。
+                if stop != "aborted":
+                    self.store.append_message(
+                        session.id, Message(role="assistant", content=[TextPart(text=answer)])
+                    )
+                    self._append_display("assistant", answer)
             if stop == "aborted":
                 self._ui(lambda: self.status_property.set_value("已停止"))
             else:
@@ -394,6 +419,7 @@ class ChatViewModel(BaseViewModel):
                     break
                 if isinstance(event, TextDelta):
                     text_parts.append(event.text)
+                    self._push_streaming("".join(text_parts))
                     self.emit({"type": "text_delta", "text": event.text})
                 elif isinstance(event, ThinkingDelta):
                     self.emit({"type": "thinking_delta", "text": event.text})
@@ -409,13 +435,19 @@ class ChatViewModel(BaseViewModel):
                 elif isinstance(event, Done):
                     stop_reason = event.stop_reason
 
+            # 适配器收到取消后直接收流（不给 Done）：这里补一次检查，别把半截流当正常结束。
+            if cancel is not None and cancel.cancelled:
+                aborted = True
             text = "".join(text_parts)
+            # 这一步的正文要么进了工具调用消息、要么就是最终回复；都落盘了，清掉流式区。
+            self._clear_streaming()
             if aborted:
-                # 中止：把已收到的半截正文落盘（重开后看得出这一轮被打断）。
+                # 中止：把已收到的半截正文落盘并展示（重开后看得出这一轮被打断）。
                 if text:
                     self.store.append_message(
                         session_id, Message(role="assistant", content=[TextPart(text=text)])
                     )
+                    self._append_display("assistant", text)
                 return text, "aborted"
 
             if calls:

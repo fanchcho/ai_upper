@@ -58,6 +58,7 @@ class FakeWindow:
 class FakeLabel:
     def __init__(self, text: str = "") -> None:
         self.text = text
+        self.visible = True
 
     def setText(self, value: str) -> None:  # noqa: N802
         self.text = value
@@ -65,11 +66,21 @@ class FakeLabel:
     def setWordWrap(self, value: bool) -> None:  # noqa: N802
         self.word_wrap = value
 
+    def show(self) -> None:
+        self.visible = True
+
+    def hide(self) -> None:
+        self.visible = False
+
 
 class FakeButton:
     def __init__(self, text: str = "") -> None:
         self.text = text
         self.clicked = FakeSignal()
+        self.enabled = True
+
+    def setEnabled(self, value: bool) -> None:  # noqa: N802
+        self.enabled = value
 
     def click(self) -> None:
         self.clicked.emit(False)
@@ -109,8 +120,29 @@ class FakeLayout:
     def addWidget(self, widget, *args) -> None:  # noqa: N802
         self.widgets.append(widget)
 
+    def addLayout(self, layout) -> None:  # noqa: N802
+        self.widgets.append(layout)
+
     def setContentsMargins(self, *args) -> None:  # noqa: N802
         pass
+
+
+class FakeTimer:
+    """QTimer 的假实现：只记录连接，由测试决定何时触发（Qt 事件循环不在这里跑）。"""
+
+    def __init__(self) -> None:
+        self.interval = 0
+        self.started = False
+        self.timeout = FakeSignal()
+
+    def setInterval(self, value: int) -> None:  # noqa: N802
+        self.interval = value
+
+    def start(self) -> None:
+        self.started = True
+
+    def stop(self) -> None:
+        self.started = False
 
 
 class FakeApplication:
@@ -146,9 +178,16 @@ def fake_qt(monkeypatch):
         "QPushButton": FakeButton,
         "QTextBrowser": FakeTextBrowser,
         "QPlainTextEdit": FakePlainTextEdit,
+        "QHBoxLayout": FakeLayout,
     }
     install_fake_binding(
-        monkeypatch, {"PySide6": {"QtCore": {"Qt": object()}, "QtWidgets": widgets}}
+        monkeypatch,
+        {
+            "PySide6": {
+                "QtCore": {"Qt": object(), "QTimer": FakeTimer},
+                "QtWidgets": widgets,
+            }
+        },
     )
 
 
