@@ -2,37 +2,64 @@
 
 > 规则：只写**实际跑出来的**结果。命令与输出都是真的；没跑过的一律归入「已实现未验证」或
 > 「未实现」，不许把没跑通的说成跑通。
-> 最近更新：2026-11-13（第三阶段：压缩接线、真实 provider 装配、流式刷新与停止）
+> 最近更新：2026-11-13（第四阶段收尾：工具卡 / 内联图片 / 待办胶囊已提交，全量 `772 passed, 5 skipped`）
 
 ## 0. 本轮起点（续跑对账）
 
-上一轮在 1 小时上限处被系统中断，中断时全量测试 `613 passed / 5 skipped`，正在接压缩。
+上一轮在第三阶段结束时全量 `634 passed / 5 skipped`，已交付压缩接线、真实 provider 装配、
+流式刷新与停止，Qt 页面只做到「单窗口最小聊天界面」。
 
-本轮（第三阶段）起点：
+本轮（第四阶段）起点：
 
 ```text
-$ git log --oneline -8
-50e4459 feat(chat): 压缩接进对话回合，回合移入后台线程并加事件队列
-7738aab feat(compaction): 上下文压缩与 .jsonl 拆分存盘
-a7a39c9 docs: 台账按三档重写
-ec9a7ad feat(provider): 三协议真实适配器
-...
+$ git log --oneline -4
+9548898 feat(ui): 主窗口三栏装配：会话列表、聊天面板、设置页
+3061e48 feat(vm): 会话列表与设置页 ViewModel，模型清单探针接通
+9109be3 docs: 台账刷新到第三阶段
+61053ae feat(ui): 流式刷新与停止按钮
 
 $ git status --porcelain
- M app/src/deva_app/__main__.py
- M app/src/mvvm/view_models/chat_vm.py
-?? app/src/mvvm/services/provider_setup.py
-?? app/tests/test_provider_setup.py
+ M app/src/mvvm/services/tool_runtime.py
+?? app/src/mvvm/services/glob_match.py
+?? app/src/mvvm/services/image_prep.py
+?? app/src/mvvm/services/office_text.py
 
 $ git branch -vv
-* develop 50e4459 [origin/develop: ahead 3]
+* develop 9548898 [origin/develop: ahead 8]
 ```
 
 远端关系：`origin` = `git@github.com:fanchcho/ai_upper.git`；`upstream` 为旧远端，只读。
 远端 `main` = `f91562b`；本地工作分支 `develop`。
 
-本轮完成两个可提交单元并各有一条 commit：真实服务商装配（§1.7）、流式刷新与停止（§1.8）；
+本轮完成的可提交单元：
+
+1. 工具全集 + 图片/Office 分支 + 待办清单接入（§1.9，commit `e4b1ed1`）；
+2. Qt 页面收尾：工具卡 / 内联图片 / 待办胶囊（§1.10，commit `044cda0`）。
+
 台账在每个单元后刷新，保证任何时刻被截断都能凭台账续上。
+
+**当前状态（真实命令输出）：**
+
+```text
+$ git log --oneline -3
+044cda0 feat(ui): 工具卡 / 内联图片 / 待办胶囊，历史重开后保留工具名与图片
+e4b1ed1 feat(tools): 工具全集（10 个）+ read_file 图片/Office 分支 + todo_write 接入会话
+9548898 feat(ui): 主窗口三栏装配：会话列表、聊天面板、设置页
+
+$ git branch -vv
+* develop 044cda0 [origin/develop: ahead 10]
+  main    f91562b [upstream/main] Initial commit
+
+$ git status --porcelain
+ M docs/BUILD-PROGRESS.md
+?? audit-tools/screenshot_app.py
+?? audit-tools/verify_demo_page.py
+?? audit-tools/xvfb_run.py
+?? out/
+```
+
+**本轮中断点（若被截断从这里续）：** 工具层、Qt 页面（工具卡 / 图片 / 待办胶囊）均已提交并全绿。
+尚未完成：158 通道结论表、打包入口指向 `deva_app` 并真实构建、最终中文报告落盘。
 
 ---
 
@@ -134,6 +161,67 @@ $ cd app && ../.venv/bin/python -m pytest -q
 
 **三协议真实网络调用仍未验证**（无密钥、容器不保证出网），见 §2。
 
+### 1.9 阶段 I：工具全集 + 图片/Office 读取 + 待办接入（commit `e4b1ed1`）
+
+| # | 项 | 验证方式（真实输出） |
+|---|---|---|
+| 44 | 注册 10 个可离线工具：`read_file` / `list_dir` / `glob` / `grep` / `web_fetch` / `write_file` / `edit_file` / `run_command` / `present_files` / `todo_write` | `pytest tests/test_tools_full.py -q` → `55 passed` |
+| 45 | `read_file` 图片分支：按魔数判 mime（不信扩展名）、超大图拒绝、返回 `ImagePart` | 同上（`test_read_file_image_returns_image_part` / `_mime_follows_magic_not_extension` / `_rejects_oversized_image`） |
+| 46 | `read_file` Office 分支：docx/xlsx/pptx 自己解 zip+XML 出文本（不引 python-docx / openpyxl），老式二进制给出明确错误 | 同上（`_docx_returns_numbered_text` / `_xlsx_and_pptx` / `_office_legacy_binary_is_clear_error`） |
+| 47 | `todo_write` 接入会话：快照折叠、非法载荷明确报错、无 sink 时显式失败 | 同上 + `pytest tests/test_chat_vm_todos.py -q` → `6 passed` |
+| 48 | Deva 19 个工具只实现 10 个，其余 9 个（`ask_user` / 需挂载工作区的子代理类等）刻意缺失 | 同上（`test_unknown_tool_and_bad_arguments`）：未知工具明确报错，不静默 |
+| 49 | 全量回归 | `pytest -q` → `750 passed, 5 skipped` |
+
+### 1.10 阶段 J：工具卡 / 内联图片 / 待办胶囊（commit `044cda0`）
+
+| # | 项 | 验证方式（真实输出） |
+|---|---|---|
+| 50 | 工具结果在历史里画成卡片（单格 `table`：Qt 富文本只有 table 上的块级背景/边框稳定生效） | `pytest tests/test_transcript_render.py -q` → `17 passed`；`pytest tests/test_deva_panes.py -q` → `28 passed` |
+| 51 | 内联图片：`deva-image:N` 占位 URL + `addResource` **先于** `setHtml`（四个绑定上唯一一致顺序） | 同上（`test_chat_pane_registers_inline_image_as_document_resource`）；真 Qt 下 `document().resource(...)` 取回非空 |
+| 52 | 待办胶囊：摘要行 + `展开清单` / `收起清单` / `取消清单`，无条目时保持收起 | 同上（`test_chat_pane_todo_capsule_expands_and_collapses` / `test_chat_pane_cancel_button_cancels_active_list`） |
+| 53 | 历史重开保留工具名与图片（此前会退化成「工具（成功）」且图丢失）：按 `tool_use_id` 反查前一条 assistant 的 `tool_use` | `pytest tests/test_chat_vm_todos.py -q` → `6 passed`（`test_history_tool_entries_keep_tool_name_and_images`） |
+| 54 | 5 张 offscreen 真截图，脚本化 provider 回放 `read_file` + `todo_write`，走完整回合 | 见下方真实输出 |
+| 55 | 全量回归 | `pytest -q` → `772 passed, 5 skipped` |
+
+截图脚本真实输出（逐字）：
+
+```text
+$ QT_QPA_PLATFORM=offscreen PYTHONPATH=app/src .venv/bin/python scripts/deva_ui_shots.py /tmp/shots1
+status: 就绪
+transcript head: ['［你］', '帮我把工作区里的笔记过一遍', '［你］']
+session count: 2
+saved: /tmp/shots1/01-chat.png True (1080, 720)
+settings page: list
+saved: /tmp/shots1/02-settings-list.png True (1080, 720)
+provider page: provider p1
+key status: 未配置密钥
+models: 2
+saved: /tmp/shots1/03-settings-provider.png True (1080, 720)
+explain tool session: sess_mwf4my70_28e0b9
+tool card present: True
+image resource registered: True
+todo pill: 待办：整理工作区｜读笔记（已完成 1/3）
+saved: /tmp/shots1/04-tool-card-and-todo.png True (1080, 720)
+todo details: ['[x] 看图片', '[~] 读笔记', '[ ] 写总结']
+saved: /tmp/shots1/05-todo-expanded.png True (1080, 720)
+UI SHOTS PASS
+```
+
+全量回归原始输出：
+
+```text
+$ cd app && ../.venv/bin/python -m pytest -q
+........................................................................ [ 74%]
+........................................................................ [ 83%]
+........................................................................ [ 92%]
+.........................................................                [100%]
+772 passed, 5 skipped in 21.97s
+```
+
+**关于权限确认：** 对照 Deva 源码（`exec-policy.ts` 文件头与 `chat.ts:5160`「权限闸门（纯同步策略，
+零弹框）：所有工具一律放行…交互轮唯一的拒绝是「用户暂不挂载工作区」」），Deva 自 2026-10-09 起
+**没有**逐工具权限确认弹框。因此不做权限确认 UI——做了就是臆造业务功能。py_upper 的
+`WorkspaceGuard` 受信根是已记录的刻意差异（Deva 用挂载工作区，py_upper 用受信根目录）。
 
 ---
 
@@ -142,19 +230,19 @@ $ cd app && ../.venv/bin/python -m pytest -q
 | 项 | 现状 | 为什么没验证 / 怎么验证 |
 |---|---|---|
 | 真实网络调用（Anthropic / OpenAI / Responses） | 适配器与装配线都完整，事件流解析有离线测试 | **无可用密钥**，本环境也不保证出网。接上密钥后跑一次真实请求即可确认；绝不以离线测试冒充真实成功 |
-| 真实窗口（有显示服务器）下的人工交互 | 只跑了 offscreen | 容器无 X/Wayland。真控件 + 真信号已覆盖装配与绑定；可 `xvfb-run` 截图 |
-| 打包后的应用能起新应用入口 | 未跑 | 打包入口仍指向旧 `main.py`；改入口是破坏性变更，待确认后执行 |
-| `read_file` 的图片 / Office 分支 | 未实现（仅文本） | 需 Pillow / docx 等依赖；工具描述已声明只读文本 |
-| 流式刷新在真窗口里的观感（40ms 节流） | 逻辑与假控件都有测试 | 需要真 Qt 事件循环 + 长回复；offscreen 下可跑脚本截图，真人手感无法验证 |
+| `web_fetch` 真实抓网页 | 只测了非 http 拒绝、缺 url、HTML→文本；无真网络用例 | 同上（不出网）。离线可测的部分已覆盖 |
+| 真实窗口（有 X/Wayland）下的人工观感 | 只跑了 offscreen（`/tmp/shots1/*.png`，1080×720 真实渲染） | 容器无显示服务器。可 `xvfb-run` 再截一次；真人手感（滚动、字体、DPI）无法在容器验证 |
+| 打包后产物能起新应用入口 | 本轮补齐入口与构建（§3.4），产物能跑 | 只在容器（linux-arm64）构建过；Windows/macOS 打包未验证 |
+| 流式刷新在真窗口里的观感（40ms 节流） | 逻辑与假控件都有测试 | 需要长回复 + 真人观察；offscreen 能跑但看不出手感 |
 
 ## 3 档三：未实现（原因与阻塞）
 
 | 项 | 原因 | 风险 |
 |---|---|---|
-| 会话列表/设置/工具卡片/状态栏页面 | 未做 | 只有单窗口最小聊天界面；设置页是「改模型/密钥下一轮生效」的唯一入口 |
-| 工具全集与权限确认 | 只有 `read_file` + 允许/拒绝 | 模型只能读文本 |
-| 158 通道逐条结论表 | 未做 | 迁移契约没有闭环 |
-| 打包入口指向新应用 | 未改 | 打出来的仍是旧应用 |
+| 158 通道逐条结论表 | 本轮未完成 | 迁移契约尚未闭环；`docs/MIGRATION-PLAN.md` 仍是逐条清单，没有判定列 |
+| 工作区挂载交互轮 | Deva 的挂载卡是交互轮唯一闸门，py_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区；需要做挂载卡才能对齐 |
+| 子智能体 / `task` 类工具（Deva 19 工具里的 9 个） | 依赖挂载工作区与多轮编排，未迁移 | 模型拿不到这几个工具时会退化为单轮 |
+| 真机人工验收（键盘焦点、IME、拖拽） | 容器无显示服务器 | 只能由人验 |
 
 ## 4. commit 列表
 
@@ -181,16 +269,15 @@ $ cd app && ../.venv/bin/python -m pytest -q
 | `50e4459` | feat(chat): 压缩接进对话回合，回合移入后台线程并加事件队列 |
 | `ba20847` | feat(app): 真实服务商装配，入口改用配置+密钥+适配器 |
 | `61053ae` | feat(ui): 流式刷新与停止按钮 |
+| `e4b1ed1` | feat(tools): 工具全集（10 个）+ read_file 图片/Office 分支 + todo_write 接入会话 |
+| `044cda0` | feat(ui): 工具卡 / 内联图片 / 待办胶囊，历史重开后保留工具名与图片 |
 
 ## 5. 下一轮入口
 
-当前起点：全量 `634 passed / 5 skipped`；`origin/develop` 落后本地 `6` 个 commit（未推送）。
+当前起点：全量 `772 passed / 5 skipped`；`origin/develop` 落后本地 `10` 个 commit（未推送）。
 
-1. Qt 页面：会话列表（新建/切换/改名/删除/归档）、设置页（服务商/模型/密钥/BaseURL + 拉模型清单）、
-   工具卡片、状态栏。ViewModel 侧的后端能力（`ChatSessionStore`、`SettingsService`、`SecretsVault`、
-   `ModelGateway`、`provider_registry.list_models`）都已具备，只差界面与命令。
-2. 工具全集与权限确认：按 `tools.ts` 的 19 个工具名逐一对位，`write_file` / `run_command` 之类
-   必须走权限确认。
-3. `read_file` 图片分支（Pillow）与 Office 分支（docx），加依赖前先评估能否自己解析 zip XML。
-4. 158 通道结论表：重写项给「通道 → 新实现文件:行号 → 覆盖测试」；44 条待定逐条判定；82 条丢弃给替代路径。
-5. 打包入口指向 `deva_app` 并实际构建。
+1. 158 通道结论表（唯一硬缺口）：重写项给「通道 → 新实现文件:行号 → 覆盖测试」；
+   44 条待定逐条判定；82 条丢弃给替代路径。
+2. 打包：入口指向 `deva_app` 并实际构建一次（linux-arm64 跑通后，Windows/macOS 仍未验）。
+3. 工作区挂载交互轮（对齐 Deva 的挂载卡），完成后才能谈子智能体类工具。
+4. 真实密钥接上后跑一次三协议真实请求，把 §2 第一行落到档一。
