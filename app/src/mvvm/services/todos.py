@@ -213,6 +213,15 @@ def todo_reminder_text(
     )
 
 
+def todo_user_cancel_note_text(todo_list: dict[str, Any]) -> str:
+    """用户手动取消清单后，下一条用户消息带给模型的说明。"""
+    title = f"「{todo_list['title']}」" if todo_list.get("title") else ""
+    return (
+        f"【待办清单】用户已手动取消待办清单{title}，不要再继续更新它；"
+        "之后若要开始新的多步骤任务，请用 todo_write 传 new_list: true 另建清单。"
+    )
+
+
 __all__ = [
     "MAX_CONTENT",
     "MAX_ITEMS",
@@ -227,4 +236,5 @@ __all__ = [
     "todo_reminder_text",
     "todo_result_text",
     "todo_snapshot_text",
+    "todo_user_cancel_note_text",
 ]

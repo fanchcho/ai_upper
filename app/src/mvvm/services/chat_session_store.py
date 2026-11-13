@@ -258,13 +258,28 @@ class ChatSessionStore:
             session.model = model
         return session
 
-    def append_message(self, session_id: str, message: Message, *, save: bool = True) -> StoredSession:
-        """追加一条消息；默认立即落盘（用户要的「追加消息 → 重启读回」）。"""
+    def append_message(
+        self,
+        session_id: str,
+        message: Message,
+        *,
+        save: bool = True,
+        title_seed: Optional[str] = None,
+    ) -> StoredSession:
+        """追加一条消息；默认立即落盘（用户要的「追加消息 → 重启读回」）。
+
+        `title_seed`：派生标题用的用户原文。回合里会给用户消息前置「待办清单提醒」之类的
+        系统说明，直接拿整条消息派生标题会得到说明文字；Deva 取的是用户原文
+        （`deriveTitle(text)`），这里显式传入。
+        """
         session = self.ensure_session(session_id)
         session.messages.append(message)
         session.touch()
         if not session.title:
-            title = self._title_from(session)
+            if title_seed is not None:
+                title = derive_title(title_seed)
+            else:
+                title = self._title_from(session)
             if title:
                 session.title = title
         if save:

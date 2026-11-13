@@ -27,6 +27,7 @@ from typing import Any, Callable, Optional
 
 from mvvm.core import BaseViewModel, ObservableProperty, PropertyFactory, RelayCommand
 from mvvm.models.chat_models import Message, TextPart, ToolUsePart
+from mvvm.models.chat_models import now_ms
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.compaction import (
     DEFAULT_CONTEXT_WINDOW,
@@ -38,7 +39,13 @@ from mvvm.services.compaction import (
     needs_compaction,
     needs_compaction_mid_turn,
 )
-from mvvm.services.fake_provider import tool_result_message
+from mvvm.services.todos import (
+    active_todo_list,
+    fold_todos,
+    todo_reminder_text,
+    todo_user_cancel_note_text,
+)
+from mvvm.services.tool_results import apply_todo_write_to, tool_result_message
 from mvvm.services.model_view import (
     COMPACT_MARKER,
     is_auto_nudge,
@@ -139,6 +146,9 @@ class ChatViewModel(BaseViewModel):
         self._events: queue.Queue[Callable[[], None]] = queue.Queue()
         self._worker_ident: Optional[int] = None
         self.emit: Callable[[dict[str, Any]], None] = lambda event: None
+        # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
+        # 工具层与界面层互不认识，靠这个回调对接。
+        self.tools.todo_sink = self._apply_todo
         super().__init__()
 
     # ── 属性 ──────────────────────────────────────────────────────────────
@@ -164,6 +174,10 @@ class ChatViewModel(BaseViewModel):
         # 正在流式输出的助手正文（未落盘）。界面把它画在时间线末尾，回合结束时清空。
         self.streaming_property = PropertyFactory.create("", "streaming")
         self._register_property("streaming", self.streaming_property)
+
+        # 当前进行中的待办清单（`todo_write` 写会话边车后同步到这里，界面画胶囊条）。
+        self.todos_state_property = ObservableProperty(None)
+        self._register_property("todos_state", self.todos_state_property)
 
         self.send_command = RelayCommand(execute=self.send, can_execute=self.can_send)
         self.stop_command = RelayCommand(execute=self.cancel, can_execute=lambda _=None: self.busy)
@@ -203,6 +217,55 @@ class ChatViewModel(BaseViewModel):
         """本 VM 生命周期内执行过的工具结果（测试断言允许/拒绝两条分支用）。"""
         return list(self._tool_results)
 
+    @property
+    def todos(self) -> Optional[dict[str, Any]]:
+        """当前进行中的待办清单（胶囊条数据）；没有则 None。"""
+        session = self.store.ensure_session(self._session_id) if self._session_id else None
+        if session is None:
+            return None
+        return active_todo_list(session.todos, session.todoCancelled)
+
+    # ── 待办清单 ──────────────────────────────────────────────────────────
+    def _apply_todo(self, tool_use_id: str, arguments: Any) -> ToolResult:
+        """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
+        if not self._session_id:
+            return ToolResult("当前没有打开的会话，无法记录待办清单。", True, "无会话")
+        session = self.store.ensure_session(self._session_id)
+        applied = apply_todo_write_to(
+            session.todos, session.todoCancelled, tool_use_id, arguments, now_ms()
+        )
+        if applied.changed:
+            session.todos = applied.entries
+            session.todoCancelled = applied.cancelled
+            session.touch()
+            self.store.save(session.id)
+            state = applied.active
+            self._ui(lambda: self.todos_state_property.set_value(state))
+            self.emit({"type": "todos", "state": state})
+            if applied.done is not None:
+                self.emit({"type": "todo_done", **applied.done})
+        return applied.result
+
+    def cancel_todos(self) -> bool:
+        """用户在清单面板里手动取消当前清单；返回是否确有可取消的清单。"""
+        session = self.store.ensure_session(self._session_id) if self._session_id else None
+        if session is None:
+            return False
+        current = active_todo_list(session.todos, session.todoCancelled)
+        if current is None:
+            return False
+        session.todoCancelled = [*(session.todoCancelled or []), current["id"]]
+        # 下一条用户消息里告诉模型清单已被用户取消（Deva `todoCancelNote`）。
+        session.todoCancelNote = todo_user_cancel_note_text(current)
+        self.store.save(session.id)
+        self.todos_state_property.set_value(active_todo_list(session.todos, session.todoCancelled))
+        self.emit({"type": "todos", "state": None})
+        return True
+
+    def _todo_reminder(self, session: Any) -> str:
+        """新一轮开始时仍留着未完成的清单：随本轮用户消息提醒模型取舍（Deva 同口径）。"""
+        return todo_reminder_text(session.todos, session.todoCancelled)
+
     def can_send(self, parameter: Any = None) -> bool:
         return not self.busy and bool(str(self.input_text_property.get_value() or "").strip())
 
@@ -211,8 +274,10 @@ class ChatViewModel(BaseViewModel):
         """打开（或新建）一条会话，把历史读进 transcript。"""
         session = self.store.ensure_session(session_id)
         self._session_id = session.id
+        self.tools.set_session(session.id)
         self.title_property.set_value(session.title)
         self.transcript_property.set_value(_display_messages(session.messages))
+        self.todos_state_property.set_value(active_todo_list(session.todos, session.todoCancelled))
         self.status_property.set_value("就绪")
         self.error_property.set_value("")
 
@@ -341,8 +406,23 @@ class ChatViewModel(BaseViewModel):
             session = self.store.ensure_session(self._session_id)
             # 模型在回合开头定一次：中途改设置不影响这一轮（与 Deva 一轮内模型不变一致）。
             provider, model = self._provider_for(cancel, session.id, session.model)
-            user_message = Message(role="user", content=[TextPart(text=text)])
-            self.store.append_message(session.id, user_message)
+            # 待办清单的两条随用户消息带给模型的说明（Deva `chat.ts` 约 6053 行）：
+            # 用户手动取消清单的告知（只带一次），以及上一轮遗留的未完成清单的取舍提醒。
+            notes: list[str] = []
+            if session.todoCancelNote:
+                notes.append(session.todoCancelNote)
+                session.todoCancelNote = None
+            reminder = self._todo_reminder(session)
+            if reminder:
+                notes.append(reminder)
+            user_parts: list[Any] = [TextPart(text=note) for note in notes]
+            user_parts.append(TextPart(text=text))
+            user_message = Message(role="user", content=user_parts)
+            self.store.append_message(session.id, user_message, title_seed=text)
+            # 取消标记要能掐断正在执行的 `run_command`：把「本轮是否已取消」交给工具层。
+            self.tools.cancel_check = (lambda: True) if cancel is None else (
+                lambda: cancel.cancelled
+            )
             self._append_display("user", text)
             self._ui(lambda: self.title_property.set_value(session.title))
             self.emit({"type": "user", "text": text})
@@ -467,20 +547,34 @@ class ChatViewModel(BaseViewModel):
                             tool_result_message(call, "本轮已被用户停止，工具未执行。", True),
                         )
                         return text, "aborted"
-                    result = self.tools.execute(call.name, call.input)
+                    result = self.tools.execute(call.name, call.input, tool_use_id=call.id)
                     self._tool_results.append(result)
                     self.store.append_message(
-                        session_id, tool_result_message(call, result.content, result.is_error)
+                        session_id,
+                        tool_result_message(
+                            call, result.content, result.is_error, images=result.images
+                        ),
                     )
                     self._append_display(
-                        "tool", result.content, is_error=result.is_error, name=call.name
+                        "tool",
+                        result.content,
+                        is_error=result.is_error,
+                        name=call.name,
+                        summary=result.summary,
+                        images=[
+                            {"mediaType": part.mediaType, "name": part.name, "data": part.data}
+                            for part in (result.images or [])
+                        ],
                     )
                     self.emit(
                         {
                             "type": "tool_result",
+                            "id": call.id,
                             "name": call.name,
                             "content": result.content,
+                            "summary": result.summary,
                             "is_error": result.is_error,
+                            "images": bool(result.images),
                         }
                     )
                 answer = text

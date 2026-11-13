@@ -118,13 +118,13 @@ def _chunks(text: str, size: int = 8) -> list[str]:
 
 
 def tool_result_message(call: ToolCall, content: str, is_error: bool) -> Message:
-    """把工具结果包成 user 消息（Anthropic 风味：工具结果挂在 user 上）。"""
-    return Message(
-        role="user",
-        content=[
-            ToolResultPart(toolUseId=call.id, content=content, isError=True if is_error else None)
-        ],
-    )
+    """把工具结果包成 user 消息（Anthropic 风味：工具结果挂在 user 上）。
+
+    保留这个名字只为兼容早期测试；生产代码用 `mvvm.services.tool_results`。
+    """
+    from mvvm.services.tool_results import tool_result_message as build
+
+    return build(call, content, is_error)
 
 
 __all__ = ["FakeProvider", "tool_result_message"]

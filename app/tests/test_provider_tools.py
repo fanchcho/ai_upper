@@ -276,8 +276,24 @@ def test_numbered_text_clips_long_lines_and_guards_output_size():
 def test_tool_specs_are_advertised():
     tools = ToolRuntime(WorkspaceGuard())
     specs = tools.specs()
-    assert [s.name for s in specs] == ["read_file"]
-    assert specs[0].input_schema["required"] == ["path"]
+    # 与 Deva `tools.ts` 的 19 个工具对位：本阶段只注册能离线自足的 10 个，其余 9 个
+    # 依赖未迁移的子系统（browser / ask_user / skill / memory / 子智能体等），不注册、不伪装可用。
+    assert [s.name for s in specs] == [
+        "read_file",
+        "list_dir",
+        "glob",
+        "grep",
+        "web_fetch",
+        "write_file",
+        "edit_file",
+        "run_command",
+        "present_files",
+        "todo_write",
+    ]
+    by_name = {s.name: s for s in specs}
+    assert by_name["read_file"].input_schema["required"] == ["path"]
+    assert by_name["edit_file"].input_schema["required"] == ["path", "old_string", "new_string"]
+    assert by_name["todo_write"].input_schema.get("required", []) == []
 
 
 async def _collect(iterator):
