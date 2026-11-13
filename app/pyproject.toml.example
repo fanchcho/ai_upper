@@ -24,11 +24,7 @@ requires-python = ">=3.8,<3.14"
 # The template ships none: a fork must not inherit the pins of whoever cloned
 # first. Declare yours in the working copy; py_upper resolves the matching
 # wheels for every target and installs them into the bundle.
-dependencies = [
-  # Deva 对话模型的落盘结构用 pydantic 校验：手写 dict 反序列化在字段几十个、
-  # 还要保留未知字段（extra="allow"）时无法维护，也不便做类型检查。
-  "pydantic==2.14.3",
-]
+dependencies = []
 
 [tool.setuptools]
 package-dir = {"" = "src"}
