@@ -235,3 +235,138 @@ def test_round_trip_preserves_tool_parts(tmp_path):
         (store.chats_dir / "t.json").read_text(encoding="utf-8")
     )
     assert session.messages[0].content[1].name == "read_file"
+
+
+# ── 拆分存盘（压缩后）────────────────────────────────────────────────────────────
+def _compacted_messages() -> list[Message]:
+    """一条已压缩的对话：摘要 + 三轮问答。模型视图从摘要起，前面两轮（含摘要）拆出去。"""
+    return [
+        Message(role="user", content="第一问"),
+        Message(role="assistant", content="第一答"),
+        Message(role="user", content="第二问"),
+        Message(role="assistant", content="第二答"),
+        Message(role="user", content="⟦deva:compaction⟧\n摘要：前两轮谈过甲和乙"),
+        Message(role="user", content="第三问"),
+        Message(role="assistant", content="第三答"),
+    ]
+
+
+def test_save_splits_prefix_into_chunk_and_stitches_back(store):
+    session = store.ensure_session("split")
+    session.messages = _compacted_messages()
+    store.save("split")
+
+    # 模型视图从摘要（下标 4）起：摘要及其之前的内容拆进 .jsonl，主文件只留它之后的部分。
+    main = json.loads((store.chats_dir / "split.json").read_text(encoding="utf-8"))
+    assert [m["content"] for m in main["messages"]] == ["⟦deva:compaction⟧\n摘要：前两轮谈过甲和乙", "第三问", "第三答"]
+    assert main["compacted"]["count"] == 4
+    chunk = store.chats_dir / main["compacted"]["file"]
+    assert chunk.exists()
+    assert [json.loads(line)["content"] for line in chunk.read_text(encoding="utf-8").splitlines()] == [
+        "第一问",
+        "第一答",
+        "第二问",
+        "第二答",
+    ]
+    assert main["compacted"]["file"].startswith("split.compacted-")
+
+    # 换一个 Store 实例（模拟重启）读回完整记录
+    reopened = ChatSessionStore(store.home)
+    restored = reopened.load_session("split")
+    assert [m.text() for m in restored.messages] == ["第一问", "第一答", "第二问", "第二答", "⟦deva:compaction⟧\n摘要：前两轮谈过甲和乙", "第三问", "第三答"]
+
+
+def test_save_appends_to_existing_chunk_when_prefix_intact(store):
+    """切点前移时只追加新压掉的那几条，不换文件；前缀被改动才换新文件。"""
+    session = store.ensure_session("append")
+    session.messages = _compacted_messages()
+    store.save("append")
+    first = session.compacted
+    assert first is not None
+    assert first.count == 4
+
+    # 续聊两条：切点不变，拆分文件不动
+    session.messages.append(Message(role="user", content="第四问"))
+    session.messages.append(Message(role="assistant", content="第四答"))
+    store.save("append")
+    assert session.compacted.file == first.file
+    assert session.compacted.count == 4
+
+    # 第二次压缩：在保留段之前再插一条摘要（正常由压缩器做，这里直接构造）。
+    # 切点前移到 5（把第一份摘要也压掉），前缀对象原样还在 → 只往旧文件追加一行。
+    session.messages.insert(5, Message(role="user", content="⟦deva:compaction⟧\n第二份摘要"))
+    store.save("append")
+    assert session.compacted.file == first.file
+    assert session.compacted.count == 5
+    chunk_lines = (store.chats_dir / first.file).read_text(encoding="utf-8").splitlines()
+    assert [json.loads(line)["content"] for line in chunk_lines] == [
+        "第一问", "第一答", "第二问", "第二答", "⟦deva:compaction⟧\n摘要：前两轮谈过甲和乙",
+    ]
+
+    # 改动已拆出去的那段（修补消息）：旧文件不再可信 → 换新文件整份重写，旧文件删掉
+    session.messages[2] = Message(role="user", content="第二问（修补）")
+    store.save("append")
+    assert session.compacted.file != first.file
+    assert not (store.chats_dir / first.file).exists()
+    assert len(list(store.chats_dir.glob("append.compacted-*.jsonl"))) == 1
+
+
+def test_save_rewrites_chunk_when_prefix_changed(store):
+    """删掉了前缀里的一条消息：旧拆分文件不再可信，换新文件整份写。"""
+    session = store.ensure_session("rewrite")
+    session.messages = _compacted_messages()
+    store.save("rewrite")
+    old_file = session.compacted.file
+
+    del session.messages[0]  # 删掉「第一问」
+    store.save("rewrite")
+    assert session.compacted.file != old_file
+    assert not (store.chats_dir / old_file).exists()
+
+    restored = ChatSessionStore(store.home).load_session("rewrite")
+    assert [m.text() for m in restored.messages][0] == "第一答"
+
+
+def test_save_rejoins_main_file_when_compaction_reverted(store):
+    """压缩被撤销（摘要没了）：不再拆分，主文件写全量，旧拆分文件删掉。"""
+    session = store.ensure_session("revert")
+    session.messages = _compacted_messages()
+    store.save("revert")
+    chunk = session.compacted.file
+
+    for index, message in enumerate(session.messages):
+        if str(message.content).startswith("⟦deva:compaction⟧"):
+            del session.messages[index]
+            break
+    store.save("revert")
+    assert session.compacted is None
+    assert not (store.chats_dir / chunk).exists()
+    main = json.loads((store.chats_dir / "revert.json").read_text(encoding="utf-8"))
+    assert len(main["messages"]) == 6
+
+
+def test_missing_chunk_does_not_delete_other_chunks(store):
+    """拆分文件读不出来时保留磁盘上的文件（可能只是暂时被占用），下次还能读回。"""
+    main = {
+        "id": "keep",
+        "title": "",
+        "createdAt": 1,
+        "updatedAt": 2,
+        "messages": [{"role": "assistant", "content": "后段"}],
+        "compacted": {"count": 2, "file": "keep.compacted-broken.jsonl"},
+    }
+    (store.chats_dir / "keep.json").write_text(json.dumps(main), encoding="utf-8")
+    # 文件存在但内容坏掉
+    (store.chats_dir / "keep.compacted-broken.jsonl").write_text("not json\n", encoding="utf-8")
+    store.load_session("keep")
+    assert (store.chats_dir / "keep.compacted-broken.jsonl").exists()
+
+
+def test_base36_matches_js_toString_36():
+    from mvvm.services.chat_session_store import base36
+
+    assert base36(0) == "0"
+    assert base36(1) == "1"
+    assert base36(35) == "z"
+    assert base36(36) == "10"
+    assert base36(1296) == "100"

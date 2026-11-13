@@ -19,12 +19,21 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import re
 import shutil
+import string
+import time
 from pathlib import Path
 from typing import Optional
 
-from mvvm.models.chat_models import ChatSessionMeta, Message, StoredSession
+from mvvm.models.chat_models import (
+    ChatSessionMeta,
+    CompactedRef,
+    Message,
+    StoredSession,
+)
+from mvvm.services.model_view import model_first
 
 INDEX_FILE = "_index.json"
 _SAFE_ID = re.compile(r"[^A-Za-z0-9_-]")
@@ -60,6 +69,19 @@ def write_file_atomic(path: Path, data: str) -> None:
             pass
 
 
+def base36(value: float) -> str:
+    """整数 → 36 进制（Deva 用 `Date.now().toString(36)` 给拆分文件名打时间戳）。"""
+    number = int(value)
+    if number <= 0:
+        return "0"
+    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+    out: list[str] = []
+    while number:
+        number, rem = divmod(number, 36)
+        out.append(digits[rem])
+    return "".join(reversed(out))
+
+
 class ChatSessionStore:
     """对话文件的读写。不含 Qt、不认识 ViewModel，可在纯 Python 下测试。"""
 
@@ -68,6 +90,9 @@ class ChatSessionStore:
         self._chats_dir = self._home / "data" / "chats"
         self._cache: dict[str, StoredSession] = {}
         self._index: Optional[dict[str, ChatSessionMeta]] = None
+        # 已写进拆分文件的那段消息（对象引用）：保存时逐个比对，前缀原样还在就只追加新的，
+        # 否则换新文件重写（Deva 用 WeakMap<StoredSession, Message[]>，这里按会话 id 存）。
+        self._persisted_prefix: dict[str, list[Message]] = {}
 
     @staticmethod
     def _default_home() -> Path:
@@ -76,6 +101,11 @@ class ChatSessionStore:
         return Path(override) if override else Path.home() / ".deva"
 
     # ── 路径 ──────────────────────────────────────────────────────────────
+    @property
+    def home(self) -> Path:
+        """数据根目录（`<home>/data/chats` 的父级）。"""
+        return self._home
+
     @property
     def chats_dir(self) -> Path:
         self._chats_dir.mkdir(parents=True, exist_ok=True)
@@ -142,28 +172,39 @@ class ChatSessionStore:
             session = StoredSession.model_validate_json(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return None
-        self._restore_compacted(session)
+        tidy = self._restore_compacted(session)
         self._cache[session.id] = session
+        if tidy != "keep":
+            # 主文件不引用的拆分文件（换文件后没删掉的旧文件、写到一半崩溃的新文件）顺手清掉。
+            self._remove_compacted_files(session.id, keep=tidy)
         return session
 
-    def _restore_compacted(self, session: StoredSession) -> None:
-        """把 `.jsonl` 里的早期消息段拼回 messages 前面。"""
+    def _restore_compacted(self, session: StoredSession) -> Optional[str]:
+        """把 `.jsonl` 里的早期消息段拼回 messages 前面。
+
+        返回主文件不引用的拆分文件名（调用方在主文件之外顺手清掉）；读不出较早记录时返回
+        `"keep"`，表示**不要**清理——文件可能只是暂时被占用，留着下次还能读回来。
+        """
         if session.compacted is None:
-            return
-        older = self._read_compacted(session.compacted.count, session.compacted.file)
+            return None
+        keep_file = session.compacted.file
+        older = self._read_compacted(session.compacted.count, keep_file)
         if older is not None:
             session.messages = older + session.messages
-        else:
-            # 拆分文件缺失/损坏：只剩主文件里的部分（模型看到的内容完整，丢的是更早的显示记录）。
-            # 提示锚点按完整记录记的，整体前移；下次保存重新判断要不要拆分。
-            n = session.compacted.count
-            if session.notices:
-                session.notices = [
-                    n_.model_copy(update={"after": n_.after - n})
-                    for n_ in session.notices
-                    if n_.after >= n
-                ]
+            self._persisted_prefix[session.id] = list(older)
+            session.compacted = None
+            return None
+        # 拆分文件缺失/损坏：只剩主文件里的部分（模型看到的内容完整，丢的是更早的显示记录）。
+        # 提示锚点按完整记录记的，整体前移；下次保存重新判断要不要拆分。
+        n = session.compacted.count
+        if session.notices:
+            session.notices = [
+                n_.model_copy(update={"after": n_.after - n})
+                for n_ in session.notices
+                if n_.after >= n
+            ]
         session.compacted = None
+        return "keep"
 
     def _read_compacted(self, count: int, filename: str) -> Optional[list[Message]]:
         try:
@@ -238,26 +279,96 @@ class ChatSessionStore:
         return ""
 
     def save(self, session_id: str) -> None:
-        """写该对话文件 + 刷新索引。只重写这一条，与其它对话无关。"""
+        """写该对话文件 + 刷新索引。只重写这一条，与其它对话无关。
+
+        压缩过的对话只重写模型还看得到的那部分，更早的追加进拆分文件（见 `_sync_compacted`）。
+        """
         session_id = safe_id(session_id)
         session = self._cache.get(session_id)
         if session is None:
             raise KeyError(f"会话不在内存中，未加载过：{session_id}")
-        self._sync_compacted(session)
+        stale = self._sync_compacted(session)
         live = session.messages[session.compacted.count:] if session.compacted else session.messages
         payload = session.model_copy(update={"messages": live})
+        # 先写主文件：拆分文件在 _sync_compacted 里已经先落盘（崩溃安全：主文件记的条数只会少于
+        # 拆分文件的行数，载入时多出的行被忽略；换新文件后崩溃，主文件仍指向旧文件）。
         write_file_atomic(
             self.session_path(session_id),
             payload.model_dump_json(indent=2, exclude_none=True),
         )
+        if stale:
+            self._remove_compacted_files(session_id, keep=session.compacted.file if session.compacted else None)
         self._ensure_index()[session_id] = session.meta()
         self._persist_index()
 
-    def _sync_compacted(self, session: StoredSession) -> None:
-        """把已压缩掉的前缀写进 `.jsonl`（P1 尚未做压缩，只在读回旧文件时保留原引用）。"""
-        # P1 不产生压缩：session.compacted 只在 _restore_compacted 里被清空，
-        # 因此这里保持 None 即可，主文件写全量 messages。
-        session.compacted = None
+    # ── 拆分存盘（见 StoredSession.compacted）──────────────────────────────
+    def _compacted_file(self, session_id: str) -> str:
+        """拆分文件名：`<id>.compacted-<时间36><随机>.jsonl`。不以 .json 结尾，扫描重建索引时天然被排除。"""
+        suffix = "".join(
+            random.choices(string.ascii_lowercase + string.digits, k=4)
+        )
+        return f"{safe_id(session_id)}.compacted-{base36(time.time() * 1000)}{suffix}.jsonl"
+
+    def _to_lines(self, messages: list[Message]) -> str:
+        return "".join(
+            message.model_dump_json(exclude_none=True) + "\n" for message in messages
+        )
+
+    def _remove_compacted_files(self, session_id: str, keep: Optional[str] = None) -> None:
+        """删掉该对话除 keep 以外的拆分文件（换文件后的旧文件、崩溃留下的半截新文件）。"""
+        prefix = f"{safe_id(session_id)}.compacted-"
+        try:
+            for path in self.chats_dir.iterdir():
+                if path.name.startswith(prefix) and path.name != keep:
+                    path.unlink(missing_ok=True)
+        except OSError:
+            pass  # 清理失败无害：下次载入再清
+
+    def _sync_compacted(self, session: StoredSession) -> Optional[str]:
+        """让拆分文件恰好存着 messages 里模型已看不到的那段，并更新 session.compacted。
+
+        返回写完主文件后要删的旧拆分文件名。与 Deva `syncCompacted` 同算法：
+        - 上一次拆分的前缀对象引用原样还在、且切点只会前移，就只**追加**新压掉的那几条；
+        - 否则（首次压缩 / 删了轮 / 回滚 / 修补改到这段 / 换了进程）整份换新文件重写。
+          文件名带随机后缀，同一毫秒里连着换两次也不会与旧文件同名。
+        """
+        cut = model_first(session.messages)
+        prev = session.compacted
+        if cut == 0:
+            # 没压缩过 / 回滚、删轮回到了第一次压缩之前：不拆分，旧文件在主文件写好后删。
+            self._persisted_prefix.pop(session.id, None)
+            session.compacted = None
+            return prev.file if prev else None
+
+        saved = self._persisted_prefix.get(session.id)
+        intact = (
+            prev is not None
+            and saved is not None
+            and len(saved) == prev.count
+            and len(saved) <= cut
+        )
+        if intact:
+            for index in range(len(saved)):
+                if session.messages[index] is not saved[index]:
+                    intact = False
+                    break
+        if intact and prev is not None:
+            if cut > prev.count:
+                with (self.chats_dir / prev.file).open("a", encoding="utf-8") as handle:
+                    handle.write(self._to_lines(session.messages[prev.count:cut]))
+            session.compacted = CompactedRef(count=cut, file=prev.file)
+            self._persisted_prefix[session.id] = list(session.messages[:cut])
+            return None
+
+        filename = self._compacted_file(session.id)
+        write_file_atomic(self.chats_dir / filename, self._to_lines(session.messages[:cut]))
+        session.compacted = CompactedRef(count=cut, file=filename)
+        self._persisted_prefix[session.id] = list(session.messages[:cut])
+        return prev.file if prev else None
+
+    def _remember_loaded_prefix(self, session_id: str, prefix: list[Message]) -> None:
+        """载入时记下拆分段的对象引用：下次保存据此判断「前缀是否原样还在」。"""
+        self._persisted_prefix[session_id] = prefix
 
     def rename_session(self, session_id: str, title: str) -> ChatSessionMeta:
         """只改标题与索引，不动 updatedAt（Deva 的列表排序语义：重命名不该把会话顶到最前）。"""
@@ -278,6 +389,7 @@ class ChatSessionStore:
         path = self.session_path(session_id)
         existed = path.exists()
         self._cache.pop(session_id, None)
+        self._persisted_prefix.pop(session_id, None)
         for chunk in self.chats_dir.glob(f"{session_id}.compacted-*.jsonl"):
             chunk.unlink(missing_ok=True)
         if path.exists():
@@ -304,6 +416,7 @@ class ChatSessionStore:
     def cleanup(self) -> None:
         """测试/退出用：清内存缓存（不删文件）。"""
         self._cache.clear()
+        self._persisted_prefix.clear()
         self._index = None
 
 
@@ -324,6 +437,7 @@ def clone_store_for_tests(source: ChatSessionStore, target_home: Path) -> ChatSe
 __all__ = [
     "ChatSessionStore",
     "INDEX_FILE",
+    "base36",
     "clone_store_for_tests",
     "derive_title",
     "safe_id",
