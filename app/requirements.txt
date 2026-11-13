@@ -4,3 +4,12 @@
 # 安装：pip install -r app/requirements.txt
 PySide6==6.11.2
 pydantic==2.14.3
+# 密钥存储：cryptography 提供 AES-256-GCM / HKDF，见 app/src/mvvm/services/secrets_crypto.py。
+# 不自实现的原因：GCM 的计数器、认证标签与侧信道防护不能靠 hashlib/hmac 拼出来，
+# 自己写等于把密钥安全押在未经验证的代码上；cryptography 的 wheel 内置 OpenSSL，无需系统头文件。
+cryptography==46.0.3
+# 系统钥匙串：keyring 对接 GNOME Keyring / KWallet / macOS Keychain / Windows 凭据管理器。
+# 不自实现的原因：每个平台的钥匙串协议都不同（D-Bus Secret Service、Security.framework、
+# Win32 CredRead/CredWrite），自己写等于重新实现一遍跨平台凭据管理。
+# 后端不可用时（本容器解析到 keyring.backends.fail）自动退到加密文件，见 secrets_vault.py。
+keyring==25.7.0
