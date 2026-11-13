@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import AsyncIterator, Optional, Sequence
 
-from mvvm.models.chat_models import Message, TextPart, ToolResultPart, ToolUsePart
+from mvvm.models.chat_models import Message, ToolResultPart
 from mvvm.services.provider_gateway import (
     Done,
     GenerateRequest,
@@ -117,11 +117,6 @@ def _chunks(text: str, size: int = 8) -> list[str]:
     return [text[i:i + size] for i in range(0, len(text), size)] or [""]
 
 
-def tool_use_message(call: ToolCall) -> Message:
-    """把一次工具调用包成 assistant 消息（追加进历史）。"""
-    return Message(role="assistant", content=[ToolUsePart(id=call.id, name=call.name, input=call.input)])
-
-
 def tool_result_message(call: ToolCall, content: str, is_error: bool) -> Message:
     """把工具结果包成 user 消息（Anthropic 风味：工具结果挂在 user 上）。"""
     return Message(
@@ -132,13 +127,4 @@ def tool_result_message(call: ToolCall, content: str, is_error: bool) -> Message
     )
 
 
-def text_message(role: str, text: str) -> Message:
-    return Message(role=role, content=[TextPart(text=text)])  # type: ignore[arg-type]
-
-
-__all__ = [
-    "FakeProvider",
-    "text_message",
-    "tool_result_message",
-    "tool_use_message",
-]
+__all__ = ["FakeProvider", "tool_result_message"]
