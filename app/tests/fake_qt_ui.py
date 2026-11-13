@@ -9,7 +9,9 @@
 """
 from __future__ import annotations
 
+import html as html_module
 import os
+import re
 
 import pytest
 
@@ -110,15 +112,38 @@ class FakeButton:
         self.clicked.emit(False)
 
 
+class FakeTextDocument:
+    def __init__(self) -> None:
+        self.resources: list = []
+
+    def addResource(self, resource_type, url, image) -> None:  # noqa: N802
+        self.resources.append((resource_type, url, image))
+
+
 class FakeTextBrowser:
+    """`setPlainText` 与 `setHtml` 分开记：历史区现在走富文本，纯文本仍供测试断言。"""
+
     def __init__(self) -> None:
         self.plain_text = ""
+        self.html = ""
+        self._document = FakeTextDocument()
 
     def setPlainText(self, value: str) -> None:  # noqa: N802
         self.plain_text = value
 
+    def setHtml(self, value: str) -> None:  # noqa: N802
+        self.html = value
+        # 真 QTextBrowser 的 toPlainText() 读得到 setHtml 的内容；这里用「去标签」近似，
+        # 让按纯文本断言的旧用例仍然测的是「屏幕上有没有这句话」。
+        text = re.sub(r"<br\s*/?>|</p>|</tr>|</li>", "\n", value)
+        text = re.sub(r"<[^>]+>", "", text)
+        self.plain_text = html_module.unescape(text)
+
     def toPlainText(self) -> str:  # noqa: N802
         return self.plain_text
+
+    def document(self) -> "FakeTextDocument":  # noqa: N802
+        return self._document
 
 
 class FakePlainTextEdit:
@@ -411,6 +436,41 @@ class FakeQt:
     UserRole = 256
 
 
+class FakeQUrl:
+    def __init__(self, value: str = "") -> None:
+        self.value = value
+
+    def toString(self) -> str:  # noqa: N802
+        return self.value
+
+    def __str__(self) -> str:
+        return self.value
+
+
+class FakeQImage:
+    """只实现内联图片渲染用到的那几个名字（`fromData` / `isNull`）。"""
+
+    def __init__(self, raw: bytes = b"") -> None:
+        self.raw = raw
+
+    @classmethod
+    def fromData(cls, data: bytes, fmt=None):  # noqa: N802 - Qt spelling
+        return cls(data or b"")
+
+    def isNull(self) -> bool:  # noqa: N802
+        return not self.raw
+
+
+class FakeResourceType:
+    ImageResource = "image"
+
+
+class FakeTextDocumentClass:
+    """`QtGui.QTextDocument` 在视图里只用于取 `ResourceType.ImageResource`。"""
+
+    ResourceType = FakeResourceType
+
+
 WIDGETS = {
     "QApplication": FakeApplication,
     "QMainWindow": FakeWindow,
@@ -441,7 +501,8 @@ def fake_qt(monkeypatch):
         monkeypatch,
         {
             "PySide6": {
-                "QtCore": {"Qt": FakeQt, "QTimer": FakeTimer},
+                "QtCore": {"Qt": FakeQt, "QTimer": FakeTimer, "QUrl": FakeQUrl},
+                "QtGui": {"QImage": FakeQImage, "QTextDocument": FakeTextDocumentClass},
                 "QtWidgets": WIDGETS,
             }
         },

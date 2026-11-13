@@ -483,3 +483,88 @@ def test_main_window_reports_missing_fetch_gateway(tmp_path, settings_env, fake_
         assert window.status_text == "未装配模型网关，无法拉取模型清单"
     finally:
         window.close()
+
+
+# ── 聊天面板：工具卡、图片、待办胶囊 ─────────────────────────────────────
+def _pane(tmp_path):
+    from mvvm.views.chat_pane import ChatPane
+
+    store = ChatSessionStore(tmp_path / "home")
+    chat = ChatViewModel(store, FakeProvider(), ToolRuntime(WorkspaceGuard(), None))
+    chat.open_session("pane")
+    return chat, ChatPane(chat)
+
+
+def test_chat_pane_renders_tool_result_as_card(tmp_path, fake_qt):
+    chat, pane = _pane(tmp_path)
+    chat._append_display(
+        "tool", "第一行\n第二行", name="read_file", summary="2 行"
+    )
+    chat.drain()
+
+    html = pane._transcript.html
+    assert "<table" in html
+    assert "read_file · 2 行" in html
+    assert "第一行<br/>第二行" in html
+
+
+def test_chat_pane_registers_inline_image_as_document_resource(tmp_path, fake_qt):
+    import base64
+
+    from helpers_png import png_bytes  # noqa: PLC0415 - 只需图片字节的用例才导入
+
+    chat, pane = _pane(tmp_path)
+    data = base64.b64encode(png_bytes()).decode()
+    chat._append_display(
+        "tool",
+        "已读取图片",
+        name="read_file",
+        images=[{"mediaType": "image/png", "name": "a.png", "data": data}],
+    )
+    chat.drain()
+
+    # 假控件的 document() 只记录 addResource 的调用；这里验证「先注册资源、HTML 里用占位 URL」。
+    assert len(pane._transcript.document().resources) == 1
+    assert 'src="deva-image:0"' in pane._transcript.html
+
+
+def test_chat_pane_todo_capsule_expands_and_collapses(tmp_path, fake_qt):
+    chat, pane = _pane(tmp_path)
+    state = {
+        "id": "l1",
+        "title": "迁移",
+        "items": [
+            {"content": "读源码", "status": "completed"},
+            {"content": "写实现", "status": "in_progress"},
+        ],
+    }
+    chat.todos_state_property.set_value(state)
+    widgets = pane.todo_widgets()
+    assert widgets["row"].visible is True
+    assert "写实现" in widgets["pill"].text()
+    assert "已完成 1/2" in widgets["pill"].text()
+    assert widgets["details"].visible is False
+
+    widgets["toggle"].click()
+    assert widgets["details"].visible is True
+    assert "[x] 读源码" in widgets["details"].text()
+    widgets["toggle"].click()
+    assert widgets["details"].visible is False
+
+    chat.todos_state_property.set_value(None)
+    assert widgets["row"].visible is False
+
+
+def test_chat_pane_cancel_button_cancels_active_list(tmp_path, fake_qt):
+    chat, pane = _pane(tmp_path)
+    chat.todos_state_property.set_value(
+        {"id": "l1", "items": [{"content": "a", "status": "in_progress"}]}
+    )
+    # 清单状态是从会话边车读的：这里先真的写一份，再点取消。
+    session = chat.store.ensure_session("pane")
+    session.todos = [{"id": "t", "listId": "l1", "at": 1, "title": "", "items": [{"content": "a", "status": "in_progress"}]}]
+    chat.store.save("pane")
+
+    pane.todo_widgets()["cancel"].click()
+    assert chat.store.ensure_session("pane").todoCancelled == ["l1"]
+    assert pane.todo_widgets()["row"].visible is False

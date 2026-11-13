@@ -9,8 +9,10 @@ import json
 
 import pytest
 
+from mvvm.models.chat_models import ImagePart, Message, ToolUsePart
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.provider_gateway import Done, TextDelta, ToolCall
+from mvvm.services.tool_results import tool_result_message
 from mvvm.services.tool_runtime import ToolRuntime
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.view_models.chat_vm import ChatViewModel
@@ -217,3 +219,42 @@ def test_all_done_clears_active_list_and_emits_done_event(home, workspace):
     # 先推新状态（清单收起），再推「清单完成」卡事件（Deva 同一顺序）。
     assert [event["type"] for event in todo_events][-2:] == ["todos", "todo_done"]
     assert todo_events[-2]["state"] is None
+
+
+def test_history_tool_entries_keep_tool_name_and_images(home, workspace):
+    """重启后工具卡不该退化成裸文本：工具名从调用块回查，图片随结果一起留在历史里。"""
+    import base64
+
+    from helpers_png import png_bytes
+
+    store = ChatSessionStore(home)
+    store.ensure_session("s1")
+    call = ToolCall(id="call_img", name="read_file", input={"path": "a.png"})
+    store.append_message(
+        "s1",
+        Message(
+            role="assistant",
+            content=[ToolUsePart(id=call.id, name=call.name, input=call.input)],
+        ),
+    )
+    store.append_message(
+        "s1",
+        tool_result_message(
+            call,
+            "图片内容已随本结果附上。",
+            False,
+            images=[
+                ImagePart(
+                    mediaType="image/png",
+                    data=base64.b64encode(png_bytes()).decode(),
+                    name="a.png",
+                )
+            ],
+        ),
+    )
+
+    vm, _ = make_vm(home, workspace, ScriptedProvider([]))
+    vm.open_session("s1")
+    tools = [entry for entry in vm.transcript if entry["role"] == "tool"]
+    assert tools and tools[0]["name"] == "read_file"
+    assert tools[0]["images"][0]["name"] == "a.png"

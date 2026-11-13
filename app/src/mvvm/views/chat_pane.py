@@ -1,15 +1,23 @@
-"""聊天面板（可嵌进主窗口的 QWidget）：历史、流式正文、输入框、发送/停止、状态与错误。
+"""聊天面板（可嵌进主窗口的 QWidget）：历史、待办胶囊、流式正文、输入框、发送/停止、状态与错误。
 
-功能优先，不做样式：没有自定义 delegate、没有 Markdown 渲染。流式输出通过
-`ChatViewModel.streaming` 属性刷新——回合跑在后台线程，VM 把每次增量经事件队列
-交回 UI 线程；这里用一个 QTimer 周期性 `drain()`，把队列里的状态写入真正落到控件上。
+功能优先，不做样式主题：没有自定义 delegate、没有 Markdown 渲染。历史用 Qt 富文本画，
+因为工具结果要成「卡片」、图片要内联——纯文本做不了这两件事。渲染规则全在
+`transcript_render.py`（纯函数、可单测），这里只负责把它们塞进控件。
 
-绑定关系全部走 `ViewBase`：
-- `transcript` -> QTextBrowser（值转换器把条目列表拼成文本）
+流式输出通过 `ChatViewModel.streaming` 属性刷新——回合跑在后台线程，VM 把每次增量经
+事件队列交回 UI 线程；这里用一个 QTimer 周期性 `drain()`，把队列里的状态写入真正落到控件上。
+
+绑定关系：
+- `transcript` -> QTextBrowser（自定义渲染：先注册图片资源，再 setHtml）
 - `streaming` -> 时间线末尾的「正在输出」区域
+- `todos_state` -> 输入框上方的待办胶囊（可展开条目、可取消清单）
 - `status` / `error` -> QLabel
 - `input_text` <-> QPlainTextEdit（双向：显式给 getter_name='toPlainText'）
 - `send_command` -> 发送按钮 clicked；`stop_command` -> 停止按钮 clicked
+
+图片资源为什么要先注册：`QTextDocument` 在 `setHtml` 时就把 `<img src>` 解析成资源引用，
+之后再 `addResource` 需要 `markContentsDirty` 才会重新布局，四个绑定上的行为并不一致。
+先 `addResource` 再 `setHtml` 在所有绑定上一致。
 
 面板不拥有 ViewModel 的生命周期（它由应用容器持有）；`close()` 只停定时器。
 """
@@ -19,6 +27,14 @@ from typing import Any, Optional
 
 from mvvm.view_models.chat_vm import ChatViewModel
 from mvvm.views.base_view import ViewBase
+from mvvm.views.transcript_render import (
+    IMAGE_URL_PREFIX,
+    decode_images,
+    image_placeholder,
+    todo_capsule_text,
+    todo_item_lines,
+    transcript_html,
+)
 
 # 与 ChatWindow 共用的文案常量放在这里，窗口只是薄壳。
 SEND_BUTTON_TEXT = "发送"
@@ -26,37 +42,9 @@ STOP_BUTTON_TEXT = "停止"
 INPUT_PLACEHOLDER = "输入消息，回车发送"
 DRAIN_INTERVAL_MS = 40
 
-ROLE_PREFIX = {
-    "user": "你",
-    "assistant": "助手",
-    "tool": "工具",
-    "error": "错误",
-    "compaction": "压缩摘要",
-    "notice": "提示",
-}
-
-
-def transcript_to_text(entries: Any) -> str:
-    """展示条目 -> 纯文本。角色前缀让测试与截图都能一眼分辨谁说的话。"""
-    lines: list[str] = []
-    for entry in entries or []:
-        role = str(entry.get("role", ""))
-        head = ROLE_PREFIX.get(role, role)
-        if entry.get("is_error"):
-            head = f"{head}（失败）"
-        name = entry.get("name")
-        if name:
-            head = f"{head} {name}"
-        lines.append(f"[{head}] {entry.get('text', '')}")
-    return "\n\n".join(lines)
-
-
-def streaming_to_text(streaming: Any) -> str:
-    """流式区：有增量时带前缀，空串时整块收起（不占一行空白）。"""
-    text = str(streaming or "")
-    if not text:
-        return ""
-    return f"[助手·输出中] {text}"
+TODO_EXPAND_TEXT = "展开清单"
+TODO_COLLAPSE_TEXT = "收起清单"
+TODO_CANCEL_TEXT = "取消清单"
 
 
 class ChatPane(ViewBase):
@@ -74,6 +62,23 @@ class ChatPane(ViewBase):
         streaming = QtWidgets.QLabel("")
         streaming.setWordWrap(True)
         streaming.hide()
+
+        # 待办胶囊：一行摘要 + 展开/取消；展开后是多行条目。没有进行中的清单时整块收起。
+        todo_row = QtWidgets.QWidget()
+        todo_layout = QtWidgets.QHBoxLayout(todo_row)
+        todo_layout.setContentsMargins(0, 0, 0, 0)
+        todo_pill = QtWidgets.QLabel("")
+        todo_pill.setWordWrap(True)
+        todo_toggle = QtWidgets.QPushButton(TODO_EXPAND_TEXT)
+        todo_cancel = QtWidgets.QPushButton(TODO_CANCEL_TEXT)
+        todo_layout.addWidget(todo_pill, 1)
+        todo_layout.addWidget(todo_toggle)
+        todo_layout.addWidget(todo_cancel)
+        todo_details = QtWidgets.QLabel("")
+        todo_details.setWordWrap(True)
+        todo_row.hide()
+        todo_details.hide()
+
         status = QtWidgets.QLabel(viewmodel.status)
         error = QtWidgets.QLabel("")
         error.setWordWrap(True)
@@ -89,6 +94,8 @@ class ChatPane(ViewBase):
         buttons.addWidget(stop_button)
 
         layout.addWidget(transcript, 1)
+        layout.addWidget(todo_row)
+        layout.addWidget(todo_details)
         layout.addWidget(streaming)
         layout.addWidget(status)
         layout.addWidget(error)
@@ -98,27 +105,35 @@ class ChatPane(ViewBase):
         self._widget = widget
         self._transcript = transcript
         self._streaming = streaming
+        self._todo_row = todo_row
+        self._todo_pill = todo_pill
+        self._todo_toggle = todo_toggle
+        self._todo_cancel = todo_cancel
+        self._todo_details = todo_details
+        self._todos_expanded = False
         self._status = status
         self._error = error
         self._input = input_box
         self._send_button = send_button
         self._stop_button = stop_button
 
-        self.bind_property("transcript", transcript, "setPlainText").add_value_converter(
-            transcript_to_text
-        )
-        # 值转换器只在 ViewModel -> UI 方向生效；初始值要自己铺一遍，
-        # 否则订阅之后的第一个事件之前窗口是空的（bind_property 不会回放当前值）。
-        transcript.setPlainText(transcript_to_text(viewmodel.transcript))
+        # 历史是自定义渲染（要先把图片注册成文档资源），因此不用 bind_property 的
+        # 「属性值直接塞给 setter」路径；其余纯文本属性照常绑定。
+        viewmodel.transcript_property.subscribe(self._on_transcript_changed)
+        self._render_transcript(viewmodel.transcript)
         self.bind_property("streaming", streaming, "setText").add_value_converter(
             streaming_to_text
         )
+        viewmodel.todos_state_property.subscribe(self._on_todos_changed)
+        self._render_todos(viewmodel.todos_state_property.get_value())
         self.bind_property("status", status, "setText")
         self.bind_property("error", error, "setText")
         self.bind_property("busy", stop_button, "setEnabled")
         self.bind_property("input_text", input_box, "setPlainText", getter_name="toPlainText")
         self.bind_command("send", send_button)
         self.bind_command("stop", stop_button)
+        todo_toggle.clicked.connect(lambda _=False: self._toggle_todos())
+        todo_cancel.clicked.connect(lambda _=False: viewmodel.cancel_todos())
 
         # 输入框内容变化要写回 ViewModel，否则 send_command 的 can_execute 永远看不到文本。
         input_box.textChanged.connect(self._sync_input)
@@ -143,8 +158,88 @@ class ChatPane(ViewBase):
     def widget(self) -> Any:
         return self._widget
 
+    def todo_widgets(self) -> dict[str, Any]:
+        """待办胶囊的控件（测试与截图脚本用）。"""
+        return {
+            "row": self._todo_row,
+            "pill": self._todo_pill,
+            "toggle": self._todo_toggle,
+            "cancel": self._todo_cancel,
+            "details": self._todo_details,
+        }
+
+    @property
+    def todos_expanded(self) -> bool:
+        return self._todos_expanded
+
     def _drain(self) -> None:
         self.viewmodel.drain()
+
+    # ── 历史渲染 ──────────────────────────────────────────────────────────
+    def _on_transcript_changed(self, _event: Any = None) -> None:
+        self._render_transcript(self.viewmodel.transcript)
+
+    def _render_transcript(self, entries: Any) -> None:
+        self._register_images(entries)
+        self._transcript.setHtml(transcript_html(entries))
+
+    def _register_images(self, entries: Any) -> None:
+        """把内联图片注册成文档资源（占位 URL 与正文里的 `<img src>` 对应）。"""
+        document = getattr(self._transcript, "document", None)
+        if not callable(document):
+            return  # 假控件/无文档环境：图片不显示，正文照常
+        doc = document()
+        for index, (media_type, raw) in enumerate(decode_images(entries)):
+            image = _load_image(raw, media_type)
+            if image is None:
+                continue
+            from utils.qt_compat import QtCore, QtGui
+
+            doc.addResource(
+                _image_resource_type(QtGui),
+                QtCore.QUrl(f"{IMAGE_URL_PREFIX}{index}"),
+                image,
+            )
+
+    # ── 待办胶囊 ──────────────────────────────────────────────────────────
+    def _on_todos_changed(self, event: Any = None) -> None:
+        state = getattr(event, "new_value", None) if event is not None else None
+        self._render_todos(state)
+
+    def _render_todos(self, state: Optional[dict[str, Any]]) -> None:
+        text = todo_capsule_text(state)
+        if not text:
+            self._todos_expanded = False
+            self._todo_details.setText("")
+            self._todo_details.hide()
+            self._todo_toggle.setText(TODO_EXPAND_TEXT)
+            self._todo_row.hide()
+            self._todo_pill.setText("")
+            return
+        self._todo_pill.setText(text)
+        self._todo_details.setText("\n".join(todo_item_lines(state)))
+        self._todo_row.show()
+        # 清单被取消/换新后保持展开会很突兀；这里跟着当前状态刷新可见性即可。
+        if self._todos_expanded:
+            self._todo_details.show()
+        else:
+            self._todo_details.hide()
+        self._todo_toggle.setText(TODO_COLLAPSE_TEXT if self._todos_expanded else TODO_EXPAND_TEXT)
+
+    def _toggle_todos(self) -> None:
+        """展开/收起条目。没有条目可展开时保持收起（胶囊只剩摘要，不该装成能展开）。"""
+        if not self._todo_details.text():
+            self._todos_expanded = False
+            self._todo_details.hide()
+        else:
+            self._todos_expanded = not self._todos_expanded
+            if self._todos_expanded:
+                self._todo_details.show()
+            else:
+                self._todo_details.hide()
+        self._todo_toggle.setText(
+            TODO_COLLAPSE_TEXT if self._todos_expanded else TODO_EXPAND_TEXT
+        )
 
     def _toggle_streaming(self, event: Any = None) -> None:
         text = streaming_to_text(self.viewmodel.streaming)
@@ -164,23 +259,41 @@ class ChatPane(ViewBase):
         self._timer.stop()
 
 
-def bind_session_id(pane: ChatPane, viewmodel: ChatViewModel) -> Callable[[], str]:
-    """便利函数：返回「当前会话 id」读取器（会话切换时主窗口据此重建/重置面板）。"""
+def streaming_to_text(streaming: Any) -> str:
+    """流式区：有增量时带前缀，空串时整块收起（不占一行空白）。"""
+    text = str(streaming or "")
+    if not text:
+        return ""
+    return f"[助手·输出中] {text}"
 
-    def current() -> str:
-        return viewmodel.session_id
 
-    return current
+def _image_resource_type(QtGui: Any) -> Any:
+    """`QTextDocument.ImageResource` 在 Qt5 是枚举、Qt6 是枚举成员。"""
+    document = QtGui.QTextDocument
+    enum = getattr(document, "ResourceType", None)
+    if enum is not None:
+        return enum.ImageResource
+    return document.ImageResource
+
+
+def _load_image(raw: bytes, media_type: str) -> Any:
+    """字节 → QImage；解不出图（坏数据）返回 None，不阻断整份历史渲染。"""
+    from utils.qt_compat import QtGui
+
+    image = QtGui.QImage.fromData(raw, media_type.split("/")[-1].upper() if media_type else None)
+    if image is None or image.isNull():
+        return None
+    return image
 
 
 __all__ = [
     "ChatPane",
     "DRAIN_INTERVAL_MS",
     "INPUT_PLACEHOLDER",
-    "ROLE_PREFIX",
     "SEND_BUTTON_TEXT",
     "STOP_BUTTON_TEXT",
-    "bind_session_id",
+    "TODO_CANCEL_TEXT",
+    "TODO_COLLAPSE_TEXT",
+    "TODO_EXPAND_TEXT",
     "streaming_to_text",
-    "transcript_to_text",
 ]

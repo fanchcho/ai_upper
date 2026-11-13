@@ -708,10 +708,32 @@ def _normalized(kind: str, message: str) -> NormalizedError:
 
 
 def _display_messages(messages: list[Message]) -> list[dict[str, Any]]:
-    return [entry for entry in map(_display, messages) if entry is not None]
+    """历史消息 → 展示条目。先把 `tool_use_id → 工具名` 扫一遍，工具卡才有标题。"""
+    names = _tool_names(messages)
+    return [
+        entry
+        for entry in (_display(message, names) for message in messages)
+        if entry is not None
+    ]
 
 
-def _display(message: Message) -> Optional[dict[str, Any]]:
+def _tool_names(messages: list[Message]) -> dict[str, str]:
+    """`tool_use_id` → 工具名（来自前一条 assistant 消息里的 tool_use 块）。
+
+    tool_result 消息本身只存 `toolUseId`（Deva 的存储格式），不在旁边存工具名；
+    展示层要把结果画成「read_file · 12 行」这样的卡片，只能在历史里回查调用方。
+    """
+    names: dict[str, str] = {}
+    for message in messages:
+        if isinstance(message.content, str):
+            continue
+        for part in message.content:
+            if getattr(part, "type", "") == "tool_use":
+                names[str(getattr(part, "id", ""))] = str(getattr(part, "name", ""))
+    return names
+
+
+def _display(message: Message, names: Optional[dict[str, str]] = None) -> Optional[dict[str, Any]]:
     """把存储消息转成展示条目（user / assistant / tool / error / compaction 五类）。
 
     纯 tool_use 且没有正文的消息返回 None：它是一次调用，不是一句话，画成空助手气泡
@@ -729,11 +751,22 @@ def _display(message: Message) -> Optional[dict[str, Any]]:
     texts = [p.text for p in message.content if isinstance(p, TextPart)]
     tool_results = [p for p in message.content if getattr(p, "type", "") == "tool_result"]
     if tool_results:
-        return {
+        part = tool_results[0]
+        name = (names or {}).get(str(getattr(part, "toolUseId", "")))
+        entry: dict[str, Any] = {
             "role": "tool",
-            "text": tool_results[0].content,
-            "is_error": bool(getattr(tool_results[0], "isError", False)),
+            "text": part.content,
+            "is_error": bool(getattr(part, "isError", False)),
         }
+        if name:
+            entry["name"] = name
+        images = [
+            {"mediaType": image.mediaType, "name": image.name, "data": image.data}
+            for image in (getattr(part, "images", None) or [])
+        ]
+        if images:
+            entry["images"] = images
+        return entry
     text = "".join(texts)
     if not text:
         return None

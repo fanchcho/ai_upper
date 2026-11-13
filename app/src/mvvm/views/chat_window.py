@@ -10,13 +10,17 @@ from mvvm.views.base_view import ViewBase
 from mvvm.views.chat_pane import (
     DRAIN_INTERVAL_MS,
     INPUT_PLACEHOLDER,
-    ROLE_PREFIX,
     SEND_BUTTON_TEXT,
     STOP_BUTTON_TEXT,
     ChatPane,
     streaming_to_text,
-    transcript_to_text,
 )
+from mvvm.views.transcript_render import MESSAGE_ROLE_HEAD, transcript_plain_text
+
+# 旧名保留：脚本/测试按 `ROLE_PREFIX` / `transcript_to_text` 引用；两者现在都住在
+# `transcript_render`（纯函数、无 Qt），这里只做转出，避免调用方被迫改 import 路径。
+ROLE_PREFIX = MESSAGE_ROLE_HEAD
+transcript_to_text = transcript_plain_text
 
 
 class ChatWindow(ViewBase):
