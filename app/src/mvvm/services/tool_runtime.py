@@ -40,6 +40,7 @@ from mvvm.services.image_prep import (
     sniff_image_mime,
 )
 from mvvm.services.office_text import OFFICE_EXT, office_text
+from mvvm.services.tool_policy import Decision, decide
 from mvvm.services.workspace_guard import DENIED, WorkspaceGuard
 
 READ_DEFAULT_LINES = 2000
@@ -391,6 +392,14 @@ class ToolRuntime:
         self.todo_sink: Optional[Callable[[str, Any], ToolResult]] = None
         # run_command 的取消检查：由回合层注入，返回 True 表示本轮已被用户停止。
         self.cancel_check: Optional[Callable[[], bool]] = None
+        # 本轮是否交互式（有人在场）。False = 密封执行（定时任务），走 sealed_decision。
+        # py_upper 暂不触发密封轮，但判定路径必须先存在，否则将来接定时任务时是空的。
+        self.interactive = True
+        # 界面是否真的提供挂载卡。没有卡时（当前默认）缺失基准的调用放行到路径解析去报
+        # 「请改用绝对路径」，而不是拦成一句没人能应答的挂载请求。
+        self.can_request_mount = False
+        # 最近一次判定的决策记录（界面 / 测试可查「为什么允许 / 为什么拒绝」）。
+        self.last_decision: Optional[Decision] = None
         self._tools: dict[str, tuple[ToolSpec, Callable[..., ToolResult]]] = dict(tools or {})
         for spec, handler in (
             (READ_FILE_SPEC, self._read_file),
@@ -427,6 +436,16 @@ class ToolRuntime:
         _, handler = entry
         if not isinstance(arguments, dict):
             return ToolResult(f"（{name} 的参数必须是对象）", True, "参数错误")
+        decision = decide(
+            name,
+            arguments,
+            self.root,
+            interactive=self.interactive,
+            can_request_mount=self.can_request_mount,
+        )
+        self.last_decision = decision
+        if not decision.allowed:
+            return ToolResult(decision.content, True, decision.summary)
         try:
             if name == "todo_write":
                 return self._todo_write(arguments, tool_use_id)
@@ -1164,6 +1183,8 @@ __all__ = [
     "WEB_FETCH_SPEC",
     "WRITE_FILE_SPEC",
     "compile_grep_pattern",
+    "decide",
+    "Decision",
     "html_to_text",
     "looks_binary",
     "numbered_text",
