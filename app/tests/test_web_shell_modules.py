@@ -190,6 +190,52 @@ def test_bridge_skills_list_serves_builtins(qapp, tmp_path):
     ]
 
 
+def _make_bridge(tmp_path):
+    from mvvm.services.chat_session_store import ChatSessionStore
+    from mvvm.services.persona_store import PersonaStore
+    from mvvm.services.settings_service import SettingsService
+    from mvvm.webui.bridge import DevaBridge
+
+    home = tmp_path / "deva-home"
+    return DevaBridge(
+        settings=SettingsService(home),
+        personas=PersonaStore(home),
+        store=ChatSessionStore(home),
+        home=home,
+    )
+
+
+def test_window_actions_are_wired_or_raise_not_fake_success(qapp, tmp_path):
+    """窗口控制必须有真实实现；没注入时显式报错，不能返回假成功。"""
+    bridge = _make_bridge(tmp_path)
+    for channel in ("window:minimize", "window:toggle-maximize", "window:close"):
+        with pytest.raises(Exception) as excinfo:
+            bridge._handlers[channel]()
+        assert "未接线" in str(excinfo.value), channel
+
+    calls: list[str] = []
+    bridge.set_window_actions(
+        minimize=lambda: calls.append("min"),
+        toggle_maximize=lambda: calls.append("max"),
+        close=lambda: calls.append("close"),
+        is_fullscreen=lambda: False,
+    )
+    bridge._handlers["window:minimize"]()
+    bridge._handlers["window:toggle-maximize"]()
+    bridge._handlers["window:close"]()
+    assert calls == ["min", "max", "close"]
+    assert bridge._handlers["window:is-fullscreen"]() is False
+
+
+def test_clipboard_round_trip_uses_qt_clipboard(qapp, tmp_path):
+    bridge = _make_bridge(tmp_path)
+    bridge._handlers["clipboard:write-text"]("粘贴测试")
+    assert bridge._handlers["clipboard:read-text"]() == "粘贴测试"
+    # 原版对非字符串入参按空串处理
+    assert bridge._handlers["clipboard:write-text"](None) == {"ok": True}
+    assert bridge._handlers["clipboard:read-text"]() == ""
+
+
 # ── 承载窗口（需要 QtWebEngine；缺了就 skip 并说明）───────────────────────
 @pytest.mark.skipif(not HAS_WEBENGINE, reason="该安装没有 QtWebEngineWidgets")
 def test_shell_window_builds_with_overlay(qapp, tmp_path, monkeypatch):

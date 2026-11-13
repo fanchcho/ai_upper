@@ -120,6 +120,12 @@ class DevaWebWindow(QMainWindow):
         self.overlay.maximizeRequested.connect(self._toggle_maximize)
         self.overlay.closeRequested.connect(self.close)
         self.bridge.set_overlay_callback(self.overlay.set_dark)
+        self.bridge.set_window_actions(
+            minimize=self.showMinimized,
+            toggle_maximize=self._toggle_maximize,
+            close=self.close,
+            is_fullscreen=self.isFullScreen,
+        )
 
     def _place_overlay(self) -> None:
         """叠加层只占右上角那块实色矩形（原版 Linux：3 个 32px 按钮宽、40 高），不铺满整条。"""

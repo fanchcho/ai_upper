@@ -65,10 +65,20 @@ class DevaBridge(QObject):
         self._handlers: dict[str, Callable[..., Any]] = {}
         # 标题栏叠加层主题回调：由视图注入（桥不直接依赖视图类）。
         self._overlay_callback: Callable[[bool], None] | None = None
+        # 窗口控制回调：同样由视图注入。没注入时通道必须显式报错，不能假装成功。
+        self._window_actions: dict[str, Callable[..., Any]] = {}
         self._register_defaults()
 
     def set_overlay_callback(self, callback: Callable[[bool], None]) -> None:
         self._overlay_callback = callback
+
+    def set_window_actions(self, **actions: Callable[..., Any]) -> None:
+        """注入真实窗口能力（minimize / toggle_maximize / close / is_fullscreen）。
+
+        渲染层的 `window:minimize` 等通道原来被注册成空 lambda：界面点下去没反应，
+        但 Promise 是 resolve 的——这正是「静默假成功」。现在改为必须有真实实现。
+        """
+        self._window_actions = {name: fn for name, fn in actions.items() if fn is not None}
 
     # ── 视图接线 ──────────────────────────────────────────────────────────
     def attach_view(self, view: Any) -> None:
@@ -147,18 +157,33 @@ class DevaBridge(QObject):
         self.register("secrets:list", self._secrets_list)
         self.register("secrets:available", self._secrets_available)
 
-        self.register("window:minimize", lambda: None)
-        self.register("window:toggle-maximize", lambda: None)
-        self.register("window:close", lambda: None)
-        self.register("window:is-fullscreen", lambda: False)
+        # 窗口控制：原版是 `mainWindow?.minimize()` 一类直调。这里必须由视图注入真实实现，
+        # 没注入就显式报错——此前的空 lambda 会让界面「点了没反应但 Promise 成功」。
+        self.register("window:minimize", self._window_action("minimize"))
+        self.register("window:toggle-maximize", self._window_action("toggle_maximize"))
+        self.register("window:close", self._window_action("close"))
+        self.register("window:is-fullscreen", self._window_action("is_fullscreen"))
+        self.register("app:get-platform", lambda: "linux")
 
-        self.register("clipboard:read-text", lambda: "")
-        self.register("clipboard:write-text", lambda text="": {"ok": True})
+        self.register("clipboard:read-text", self._clipboard_read)
+        self.register("clipboard:write-text", self._clipboard_write)
 
         self.register("update:get-state", self._update_state)
         self.register("remote:get-state", self._remote_state)
 
     # ── 各通道实现 ────────────────────────────────────────────────────────
+    def _window_action(self, name: str) -> Callable[..., Any]:
+        """把窗口能力包成通道处理函数；视图没有注入时必须抛错。"""
+
+        def run(*args: Any) -> Any:
+            del args
+            action = self._window_actions.get(name)
+            if action is None:
+                raise UnimplementedChannel(f"窗口能力未接线：{name}")
+            return action()
+
+        return run
+
     def _config_set(self, patch: Any) -> dict[str, bool]:
         if not isinstance(patch, dict):
             raise BridgeError("config:set 需要一个对象")
@@ -212,6 +237,23 @@ class DevaBridge(QObject):
         dark = symbol_color == "#e4e4e7"
         if self._overlay_callback is not None:
             self._overlay_callback(dark)
+
+    def _clipboard_read(self) -> str:
+        """原版是 Electron `clipboard.readText()`；这里走 Qt 剪贴板（没有剪贴板时返回空串）。"""
+        from utils.qt_compat import QtGui
+
+        app_clipboard = QtGui.QGuiApplication.clipboard()
+        return app_clipboard.text() if app_clipboard is not None else ""
+
+    def _clipboard_write(self, text: Any = "") -> dict[str, bool]:
+        """原版把非字符串参数统一按空串处理（`typeof text === 'string' ? text : ''`）。"""
+        from utils.qt_compat import QtGui
+
+        value = text if isinstance(text, str) else ""
+        app_clipboard = QtGui.QGuiApplication.clipboard()
+        if app_clipboard is not None:
+            app_clipboard.setText(value)
+        return {"ok": True}
 
     def _secrets_has(self, provider_id: str) -> bool:
         return bool(getattr(self, "vault", None) and self.vault.has_secret(provider_id))
