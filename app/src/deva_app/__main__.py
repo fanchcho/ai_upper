@@ -17,7 +17,9 @@ from typing import Optional
 
 from mvvm.mvvm_bootstrap import MVVMQtApplication
 from mvvm.services.chat_session_store import ChatSessionStore
-from mvvm.services.fake_provider import FakeProvider
+from mvvm.services.provider_setup import ModelGateway
+from mvvm.services.secrets_vault import SecretsVault
+from mvvm.services.settings_service import SettingsService
 from mvvm.services.tool_runtime import ToolRuntime
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.view_models.chat_vm import ChatViewModel
@@ -44,11 +46,33 @@ class DevaApplication(MVVMQtApplication):
             guard.trust_root(workspace)
         tools = ToolRuntime(guard, workspace or None)
 
+        settings = SettingsService(home)
+        vault = SecretsVault(home)
+        gateway = ModelGateway(settings, vault)
+
         app.register_service("chat_store", store)
+        app.register_service("settings", settings)
+        app.register_service("secrets", vault)
+        app.register_service("model_gateway", gateway)
         app.register_service("workspace_guard", guard)
         app.register_service("tool_runtime", tools)
 
-        viewmodel = ChatViewModel(store, FakeProvider(), tools)
+        viewmodel = ChatViewModel(
+            store,
+            None,
+            tools,
+            # 真实适配器按会话定格的模型现造；没配置时回合以「尚未配置」错误收场，界面照常可用。
+            turn_factory=lambda cancel, session_model: gateway.turn_provider(
+                cancel, session_model, DEFAULT_SESSION_ID
+            ),
+            provider_factory=gateway.provider_factory(DEFAULT_SESSION_ID),
+            compact_model_provider=gateway.compact_model,
+            # 模型段与压缩配置按当前 config.json 现查：设置页改动下一轮生效。
+            models_section_provider=settings.models_section,
+            compaction_config_provider=gateway.compaction_settings,
+            # 会话思考档位 → 本轮思考参数；未配置模型时给 None，不拦截回合。
+            effort_provider=lambda level: gateway.effort_parameter(level),
+        )
         viewmodel.open_session(DEFAULT_SESSION_ID)
         app.register_viewmodel("chat", viewmodel)
 

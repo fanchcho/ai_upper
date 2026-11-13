@@ -65,6 +65,9 @@ MAX_TOOL_STEPS = 4  # 单回合最多几次「调工具 → 再问模型」，�
 
 # provider 工厂：给压缩摘要用。每次调用都造一个新适配器，以便超时/取消能真正掐断请求。
 ProviderFactory = Callable[[Optional[CancelToken]], Provider]
+# 回合工厂：给一次对话回合用。入参（取消标记、会话定格的模型引用），返回（适配器，模型 id）。
+# 模型在回合开头定死，之后就算设置页换了模型也不影响这一轮（Deva 一轮内模型不变）。
+TurnFactory = Callable[[Optional[CancelToken], Optional[str]], "tuple[Provider, str]"]
 
 
 @dataclass
@@ -76,21 +79,32 @@ class TurnOutcome:
 
 
 class ChatViewModel(BaseViewModel):
-    """一条会话的聊天状态与回合逻辑。"""
+    """一条会话的聊天状态与回合逻辑。
+
+    `provider` 是**缺省适配器**（测试与单会话场景）；真实应用给的是 `provider_factory`：
+    每轮按会话定格的模型引用现解析、现取密钥、现造适配器（Deva `streamChat` 的口径），
+    这样在设置页换模型 / 换密钥后下一轮立即生效，不必重建 ViewModel。
+    """
 
     def __init__(
         self,
         store: ChatSessionStore,
-        provider: Provider,
+        provider: Optional[Provider],
         tools: ToolRuntime,
         session_id: Optional[str] = None,
         model: str = "fake-model",
         *,
         provider_factory: Optional[ProviderFactory] = None,
+        turn_factory: Optional[TurnFactory] = None,
         compact_model: Optional[CompactModel] = None,
         models_section: Optional[dict[str, Any]] = None,
         compaction_config: Optional[CompactionConfig] = None,
         locale: str = "zh-CN",
+        compact_model_provider: Optional[Callable[[], Optional[CompactModel]]] = None,
+        models_section_provider: Optional[Callable[[], dict[str, Any]]] = None,
+        compaction_config_provider: Optional[Callable[[], CompactionConfig]] = None,
+        effort_provider: Optional[Callable[[Optional[str]], Any]] = None,
+        notifier: Optional[Callable[[], None]] = None,
     ) -> None:
         self.store = store
         self.provider = provider
@@ -98,11 +112,23 @@ class ChatViewModel(BaseViewModel):
         self.model = model
         # 压缩用的模型配置与 provider 工厂：没给就视为「不支持压缩」（纯文本测试场景）。
         self.provider_factory = provider_factory
+        # 真实应用的回合工厂：按会话定格的模型引用现解析、现取密钥、现造适配器。
+        # 给了它就用它，否则用缺省 `provider`（测试与单模型场景）。
+        self.turn_factory: Optional[TurnFactory] = turn_factory
         self.compact_model = compact_model
         self.models_section = models_section or {}
         self.compaction_config = compaction_config or CompactionConfig(
             default_window=DEFAULT_CONTEXT_WINDOW
         )
+        # 真实应用里压缩模型、模型段与压缩配置都是「按当前配置现查」的（设置页改了东西，
+        # 下一轮就按新值判定）；直接给固定值的是测试与单模型场景。
+        self._models_section_provider = models_section_provider
+        self._compaction_config_provider = compaction_config_provider
+        self._compact_model_provider = compact_model_provider
+        # 思考等级（Deva `effort`）：按会话定格值现算请求参数；没给就不发思考参数。
+        self._effort_provider = effort_provider
+        # 回合结束时唤醒界面的回调（如把 QTimer 的下一次 drain 提前）。
+        self._notifier = notifier
         self.locale = locale
         self._session_id = session_id
         self._tool_results: list[ToolResult] = []
@@ -253,6 +279,32 @@ class ChatViewModel(BaseViewModel):
             self.status_property.set_value("正在停止…")
 
     # ── 回合 ──────────────────────────────────────────────────────────────
+    def _provider_for(
+        self, cancel: Optional[CancelToken], session_id: str, session_model: Optional[str]
+    ) -> tuple[Provider, str]:
+        """本轮要用的适配器与模型 id。工厂可能抛出「未配置」，交由回合边界转成界面错误。"""
+        if self.turn_factory is not None:
+            return self.turn_factory(cancel, session_model)
+        model = session_model or self.model
+        if self.provider is None:
+            raise RuntimeError("没有可用的 provider：既没有 turn_factory 也没有缺省适配器")
+        return self.provider, model
+
+    def _compact_model_now(self) -> Optional[CompactModel]:
+        if self._compact_model_provider is not None:
+            return self._compact_model_provider()
+        return self.compact_model
+
+    def _models_section_now(self) -> dict[str, Any]:
+        if self._models_section_provider is not None:
+            return self._models_section_provider()
+        return self.models_section
+
+    def _compaction_config_now(self) -> CompactionConfig:
+        if self._compaction_config_provider is not None:
+            return self._compaction_config_provider()
+        return self.compaction_config
+
     async def run_turn(
         self, text: str, *, cancel: Optional[CancelToken] = None
     ) -> TurnOutcome:
@@ -264,6 +316,8 @@ class ChatViewModel(BaseViewModel):
         self._ui(lambda: self.status_property.set_value("思考中…"))
         try:
             session = self.store.ensure_session(self._session_id)
+            # 模型在回合开头定一次：中途改设置不影响这一轮（与 Deva 一轮内模型不变一致）。
+            provider, model = self._provider_for(cancel, session.id, session.model)
             user_message = Message(role="user", content=[TextPart(text=text)])
             self.store.append_message(session.id, user_message)
             self._append_display("user", text)
@@ -272,7 +326,9 @@ class ChatViewModel(BaseViewModel):
 
             await self._auto_compact(session, cancel=cancel, mid_turn=False)
 
-            answer, stop = await self._agent_loop(session.id, cancel=cancel)
+            answer, stop = await self._agent_loop(
+                session.id, provider=provider, model=model, cancel=cancel
+            )
             if answer:
                 self.store.append_message(
                     session.id, Message(role="assistant", content=[TextPart(text=answer)])
@@ -292,12 +348,23 @@ class ChatViewModel(BaseViewModel):
             return TurnOutcome("", "error")
         finally:
             self._ui(lambda: self.busy_property.set_value(False))
+            if self._notifier is not None:
+                self._notifier()
 
     async def _agent_loop(
-        self, session_id: str, *, cancel: Optional[CancelToken] = None
+        self,
+        session_id: str,
+        *,
+        provider: Optional[Provider] = None,
+        model: Optional[str] = None,
+        cancel: Optional[CancelToken] = None,
     ) -> tuple[str, str]:
         """模型 ↔ 工具循环。返回（最终正文，结束原因）。"""
         answer = ""
+        provider = provider if provider is not None else self.provider
+        if provider is None:
+            raise RuntimeError("没有可用的 provider")
+        model = model or self.model
         for step in range(MAX_TOOL_STEPS + 1):
             session = self.store.ensure_session(session_id)
             if step > 0:
@@ -305,18 +372,23 @@ class ChatViewModel(BaseViewModel):
                 await self._auto_compact(session, cancel=cancel, mid_turn=True)
             if cancel is not None and cancel.cancelled:
                 return answer, "aborted"
+            effort = None
+            if self._effort_provider is not None:
+                effort = self._effort_provider(session.effort)
             request = GenerateRequest(
-                model=self.model,
+                model=model,
                 messages=model_messages(session.messages),
                 tools=[_spec_dict(s) for s in self.tools.specs()],
                 cache=True,
+                effort=effort,
                 session_id=session_id,
             )
             text_parts: list[str] = []
             calls: list[ToolCall] = []
             stop_reason = "end_turn"
             aborted = False
-            async for event in self.provider.stream(request):
+            async for event in provider.stream(request):
+
                 if cancel is not None and cancel.cancelled:
                     aborted = True
                     break
@@ -404,30 +476,31 @@ class ChatViewModel(BaseViewModel):
         mid_turn: bool,
     ) -> bool:
         """按阈值自动压缩；返回是否真的压了。失败不阻断本回合（宁可这一轮不压）。"""
-        if self.provider_factory is None or self.compact_model is None:
+        model = self._compact_model_now()
+        if self.provider_factory is None or model is None:
             return False
+        models_section = self._models_section_now()
+        cfg = self._compaction_config_now()
         if mid_turn:
             ready = needs_compaction_mid_turn(
                 session.messages,
-                self.compact_model,
+                model,
                 session.lastInputTokens or 0,
                 len(session.messages),
-                self.models_section,
-                self.compaction_config,
+                models_section,
+                cfg,
             )
         else:
-            ready = needs_compaction(
-                session, self.compact_model, self.models_section, self.compaction_config
-            )
+            ready = needs_compaction(session, model, models_section, cfg)
         if not ready:
             return False
         result = await compact_session(
             session,
-            self.compact_model,
+            model,
             self.provider_factory,
             cancel=cancel,
-            models_section=self.models_section,
-            cfg=self.compaction_config,
+            models_section=models_section,
+            cfg=cfg,
             locale=self.locale,
             mid_turn=mid_turn,
             on_start=lambda: self.emit({"type": "compacting", "active": True}),
@@ -451,16 +524,17 @@ class ChatViewModel(BaseViewModel):
 
     async def compact_now(self, cancel: Optional[CancelToken] = None) -> CompactResult:
         """手动压缩（`/compact`）。回调 `emit` 发 compacted 事件。"""
-        if self.provider_factory is None or self.compact_model is None:
+        model = self._compact_model_now()
+        if self.provider_factory is None or model is None:
             return CompactResult("failed", "未配置压缩所需的模型服务")
         session = self.store.ensure_session(self._session_id)
         result = await compact_session(
             session,
-            self.compact_model,
+            model,
             self.provider_factory,
             cancel=cancel,
-            models_section=self.models_section,
-            cfg=self.compaction_config,
+            models_section=self._models_section_now(),
+            cfg=self._compaction_config_now(),
             locale=self.locale,
             on_start=lambda: self.emit({"type": "compacting", "active": True}),
             save=self.store.save,
