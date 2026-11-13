@@ -215,6 +215,8 @@ def test_window_binds_transcript_status_and_send(monkeypatch, tmp_path, fake_qt)
     assert vm.can_send() is True
 
     window._send_button.click()
+    # 按钮只在后台线程起回合、立即返回；等回合结束 + 事件落地后再断言界面。
+    assert vm.wait_idle(5.0)
 
     assert vm.transcript[-1]["role"] == "assistant"
     assert "你好" in window._transcript.plain_text

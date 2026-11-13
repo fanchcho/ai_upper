@@ -44,6 +44,7 @@ def test_full_slice_allowed_then_persisted_then_read_back(tmp_path, workspace):
     vm.input_text_property.set_value("看一下 notes.txt")
 
     vm.send()
+    assert vm.wait_idle(5.0)
 
     assert vm.error == "", vm.error
     assert vm.status == "就绪"
@@ -85,6 +86,7 @@ def test_denied_tool_is_reported_to_model_and_persisted(tmp_path, workspace):
     vm.input_text_property.set_value("读一下外面那个文件")
 
     vm.send()
+    assert vm.wait_idle(5.0)
 
     assert len(vm.tool_results) == 1
     denied = vm.tool_results[0]
@@ -109,6 +111,7 @@ def test_no_trusted_roots_means_denied(tmp_path, workspace):
     vm.open_session("no-roots")
     vm.input_text_property.set_value("读文件")
     vm.send()
+    assert vm.wait_idle(5.0)
 
     assert vm.tool_results[0].is_error is True
     assert vm.tool_results[0].content == DENIED
@@ -119,6 +122,7 @@ def test_provider_failure_surfaces_as_visible_error(tmp_path, workspace):
     vm.open_session("auth-fail")
     vm.input_text_property.set_value("你好")
     vm.send()
+    assert vm.wait_idle(5.0)
 
     assert vm.status == "失败"
     assert vm.error == "密钥无效"
@@ -133,6 +137,7 @@ def test_empty_input_does_nothing(tmp_path, workspace):
     vm.input_text_property.set_value("   ")
     assert vm.can_send() is False
     vm.send()
+    assert vm.wait_idle(5.0)
     assert vm.transcript == []
     assert not (store_path(tmp_path / "home") / "empty.json").exists()
 
@@ -141,6 +146,7 @@ def test_send_requires_an_open_session(tmp_path, workspace):
     vm = make_vm(tmp_path / "home", workspace)
     vm.input_text_property.set_value("hi")
     vm.send()
+    assert vm.wait_idle(5.0)
     assert vm.status == "失败"
     assert "没有打开会话" in vm.error
 
@@ -172,6 +178,7 @@ def test_tool_loop_stops_when_provider_keeps_calling_tools(tmp_path, workspace):
     vm.input_text_property.set_value("循环")
 
     vm.send()
+    assert vm.wait_idle(5.0)
 
     assert vm.status == "失败"
     assert "工具调用超过" in vm.error
@@ -183,6 +190,7 @@ def test_reopening_a_session_shows_stored_history(tmp_path, workspace):
     vm.open_session("reopen")
     vm.input_text_property.set_value("看一下 notes.txt")
     vm.send()
+    assert vm.wait_idle(5.0)
     before = len(vm.transcript)
 
     same_session = make_vm(home, workspace)
