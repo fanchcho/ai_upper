@@ -24,12 +24,7 @@ import shutil
 from pathlib import Path
 from typing import Optional
 
-from mvvm.models.chat_models import (
-    ChatSessionMeta,
-    Message,
-    StoredSession,
-    now_ms,
-)
+from mvvm.models.chat_models import ChatSessionMeta, Message, StoredSession
 
 INDEX_FILE = "_index.json"
 _SAFE_ID = re.compile(r"[^A-Za-z0-9_-]")

@@ -196,7 +196,7 @@ def test_window_binds_transcript_status_and_send(monkeypatch, tmp_path, fake_qt)
     from mvvm.services.tool_runtime import ToolRuntime
     from mvvm.services.workspace_guard import WorkspaceGuard
     from mvvm.view_models.chat_vm import ChatViewModel
-    from mvvm.views.chat_window import SEND_BUTTON_TEXT, ChatWindow
+    from mvvm.views.chat_window import ChatWindow
 
     (tmp_path / "notes.txt").write_text("你好\n", encoding="utf-8")
     guard = WorkspaceGuard([tmp_path])

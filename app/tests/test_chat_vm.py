@@ -14,7 +14,7 @@ import pytest
 from mvvm.models.chat_models import StoredSession
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.fake_provider import FakeProvider
-from mvvm.services.provider_gateway import Done, GenerateRequest, TextDelta
+from mvvm.services.provider_gateway import Done, TextDelta, ToolCall
 from mvvm.services.tool_runtime import ToolRuntime
 from mvvm.services.workspace_guard import DENIED, WorkspaceGuard
 from mvvm.view_models.chat_vm import ChatViewModel
@@ -163,9 +163,7 @@ def test_tool_loop_stops_when_provider_keeps_calling_tools(tmp_path, workspace):
     looping = FakeProvider(
         script=[
             TextDelta("再看看"),
-            __import__("mvvm.services.provider_gateway", fromlist=["ToolCall"]).ToolCall(
-                id="loop", name="read_file", input={"path": "notes.txt"}
-            ),
+            ToolCall(id="loop", name="read_file", input={"path": "notes.txt"}),
             Done("tool_use"),
         ]
     )

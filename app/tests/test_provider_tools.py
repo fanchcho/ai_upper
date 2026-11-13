@@ -13,19 +13,15 @@ import pytest
 from mvvm.models.chat_models import Message, TextPart, ToolResultPart, ToolUsePart
 from mvvm.services.fake_provider import FakeProvider
 from mvvm.services.provider_gateway import (
-    Done,
     GenerateRequest,
     NotImplementedProvider,
-    ProviderError,
     StreamError,
-    TextDelta,
     http_error,
     normalize_messages,
 )
 from mvvm.services.tool_runtime import (
     MISSING_PATH,
     NO_ROOT_RELATIVE,
-    ToolResult,
     ToolRuntime,
     numbered_text,
 )
