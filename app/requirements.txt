@@ -1,0 +1,6 @@
+# 本应用（Deva 重写）的运行依赖，与 app/pyproject.toml 的 [project.dependencies] 保持一致。
+# 入库模板 app/pyproject.toml.example 的 dependencies 必须保持为空（克隆者不继承维护者的 pin，
+# 该约束由 app/tests/test_build_tool_compat.py 强制）；这里记录本应用实际需要的最小集合。
+# 安装：pip install -r app/requirements.txt
+PySide6==6.11.2
+pydantic==2.14.3
