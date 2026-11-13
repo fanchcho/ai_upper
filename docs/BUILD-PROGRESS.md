@@ -71,18 +71,19 @@ $ git branch -vv
 
 ### 0.4 第五阶段实际提交（与本台账一致）
 
-截至代码提交 `64a8402`（本台账与收口报告自身另有一条 docs commit，不计入下列数字）：
+截至代码提交 `e289b45`（本台账与收口报告自身另有一条 docs commit，不计入下列数字）：
 
 ```text
-$ git log --oneline -5
+$ git log --oneline -6
+e289b45 fix(webui): 窗口控制与剪贴板改为真实实现，不再返回假成功
+188cfed docs: 第五阶段收口（逐页一致性判定 + 三档报告 + 差异量化）
 64a8402 chore(assets): 补齐首启种子角色文件
 06841f9 test(webui): 修好全量测试的红灯，豁免项补真实 binding 覆盖
 f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
 4f53a1e feat(ext): 技能服务（内置元技能 + 自定义目录 + frontmatter 解析）
-c08da9d feat(tools): 工具权限判定层（交互轮放行/密封轮拒绝/挂载判据）接入执行入口
 
 $ git branch -vv
-* develop 64a8402 [origin/develop: ahead 16]
+* develop e289b45 [origin/develop: ahead 18]
   main    f91562b [upstream/main] Initial commit
 ```
 
@@ -90,7 +91,7 @@ $ git branch -vv
 `deva` 工程（`/home/agent/shared_workspace/deva`）全程只读，未写入任何文件。
 
 **本轮中断点（若被截断从这里续）：** 界面七页实拍全部判定「已一致」（§1.11）；
-全量测试 `843 passed, 5 skipped`；收口报告见 `docs/STAGE5-CLOSEOUT-REPORT.md`。
+全量测试 `845 passed, 5 skipped`；收口报告见 `docs/STAGE5-CLOSEOUT-REPORT.md`。
 尚未完成：把新界面的写路径接通、158 通道结论表、打包入口指向 Web 承载窗口并真实构建。
 
 
@@ -103,7 +104,7 @@ $ git branch -vv
 | # | 项 | 验证方式（真实输出） |
 |---|---|---|
 | 1 | 新远端 `origin` = `git@github.com:fanchcho/ai_upper.git`，本地 `develop` 跟踪 `origin/develop` | `git remote -v`、`git branch -vv`（见 §0） |
-| 2 | 不强推、不 rebase 覆盖远端；`upstream` 不推不改 | 全程只用 `git commit`；`origin/develop` 仅依赖快进合并（本轮尚未推送，本地 ahead 16，见 §0.4） |
+| 2 | 不强推、不 rebase 覆盖远端；`upstream` 不推不改 | 全程只用 `git commit`；`origin/develop` 仅依赖快进合并（本轮尚未推送，本地 ahead 18，见 §0.4） |
 | 3 | 迁移计划落库（158 唯一通道 = 154 `ipcMain.handle` + 4 `ipcMain.on`） | `docs/MIGRATION-PLAN.md`，生成脚本 `audit-tools/scan_deva_ipc.py` |
 
 ### 1.2 阶段 A：骨架与纵向切片
@@ -419,7 +420,7 @@ cd app && ../.venv/bin/python -m pytest tests/test_skill_store.py -q
 
 # 7) Web 承载层（真实 binding）单测
 cd app && ../.venv/bin/python -m pytest tests/test_web_shell_modules.py -q
-# → 10 passed in 0.51s
+# → 12 passed in 0.40s
 ```
 
 截图流水线内部固定：Xvfb `1400x900x24`（原版 `:95`、端口 `:96`），窗口 `windowmove 0 0` +
@@ -443,8 +444,8 @@ $ cd app && ../.venv/bin/python -m pytest -q
 ........................................................................ [ 76%]
 ........................................................................ [ 84%]
 ........................................................................ [ 93%]
-........................................................                 [100%]
-843 passed, 5 skipped in 22.10s
+..........................................................               [100%]
+845 passed, 5 skipped in 21.51s
 ```
 
 5 条 skip 的原文原因（`-q -rs` 原样抄录）：
@@ -456,7 +457,7 @@ SKIPPED [1] tests/test_build_tool_compat.py:1669: handle inheritance for GUI-sub
 SKIPPED [1] tests/test_e2e_local.py:432: set PY_UPPER_E2E=1 to run the full local build E2E
 SKIPPED [1] tests/test_e2e_local.py:470: set PY_UPPER_E2E=1 to run the full local build E2E
 SKIPPED [1] tests/test_native_deployment.py:177: requires cc, patchelf and readelf
-843 passed, 5 skipped in 21.90s
+845 passed, 5 skipped in 21.35s
 ```
 
 这 5 条都是**环境型**跳过（Windows 专属 2 条、需显式开关的完整构建 E2E 2 条、需
@@ -471,6 +472,19 @@ Web 承载层三个模块在**类体求值**时即需 Qt（继承 `QWidget` / `Q
 `tests/test_web_shell_modules.py` 用**真实 binding** 覆盖被豁免的部分（导入、叠加层几何 96×40 与
 不透明底色、深色切换、桥接契约通道、未知通道显式 reject、`browser:state` 键集、`skills:list`、
 承载窗口 1280×820/最小 940×600 与叠加层位置、shim 占位符替换）。commit `06841f9`。
+
+#### 1.11.9 桥接层「假成功」清理（commit `e289b45`）
+
+收口后复核频道表时发现两条**静默假成功**，已改为真实实现并补用例：
+
+| 通道 | 之前 | 现在 | 覆盖用例 |
+|---|---|---|---|
+| `window:minimize` / `window:toggle-maximize` / `window:close` | 空 lambda：界面点了没反应，但 Promise resolve | 由承载窗口注入 `set_window_actions(...)` 真调 `showMinimized` / `showMaximized` / `close`；**没注入就抛 `UnimplementedChannel`**（前端 reject） | `test_window_actions_are_wired_or_raise_not_fake_success` |
+| `clipboard:read-text` / `clipboard:write-text` | 写死空串 / `{"ok": true}` | 走 Qt 剪贴板；非字符串入参照原版按空串处理 | `test_clipboard_round_trip_uses_qt_clipboard` |
+
+`pytest tests/test_web_shell_modules.py -q` → **12 passed in 0.40s**；全量 **845 passed, 5 skipped**。
+注意：这只证明**通道被调用后的 Python 行为正确**，Xvfb 无窗口管理器，最小化/最大化的**视觉结果**
+仍需真桌面验（见 §2）。
 
 ---
 
@@ -537,11 +551,11 @@ Web 承载层三个模块在**类体求值**时即需 Qt（继承 `QWidget` / `Q
 
 ```text
 $ git branch -vv
-* develop 64a8402 [origin/develop: ahead 16]
+* develop e289b45 [origin/develop: ahead 18]
   main    f91562b [upstream/main] Initial commit
 
 $ cd app && ../.venv/bin/python -m pytest -q
-843 passed, 5 skipped in 22.10s
+845 passed, 5 skipped in 21.51s
 ```
 
 按优先级：

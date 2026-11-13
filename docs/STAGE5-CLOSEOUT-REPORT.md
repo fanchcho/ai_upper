@@ -1,7 +1,7 @@
 # 第五阶段收口报告：界面与原版逐页一致
 
 - 日期：2026-11-14
-- 分支：`develop`（`origin/develop` 快进关系，本地 ahead 16，未 force push）
+- 分支：`develop`（`origin/develop` 快进关系，本地 ahead 18，未 force push）
 - 配套台账：`docs/BUILD-PROGRESS.md`（§0 对账、§1.11 逐页判定、§2/§3 两档）
 - 口径：只写**实际跑出来的**结果。「已一致」的判定是**实测截图比对**，
   不是主观描述；残余差异逐像素列出，**不含「零差异」这种说法**。
@@ -19,7 +19,7 @@
 | 窗口几何与原版一致：1280×820，最小 940×600，无边框 | `app/src/mvvm/views/web_shell_window.py` |
 | 自绘 `titleBarOverlay`：右上角 96×40 实色，三个 32×40 按钮 | `app/src/mvvm/views/title_bar_overlay.py` |
 | 未实现的通道在桥边界**显式 reject**，不返回假成功 | `test_bridge_unknown_channel_is_explicit_not_silent` |
-| 单元测试（真实 Qt binding） | `pytest tests/test_web_shell_modules.py -q` → **10 passed in 0.51s** |
+| 单元测试（真实 Qt binding） | `pytest tests/test_web_shell_modules.py -q` → **12 passed in 0.40s** |
 
 ### 2. 技能服务（设置 › 扩展页的数据源）
 
@@ -45,8 +45,8 @@ $ cd app && ../.venv/bin/python -m pytest -q
 ........................................................................ [ 76%]
 ........................................................................ [ 84%]
 ........................................................................ [ 93%]
-........................................................                 [100%]
-843 passed, 5 skipped in 22.10s
+..........................................................               [100%]
+845 passed, 5 skipped in 21.51s
 ```
 
 5 条 skip 的原文原因（`-q -rs`）：
@@ -70,7 +70,7 @@ SKIPPED [1] tests/test_native_deployment.py:177: requires cc, patchelf and reade
 1. 把三者列入显式豁免名单，并断言名单内文件真实存在（防重命名后豁免悄悄失效）；
 2. 新增 `tests/test_web_shell_modules.py` 用**真实 binding** 补上被豁免的覆盖。
 
-全量结果由 `1 failed, 832 passed, 5 skipped` 变为 `843 passed, 5 skipped`。
+全量结果由 `1 failed, 832 passed, 5 skipped` 变为 `845 passed, 5 skipped`。
 
 ---
 
@@ -190,8 +190,8 @@ DISPLAY=:96 DEVA_HOME=/tmp/py-home QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --di
 # 单测
 cd app
 ../.venv/bin/python -m pytest tests/test_skill_store.py -q      # 19 passed in 0.18s
-../.venv/bin/python -m pytest tests/test_web_shell_modules.py -q # 10 passed in 0.51s
-../.venv/bin/python -m pytest -q                                # 843 passed, 5 skipped in 22.10s
+../.venv/bin/python -m pytest tests/test_web_shell_modules.py -q # 12 passed in 0.40s
+../.venv/bin/python -m pytest -q                                # 845 passed, 5 skipped in 21.51s
 ```
 
 `compare.sh` 真实输出：
@@ -243,6 +243,8 @@ PAGE                          raw    fuzz3   maxd  VERDICT
 ## 六、本轮新增 commit
 
 ```text
+e289b45 fix(webui): 窗口控制与剪贴板改为真实实现，不再返回假成功
+188cfed docs: 第五阶段收口（逐页一致性判定 + 三档报告 + 差异量化）
 64a8402 chore(assets): 补齐首启种子角色文件
 06841f9 test(webui): 修好全量测试的红灯，豁免项补真实 binding 覆盖
 f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
@@ -250,7 +252,8 @@ f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截�
 c08da9d feat(tools): 工具权限判定层（交互轮放行/密封轮拒绝/挂载判据）接入执行入口
 ```
 
-本轮收口的文档与报告另起一条 docs commit（标题含「第五阶段收口」）。
+其中 `188cfed` 是本报告与台账自身的 docs commit；`e289b45` 是收口后复核频道表时
+发现的「静默假成功」修复（窗口控制与剪贴板），单测从 10 条增至 12 条。
 
 远端只做快进：全程 `git commit`，未 force push、未覆盖远端提交。
 `deva` 工程（`/home/agent/shared_workspace/deva`）全程只读，未写入任何文件。
