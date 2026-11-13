@@ -164,3 +164,30 @@ def test_only_the_shim_names_the_event_loop_entry():
                 offenders.append(f"{path.relative_to(src)}:{node.lineno}")
 
     assert not offenders, f"call the loop through {SHIM}.exec_loop: {offenders}"
+
+
+def test_enum_member_resolves_flat_and_scoped_spellings():
+    """Qt6 把枚举收进类里（Qt.Orientation.Horizontal），Qt5 是平铺的（Qt.Horizontal）。"""
+
+    class Scoped:
+        class Orientation:
+            Horizontal = "scoped"
+
+    class Flat:
+        Horizontal = "flat"
+
+    # 纯函数：两种拼写都不需要真绑定，直接用假类验证分支
+    import utils.qt_compat as shim
+
+    assert shim.enum_member(Scoped, "Horizontal") == "scoped"
+    assert shim.enum_member(Flat, "Horizontal") == "flat"
+
+
+def test_enum_member_reports_unknown_names():
+    import utils.qt_compat as shim
+
+    class Empty:
+        pass
+
+    with pytest.raises(AttributeError, match="NoSuchMember"):
+        shim.enum_member(Empty, "NoSuchMember")

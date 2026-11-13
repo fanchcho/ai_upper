@@ -31,7 +31,7 @@ from typing import TYPE_CHECKING, Any
 # The names the TYPE_CHECKING block resolves for editors. Runtime lookup goes
 # through __getattr__ and covers every Qt<Module>, binding or not, so this is
 # the IDE surface rather than the set of importable names.
-__all__ = ["QtCore", "QtGui", "QtWidgets", "Signal", "Slot", "exec_loop"]
+__all__ = ["QtCore", "QtGui", "QtWidgets", "Signal", "Slot", "enum_member", "exec_loop"]
 
 if TYPE_CHECKING:  # IDE/static: editors resolve completion and types here.
     from PySide6 import QtCore as QtCore, QtGui as QtGui, QtWidgets as QtWidgets  # type: ignore # noqa
@@ -155,6 +155,26 @@ def _qt_factory(*names: str) -> Any:
         if factory is not None:
             return factory
     raise ImportError(f"{qt_binding()}.QtCore provides none of {names}")
+
+
+def enum_member(parent: Any, name: str) -> Any:
+    """Resolve an enum member under the spelling the detected binding uses.
+
+    Qt6 bindings (PySide6 >= 6.x, PyQt6) promote enums to real Python enums and
+    also keep scoped-compatible aliases on the class; Qt5 exposes them flat.
+    ``enum_member(QtCore.Qt, "Horizontal")`` returns ``Qt.Orientation.Horizontal`` when
+    the flat name only exists inside a scoped enum; PySide6 also keeps flat
+    aliases, so the direct attribute is preferred when present.
+    """
+    scoped = getattr(parent, name, None)
+    if scoped is not None:
+        return scoped
+    for attribute in dir(parent):
+        holder = getattr(parent, attribute, None)
+        member = getattr(holder, name, None)
+        if member is not None:
+            return member
+    raise AttributeError(f"{parent!r} has no enum member {name!r}")
 
 
 def Signal(*args: Any, **kwargs: Any) -> Any:

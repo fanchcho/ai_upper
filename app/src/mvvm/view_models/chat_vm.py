@@ -373,8 +373,10 @@ class ChatViewModel(BaseViewModel):
             return TurnOutcome("", "error")
         finally:
             self._ui(lambda: self.busy_property.set_value(False))
+            # 通知界面「回合结束」也要回到 UI 线程：本方法跑在工作线程，直接调回调会让
+            # 界面在自己的线程之外改控件（Qt 会拒绝创建子对象，进程随后崩溃）。
             if self._notifier is not None:
-                self._notifier()
+                self._ui(self._notifier)
 
     async def _agent_loop(
         self,

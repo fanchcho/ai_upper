@@ -406,11 +406,17 @@ class ChatSessionStore:
 
     # ── 展示辅助 ──────────────────────────────────────────────────────────
     def visible_sessions(self) -> list[ChatSessionMeta]:
-        """左侧列表：隐藏归档项与成员会话（Deva 的列表口径）。"""
+        """左侧列表：隐藏归档项、成员会话，以及**尚未落盘的惰性会话**（Deva 的列表口径）。
+
+        惰性会话只活在内存索引里（`ensure_session` 不写盘）：Deva 的渲染层新建后只
+        `setCurrent(id)`，主进程索引里根本没有它；本工程 `open_session` 直接调
+        `ensure_session`，所以要在投影时按「文件是否存在」把它排除，等价于 Deva 的
+        「未 `createSession` 不列出」。首条消息落盘后文件出现，会话自然进列表。
+        """
         return [
             m
             for m in self.list_sessions()
-            if not m.archived and not m.parentId
+            if not m.archived and not m.parentId and self.session_path(m.id).exists()
         ]
 
     def cleanup(self) -> None:

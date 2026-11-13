@@ -43,6 +43,10 @@ def main() -> int:
         print("can_send:", vm.can_send())
 
         window._send_button.click()
+        # 回合在后台线程跑；等它结束并把队列里的事件在「本线程」执行完（等价于真实
+        # 应用里 40ms 定时器反复 drain 的结果）。只 processEvents 不够：事件队列归
+        # ViewModel 所有，必须显式 drain。
+        assert vm.wait_idle(5.0)
         app.processEvents()
 
         print("status label:", window._status.text())

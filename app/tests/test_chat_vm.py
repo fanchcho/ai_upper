@@ -200,3 +200,32 @@ def test_reopening_a_session_shows_stored_history(tmp_path, workspace):
 
 def store_path(home):
     return ChatSessionStore(home).chats_dir
+
+
+def test_turn_end_notifier_runs_on_the_draining_thread(tmp_path, workspace):
+    """回合结束回调必须在 `drain()` 的线程执行，不能在工作线程直接改界面。
+
+    回归用例：`run_turn` 曾在工作线程的 finally 里直接调 `_notifier`，界面回调
+    因此从工作线程写 Qt 控件（`QObject: Cannot create children for a parent that
+    is in a different thread`，随后进程崩溃）。
+    """
+    import threading
+
+    calls: list[int] = []
+    store = ChatSessionStore(tmp_path / "home")
+    vm = ChatViewModel(
+        store,
+        FakeProvider(),
+        ToolRuntime(WorkspaceGuard([workspace]), workspace),
+        notifier=lambda: calls.append(threading.get_ident()),
+    )
+    vm.open_session("notify")
+    main_ident = threading.get_ident()
+
+    vm.start_turn("看一下 notes.txt")
+    worker = vm._thread
+    assert worker is not None
+    worker.join(5.0)
+    assert calls == []          # 回合跑完但界面还没取事件：回调不该已在工作线程执行
+    assert vm.drain() > 0
+    assert calls == [main_ident]

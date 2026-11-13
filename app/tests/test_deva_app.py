@@ -1,194 +1,21 @@
-"""新应用入口与最小界面：装配跑得起来、绑定把界面刷对。
+"""新应用入口与主窗口：装配跑得起来、绑定把界面刷对。
 
 Qt 在这里用假实现（与 test_mvvm_example.py 同一套思路）：这一层测的是装配与绑定，
 真实 Qt 的启动由 `QT_QPA_PLATFORM=offscreen python -m deva_app` 在 CI/验收里跑。
+
+控件替身集中在 `fake_qt_ui.py`，和 `test_deva_panes.py` 共用；这里只保留入口装配
+相关的用例。
 """
 from __future__ import annotations
 
-import os
-
-import pytest
-
-from conftest import install_fake_binding
-
-
-class FakeSignal:
-    def __init__(self) -> None:
-        self.handlers: list = []
-
-    def connect(self, handler) -> None:
-        self.handlers.append(handler)
-
-    def emit(self, *args) -> None:
-        for handler in list(self.handlers):
-            handler(*args)
-
-
-class FakeWindow:
-    def __init__(self) -> None:
-        self.visible = False
-        self.title = ""
-        self.central_widget = None
-        self.size = None
-        self.raised = False
-        self.activated = False
-
-    def setWindowTitle(self, title: str) -> None:  # noqa: N802
-        self.title = title
-
-    def setCentralWidget(self, widget) -> None:  # noqa: N802
-        self.central_widget = widget
-
-    def resize(self, *size: int) -> None:
-        self.size = size
-
-    def show(self) -> None:
-        self.visible = True
-
-    def raise_(self) -> None:  # noqa: N802
-        self.raised = True
-
-    def activateWindow(self) -> None:  # noqa: N802
-        self.activated = True
-
-    def close(self) -> None:
-        self.visible = False
-
-
-class FakeLabel:
-    def __init__(self, text: str = "") -> None:
-        self.text = text
-        self.visible = True
-
-    def setText(self, value: str) -> None:  # noqa: N802
-        self.text = value
-
-    def setWordWrap(self, value: bool) -> None:  # noqa: N802
-        self.word_wrap = value
-
-    def show(self) -> None:
-        self.visible = True
-
-    def hide(self) -> None:
-        self.visible = False
-
-
-class FakeButton:
-    def __init__(self, text: str = "") -> None:
-        self.text = text
-        self.clicked = FakeSignal()
-        self.enabled = True
-
-    def setEnabled(self, value: bool) -> None:  # noqa: N802
-        self.enabled = value
-
-    def click(self) -> None:
-        self.clicked.emit(False)
-
-
-class FakeTextBrowser:
-    def __init__(self) -> None:
-        self.plain_text = ""
-
-    def setPlainText(self, value: str) -> None:  # noqa: N802
-        self.plain_text = value
-
-
-class FakePlainTextEdit:
-    def __init__(self) -> None:
-        self.plain_text = ""
-        self.textChanged = FakeSignal()
-
-    def setPlainText(self, value: str) -> None:  # noqa: N802
-        self.plain_text = value
-        self.textChanged.emit()
-
-    def toPlainText(self) -> str:  # noqa: N802
-        return self.plain_text
-
-    def setPlaceholderText(self, value: str) -> None:  # noqa: N802
-        self.placeholder = value
-
-    def setFixedHeight(self, value: int) -> None:  # noqa: N802
-        self.fixed_height = value
-
-
-class FakeLayout:
-    def __init__(self, parent=None) -> None:
-        self.widgets: list = []
-
-    def addWidget(self, widget, *args) -> None:  # noqa: N802
-        self.widgets.append(widget)
-
-    def addLayout(self, layout) -> None:  # noqa: N802
-        self.widgets.append(layout)
-
-    def setContentsMargins(self, *args) -> None:  # noqa: N802
-        pass
-
-
-class FakeTimer:
-    """QTimer 的假实现：只记录连接，由测试决定何时触发（Qt 事件循环不在这里跑）。"""
-
-    def __init__(self) -> None:
-        self.interval = 0
-        self.started = False
-        self.timeout = FakeSignal()
-
-    def setInterval(self, value: int) -> None:  # noqa: N802
-        self.interval = value
-
-    def start(self) -> None:
-        self.started = True
-
-    def stop(self) -> None:
-        self.started = False
-
-
-class FakeApplication:
-    def __init__(self, argv=None) -> None:
-        self.argv = argv
-
-    @classmethod
-    def instance(cls):
-        return None
-
-    @classmethod
-    def setAttribute(cls, attribute) -> None:  # noqa: N802
-        pass
-
-    def processEvents(self) -> None:  # noqa: N802
-        pass
-
-    def platformName(self) -> str:  # noqa: N802
-        return os.environ.get("QT_QPA_PLATFORM", "unknown")
-
-    def quit(self) -> None:
-        pass
-
-
-@pytest.fixture()
-def fake_qt(monkeypatch):
-    widgets = {
-        "QApplication": FakeApplication,
-        "QMainWindow": FakeWindow,
-        "QWidget": FakeWindow,
-        "QVBoxLayout": FakeLayout,
-        "QLabel": FakeLabel,
-        "QPushButton": FakeButton,
-        "QTextBrowser": FakeTextBrowser,
-        "QPlainTextEdit": FakePlainTextEdit,
-        "QHBoxLayout": FakeLayout,
-    }
-    install_fake_binding(
-        monkeypatch,
-        {
-            "PySide6": {
-                "QtCore": {"Qt": object(), "QTimer": FakeTimer},
-                "QtWidgets": widgets,
-            }
-        },
-    )
+from fake_qt_ui import (  # noqa: F401 - fixture 需要出现在模块命名空间里
+    FakeButton,
+    FakeLabel,
+    FakeListItem,
+    FakeListWidget,
+    FakeMessageBox,
+    fake_qt,
+)
 
 
 def test_headless_entry_assembles_and_prints(monkeypatch, tmp_path, capsys, fake_qt):
@@ -220,7 +47,7 @@ def test_assembly_registers_services_viewmodel_and_view(monkeypatch, tmp_path, f
         assert isinstance(app.get_service("workspace_guard"), WorkspaceGuard)
         assert isinstance(app.get_service("tool_runtime"), ToolRuntime)
         assert app.get_viewmodel("chat").session_id == "main"
-        assert app.get_view("chat") is not None
+        assert app.get_view("main") is not None
         # 工作区环境变量真的登记成了受信根
         assert app.get_service("workspace_guard").list_roots() == [tmp_path]
     finally:
@@ -259,6 +86,24 @@ def test_window_binds_transcript_status_and_send(monkeypatch, tmp_path, fake_qt)
 
     assert vm.transcript[-1]["role"] == "assistant"
     assert "你好" in window._transcript.plain_text
-    assert window._status.text == "就绪"
-    assert window._error.text == ""
+    assert window._status.text() == "就绪"
+    assert window._error.text() == ""
     window.close()
+
+
+def test_main_window_has_one_registered_view_so_only_one_window_opens(monkeypatch, tmp_path, fake_qt):
+    """框架的 `start()` 会 show() 所有注册的 View：多注册一个就多开一个窗口。"""
+    monkeypatch.setenv("DEVA_HOME", str(tmp_path / "home"))
+
+    from deva_app.__main__ import DevaApplication
+
+    application = DevaApplication()
+    app = application.prepare()
+    try:
+        assert list(app.views.keys()) == ["main"]
+        window = app.get_view("main")
+        assert isinstance(window.status_text, str)
+        assert window.status_text == "就绪"
+        assert window.settings_visible is False
+    finally:
+        app.stop()

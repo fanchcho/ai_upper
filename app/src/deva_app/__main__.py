@@ -22,7 +22,9 @@ from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services.settings_service import SettingsService
 from mvvm.services.tool_runtime import ToolRuntime
 from mvvm.services.workspace_guard import WorkspaceGuard
+from mvvm.view_models.chat_sessions_vm import ChatSessionsViewModel
 from mvvm.view_models.chat_vm import ChatViewModel
+from mvvm.view_models.settings_vm import SettingsViewModel
 
 HEADLESS_ENV = "DEVA_APP_HEADLESS"
 WORKSPACE_ENV = "DEVA_APP_WORKSPACE"
@@ -74,14 +76,30 @@ class DevaApplication(MVVMQtApplication):
             effort_provider=lambda level: gateway.effort_parameter(level),
         )
         viewmodel.open_session(DEFAULT_SESSION_ID)
+
+        # 会话列表与设置页各自一个 ViewModel；聊天会话切换时由主窗口驱动它们。
+        sessions = ChatSessionsViewModel(store)
+        sessions.set_active(DEFAULT_SESSION_ID)
+        settings_vm = SettingsViewModel(settings, vault, gateway)
+
         app.register_viewmodel("chat", viewmodel)
+        app.register_viewmodel("sessions", sessions)
+        app.register_viewmodel("settings", settings_vm)
 
     def initialize_views(self) -> None:
         # 延迟 import：没有 Qt 时这个模块（以及它的测试）照样能导入。
-        from mvvm.views.chat_window import ChatWindow
+        from mvvm.views.deva_main_window import DevaMainWindow
 
         app = self.mvvm_app
-        app.register_view("chat", ChatWindow(app.get_viewmodel("chat")))
+        window = DevaMainWindow(
+            app.get_viewmodel("chat"),
+            app.get_viewmodel("sessions"),
+            app.get_viewmodel("settings"),
+            fetch_models=app.get_service("model_gateway").list_models,
+        )
+        # 只注册一个 View：`MVVMApplication.start()` 会 show() 所有已注册的 View，
+        # 注册第二个就会多开一个窗口。验收脚本按 "main" 取窗口。
+        app.register_view("main", window)
 
 
 def run(headless: Optional[bool] = None) -> int:
