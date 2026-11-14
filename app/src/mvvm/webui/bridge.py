@@ -12,7 +12,9 @@
 """
 from __future__ import annotations
 
+import asyncio
 import json
+import threading
 from pathlib import Path
 from typing import Any, Callable
 
@@ -20,6 +22,7 @@ from utils.qt_compat import QtCore, Signal, Slot
 
 QObject = QtCore.QObject
 
+from mvvm.services.avatar_image import clear_avatar_image, read_avatar_image, write_avatar_image
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.settings_service import SettingsService
@@ -37,6 +40,14 @@ class UnimplementedChannel(BridgeError):
     """通道尚未接入 Python 实现。显式暴露，不静默吞。"""
 
 
+class Deferred:
+    """标记一个通道「异步收尾」：处理函数拿 requestId，稍后自己调 `bridge.finish`。
+
+    `provider:list-models` 是唯一需要的例子：探针最多等 15 秒，同步跑会把界面卡死。
+    调用方式仍是同步入口（`bridge.invoke` 立即返回），只是结果由后台线程回送。
+    """
+
+
 class DevaBridge(QObject):
     """一个 WebEngine 页面 ↔ Python 服务 的桥。
 
@@ -45,6 +56,10 @@ class DevaBridge(QObject):
 
     # 事件通道：名字与 preload 的 `ipcRenderer.on(...)` 一致
     event = Signal(str, str)  # (channel, payload_json)
+    # 后台线程回送调用结果：runJavaScript 必须在 GUI 线程调，跨线程时先经这个信号。
+    _deferred_result = Signal(str, bool, str)  # (request_id, ok, payload_json)
+    # 后台线程推事件（回合线程 emit `chat:event`）同样要回 GUI 线程。
+    _emit_requested = Signal(str, str)  # (channel, payload_json)
 
     def __init__(
         self,
@@ -63,10 +78,21 @@ class DevaBridge(QObject):
         self.skills = SkillStore(self.home)
         self._view: Any = None
         self._handlers: dict[str, Callable[..., Any]] = {}
+        self._deferred: set[str] = set()
         # 标题栏叠加层主题回调：由视图注入（桥不直接依赖视图类）。
         self._overlay_callback: Callable[[bool], None] | None = None
         # 窗口控制回调：同样由视图注入。没注入时通道必须显式报错，不能假装成功。
         self._window_actions: dict[str, Callable[..., Any]] = {}
+        # 回合宿主（`ChatHost`）：读取类通道也要用它（attach-session 的进行中回合、
+        # list-sessions 的受信根恢复）。没有它时相关通道不注册，调用显式报未接入。
+        self.chat_host: Any = None
+        self.model_gateway: Any = None
+        self._deferred_result.connect(
+            self._resolve_deferred, QtCore.Qt.ConnectionType.QueuedConnection
+        )
+        self._emit_requested.connect(
+            self._write_emit, QtCore.Qt.ConnectionType.QueuedConnection
+        )
         self._register_defaults()
 
     def set_overlay_callback(self, callback: Callable[[bool], None]) -> None:
@@ -86,18 +112,43 @@ class DevaBridge(QObject):
         self._view = view
 
     def emit_event(self, channel: str, payload: Any) -> None:
-        """把一条事件推给渲染层（对应 `webContents.send(channel, payload)`）。"""
+        """把一条事件推给渲染层（对应 `webContents.send(channel, payload)`）。
+
+        回合在后台线程跑，事件也从那里推；`runJavaScript` 只能在 GUI 线程调，所以这里统一
+        走信号回到 GUI 线程再写页面（同线程时 QueuedConnection 也只是稍后派发，视觉无差）。
+        """
         if self._view is None:
             return
+        self._emit_requested.emit(
+            str(channel), json.dumps(payload, ensure_ascii=False)
+        )
+
+    def _write_emit(self, channel: str, payload_json: str) -> None:
+        if self._view is None:
+            return
+        # payload 以 JSON 字面量直接嵌进调用：渲染层的回调拿到的是对象（与原版
+        # `webContents.send` 的结构化克隆一致），不是一段需要自己 JSON.parse 的字符串。
         code = (
-            f"window.__devaEmit({json.dumps(channel)}, "
-            f"{json.dumps(json.dumps(payload, ensure_ascii=False))});"
+            f"window.__devaEmit({json.dumps(channel)}, {payload_json});"
         )
         self._view.page().runJavaScript(code)
 
     # ── 注册表 ────────────────────────────────────────────────────────────
     def register(self, channel: str, handler: Callable[..., Any]) -> None:
         self._handlers[channel] = handler
+
+    def register_deferred(self, channel: str, handler: Callable[..., Any]) -> None:
+        """注册异步通道：handler(request_id, *args) 自己调 `finish` 回送结果。"""
+        self._handlers[channel] = handler
+        self._deferred.add(channel)
+
+    def finish(self, request_id: str, ok: bool, payload: Any) -> None:
+        """异步通道的收尾入口；可在任意线程调用（跨线程时经信号回到 GUI 线程）。"""
+        body = json.dumps(payload, ensure_ascii=False) if payload is not None else "null"
+        self._deferred_result.emit(str(request_id), bool(ok), body)
+
+    def _resolve_deferred(self, request_id: str, ok: bool, payload_json: str) -> None:
+        self._write_resolve(request_id, ok, payload_json)
 
     def handles(self, channel: str) -> bool:
         return channel in self._handlers
@@ -116,6 +167,10 @@ class DevaBridge(QObject):
             handler = self._handlers.get(channel)
             if handler is None:
                 raise UnimplementedChannel(f"通道未接入：{channel}")
+            if channel in self._deferred:
+                # 结果由处理函数稍后 `finish` 回送；这里不 resolve。
+                handler(request_id, *args)
+                return
             result = handler(*args)
         except Exception as exc:  # noqa: BLE001 - 桥边界：任何异常都要变成前端的 reject
             self._resolve(request_id, False, _error_payload(exc))
@@ -123,9 +178,12 @@ class DevaBridge(QObject):
         self._resolve(request_id, True, result)
 
     def _resolve(self, request_id: str, ok: bool, payload: Any) -> None:
+        body = json.dumps(payload, ensure_ascii=False) if payload is not None else "null"
+        self._write_resolve(request_id, ok, body)
+
+    def _write_resolve(self, request_id: str, ok: bool, body: str) -> None:
         if self._view is None:
             return
-        body = json.dumps(payload, ensure_ascii=False) if payload is not None else "null"
         code = (
             f"window.__devaResolve({json.dumps(request_id)}, "
             f"{'true' if ok else 'false'}, {body});"
@@ -139,15 +197,44 @@ class DevaBridge(QObject):
 
         self.register("personas:list", lambda: self.personas.list_personas())
         self.register("personas:get", self.personas.get)
+        self.register("personas:upsert", self.personas.upsert)
+        self.register("personas:remove", self.personas.remove)
+        self.register("personas:set-enabled", self.personas.set_enabled)
+        self.register("personas:reorder", self.personas.reorder)
+        self.register("personas:set-avatar-image", self.personas.set_avatar_image)
+        self.register("personas:clear-avatar-image", self.personas.clear_avatar_image)
 
         self.register("skills:list", self.skills.list_skills)
         self.register("skills:get", self.skills.get)
+        self.register("skills:remove", self.skills.remove)
+        self.register("skills:set-enabled", self.skills.set_enabled)
+        self.register("skills:set-roles", self.skills.set_roles)
 
         self.register("profile:get", self._profile_get)
+        self.register("profile:set-avatar", self._profile_set_avatar)
+        self.register("profile:set-avatar-image", self._profile_set_avatar_image)
 
         self.register("chat:list-sessions", self._list_sessions)
         self.register("chat:load-session", self._load_session)
         self.register("chat:attach-session", self._attach_session)
+        # 写路径：全部转到 `ChatHost`（宿主没接线时这些通道不注册，调用显式报未接入）。
+        for channel, method in (
+            ("chat:send", "send"),
+            ("chat:abort", "abort"),
+            ("chat:compact", "compact"),
+            ("chat:create-session", "create_session"),
+            ("chat:set-model", "set_model"),
+            ("chat:set-effort", "set_effort"),
+            ("chat:set-focus", "set_focus"),
+            ("chat:rename-session", "rename_session"),
+            ("chat:set-archived", "set_archived"),
+            ("chat:delete-session", "delete_session"),
+            ("chat:reset", "reset"),
+            ("chat:delete-turns", "delete_turns"),
+            ("chat:todos", "todos"),
+            ("chat:todo-cancel", "cancel_todos"),
+        ):
+            self.register(channel, self._host_method(method))
         self.register("browser:state", self._browser_state)
         self.register("browser:ready", self._browser_state)
         self.register("browser:preview-pinned", lambda _tab=None: {"ok": True})
@@ -156,6 +243,11 @@ class DevaBridge(QObject):
         self.register("secrets:has", self._secrets_has)
         self.register("secrets:list", self._secrets_list)
         self.register("secrets:available", self._secrets_available)
+        self.register("secrets:set", self._secrets_set)
+        self.register("secrets:delete", self._secrets_delete)
+
+        # 模型清单探针：最长等 15 秒，必须异步回送，否则同步跑会把渲染层主线程卡死。
+        self.register_deferred("provider:list-models", self._list_models)
 
         # 窗口控制：原版是 `mainWindow?.minimize()` 一类直调。这里必须由视图注入真实实现，
         # 没注入就显式报错——此前的空 lambda 会让界面「点了没反应但 Promise 成功」。
@@ -172,6 +264,80 @@ class DevaBridge(QObject):
         self.register("remote:get-state", self._remote_state)
 
     # ── 各通道实现 ────────────────────────────────────────────────────────
+    def _host_method(self, method: str) -> Callable[..., Any]:
+        """宿主方法包装：宿主未接线时抛「未接入」，绝不返回假成功。"""
+
+        def run(*args: Any) -> Any:
+            host = self.chat_host
+            if host is None:
+                raise UnimplementedChannel(f"回合宿主未接线：{method}")
+            return getattr(host, method)(*args)
+
+        return run
+
+    def _attach_session(self, session_id: str) -> dict[str, Any]:
+        """接上会话：历史 + 进行中回合（同一时刻取出，不会漏掉随后的 done）。"""
+        host = self.chat_host
+        if host is None:
+            return {"messages": self._load_session(session_id), "turnId": None, "startedAt": None}
+        return host.attach(session_id)
+
+    def _profile_set_avatar(self, spec: Any) -> dict[str, bool]:
+        """写头像 spec；超过 4096 字节存空串（即视为清除，回落默认头像）。"""
+        value = spec if isinstance(spec, str) else ""
+        section = self.settings.get("profile")
+        section = dict(section) if isinstance(section, dict) else {}
+        section["avatar"] = "" if len(value) > 4096 else value
+        return self.settings.set_config({"profile": section})
+
+    def _profile_set_avatar_image(self, data_uri: Any) -> str:
+        """空串 = 清除图片；否则落盘并回读 data URI（校验/写入失败为空串）。"""
+        directory = self.home / "profile"
+        uri = data_uri if isinstance(data_uri, str) else ""
+        if not uri:
+            clear_avatar_image(directory, "avatar")
+            return ""
+        return write_avatar_image(directory, "avatar", uri)
+
+    def _secrets_set(self, provider_id: Any, key: Any) -> dict[str, bool]:
+        vault = getattr(self, "vault", None)
+        if vault is None:
+            return {"ok": False, "available": False}
+        return vault.set_secret(str(provider_id or ""), str(key or ""))
+
+    def _secrets_delete(self, provider_id: Any) -> dict[str, bool]:
+        vault = getattr(self, "vault", None)
+        if vault is None:
+            raise UnimplementedChannel("密钥库未接线：secrets:delete")
+        result = vault.delete_secret(str(provider_id or ""))
+        return {"ok": True} if result.get("ok") else result
+
+    def _list_models(self, request_id: str, cfg: Any) -> None:
+        """`provider:list-models`：后台线程跑探针，结果经信号回到 GUI 线程回送。
+
+        入参是渲染层的 `{adapter, providerId, baseURL}`；密钥由网关从密钥库现取。
+        """
+        gateway = self.model_gateway
+        if gateway is None:
+            self.finish(request_id, False, {"unimplemented": True, "message": "模型网关未接线"})
+            return
+        payload = cfg if isinstance(cfg, dict) else {}
+
+        def work() -> None:
+            try:
+                result = asyncio.run(
+                    gateway.list_models(
+                        str(payload.get("providerId") or ""),
+                        payload.get("adapter") or None,
+                        payload.get("baseURL") or None,
+                    )
+                )
+                self.finish(request_id, True, list_models_payload(result))
+            except Exception as exc:  # noqa: BLE001 - 桥边界：异常回给渲染层而不是吞掉
+                self.finish(request_id, False, _error_payload(exc))
+
+        threading.Thread(target=work, name="list-models", daemon=True).start()
+
     def _window_action(self, name: str) -> Callable[..., Any]:
         """把窗口能力包成通道处理函数；视图没有注入时必须抛错。"""
 
@@ -198,8 +364,21 @@ class DevaBridge(QObject):
         }
 
     def _list_sessions(self, workspace_root: str | None = None) -> list[dict[str, Any]]:
+        """`chat:list-sessions`：全部会话（含归档与成员会话——渲染层自己过滤）。
+
+        原版还会把每个非空 `focusRoot` 登记为受信根：否则重启后 `git:status` / `fs:*`
+        首行 `assertInside` 抛「拒绝访问」，界面表现为 git 丢失。宿主存在时用它的守卫。
+        """
         del workspace_root  # 会话已无项目分桶；参数仅为兼容签名
-        return [meta.model_dump() for meta in self.store.visible_sessions()]
+        # 惰性会话（只进内存索引、尚未 save）不列：原版里它们只活在渲染层，
+        # 主进程索引根本没有它们——列出来会凭空多一条空对话。
+        metas = [m for m in self.store.list_sessions() if self.store.session_path(m.id).exists()]
+        guard = getattr(self.chat_host, "guard", None)
+        if guard is not None:
+            for meta in metas:
+                if meta.focusRoot:
+                    guard.trust_root(meta.focusRoot)
+        return [meta.model_dump() for meta in metas]
 
     def _load_session(self, session_id: str, workspace_root: str | None = None) -> list[dict[str, Any]]:
         del workspace_root
@@ -207,10 +386,6 @@ class DevaBridge(QObject):
         if session is None:
             return []
         return display_messages(session.messages)
-
-    def _attach_session(self, session_id: str) -> dict[str, Any]:
-        """接上会话：历史 + 进行中回合。当前还没有后台回合，turnId 恒为 null（不假造）。"""
-        return {"messages": self._load_session(session_id), "turnId": None, "startedAt": None}
 
     def _browser_state(self) -> dict[str, Any]:
         """内置浏览器未接入：返回 Deva `BrowserUiState` 的空态。
@@ -285,6 +460,26 @@ def _error_payload(exc: Exception) -> dict[str, Any]:
         "message": str(exc),
         "unimplemented": isinstance(exc, UnimplementedChannel),
     }
+
+
+def list_models_payload(result: Any) -> dict[str, Any]:
+    """`ListModelsResult`（frozen dataclass）→ 渲染层契约形状 `{ok, models?, kind?, message?}`。
+
+    `ListModelsResult` **不是** pydantic 模型，没有 `model_dump()`；之前桥里直接调它，
+    每次「拉取模型」都以 AttributeError 收场（界面永远显示拉取失败）。这里显式按契约
+    只放这四个键，`models` 用数组（原版是 `string[]`）。
+    """
+    payload: dict[str, Any] = {"ok": bool(getattr(result, "ok", False))}
+    models = list(getattr(result, "models", ()) or ())
+    if models:
+        payload["models"] = models
+    kind = getattr(result, "kind", None)
+    if kind:
+        payload["kind"] = kind
+    message = getattr(result, "message", None)
+    if message:
+        payload["message"] = message
+    return payload
 
 
 def display_messages(messages: list[Any]) -> list[dict[str, Any]]:
@@ -384,4 +579,5 @@ __all__ = [
     "DevaBridge",
     "UnimplementedChannel",
     "display_messages",
+    "list_models_payload",
 ]

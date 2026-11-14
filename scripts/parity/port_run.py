@@ -25,6 +25,9 @@ from mvvm.services.secrets_vault import SecretsVault  # noqa: E402
 from mvvm.services.settings_service import SettingsService  # noqa: E402
 from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
 
+# 回合宿主、模型网关与工具运行时由窗口内部装配（mvvm.webui.assembly），
+# 这里只负责起窗口——装配写两份就会漂移。
+
 
 def main() -> int:
     app = QApplication(sys.argv)

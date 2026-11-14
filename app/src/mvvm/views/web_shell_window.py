@@ -30,9 +30,16 @@ QWebEngineView = QtWebEngineWidgets.QWebEngineView
 QMainWindow = QtWidgets.QMainWindow
 QWidget = QtWidgets.QWidget
 
+from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.persona_store import PersonaStore
+from mvvm.services.secrets_vault import SecretsVault
+from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.views.title_bar_overlay import TITLEBAR_HEIGHT, TitleBarOverlay
+from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from mvvm.webui.bridge import DevaBridge
+
+# 回合线程攒下的界面写入（busy / status / streaming）由 GUI 线程周期性 drain。
+DRAIN_INTERVAL_MS = 50
 
 ASSETS_DIR = Path(__file__).resolve().parents[3] / "assets" / "renderer"
 
@@ -90,11 +97,31 @@ class DevaWebWindow(QMainWindow):
         page.settings().setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows, False)
 
         self.channel = QWebChannel(self)
-        self.bridge = DevaBridge(
-            settings=settings, personas=personas, store=store, home=Path(settings.home)
+        home = Path(settings.home)
+        vault = vault if vault is not None else SecretsVault(home)
+        self.bridge = DevaBridge(settings=settings, personas=personas, store=store, home=home)
+        self.bridge.vault = vault
+
+        # ── 回合装配：写通道（chat:send / abort / …）由宿主执行 ──────────────
+        # 受信根：启动时按 DEVA_APP_WORKSPACE 登记；会话里的 focusRoot 在
+        # `chat:list-sessions` 时补登记（与原版一致，否则重启后 git/fs 报拒绝访问）。
+        self.guard = WorkspaceGuard()
+        workspace = trusted_workspace_from_env()
+        if workspace:
+            self.guard.trust_root(workspace)
+        self.host, self.gateway = build_chat_host(
+            settings=settings,
+            vault=vault,
+            store=store,
+            guard=self.guard,
+            home=home,
+            # 回合在后台线程跑，事件从那里推；桥内部会回到 GUI 线程再写页面。
+            emit=lambda payload: self.bridge.emit_event("chat:event", payload),
+            emit_sessions_changed=lambda: self.bridge.emit_event("chat:sessions-changed", None),
         )
-        if vault is not None:
-            self.bridge.vault = vault
+        self.bridge.chat_host = self.host
+        self.bridge.model_gateway = self.gateway
+
         self.bridge.attach_view(self.view)
         self.channel.registerObject("bridge", self.bridge)
         page.setWebChannel(self.channel)
@@ -126,6 +153,13 @@ class DevaWebWindow(QMainWindow):
             close=self.close,
             is_fullscreen=self.isFullScreen,
         )
+
+        # 回合线程只把界面写入排进队列（见 ChatViewModel._ui）；这里在 GUI 线程定时取走执行，
+        # 否则 busy/status/streaming 永远停在旧值——渲染层的「正在输出」状态就不会亮起。
+        self._drain_timer = QtCore.QTimer(self)
+        self._drain_timer.setInterval(DRAIN_INTERVAL_MS)
+        self._drain_timer.timeout.connect(self.host.drain)
+        self._drain_timer.start()
 
     def _place_overlay(self) -> None:
         """叠加层只占右上角那块实色矩形（原版 Linux：3 个 32px 按钮宽、40 高），不铺满整条。"""

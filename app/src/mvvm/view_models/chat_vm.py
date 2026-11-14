@@ -290,11 +290,15 @@ class ChatViewModel(BaseViewModel):
         self.input_text_property.set_value("")
         self.start_turn(text)
 
-    def start_turn(self, text: str) -> threading.Thread:
-        """起后台线程跑 `run_turn`；已有一个回合在跑时直接返回当前线程。"""
+    def start_turn(self, text: str, *, cancel: Optional[CancelToken] = None) -> threading.Thread:
+        """起后台线程跑 `run_turn`；已有一个回合在跑时直接返回当前线程。
+
+        `cancel` 由调用方（Web 承载层的回合宿主）传入，好让 `chat:abort` 拿同一个标记
+        止损——否则中止只能等 `busy` 属性被 UI 线程 drain 到才有反应。
+        """
         if self._thread is not None and self._thread.is_alive():
             return self._thread
-        self._cancel = CancelToken()
+        self._cancel = cancel if cancel is not None else CancelToken()
 
         def runner() -> None:
             self._worker_ident = threading.get_ident()
@@ -507,7 +511,10 @@ class ChatViewModel(BaseViewModel):
                     self.emit({"type": "thinking_delta", "text": event.text})
                 elif isinstance(event, ToolCall):
                     calls.append(event)
-                    self.emit({"type": "tool_call", "name": event.name, "input": event.input})
+                    # 带上 id：渲染层按 id 把 tool_result 回填到这张工具卡上，缺了就对不上。
+                    self.emit(
+                        {"type": "tool_call", "id": event.id, "name": event.name, "input": event.input}
+                    )
                 elif isinstance(event, StreamError):
                     if aborted:
                         break

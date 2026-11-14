@@ -9,13 +9,14 @@
   且**磁盘同名目录不得影子内置技能**；
 - 解析失败的目录跳过，绝不让一个坏文件拖垮扩展页。
 
-只读范围：列表 / 单条。写入类（upsert / remove / 导入 / 启停 / 角色）尚未接入，沿用
-`persona_store` 的做法显式报「未实现」，不做静默假成功。
+读写范围：列表 / 单条 / 启停 / 角色白名单 / 删除。文件导入（zip 技能包）依赖解压与限额
+校验，尚未接入，桥层直接显式报「未实现」（不返回假成功）。
 """
 from __future__ import annotations
 
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -258,6 +259,83 @@ class SkillStore:
             self._enabled_map().get(skill_id) is not False,
             self._roles_map().get(skill_id),
         )
+
+
+    # ── 写（Deva `skills:set-enabled` / `set-roles` / `remove`）──────────────
+    def _write_section(self, section: dict[str, Any]) -> None:
+        """写 `config.json` 的 `skills` 段（原版走 `setConfig` 顶层浅合并，失败静默）。"""
+        path = self.home / "config.json"
+        try:
+            config = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(config, dict):
+                config = {}
+        except (OSError, ValueError):
+            config = {}
+        config["skills"] = section
+        try:
+            self.home.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
+        except OSError:
+            pass  # 原版同口径：persist 吞异常
+
+    def _skills_section(self) -> dict[str, Any]:
+        section = self._section("skills")
+        return dict(section)
+
+    def set_enabled(self, skill_id: Any, enabled: Any) -> dict[str, bool]:
+        """写启用位；内置技能与非法 id 一律 no-op，恒回 `{ok:true}`（原版语义）。"""
+        key = str(skill_id or "")
+        if key and is_safe_id(key) and key not in RESERVED_IDS:
+            section = self._skills_section()
+            current = section.get("enabled") if isinstance(section.get("enabled"), dict) else {}
+            self._write_section({**section, "enabled": {**current, key: enabled is True}})
+        return {"ok": True}
+
+    def set_roles(self, skill_id: Any, roles: Any) -> dict[str, bool]:
+        """写可用角色；内置 / 非法 id → `{ok:false}`；`roles` 非数组按 `null`（= 全部角色）。
+
+        数组会去重并剔除空串与非字符串；`null` 时删除该键（原版 `setRoles`）。
+        """
+        key = str(skill_id or "")
+        if not key or not is_safe_id(key) or key in RESERVED_IDS:
+            return {"ok": False}
+        section = self._skills_section()
+        current = section.get("roles") if isinstance(section.get("roles"), dict) else {}
+        cleaned: list[str] | None = None
+        if isinstance(roles, list):
+            cleaned = []
+            for item in roles:
+                if isinstance(item, str) and item and item not in cleaned:
+                    cleaned.append(item)
+        next_roles = {k: v for k, v in current.items() if k != key}
+        if cleaned is not None:
+            next_roles[key] = cleaned
+        self._write_section({**section, "roles": next_roles})
+        return {"ok": True}
+
+    def remove(self, skill_id: Any) -> dict[str, bool]:
+        """删除自定义技能目录；内置 / 非法 id → `{ok:false}`；目录本不存在视为成功。
+
+        成功时连带删 `skills.enabled[id]` 与 `skills.roles[id]`（原版 `deleteSkill`）。
+        原版用 `shell.trashItem` 移入回收站；这里直接删除目录（Linux 上无统一回收站接口，
+        差异已记入台账）。
+        """
+        key = str(skill_id or "")
+        if not key or not is_safe_id(key) or key in RESERVED_IDS:
+            return {"ok": False}
+        folder = self.dir / key
+        try:
+            if folder.exists():
+                shutil.rmtree(folder)
+        except OSError:
+            return {"ok": False}
+        section = self._skills_section()
+        enabled = section.get("enabled") if isinstance(section.get("enabled"), dict) else {}
+        enabled.pop(key, None)
+        roles = section.get("roles") if isinstance(section.get("roles"), dict) else {}
+        roles.pop(key, None)
+        self._write_section({**section, "enabled": enabled, "roles": roles})
+        return {"ok": True}
 
 
 # ── frontmatter 解析（照抄 Deva `services/frontmatter.ts` 的四类条目）──────────

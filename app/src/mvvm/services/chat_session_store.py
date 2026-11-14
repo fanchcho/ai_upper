@@ -33,7 +33,7 @@ from mvvm.models.chat_models import (
     Message,
     StoredSession,
 )
-from mvvm.services.model_view import model_first
+from mvvm.services.model_view import is_genuine_user_turn, model_first
 
 INDEX_FILE = "_index.json"
 _SAFE_ID = re.compile(r"[^A-Za-z0-9_-]")
@@ -397,6 +397,106 @@ class ChatSessionStore:
         session.archived = archived
         self.save(session_id)
         return self._ensure_index()[session.id]
+
+    # ── 会话属性写入（Deva chat:set-model / set-effort / set-focus）─────────────
+    def set_model(self, session_id: str, model_ref: Optional[str]) -> bool:
+        """写会话定格的模型引用；会话尚未建档返回 False（原版 `{ok:false}`，不建档）。
+
+        不改 `updatedAt`：换模型不该把会话顶到列表最前（与 rename 同口径）。
+        """
+        session_id = safe_id(session_id)
+        # 原版的 getSession 只认**已建档**的会话：惰性会话（ensure_session 只进内存）返回
+        # `{ok:false}` 且不建档，模型仍由渲染层覆盖层随首发落库。
+        if not self.session_path(session_id).exists():
+            return False
+        session = self.load_session(session_id)
+        if session is None:
+            return False
+        session.model = model_ref or None
+        self.save(session_id)
+        return True
+
+    def set_effort(self, session_id: str, effort: Optional[str]) -> bool:
+        """写会话思考档位；会话不存在返回 False（原版对非法档位仍是 `{ok:true}`，
+        合法性判定放在桥层，这里只负责落盘）。"""
+        session_id = safe_id(session_id)
+        if not self.session_path(session_id).exists():
+            return False
+        session = self.load_session(session_id)
+        if session is None:
+            return False
+        session.effort = effort or None
+        self.save(session_id)
+        return True
+
+    def set_focus(self, session_id: str, focus_root: Optional[str]) -> bool:
+        """写会话聚焦工作区；会话不存在返回 False（惰性会话由首发覆盖层落库）。"""
+        session_id = safe_id(session_id)
+        if not self.session_path(session_id).exists():
+            return False
+        session = self.load_session(session_id)
+        if session is None:
+            return False
+        session.focusRoot = focus_root or None
+        self.save(session_id)
+        return True
+
+    def reset_messages(self, session_id: str) -> bool:
+        """清空对话正文与回合边车（`chat:reset`）；会话不存在返回 False。
+
+        保留：id / createdAt / title / personaId / model / effort / focusRoot / archived。
+        侧车按原版清空 notices / background / checkpoints / lastKnown / baselines / restoreNote，
+        并刷新 updatedAt（原版 reset 会 touch）。
+        """
+        session_id = safe_id(session_id)
+        session = self.load_session(session_id)
+        if session is None:
+            return False
+        session.messages = []
+        session.notices = None
+        session.background = None
+        session.checkpoints = None
+        session.lastKnown = None
+        session.baselines = None
+        session.restoreNote = None
+        session.lastInputTokens = None
+        session.lastCacheRead = None
+        session.lastCacheWrite = None
+        session.updatedAt = int(time.time() * 1000)
+        self.save(session_id)
+        return True
+
+    def delete_turns(self, session_id: str, turns: list[int]) -> Optional[list[Message]]:
+        """按「轮序号」删除消息，返回删除后的完整消息列表；会话不存在返回 None。
+
+        轮边界取真实的用户轮起点（`is_genuine_user_turn`：排除压缩摘要 / 自愈引导 /
+        tool_result 回灌），第 i 轮 = 第 i 个起点到第 i+1 个起点之前。越界的序号忽略。
+        """
+        session_id = safe_id(session_id)
+        session = self.load_session(session_id)
+        if session is None:
+            return None
+        starts = [
+            index for index, message in enumerate(session.messages)
+            if is_genuine_user_turn(message)
+        ]
+        ranges: list[tuple[int, int]] = []
+        for index, start in enumerate(starts):
+            end = starts[index + 1] if index + 1 < len(starts) else len(session.messages)
+            ranges.append((start, end))
+        drop: set[int] = set()
+        for turn in turns:
+            if isinstance(turn, int) and 0 <= turn < len(ranges):
+                start, end = ranges[turn]
+                drop.update(range(start, end))
+        if drop:
+            session.messages = [
+                message for index, message in enumerate(session.messages) if index not in drop
+            ]
+            session.lastInputTokens = None
+            session.touch()
+            self.save(session_id)
+        return list(session.messages)
 
     def delete_session(self, session_id: str) -> bool:
         """删除对话文件与其拆分文件；不存在返回 False。"""
