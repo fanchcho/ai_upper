@@ -9,6 +9,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+# 宿主固定的工作区根：改名只动工程自己的名字，这条路径不随改名移动。
+# 文档里写死它是「记录真实路径」，不是残留旧名——CI 的检出根在别处，
+# 所以这里必须是常量，不能靠 `str(root)` 推导。
+HOST_FIXED_WORKSPACE = "/home/agent/shared_workspace/py_upper"
+
 
 def _isolate_home(monkeypatch, tmp_path):
     """把 `Path.home()` 指到临时目录，避免读到真机上的 `~/.ai_upper` / `~/.deva`。"""
@@ -241,7 +246,12 @@ def test_repository_keeps_no_stale_old_name(tmp_path):
             continue
         # 工作区根目录由宿主固定，不随改名移动；它的绝对路径出现在历史证据里
         # 是记录而不是命名，替换掉再查。
-        text = text.replace(str(root), "<repo>")
+        #
+        # 这个路径是**常量**：CI 的检出根是另一条路径（`/home/agent/work/...`），
+        # 只剔除 `str(root)` 时，文档里写死的宿主路径会留下来，被当成残留旧名——
+        # 本机跑绿、CI 十二条 job 全红正是这么来的。
+        for host_fixed in (str(root), HOST_FIXED_WORKSPACE):
+            text = text.replace(host_fixed, "<repo>")
         for old in ("py_upper", "PY_UPPER", "PyUpper", "pyupper"):
             if old in text:
                 offenders.append(f"{relative}: {old}")
