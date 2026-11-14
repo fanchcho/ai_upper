@@ -330,7 +330,20 @@ jobs:
         shell: bash
         run: |
           log=build.log
-          rc="$(cat build.exitcode 2>/dev/null || echo 255)"
+          if [ -f build.exitcode ]; then
+            rc="$(cat build.exitcode)"
+          else
+            # The build step never ran (an earlier step failed, so the job is
+            # already red). Inventing an exit code here would file a second,
+            # misleading "build.py failed" annotation against a build that was
+            # never attempted -- exactly what happened on windows-arm64, where a
+            # unit test failure produced "build.py (exit 255) (no build.log)".
+            echo '### Full integration build — ${{ matrix.target }} (${{ matrix.os }})'
+            echo ''
+            echo 'Not run: an earlier step in this job failed.'
+            echo 'Not run: an earlier step in this job failed.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           {
             echo '### Full integration build — ${{ matrix.target }} (${{ matrix.os }})'
             echo ''
@@ -342,7 +355,7 @@ jobs:
               echo '```'
             else
               echo ''
-              echo 'build.log was not created: the step failed before the build ran.'
+              echo 'build.log was not created: the build step failed before it could write one.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
           RC="$rc" python - "$log" <<'PY'
