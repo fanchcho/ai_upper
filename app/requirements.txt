@@ -4,6 +4,9 @@
 # 安装：pip install -r app/requirements.txt
 PySide6==6.11.2
 pydantic==2.14.3
+# 模型请求的 HTTP 客户端：http_client.py 直接 import httpx，SSE 解析与
+# 连接复用都建在它的 API 上；漏声明会让打包产物在装配时 ModuleNotFoundError。
+httpx==0.28.1
 # 密钥存储：cryptography 提供 AES-256-GCM / HKDF，见 app/src/mvvm/services/secrets_crypto.py。
 # 不自实现的原因：GCM 的计数器、认证标签与侧信道防护不能靠 hashlib/hmac 拼出来，
 # 自己写等于把密钥安全押在未经验证的代码上；cryptography 的 wheel 内置 OpenSSL，无需系统头文件。

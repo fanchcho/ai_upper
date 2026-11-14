@@ -394,3 +394,30 @@ def test_manifest_records_imports_before_distribution_metadata_trim(tmp_path, mo
     data = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     assert data["imports"] == ["demo_pkg"]
     assert not list((staging / "site-packages").glob("*.dist-info"))
+
+
+def test_wheel_execute_bits_survive_extraction(tmp_path):
+    """A wheel executable that is only ever spawned must stay executable.
+
+    ``write_bytes`` applies the umask, so every file used to land 0o644.
+    PySide6 marks ``Qt/libexec/QtWebEngineProcess`` 0o100755 in the archive;
+    without the execute bit the packaged application started, failed to
+    ``execvp`` the helper, and showed a blank window — while pip-installed
+    site-packages (which applies the mode) worked fine.
+    """
+    from py_upper.third_party import _extract_wheel
+
+    wheel = make_wheel(tmp_path)
+    with zipfile.ZipFile(wheel, "a") as archive:
+        helper = zipfile.ZipInfo("demo_pkg/Qt/libexec/QtWebEngineProcess")
+        helper.external_attr = 0o100755 << 16
+        archive.writestr(helper, b"\x7fELF")
+        plain = zipfile.ZipInfo("demo_pkg/Qt/libexec/README.txt")
+        plain.external_attr = 0o100644 << 16
+        archive.writestr(plain, b"text")
+
+    site = tmp_path / "site"
+    _extract_wheel(wheel, site, tmp_path / "stage")
+
+    assert (site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess").stat().st_mode & 0o111
+    assert not (site / "demo_pkg" / "Qt" / "libexec" / "README.txt").stat().st_mode & 0o111

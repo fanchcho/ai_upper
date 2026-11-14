@@ -25,6 +25,46 @@ def test_resource_root_prefers_the_launcher_exported_home(monkeypatch, tmp_path)
     assert paths.resource_root() == tmp_path.resolve() / "resources"
 
 
+def test_assets_root_follows_the_launcher_exported_home(monkeypatch, tmp_path):
+    """A bundle has no source tree, so the assets path cannot be counted out.
+
+    The packager copies `app/assets` to `<bundle>/assets`; that is the only
+    location that exists after the egg is unpacked, and the launcher exports
+    its root as PY_UPPER_HOME.
+    """
+    from utils import paths
+
+    monkeypatch.delenv(paths.ASSETS_ENV, raising=False)
+    monkeypatch.delenv(paths.BUNDLE_HOME_ENV, raising=False)
+    assert paths.assets_root() == Path(paths.__file__).resolve().parents[2] / "assets"
+
+    monkeypatch.setenv(paths.BUNDLE_HOME_ENV, str(tmp_path))
+    assert paths.assets_root() == tmp_path.resolve() / "assets"
+
+    # The explicit override is what the parity scripts point at another build.
+    other = tmp_path / "other-assets"
+    other.mkdir()
+    monkeypatch.setenv(paths.ASSETS_ENV, str(other))
+    assert paths.assets_root() == other.resolve()
+
+
+def test_assets_root_names_the_packaged_location_when_nothing_exists(monkeypatch, tmp_path):
+    """A missing payload must report where it was expected, not a dev path."""
+    from utils import paths
+
+    monkeypatch.delenv(paths.ASSETS_ENV, raising=False)
+    monkeypatch.setattr(paths, "_module_file", lambda: None)
+    monkeypatch.setenv(paths.BUNDLE_HOME_ENV, str(tmp_path))
+
+    assert paths.assets_root() == tmp_path.resolve() / "assets"
+
+    # Without either export (a merged bundle whose env was lost) the executable
+    # directory is the only place left to name.
+    monkeypatch.delenv(paths.BUNDLE_HOME_ENV, raising=False)
+    monkeypatch.setattr(paths.sys, "executable", str(tmp_path / "Upper"))
+    assert paths.assets_root() == tmp_path.resolve() / "assets"
+
+
 def test_app_name_agrees_with_the_packaging_configuration(monkeypatch):
     """The name is written once, in app/pyproject.toml, and read from there."""
     from py_upper.config import app_name as packaged_app_name
@@ -87,3 +127,49 @@ def test_gui_opens_a_window_headlessly(monkeypatch, capsys):
 
     assert run_gui() == 0
     assert "GUI OK offscreen" in capsys.readouterr().out
+
+
+def test_every_third_party_import_is_a_declared_runtime_dependency():
+    """A dependency imported but not declared ships outside the bundle.
+
+    Cython compiles the application's own sources and the bundler installs
+    exactly ``[project].dependencies``; nothing else lands in site-packages.
+    ``httpx`` was imported by ``http_client.py`` and missing from both lists,
+    so every source-mode test passed while the packaged application died on the
+    first window with ``ModuleNotFoundError: No module named 'httpx'``. Only a
+    real build starting a real bundle found it.
+
+    The comparison is import-name based: distribution names and import names
+    differ (``PySide6`` installs ``PySide6``, ``cryptography`` installs
+    ``cryptography``), and this project pins the two to the same spelling.
+    """
+    import ast
+    import sys
+
+    project = Path(__file__).resolve().parents[1]
+    source_root = project / "src"
+    local = {path.stem for path in source_root.rglob("*.py")}
+    local |= {path.name for path in source_root.iterdir() if path.is_dir()}
+
+    imported: set[str] = set()
+    for path in sorted(source_root.rglob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported.update(alias.name.split(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                imported.add(node.module.split(".")[0])
+
+    third_party = {
+        name for name in imported
+        if name not in sys.stdlib_module_names and name not in local
+    }
+    declared = {
+        line.strip().split("==")[0].split(">=")[0].split("[")[0].lower()
+        for line in (project / "requirements.txt").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#") and not line.lstrip().startswith("-")
+    }
+    missing = {name for name in third_party if name.lower() not in declared}
+    assert not missing, (
+        f"imported but not in app/requirements.txt (so not in the bundle): {sorted(missing)}"
+    )

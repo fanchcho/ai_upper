@@ -308,8 +308,23 @@ def _prepare_repo() -> Path:
     assert replaced == 1, "could not rewrite [project].dependencies in the E2E fixture"
     pyproject.write_text(project, encoding="utf-8")
 
-    main_py = repo / "app" / "src" / "main.py"
-    main_py.write_text(
+    # The fixture builds the project's *configured* entry, whatever it is. Pin
+    # it to a fixture module instead of rewriting the real one: the shipped
+    # entry (deva_web.py) imports Qt, and this fixture application has no Qt
+    # payload at all. Reading the entry from the configuration also keeps the
+    # embedded-entry check meaningful — it must match this module.
+    project, replaced = re.subn(
+        r"^entry = \"[^\"]*\"",
+        'entry = "e2e_entry.py"',
+        project,
+        count=1,
+        flags=re.M,
+    )
+    assert replaced == 1, "could not rewrite [tool.py_upper].entry in the E2E fixture"
+    pyproject.write_text(project, encoding="utf-8")
+
+    entry_py = repo / "app" / "src" / "e2e_entry.py"
+    entry_py.write_text(
         "from application import run_application\n"
         "import demo_native\n"
         "import demo_pkg\n\n\n"
@@ -446,7 +461,10 @@ def test_local_build_end_to_end_with_third_party_dependency():
         assert (packaged / "demo_pkg" / "__init__.py").exists()
         extension = ".pyd" if target.os == "windows" else ".so"
         assert any(path.name.startswith("demo_native") and path.suffix == extension for path in packaged.iterdir())
-        assert not (packaged / "main.py").exists()
+        assert not (packaged / "e2e_entry.py").exists()
+        # The assets tree ships beside resources: the web window reads its
+        # renderer from there, and `parents[3]` cannot find it inside a bundle.
+        assert (_packaged_root(repo, target) / "assets" / "personas" / "general.md").is_file()
 
         wheel_manifest = json.loads((repo / "build" / "wheels" / target.key / "manifest.json").read_text(encoding="utf-8"))
         assert sorted(wheel_manifest["requirements"]) == ["demo-native==1.0.0", "demo-pkg==1.0.0"]

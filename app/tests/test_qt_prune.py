@@ -821,3 +821,128 @@ def test_prune_rejects_malformed_payload_options(tmp_path, monkeypatch):
         monkeypatch.setattr(qt_prune, "optimize_config", lambda cfg=config: cfg)
         with pytest.raises(RuntimeError, match=name):
             prune(site, TARGETS["windows-x86_64"], {"QtCore"})
+
+
+def test_prune_keeps_the_webengine_helper_process_with_its_module(tmp_path, monkeypatch):
+    """A kept QtWebEngineCore without its helper process renders nothing.
+
+    ``QtWebEngineProcess`` is spawned by QtWebEngineCore when a view attaches,
+    and it ships in the same ``libexec`` directory as rcc/uic/qmlcachegen.
+    Dropping that directory wholesale deleted the runtime helper together with
+    the build tooling: the packaged window opened, loaded the page, and stayed
+    blank with no error. The helper has to follow its module; plain tooling
+    still goes.
+    """
+    from py_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = _fake_pyside(site)
+    _touch(pyside / "Qt" / "libexec" / "rcc")
+    _touch(pyside / "Qt" / "libexec" / "uic")
+    _touch(pyside / "Qt" / "libexec" / "qmlcachegen")
+
+    def fake_dependencies(path):
+        name = Path(path).name
+        if name.startswith("QtWebEngineCore"):
+            return ["@rpath/QtCore.framework/Versions/A/QtCore"]
+        if name.startswith("QtCore"):
+            return ["/usr/lib/libSystem.B.dylib"]
+        return []
+
+    monkeypatch.setattr(qt_prune, "dependency_names", fake_dependencies)
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+
+    helper = pyside / "Qt" / "libexec" / "QtWebEngineProcess"
+    assert helper.exists(), "QtWebEngineCore ships without the process it spawns"
+    # Everything else in libexec is build tooling, not runtime payload.
+    assert not (pyside / "Qt" / "libexec" / "rcc").exists()
+    assert not (pyside / "Qt" / "libexec" / "uic").exists()
+    assert not (pyside / "Qt" / "libexec" / "qmlcachegen").exists()
+
+
+def test_prune_drops_the_webengine_helper_with_its_module(tmp_path, monkeypatch):
+    """The helper is dead weight once QtWebEngineCore itself is gone."""
+    from py_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = _fake_pyside(site)
+
+    monkeypatch.setattr(qt_prune, "dependency_names", lambda path: [])
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore"})
+
+    assert not (pyside / "Qt" / "libexec").exists()
+
+
+def test_prune_keeps_the_webengine_locale_packs_with_its_module(tmp_path, monkeypatch):
+    """Chromium's locale packs belong to QtWebEngineCore, not to Qt translations.
+
+    They live in ``translations/qtwebengine_locales`` and are spelled
+    ``en-US.pak``, so the rule that keeps ``qtbase_*.qm`` treated the whole
+    directory as tooling and removed it from the bundle. Every launch then
+    logged ``could not find the translation file for the current locale``.
+    """
+    from py_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = _fake_pyside(site)
+    locales = pyside / "Qt" / "translations" / qt_prune.WEBENGINE_LOCALES_DIR
+    for name in ("en-US.pak", "zh-CN.pak", "de.pak"):
+        (locales / name).parent.mkdir(parents=True, exist_ok=True)
+        (locales / name).write_bytes(b"pak")
+
+    monkeypatch.setattr(qt_prune, "dependency_names", lambda path: [])
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+
+    assert (locales / "en-US.pak").exists()
+    assert (locales / "zh-CN.pak").exists()
+    assert (locales / "de.pak").exists()
+
+
+def test_webengine_locale_allowlist_matches_chromium_spelling(tmp_path, monkeypatch):
+    """One allowlist covers Qt's ``zh_CN`` and Chromium's ``zh-CN``."""
+    from py_upper import qt_prune
+
+    monkeypatch.setattr(
+        qt_prune,
+        "optimize_config",
+        lambda: {"qt_locales": ["zh_CN"]},
+    )
+    site = tmp_path / "site-packages"
+    pyside = _fake_pyside(site)
+    locales = pyside / "Qt" / "translations" / qt_prune.WEBENGINE_LOCALES_DIR
+    locales.mkdir(parents=True, exist_ok=True)
+    for name in ("en-US.pak", "zh-CN.pak", "zh-TW.pak", "de.pak"):
+        (locales / name).write_bytes(b"pak")
+
+    monkeypatch.setattr(qt_prune, "dependency_names", lambda path: [])
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+
+    assert (locales / "en-US.pak").exists(), "the fallback pack must survive any allowlist"
+    assert (locales / "zh-CN.pak").exists()
+    assert not (locales / "zh-TW.pak").exists()
+    assert not (locales / "de.pak").exists()
+    # Qt's own translations still follow the same allowlist.
+    assert (pyside / "Qt" / "translations" / "qtbase_zh_CN.qm").exists()
+    assert (pyside / "Qt" / "translations" / "qt_zh_CN.qm").exists()
+    assert not (pyside / "Qt" / "translations" / "qtmultimedia_zh_CN.qm").exists()
+
+
+def test_prune_drops_the_webengine_locale_packs_with_its_module(tmp_path, monkeypatch):
+    """No QtWebEngineCore, no Chromium locale packs."""
+    from py_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = _fake_pyside(site)
+    locales = pyside / "Qt" / "translations" / qt_prune.WEBENGINE_LOCALES_DIR
+    locales.mkdir(parents=True, exist_ok=True)
+    (locales / "en-US.pak").write_bytes(b"pak")
+
+    monkeypatch.setattr(qt_prune, "dependency_names", lambda path: [])
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore"})
+
+    assert not locales.exists()

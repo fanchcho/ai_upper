@@ -37,19 +37,24 @@ from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.views.title_bar_overlay import TITLEBAR_HEIGHT, TitleBarOverlay
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from mvvm.webui.bridge import DevaBridge
+from utils.paths import assets_root
 
 # 回合线程攒下的界面写入（busy / status / streaming）由 GUI 线程周期性 drain。
 DRAIN_INTERVAL_MS = 50
 
-ASSETS_DIR = Path(__file__).resolve().parents[3] / "assets" / "renderer"
+ASSETS_DIR = assets_root() / "renderer"
 
 
 def assets_dir() -> Path:
-    """打包后资产目录可能被拷到别处：先看常量，再看环境变量覆盖。"""
+    """渲染层目录：开发态取 app/assets/renderer，打包后取 <bundle>/assets/renderer。
+
+    `DEVA_RENDERER_DIR` 仍然生效（早期截图脚本用它直指某个渲染层目录），
+    它是 `DEVA_ASSETS_DIR` 的等价简写。
+    """
     import os
 
     override = os.environ.get("DEVA_RENDERER_DIR")
-    return Path(override) if override else ASSETS_DIR
+    return Path(override) if override else assets_root() / "renderer"
 
 
 def _read_qwebchannel_source() -> str:

@@ -288,6 +288,21 @@ def _publish(assembly: Path, source: Path, destination: Path) -> Path:
     return destination
 
 
+def _copy_supporting_trees(bundle_root: Path) -> None:
+    """Copy `app/resources` and `app/assets` into the bundle's payload root.
+
+    Both trees are optional: a project without one simply ships none. The
+    launcher exports the payload root as ``PY_UPPER_HOME`` and the application
+    resolves ``utils.paths.resource_root()`` / ``assets_root()`` from it, so
+    these two names are a contract rather than a layout accident.
+    """
+    copy_optional_tree(APP / "resources", bundle_root / "resources")
+    # The renderer bundle and the seed personas. Without this the web window
+    # loads a missing index.html: a blank window that only shows up after the
+    # package is finished.
+    copy_optional_tree(APP / "assets", bundle_root / "assets")
+
+
 def package(target: Target, launcher: Path, trim=None) -> Path:
     stage = staging_dir(target)
     runtime = target_runtime_dir(target)
@@ -317,7 +332,7 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
             copy_file_contents(stage_egg, out / EGG_DIR / EGG_NAME)
         _report_pruned(out / "site-packages")
         # Resources are optional: a project without app/resources simply ships none.
-        copy_optional_tree(APP / "resources", out / "resources")
+        _copy_supporting_trees(out)
         bundle_native_dependencies(out, target)
         return _publish(assembly, out, DIST / name)
 
@@ -337,8 +352,9 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
     if stage_egg.is_file():
         copy_file_contents(stage_egg, resources / EGG_DIR / EGG_NAME)
     _report_pruned(resources / "site-packages")
-    # Resources are optional: a project without app/resources simply ships none.
-    copy_optional_tree(APP / "resources", resources / "resources")
+    # `resources` is this bundle's payload root (the launcher exports it as
+    # PY_UPPER_HOME), so the same two trees sit inside Contents/Resources.
+    _copy_supporting_trees(resources)
     (contents / "Info.plist").write_text(_mac_info_plist(name), encoding="utf-8")
     bundle_native_dependencies(app, target)
     return _publish(assembly, app, DIST / f"{name}.app")

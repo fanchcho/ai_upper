@@ -28,7 +28,10 @@ DEFAULT_PERSONA_IDS = ("general", "xiaomajiang")
 
 
 def _assets_dir() -> Path:
-    return Path(__file__).resolve().parents[3] / "assets" / "personas"
+    """首启种子目录：开发态 app/assets/personas，打包后 <bundle>/assets/personas。"""
+    from utils.paths import assets_root
+
+    return assets_root() / "personas"
 
 
 def is_safe_id(value: str) -> bool:

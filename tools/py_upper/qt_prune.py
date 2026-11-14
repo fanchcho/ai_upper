@@ -136,6 +136,17 @@ QML_MODULE_PREFIXES = ("QtQml", "QtQuick")
 PLUGIN_KEEP_EXCEPTIONS = ("qsvg", "qsvgicon")
 # Translation families that belong to developer tooling, never to a running app.
 TOOLING_TRANSLATION_PREFIXES = ("assistant_", "designer_", "linguist_", "qt_help_")
+# Chromium's own UI strings live in ``translations/qtwebengine_locales``. They
+# do not match the ``qt_``/``qtbase_`` shape of Qt's translations, so the
+# translation sweep treated the whole directory as tooling and removed it from
+# every bundle that shipped QtWebEngineCore. It belongs to that module the same
+# way ``resources`` does: a bundle without it still renders a page, but its
+# helper process cannot find the pack for the user's locale and every launch
+# logs the failure.
+WEBENGINE_LOCALES_DIR = "qtwebengine_locales"
+# Chromium falls back to this pack when the requested locale is absent, so it
+# survives any locale allowlist.
+WEBENGINE_FALLBACK_LOCALE = "en-US"
 # Images Qt loads by name rather than through an import. The dependency closure
 # can never see them, so the reachability rule would delete them: the software
 # OpenGL fallback is the one that matters, because a machine without a usable
@@ -212,12 +223,28 @@ class _QtLayout:
     translations: Path
     metatypes: Path | None
     helpers: tuple[Path, ...]
-    """Files belonging to a Qt module rather than to tooling: the WebEngine
-    helper process, which lives in ``Qt/libexec`` on POSIX and in the package
-    root on Windows."""
+    """Directories (POSIX ``Qt/libexec``) or files (Windows package root) that
+    hold helper executables. They mix tooling with module helpers, so the
+    reachability rule is applied per entry, not to the directory as a whole:
+    see ``MODULE_HELPERS``."""
 
     qml_helpers: tuple[str, ...]
     """Glob patterns for shiboken's QML bridge library."""
+
+
+# Helper executables that a *runtime* module runs as a separate process, and
+# therefore has to ship beside it. ``QtWebEngineProcess`` is dlopen'd by
+# QtWebEngineCore when the view attaches: a bundle that keeps the module but
+# drops the helper starts, loads the page, and then renders nothing at all.
+# Every other entry in ``libexec`` (rcc, uic, qmlcachegen, …) is build tooling
+# and always goes.
+MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+
+
+def _helper_owner(name: str) -> str | None:
+    """The Qt module a helper executable serves, or None for plain tooling."""
+    stem = Path(name).stem
+    return MODULE_HELPERS.get(stem)
 
 
 def _qt_payload_root(package: Path) -> Path | None:
@@ -334,6 +361,28 @@ def _payload_options() -> _QtPayloadOptions:
         image_formats=_qt_option_list(cfg.get("qt_image_formats"), "qt_image_formats", None),
         platforms=_qt_option_list(cfg.get("qt_platforms"), "qt_platforms", DEFAULT_PLATFORM_PLUGINS),
     )
+
+
+def _allowed_webengine_locale(name: str, allowed: frozenset[str] | None) -> bool:
+    """Whether a Chromium locale pack (``en-US.pak``) serves a configured locale.
+
+    Chromium spells locales ``zh-CN`` where Qt spells them ``zh_CN``, and the
+    same allowlist has to cover both. A bare language (``zh``) keeps its
+    regional variants, matching ``_allowed_locale``.
+    """
+    if allowed is None:
+        return True
+    locale = Path(name).stem
+    if locale == WEBENGINE_FALLBACK_LOCALE:
+        return True
+    for pattern in allowed:
+        token = pattern.strip().replace("-", "_")
+        if any(char in token for char in "*?["):
+            if fnmatch(locale, token.replace("_", "-")):
+                return True
+        elif locale.replace("-", "_") == token or locale.replace("-", "_").startswith(token + "_"):
+            return True
+    return False
 
 
 def _plugin_name(name: str) -> str:
@@ -634,8 +683,19 @@ def prune(site: Path, target: Target, modules: set[str] | None = None) -> dict[s
             drop(pyside / f"{tooling_prefix}{name}{suffix}")
     if layout.metatypes is not None:
         drop(layout.metatypes)
-    for helper in layout.helpers:
-        drop(helper)
+    # `libexec` holds both module helpers and build tooling. Dropping the
+    # whole directory took `QtWebEngineProcess` with it, so a bundle that kept
+    # QtWebEngineCore shipped without the process it spawns to render a page:
+    # the window opened and stayed blank. Each entry is judged by the module it
+    # serves instead; an entry with no owner is tooling.
+    for helper_root in layout.helpers:
+        entries = sorted(helper_root.iterdir()) if helper_root.is_dir() else [helper_root]
+        for entry in entries:
+            owner = _helper_owner(entry.name)
+            if owner is None or owner not in modules:
+                drop(entry)
+        if helper_root.is_dir() and not any(helper_root.iterdir()):
+            drop(helper_root)
 
     # Build-time material that ships beside the runtime payload: C++
     # documentation, the genpyi/tool wrappers and the import libraries. None of
@@ -746,11 +806,21 @@ def prune(site: Path, target: Target, modules: set[str] | None = None) -> dict[s
                 drop(helper)
 
     # Only Qt's own widget strings are useful to a running application; tooling
-    # and unused-module translations are dead weight.
+    # and unused-module translations are dead weight. Chromium's locale packs
+    # are a module payload rather than a translation of Qt, so they are judged
+    # by the module that loads them and by their own allowlist.
     translations = layout.translations
     if translations.is_dir():
         for entry in sorted(translations.iterdir()):
             name = entry.name
+            if name == WEBENGINE_LOCALES_DIR:
+                if "QtWebEngineCore" not in modules:
+                    drop(entry)
+                    continue
+                for pack in sorted(entry.iterdir()):
+                    if pack.is_dir() or not _allowed_webengine_locale(pack.name, options.locales):
+                        drop(pack)
+                continue
             # Only Qt's own widget strings are useful to a running application.
             # Tooling translations are always dead weight; a locale allowlist
             # then keeps just the languages the application ships with, turning

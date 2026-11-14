@@ -63,6 +63,39 @@ def resource_root() -> Path:
     return Path(sys.executable).resolve().parent / "resources"
 
 
+ASSETS_ENV = "DEVA_ASSETS_DIR"
+_ASSETS_MODULE_DIR = "assets"
+
+
+def assets_root() -> Path:
+    """Where the renderer bundle and seed personas live.
+
+    Development keeps ``app/assets`` next to ``app/src``. A package has no
+    source tree at all (the application code ships as one merged extension or
+    inside the egg archive, so ``__file__`` is useless), therefore the packager
+    copies the tree to ``<bundle>/assets`` — beside ``resources`` — and this
+    function reads it from the launcher-exported home. ``DEVA_ASSETS_DIR`` is
+    the explicit override used by the parity scripts to point at a different
+    build.
+    """
+    override = os.environ.get(ASSETS_ENV)
+    if override:
+        return Path(override).resolve()
+    # The launcher's export is authoritative, exactly as it is for
+    # `resource_root()`: a bundle that is missing its assets must report the
+    # packaged location, not silently load a development tree that happens to
+    # sit next to the source checkout.
+    home = bundle_home()
+    if home is not None:
+        return home / _ASSETS_MODULE_DIR
+    project = _project_root()
+    if project is not None:
+        return project / _ASSETS_MODULE_DIR
+    # A merged bundle has no source path; the executable's directory is the
+    # best answer when the launcher export is lost.
+    return Path(sys.executable).resolve().parent / _ASSETS_MODULE_DIR
+
+
 def app_name() -> str:
     """The user-facing application name.
 

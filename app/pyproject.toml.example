@@ -32,8 +32,10 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+# The web-hosted window, not the template application: `main.py` still
+# opens the reference MVVM window, and packaging must start the real one.
 [tool.py_upper]
-entry = "main.py"
+entry = "deva_web.py"
 
 [tool.py_upper.app]
 # APP NAME, single source of truth: derives the .app / executable /

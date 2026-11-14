@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import time
+import types
 from typing import Annotated, Any, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -35,10 +36,34 @@ def now_ms() -> int:
     return int(time.time() * 1000)
 
 
+def _method_types() -> tuple[type, ...]:
+    """本工程的模型可以带普通方法，而 Cython 会把它们编译成另一种类型。
+
+    打包时应用源码被 Cython 编译成一个合并扩展，类体里的 ``def`` 不再是
+    ``types.FunctionType``，而 pydantic 建类时只按类型忽略方法
+    （``_model_construction.default_ignored_types``），于是编译后的
+    ``Message.text`` 被判成「无注解字段」，**打包产物一启动就抛
+    PydanticUserError**——源码态测试全绿，只有真跑产物才会暴露。
+
+    这里把编译后的方法类型补进 ``ignored_types``。类型从模块自身的函数上取，
+    而不是 import ``cython``：产物里没有 Cython 运行时，未编译时该类型就是
+    ``types.FunctionType``（pydantic 默认已忽略，不必重复列）。
+    """
+    method_type = type(now_ms)
+    if method_type is types.FunctionType:
+        return ()
+    return (method_type,)
+
+
 class _Model(BaseModel):
     """所有对话模型的共同配置：未知字段保留，按字段名填充。"""
 
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
+    model_config = ConfigDict(
+        extra="allow",
+        populate_by_name=True,
+        # 编译后的方法必须被当成方法，不能当成字段（见 `_method_types`）。
+        ignored_types=_method_types(),
+    )
 
 
 class TextPart(_Model):

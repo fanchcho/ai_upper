@@ -10,6 +10,7 @@ import zipfile
 from pathlib import Path, PureWindowsPath
 
 from .config import APP, BUILD, LOCK, ROOT, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
+from .fs import make_executable
 
 WHEEL_MANIFEST = "manifest.json"
 MANIFEST_FORMAT = 4
@@ -294,8 +295,26 @@ def _extract_wheel(wheel: Path, site: Path, staging: Path | None = None) -> list
                     raise RuntimeError(f"Wheel file collision with different content: {destination}")
             else:
                 destination.write_bytes(payload)
+            _apply_wheel_mode(info, destination)
             installed.append(destination)
     return installed
+
+
+def _apply_wheel_mode(info: zipfile.ZipInfo, destination: Path) -> None:
+    """Give an extracted file the execute bits the wheel recorded for it.
+
+    ``write_bytes`` takes the process umask, so every wheel file landed 0o644.
+    A wheel marks its executables in ``external_attr`` (the high 16 bits carry
+    the POSIX mode), and some of them are *only* ever started as processes, not
+    imported: PySide6's ``Qt/libexec/QtWebEngineProcess`` is spawned by
+    QtWebEngineCore. Without the bit the packaged application printed
+    ``LaunchProcess: failed to execvp: …/QtWebEngineProcess`` and rendered a
+    blank window, while the same code worked from site-packages (pip applies
+    the mode) and in every source-mode test.
+    """
+    mode = (info.external_attr >> 16) & 0o777
+    if mode & 0o111:
+        make_executable(destination)
 
 
 def _direct_imports_from_requirements(site: Path) -> list[str]:
