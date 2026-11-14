@@ -1,0 +1,25 @@
+### 依赖闭环复核（2026-11-14）
+
+## A) 3.8 侧：typing_extensions==4.13.2 + pydantic==2.10.6 能否共同解析
+$ /tmp/venv38/bin/python -m pip install --dry-run "pydantic==2.10.6" "typing_extensions==4.13.2"
+Requirement already satisfied: pydantic==2.10.6 in /tmp/venv38/lib/python3.8/site-packages (2.10.6)
+Requirement already satisfied: typing_extensions==4.13.2 in /tmp/venv38/lib/python3.8/site-packages (4.13.2)
+Requirement already satisfied: pydantic-core==2.27.2 in /tmp/venv38/lib/python3.8/site-packages (from pydantic==2.10.6) (2.27.2)
+Requirement already satisfied: annotated-types>=0.6.0 in /tmp/venv38/lib/python3.8/site-packages (from pydantic==2.10.6) (0.7.0)
+
+## B) 3.8 侧：app/requirements.txt 实际已装版本
+python 3.8.20
+pydantic 2.10.6
+typing_extensions /tmp/venv38/lib/python3.8/site-packages/typing_extensions.py
+Name: typing_extensions
+Version: 4.13.2
+
+## C) 3.9+ 侧：环境标记不生效，pydantic 2.14.3 自行拉 >=4.16.0（打包实测，见 py38fix-build3.log）
+Ignoring typing_extensions: markers 'python_version < "3.9"' don't match your environment
+Collecting typing-extensions>=4.16.0 (from pydantic==2.14.3)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/typing_extensions-4.16.0-py3-none-any.whl
+
+## D) 3.13 侧：app/pyproject.toml 里的同一行带标记，不会被解析成 4.13.2
+Ignoring typing_extensions: markers 'python_version < "3.9"' don't match your environment

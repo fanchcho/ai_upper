@@ -1,0 +1,5 @@
+ M app/src/mvvm/models/chat_models.py
+ M app/src/mvvm/services/effort.py
+ M app/src/mvvm/services/provider_gateway.py
+ M tools/ai_upper/third_party.py
+RESTORE_CHECK_EXIT=0

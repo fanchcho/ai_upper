@@ -1,0 +1,9 @@
+interpreter: 3.8.20
+modules scanned: 78
+MISSING-DEP (no wheel installed on this host, not a defect): 5
+   mvvm.views.title_bar_overlay               needs PySide6/PySide2        No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip insta
+   mvvm.views.web_shell_window                needs PySide6/PySide2        No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip insta
+   mvvm.webui.assembly                        needs PySide6/PySide2        No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip insta
+   mvvm.webui.bridge                          needs PySide6/PySide2        No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip insta
+   mvvm.webui.host                            needs PySide6/PySide2        No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip insta
+INCOMPATIBLE (code does not run on 3.8): 0

@@ -1,0 +1,78 @@
+### 变异 1：把 Annotated 版本分支退回裸 `from typing import Annotated`
+# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：2 failed, 3 passed / GUARD_EXIT=1
+# 真 3.8（ImportError: cannot import name 'Annotated' from 'typing'）：见下方 IMPORT38_EXIT
+# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+# ----------------------------------------------------------------
+.F.F.                                                                    [100%]
+=================================== FAILURES ===================================
+______________ test_no_python39_typing_names_imported_from_typing ______________
+
+    def test_no_python39_typing_names_imported_from_typing():
+        """`typing.Annotated` does not exist on 3.8.
+    
+        A bare ``from typing import Annotated`` is the original red: it fails at
+        import on 3.8 with ``ImportError: cannot import name 'Annotated'``. The
+        only allowed form is inside a branch that cannot be taken on 3.8, i.e.
+        guarded by ``sys.version_info >= (3, 9)`` -- which is what the test below
+        pins down for chat_models.py.
+        """
+        problems = []
+        for path in _sources():
+            tree = _parse(path)
+            guarded = _version_guarded_lines(tree)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == "typing":
+                    for alias in node.names:
+                        if alias.name in MISSING_FROM_38_TYPING and node.lineno not in guarded:
+                            problems.append(
+                                "%s:%d: from typing import %s" % (path, node.lineno, alias.name)
+                            )
+                elif isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
+                    if node.value.id == "typing" and node.attr in MISSING_FROM_38_TYPING:
+                        problems.append("%s:%d: typing.%s" % (path, node.lineno, node.attr))
+>       assert not problems, (
+            "names that do not exist in Python 3.8's typing module outside a "
+            "version guard:\n" + "\n".join(problems)
+        )
+E       AssertionError: names that do not exist in Python 3.8's typing module outside a version guard:
+E         /home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py:21: from typing import Annotated
+E       assert not ['/home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py:21: from typing import Annotated']
+
+app/tests/test_py38_compat.py:238: AssertionError
+________ test_chat_models_selects_annotated_by_version_not_by_exception ________
+
+    def test_chat_models_selects_annotated_by_version_not_by_exception():
+        """The 3.8 fallback must be an explicit version check.
+    
+        ``try: from typing import Annotated / except ImportError: from
+        typing_extensions import ...`` would also mask a missing typing_extensions
+        install: the app would then fail on the next name instead of at the import
+        that says what is wrong. The version check is also what the CI pin list is
+        derived from, so it has to be readable statically.
+        """
+        path = Path(__file__).resolve().parents[1] / "src" / "mvvm" / "models" / "chat_models.py"
+        tree = _parse(path)
+    
+        guarded = False
+        for node in tree.body:
+            if not isinstance(node, ast.If) or not isinstance(node.test, ast.Compare):
+                continue
+            left = node.test.left
+            if not (isinstance(left, ast.Attribute) and left.attr == "version_info"
+                    and isinstance(left.value, ast.Name) and left.value.id == "sys"):
+                continue
+            for comparator in node.test.comparators:
+                if isinstance(comparator, ast.Tuple) and len(comparator.elts) == 2:
+                    if all(isinstance(e, ast.Constant) for e in comparator.elts):
+                        if tuple(e.value for e in comparator.elts) == (3, 9):
+                            guarded = True
+>       assert guarded, "chat_models.py must branch on `sys.version_info >= (3, 9)`"
+E       AssertionError: chat_models.py must branch on `sys.version_info >= (3, 9)`
+E       assert False
+
+app/tests/test_py38_compat.py:313: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_py38_compat.py::test_no_python39_typing_names_imported_from_typing
+FAILED app/tests/test_py38_compat.py::test_chat_models_selects_annotated_by_version_not_by_exception
+2 failed, 3 passed in 0.99s
+GUARD_EXIT=1

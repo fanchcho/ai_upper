@@ -1,0 +1,11 @@
+### 变异 1 的真 3.8 结果
+# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：（守卫见 py38-mutation-1-annotated.log）
+# 真 3.8（CPython 3.8.20）：见下方 IMPORT38_EXIT
+# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+# ----------------------------------------------------------------
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py", line 21, in <module>
+    from typing import Annotated
+ImportError: cannot import name 'Annotated' from 'typing' (/tmp/py38/python/lib/python3.8/typing.py)
+IMPORT38_EXIT=1

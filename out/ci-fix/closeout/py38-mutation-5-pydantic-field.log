@@ -1,0 +1,33 @@
+### 变异 5：pydantic 字段 `Optional[List[ImagePart]]` 退回 `list[ImagePart]`（守卫需追 `_Model` 继承链）
+# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：1 failed, 4 passed / GUARD_EXIT=1
+# 真 3.8（CPython 3.8.20 + pydantic 2.10.6）：见下方 IMPORT38_EXIT（pydantic 报 Unable to evaluate type annotation 'Optional[list[ImagePart]]'）
+# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+# ----------------------------------------------------------------
+F....                                                                    [100%]
+=================================== FAILURES ===================================
+_____________ test_import_time_type_expressions_are_python38_safe ______________
+
+    def test_import_time_type_expressions_are_python38_safe():
+        """No PEP 585/604 construct in a position the interpreter evaluates on import.
+    
+        These are exactly the sites that the future import cannot rescue. A
+        regression here is invisible on 3.9+ and kills the 3.8 leg on startup.
+        """
+        problems = []
+        for path in _sources():
+            tree = _parse(path)
+            for line, what in _import_time_offenders(tree):
+                problems.append("%s:%d: %s evaluated at import time" % (path, line, what))
+>       assert not problems, (
+            "PEP 585/604 constructs that Python 3.8 evaluates at import time "
+            "(use typing.List / typing.Dict / typing.Union instead):\n" + "\n".join(problems)
+        )
+E       AssertionError: PEP 585/604 constructs that Python 3.8 evaluates at import time (use typing.List / typing.Dict / typing.Union instead):
+E         /home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py:111: list[...] evaluated at import time
+E       assert not ['/home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py:111: list[...] evaluated at import time']
+
+app/tests/test_py38_compat.py:209: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_py38_compat.py::test_import_time_type_expressions_are_python38_safe
+1 failed, 4 passed in 1.02s
+GUARD_EXIT=1

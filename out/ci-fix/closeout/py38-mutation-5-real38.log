@@ -1,0 +1,39 @@
+### 变异 5 的真 3.8 结果
+# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：（守卫见 py38-mutation-5-pydantic-field.log）
+# 真 3.8（CPython 3.8.20）：见下方 IMPORT38_EXIT
+# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+# ----------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 633, in _eval_type_backport
+    return _eval_type(value, globalns, localns, type_params)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 667, in _eval_type
+    return typing._eval_type(  # type: ignore
+  File "/tmp/py38/python/lib/python3.8/typing.py", line 270, in _eval_type
+    return t._evaluate(globalns, localns)
+  File "/tmp/py38/python/lib/python3.8/typing.py", line 518, in _evaluate
+    eval(self.__forward_code__, globalns, localns),
+  File "<string>", line 1, in <module>
+TypeError: 'type' object is not subscriptable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/agent/shared_workspace/py_upper/app/src/mvvm/models/chat_models.py", line 106, in <module>
+    class ToolResultPart(_Model):
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_model_construction.py", line 219, in __new__
+    set_model_fields(cls, bases, config_wrapper, ns_resolver)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_model_construction.py", line 537, in set_model_fields
+    fields, class_vars = collect_model_fields(cls, bases, config_wrapper, ns_resolver, typevars_map=typevars_map)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_fields.py", line 112, in collect_model_fields
+    type_hints = _typing_extra.get_model_type_hints(cls, ns_resolver=ns_resolver)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 509, in get_model_type_hints
+    hints[name] = try_eval_type(value, globalns, localns)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 558, in try_eval_type
+    return eval_type_backport(value, globalns, localns), True
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 609, in eval_type_backport
+    return _eval_type_backport(value, globalns, localns, type_params)
+  File "/tmp/venv38/lib/python3.8/site-packages/pydantic/_internal/_typing_extra.py", line 641, in _eval_type_backport
+    raise TypeError(
+TypeError: Unable to evaluate type annotation 'Optional[list[ImagePart]]'. If you are making use of the new typing syntax (unions using `|` since Python 3.10 or builtins subscripting since Python 3.9), you should either replace the use of new syntax with the existing `typing` constructs or install the `eval_type_backport` package.
+IMPORT38_EXIT=1
