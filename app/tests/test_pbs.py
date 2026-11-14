@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import urllib.error
 import zipfile
+from pathlib import Path
 
 import pytest
 
@@ -606,16 +608,24 @@ def test_pbs_runtime_reuses_the_sdk_install_tree_of_a_full_build(tmp_path, monke
     assert marker["asset"] == asset.name
 
 
-def test_sdk_extraction_never_hands_tar_a_windows_drive_letter(tmp_path, monkeypatch):
-    """The archive argument must be colon-free even when the cache is on D:.
+def test_sdk_extraction_keeps_windows_paths_out_of_tar_arguments(tmp_path, monkeypatch):
+    """tar must not receive any argument a Windows drive letter can confuse.
 
-    GNU tar (which is what Git for Windows puts on PATH) parses ``host:path``
-    as an rsh request. A cached archive under ``D:\\a\\...`` has no leading
-    slash, so passing it as an absolute argument made every Windows build die
-    with ``tar: Cannot connect to D: resolve failed`` (exit 128) before the
-    first file was unpacked. Running tar from the archive's directory with a
-    bare name is the fix, and it also works for bsdtar, which has no
-    ``--force-local``.
+    Three Windows failures came out of this call, and the assertion has to
+    cover the shape that fixed all three:
+
+    * ``tar: Cannot connect to D: resolve failed`` (exit 128) -- GNU tar, which
+      is what Git for Windows ships, read the absolute ``D:\\a\\...`` archive
+      argument as an rsh ``host:path`` because it has none of the leading slash
+      that made POSIX paths safe;
+    * ``tar: D:\\a\\...: Cannot open: No such file or directory`` (exit 2) --
+      with the archive passed as a bare name, Git's MSYS2 tar still could not
+      use the absolute ``-C`` destination;
+    * the earlier fix for the first failure broke on the second, which is why
+      this asserts the whole command line rather than one argument.
+
+    Fixed shape: tar runs inside the destination with an archive path relative
+    to it. No drive letter, no ``-C``, nothing to translate.
     """
     from ai_upper import pbs
 
@@ -634,7 +644,10 @@ def test_sdk_extraction_never_hands_tar_a_windows_drive_letter(tmp_path, monkeyp
     monkeypatch.setattr(pbs.shutil, "which", lambda name: "tar")
     monkeypatch.setattr(pbs.subprocess, "run", fake_run)
 
-    archive = tmp_path / "D:" / "a" / "sdk.tar.zst"
+    # A directory whose name starts with a drive letter, created somewhere that
+    # is legal on this host: a real "D:" path can only be made on Windows, and
+    # there "D:" means "the current directory on drive D".
+    archive = tmp_path / "D_drive" / "a" / "ai_upper" / ".cache" / "sdk.tar.zst"
     archive.parent.mkdir(parents=True)
     archive.write_bytes(b"")
     destination = tmp_path / "sdk-extract"
@@ -643,7 +656,10 @@ def test_sdk_extraction_never_hands_tar_a_windows_drive_letter(tmp_path, monkeyp
 
     assert calls, "tar was never invoked"
     argv, kwargs = calls[0]
-    assert argv[1:] == ["-axf", "sdk.tar.zst", "-C", str(destination)], argv
-    assert kwargs["cwd"] == str(archive.parent)
-    # The whole point: the argument tar parses must not carry the drive letter.
-    assert argv[2] == archive.name
+    assert argv[1] == "-axf"
+    # No -C at all, and the archive is relative to the destination.
+    assert len(argv) == 3, argv
+    assert argv[2] == os.path.relpath(archive, destination).replace(os.sep, "/"), argv
+    assert not os.path.isabs(argv[2]), argv[2]
+    assert ":" not in argv[2], argv[2]
+    assert kwargs["cwd"] == str(destination)

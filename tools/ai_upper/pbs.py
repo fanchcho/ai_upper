@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -326,21 +327,27 @@ SDK_MARKER = ".ai_upper-sdk.json"
 
 
 def _run_tar(tar: str, flags: str, archive: Path, destination: Path, **kwargs: Any) -> subprocess.CompletedProcess:
-    """Run tar on `archive` without letting a drive letter look like a remote host.
+    """Run tar on `archive` without handing it any Windows path at all.
 
-    GNU tar reads `host:path` as an rsh request. A Windows path such as
-    ``D:\\a\\...`` reaches Git's tar (which is GNU tar) as exactly that shape,
-    because it has no leading slash, so every Windows build died with
-    ``tar: Cannot connect to D: resolve failed`` (exit 128) before unpacking a
-    single file. Passing a bare file name with the archive's own directory as
-    the working directory keeps the argument colon-free on every platform, and
-    needs no GNU-only flag such as ``--force-local`` (bsdtar on macOS has none).
+    Git for Windows ships GNU tar built with MSYS2. Two rounds of Windows
+    failures came out of passing it a path:
+
+    * ``tar: Cannot connect to D: resolve failed`` (exit 128) -- an absolute
+      ``D:\\\\a\\\\...`` archive argument has no leading slash, so GNU tar reads
+      it as an rsh ``host:path``;
+    * ``tar: D:\\\\a\\\\...: Cannot open: No such file or directory`` (exit 2) --
+      with the archive argument fixed, the absolute ``-C`` destination was
+      still unusable, because the MSYS2 build reinterprets arguments its own
+      way instead of taking a Windows path verbatim.
+
+    So both paths leave the command line. tar runs *inside* the destination
+    directory (``cwd``) with an archive name relative to it; the only thing it
+    parses is a name that cannot contain a drive letter. This needs no
+    GNU-only flag (``--force-local`` does not exist in macOS's bsdtar) and no
+    assumption about how a particular tar build translates arguments.
     """
-    return subprocess.run(
-        [tar, flags, archive.name, "-C", str(destination)],
-        cwd=str(archive.parent),
-        **kwargs,
-    )
+    archive_arg = os.path.relpath(archive, destination).replace(os.sep, "/")
+    return subprocess.run([tar, flags, archive_arg], cwd=str(destination), **kwargs)
 
 
 def _safe_extract_zst(archive: Path, destination: Path) -> None:
