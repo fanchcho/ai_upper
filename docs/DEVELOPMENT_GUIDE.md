@@ -1,6 +1,6 @@
-# py_upper 开发使用指南
+# ai_upper 开发使用指南
 
-本文是 `py_upper` 的完整开发与使用手册：从环境准备、日常开发、打包发布，到 Qt 应用处理、依赖管理和排错。README 讲的是"是什么"，本文讲的是"怎么用、为什么这么设计、出问题怎么查"。
+本文是 `ai_upper` 的完整开发与使用手册：从环境准备、日常开发、打包发布，到 Qt 应用处理、依赖管理和排错。README 讲的是"是什么"，本文讲的是"怎么用、为什么这么设计、出问题怎么查"。
 
 当前稳定线：**0.17.9**。
 
@@ -51,10 +51,10 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 
 交叉目标（例如在 macOS 上打 Linux 包）可以 build/verify，但不会冒充在当前机器运行；带平台标记的第三方依赖需要目标平台的宿主，见 §8.1。
 
-**Windows 的 Zig 回退（无 VS 构建）：** 在 macOS/Linux 宿主上设置 `PY_UPPER_WINDOWS_TOOLCHAIN=zig`，构建工具会自动下载、SHA256 校验并使用**宿主原生** Zig（`PY_UPPER_ZIG_VERSION`，默认 `0.16.0`），用 `zig cc -target <arch>-windows-gnu` 交叉编译 launcher 和 Cython 扩展。注意：
+**Windows 的 Zig 回退（无 VS 构建）：** 在 macOS/Linux 宿主上设置 `AI_UPPER_WINDOWS_TOOLCHAIN=zig`，构建工具会自动下载、SHA256 校验并使用**宿主原生** Zig（`AI_UPPER_ZIG_VERSION`，默认 `0.16.0`），用 `zig cc -target <arch>-windows-gnu` 交叉编译 launcher 和 Cython 扩展。注意：
 - 产物使用 MinGW-w64 CRT/ABI（Zig 0.16 不提供 MSVC 交叉 CRT），与 CPython 官方 `python313.lib` 兼容；
 - launcher 的子系统由 `launcher/CMakeLists.txt` 显式要求（非 MSVC 链接器传 `-Wl,--subsystem,windows`）——CMake 的 `WIN32_EXECUTABLE` 只对 MSVC 生效，clang 驱动会静默丢掉 `-mwindows`；`verify` 会断言产物子系统，默认要 GUI；
-- `PY_UPPER_LAUNCHER_CONSOLE=1` 构建控制台子系统的调试版 launcher（stdout/stderr 常连），此时 `verify` 期望的子系统随之变成 console；
+- `AI_UPPER_LAUNCHER_CONSOLE=1` 构建控制台子系统的调试版 launcher（stdout/stderr 常连），此时 `verify` 期望的子系统随之变成 console；
 - 交叉目标不执行目标运行时/launcher 冒烟，静态验证照常执行；
 - 有 VS 的 Windows 宿主不受影响（MSVC 路径不变）。
 
@@ -62,7 +62,7 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 
 最低 **3.8**，推荐 3.10+。选择顺序：
 
-1. `PY_UPPER_PYTHON`（旧变量 `PYSTAND_PYTHON` 仍兼容）
+1. `AI_UPPER_PYTHON`（旧变量 `PYSTAND_PYTHON` 仍兼容）
 2. `app/.venv`
 3. 当前执行 `tools/build.py` 的解释器
 4. `python` / `python3`
@@ -105,7 +105,7 @@ cp app/pyproject.toml.example app/pyproject.toml
 
 # 1. 写代码：app/src 就是应用源码
 app/src/
-├── main.py            # 入口（由 [tool.py_upper].entry 指定），只把控制权交给 application
+├── main.py            # 入口（由 [tool.ai_upper].entry 指定），只把控制权交给 application
 ├── application.py     # ★ 装配处：MVVM 的对象图在这里接起来（见 §9.5）
 ├── mvvm/              # MVVM 骨架：core / models / view_models / views / services
 ├── utils/             # 运行时胶水：paths（launcher 契约）、qt_compat（Qt 名字唯一入口）
@@ -114,7 +114,7 @@ app/src/
 # 2. 声明依赖与目标
 #    app/pyproject.toml（本地副本，改了不进 Git）
 #    [project] dependencies = ["PySide6==6.11.0"]
-#    [tool.py_upper.runtime] provider = "pbs"  python = "3.13.5"
+#    [tool.ai_upper.runtime] provider = "pbs"  python = "3.13.5"
 
 # 3. 构建 + 运行
 python tools/build.py --run
@@ -126,15 +126,15 @@ python tools/build.py
 产物：
 
 ```
-dist/Upper.app/Contents/          # macOS
-├── MacOS/Upper                   # launcher（可执行，入口程序编译在它里面）
+dist/ai_upper.app/Contents/      # macOS
+├── MacOS/ai_upper               # launcher（可执行，入口程序编译在它里面）
 └── Resources/
     ├── runtime/                  # bundled CPython
     ├── site-packages/            # 你的模块 + 第三方
     └── resources/                # app/resources 的内容（没有该目录时不生成）
 
-dist/Upper/                       # Windows / Linux
-├── Upper(.exe)                   # launcher（入口程序编译在它里面）
+dist/ai_upper/                   # Windows / Linux
+├── ai_upper(.exe)               # launcher（入口程序编译在它里面）
 ├── runtime/                      # Windows PBS：官方 python.org embed ZIP（pythonXY.zip、.pyd、DLL）
 ├── site-packages/
 └── resources/                    # 同上，可选
@@ -145,7 +145,7 @@ dist/Upper/                       # Windows / Linux
 ## 4. 目录结构
 
 ```text
-py_upper/
+ai_upper/
 ├── app/
 │   ├── pyproject.toml.example # 配置模板（入库）
 │   ├── pyproject.toml         # 本地配置（Git ignored，从模板复制）
@@ -155,7 +155,7 @@ py_upper/
 ├── launcher/                 # C++ 启动器（CMake）
 ├── tools/
 │   ├── build.py              # ★ 唯一公共构建入口
-│   └── py_upper/             # 构建工具实现（见 §15）
+│   └── ai_upper/             # 构建工具实现（见 §15）
 ├── runtimes/                 # 本地 runtime 缓存（git 忽略）
 ├── .cache/                   # PBS / pip 缓存（git 忽略）
 ├── build/                    # 中间产物（git 忽略）
@@ -172,29 +172,29 @@ py_upper/
 
 ```toml
 [project]
-name = "py_upper"
+name = "ai_upper"
 version = "0.17.9"
 requires-python = ">=3.8,<3.14"
 dependencies = ["PySide6==6.11.0", "pyserial==3.5"]
 
-[tool.py_upper]
+[tool.ai_upper]
 entry = "main.py"                 # app/src 下的入口文件
 
-[tool.py_upper.app]
-name = "Upper"                    # 最终应用名（.app / 可执行文件 / 窗口标题，见 §10.2 与 README「App 名称」）
-identifier = "com.example.pyupper" # macOS bundle identifier
+[tool.ai_upper.app]
+name = "ai_upper"                 # 最终应用名（.app / 可执行文件 / 窗口标题，见 §10.2 与 README「App 名称」）
+identifier = "com.example.aiupper" # macOS bundle identifier
 
-[tool.py_upper.runtime]
+[tool.ai_upper.runtime]
 provider = "pbs"                  # pbs | local
 python = "3.13.5"                # 目标 Python 精确版本（同时有 Windows 官方 embed ZIP 与 7 个 PBS SDK）
 # provider = "local" 时改为：
 # runtime = "runtimes/{target}/{python}"
 # sdk     = "build/local-sdk/{target}/{python}"
 
-[tool.py_upper.pbs]
+[tool.ai_upper.pbs]
 # release = "20230507"            # 可选，固定 PBS release；省略则自动解析
 
-[tool.py_upper.dependencies]
+[tool.ai_upper.dependencies]
 # find_links = ["wheelhouse"]     # 离线/内网 wheel 目录
 # no_index = true
 # index_url = "https://pypi.tuna.tsinghua.edu.cn/simple"
@@ -203,21 +203,21 @@ manylinux = ["manylinux_2_39", "manylinux_2_34"]  # Linux 兼容 baseline，从�
 timeout = 120                     # pip socket 超时（秒）
 retries = 10                      # pip 重试次数
 
-[tool.py_upper.native]
+[tool.ai_upper.native]
 exclude = [                       # 丢弃无法在包内满足依赖的可选原生组件
   "PySide6/Qt/plugins/sqldrivers/*qsqlodbc*",
 ]
 
-[tool.py_upper.cython]
+[tool.ai_upper.cython]
 include = ["*"]                   # 相对 app/src 的模块名 glob
 exclude = []
 merge = "directory"               # none = 一模块一扩展；directory = 按顶层目录合并
 
-[tool.py_upper.build]
+[tool.ai_upper.build]
 jobs = 0                          # 并行编译任务数；0 = 每 CPU 一个
 incremental = true                # 只重编译变化的模块；false = 每次全量
 
-[tool.py_upper.optimize]
+[tool.ai_upper.optimize]
 profile = "safe"                  # safe | aggressive
 remove_python_caches = true       # 删 __pycache__ / *.pyc
 remove_tests = false              # aggressive 时自动 true
@@ -231,11 +231,11 @@ qt = "imports"                    # all | imports | ["QtWidgets", ...]
 # qt_image_formats = ["gif", "ico", "jpeg"]  # 图片/图标插件白名单
 # qt_platforms = ["windows", "cocoa", "xcb", "wayland", "offscreen"]
 
-[tool.py_upper.windows]
+[tool.ai_upper.windows]
 architectures = ["x86", "x86_64", "arm64"]
-[tool.py_upper.macos]
+[tool.ai_upper.macos]
 architectures = ["arm64", "x86_64"]
-[tool.py_upper.linux]
+[tool.ai_upper.linux]
 architectures = ["x86_64", "arm64"]
 ```
 
@@ -245,17 +245,17 @@ Windows + PBS：发布 runtime 来自 python.org 官方 embeddable ZIP；PBS ful
 
 | 变量 | 作用 |
 |---|---|
-| `PY_UPPER_PYTHON` / `PYSTAND_PYTHON` | 指定 Build Tool 解释器 |
-| `PY_UPPER_TRACEBACK=1` | 构建失败时打印完整 traceback |
-| `PY_UPPER_LOCKED=1` | 等价 `--locked` |
-| `PY_UPPER_HTTP_TIMEOUT` / `PY_UPPER_HTTP_RETRIES` | PBS 下载超时/重试 |
-| `PY_UPPER_PIP_TIMEOUT` / `PY_UPPER_PIP_RETRIES` | pip 传输超时/重试 |
-| `PY_UPPER_HEADLESS=1` | 应用以 offscreen 方式建 Qt 窗口后退出（CI/smoke 用） |
-| `PY_UPPER_NO_DIALOG=1` | launcher 不弹原生错误对话框，失败只走 stderr + 退出码（CI/smoke 必须设） |
-| `PY_UPPER_LAUNCHER_CONSOLE=1` | Windows：构建控制台子系统 launcher，用于调试（等价 `-DPY_UPPER_LAUNCHER_CONSOLE=ON`） |
-| `PY_UPPER_E2E=1` | 打开本地端到端测试 |
+| `AI_UPPER_PYTHON` / `PYSTAND_PYTHON` | 指定 Build Tool 解释器 |
+| `AI_UPPER_TRACEBACK=1` | 构建失败时打印完整 traceback |
+| `AI_UPPER_LOCKED=1` | 等价 `--locked` |
+| `AI_UPPER_HTTP_TIMEOUT` / `AI_UPPER_HTTP_RETRIES` | PBS 下载超时/重试 |
+| `AI_UPPER_PIP_TIMEOUT` / `AI_UPPER_PIP_RETRIES` | pip 传输超时/重试 |
+| `AI_UPPER_HEADLESS=1` | 应用以 offscreen 方式建 Qt 窗口后退出（CI/smoke 用） |
+| `AI_UPPER_NO_DIALOG=1` | launcher 不弹原生错误对话框，失败只走 stderr + 退出码（CI/smoke 必须设） |
+| `AI_UPPER_LAUNCHER_CONSOLE=1` | Windows：构建控制台子系统 launcher，用于调试（等价 `-DAI_UPPER_LAUNCHER_CONSOLE=ON`） |
+| `AI_UPPER_E2E=1` | 打开本地端到端测试 |
 
-launcher 运行时还会向应用导出 `PY_UPPER_HOME` / `PY_UPPER_RUNTIME` / `PY_UPPER_SITE_PACKAGES` / `PY_UPPER_EXECUTABLE`，以及（仅当入口真是文件时）`PY_UPPER_SCRIPT`，见 §10.2。
+launcher 运行时还会向应用导出 `AI_UPPER_HOME` / `AI_UPPER_RUNTIME` / `AI_UPPER_SITE_PACKAGES` / `AI_UPPER_EXECUTABLE`，以及（仅当入口真是文件时）`AI_UPPER_SCRIPT`，见 §10.2。
 
 ---
 
@@ -272,7 +272,7 @@ PYTHONPATH=src python -c "from application import main; main()"
 PYTHONPATH=src python src/main.py
 ```
 
-注意：直接运行 `main()` 会尝试打开 Qt 窗口；CI/无显示环境加 `PY_UPPER_HEADLESS=1`。
+注意：直接运行 `main()` 会尝试打开 Qt 窗口；CI/无显示环境加 `AI_UPPER_HEADLESS=1`。
 
 还没装 Qt 时也能看到装配跑通：`import application` 不加载任何 binding（见 §9.5），
 `PYTHONPATH=src python -c "from application import run_application; run_application()"` 只打印问候语，不碰 Qt。
@@ -281,7 +281,7 @@ PYTHONPATH=src python src/main.py
 
 ```bash
 python -m pytest app/tests -q                 # 单元 + 兼容性测试
-PY_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较慢，需 C 编译器）
+AI_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较慢，需 C 编译器）
 ```
 
 单元测试用 Build Tool 的解释器跑；`test_e2e_local.py` 默认跳过。
@@ -292,9 +292,9 @@ PY_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较�
 
 - `launch.json`
   - **Python: app/src/main.py**：直接调试应用（`PYTHONPATH=app/src`，cwd=`app`）
-  - **py_upper: packaged app**：执行 `tools/build.py --run`，构建并启动打包后的应用
+  - **ai_upper: packaged app**：执行 `tools/build.py --run`，构建并启动打包后的应用
 - `tasks.json`
-  - **py_upper: build** / **py_upper: run packaged app**
+  - **ai_upper: build** / **ai_upper: run packaged app**
 - `settings.json`：pytest 与 `app/src` 分析路径，并把 `build/`、`dist/`、`runtimes/` 排除出文件监视与搜索
 
 `settings.json` 里的 `files.watcherExclude` / `search.exclude` 不是可选的整理项，删掉它们本机构建会重新变得不稳定：
@@ -307,8 +307,8 @@ PY_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较�
 
 调试建议：
 
-- 想调试 **打包结果**：用 "py_upper: packaged app"；想调试 **源码**：用第一个配置。
-- 调试 Build Tool 自身：给 `tools/build.py` 打断点，`PY_UPPER_TRACEBACK=1` 让异常完整抛出。
+- 想调试 **打包结果**：用 "ai_upper: packaged app"；想调试 **源码**：用第一个配置。
+- 调试 Build Tool 自身：给 `tools/build.py` 打断点，`AI_UPPER_TRACEBACK=1` 让异常完整抛出。
 - 打包后的 App 里源码已被 Cython 化，无法直接断点；要断点就调试源码配置。
 
 ### 6.4 增量编译
@@ -320,9 +320,9 @@ PY_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较�
 
 所以只有真正变化的模块会重新 Cython 化并编译，其余直接从缓存复制。两层是链式的：改一个 `.py` 只会让它的 `.c` 和它自己的扩展失效，删掉或改名的模块不会留下会被打包的旧产物（staging 只处理当前源码）。
 
-`merge = "directory"` 时，缓存分成两层：第一步仍按模块缓存生成的 `.c`；第二步按顶层目录把该组所有 `.c` 加上生成的 `register.c` 链接成一个 bundle，缓存 key（`py_upper-merged-native-1`）包含每个翻译单元的内容、链接命令和 MSVC 环境。改一个模块只会让它所在的 bundle 失效，其他组继续复用。
+`merge = "directory"` 时，缓存分成两层：第一步仍按模块缓存生成的 `.c`；第二步按顶层目录把该组所有 `.c` 加上生成的 `register.c` 链接成一个 bundle，缓存 key（`ai_upper-merged-native-1`）包含每个翻译单元的内容、链接命令和 MSVC 环境。改一个模块只会让它所在的 bundle 失效，其他组继续复用。
 
-Cython 与编译器调用都在线程池里并发执行，并行度由 `[tool.py_upper.build].jobs` 控制（默认 `0` = 每 CPU 一个任务）。
+Cython 与编译器调用都在线程池里并发执行，并行度由 `[tool.ai_upper.build].jobs` 控制（默认 `0` = 每 CPU 一个任务）。
 
 缓存是纯产物，随应用增长：`python tools/build.py --clean` 会连同 `build/` 一起删掉。需要强制全量重编译时用 `incremental = false` 或先 `--clean`。
 
@@ -335,7 +335,7 @@ python tools/build.py                 # 完整构建（默认）
 python tools/build.py --run           # 构建并运行（仅宿主平台目标）
 python tools/build.py --verify        # 只做静态校验（可重复执行）
 python tools/build.py --doctor        # 打印宿主/目标/工具链信息
-python tools/build.py --lock          # 解析并写入 py_upper.lock.json
+python tools/build.py --lock          # 解析并写入 ai_upper.lock.json
 python tools/build.py --locked        # 只使用锁文件与本地缓存构建
 python tools/build.py --release       # 构建 + 签名（+ macOS 公证）
 python tools/build.py --clean         # 清空 build/ 与 dist/
@@ -344,7 +344,7 @@ python tools/build.py --target linux-arm64     # 指定目标
 
 `--run` 只允许运行宿主平台目标；交叉目标可以 build/verify。
 
-锁文件：`py_upper.lock.json` 记录 runtime/SDK 与 wheel 集合及校验值。`--locked` 不重新解析依赖，适合 CI 与可复现发布。
+锁文件：`ai_upper.lock.json` 记录 runtime/SDK 与 wheel 集合及校验值。`--locked` 不重新解析依赖，适合 CI 与可复现发布。
 
 ---
 
@@ -354,7 +354,7 @@ python tools/build.py --target linux-arm64     # 指定目标
 
 pip 的 `--platform` / `--python-version` **只影响 wheel 兼容标签**，环境标记（`sys_platform`、`python_full_version` 等）永远按**运行 pip 的那个解释器**求值。
 
-因此 py_upper 在**宿主可执行目标 runtime** 时，直接用**目标解释器**解析依赖：
+因此 ai_upper 在**宿主可执行目标 runtime** 时，直接用**目标解释器**解析依赖：
 
 ```
 目标 3.10 + 宿主 3.11 时，bleak 需要 async-timeout（marker: python_full_version < "3.11"）
@@ -370,14 +370,14 @@ pip 的 `--platform` / `--python-version` **只影响 wheel 兼容标签**，环
 ### 8.3 离线 / 内网
 
 ```toml
-[tool.py_upper.dependencies]
+[tool.ai_upper.dependencies]
 find_links = ["wheelhouse"]
 no_index = true
 ```
 
 ### 8.4 原生依赖闭包
 
-打包时会扫描 site-packages 里的原生文件，递归解析依赖并复制缺失库，macOS 上把 install name 改写成 `@loader_path/...` 并重新 ad-hoc 签名。找不到的依赖是**硬错误**（不会静默产出坏包），可用 `[tool.py_upper.native].exclude` 显式丢弃可选组件。
+打包时会扫描 site-packages 里的原生文件，递归解析依赖并复制缺失库，macOS 上把 install name 改写成 `@loader_path/...` 并重新 ad-hoc 签名。找不到的依赖是**硬错误**（不会静默产出坏包），可用 `[tool.ai_upper.native].exclude` 显式丢弃可选组件。
 
 runtime 的 libpython、stdlib 扩展也参加闭包；找到已在包内的库后继续递归检查。
 文件发现按目标格式的文件头进行，覆盖 Linux `.so.N`、SONAME 符号链接和无后缀 ELF。
@@ -434,14 +434,14 @@ def main() -> int:
     return run_gui()       # 打开 Qt 主窗口
 ```
 
-`run_gui()` 在 `PY_UPPER_HEADLESS=1` 时用 offscreen 平台建同一个窗口、跑一次事件循环后退出并打印 `GUI OK offscreen`。CI 与 smoke 靠这个在不接显示器的环境里验证 Qt 真的可用。
+`run_gui()` 在 `AI_UPPER_HEADLESS=1` 时用 offscreen 平台建同一个窗口、跑一次事件循环后退出并打印 `GUI OK offscreen`。CI 与 smoke 靠这个在不接显示器的环境里验证 Qt 真的可用。
 
 ### 9.3 按 import 裁剪（体积关键）
 
 PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个约 450 MB。开启：
 
 ```toml
-[tool.py_upper.optimize]
+[tool.ai_upper.optimize]
 qt = "imports"
 ```
 
@@ -452,7 +452,7 @@ qt = "imports"
 3. 删除未用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken QML 辅助库、Qt 工具二进制、工具翻译；
 4. 插件按**依赖的 Qt 模块**判定：需要额外 Qt 模块的插件（如虚拟键盘输入法插件拉 QtQml/QtQuick、`libqpdf` 拉 QtPdf）会被删除；**平台插件类别永不裁剪**（删了应用起不来）；SVG 图标插件走例外保留。
 
-实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/Upper.app` 100 MB、其中 PySide6 58 MB；再开 `strip_native = true` 原生库还能更小。
+实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/ai_upper.app` 100 MB、其中 PySide6 58 MB；再开 `strip_native = true` 原生库还能更小。
 
 限制：动态加载（`importlib`、QML 内 import）静态看不到，这类应用请显式写模块列表；交叉目标无法执行目标解释器，会保留完整 Qt。
 
@@ -463,7 +463,7 @@ import 永远看不到的负载，可以用下列开关继续裁剪；不写时�
 `qt = "all"` 时这些开关全部不生效：
 
 ```toml
-[tool.py_upper.optimize]
+[tool.ai_upper.optimize]
 qt_software_opengl = false                  # 删除 opengl32sw.dll（约 20 MB）
 qt_locales = ["zh_CN"]                     # 翻译白名单；"all" 为全部
 qt_image_formats = ["gif", "ico", "jpeg"]  # 图片/图标插件白名单
@@ -483,7 +483,7 @@ qt_platforms = ["windows", "cocoa", "xcb", "wayland", "offscreen"]
   `*.lib`，以及 shiboken 里只服务 C++ 工具链的 `vcamp140.dll`、
   `concrt140.dll`、`vcomp140.dll`。
 
-### 9.4 通用裁剪接口（`[tool.py_upper.trim]`）
+### 9.4 通用裁剪接口（`[tool.ai_upper.trim]`）
 
 按 import 裁剪只能处理 Qt 能通过 import 证明的负载。开发负载由代码内置的
 全局规则直接删除，不写进配置：
@@ -501,7 +501,7 @@ qt_platforms = ["windows", "cocoa", "xcb", "wayland", "offscreen"]
 Tk/Tcl 是否保留取决于应用，所以留在配置里按项目选择：
 
 ```toml
-[tool.py_upper.trim]
+[tool.ai_upper.trim]
 preset = "safe"
 site_packages = []
 site_packages_keep = []
@@ -578,16 +578,16 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 
 ### 9.6 加密 egg（默认开启）
 
-`[tool.py_upper.egg]` 把应用自己的 Python 模块与本次构建产出的扩展收进一个
-`bundle/py_upper.dat`，不再以散文件留在 `site-packages`。格式是
+`[tool.ai_upper.egg]` 把应用自己的 Python 模块与本次构建产出的扩展收进一个
+`bundle/ai_upper.dat`，不再以散文件留在 `site-packages`。格式是
 `MAGIC (8 字节) + XOR(zip, SHAKE-256 key stream)`，launcher 在导入入口前安装
 loader。
 
-加密默认开启：配置里没有 `[tool.py_upper.egg]` 段时也按 `enabled = true`
+加密默认开启：配置里没有 `[tool.ai_upper.egg]` 段时也按 `enabled = true`
 处理；`--no-egg` 只对本次构建关闭，配置里写 `enabled = false` 才会长期关闭。
 
 ```toml
-[tool.py_upper.egg]
+[tool.ai_upper.egg]
 enabled = true
 key_hex = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
 backend = "auto"          # auto | memory | extract
@@ -596,7 +596,7 @@ compression = "deflated"  # deflated | stored | lzma
 
 **进 egg 的东西**：`app/src` 下的 `.py` 和应用自带的其它非原生文件、本次构建
 编译出的 `.pyd`/`.so`。**不进 egg 的东西**：第三方 wheel、runtime，以及
-`[tool.py_upper.native]` 依赖闭包要检查的 `.dll`/`.so` 等原生输入——它们必须
+`[tool.ai_upper.native]` 依赖闭包要检查的 `.dll`/`.so` 等原生输入——它们必须
 留在 `site-packages`，否则 `bundle_native_dependencies` 看不到。
 
 后端：
@@ -606,10 +606,10 @@ compression = "deflated"  # deflated | stored | lzma
 - `extract`：所有平台。启动时解密到按内容寻址的缓存目录并插入 `sys.path`。
   目录名是解密后归档的 SHA-256：首次启动解压一次并写入 `.complete` 标记，
   后续启动直接复用；egg 内容变化时目录名随之变化，不存在的缓存会重新解压。
-  缓存根默认是 `~/Library/Caches/py_upper/eggs`（macOS）、
-  `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
-  `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），
-  `PY_UPPER_EGG_CACHE` 可覆盖；目录不可写时回退到 `py_upper_egg_*` 临时目录。
+  缓存根默认是 `~/Library/Caches/ai_upper/eggs`（macOS）、
+  `%LOCALAPPDATA%/ai_upper/cache/eggs`（Windows）、
+  `$XDG_CACHE_HOME/ai_upper/eggs` 或 `~/.cache/ai_upper/eggs`（Linux），
+  `AI_UPPER_EGG_CACHE` 可覆盖；目录不可写时回退到 `ai_upper_egg_*` 临时目录。
   Linux 没有稳定的内存 dlopen 接口；macOS 的 hardened runtime 还要求缓存
   目录里的 `.so` 通过签名校验，否则需要
   `com.apple.security.cs.disable-library-validation`。
@@ -617,20 +617,20 @@ compression = "deflated"  # deflated | stored | lzma
   上编译失败只打印 warning；显式 `memory` 则报错。
 
 **合并扩展（`merge = "directory"`）**：每个顶层目录下的叶子模块链接成一个
-bundle，文件名是 `py_upper_<group><扩展后缀>`，统一放在
-`site-packages/py_upper_bundles/`，再以 **`ZIP_STORED`** 写进 `py_upper.dat`
+bundle，文件名是 `ai_upper_<group><扩展后缀>`，统一放在
+`site-packages/ai_upper_bundles/`，再以 **`ZIP_STORED`** 写进 `ai_upper.dat`
 （launcher 在 `Py_Initialize` 之前读归档，没有 zlib/lzma 可用，所以这些 entry
 不能压缩）。`__init__.py` 不参与合并，仍以 `.py` 包标记进入 egg。launcher
 启动时从 egg 取出 bundle 到内容寻址缓存
 （`<cache>/eggs/merged-<shake256(payload)[:16]>/`），`dlopen` 后调用
-`py_upper_register_modules()`，由它用 `PyImport_ExtendInittab` 在解释器初始化
-前注册所有模块名。Python 层的 egg loader 会跳过 `py_upper_bundles/`，不会重复
+`ai_upper_register_modules()`，由它用 `PyImport_ExtendInittab` 在解释器初始化
+前注册所有模块名。Python 层的 egg loader 会跳过 `ai_upper_bundles/`，不会重复
 解压。`--verify` 会检查 bundle 在 egg 内、`site-packages` 没有散落副本、entry
 是 `ZIP_STORED`、架构与 target 一致。
 
 launcher 内嵌 loader 源码、key 与 backend，并在运行入口前调用
-`install(EGG_PATH, key_hex, backend)`；`PY_UPPER_EGG` 指向包内的
-`bundle/py_upper.dat`
+`install(EGG_PATH, key_hex, backend)`；`AI_UPPER_EGG` 指向包内的
+`bundle/ai_upper.dat`
 （Windows/Linux 在可执行文件旁，macOS 在 `Contents/Resources/`）。stage 下的
 `egg.json` 记录本次构建实际使用的 key/backend/compression；`--verify` 和冒烟
 以它为准，因为 `--egg-key` 等覆盖不会写回项目配置。
@@ -643,13 +643,13 @@ python tools/build.py --no-egg
 python tools/build.py --egg --egg-key <HEX> --egg-backend extract --egg-compression lzma
 ```
 
-验证点：`--verify` 检查 `bundle/py_upper.dat` 存在、MAGIC 正确、成员可解，并确认已打包的
+验证点：`--verify` 检查 `bundle/ai_upper.dat` 存在、MAGIC 正确、成员可解，并确认已打包的
 应用文件不再以散文件出现；`backend = memory` 的 stage 还必须带
 `_memimporter.pyd`。冒烟脚本内嵌同一份 loader，先 `install()` 再导入入口。
 
 边界：这是混淆而不是现代密码学——key 编在 launcher 里，有决心的逆向者仍能
 取回；它也不会显著缩小产物，runtime/第三方 wheel/Qt 才是体积大头，裁剪仍用
-§9.3/§9.4。memory 后端下模块的 `__file__` 是 `bundle/py_upper.dat` 内的虚拟路径，依赖
+§9.3/§9.4。memory 后端下模块的 `__file__` 是 `bundle/ai_upper.dat` 内的虚拟路径，依赖
 真实文件路径的代码需要自己处理；extract 后端则指向临时目录。
 
 ### 9.5 MVVM 应用骨架
@@ -732,18 +732,18 @@ launcher 不修改安装目录中的 `python*._pth`；显式 PyConfig 路径生�
 UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；不依赖用户 locale
 或 `PYTHONUTF8` 环境变量，也不修改进程 locale。
 
-入口程序**编译在 launcher 里**。打包时 `package.write_embedded_source()` 生成 `py_upper_embedded.cpp`（入口程序 + smoke 程序的 C++ raw string 字面量），CMake 通过 `-DPY_UPPER_EMBEDDED_SOURCE=` 把它编进 launcher，并定义 `PY_UPPER_HAS_EMBEDDED_SOURCE` 让 `PyUpper.cpp` 知道符号存在。入口本来就是从 `[tool.py_upper].entry` 生成的那三行，没有第二份手写副本，改个名字（`Upper.app` → `Renamed.app`、`Upper.exe` → `Renamed.exe`）也不用动任何东西。
+入口程序**编译在 launcher 里**。打包时 `package.write_embedded_source()` 生成 `ai_upper_embedded.cpp`（入口程序 + smoke 程序的 C++ raw string 字面量），CMake 通过 `-DAI_UPPER_EMBEDDED_SOURCE=` 把它编进 launcher，并定义 `AI_UPPER_HAS_EMBEDDED_SOURCE` 让 `AiUpper.cpp` 知道符号存在。入口本来就是从 `[tool.ai_upper].entry` 生成的那三行，没有第二份手写副本，改个名字（`Upper.app` → `Renamed.app`、`Upper.exe` → `Renamed.exe`）也不用动任何东西。
 
-产物因此**不再有 `.int` 文件**：老布局里的 `<App>.int`、改名安全副本 `_py_upper_static.int`、以及构建验证数据 `<App>.smoke.int` 都是同一个程序的冗余副本，现在都只在 launcher 里存在一份。`--verify` 断言两件事：产物里没有 `.int` sidecar，且 launcher 二进制里能读到 `entry_source()` 的字节——后者是"编译进去的入口就是配置里那个入口"的证明，文件存在性检查做不到这点。
+产物因此**不再有 `.int` 文件**：老布局里的 `<App>.int`、改名安全副本 `_ai_upper_static.int`、以及构建验证数据 `<App>.smoke.int` 都是同一个程序的冗余副本，现在都只在 launcher 里存在一份。`--verify` 断言两件事：产物里没有 `.int` sidecar，且 launcher 二进制里能读到 `entry_source()` 的字节——后者是"编译进去的入口就是配置里那个入口"的证明，文件存在性检查做不到这点。
 
 **只有手工构建的 launcher（没有生成源可内嵌）才走文件链**，用自身文件名（stem）在 bundle 根目录按顺序找：
 
 1. `<stem>.int`（文档化布局）
 2. `<stem>.py`
 3. `<stem>.pyw`
-4. `_py_upper_static.int`（**改名安全兜底**）
+4. `_ai_upper_static.int`（**改名安全兜底**）
 
-内嵌优先于文件链：打包的 launcher 不看旁边有没有脚本，老布局残留的 sidecar 不能 shadow 编译进去的入口。`PY_UPPER_SMOKE=1` 时跑内嵌 smoke 程序（手工构建回退到 `<stem>.smoke.int`）。
+内嵌优先于文件链：打包的 launcher 不看旁边有没有脚本，老布局残留的 sidecar 不能 shadow 编译进去的入口。`AI_UPPER_SMOKE=1` 时跑内嵌 smoke 程序（手工构建回退到 `<stem>.smoke.int`）。
 
 内嵌入口用 `exec(compile(source, ENTRY_FILE, "exec"))` 执行，`__file__` 就是 launcher 自身；文件入口仍走 `runpy.run_path()`。差别之一：`runpy` 的 `_ModifiedArgv0` 会把 `sys.argv[0]` 临时改成入口文件路径，内嵌执行时 `sys.argv[0]` 保持 launcher 路径。
 
@@ -751,33 +751,33 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 
 | 变量 | 值 |
 |---|---|
-| `PY_UPPER_HOME` | 入口所在目录（macOS：`Contents/Resources`） |
-| `PY_UPPER_RUNTIME` | bundled runtime 根 |
-| `PY_UPPER_SITE_PACKAGES` | `site-packages` |
-| `PY_UPPER_SCRIPT` | 实际选中的入口文件；入口编译在 launcher 里时**不导出**（指向不存在的文件比不说更糟） |
-| `PY_UPPER_EXECUTABLE` | launcher 绝对路径 |
-| `PY_UPPER_APP_NAME` | 打包时编译进 launcher 的应用名（改名不会变） |
+| `AI_UPPER_HOME` | 入口所在目录（macOS：`Contents/Resources`） |
+| `AI_UPPER_RUNTIME` | bundled runtime 根 |
+| `AI_UPPER_SITE_PACKAGES` | `site-packages` |
+| `AI_UPPER_SCRIPT` | 实际选中的入口文件；入口编译在 launcher 里时**不导出**（指向不存在的文件比不说更糟） |
+| `AI_UPPER_EXECUTABLE` | launcher 绝对路径 |
+| `AI_UPPER_APP_NAME` | 打包时编译进 launcher 的应用名（改名不会变） |
 
-应用侧取资源目录用 `utils.paths.resource_root()`：优先 `PY_UPPER_HOME/resources`，没有该变量时才回退到"数父目录"。数父目录只对某一天的目录布局成立，launcher 才知道真实答案。`app/resources` 是**可选**的：目录不存在时产物里就没有 `resources/`，调用方要按"可能不存在"处理。
+应用侧取资源目录用 `utils.paths.resource_root()`：优先 `AI_UPPER_HOME/resources`，没有该变量时才回退到"数父目录"。数父目录只对某一天的目录布局成立，launcher 才知道真实答案。`app/resources` 是**可选**的：目录不存在时产物里就没有 `resources/`，调用方要按"可能不存在"处理。
 
-应用名同理只有一个来源：`app/pyproject.toml` 的 `[tool.py_upper.app].name`（改应用名只改这一行，工作副本与 `app/pyproject.toml.example` 两份都要动，操作步骤与旧产物残留的坑见 README「App 名称」）。打包链由它派生 `.app`/可执行文件/`Info.plist`/Windows 版本资源的名字，并把它编译进 launcher；运行时应用统一调 `utils.paths.app_name()` 读取（先看 `PY_UPPER_APP_NAME`，开发态没有 launcher 时回读同一个 `pyproject.toml`）。**不要**从 `PY_UPPER_EXECUTABLE` 或 `argv[0]` 推名字——可执行文件是允许改名的，也不要在应用代码里硬编码第二份。
+应用名同理只有一个来源：`app/pyproject.toml` 的 `[tool.ai_upper.app].name`（改应用名只改这一行，工作副本与 `app/pyproject.toml.example` 两份都要动，操作步骤与旧产物残留的坑见 README「App 名称」）。打包链由它派生 `.app`/可执行文件/`Info.plist`/Windows 版本资源的名字，并把它编译进 launcher；运行时应用统一调 `utils.paths.app_name()` 读取（先看 `AI_UPPER_APP_NAME`，开发态没有 launcher 时回读同一个 `pyproject.toml`）。**不要**从 `AI_UPPER_EXECUTABLE` 或 `argv[0]` 推名字——可执行文件是允许改名的，也不要在应用代码里硬编码第二份。
 
 ### 10.3 失败可见性
 
 - 致命错误（入口缺失、runtime 加载失败、解释器初始化失败、应用抛未捕获异常）先写 stderr，再按需弹**原生对话框**：Windows `MessageBoxW`、macOS `CFUserNotification`、Linux `zenity`（退回 `xmessage`）。macOS 的对话框有 120 s 超时，无人值守不会挂死。
-- 已经能看到 stderr 时不弹窗：设置了 `PY_UPPER_NO_DIALOG`，或 stdout/stderr 是 tty。**CI 与 smoke 必须设 `PY_UPPER_NO_DIALOG=1`**。
-- 应用抛未捕获异常时，bootstrap 先把 traceback 写进 `TMPDIR/py_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件。
+- 已经能看到 stderr 时不弹窗：设置了 `AI_UPPER_NO_DIALOG`，或 stdout/stderr 是 tty。**CI 与 smoke 必须设 `AI_UPPER_NO_DIALOG=1`**。
+- 应用抛未捕获异常时，bootstrap 先把 traceback 写进 `TMPDIR/ai_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件。
 - 退出码：1 无 argv / 未捕获异常，3 入口缺失，4 libpython 加载失败，5 符号缺失，6 配置失败，7 初始化失败，8 `PyRun_SimpleString` 缺失，9 launcher 内部异常。
 
 ### 10.4 平台差异
 
-- **Windows**：默认编译成 GUI 子系统（`WIN32_EXECUTABLE`），双击不弹控制台；从 cmd/PowerShell/CI 启动时用 `AttachConsole(ATTACH_PARENT_PROCESS)` 接管父控制台，**已有的重定向优先**（`> run.log` 不会被抢走）。入口是 `wWinMain`，宽命令行统一转 UTF-8 后再处理，非 ASCII 安装路径不会乱码。链接静态 CRT（`/MT`），目标机不需要 VC++ 运行库。调试时用 `PY_UPPER_LAUNCHER_CONSOLE=1` 构建控制台版本。runtime 目录里的 `python3.dll` 是稳定 ABI 转发层，只再导出受限 API，`PyConfig_*` 不在其中；launcher 会把该目录下所有 `python*.dll` 都加载（abi3 扩展按名字 import 转发层，必须留在已加载模块表里），入口点则从真正导出它们的那一个（`python3XX.dll`）解析。官方 embeddable runtime 没有 `DLLs/`，标准扩展（`_socket.pyd`、`_ssl.pyd` 等）直接躺在 `python3XX.dll` 旁边，所以 launcher 在 `DLLs/` 不存在时把 runtime 根目录当作扩展目录。
+- **Windows**：默认编译成 GUI 子系统（`WIN32_EXECUTABLE`），双击不弹控制台；从 cmd/PowerShell/CI 启动时用 `AttachConsole(ATTACH_PARENT_PROCESS)` 接管父控制台，**已有的重定向优先**（`> run.log` 不会被抢走）。入口是 `wWinMain`，宽命令行统一转 UTF-8 后再处理，非 ASCII 安装路径不会乱码。链接静态 CRT（`/MT`），目标机不需要 VC++ 运行库。调试时用 `AI_UPPER_LAUNCHER_CONSOLE=1` 构建控制台版本。runtime 目录里的 `python3.dll` 是稳定 ABI 转发层，只再导出受限 API，`PyConfig_*` 不在其中；launcher 会把该目录下所有 `python*.dll` 都加载（abi3 扩展按名字 import 转发层，必须留在已加载模块表里），入口点则从真正导出它们的那一个（`python3XX.dll`）解析。官方 embeddable runtime 没有 `DLLs/`，标准扩展（`_socket.pyd`、`_ssl.pyd` 等）直接躺在 `python3XX.dll` 旁边，所以 launcher 在 `DLLs/` 不存在时把 runtime 根目录当作扩展目录。
 - **macOS**：入口在 `Contents/MacOS`，资源 / runtime / site-packages 都在 `Contents/Resources`；链接 CoreFoundation 以使用 `CFUserNotification`。
 - **Linux**：单目录布局，`libpython3.x.so` 以 `RTLD_GLOBAL` 加载，保证后续导入的扩展能解析 CPython 符号。
 
 ### 10.5 Windows 版本资源
 
-打包时生成 `py_upper_resource.rc`（`VERSIONINFO`：FileDescription / FileVersion / ProductName / ProductVersion / OriginalFilename）并交给 CMake 编译，可执行文件属性里能看到产品名与版本。**当前不嵌入图标**：仓库里没有图标资源，`Info.plist` 也没有 `CFBundleIconFile`；需要时新建 `app/resources`（可选目录，存在就会被打进包）把 `.ico`/`.icns` 放进去，再扩展这条链路。
+打包时生成 `ai_upper_resource.rc`（`VERSIONINFO`：FileDescription / FileVersion / ProductName / ProductVersion / OriginalFilename）并交给 CMake 编译，可执行文件属性里能看到产品名与版本。**当前不嵌入图标**：仓库里没有图标资源，`Info.plist` 也没有 `CFBundleIconFile`；需要时新建 `app/resources`（可选目录，存在就会被打进包）把 `.ico`/`.icns` 放进去，再扩展这条链路。
 
 ---
 
@@ -788,10 +788,10 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 1. **静态校验**（`--verify`）：文件存在、架构匹配、扩展 ABI 后缀、依赖清单、包布局。可重复执行（幂等）。
 2. **真 import smoke**（`--run` 之前自动执行）：
    - 用 bundled Python 导入入口模块 + 所有直接声明的第三方依赖；
-   - 用打包好的 launcher 再导入一次（`PY_UPPER_SMOKE=1`）；
+   - 用打包好的 launcher 再导入一次（`AI_UPPER_SMOKE=1`）；
    - 最后才真正运行应用。
 
-launcher 相关步骤一律带 `PY_UPPER_NO_DIALOG=1`：CI 里一次失败必须是退出码，而不是一个没人能点的对话框。
+launcher 相关步骤一律带 `AI_UPPER_NO_DIALOG=1`：CI 里一次失败必须是退出码，而不是一个没人能点的对话框。
 
 CI（`.github/workflows/validate.yml`）在**每个原生平台**都跑：
 
@@ -806,7 +806,7 @@ CI（`.github/workflows/validate.yml`）在**每个原生平台**都跑：
 新用户缓存和无关工作目录分别运行真实入口与 launcher smoke，并比较包内文件摘要。
 POSIX 测试把复制的安装目录设为只读；Windows 测试保留 `_pth` 并验证启动未改名或删除它。
 迁移启动还设置 `LC_ALL=C`、`PYTHONUTF8=0`，确认隔离解释器不依赖宿主的 UTF-8 配置。
-用 `PY_UPPER_E2E=1 python -m pytest app/tests/test_e2e_local.py -q` 运行这组验证。
+用 `AI_UPPER_E2E=1 python -m pytest app/tests/test_e2e_local.py -q` 运行这组验证。
 
 触发范围只有 develop：`push` 与 `pull_request` 都带 `branches: [develop]`（`pull_request` 过滤的是 base 分支），`workflow_dispatch` 保留给失败重跑。`feature_*` / `fix_*` 临时分支上的中间提交不跑矩阵——它们的验证由合并后的 develop 承担，一次功能开发不会在临时分支上白烧十几轮全平台 job。确实要单独验证某个分支时用 `gh workflow run validate.yml --ref <branch>` 手动触发。
 
@@ -819,7 +819,7 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 ```
 
 - **macOS**：对嵌套 dylib/so 与应用本体签名，`--notary-profile` 时提交公证并 staple。
-- **Windows**：需要 `signtool` 与 `PY_UPPER_SIGN_CERT`。
+- **Windows**：需要 `signtool` 与 `AI_UPPER_SIGN_CERT`。
 - **Linux**：交给发行版打包/签名体系。
 
 签名顺序由工具保证：嵌套代码由内向外，launcher 最后（否则 bundle 封签会失效）。
@@ -836,9 +836,9 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 | `No module named 'main'` | 扩展后缀不是 CPython 识别的形式 | 应为 `.cpython-310-darwin.so`（macOS）/`.cp310-win_amd64.pyd` |
 | `import zlib` 失败 / Cython 字符串压缩报错 | 搜索路径缺 `lib-dynload`（Unix）或 `DLLs`（Windows） | ≥0.17.1 已加入 launcher 搜索路径 |
 | `PermissionError: ... python3.10` | runtime 拷贝丢了可执行位 | ≥0.17.1 拷贝时保留执行位 |
-| `PermissionError: [WinError 5] ... dist\Upper -> build\retired\...` | 上一轮打包出的程序、解析 `dist/**/python` 解释器的编辑器进程、或杀软扫描仍持有 `dist/<app>`；Windows 把“还被占用”和“没权限”都报成 WinError 5 | 构建会先等待这类短命占用再失败，并在失败信息里列出可能的占用者；按提示关掉该进程后重试 |
+| `PermissionError: [WinError 5] ... dist\ai_upper -> build\retired\...` | 上一轮打包出的程序、解析 `dist/**/python` 解释器的编辑器进程、或杀软扫描仍持有 `dist/<app>`；Windows 把“还被占用”和“没权限”都报成 WinError 5 | 构建会先等待这类短命占用再失败，并在失败信息里列出可能的占用者；按提示关掉该进程后重试 |
 | `Errno 1: Operation not permitted` 打包时 | 回放源文件权限/元数据 | ≥0.16.10 只拷内容 + 执行位 |
-| `Unresolved native dependencies` | 原生依赖闭包里有找不到的库 | 看清单；可选组件用 `[tool.py_upper.native].exclude`；自带库放 `app/src` 会被自动纳入 |
+| `Unresolved native dependencies` | 原生依赖闭包里有找不到的库 | 看清单；可选组件用 `[tool.ai_upper.native].exclude`；自带库放 `app/src` 会被自动纳入 |
 | Linux 上 `Unresolved native dependencies` 里全是 `libGL` / `libEGL` / `libxcb*` / `libxkbcommon` / `libwayland*` / `libwebp*` / `libtiff` | Qt 平台插件无条件链接宿主桌面栈，这些库属于目标机 | 已在 `deps.py` 的 `LINUX_HOST_LIBRARIES` 白名单，不再算未解析；目标机需装运行库（Debian/Ubuntu：`libgl1 libegl1 libxkbcommon0 libwayland-client0 libtiff6 libwebp7`） |
 | `@rpath/xxx.dylib` 被当成依赖 | 把 `LC_ID_DYLIB` 当 `LC_LOAD_DYLIB` | ≥0.16.13 已区分 identity 与依赖 |
 | `No PBS runtime metadata for exact Python X` | 元数据缓存被污染或版本不存在 | 删除 `.cache/pbs/uv-download-metadata.json` 重试；确认 PBS 有该精确版本 |
@@ -846,19 +846,19 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 | `codesign` 报 `code object is not signed at all` | 嵌套 bundle 未按由内向外签名 | ≥0.17.2 按路径深度倒序签名 |
 | 应用体积 1 GB+ | 完整 Qt 被打包 | 设 `qt = "imports"` |
 | 构建日志出现 `app/src does not reference a Qt binding, keeping the full Qt payload` | 剪枝没在 `app/src` 找到任何 Qt import（binding 前缀或 `utils.qt_compat` 前缀），于是整块保留 | ≥0.17.9 用 `ast` 读 import 并认识 `utils.qt_compat`；仍有这行说明应用确实没 import Qt，或者 `qt` 设成了 `"all"` |
-| pip 下载大 wheel 超时 | 默认 15s socket 超时 | 设 `timeout`/`retries` 或 `PY_UPPER_PIP_TIMEOUT` |
+| pip 下载大 wheel 超时 | 默认 15s socket 超时 | 设 `timeout`/`retries` 或 `AI_UPPER_PIP_TIMEOUT` |
 | VS Code 调试报 `No module named 'Cython'` | 探测 Cython 时抛预期异常 | ≥0.16.8 改用 `importlib.metadata`，不会停在异常上 |
-| 双击打包好的应用"没反应" | 入口/runtime/初始化失败，而 GUI 子系统没有控制台 | ≥0.17.5 会弹原生错误对话框显示原因；自动化场景设 `PY_UPPER_NO_DIALOG=1` 只取退出码 |
-| 应用启动即退出，看不到 traceback | 未捕获异常被解释器写到不存在的 stderr | ≥0.17.5 bootstrap 先落 `TMPDIR/py_upper-<pid>.log`，launcher 在 `Py_FinalizeEx` 后据此上报；双击时会弹对话框 |
-| 把可执行文件改名后起不来 | 入口名跟随可执行文件名 | ≥0.17.11 入口编译在 launcher 里，改名无影响（≥0.17.5 靠 `_py_upper_static.int` 兜底） |
-| Windows 上从 cmd 运行看不到输出 | GUI 子系统没有自己的控制台 | ≥0.17.5 自动 `AttachConsole` 到父控制台（已有重定向优先）；要无条件控制台用 `PY_UPPER_LAUNCHER_CONSOLE=1` 重新构建 |
+| 双击打包好的应用"没反应" | 入口/runtime/初始化失败，而 GUI 子系统没有控制台 | ≥0.17.5 会弹原生错误对话框显示原因；自动化场景设 `AI_UPPER_NO_DIALOG=1` 只取退出码 |
+| 应用启动即退出，看不到 traceback | 未捕获异常被解释器写到不存在的 stderr | ≥0.17.5 bootstrap 先落 `TMPDIR/ai_upper-<pid>.log`，launcher 在 `Py_FinalizeEx` 后据此上报；双击时会弹对话框 |
+| 把可执行文件改名后起不来 | 入口名跟随可执行文件名 | ≥0.17.11 入口编译在 launcher 里，改名无影响（≥0.17.5 靠 `_ai_upper_static.int` 兜底） |
+| Windows 上从 cmd 运行看不到输出 | GUI 子系统没有自己的控制台 | ≥0.17.5 自动 `AttachConsole` 到父控制台（已有重定向优先）；要无条件控制台用 `AI_UPPER_LAUNCHER_CONSOLE=1` 重新构建 |
 | Windows 目标机报缺 `VCRUNTIME140.dll` | launcher 动态链接 CRT | ≥0.17.5 launcher 使用静态 CRT（`/MT`） |
 | 非 ASCII 安装路径下应用起不来 | 窄字符路径按 ANSI 代码页解释 | ≥0.17.5 入口/路径全程 UTF-8，`std::filesystem` 走 `u8path` |
-| 改了 `[tool.py_upper.app].name` 但产物还是旧名，或 `dist/` 里旧名 bundle 还在 | 名字是构建期编译进 launcher 的，且构建不会清理 `dist/` 里的旧产物 | ≥0.17.11 用 `python tools/build.py --clean`（连同 `build/`、`dist/` 一起清掉）重新构建，或手工删掉 `dist/` 下的旧 bundle；只改配置文件不重新构建不生效，见 README「App 名称」 |
-| 改了代码但该模块没有重新编译 | 增量缓存命中（源码文本与上次一致） | 确认文件内容真的变了；强制全量用 `[tool.py_upper.build].incremental = false` 或 `--clean` |
+| 改了 `[tool.ai_upper.app].name` 但产物还是旧名，或 `dist/` 里旧名 bundle 还在 | 名字是构建期编译进 launcher 的，且构建不会清理 `dist/` 里的旧产物 | ≥0.17.11 用 `python tools/build.py --clean`（连同 `build/`、`dist/` 一起清掉）重新构建，或手工删掉 `dist/` 下的旧 bundle；只改配置文件不重新构建不生效，见 README「App 名称」 |
+| 改了代码但该模块没有重新编译 | 增量缓存命中（源码文本与上次一致） | 确认文件内容真的变了；强制全量用 `[tool.ai_upper.build].incremental = false` 或 `--clean` |
 | Windows 编译扩展报 `Import library of target Python ... not found under the SDK tree` | 导库是编译器输入，只从 SDK 取；发布 runtime 是嵌入形状，没有 `libs/` | ≥0.17.8 已从 SDK 取；SDK 缓存不完整时删 `.cache/pbs-sdk/<target>/<python>` 重新下载 |
 
-调试技巧：`PY_UPPER_TRACEBACK=1 python tools/build.py`；`python tools/build.py --doctor` 看宿主/目标/工具链；`--verify` 可反复执行定位到具体失败项。
+调试技巧：`AI_UPPER_TRACEBACK=1 python tools/build.py`；`python tools/build.py --doctor` 看宿主/目标/工具链；`--verify` 可反复执行定位到具体失败项。
 
 ---
 

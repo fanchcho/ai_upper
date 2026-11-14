@@ -1,4 +1,4 @@
-# 第六阶段收尾报告（py_upper ← Deva 迁移续跑）
+# 第六阶段收尾报告（ai_upper ← Deva 迁移续跑）
 
 日期：2026-11-14　文档：`docs/STAGE6-CLOSEOUT-REPORT.md`　分支：`develop`　HEAD：`abd6e1f`
 
@@ -12,12 +12,12 @@
 
 | # | 项 | 验证方式（可复现） |
 |---|---|---|
-| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/Upper/Upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
-| 2 | 产物含 QtWebEngine 运行载荷 | `find dist/Upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \)` → 3 条；helper 权限 `-rwxr-xr-x` |
-| 3 | 产物含原版渲染层，且与源逐文件一致 | `diff -rq app/assets/renderer dist/Upper/assets/renderer` → `IDENTICAL` |
-| 4 | 产物含角色种子资产 | `ls dist/Upper/assets/personas` → `general.md` 等 |
-| 5 | 产物 headless 真起界面、桥对象在位 | `DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen ./dist/Upper/Upper` → `DEVA WEB OK platform=offscreen title='Deva' url=…/assets/renderer/index.html bridge=True`，`EXIT=0` |
-| 6 | Chromium locale pak 不再被裁掉 | `ls dist/Upper/site-packages/PySide6/Qt/translations/qtwebengine_locales \| wc -l` → `53`；启动日志无 `could not find the translation file` |
+| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+| 2 | 产物含 QtWebEngine 运行载荷 | `find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \)` → 3 条；helper 权限 `-rwxr-xr-x` |
+| 3 | 产物含原版渲染层，且与源逐文件一致 | `diff -rq app/assets/renderer dist/ai_upper/assets/renderer` → `IDENTICAL` |
+| 4 | 产物含角色种子资产 | `ls dist/ai_upper/assets/personas` → `general.md` 等 |
+| 5 | 产物 headless 真起界面、桥对象在位 | `DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen ./dist/ai_upper/ai_upper` → `DEVA WEB OK platform=offscreen title='Deva' url=…/assets/renderer/index.html bridge=True`，`EXIT=0` |
+| 6 | Chromium locale pak 不再被裁掉 | `ls dist/ai_upper/site-packages/PySide6/Qt/translations/qtwebengine_locales \| wc -l` → `53`；启动日志无 `could not find the translation file` |
 | 7 | 158 通道逐条结论表（机器生成） | `docs/audit/IPC-158-LEDGER.md`：158 行，通过 60 / 已知差异 5 / 不适用 0 / 未实现 93；桥内注册 64 条；每行有 `文件:行号` 与测试名 |
 | 8 | 写路径（对话/设置）在真窗口里可用 | §1.12；实跑日志 `out/e2e-live/logs/{model,tools,abort,reload}.log` |
 | 9 | 界面七页与原版逐页一致 | `scripts/parity/compare.sh`：七页 `fuzz3 = 1`、`maxd = 9`，全部「已一致」（见第三节） |
@@ -54,17 +54,17 @@
 - 新增 `app/src/deva_web.py`：薄入口，装配 `SettingsService` / `PersonaStore` /
   `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
   的模板语义**未改**。
-- `[tool.py_upper] entry = "deva_web.py"`（`app/pyproject.toml.example` 与本地 `app/pyproject.toml`）。
-- `tools/py_upper/package.py` 的 `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；
+- `[tool.ai_upper] entry = "deva_web.py"`（`app/pyproject.toml.example` 与本地 `app/pyproject.toml`）。
+- `tools/ai_upper/package.py` 的 `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；
   linux/windows 落 bundle 根，macOS 落 `Contents/Resources`。
-- `app/src/utils/paths.py` 新增 `assets_root()`：以 launcher 导出的 `PY_UPPER_HOME`
+- `app/src/utils/paths.py` 新增 `assets_root()`：以 launcher 导出的 `AI_UPPER_HOME`
   为准 → `_project_root()` → `sys.executable` 目录。不再用 `parents[3]`（Cython 合并 + egg 后不可靠）。
 
 ### 2.2 构建命令与产物
 
 ```text
 $ cd /home/agent/shared_workspace/py_upper && PATH=/tmp/ninja-bin:/tmp/buildtools/patchelf/bin:$PATH \
-    PY_UPPER_PYTHON=/home/agent/shared_workspace/py_upper/.venv/bin/python-real \
+    AI_UPPER_PYTHON=/home/agent/shared_workspace/py_upper/.venv/bin/python-real \
     .venv/bin/python tools/build.py build --target linux-arm64
 [1/6] Runtime + SDK
 [2/6] Third-party dependencies
@@ -75,29 +75,29 @@ Third-party optimization: removed 559 files and 36 directories
 SMOKE PASS 5 modules (launcher registers merged bundles)
 [6/6] Target runtime smoke
 SMOKE PASS launcher
-READY: /home/agent/shared_workspace/py_upper/dist/Upper
+READY: /home/agent/shared_workspace/py_upper/dist/ai_upper
 EXIT=0
 ```
 
-产物：**`/home/agent/shared_workspace/py_upper/dist/Upper`**（499 MB）。
+产物：**`/home/agent/shared_workspace/py_upper/dist/ai_upper`**（499 MB）。
 完整日志 `/home/agent/shared_workspace/py_upper/out/packaging/build8.log`。
 
 ### 2.3 产物内容核对（原始输出）
 
 ```text
-$ find dist/Upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
-dist/Upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
-dist/Upper/site-packages/PySide6/QtWebChannel.abi3.so
-dist/Upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+$ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
 
-$ diff -rq app/assets/renderer dist/Upper/assets/renderer && echo IDENTICAL
+$ diff -rq app/assets/renderer dist/ai_upper/assets/renderer && echo IDENTICAL
 IDENTICAL
 
-$ ls dist/Upper/assets
+$ ls dist/ai_upper/assets
 personas
 renderer
 
-$ strings dist/Upper/Upper | grep -c "from deva_web import main"
+$ strings dist/ai_upper/ai_upper | grep -c "from deva_web import main"
 1
 ```
 
@@ -107,9 +107,9 @@ $ strings dist/Upper/Upper | grep -c "from deva_web import main"
 
 ```text
 $ rm -rf /tmp/pack-smoke && mkdir -p /tmp/pack-smoke
-$ DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen timeout 180 ./dist/Upper/Upper
+$ DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen timeout 180 ./dist/ai_upper/ai_upper
 …
-DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/Upper/assets/renderer/index.html bridge=True
+DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/ai_upper/assets/renderer/index.html bridge=True
 EXIT=0
 ```
 
@@ -226,8 +226,8 @@ $ PATH=/tmp/buildtools/patchelf/bin:$PATH ../.venv/bin/python -m pytest -q -rs
 ```text
 SKIPPED [1] tests/test_build_tool_compat.py:1615: the auto-link pragma belongs to the Windows pyconfig.h
 SKIPPED [1] tests/test_build_tool_compat.py:1669: handle inheritance for GUI-subsystem children belongs to Windows
-SKIPPED [1] tests/test_e2e_local.py:447: set PY_UPPER_E2E=1 to run the full local build E2E
-SKIPPED [1] tests/test_e2e_local.py:488: set PY_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E
 SKIPPED [1] tests/test_web_e2e_stream.py:131: 端到端实跑需要真 provider：设 DEVA_E2E_PROVIDER=1 并提供 ANTHROPIC_BASE_URL / ANTHROPIC_API_KEY / ANTHROPIC_MODEL（或 DEVA_E2E_* 同名变量）
 ```
 

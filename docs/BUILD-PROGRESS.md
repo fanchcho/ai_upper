@@ -321,8 +321,8 @@ $ cd app && ../.venv/bin/python -m pytest -q
 
 **关于权限确认：** 对照 Deva 源码（`exec-policy.ts` 文件头与 `chat.ts:5160`「权限闸门（纯同步策略，
 零弹框）：所有工具一律放行…交互轮唯一的拒绝是「用户暂不挂载工作区」」），Deva 自 2026-10-09 起
-**没有**逐工具权限确认弹框。因此不做权限确认 UI——做了就是臆造业务功能。py_upper 的
-`WorkspaceGuard` 受信根是已记录的刻意差异（Deva 用挂载工作区，py_upper 用受信根目录）。
+**没有**逐工具权限确认弹框。因此不做权限确认 UI——做了就是臆造业务功能。ai_upper 的
+`WorkspaceGuard` 受信根是已记录的刻意差异（Deva 用挂载工作区，ai_upper 用受信根目录）。
 
 ### 1.11 阶段 K：界面与原版逐页一致（commit `f5e987b` / `4f53a1e` / `06841f9` / `64a8402`）
 
@@ -521,8 +521,8 @@ $ cd app && ../.venv/bin/python -m pytest -q
 $ cd app && ../.venv/bin/python -m pytest -q -rs
 SKIPPED [1] tests/test_build_tool_compat.py:1615: the auto-link pragma belongs to the Windows pyconfig.h
 SKIPPED [1] tests/test_build_tool_compat.py:1669: handle inheritance for GUI-subsystem children belongs to Windows
-SKIPPED [1] tests/test_e2e_local.py:432: set PY_UPPER_E2E=1 to run the full local build E2E
-SKIPPED [1] tests/test_e2e_local.py:470: set PY_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:432: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:470: set AI_UPPER_E2E=1 to run the full local build E2E
 SKIPPED [1] tests/test_native_deployment.py:177: requires cc, patchelf and readelf
 845 passed, 5 skipped in 21.35s
 ```
@@ -771,7 +771,7 @@ schema 已随请求发出）；② 工作区内 `/tmp/live-work-final/note.txt` 
 `…/out/e2e-live/04-tool-outside.png`。
 
 **未做到的项（照实写）**：`ask_user` / `exit_plan` / 挂载卡三种**交互式审批**没有实跑——
-py_upper 的工具层没有 `ask_user` 工具，也没有待答请求注册表，所以没有可审批的对象
+ai_upper 的工具层没有 `ask_user` 工具，也没有待答请求注册表，所以没有可审批的对象
 （158 条表里这三条是「未实现」，见 §3）。“审批”在这里只覆盖了「判定层允许 / 执行期拒绝」
 这条真实存在的路径。
 
@@ -851,16 +851,16 @@ Windows / macOS 目标本轮**未构建**（见 §2）。
 | 改动 | 文件 | 要点 |
 |---|---|---|
 | 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
-| 包装配置 | `app/pyproject.toml.example`、`app/pyproject.toml` | `[tool.py_upper] entry = "deva_web.py"`；构建期验证行 `PASS entry module Cythonized: deva_web`（`out/packaging/build8.log:176`） |
-| 资产入产物 | `tools/py_upper/package.py` | `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；linux/windows 落 bundle 根，macOS 落 `Contents/Resources` |
-| 资产定位 | `app/src/utils/paths.py` | 新增 `assets_root()`，以 launcher 导出的 `PY_UPPER_HOME` 为准，再退到 `_project_root()`、`sys.executable` 目录——不再靠 `parents[3]` 计数（Cython 合并 + egg 后不可靠） |
+| 包装配置 | `app/pyproject.toml.example`、`app/pyproject.toml` | `[tool.ai_upper] entry = "deva_web.py"`；构建期验证行 `PASS entry module Cythonized: deva_web`（`out/packaging/build8.log:176`） |
+| 资产入产物 | `tools/ai_upper/package.py` | `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；linux/windows 落 bundle 根，macOS 落 `Contents/Resources` |
+| 资产定位 | `app/src/utils/paths.py` | 新增 `assets_root()`，以 launcher 导出的 `AI_UPPER_HOME` 为准，再退到 `_project_root()`、`sys.executable` 目录——不再靠 `parents[3]` 计数（Cython 合并 + egg 后不可靠） |
 | 调用点 | `web_shell_window.py`、`persona_store.py` | `ASSETS_DIR = assets_root() / "renderer"`；角色资产走 `assets_root() / "personas"` |
 
 #### 1.14.2 构建命令与结果（原始）
 
 ```text
 $ cd /home/agent/shared_workspace/py_upper && PATH=/tmp/ninja-bin:/tmp/buildtools/patchelf/bin:$PATH \
-    PY_UPPER_PYTHON=/home/agent/shared_workspace/py_upper/.venv/bin/python-real \
+    AI_UPPER_PYTHON=/home/agent/shared_workspace/py_upper/.venv/bin/python-real \
     .venv/bin/python tools/build.py build --target linux-arm64
 [1/6] Runtime + SDK
 [2/6] Third-party dependencies
@@ -871,35 +871,35 @@ Third-party optimization: removed 559 files and 36 directories
 SMOKE PASS 5 modules (launcher registers merged bundles)
 [6/6] Target runtime smoke
 SMOKE PASS launcher
-READY: /home/agent/shared_workspace/py_upper/dist/Upper
+READY: /home/agent/shared_workspace/py_upper/dist/ai_upper
 EXIT=0
 ```
 
 完整日志：`out/packaging/build8.log`。构建机需要 `cmake`、`ninja`、`patchelf`；
 本机 `patchelf` 不在 `/usr/bin`，装在 `/tmp/buildtools/patchelf/bin` 后经 `PATH` 传入。
 
-产物绝对路径：**`/home/agent/shared_workspace/py_upper/dist/Upper`**（499 MB）。
+产物绝对路径：**`/home/agent/shared_workspace/py_upper/dist/ai_upper`**（499 MB）。
 
 #### 1.14.3 产物内容核对（原始命令与输出）
 
 ```text
-$ find dist/Upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
-dist/Upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
-dist/Upper/site-packages/PySide6/QtWebChannel.abi3.so
-dist/Upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+$ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
 
-$ diff -rq app/assets/renderer dist/Upper/assets/renderer && echo IDENTICAL
+$ diff -rq app/assets/renderer dist/ai_upper/assets/renderer && echo IDENTICAL
 IDENTICAL
 
-$ ls dist/Upper/assets
+$ ls dist/ai_upper/assets
 personas
 renderer
 
-$ ls dist/Upper/assets/personas | head -3
+$ ls dist/ai_upper/assets/personas | head -3
 general.md
 xiaomajiang.md
 
-$ strings dist/Upper/Upper | grep -c "from deva_web import main"
+$ strings dist/ai_upper/ai_upper | grep -c "from deva_web import main"
 1
 ```
 
@@ -911,9 +911,9 @@ $ strings dist/Upper/Upper | grep -c "from deva_web import main"
 
 ```text
 $ rm -rf /tmp/pack-smoke && mkdir -p /tmp/pack-smoke
-$ DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen timeout 180 ./dist/Upper/Upper
+$ DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen timeout 180 ./dist/ai_upper/ai_upper
 …
-DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/Upper/assets/renderer/index.html bridge=True
+DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/ai_upper/assets/renderer/index.html bridge=True
 EXIT=0
 ```
 
@@ -962,7 +962,7 @@ EXIT=0
 | Web 承载窗口在真桌面（真显卡、HiDPI、Wayland）下的观感 | 已在 Xvfb 软渲染下实拍七页并与原版逐像素比对（§1.11） | 容器只有 Xvfb。真显卡/缩放的合成差异无法在容器验证；截图结论只对 `1400x900x24 + 软渲染` 这一配置成立 |
 | `titleBarOverlay` 的窗口控制（最小化/最大化/关闭真实生效） | 叠加层画得与原版一致，按钮几何有测试 | 截图对比只能证明**画对**，证明不了**点了有效**；Xvfb 无窗口管理器，最小化/最大化行为需要真桌面验 |
 | 深色主题下的七页对比 | 叠加层深色切换有单测（`OVERLAY_BG_DARK`） | 只实拍了浅色七页；深色需要原版切主题再拍一轮，本轮时间不够 |
-| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/Upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
 | Windows / macOS 打包产物 | 同一套 `package()` / `qt_prune` 代码路径，有单测覆盖两平台的目录布局 | **未构建、未启动**。`qt_prune` 保留了 `QtWebEngineProcess.exe` 与 `qtwebengine_locales` 的 Windows 布局，但没有真产物证据；不许拿 linux 结果冒充 |
 | 流式刷新在真窗口里的观感（40ms 节流） | 逻辑与假控件都有测试 | 需要长回复 + 真人观察；Xvfb 能跑但看不出手感 |
 | 技能目录里**自定义**技能的排序 | 按 `casefold()` 排，ASCII 名与原版 `localeCompare` 等价 | 非 ASCII 名（中文）在 `localeCompare` 默认 ICU 排序下与 `casefold()` 可能不同，未实拍对比 |
@@ -973,7 +973,7 @@ EXIT=0
 |---|---|---|
 | ~~158 通道逐条结论表~~ | **已生成**，见 `docs/audit/IPC-158-LEDGER.md`（158 行 = 154 `ipcMain.handle` + 4 `ipcMain.on`；判定 **通过 60 / 已知差异 5 / 不适用 0 / 未实现 93**；桥内注册 64 条，每行有 `文件:行号` 与测试名）。它不再是档三项——**未实现的 93 条**才是档三内容，逐条列在 §3.1 | — |
 | ~~聊天/工具/待办等**写路径**通道接通~~ | **第六阶段已落地**，见 §1.12 | — |
-| 工作区挂载交互轮 | Deva 的挂载卡是交互轮唯一闸门，py_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区；需要做挂载卡才能对齐 |
+| 工作区挂载交互轮 | Deva 的挂载卡是交互轮唯一闸门，ai_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区；需要做挂载卡才能对齐 |
 | 子智能体 / `task` 类工具（Deva 19 工具里的 9 个） | 依赖挂载工作区与多轮编排，未迁移 | 模型拿不到这几个工具时会退化为单轮 |
 | 真机人工验收（键盘焦点、IME、拖拽） | 容器无显示服务器 | 只能由人验 |
 
@@ -1013,7 +1013,7 @@ EXIT=0
 
 | commit | 内容 |
 |---|---|
-| `76d4009` | docs: Deva→py_upper 迁移计划（158 通道契约主轴） |
+| `76d4009` | docs: Deva→ai_upper 迁移计划（158 通道契约主轴） |
 | `a7fba52` | feat(chat): pydantic 对话模型与 Deva 兼容的会话存储 |
 | `d4ac576` | feat(services): provider 抽象 + 离线假实现、路径守卫与 read_file |
 | `76bed55` | test(services): provider 错误映射、假 provider、守卫越界 |
@@ -1073,7 +1073,7 @@ $ PATH=/tmp/buildtools/patchelf/bin:$PATH ../.venv/bin/python -m pytest -q
 两次的差别只有一条：`test_native_deployment.py:177` 在找不到 `patchelf` 时跳过，
 把 `patchelf` 放进 `PATH` 后它变绿。构建机本来就要求 `patchelf`（§1.14.2），
 所以**以 939 passed / 5 skipped 为基线**；剩下 5 条 skip 的原因分别是 Windows 专属
-（2 条）、需 `PY_UPPER_E2E=1` 跑完整本地构建（2 条）、需真 provider 密钥（1 条）。
+（2 条）、需 `AI_UPPER_E2E=1` 跑完整本地构建（2 条）、需真 provider 密钥（1 条）。
 原始日志：`out/packaging/pytest-full.log`、`out/packaging/pytest-full-patchelf.log`。
 
 按优先级：

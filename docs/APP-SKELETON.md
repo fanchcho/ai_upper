@@ -11,7 +11,7 @@
 - **没有第二套 MVVM**：ViewModel 基类、可观察属性、命令、绑定、容器、Qt 引导全部复用
   `app/src/mvvm/`（`core/`、`views/base_view.py`、`mvvm_application.py`、`mvvm_bootstrap.py`）。
   新工程只往里加**具体类**，不复制框架代码。
-- **装配处唯二**：参考实现仍由 `app/src/application.py::PyUpperApplication` 装配；
+- **装配处唯二**：参考实现仍由 `app/src/application.py::AiUpperApplication` 装配；
   新应用由 `app/src/deva_app/__main__.py::DevaApplication` 装配。两者都继承
   `MVVMQtApplication`，互不影响，原有 377 个测试保持全绿。
 
@@ -117,7 +117,7 @@ ChatWindow(输入框)
 
 1. **真实 provider 的接入时机**：P1 未做网络适配器。需要确认是否引入 `httpx`（当前 venv 未装）
    还是走标准库 `http.client`；这会决定 `provider_gateway.py` 的依赖与重连实现。
-2. **打包入口**：`app/pyproject.toml` 的 `[tool.py_upper].entry` 仍是 `main.py`。
+2. **打包入口**：`app/pyproject.toml` 的 `[tool.ai_upper].entry` 仍是 `main.py`。
    要把新应用作为发行入口，需要把入口改为 `deva_app/__main__.py` 或新增一个启动脚本——
    这会改变参考实现的打包行为，属于破坏性变更，未擅自执行。
 3. **会话列表/设置页**：本轮只做单会话聊天窗口，左侧列表与设置页未做（见 `BUILD-PROGRESS.md`）。

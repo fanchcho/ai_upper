@@ -54,8 +54,8 @@ $ cd app && ../.venv/bin/python -m pytest -q
 ```text
 SKIPPED [1] tests/test_build_tool_compat.py:1615: the auto-link pragma belongs to the Windows pyconfig.h
 SKIPPED [1] tests/test_build_tool_compat.py:1669: handle inheritance for GUI-subsystem children belongs to Windows
-SKIPPED [1] tests/test_e2e_local.py:432: set PY_UPPER_E2E=1 to run the full local build E2E
-SKIPPED [1] tests/test_e2e_local.py:470: set PY_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:432: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] tests/test_e2e_local.py:470: set AI_UPPER_E2E=1 to run the full local build E2E
 SKIPPED [1] tests/test_native_deployment.py:177: requires cc, patchelf and readelf
 ```
 
@@ -234,7 +234,7 @@ PAGE                          raw    fuzz3   maxd  VERDICT
 | **新界面的写路径**（`chat:send` 等） | 本轮只做到七页渲染正确 | **最大功能缺口**：新界面能看不能发消息 |
 | 158 通道逐条结论表 | 本轮时间用尽 | 契约闭环缺一张表；未实现的通道在桥边界显式 reject，但不假成功 |
 | 打包入口指向 Web 窗口并真实构建 | 同上 | 打包产物未被证明能起新界面 |
-| 工作区挂载交互轮 | py_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区 |
+| 工作区挂载交互轮 | ai_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区 |
 | 子智能体 / `task` 类工具（19 里的 9 个） | 依赖挂载与多轮编排 | 模型工具面变窄 |
 | 真机人工验收（焦点、IME、拖拽） | 容器无显示服务器 | 只能由人验 |
 
