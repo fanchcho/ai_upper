@@ -1,0 +1,18 @@
+$ find dist/Upper -name "*QtWebEngineCore*" -o -name "*QtWebChannel*" -o -name "QtWebEngineProcess" | sort
+dist/Upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+dist/Upper/site-packages/PySide6/QtWebChannel.abi3.so
+dist/Upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+
+$ diff -rq app/assets/renderer dist/Upper/assets/renderer && echo IDENTICAL
+IDENTICAL
+
+$ ls dist/Upper/assets
+personas
+renderer
+
+$ ls dist/Upper/assets/personas | head -3
+general.md
+xiaomajiang.md
+
+$ strings dist/Upper/Upper | grep -c "from deva_web import main"
+1

@@ -1,0 +1,571 @@
+[1/6] Runtime + SDK
+[2/6] Third-party dependencies
++ /home/agent/shared_workspace/py_upper/runtimes/linux-arm64/3.13.5/bin/python3.13 -m pip download --disable-pip-version-check --only-binary=:all: --prefer-binary --cache-dir /home/agent/shared_workspace/py_upper/.cache/pip --dest /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64 --timeout 120 --retries 10 PySide6==6.11.2 pydantic==2.14.3 httpx==0.28.1 cryptography==46.0.3 keyring==25.7.0
+Collecting PySide6==6.11.2
+  Using cached pyside6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (5.2 kB)
+Collecting pydantic==2.14.3
+  Using cached pydantic-2.14.3-py3-none-any.whl.metadata (141 kB)
+Collecting httpx==0.28.1
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting cryptography==46.0.3
+  Using cached cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl.metadata (5.7 kB)
+Collecting keyring==25.7.0
+  Using cached keyring-25.7.0-py3-none-any.whl.metadata (21 kB)
+Collecting shiboken6==6.11.2 (from PySide6==6.11.2)
+  Using cached shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (2.4 kB)
+Collecting PySide6_Essentials==6.11.2 (from PySide6==6.11.2)
+  Using cached pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (3.6 kB)
+Collecting PySide6_Addons==6.11.2 (from PySide6==6.11.2)
+  Using cached pyside6_addons-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (4.0 kB)
+Collecting annotated-types>=0.6.0 (from pydantic==2.14.3)
+  Using cached annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.4 (from pydantic==2.14.3)
+  Using cached pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.16.0 (from pydantic==2.14.3)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic==2.14.3)
+  Using cached typing_inspection-0.4.5-py3-none-any.whl.metadata (2.6 kB)
+Collecting anyio (from httpx==0.28.1)
+  Using cached anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+Collecting certifi (from httpx==0.28.1)
+  Using cached certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx==0.28.1)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx==0.28.1)
+  Using cached idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting cffi>=2.0.0 (from cryptography==46.0.3)
+  Using cached cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (2.5 kB)
+Collecting SecretStorage>=3.2 (from keyring==25.7.0)
+  Using cached secretstorage-3.5.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting jeepney>=0.4.2 (from keyring==25.7.0)
+  Using cached jeepney-0.9.0-py3-none-any.whl.metadata (1.2 kB)
+Collecting jaraco.classes (from keyring==25.7.0)
+  Using cached jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting jaraco.functools (from keyring==25.7.0)
+  Using cached jaraco_functools-4.6.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting jaraco.context (from keyring==25.7.0)
+  Using cached jaraco_context-6.1.2-py3-none-any.whl.metadata (4.2 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx==0.28.1)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography==46.0.3)
+  Using cached pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting more-itertools (from jaraco.classes->keyring==25.7.0)
+  Using cached more_itertools-11.2.1-py3-none-any.whl.metadata (42 kB)
+Using cached pyside6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (572 kB)
+Using cached pydantic-2.14.3-py3-none-any.whl (494 kB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl (4.3 MB)
+Using cached keyring-25.7.0-py3-none-any.whl (39 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (2.1 MB)
+Using cached pyside6_addons-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (170.8 MB)
+Using cached pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (79.6 MB)
+Using cached shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (270 kB)
+Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Using cached cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (222 kB)
+Using cached jeepney-0.9.0-py3-none-any.whl (49 kB)
+Using cached secretstorage-3.5.0-py3-none-any.whl (15 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Using cached typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Using cached anyio-4.16.0-py3-none-any.whl (134 kB)
+Using cached idna-3.20-py3-none-any.whl (69 kB)
+Using cached certifi-2026.10.23-py3-none-any.whl (135 kB)
+Using cached jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Using cached jaraco_context-6.1.2-py3-none-any.whl (7.9 kB)
+Using cached jaraco_functools-4.6.0-py3-none-any.whl (11 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached more_itertools-11.2.1-py3-none-any.whl (74 kB)
+Using cached pycparser-3.12-py3-none-any.whl (62 kB)
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pydantic-2.14.3-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/httpx-0.28.1-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/keyring-25.7.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/httpcore-1.0.9-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6_addons-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/annotated_types-0.8.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/jeepney-0.9.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/secretstorage-3.5.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/typing_extensions-4.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/typing_inspection-0.4.5-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/anyio-4.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/idna-3.20-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/certifi-2026.10.23-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/jaraco.classes-3.4.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/jaraco_context-6.1.2-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/jaraco_functools-4.6.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/h11-0.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/more_itertools-11.2.1-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pycparser-3.12-py3-none-any.whl
+Successfully downloaded PySide6 pydantic httpx cryptography keyring httpcore pydantic-core PySide6_Addons PySide6_Essentials shiboken6 annotated-types cffi jeepney SecretStorage typing-extensions typing-inspection anyio idna certifi jaraco.classes jaraco.context jaraco.functools h11 more-itertools pycparser
+Qt pruning: removed 513 file(s) and 35 director(ies), freed 281 MB
+Trim (site-packages): removed 44 file(s) and 0 director(ies), freed 2.2 MB
+Third-party optimization: removed 559 files and 36 directories
+Cython: 69 module(s) up to date
+Compile: 4 merged bundle(s) up to date
+Encrypted egg: 13 application file(s), backend=auto
+Python stage ready: /home/agent/shared_workspace/py_upper/build/staging/linux-arm64/site-packages
+[3/6] Target launcher
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/agent/shared_workspace/py_upper/build/launcher/linux-arm64
+[1/4] Building CXX object CMakeFiles/PyUpper.dir/py_upper_embedded.cpp.o
+[2/4] Building CXX object CMakeFiles/PyUpper.dir/src/main.cpp.o
+[3/4] Building CXX object CMakeFiles/PyUpper.dir/src/PyUpper.cpp.o
+[4/4] Linking CXX executable PyUpper
+[4/6] Package + native dependency closure
+Trim (runtime): removed 358 file(s) and 9 director(ies), freed 3.0 MB
+Native dependency: bundled /lib/aarch64-linux-gnu/libglib-2.0.so.0 as site-packages/PySide6/Qt/lib/libglib-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libz.so.1 as site-packages/PySide6/Qt/lib/libz.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libzstd.so.1 as site-packages/PySide6/Qt/lib/libzstd.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libdbus-1.so.3 as site-packages/PySide6/Qt/lib/libdbus-1.so.3
+Native dependency: bundled /lib/aarch64-linux-gnu/libfontconfig.so.1 as site-packages/PySide6/Qt/lib/libfontconfig.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libbrotlidec.so.1 as site-packages/PySide6/Qt/lib/libbrotlidec.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libxcb-dri3.so.0 as site-packages/PySide6/Qt/lib/libxcb-dri3.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libnspr4.so as site-packages/PySide6/Qt/lib/libnspr4.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libnss3.so as site-packages/PySide6/Qt/lib/libnss3.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libnssutil3.so as site-packages/PySide6/Qt/lib/libnssutil3.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libsmime3.so as site-packages/PySide6/Qt/lib/libsmime3.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libgbm.so.1 as site-packages/PySide6/Qt/lib/libgbm.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libsnappy.so.1 as site-packages/PySide6/Qt/lib/libsnappy.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libopus.so.0 as site-packages/PySide6/Qt/lib/libopus.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libXcomposite.so.1 as site-packages/PySide6/Qt/lib/libXcomposite.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libXdamage.so.1 as site-packages/PySide6/Qt/lib/libXdamage.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libXext.so.6 as site-packages/PySide6/Qt/lib/libXext.so.6
+Native dependency: bundled /lib/aarch64-linux-gnu/libXfixes.so.3 as site-packages/PySide6/Qt/lib/libXfixes.so.3
+Native dependency: bundled /lib/aarch64-linux-gnu/libXrandr.so.2 as site-packages/PySide6/Qt/lib/libXrandr.so.2
+Native dependency: bundled /lib/aarch64-linux-gnu/libXtst.so.6 as site-packages/PySide6/Qt/lib/libXtst.so.6
+Native dependency: bundled /lib/aarch64-linux-gnu/libexpat.so.1 as site-packages/PySide6/Qt/lib/libexpat.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libasound.so.2 as site-packages/PySide6/Qt/lib/libasound.so.2
+Native dependency: bundled /lib/aarch64-linux-gnu/libudev.so.1 as site-packages/PySide6/Qt/lib/libudev.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libminizip.so.1 as site-packages/PySide6/Qt/lib/libminizip.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/liblcms2.so.2 as site-packages/PySide6/Qt/lib/liblcms2.so.2
+Native dependency: bundled /lib/aarch64-linux-gnu/libxkbfile.so.1 as site-packages/PySide6/Qt/lib/libxkbfile.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libSM.so.6 as site-packages/PySide6/Qt/lib/libSM.so.6
+Native dependency: bundled /lib/aarch64-linux-gnu/libICE.so.6 as site-packages/PySide6/Qt/lib/libICE.so.6
+Native dependency: bundled /lib/aarch64-linux-gnu/libgobject-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgobject-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libgio-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgio-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libatomic.so.1 as site-packages/PySide6/Qt/lib/libatomic.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libpcre2-8.so.0 as site-packages/PySide6/Qt/lib/libpcre2-8.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libsystemd.so.0 as site-packages/PySide6/Qt/lib/libsystemd.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libbrotlicommon.so.1 as site-packages/PySide6/Qt/lib/libbrotlicommon.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libplc4.so as site-packages/PySide6/Qt/lib/libplc4.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libplds4.so as site-packages/PySide6/Qt/lib/libplds4.so
+Native dependency: bundled /lib/aarch64-linux-gnu/libXrender.so.1 as site-packages/PySide6/Qt/lib/libXrender.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libcap.so.2 as site-packages/PySide6/Qt/lib/libcap.so.2
+Native dependency: bundled /lib/aarch64-linux-gnu/libuuid.so.1 as site-packages/PySide6/Qt/lib/libuuid.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libffi.so.8 as site-packages/PySide6/Qt/plugins/networkinformation/libffi.so.8
+Native dependency: bundled /lib/aarch64-linux-gnu/libgmodule-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgmodule-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libmount.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libmount.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libselinux.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libselinux.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libblkid.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libblkid.so.1
+[5/6] Static verification
+PASS staging
+PASS application site-packages
+PASS runtime manifest format=4
+PASS entry module Cythonized: deva_web
+PASS encrypted egg py_upper.dat
+PASS encrypted egg magic
+PASS encrypted egg members=13
+PASS egg merged bundle _root
+PASS merged bundle not loose _root
+PASS merged bundle stored py_upper_bundles/py_upper__root.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper__root.cpython-313-aarch64-linux-gnu.so=arm64
+PASS merged bundle modules _root=4
+PASS egg merged bundle deva_app
+PASS merged bundle not loose deva_app
+PASS merged bundle stored py_upper_bundles/py_upper_deva_app.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_deva_app.cpython-313-aarch64-linux-gnu.so=arm64
+PASS merged bundle modules deva_app=1
+PASS egg merged bundle mvvm
+PASS merged bundle not loose mvvm
+PASS merged bundle stored py_upper_bundles/py_upper_mvvm.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_mvvm.cpython-313-aarch64-linux-gnu.so=arm64
+PASS merged bundle modules mvvm=62
+PASS egg merged bundle utils
+PASS merged bundle not loose utils
+PASS merged bundle stored py_upper_bundles/py_upper_utils.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_utils.cpython-313-aarch64-linux-gnu.so=arm64
+PASS merged bundle modules utils=2
+PASS source removed application
+PASS no per-module extension application
+PASS source removed demo_application
+PASS no per-module extension demo_application
+PASS egg package marker deva_app
+PASS package marker not loose deva_app
+PASS package marker not compiled deva_app
+PASS source removed deva_app.__main__
+PASS no per-module extension deva_app.__main__
+PASS source removed deva_web
+PASS no per-module extension deva_web
+PASS source removed main
+PASS no per-module extension main
+PASS egg package marker mvvm
+PASS package marker not loose mvvm
+PASS package marker not compiled mvvm
+PASS egg package marker mvvm.core
+PASS package marker not loose mvvm.core
+PASS package marker not compiled mvvm.core
+PASS source removed mvvm.core.base_view_model
+PASS no per-module extension mvvm.core.base_view_model
+PASS source removed mvvm.core.command
+PASS no per-module extension mvvm.core.command
+PASS source removed mvvm.core.factory
+PASS no per-module extension mvvm.core.factory
+PASS source removed mvvm.core.observable
+PASS no per-module extension mvvm.core.observable
+PASS egg package marker mvvm.models
+PASS package marker not loose mvvm.models
+PASS package marker not compiled mvvm.models
+PASS source removed mvvm.models.about_model
+PASS no per-module extension mvvm.models.about_model
+PASS source removed mvvm.models.base_model
+PASS no per-module extension mvvm.models.base_model
+PASS source removed mvvm.models.chat_models
+PASS no per-module extension mvvm.models.chat_models
+PASS source removed mvvm.mvvm_application
+PASS no per-module extension mvvm.mvvm_application
+PASS source removed mvvm.mvvm_bootstrap
+PASS no per-module extension mvvm.mvvm_bootstrap
+PASS egg package marker mvvm.services
+PASS package marker not loose mvvm.services
+PASS package marker not compiled mvvm.services
+PASS source removed mvvm.services.anthropic_provider
+PASS no per-module extension mvvm.services.anthropic_provider
+PASS source removed mvvm.services.attachments
+PASS no per-module extension mvvm.services.attachments
+PASS source removed mvvm.services.avatar_image
+PASS no per-module extension mvvm.services.avatar_image
+PASS source removed mvvm.services.chat_session_store
+PASS no per-module extension mvvm.services.chat_session_store
+PASS source removed mvvm.services.compaction
+PASS no per-module extension mvvm.services.compaction
+PASS source removed mvvm.services.context_window
+PASS no per-module extension mvvm.services.context_window
+PASS source removed mvvm.services.effort
+PASS no per-module extension mvvm.services.effort
+PASS source removed mvvm.services.fake_provider
+PASS no per-module extension mvvm.services.fake_provider
+PASS source removed mvvm.services.glob_match
+PASS no per-module extension mvvm.services.glob_match
+PASS source removed mvvm.services.greeting
+PASS no per-module extension mvvm.services.greeting
+PASS source removed mvvm.services.http_client
+PASS no per-module extension mvvm.services.http_client
+PASS source removed mvvm.services.image_prep
+PASS no per-module extension mvvm.services.image_prep
+PASS source removed mvvm.services.model_resolve
+PASS no per-module extension mvvm.services.model_resolve
+PASS source removed mvvm.services.model_view
+PASS no per-module extension mvvm.services.model_view
+PASS source removed mvvm.services.office_text
+PASS no per-module extension mvvm.services.office_text
+PASS source removed mvvm.services.openai_provider
+PASS no per-module extension mvvm.services.openai_provider
+PASS source removed mvvm.services.persona_store
+PASS no per-module extension mvvm.services.persona_store
+PASS source removed mvvm.services.provider_gateway
+PASS no per-module extension mvvm.services.provider_gateway
+PASS source removed mvvm.services.provider_registry
+PASS no per-module extension mvvm.services.provider_registry
+PASS source removed mvvm.services.provider_setup
+PASS no per-module extension mvvm.services.provider_setup
+PASS source removed mvvm.services.repetition
+PASS no per-module extension mvvm.services.repetition
+PASS source removed mvvm.services.responses_provider
+PASS no per-module extension mvvm.services.responses_provider
+PASS source removed mvvm.services.secrets_crypto
+PASS no per-module extension mvvm.services.secrets_crypto
+PASS source removed mvvm.services.secrets_vault
+PASS no per-module extension mvvm.services.secrets_vault
+PASS source removed mvvm.services.settings_service
+PASS no per-module extension mvvm.services.settings_service
+PASS source removed mvvm.services.skill_store
+PASS no per-module extension mvvm.services.skill_store
+PASS source removed mvvm.services.sse
+PASS no per-module extension mvvm.services.sse
+PASS source removed mvvm.services.todos
+PASS no per-module extension mvvm.services.todos
+PASS source removed mvvm.services.tool_policy
+PASS no per-module extension mvvm.services.tool_policy
+PASS source removed mvvm.services.tool_results
+PASS no per-module extension mvvm.services.tool_results
+PASS source removed mvvm.services.tool_runtime
+PASS no per-module extension mvvm.services.tool_runtime
+PASS source removed mvvm.services.transport
+PASS no per-module extension mvvm.services.transport
+PASS source removed mvvm.services.workspace_guard
+PASS no per-module extension mvvm.services.workspace_guard
+PASS egg package marker mvvm.view_models
+PASS package marker not loose mvvm.view_models
+PASS package marker not compiled mvvm.view_models
+PASS source removed mvvm.view_models.chat_sessions_vm
+PASS no per-module extension mvvm.view_models.chat_sessions_vm
+PASS source removed mvvm.view_models.chat_vm
+PASS no per-module extension mvvm.view_models.chat_vm
+PASS source removed mvvm.view_models.demo_vm
+PASS no per-module extension mvvm.view_models.demo_vm
+PASS source removed mvvm.view_models.main_vm
+PASS no per-module extension mvvm.view_models.main_vm
+PASS source removed mvvm.view_models.settings_vm
+PASS no per-module extension mvvm.view_models.settings_vm
+PASS egg package marker mvvm.views
+PASS package marker not loose mvvm.views
+PASS package marker not compiled mvvm.views
+PASS source removed mvvm.views.about_window
+PASS no per-module extension mvvm.views.about_window
+PASS source removed mvvm.views.base_view
+PASS no per-module extension mvvm.views.base_view
+PASS source removed mvvm.views.chat_pane
+PASS no per-module extension mvvm.views.chat_pane
+PASS source removed mvvm.views.chat_window
+PASS no per-module extension mvvm.views.chat_window
+PASS source removed mvvm.views.demo_window
+PASS no per-module extension mvvm.views.demo_window
+PASS source removed mvvm.views.deva_main_window
+PASS no per-module extension mvvm.views.deva_main_window
+PASS source removed mvvm.views.main_window
+PASS no per-module extension mvvm.views.main_window
+PASS source removed mvvm.views.session_list
+PASS no per-module extension mvvm.views.session_list
+PASS source removed mvvm.views.settings_pane
+PASS no per-module extension mvvm.views.settings_pane
+PASS source removed mvvm.views.title_bar_overlay
+PASS no per-module extension mvvm.views.title_bar_overlay
+PASS source removed mvvm.views.transcript_render
+PASS no per-module extension mvvm.views.transcript_render
+PASS source removed mvvm.views.web_shell_window
+PASS no per-module extension mvvm.views.web_shell_window
+PASS egg package marker mvvm.webui
+PASS package marker not loose mvvm.webui
+PASS package marker not compiled mvvm.webui
+PASS source removed mvvm.webui.assembly
+PASS no per-module extension mvvm.webui.assembly
+PASS source removed mvvm.webui.bridge
+PASS no per-module extension mvvm.webui.bridge
+PASS source removed mvvm.webui.host
+PASS no per-module extension mvvm.webui.host
+PASS egg package marker utils
+PASS package marker not loose utils
+PASS package marker not compiled utils
+PASS source removed utils.paths
+PASS no per-module extension utils.paths
+PASS source removed utils.qt_compat
+PASS no per-module extension utils.qt_compat
+PASS no generated source/cache files in site-packages
+PASS third-party wheel manifest
+PASS third-party requirements match
+PASS third-party direct imports recorded
+PASS package
+PASS launcher
+PASS no entry sidecar next to the launcher
+PASS embedded entry deva_web
+PASS packaged egg magic
+PASS packaged egg members=13
+PASS embedded egg loader
+PASS egg native dependencies portable
+PASS runtime pip/ensurepip removed
+PASS launcher arch=arm64
+PASS packaged egg merged bundle _root
+PASS packaged merged bundle not loose _root
+PASS merged bundle stored py_upper_bundles/py_upper__root.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper__root.cpython-313-aarch64-linux-gnu.so=arm64
+PASS packaged merged bundle modules _root=4
+PASS packaged egg merged bundle deva_app
+PASS packaged merged bundle not loose deva_app
+PASS merged bundle stored py_upper_bundles/py_upper_deva_app.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_deva_app.cpython-313-aarch64-linux-gnu.so=arm64
+PASS packaged merged bundle modules deva_app=1
+PASS packaged egg merged bundle mvvm
+PASS packaged merged bundle not loose mvvm
+PASS merged bundle stored py_upper_bundles/py_upper_mvvm.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_mvvm.cpython-313-aarch64-linux-gnu.so=arm64
+PASS packaged merged bundle modules mvvm=62
+PASS packaged egg merged bundle utils
+PASS packaged merged bundle not loose utils
+PASS merged bundle stored py_upper_bundles/py_upper_utils.cpython-313-aarch64-linux-gnu.so
+PASS arch bundle py_upper_bundles/py_upper_utils.cpython-313-aarch64-linux-gnu.so=arm64
+PASS packaged merged bundle modules utils=2
+PASS packaged source removed application
+PASS packaged no per-module extension application
+PASS packaged source removed demo_application
+PASS packaged no per-module extension demo_application
+PASS packaged egg package marker deva_app
+PASS packaged package marker not loose deva_app
+PASS packaged package marker not compiled deva_app
+PASS packaged source removed deva_app.__main__
+PASS packaged no per-module extension deva_app.__main__
+PASS packaged source removed deva_web
+PASS packaged no per-module extension deva_web
+PASS packaged source removed main
+PASS packaged no per-module extension main
+PASS packaged egg package marker mvvm
+PASS packaged package marker not loose mvvm
+PASS packaged package marker not compiled mvvm
+PASS packaged egg package marker mvvm.core
+PASS packaged package marker not loose mvvm.core
+PASS packaged package marker not compiled mvvm.core
+PASS packaged source removed mvvm.core.base_view_model
+PASS packaged no per-module extension mvvm.core.base_view_model
+PASS packaged source removed mvvm.core.command
+PASS packaged no per-module extension mvvm.core.command
+PASS packaged source removed mvvm.core.factory
+PASS packaged no per-module extension mvvm.core.factory
+PASS packaged source removed mvvm.core.observable
+PASS packaged no per-module extension mvvm.core.observable
+PASS packaged egg package marker mvvm.models
+PASS packaged package marker not loose mvvm.models
+PASS packaged package marker not compiled mvvm.models
+PASS packaged source removed mvvm.models.about_model
+PASS packaged no per-module extension mvvm.models.about_model
+PASS packaged source removed mvvm.models.base_model
+PASS packaged no per-module extension mvvm.models.base_model
+PASS packaged source removed mvvm.models.chat_models
+PASS packaged no per-module extension mvvm.models.chat_models
+PASS packaged source removed mvvm.mvvm_application
+PASS packaged no per-module extension mvvm.mvvm_application
+PASS packaged source removed mvvm.mvvm_bootstrap
+PASS packaged no per-module extension mvvm.mvvm_bootstrap
+PASS packaged egg package marker mvvm.services
+PASS packaged package marker not loose mvvm.services
+PASS packaged package marker not compiled mvvm.services
+PASS packaged source removed mvvm.services.anthropic_provider
+PASS packaged no per-module extension mvvm.services.anthropic_provider
+PASS packaged source removed mvvm.services.attachments
+PASS packaged no per-module extension mvvm.services.attachments
+PASS packaged source removed mvvm.services.avatar_image
+PASS packaged no per-module extension mvvm.services.avatar_image
+PASS packaged source removed mvvm.services.chat_session_store
+PASS packaged no per-module extension mvvm.services.chat_session_store
+PASS packaged source removed mvvm.services.compaction
+PASS packaged no per-module extension mvvm.services.compaction
+PASS packaged source removed mvvm.services.context_window
+PASS packaged no per-module extension mvvm.services.context_window
+PASS packaged source removed mvvm.services.effort
+PASS packaged no per-module extension mvvm.services.effort
+PASS packaged source removed mvvm.services.fake_provider
+PASS packaged no per-module extension mvvm.services.fake_provider
+PASS packaged source removed mvvm.services.glob_match
+PASS packaged no per-module extension mvvm.services.glob_match
+PASS packaged source removed mvvm.services.greeting
+PASS packaged no per-module extension mvvm.services.greeting
+PASS packaged source removed mvvm.services.http_client
+PASS packaged no per-module extension mvvm.services.http_client
+PASS packaged source removed mvvm.services.image_prep
+PASS packaged no per-module extension mvvm.services.image_prep
+PASS packaged source removed mvvm.services.model_resolve
+PASS packaged no per-module extension mvvm.services.model_resolve
+PASS packaged source removed mvvm.services.model_view
+PASS packaged no per-module extension mvvm.services.model_view
+PASS packaged source removed mvvm.services.office_text
+PASS packaged no per-module extension mvvm.services.office_text
+PASS packaged source removed mvvm.services.openai_provider
+PASS packaged no per-module extension mvvm.services.openai_provider
+PASS packaged source removed mvvm.services.persona_store
+PASS packaged no per-module extension mvvm.services.persona_store
+PASS packaged source removed mvvm.services.provider_gateway
+PASS packaged no per-module extension mvvm.services.provider_gateway
+PASS packaged source removed mvvm.services.provider_registry
+PASS packaged no per-module extension mvvm.services.provider_registry
+PASS packaged source removed mvvm.services.provider_setup
+PASS packaged no per-module extension mvvm.services.provider_setup
+PASS packaged source removed mvvm.services.repetition
+PASS packaged no per-module extension mvvm.services.repetition
+PASS packaged source removed mvvm.services.responses_provider
+PASS packaged no per-module extension mvvm.services.responses_provider
+PASS packaged source removed mvvm.services.secrets_crypto
+PASS packaged no per-module extension mvvm.services.secrets_crypto
+PASS packaged source removed mvvm.services.secrets_vault
+PASS packaged no per-module extension mvvm.services.secrets_vault
+PASS packaged source removed mvvm.services.settings_service
+PASS packaged no per-module extension mvvm.services.settings_service
+PASS packaged source removed mvvm.services.skill_store
+PASS packaged no per-module extension mvvm.services.skill_store
+PASS packaged source removed mvvm.services.sse
+PASS packaged no per-module extension mvvm.services.sse
+PASS packaged source removed mvvm.services.todos
+PASS packaged no per-module extension mvvm.services.todos
+PASS packaged source removed mvvm.services.tool_policy
+PASS packaged no per-module extension mvvm.services.tool_policy
+PASS packaged source removed mvvm.services.tool_results
+PASS packaged no per-module extension mvvm.services.tool_results
+PASS packaged source removed mvvm.services.tool_runtime
+PASS packaged no per-module extension mvvm.services.tool_runtime
+PASS packaged source removed mvvm.services.transport
+PASS packaged no per-module extension mvvm.services.transport
+PASS packaged source removed mvvm.services.workspace_guard
+PASS packaged no per-module extension mvvm.services.workspace_guard
+PASS packaged egg package marker mvvm.view_models
+PASS packaged package marker not loose mvvm.view_models
+PASS packaged package marker not compiled mvvm.view_models
+PASS packaged source removed mvvm.view_models.chat_sessions_vm
+PASS packaged no per-module extension mvvm.view_models.chat_sessions_vm
+PASS packaged source removed mvvm.view_models.chat_vm
+PASS packaged no per-module extension mvvm.view_models.chat_vm
+PASS packaged source removed mvvm.view_models.demo_vm
+PASS packaged no per-module extension mvvm.view_models.demo_vm
+PASS packaged source removed mvvm.view_models.main_vm
+PASS packaged no per-module extension mvvm.view_models.main_vm
+PASS packaged source removed mvvm.view_models.settings_vm
+PASS packaged no per-module extension mvvm.view_models.settings_vm
+PASS packaged egg package marker mvvm.views
+PASS packaged package marker not loose mvvm.views
+PASS packaged package marker not compiled mvvm.views
+PASS packaged source removed mvvm.views.about_window
+PASS packaged no per-module extension mvvm.views.about_window
+PASS packaged source removed mvvm.views.base_view
+PASS packaged no per-module extension mvvm.views.base_view
+PASS packaged source removed mvvm.views.chat_pane
+PASS packaged no per-module extension mvvm.views.chat_pane
+PASS packaged source removed mvvm.views.chat_window
+PASS packaged no per-module extension mvvm.views.chat_window
+PASS packaged source removed mvvm.views.demo_window
+PASS packaged no per-module extension mvvm.views.demo_window
+PASS packaged source removed mvvm.views.deva_main_window
+PASS packaged no per-module extension mvvm.views.deva_main_window
+PASS packaged source removed mvvm.views.main_window
+PASS packaged no per-module extension mvvm.views.main_window
+PASS packaged source removed mvvm.views.session_list
+PASS packaged no per-module extension mvvm.views.session_list
+PASS packaged source removed mvvm.views.settings_pane
+PASS packaged no per-module extension mvvm.views.settings_pane
+PASS packaged source removed mvvm.views.title_bar_overlay
+PASS packaged no per-module extension mvvm.views.title_bar_overlay
+PASS packaged source removed mvvm.views.transcript_render
+PASS packaged no per-module extension mvvm.views.transcript_render
+PASS packaged source removed mvvm.views.web_shell_window
+PASS packaged no per-module extension mvvm.views.web_shell_window
+PASS packaged egg package marker mvvm.webui
+PASS packaged package marker not loose mvvm.webui
+PASS packaged package marker not compiled mvvm.webui
+PASS packaged source removed mvvm.webui.assembly
+PASS packaged no per-module extension mvvm.webui.assembly
+PASS packaged source removed mvvm.webui.bridge
+PASS packaged no per-module extension mvvm.webui.bridge
+PASS packaged source removed mvvm.webui.host
+PASS packaged no per-module extension mvvm.webui.host
+PASS packaged egg package marker utils
+PASS packaged package marker not loose utils
+PASS packaged package marker not compiled utils
+PASS packaged source removed utils.paths
+PASS packaged no per-module extension utils.paths
+PASS packaged source removed utils.qt_compat
+PASS packaged no per-module extension utils.qt_compat
+PASS native binaries checked=114
+[6/6] Target runtime smoke
++ /home/agent/shared_workspace/py_upper/runtimes/linux-arm64/3.13.5/bin/python3.13 /home/agent/shared_workspace/py_upper/build/smoke/linux-arm64/target.py
+SMOKE PASS 5 modules (launcher registers merged bundles)
++ /home/agent/shared_workspace/py_upper/dist/Upper/Upper [launcher smoke]
+SMOKE PASS launcher
+READY: /home/agent/shared_workspace/py_upper/dist/Upper
+EXIT=0
