@@ -15,9 +15,8 @@ ai_upper 与 Deva 的一处刻意差异：Deva 的文件工具**不**过路径�
 """
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Optional
 
 # 写入类：与 Deva `EDIT_TOOLS` 同集。
@@ -117,11 +116,11 @@ def needs_workspace_mount(
     path = value.strip() if isinstance(value, str) else ""
     expanded = _expand_home(path) if path else ""
     if name in FILE_PATH_TOOLS:
-        if expanded and not os.path.isabs(expanded):
+        if expanded and not is_absolute_anywhere(expanded):
             return {"tool": name, "path": path}
         return None
     if name in SCAN_TOOLS:
-        if not os.path.isabs(expanded):
+        if not is_absolute_anywhere(expanded):
             return {"tool": name, "path": path}
         return None
     return None
@@ -195,6 +194,17 @@ def decide(
     )
 
 
+def is_absolute_anywhere(value: str) -> bool:
+    """path 是否是绝对路径，按 Windows 与 POSIX 两套写法都认。
+
+    `os.path.isabs` 只认宿主那一套：Windows 上 `/etc/hosts`（当前盘根写法）不算绝对，
+    于是策略会把调用方明确给出的绝对落点判成「缺相对路径基准」并要求挂载工作区。Deva 用
+    的是 Node 的 `path.isAbsolute`，在 win32 上 `/etc/hosts` 与 `C:\\x` 都算绝对；这里对齐
+    同一口径，而不是让「调得动调不动」随宿主变化。
+    """
+    return PurePosixPath(value).is_absolute() or PureWindowsPath(value).is_absolute()
+
+
 def _expand_home(value: str) -> str:
     if value == "~":
         return str(Path.home())
@@ -218,6 +228,7 @@ __all__ = [
     "SEALED_FORBIDDEN",
     "decide",
     "needs_workspace_mount",
+    "is_absolute_anywhere",
     "sealed_decision",
     "tool_category",
 ]

@@ -40,7 +40,7 @@ from mvvm.services.image_prep import (
     sniff_image_mime,
 )
 from mvvm.services.office_text import OFFICE_EXT, office_text
-from mvvm.services.tool_policy import Decision, decide
+from mvvm.services.tool_policy import Decision, decide, is_absolute_anywhere
 from mvvm.services.workspace_guard import DENIED, WorkspaceGuard
 
 READ_DEFAULT_LINES = 2000
@@ -323,7 +323,10 @@ def resolve_tool_path(guard: WorkspaceGuard, root: Optional[Path], raw: Any) -> 
         raise ValueError(MISSING_PATH)
     expanded = expand_home(raw)
     candidate = Path(expanded)
-    if not candidate.is_absolute():
+    # 与 `needs_workspace_mount` 同一口径：Windows 上 `/tmp/x`（当前盘根写法）算绝对路径。
+    # 若这里退回宿主 `Path.is_absolute`，判定层说「有基准」，解析层却把它接到工作区根下，
+    # 同一个 path 在两处得到不同落点。
+    if not is_absolute_anywhere(expanded):
         if root is None:
             raise ValueError(NO_ROOT_RELATIVE)
         candidate = Path(root) / candidate
@@ -335,7 +338,7 @@ def resolve_read_dir(root: Optional[Path], raw: Any) -> Path:
     if isinstance(raw, str) and raw.strip():
         expanded = expand_home(raw)
         candidate = Path(expanded)
-        return candidate if candidate.is_absolute() else Path(root) / candidate
+        return candidate if is_absolute_anywhere(expanded) else Path(root) / candidate
     if root is None:
         raise ValueError(NO_ROOT_SCAN)
     return Path(root)
@@ -343,6 +346,18 @@ def resolve_read_dir(root: Optional[Path], raw: Any) -> Path:
 
 def looks_binary(buf: bytes) -> bool:
     return b"\x00" in buf[:8000]
+
+
+def write_text_lf(path: Path, text: str) -> None:
+    """按给定的换行符逐字写盘，不跟随宿主平台的换行转换。
+
+    `Path.write_text` 用 `open(..., newline=None)`，写出的 `\\n` 在 Windows 上会变成
+    `\\r\\n`。本模块的换行语义是**文件自己的**（`dominant_eol`），不是宿主的：一个 LF
+    文件在 Windows 上被 edit_file 改一行，不能整篇变成 CRLF；已经按 CRLF 拼好的结果也
+    不能被再展开成 `\\r\\r\\n`。所以写入固定 `newline=""`，让调用方给出的字符原样落盘。
+    """
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        handle.write(text)
 
 
 def dominant_eol(text: str) -> str:
@@ -708,7 +723,7 @@ class ToolRuntime:
         if content and not content.startswith("﻿") and _has_utf8_bom(absolute):
             output = "﻿" + content
         try:
-            absolute.write_text(output, encoding="utf-8")
+            write_text_lf(absolute, output)
         except OSError as exc:
             return ToolResult(f"写入失败：{exc.strerror or exc}", True, "写入失败")
         return ToolResult(f"已写入 {len(output.encode('utf-8'))} 字节", False, "已写入")
@@ -765,7 +780,7 @@ class ToolRuntime:
                 "无变化",
             )
         try:
-            absolute.write_text(result, encoding="utf-8")
+            write_text_lf(absolute, result)
         except OSError as exc:
             return ToolResult(f"写入失败：{exc.strerror or exc}", True, "写入失败")
         replaced = count if replace_all else 1

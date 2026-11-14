@@ -322,6 +322,19 @@ def test_edit_file_missing_and_empty_old(tools):
     assert same.is_error and "无需编辑" in same.content
 
 
+def test_edit_file_keeps_lf_file_lf_on_every_host(tools, root):
+    """文件自己的换行风格，不跟宿主走：LF 文件在 Windows 上也不能整篇变 CRLF。
+
+    `Path.write_text` 用 `open(..., newline=None)`，写出的 `\n` 在 Windows 上会变成
+    `\r\n`。这不是「Windows 版期望不同」——同一个仓库、同一份代码，换行符不该随操作
+    系统变化，否则在 Windows 上改一行会把整篇文件的 diff 变成「全文件重写」。
+    """
+    (root / "lf.txt").write_bytes(b"one\ntwo\n")
+    result = tools.execute("edit_file", {"path": "lf.txt", "old_string": "two", "new_string": "three"})
+    assert result.is_error is False
+    assert (root / "lf.txt").read_bytes() == b"one\nthree\n"
+
+
 def test_edit_file_crlf_file_matches_lf_old_string(tools, root):
     (root / "win.txt").write_bytes(b"alpha\r\nbeta\r\n")
     result = tools.execute(
