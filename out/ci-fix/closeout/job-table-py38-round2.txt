@@ -1,21 +1,28 @@
-CI run 43605493485  commit 617427a49b2e0330e381511917347e90b66a068e  status=completed conclusion=failure
-created 2026-11-14T14:33:37Z  updated 2026-11-14T15:00:21Z
-url https://github.com/fanchcho/ai_upper/actions/runs/43605493485
+CI run 43608380890  commit 91d934e114fa72cf40fa98a95fa09cd1c34df062  status=completed conclusion=failure
+created 2026-11-14T15:06:39Z  updated 2026-11-14T15:27:19Z
+url https://github.com/fanchcho/ai_upper/actions/runs/43608380890
 
-conclusion   job                                                                    job_id         failing step
-----------------------------------------------------------------------------------------------------------------------------------
-success      Build Tool Python 3.10                                                 132479119516   
-success      Build Tool Python 3.11                                                 132479119305   
-success      Build Tool Python 3.12                                                 132479119369   
-success      Build Tool Python 3.13                                                 132479119310   
-success      Build Tool Python 3.8                                                  132479119383   
-success      Build Tool Python 3.9                                                  132479119158   
-skipped      aggregate-artifacts                                                    132486077793   
-success      native-integration (macos-15, macos-arm64, true)                       132479119402   
-success      native-integration (macos-15-intel, macos-x86_64, true)                132479119494   
-success      native-integration (ubuntu-24.04, linux-x86_64, true)                  132479119392   
-success      native-integration (ubuntu-24.04-arm, linux-arm64, false)              132479119381   
-failure      native-integration (windows-11-arm, windows-arm64, true)               132479119307   step 18 Full integration run
-success      native-integration (windows-2025, windows-x86, false, ["pyserial==3.5" 132479119274   
-failure      native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySi 132479119483   step 15 Full integration build
-success      native-integration (windows-2025, windows-x86_64, true)                132479119409   
+conclusion  job                                                                      job_id         failing step
+---------------------------------------------------------------------------------------------------------------------------------------
+success     Build Tool Python 3.10                                                   132487823778   
+success     Build Tool Python 3.11                                                   132487823846   
+success     Build Tool Python 3.12                                                   132487823807   
+success     Build Tool Python 3.13                                                   132487823890   
+success     Build Tool Python 3.8                                                    132487823909   
+success     Build Tool Python 3.9                                                    132487823845   
+skipped     aggregate-artifacts                                                      132493583975   
+success     native-integration (macos-15, macos-arm64, true)                         132487823873   
+success     native-integration (macos-15-intel, macos-x86_64, true)                  132487823773   
+success     native-integration (ubuntu-24.04, linux-x86_64, true)                    132487823883   
+success     native-integration (ubuntu-24.04-arm, linux-arm64, false)                132487823964   
+failure     native-integration (windows-11-arm, windows-arm64, true)                 132487823836   step 18 Full integration run
+success     native-integration (windows-2025, windows-x86, false, ["pyserial==3.5"]) 132487823814   
+success     native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySide 132487823907   
+success     native-integration (windows-2025, windows-x86_64, true)                  132487823609   
+
+=== windows-x86_64 3.8.10 job 132487823907 ===
+conclusion=success  started=2026-11-14T15:06:42Z  completed=2026-11-14T15:17:16Z
+  steps: all success except the platform-specific skips (7,8)
+  public check-run annotations:
+   notice: Application exit code: 0
+   notice: [8100:9192:1114/150827.566:ERROR:../../../qtwebengine/src/3rdparty/chromium/gpu/ipc/service/gpu_channel_manager.cc:931] ContextResult::kFatalFailure: 

@@ -3,19 +3,26 @@
 本报告取代上一版 `py38-closeout-report.md` 里「**是**：…已修好」的结论——那一版与
 远端实际结果不符，见 `py38-authoritative-run-failure.md`。
 
-提交序列（本轮，均已推送 develop）：
+提交序列（本轮）：
 `158a36c` fix(py38) → `c49161b` build(py38) → `28aeec5` test(py38) →
-`289749b` chore(evidence) → `d44fac5`/`b7d00c2` docs/evidence 补正。
+`289749b` chore(evidence) → `d44fac5`/`b7d00c2`/`617427a` docs/evidence 补正 →
+`ba55d4e` fix(py38)（`BluetoothApis.dll`）→ `798a4f3` test(py38) →
+`91d934e` chore(evidence)（3.8.10 由此转绿）→ `ca8eb0e`/`7cdaba9` chore(evidence)。
 
 ## 一句话结论
 
-**还没有真绿。** 上一轮「已转绿」的结论是错的（权威 run `43600186928` / commit
-`7476558` 的 3.8.10 job `132463066925` 在 `[6/6]` 失败）；本轮修掉三处真实缺陷后，
-新权威 run `43605493485`（commit `617427a`）的 3.8.10 job **推进到了 `[4/6]`**，
-在那里因 `Qt6WebEngineCore.dll: BluetoothApis.dll` 未解析而失败。该缺口已定位、
-修复（`BluetoothApis.dll` 是 System32 的 Web Bluetooth 实现，6.6.3 载入期直接导入，
-6.11.2 已不再导入），本地真 3.8.20 验证与守卫用例均通过，但**修复本身还没跑过一次
-真实 CI**，所以在拿到新 run 的终态之前不声称转绿。
+**是——`windows-x86_64 3.8.10` 真绿了。** 权威 run `43608380890`（commit `91d934e`）
+的该 job（`132487823907`，2026-11-14T15:06:42Z → 15:17:16Z）**success**，21 个执行步骤
+全绿（`[6/6]` 与 `Full integration run` 都在其中），公开 check-run 注解给出
+`Application exit code: 0`。
+
+走到这一步修了三处真实缺陷：上一轮漏掉的两处运行期问题（2.1 Qt binding 类布局、
+2.2 `runJavaScript` 布尔转换，先让 job 从 `[6/6]` 失败推进到 `[4/6]`），以及本轮
+新暴露的原生闭包缺口（2.4 `BluetoothApis.dll`）。同时上一轮「已转绿」的结论被证伪
+（run `43600186928` / commit `7476558` 的 3.8.10 job `132463066925` 在 `[6/6]` 失败）。
+
+仍有一项**不在本目标范围内**的已知阻塞：`windows-arm64`（上游不发含 QtWebEngine 的
+win_arm64 wheel，见第 9 节），矩阵条目保留、不加 skip、不放宽 `requires-python`。
 
 ## 1. 上一版为什么错
 
@@ -100,6 +107,9 @@ QtQuick Controls 样式、VirtualKeyboard）：Windows runner 上 prune 生效�
 CI 注解只有 `BluetoothApis.dll` 这一行，正好证明其余项在目标机上已被剪掉。
 本机是 Linux、跑不了 windows-x86_64 的目标解释器，`qt_prune` 返回 None 保留全量，
 所以这 18 项才会出现在本机日志里。
+
+**已由真实 CI 验证**：commit `91d934e` 的 run `43608380890`，3.8.10 job
+`132487823907` 全绿。
 
 ## 3. 依赖闭包（真 3.8 实跑）
 
@@ -217,8 +227,9 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | `28aeec5` | test(py38) | `app/tests/test_web_shell_modules.py`、`app/tests/test_build_tool_compat.py` |
 | `289749b` | chore(evidence) | `out/ci-fix/closeout/*`、`out/ci-fix/verify-7476558/*` |
 | `d44fac5`/`b7d00c2`/`617427a` | docs(py38)/chore(evidence) | 报告与清查表补正 |
-| `fix(py38)` 第三处 | `tools/ai_upper/native/deps.py`（`BluetoothApis.dll` 进宿主库清单） |
-| `test(py38)` 第三处 | `app/tests/test_native_deployment.py`（`test_windows_web_bluetooth_is_system_provided`） |
+| `ba55d4e` | fix(py38) | `tools/ai_upper/native/deps.py`（`BluetoothApis.dll` 进宿主库清单） |
+| `798a4f3` | test(py38) | `app/tests/test_native_deployment.py`（`test_windows_web_bluetooth_is_system_provided`） |
+| `91d934e`/`ca8eb0e`/`7cdaba9` | chore(evidence) | 第三轮证据、逐 job 表、变异记录重跑 |
 
 对照 `py38-compat-audit.md` 的条目：
 
@@ -232,8 +243,8 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 
 ## 9. CI 逐 job 结论
 
-权威 run：`43605493485`（commit `617427a`，`in_progress` → `completed/failure`，
-2026-11-14T15:00:21Z）。完整快照 `out/ci-fix/run-43605493485/{run,jobs}.json`，
+**权威 run：`43608380890`（commit `91d934e`，`completed`，2026-11-14T15:27:19Z）。**
+完整快照 `out/ci-fix/run-43608380890/{run,jobs,artifacts}.json` + 该 job 的公开注解，
 逐 job 表 `out/ci-fix/closeout/job-table-py38-round2.txt`。
 
 | job | 结论 | 说明 |
@@ -245,24 +256,33 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | native-integration (macos-15-intel, macos-x86_64) | ✅ success | |
 | native-integration (windows-2025, windows-x86) | ✅ success | 仅 `pyserial==3.5` 的 32 位链路 |
 | native-integration (windows-2025, windows-x86_64) | ✅ success | 3.13 + 应用完整依赖 |
-| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ❌ failure | step 15 `[4/6] Package + native dependency closure`：`BluetoothApis.dll` 未解析 |
+| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ✅ **success** | job `132487823907`，21 个执行步骤全绿；`Application exit code: 0` |
 | native-integration (windows-11-arm, windows-arm64) | ❌ failure | 已知平台阻塞，见下 |
 | aggregate-artifacts | — skipped | 上游有 job 失败时不汇总 |
 
-**3.8.10 已推进但未转绿。** 相对 run `43600186928`（`[6/6]` 失败）本轮修掉的两处
-让 job 前进到了 `[4/6]`；第 4 阶段的原生闭包缺口（2.4 节）已修，但**修复本身尚未
-经过一次真实 CI 运行验证**，因此现在不能声称「3.8.10 真绿」。
+`windows-x86_64 3.8.10` 的 21 个执行步骤依次为：Set up job → checkout →
+setup-python → 写本地配置 → 缓存 → 装 Python 构建工具 →（Linux/macOS 工具 step 7/8
+按平台 skip）→ 装应用依赖 → Unit tests → Publish/Upload 测试日志 → Local end-to-end
+build → Doctor → **Full integration build（`[1/6]`…`[5/6]`）** → Publish/Upload 构建日志
+→ **Full integration run（`[6/6]` + 启动产物）** → Upload 运行日志 → 校验发布清单 →
+Upload 打包产物 → Post 三步 → Complete job。全部 `success`。
+
+先前的 run `43605493485`（commit `617427a`）在 step 15 `[4/6]` 因
+`Qt6WebEngineCore.dll: BluetoothApis.dll` 失败；`91d934e` 补上宿主库登记后通过。
 
 **`windows-arm64` 保持已知平台阻塞**：PySide6 的 win_arm64 wheel **里没有
-`Qt6WebEngineCore.dll`**（6.11.2 与 6.6.3 都一样，已核 wheel 内容），而
-`app/src/mvvm/views/web_shell_window.py` 在类体阶段就要这个类。矩阵条目保留、
-不加 skip、不放宽 `requires-python`。该 job 的注解是 `[6/6]` 下的
-`qt_compat.py` ImportError 链——与 3.8.10 当时不同的失败点，且根因是上游不发轮子。
+`Qt6WebEngineCore.dll`**（6.11.2 与 6.6.3 都一样，已核 wheel 内容：arm64 addons
+wheel 里 `Qt6WebEngine*` 条目数为 0，只有 `qtwebengine_*.qm` 翻译），而
+`app/src/mvvm/views/web_shell_window.py` 构造窗口时就要这个类。矩阵条目保留、
+不加 skip、不放宽 `requires-python`。该 job 失败在 step 18 `Full integration run`
+的 `[6/6]`，`qt_compat.py` 的 ImportError 链——根因是上游不发轮子，不是本仓库的
+3.8 兼容问题。`windows-x86_64 3.8.10` 与它互不影响（前者已 green）。
 
 **副作用（须知）**：`.github/workflows/validate.yml` 没有 `concurrency:` 组，因此
-每推一次都会新起一整轮 14 个 job。本轮为了补证据推了 `d44fac5`/`b7d00c2`/`617427a`，
-产生了 `43605158930`/`43605423736`/`43605493485` 三轮重叠。`43605493485` 被指定为
-权威；后续修复提交会再起一轮，以最后那一轮为准。
+每推一次都会新起一整轮 14 个 job。本轮先后产生了 `43605158930`、`43605423736`、
+`43605493485`（`[4/6]` 失败）、`43608380890`（3.8.10 转绿）四轮重叠。以
+`43608380890` 为权威。最后那次 `chore(evidence)` 提交（变异记录重跑与表头修正）
+只改 `out/` 下的证据文件，不触碰任何构建输入。
 
 ## 10. 一处未处理但已判定不影响本目标的差异
 

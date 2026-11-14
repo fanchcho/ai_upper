@@ -1,0 +1,585 @@
+{
+  "total_count": 29,
+  "artifacts": [
+    {
+      "id": 14120310242,
+      "node_id": "MDg6QXJ0aWZhY3QxNDEyMDMxMDI0Mg==",
+      "name": "build-log-macos-x86_64",
+      "size_in_bytes": 5497,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14120310242",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14120310242/zip",
+      "expired": false,
+      "digest": "sha256:a7e0733054f2ba5984d5b2e670d10154954f27b25348ee645840f3a703627352",
+      "created_at": "2026-11-14T15:25:09Z",
+      "updated_at": "2026-11-14T15:25:09Z",
+      "expires_at": "2026-11-28T15:25:09Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119865157,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTg2NTE1Nw==",
+      "name": "ai-upper-linux-arm64",
+      "size_in_bytes": 241817337,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119865157",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119865157/zip",
+      "expired": false,
+      "digest": "sha256:5a698a70cb959725d3c11c056b399c81ebc807ab4f0370757bc250e2f40b64c2",
+      "created_at": "2026-11-14T15:17:59Z",
+      "updated_at": "2026-11-14T15:17:59Z",
+      "expires_at": "2026-11-28T15:17:44Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119795071,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTc5NTA3MQ==",
+      "name": "run-log-windows-arm64",
+      "size_in_bytes": 4929,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119795071",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119795071/zip",
+      "expired": false,
+      "digest": "sha256:feef8cd35546e086c8e984c90e355c8b47589f3fc100dd7610014b869a4622fe",
+      "created_at": "2026-11-14T15:15:46Z",
+      "updated_at": "2026-11-14T15:15:46Z",
+      "expires_at": "2026-11-28T15:15:45Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119755752,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTc1NTc1Mg==",
+      "name": "build-log-linux-arm64",
+      "size_in_bytes": 5737,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119755752",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119755752/zip",
+      "expired": false,
+      "digest": "sha256:f14e8f8d8b26f1c8725dc3c676384699d4c8dd372942c4ae4e9556b49b0cf68e",
+      "created_at": "2026-11-14T15:17:42Z",
+      "updated_at": "2026-11-14T15:17:42Z",
+      "expires_at": "2026-11-28T15:17:42Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119747290,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTc0NzI5MA==",
+      "name": "ai-upper-macos-x86_64",
+      "size_in_bytes": 215910759,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119747290",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119747290/zip",
+      "expired": false,
+      "digest": "sha256:a0d6fb5b9d75b201ded7115d51750893a2158330b556294ded32412d8d6df59c",
+      "created_at": "2026-11-14T15:27:14Z",
+      "updated_at": "2026-11-14T15:27:14Z",
+      "expires_at": "2026-11-28T15:26:51Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119706048,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTcwNjA0OA==",
+      "name": "py38-compat-windows-x86_64",
+      "size_in_bytes": 140982094,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119706048",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119706048/zip",
+      "expired": false,
+      "digest": "sha256:aaa247a687b26c21aa23155888588db3f40662b8649e40e4108299c4f1f8420c",
+      "created_at": "2026-11-14T15:17:07Z",
+      "updated_at": "2026-11-14T15:17:07Z",
+      "expires_at": "2026-11-28T15:16:55Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119678795,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTY3ODc5NQ==",
+      "name": "run-log-macos-x86_64",
+      "size_in_bytes": 4775,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119678795",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119678795/zip",
+      "expired": false,
+      "digest": "sha256:40fc8dd56f40c28c4a0d25ecb2d670fb2bf2ff7b4f68cf5f6e2808159e13c51b",
+      "created_at": "2026-11-14T15:26:49Z",
+      "updated_at": "2026-11-14T15:26:49Z",
+      "expires_at": "2026-11-28T15:26:48Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119632655,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTYzMjY1NQ==",
+      "name": "build-log-linux-x86_64",
+      "size_in_bytes": 5720,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119632655",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119632655/zip",
+      "expired": false,
+      "digest": "sha256:e58d1a54b22c5e037d36f94e5e687976010feb64755f16935fc66e1710cfbd97",
+      "created_at": "2026-11-14T15:15:17Z",
+      "updated_at": "2026-11-14T15:15:17Z",
+      "expires_at": "2026-11-28T15:15:16Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119621760,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTYyMTc2MA==",
+      "name": "run-log-macos-arm64",
+      "size_in_bytes": 4809,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119621760",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119621760/zip",
+      "expired": false,
+      "digest": "sha256:76f19282f910759e9dabb92a62983addc55cbe2b1ac9031b32259de9eeda829a",
+      "created_at": "2026-11-14T15:15:44Z",
+      "updated_at": "2026-11-14T15:15:44Z",
+      "expires_at": "2026-11-28T15:15:43Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119566211,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTU2NjIxMQ==",
+      "name": "pytest-log-py38-compat-windows-x86_64",
+      "size_in_bytes": 937,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119566211",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119566211/zip",
+      "expired": false,
+      "digest": "sha256:15d6c67cf1ffc6a34782147a4f78d729cdbee1f8491eb486701834d68a9e3d4a",
+      "created_at": "2026-11-14T15:08:28Z",
+      "updated_at": "2026-11-14T15:08:28Z",
+      "expires_at": "2026-11-28T15:08:28Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119463633,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTQ2MzYzMw==",
+      "name": "ai-upper-linux-x86_64",
+      "size_in_bytes": 263287087,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119463633",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119463633/zip",
+      "expired": false,
+      "digest": "sha256:66fdb1c1827fdf84dc0ebe9085614bb97b54abc561424ef9d4188b43d0be1670",
+      "created_at": "2026-11-14T15:15:51Z",
+      "updated_at": "2026-11-14T15:15:51Z",
+      "expires_at": "2026-11-28T15:15:35Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119417522,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTQxNzUyMg==",
+      "name": "pytest-log-linux-x86_64",
+      "size_in_bytes": 632,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119417522",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119417522/zip",
+      "expired": false,
+      "digest": "sha256:5e99eca155ef949e02d953e57c07c0a38925fe7f4baa4e49b9ab7b2b8c09e757",
+      "created_at": "2026-11-14T15:07:43Z",
+      "updated_at": "2026-11-14T15:07:43Z",
+      "expires_at": "2026-11-28T15:07:42Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119367761,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTM2Nzc2MQ==",
+      "name": "pytest-log-linux-arm64",
+      "size_in_bytes": 632,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119367761",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119367761/zip",
+      "expired": false,
+      "digest": "sha256:77e3ae2edb88514ae8a6d230c036dd0d72fc1b2480c396c99960899b4b101c78",
+      "created_at": "2026-11-14T15:08:04Z",
+      "updated_at": "2026-11-14T15:08:04Z",
+      "expires_at": "2026-11-28T15:08:03Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119347765,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTM0Nzc2NQ==",
+      "name": "pytest-log-windows-x86_64",
+      "size_in_bytes": 946,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119347765",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119347765/zip",
+      "expired": false,
+      "digest": "sha256:5ee403c3327b1d0ece8c628534da9803205d17d0c212c6dac9036547ccb65111",
+      "created_at": "2026-11-14T15:08:53Z",
+      "updated_at": "2026-11-14T15:08:53Z",
+      "expires_at": "2026-11-28T15:08:53Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119239133,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTIzOTEzMw==",
+      "name": "build-log-windows-arm64",
+      "size_in_bytes": 8894,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119239133",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119239133/zip",
+      "expired": false,
+      "digest": "sha256:9d3eb749ecbca435eaf21bf84293bf68ca57917bc4d80d791c5906b83f874088",
+      "created_at": "2026-11-14T15:15:10Z",
+      "updated_at": "2026-11-14T15:15:10Z",
+      "expires_at": "2026-11-28T15:15:09Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119174299,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTE3NDI5OQ==",
+      "name": "build-log-windows-x86",
+      "size_in_bytes": 7496,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119174299",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119174299/zip",
+      "expired": false,
+      "digest": "sha256:9055b712f9587526905e993e892ae51320348ab7a4d1e2c8e09dd6067da61c4e",
+      "created_at": "2026-11-14T15:16:29Z",
+      "updated_at": "2026-11-14T15:16:29Z",
+      "expires_at": "2026-11-28T15:16:28Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119144360,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTE0NDM2MA==",
+      "name": "run-log-linux-x86_64",
+      "size_in_bytes": 4970,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119144360",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119144360/zip",
+      "expired": false,
+      "digest": "sha256:4384d3787b744be1669b0852c45254c1aa6ac2badc8b1547cb149cb60b18fd31",
+      "created_at": "2026-11-14T15:15:34Z",
+      "updated_at": "2026-11-14T15:15:34Z",
+      "expires_at": "2026-11-28T15:15:33Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119124512,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTEyNDUxMg==",
+      "name": "ai-upper-windows-x86",
+      "size_in_bytes": 15751741,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119124512",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119124512/zip",
+      "expired": false,
+      "digest": "sha256:5340196f31c942aacb12c05e69ba8891c1ab68f8c5723a49b2f0131e96d63ff5",
+      "created_at": "2026-11-14T15:16:33Z",
+      "updated_at": "2026-11-14T15:16:33Z",
+      "expires_at": "2026-11-28T15:16:30Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14119004790,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExOTAwNDc5MA==",
+      "name": "run-log-py38-compat-windows-x86_64",
+      "size_in_bytes": 4098,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119004790",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14119004790/zip",
+      "expired": false,
+      "digest": "sha256:41f0d605c8eeaf8834564cfd39489d328fa5dbcc07d1858235dd231127b8e683",
+      "created_at": "2026-11-14T15:16:54Z",
+      "updated_at": "2026-11-14T15:16:54Z",
+      "expires_at": "2026-11-28T15:16:53Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118973336,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODk3MzMzNg==",
+      "name": "ai-upper-windows-x86_64",
+      "size_in_bytes": 196856621,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118973336",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118973336/zip",
+      "expired": false,
+      "digest": "sha256:ef7646b665e0395963ad3c9345f70009f378fd5fa0f292e8e3a752237085ce81",
+      "created_at": "2026-11-14T15:18:29Z",
+      "updated_at": "2026-11-14T15:18:29Z",
+      "expires_at": "2026-11-28T15:18:12Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118903519,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODkwMzUxOQ==",
+      "name": "pytest-log-windows-x86",
+      "size_in_bytes": 936,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118903519",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118903519/zip",
+      "expired": false,
+      "digest": "sha256:cfec4c962158182342c7f3b11d9095713a6e0a62a9ef81f36f27cc9de06a644e",
+      "created_at": "2026-11-14T15:08:46Z",
+      "updated_at": "2026-11-14T15:08:46Z",
+      "expires_at": "2026-11-28T15:08:45Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118898365,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODg5ODM2NQ==",
+      "name": "build-log-windows-x86_64",
+      "size_in_bytes": 8728,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118898365",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118898365/zip",
+      "expired": false,
+      "digest": "sha256:023bdf64095e2a7911eb7c08013694006b8c847ca264c723808d2c93d5bdec5c",
+      "created_at": "2026-11-14T15:17:32Z",
+      "updated_at": "2026-11-14T15:17:32Z",
+      "expires_at": "2026-11-28T15:17:31Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118889837,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODg4OTgzNw==",
+      "name": "ai-upper-macos-arm64",
+      "size_in_bytes": 201742411,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118889837",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118889837/zip",
+      "expired": false,
+      "digest": "sha256:91f766a7297dea5485807a13697fde45856f8ba8b3dd061427b7aa01553e3e1a",
+      "created_at": "2026-11-14T15:16:00Z",
+      "updated_at": "2026-11-14T15:16:00Z",
+      "expires_at": "2026-11-28T15:15:45Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118873568,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODg3MzU2OA==",
+      "name": "pytest-log-macos-arm64",
+      "size_in_bytes": 669,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118873568",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118873568/zip",
+      "expired": false,
+      "digest": "sha256:28a0a0a1f98e8f83949a57e21f1f9af50b189ce5d6087796fda434d8d970a60c",
+      "created_at": "2026-11-14T15:07:50Z",
+      "updated_at": "2026-11-14T15:07:50Z",
+      "expires_at": "2026-11-28T15:07:49Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118773752,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODc3Mzc1Mg==",
+      "name": "run-log-windows-x86_64",
+      "size_in_bytes": 4643,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118773752",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118773752/zip",
+      "expired": false,
+      "digest": "sha256:ca7f7f6fcb403b0442720370936a2d53a682853c33935884879a4a0b1c1ee62c",
+      "created_at": "2026-11-14T15:18:11Z",
+      "updated_at": "2026-11-14T15:18:11Z",
+      "expires_at": "2026-11-28T15:18:10Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118773324,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODc3MzMyNA==",
+      "name": "build-log-macos-arm64",
+      "size_in_bytes": 5535,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118773324",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118773324/zip",
+      "expired": false,
+      "digest": "sha256:200a1162adf752dd84ae1608ee6966fbc62f06a61b99d4cb32d0544cdc168001",
+      "created_at": "2026-11-14T15:14:37Z",
+      "updated_at": "2026-11-14T15:14:37Z",
+      "expires_at": "2026-11-28T15:14:36Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118718433,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODcxODQzMw==",
+      "name": "build-log-py38-compat-windows-x86_64",
+      "size_in_bytes": 8479,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118718433",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118718433/zip",
+      "expired": false,
+      "digest": "sha256:cdb3be7d4648865559342a540511944199fdb3a468a7ff403500ba52061ca894",
+      "created_at": "2026-11-14T15:16:14Z",
+      "updated_at": "2026-11-14T15:16:14Z",
+      "expires_at": "2026-11-28T15:16:14Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118628028,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODYyODAyOA==",
+      "name": "pytest-log-macos-x86_64",
+      "size_in_bytes": 706,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118628028",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118628028/zip",
+      "expired": false,
+      "digest": "sha256:4ffbb1430ad659a1ee492dd91499e7bb87b21fba15b0216140f149e146faee07",
+      "created_at": "2026-11-14T15:10:04Z",
+      "updated_at": "2026-11-14T15:10:04Z",
+      "expires_at": "2026-11-28T15:10:04Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    },
+    {
+      "id": 14118543146,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExODU0MzE0Ng==",
+      "name": "pytest-log-windows-arm64",
+      "size_in_bytes": 691,
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118543146",
+      "archive_download_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/artifacts/14118543146/zip",
+      "expired": false,
+      "digest": "sha256:914619ce58bfec0015e4b796364a2815a9bc294abca8925d189095753ca7ff8a",
+      "created_at": "2026-11-14T15:08:29Z",
+      "updated_at": "2026-11-14T15:08:29Z",
+      "expires_at": "2026-11-28T15:08:28Z",
+      "workflow_run": {
+        "id": 43608380890,
+        "repository_id": 1456531412,
+        "head_repository_id": 1456531412,
+        "head_branch": "develop",
+        "head_sha": "91d934e114fa72cf40fa98a95fa09cd1c34df062"
+      }
+    }
+  ]
+}
