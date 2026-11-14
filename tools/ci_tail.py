@@ -166,9 +166,11 @@ def main(argv=None):
     lines = read_log_lines(args.log)
     if lines is None:
         # Never invent an exit code for a step that did not run: the job is
-        # already red and a second, wrong failure only hides the real one.
+        # already red and a second, wrong failure only hides the real one. The
+        # missing log is still an error unless the caller downgraded the
+        # annotation to a notice.
         emit(
-            "error",
+            args.level or "error",
             args.title,
             escape_command_message(
                 "%s was not created: the step failed before it could write one." % args.label
