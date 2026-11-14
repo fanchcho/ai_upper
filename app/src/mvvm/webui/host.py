@@ -37,6 +37,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 from mvvm.services.chat_session_store import ChatSessionStore, derive_title
+from mvvm.services.attachments import AttachmentService
 from mvvm.services.transport import CancelToken
 from mvvm.services.todos import active_todo_list
 from mvvm.services.tool_runtime import ToolRuntime
@@ -90,10 +91,13 @@ class ChatHost:
         emit_sessions_changed: Callable[[], None],
         tool_factory: Optional[Callable[[str], ToolRuntime]] = None,
         vm_factory: Optional[Callable[[str], ChatViewModel]] = None,
+        attachments: Optional[AttachmentService] = None,
     ) -> None:
         self.store = store
         self.guard = guard
         self.home = Path(home)
+        # 附件服务与守卫共用同一个实例：受信根、白名单才是同一份。
+        self.attachments = attachments or AttachmentService(self.home, guard)
         self._emit = emit
         self._emit_sessions_changed = emit_sessions_changed
         # ViewModel 的装配来自外部（模型网关等依赖在应用层，宿主不认识）。
@@ -180,11 +184,26 @@ class ChatHost:
             session.effort = effort
 
         attachments = request.get("attachments")
-        if attachments:
-            raise BridgeError("chat:send 的附件注入尚未接入（fs:pick-attachments / buildAttachmentPart 未移植）")
-        if not text.strip():
+        # 附件：逐条读成内容块（排在提问正文之前），读不进的转成 note 拼在正文后的括号里。
+        # 语义逐条对齐 Deva `chat.ts` sendMessage（buildAttachmentPart 的三种前缀标记）。
+        parts: list[Any] = []
+        notes: list[str] = []
+        adapter = _adapter_of(request.get("model"))
+        if isinstance(attachments, list):
+            for path in attachments:
+                if not isinstance(path, str) or not path:
+                    continue
+                built = self.attachments.build_attachment_part(path, adapter)
+                if built.part is not None:
+                    parts.append(built.part)
+                if built.note:
+                    notes.append(built.note)
+        question = text.strip() or (ATTACHMENT_ONLY_QUESTION if parts else "")
+        if notes:
+            # note 是「读不进消息」的说明，拼在提问正文后的括号里（原版 questionText 同形状）。
+            question = f"{question}\n（{'；'.join(notes)}）"
+        if not question.strip():
             raise BridgeError("chat:send 的 text 为空：没有可发送的内容")
-        question = text.strip()
         vm = self.vm_for(session_id)
         # ViewModel 的 run_turn 自己落盘用户消息并写标题；这里只为 turn_start 准备展示形态。
         turn_id = uuid.uuid4().hex
@@ -201,20 +220,40 @@ class ChatHost:
 
         if session.archived:
             self.store.set_archived(session.id, False)
-        # turn_start 必须是本轮第一个事件：先推它，再起线程。
-        user_display = {
-            "role": "user",
-            "text": question,
-            "attachments": [],
-        }
+        # 本轮用户消息的完整形状：附件块 → 待办说明块 → 提问正文（与 ViewModel 落盘的顺序一致）。
+        # turn_start 展示形态在起线程**之前**算好：线程会立刻改写历史，事后再算容易把上一轮的
+        # assistant 段也算进来；先算则与「本轮第一事件」的语义严格对齐。
+        note_parts = self._turn_notes(session)
+        user_display = _pending_user_display(
+            session.messages, [*note_parts, *parts], question
+        )
         self._emit(
             {"turnId": turn_id, "sessionId": session_id, "event": {"type": "turn_start", "user": user_display}}
         )
 
-        thread = vm.start_turn(text, cancel=turn.cancel)
+        thread = vm.start_turn(
+            text, cancel=turn.cancel, parts=parts or None, question=question
+        )
         turn.thread = thread
         self._watch(turn)
         return {"turnId": turn_id}
+
+    def _turn_notes(self, session: Any) -> list[Any]:
+        """本轮随用户消息带出的系统说明块（待办取消告知 / 遗留清单提醒）。
+
+        只用于算 `turn_start` 的展示形状：真正的落盘与「用一次即清」在 ViewModel 里做，
+        这里读的是同一份边车，不写状态。
+        """
+        from mvvm.models.chat_models import TextPart
+        from mvvm.services.todos import todo_reminder_text
+
+        out: list[Any] = []
+        if session.todoCancelNote:
+            out.append(TextPart(text=session.todoCancelNote))
+        reminder = todo_reminder_text(session.todos, session.todoCancelled)
+        if reminder:
+            out.append(TextPart(text=reminder))
+        return out
 
     def _watch(self, turn: _Turn) -> None:
         """回合线程结束后清注册表并推 done 的收尾（ViewModel 已推过 done，这里只清状态）。"""
@@ -529,6 +568,33 @@ _STOP_REASONS = {
 def _stop_reason(value: Any) -> str:
     text = _as_str(value)
     return _STOP_REASONS.get(text, text or "end_turn")
+
+
+def _adapter_of(model: Any) -> str:
+    """`chat:send` 入参里的适配器名；缺省按 anthropic（原版 model.adapter 必填）。"""
+    if isinstance(model, dict):
+        adapter = model.get("adapter")
+        if isinstance(adapter, str) and adapter:
+            return adapter
+    return "anthropic"
+
+
+def _pending_user_display(
+    stored: list[Any], parts: list[Any], question: str
+) -> dict[str, Any]:
+    """本轮用户消息的展示形态（turn_start.user）。
+
+    与历史重建走**同一个函数**：把「附件内容块 + 提问正文」拼成临时的 user 消息，
+    再用 `display_messages` 转换，`index_base` 取它在整份记录里的下标——这样图片 ref
+    与重开历史时算出的 ref 完全一致（原版 `emitTurnStart` 也复用了 `toDisplayMessages`）。
+    """
+    from mvvm.models.chat_models import Message, TextPart
+
+    synthetic = Message(role="user", content=[*parts, TextPart(text=question)])
+    displayed = display_messages([synthetic], index_base=len(stored))
+    if displayed and displayed[0].get("role") == "user":
+        return displayed[0]
+    return {"role": "user", "text": question, "attachments": []}
 
 
 def _as_str(value: Any) -> str:

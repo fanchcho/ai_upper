@@ -13,7 +13,10 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 import json
+import os
+import re
 import threading
 from pathlib import Path
 from typing import Any, Callable
@@ -22,11 +25,18 @@ from utils.qt_compat import QtCore, Signal, Slot
 
 QObject = QtCore.QObject
 
+from mvvm.services.attachments import (
+    ATTACH_FOLDER_PREFIX,
+    ATTACH_PATH_PREFIX,
+    ATTACH_TEXT_PREFIX,
+    AttachmentService,
+)
 from mvvm.services.avatar_image import clear_avatar_image, read_avatar_image, write_avatar_image
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.settings_service import SettingsService
 from mvvm.services.skill_store import SkillStore
+from mvvm.services.workspace_guard import WorkspaceGuard
 
 # 后台任务通知前缀，与 Deva `main/services/compaction.ts` 的 NOTIFY_MARKER 同值。
 NOTIFY_MARKER = "⟦deva:notify⟧"
@@ -87,6 +97,10 @@ class DevaBridge(QObject):
         # list-sessions 的受信根恢复）。没有它时相关通道不注册，调用显式报未接入。
         self.chat_host: Any = None
         self.model_gateway: Any = None
+        # 附件与工作区文件服务（fs:* 九条 + chat:attachment-image）。宿主接了线就用宿主
+        # 那一份：白名单是内存态、受信根也是内存态，桥和宿主各存一份的话「界面上选中的
+        # 文件，发送时被判未授权」。宿主还没接线时用这份兜底（单测直接调 fs:* 时用）。
+        self._attachments = AttachmentService(self.home, WorkspaceGuard())
         self._deferred_result.connect(
             self._resolve_deferred, QtCore.Qt.ConnectionType.QueuedConnection
         )
@@ -110,6 +124,18 @@ class DevaBridge(QObject):
     def attach_view(self, view: Any) -> None:
         """记录 WebEngineView：Python 处理后要把结果送回页面。"""
         self._view = view
+
+    @property
+    def attachments(self) -> AttachmentService:
+        """附件服务：宿主有线就用宿主那一份，否则用桥自己的兜底实例。
+
+        两边共用一个实例是硬要求：`fs:pick-attachments` 登记的白名单必须能被
+        `chat:send` 的 `build_attachment_part` 读到，否则「选完了发出去」永远被判未授权。
+        """
+        host = self.chat_host
+        if host is not None and getattr(host, "attachments", None) is not None:
+            return host.attachments
+        return self._attachments
 
     def emit_event(self, channel: str, payload: Any) -> None:
         """把一条事件推给渲染层（对应 `webContents.send(channel, payload)`）。
@@ -235,6 +261,20 @@ class DevaBridge(QObject):
             ("chat:todo-cancel", "cancel_todos"),
         ):
             self.register(channel, self._host_method(method))
+        self.register("chat:attachment-image", self._attachment_image)
+        # 附件与工作区文件通道：参数名与顺序照 preload（见 contracts-fs-*）。
+        # 全部经 `self.attachments` 现取：宿主接线后要立刻切到宿主那一份（同一份白名单）。
+        self.register("fs:pick-attachments", lambda: self.attachments.pick_attachments())
+        self.register("fs:paste-attachment", lambda file: self.attachments.paste_attachment(file))
+        self.register("fs:dropped-entries", lambda paths: self.attachments.dropped_entries(paths))
+        self.register("fs:attachment-image",
+                      lambda path, full=False: self.attachments.attachment_image(path, full))
+        self.register("fs:open-folder", lambda: self.attachments.open_folder())
+        self.register("fs:reveal-folder", lambda dir_path: self.attachments.reveal_folder(dir_path))
+        self.register("fs:read-dir", lambda dir_path: self.attachments.read_dir(dir_path))
+        self.register("fs:read-file", lambda file_path: self.attachments.read_file(file_path))
+        self.register("fs:write-file",
+                      lambda file_path, content: self.attachments.write_file(file_path, content))
         self.register("browser:state", self._browser_state)
         self.register("browser:ready", self._browser_state)
         self.register("browser:preview-pinned", lambda _tab=None: {"ok": True})
@@ -387,6 +427,14 @@ class DevaBridge(QObject):
             return []
         return display_messages(session.messages)
 
+    def _attachment_image(self, session_id: Any, ref: Any, full: Any = False) -> Optional[str]:
+        """`chat:attachment-image`：会话记录里的图片附件，按 ref 现取原图 / 缩略图。"""
+        key = session_id if isinstance(session_id, str) else ""
+        session = self.store.load_session(key) if key else None
+        if session is None:
+            return None
+        return attachment_image(session, ref, full)
+
     def _browser_state(self) -> dict[str, Any]:
         """内置浏览器未接入：返回 Deva `BrowserUiState` 的空态。
 
@@ -482,21 +530,29 @@ def list_models_payload(result: Any) -> dict[str, Any]:
     return payload
 
 
-def display_messages(messages: list[Any]) -> list[dict[str, Any]]:
+def display_messages(
+    messages: list[Any], index_base: int = 0
+) -> list[dict[str, Any]]:
     """存储消息 → Deva 的 `DisplayMessage[]`（渲染层重建历史用）。
 
     规则照抄原版 `main/services/chat.ts` 的 `toDisplayMessages`，界面才与重开原版会话一致：
     - 同一轮内、只被 tool_result（user 角色）隔开的连续 assistant 段**并入上一条展示气泡**——
       有工具调用时一轮在持久化历史里是多条 assistant，逐条成气泡会重开后每段各显一个头像；
     - tool_result 不单独成气泡，而是按 toolUseId **回填**上一条 assistant 里那张工具卡的 status；
-    - 真实用户消息把合并链断开（lastAssistant = None），其后的 assistant 另起新气泡。
+    - 真实用户消息把合并链断开（lastAssistant = None），其后的 assistant 另起新气泡；
+    - 用户消息的附件按原版重建为贴片：图片 `{name,kind:image,size,ref}`、PDF `{name,kind:document,size}`、
+      文本注入块按前缀标记还原 `{name,kind:text,size}`、文件夹/只给位置的文件 `{name,kind,path}`。
+      图片**不回传 base64**，界面按 `ref`（`消息下标:块下标:指纹`）走 `chat:attachment-image` 现取。
 
-    形状严格照 preload 的 `DisplayMessage` / `DisplayBlock`。
+    `index_base`：`messages` 首条在整份对话记录里的下标。只转换末尾几条时（`turn_start`）
+    图片 ref 仍要指向记录里的真实位置，否则渲染层取图时对不上指纹。
+    形状严格照 preload 的 `DisplayMessage` / `DisplayBlock` / `AttachmentChip`。
     """
     out: list[dict[str, Any]] = []
     last_assistant: dict[str, Any] | None = None
 
-    for message in messages:
+    for offset, message in enumerate(messages):
+        msg_index = index_base + offset
         content = getattr(message, "content", None)
         role = getattr(message, "role", "")
 
@@ -560,11 +616,152 @@ def display_messages(messages: list[Any]) -> list[dict[str, Any]]:
                     card["status"] = "error" if getattr(part, "isError", False) else "ok"
             continue
 
-        # 真实用户消息：最后一个 text 块是提问正文（其余为附件注入块，暂不重建）。
+        # 真实用户消息（可能带附件）：附件贴片在前、提问正文在最后一个 text 块。
         text_parts = [str(getattr(p, "text", "")) for p in parts if getattr(p, "type", "") == "text"]
-        out.append({"role": "user", "text": text_parts[-1] if text_parts else "", "attachments": []})
+        attachments = _attachment_chips(parts, msg_index)
+        out.append(
+            {
+                "role": "user",
+                "text": text_parts[-1] if text_parts else "",
+                "attachments": attachments,
+            }
+        )
         last_assistant = None
     return out
+
+
+def _attachment_chips(parts: list[Any], msg_index: int) -> list[dict[str, Any]]:
+    """用户消息里的附件 → `AttachmentChip[]`（同 Deva `toDisplayMessages` 的 user 分支）。
+
+    - 图片 / PDF 是结构化内容块：只回名称、类型、体积；图片另给 ref，界面按 ref 现取缩略图；
+    - 文本 / 文件夹 / 只给位置的文件是注入的 text 块，靠前缀标记认出来再还原贴片；
+    - 提问正文是最后一个 text 块，不在 chips 里。
+    """
+    chips: list[dict[str, Any]] = []
+    text_parts = [
+        str(getattr(p, "text", "")) for p in parts if getattr(p, "type", "") == "text"
+    ]
+    for part_index, part in enumerate(parts):
+        kind = getattr(part, "type", "")
+        if kind == "image":
+            data = str(getattr(part, "data", "") or "")
+            chips.append(
+                {
+                    "name": str(getattr(part, "name", "") or "图片"),
+                    "kind": "image",
+                    "size": _base64_bytes(data),
+                    "ref": _image_ref(msg_index, part_index, data),
+                }
+            )
+        elif kind == "document":
+            data = str(getattr(part, "data", "") or "")
+            chips.append(
+                {
+                    "name": str(getattr(part, "name", "") or "文档"),
+                    "kind": "document",
+                    "size": _base64_bytes(data),
+                }
+            )
+    # 注入文本块：除最后一个 text（提问正文）之外，其余按前缀重建。
+    for text in text_parts[:-1]:
+        if text.startswith(ATTACH_TEXT_PREFIX):
+            # 形如「前缀 + 文件名\n```\n正文\n```」，体积按正文算。
+            head, _, body = text.partition("\n")
+            body = body[4:] if body.startswith("```\n") else body
+            body = body[:-4] if body.endswith("\n```") else body
+            chips.append(
+                {
+                    "name": head[len(ATTACH_TEXT_PREFIX):].strip(),
+                    "kind": "text",
+                    "size": len(body.encode("utf-8")),
+                }
+            )
+        elif text.startswith(ATTACH_FOLDER_PREFIX):
+            directory = text[len(ATTACH_FOLDER_PREFIX):].split("\n", 1)[0].strip()
+            chips.append(
+                {
+                    "name": os.path.basename(directory) or directory,
+                    "kind": "folder",
+                    "path": directory,
+                }
+            )
+        elif text.startswith(ATTACH_PATH_PREFIX):
+            file_path = text[len(ATTACH_PATH_PREFIX):].split("\n", 1)[0].strip()
+            chips.append(
+                {
+                    "name": os.path.basename(file_path) or file_path,
+                    "kind": "file",
+                    "path": file_path,
+                }
+            )
+    return chips
+
+
+def _image_ref(msg_index: int, part_index: int, data: str) -> str:
+    """图片 ref：`消息下标:块下标:指纹`。
+
+    指纹取 base64 长度（36 进制）+ 中段 8 个字符——按轮删除后下标会前移，同一个
+    「下标:块下标」可能换成另一张图，取图时对不上就不给（同 Deva `imageRef`）。
+    """
+    mid = len(data) // 2
+    return f"{msg_index}:{part_index}:{_base36(len(data))}{data[mid:mid + 8]}"
+
+
+def _base36(value: int) -> str:
+    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+    if value <= 0:
+        return "0"
+    out: list[str] = []
+    while value:
+        value, rem = divmod(value, 36)
+        out.append(digits[rem])
+    return "".join(reversed(out))
+
+
+def _base64_bytes(b64: str) -> int:
+    """base64 串解码后的字节数（同 Deva `base64Bytes`，不为解码多分配一份）。"""
+    pad = 2 if b64.endswith("==") else 1 if b64.endswith("=") else 0
+    return max(0, (len(b64) * 3) // 4 - pad)
+
+
+def attachment_image(session: Any, ref: Any, full: Any = False) -> str | None:
+    """`chat:attachment-image`：按 `消息下标:块下标:指纹` 取历史里的图片。
+
+    与原版同一套校验：ref 必须匹配 `^(\\d+):(\\d+):`；该下标消息必须是 user 且 content 是数组；
+    该块必须是 image，且重算的指纹与 ref 完全相等（删轮 / 回滚后下标错位时不给错图）。
+    `full === true` 给原图，否则给缩略图；缩略失败或对不上都返回 None。
+    """
+    from mvvm.services.attachments import thumbnail_data_url
+
+    if not isinstance(ref, str):
+        return None
+    match = re.match(r"^(\d+):(\d+):", ref)
+    if match is None:
+        return None
+    messages = getattr(session, "messages", None) or []
+    msg_index = int(match.group(1))
+    if msg_index >= len(messages):
+        return None
+    message = messages[msg_index]
+    if getattr(message, "role", "") != "user" or isinstance(getattr(message, "content", None), str):
+        return None
+    part_index = int(match.group(2))
+    parts = list(getattr(message, "content", None) or [])
+    if part_index >= len(parts):
+        return None
+    part = parts[part_index]
+    if getattr(part, "type", "") != "image":
+        return None
+    data = str(getattr(part, "data", "") or "")
+    if _image_ref(msg_index, part_index, data) != ref:
+        return None
+    media_type = str(getattr(part, "mediaType", "") or "image/png")
+    if full is True:
+        return f"data:{media_type};base64,{data}"
+    try:
+        return thumbnail_data_url(base64.b64decode(data), media_type)
+    except Exception:  # noqa: BLE001 - 与原版 catch 同语义：缩略失败给 null 由界面显示占位
+        return None
 
 
 def _notify_headline(body: str) -> str:
@@ -578,6 +775,7 @@ __all__ = [
     "DEFAULT_USER_AVATAR",
     "DevaBridge",
     "UnimplementedChannel",
+    "attachment_image",
     "display_messages",
     "list_models_payload",
 ]

@@ -121,6 +121,13 @@ class DevaWebWindow(QMainWindow):
         )
         self.bridge.chat_host = self.host
         self.bridge.model_gateway = self.gateway
+        # 原生选择框 / 「在文件管理器里打开」是唯一必须由视图提供的能力：
+        # 附件服务不认 Qt，宿主没注入回调时这些通道显式报「未接线」而不是假成功。
+        self.host.attachments.set_file_dialogs(
+            open_folder=lambda: self._pick_directory(),
+            pick_files=lambda: self._pick_files(),
+            open_path=self._open_path,
+        )
 
         self.bridge.attach_view(self.view)
         self.channel.registerObject("bridge", self.bridge)
@@ -160,6 +167,39 @@ class DevaWebWindow(QMainWindow):
         self._drain_timer.setInterval(DRAIN_INTERVAL_MS)
         self._drain_timer.timeout.connect(self.host.drain)
         self._drain_timer.start()
+
+    # ── 原生对话框（附件 / 打开文件夹 / 在文件管理器里打开）─────────────────
+    def _pick_files(self) -> list[str]:
+        """`fs:pick-attachments`：四组过滤条件照原版 `attachments.ts` 的 showOpenDialog。"""
+        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
+            self,
+            "选择附加文件",
+            "",
+            "支持的文件 (*.png *.jpg *.jpeg *.gif *.webp *.pdf *.docx *.xlsx *.pptx *.doc "
+            "*.xls *.ppt *.txt *.md *.markdown *.json *.yaml *.yml *.toml *.csv *.log "
+            "*.js *.jsx *.ts *.tsx *.vue *.svelte *.html *.css *.scss *.xml *.py *.go "
+            "*.rs *.java *.kt *.c *.h *.cpp *.cs *.php *.sh *.sql);;"
+            "图片 (*.png *.jpg *.jpeg *.gif *.webp);;"
+            "PDF (*.pdf);;"
+            "所有文件 (*)",
+        )
+        return [str(path) for path in paths]
+
+    def _pick_directory(self) -> Optional[str]:
+        """`fs:open-folder`：选一个工作区根目录。"""
+        directory = QtWidgets.QFileDialog.getExistingDirectory(self, "打开项目文件夹")
+        return directory or None
+
+    @staticmethod
+    def _open_path(path: str) -> str:
+        """`fs:reveal-folder`：交给桌面环境打开目录；返回空串即成功（同 `shell.openPath`）。"""
+        import subprocess
+
+        try:
+            proc = subprocess.run(["xdg-open", path], capture_output=True, text=True, timeout=15)
+        except (OSError, subprocess.SubprocessError) as exc:
+            return str(exc)
+        return "" if proc.returncode == 0 else (proc.stderr.strip() or f"退出码 {proc.returncode}")
 
     def _place_overlay(self) -> None:
         """叠加层只占右上角那块实色矩形（原版 Linux：3 个 32px 按钮宽、40 高），不铺满整条。"""

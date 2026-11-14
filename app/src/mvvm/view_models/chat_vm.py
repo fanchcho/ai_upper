@@ -290,11 +290,23 @@ class ChatViewModel(BaseViewModel):
         self.input_text_property.set_value("")
         self.start_turn(text)
 
-    def start_turn(self, text: str, *, cancel: Optional[CancelToken] = None) -> threading.Thread:
+    def start_turn(
+        self,
+        text: str,
+        *,
+        cancel: Optional[CancelToken] = None,
+        parts: Optional[list[Any]] = None,
+        question: Optional[str] = None,
+    ) -> threading.Thread:
         """起后台线程跑 `run_turn`；已有一个回合在跑时直接返回当前线程。
 
         `cancel` 由调用方（Web 承载层的回合宿主）传入，好让 `chat:abort` 拿同一个标记
         止损——否则中止只能等 `busy` 属性被 UI 线程 drain 到才有反应。
+
+        `parts`：附件读出来的内容块（图片 / PDF / 文本注入 / 只给位置），按原版顺序
+        **排在提问正文之前**与本条用户消息一起落盘（见 Deva `chat.ts` sendMessage）。
+        `question`：真正落进历史的提问正文（原版 `questionText`，可能带「已忽略…」说明）；
+        `text` 仍用作标题来源（原版 `deriveTitle(text) || deriveTitle(questionText)`）。
         """
         if self._thread is not None and self._thread.is_alive():
             return self._thread
@@ -303,7 +315,11 @@ class ChatViewModel(BaseViewModel):
         def runner() -> None:
             self._worker_ident = threading.get_ident()
             try:
-                asyncio.run(self.run_turn(text, cancel=self._cancel))
+                asyncio.run(
+                    self.run_turn(
+                        text, cancel=self._cancel, parts=parts, question=question
+                    )
+                )
             except Exception as exc:  # noqa: BLE001 - 线程边界：异常必须变成界面可见的错误
                 self._fail(f"回合失败：{exc}")
             finally:
@@ -397,11 +413,22 @@ class ChatViewModel(BaseViewModel):
         return self.compaction_config
 
     async def run_turn(
-        self, text: str, *, cancel: Optional[CancelToken] = None
+        self,
+        text: str,
+        *,
+        cancel: Optional[CancelToken] = None,
+        parts: Optional[list[Any]] = None,
+        question: Optional[str] = None,
     ) -> TurnOutcome:
-        """完整回合：用户消息落盘 → 轮首压缩 → provider 流 → 工具 → 最终回复落盘。"""
+        """完整回合：用户消息落盘 → 轮首压缩 → provider 流 → 工具 → 最终回复落盘。
+
+        `question`：真正落进历史的提问正文；`text` 只作标题来源（原版
+        `deriveTitle(text) || deriveTitle(questionText)`）。两者不同只在「只发了附件、
+        输入框为空」以及带「已忽略…」说明时。
+        """
         if not self._session_id:
             raise RuntimeError("没有打开会话：先调用 open_session()")
+        body = question if question is not None else text
         self._ui(lambda: self.busy_property.set_value(True))
         self._ui(lambda: self.error_property.set_value(""))
         self._ui(lambda: self.streaming_property.set_value(""))
@@ -420,16 +447,19 @@ class ChatViewModel(BaseViewModel):
             if reminder:
                 notes.append(reminder)
             user_parts: list[Any] = [TextPart(text=note) for note in notes]
-            user_parts.append(TextPart(text=text))
+            # 附件内容块排在提问正文之前（Deva `chat.ts` sendMessage 的 parts 顺序）。
+            if parts:
+                user_parts.extend(parts)
+            user_parts.append(TextPart(text=body))
             user_message = Message(role="user", content=user_parts)
             self.store.append_message(session.id, user_message, title_seed=text)
             # 取消标记要能掐断正在执行的 `run_command`：把「本轮是否已取消」交给工具层。
             self.tools.cancel_check = (lambda: True) if cancel is None else (
                 lambda: cancel.cancelled
             )
-            self._append_display("user", text)
+            self._append_display("user", body)
             self._ui(lambda: self.title_property.set_value(session.title))
-            self.emit({"type": "user", "text": text})
+            self.emit({"type": "user", "text": body})
 
             await self._auto_compact(session, cancel=cancel, mid_turn=False)
 
