@@ -74,3 +74,20 @@
 运行期/注解期」判定，没有覆盖「同一个类名在不同 Qt binding 的不同子模块」与
 「同一调用在不同 binding 版本的返回值转换」。这两类只会在打包产物真正跑起来时显形。
 
+
+## 四、第三轮追加（原生依赖闭包，非语言特性）
+
+第三轮的红点在**打包流水线的原生依赖闭包**，既不是语言特性也不是 Qt binding API：
+它只在目标机（Windows）跑 `[4/6]` 时才显形，本机 Linux 无法复现出同一条错误。
+
+| 改动文件 | 改了什么 | 为什么必须改 |
+|---|---|---|
+| `tools/ai_upper/native/deps.py` | `WINDOWS_HOST_LIBRARIES` 增加 `bluetoothapis.dll` | PySide6 6.6.3（最后一个 cp38 版本）的 `Qt6WebEngineCore.dll` 在载入期导入 System32 的 `BluetoothApis.dll`；不在宿主库清单里就被判为 wheel 负载，整个 3.8.10 leg 在 `[4/6]` 失败。6.11.2 已不再导入它，所以只有 3.8.10 这条 leg 会撞上 |
+| `app/tests/test_native_deployment.py` | 新增 `test_windows_web_bluetooth_is_system_provided` | 把「Windows 为真、Linux/macOS 为假、闭包为空」钉住，与已有的 `bcryptprimitives`/`usp10`/`msi` 同型 |
+
+证据：`out/ci-fix/verify-round3/bluetoothapis-closure.log`（直接读 6.6.3 与 6.11.2
+四个 win_amd64 wheel 的 PE 导入表做对比）。
+
+这一条不属于第 1–23 条的任何一类：前 23 条都是「Python 代码/绑定 API 在 3.8 上行为
+不同」，而这条是「目标平台本来就提供的系统 DLL 没被登记为宿主库」。同类缺口在历史
+上出现过两次（`bcryptprimitives.dll`、`usp10.dll`），都是补清单而不是改代码。

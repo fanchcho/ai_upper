@@ -1,0 +1,4 @@
+deps import OK on 3.8.20
+bluetoothapis in host set: True
+system_dependency: True
+EXIT=0

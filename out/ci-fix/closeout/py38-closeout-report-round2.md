@@ -9,11 +9,13 @@
 
 ## 一句话结论
 
-**否——上一轮的「已转绿」结论是错的。** 权威 run `43600186928`（commit `7476558`）
-的 `windows-x86_64 3.8.10`（job `132463066925`）在 `[6/6] Target runtime smoke`
-失败，原因是 Qt binding 的类布局差异与 `runJavaScript` 的布尔转换差异，而非类型兼容
-问题。两处缺陷已在本轮定位、修复，并在真实 CPython 3.8.20 + PySide6 6.6.3 上复现与
-验证通过；CI 终态以本轮推送后的新 run 为准（见文末，结论表格在 run 结束后回填）。
+**还没有真绿。** 上一轮「已转绿」的结论是错的（权威 run `43600186928` / commit
+`7476558` 的 3.8.10 job `132463066925` 在 `[6/6]` 失败）；本轮修掉三处真实缺陷后，
+新权威 run `43605493485`（commit `617427a`）的 3.8.10 job **推进到了 `[4/6]`**，
+在那里因 `Qt6WebEngineCore.dll: BluetoothApis.dll` 未解析而失败。该缺口已定位、
+修复（`BluetoothApis.dll` 是 System32 的 Web Bluetooth 实现，6.6.3 载入期直接导入，
+6.11.2 已不再导入），本地真 3.8.20 验证与守卫用例均通过，但**修复本身还没跑过一次
+真实 CI**，所以在拿到新 run 的终态之前不声称转绿。
 
 ## 1. 上一版为什么错
 
@@ -29,7 +31,11 @@
 只覆盖到「解释器能导入模块」这一层；打包产物冒烟是在**另一层**失败的，上一轮没有跑
 到判决点就下了结论。
 
-## 2. 本轮的两处真实缺陷
+## 2. 本轮的真实缺陷
+
+计三处：前两处（2.1、2.2）是上一轮漏掉的、在权威 run `43600186928` 的 `[6/6]`
+暴露的运行期问题；第三处（2.4）是本轮修完之后，新 run `43605493485` 在 `[4/6]`
+暴露的原生依赖闭包缺口。
 
 ### 2.1 `QWebEngineScript` 落在哪个子模块，随 binding 变
 
@@ -63,6 +69,38 @@ readiness 探测原本执行 `!!(window.deva && window.deva.chat)` 并直接按�
 标记（只依赖 shim.js）会打印 OK，应用却在渲染链接时才抛错。所以矩阵改用
 **PySide6 6.6.3**（最后一个发布 cp38 wheel 的版本，自带 Chromium 122），而不是 PySide2。
 
+### 2.4 PySide6 6.6.3 的 `Qt6WebEngineCore.dll` 直接导入 `BluetoothApis.dll`
+
+修好 2.1/2.2 之后，新 run `43605493485` 的 3.8.10 job（`132479119483`）**推进到了
+`[4/6] Package + native dependency closure`**，在那里失败，注解原文只有一行：
+
+```
+ERROR: RuntimeError: Unresolved native dependencies:
+  site-packages\PySide6\Qt6WebEngineCore.dll: BluetoothApis.dll
+```
+
+`BluetoothApis.dll` 是 Windows 自带的 Web Bluetooth 实现（System32），6.6.3 这一代
+Chromium 在**载入期**导入它（不是 delay-load）。`WINDOWS_HOST_LIBRARIES` 里没有它，
+闭包就把它当成 wheel 内应有的负载而报未解析。
+
+验证（证据 `out/ci-fix/verify-round3/bluetoothapis-closure.log`，直接读 PE 导入表）：
+
+- 把 6.6.3 的四个 win_amd64 wheel（`PySide6` / `Essentials` / `Addons` / `shiboken6`，
+  338 个原生镜像）全解出来算闭包，未解析项里确实有 `BluetoothApis.dll`；
+- **6.11.2**（`app/requirements.txt` 的 pin，其余七条 leg 用的就是它）的
+  `Qt6WebEngineCore.dll` 已不再导入它——所以只有 3.8.10 这条 leg 会撞上；
+- 因此把它加进 `WINDOWS_HOST_LIBRARIES`（与已有的 `hid.dll` / `winusb.dll` 同类：
+  OS 自己维护的实现，打包一份等于发一个旧的），并补守卫用例
+  `test_windows_web_bluetooth_is_system_provided`（x86_64/arm64 为真、Linux/macOS 为假，
+  且闭包为空）。
+
+同一份日志里还能看到另外 18 个未解析项，它们全部落在 `qt = "imports"` 会剪掉的
+可选插件里（sqldrivers 的 Mimer/PostgreSQL、multimedia 的 ffmpeg 插件、
+QtQuick Controls 样式、VirtualKeyboard）：Windows runner 上 prune 生效，
+CI 注解只有 `BluetoothApis.dll` 这一行，正好证明其余项在目标机上已被剪掉。
+本机是 Linux、跑不了 windows-x86_64 的目标解释器，`qt_prune` 返回 None 保留全量，
+所以这 18 项才会出现在本机日志里。
+
 ## 3. 依赖闭包（真 3.8 实跑）
 
 证据：`out/ci-fix/verify-7476558/py38-dependency-resolution.log`
@@ -78,7 +116,9 @@ readiness 探测原本执行 `!!(window.deva && window.deva.chat)` 并直接按�
 
 ## 4. 3.8 全量 import 清扫（第三方缺件单列）
 
-证据：`out/ci-fix/verify-7476558/py38-import-sweep.log`
+证据：`out/ci-fix/verify-round3/py38-import-sweep.log`（本轮重跑，改动的
+`tools/ai_upper/native/deps.py` 也在真 3.8 上单独验过：
+`out/ci-fix/verify-round3/py38-tools-import.log`）
 
 用真 CPython 3.8.20 遍历 `app/src` 下 78 个模块：
 
@@ -97,20 +137,19 @@ COMPAT FAILURES: 0
 
 ## 5. 两组全量 pytest
 
-证据：`out/ci-fix/verify-7476558/pytest-with-patchelf-missing.log`（无 patchelf 组）、
-本轮前述 patchelf 组（988 passed / 5 skipped，`EXIT=0`）。
+证据：`out/ci-fix/verify-round3/pytest-with-patchelf.log`、
+`out/ci-fix/verify-round3/pytest-without-patchelf.log`（两份都带 `-rs` 与 `EXIT=`）。
 
 | 组 | 结果 |
 |---|---|
-| 有 patchelf（`/usr/bin/patchelf` 存在） | **988 passed, 5 skipped**，`EXIT=0` |
-| 无 patchelf（PATH 里移除了 patchelf） | **987 passed, 6 skipped**，`EXIT=0` |
+| 有 patchelf（`/usr/bin/patchelf` 存在） | **989 passed, 5 skipped**，`EXIT=0` |
+| 无 patchelf（PATH 里移除了 patchelf） | **988 passed, 6 skipped**，`EXIT=0` |
 
 无 patchelf 组多出的那条 skip 是
-`test_native_deployment.py:177: requires cc, patchelf and readelf` —— 环境缺件的
-既有跳过，不是本轮新增的 skip。两组都没有删除或跳过任何用例；数字比上一版各 +3，
-即本轮新增的三条守卫用例（`test_webengine_class_lookup_follows_the_binding_not_a_fixed_submodule`、
-`test_readiness_probe_reads_a_string_not_a_javascript_boolean`、
-`test_readiness_probe_interprets_the_string_result`）。
+`tests/test_native_deployment.py:177: requires cc, patchelf and readelf` —— 环境缺件的
+既有跳过，在 `-rs` 汇总里直接可见，不是本轮新增的 skip。两组都没有删除或跳过任何用例。
+数字比上一版各 +4：本轮新增的三条 Qt binding/readiness 守卫用例，加上第四节
+`test_windows_web_bluetooth_is_system_provided`。
 
 > 做法说明：无 patchelf 组不能靠放一个假的 `patchelf` 可执行文件来模拟——跳过判定用的是
 > `shutil.which`，假二进制会让它「找到」，随后以 127 失败（第一次尝试即这样失败：
@@ -125,6 +164,9 @@ COMPAT FAILURES: 0
 
 - 六阶段全跑完（`[1/6]`…`[6/6]`）：`SMOKE PASS 6 modules`、
   `SMOKE PASS launcher`、`READY: .../dist/ai_upper`，`BUILD_EXIT=0`；
+- 耗时 `real 0m26.7s`（`packaging-build.time`）——命中 pip 缓存与既有 build 目录，
+  不是从零冷构建；六阶段本身都真实执行了（`[2/6]` 的 pip download 有输出，
+  `[5/6]` 静态校验 114 个原生二进制、逐模块 PASS，`[6/6]` 两个 SMOKE PASS）；
 - 产物名 `ai_upper`（`dist/ai_upper/ai_upper`，154344 字节）；
 - 产物 headless 启动：`DEVA WEB OK platform=offscreen title='ai_upper'
   url=.../dist/ai_upper/assets/renderer/index.html bridge=True`，`LAUNCH_EXIT=0`。
@@ -172,6 +214,9 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | `c49161b` | build(py38) | `.github/workflows/validate.yml` |
 | `28aeec5` | test(py38) | `app/tests/test_web_shell_modules.py`、`app/tests/test_build_tool_compat.py` |
 | `289749b` | chore(evidence) | `out/ci-fix/closeout/*`、`out/ci-fix/verify-7476558/*` |
+| `d44fac5`/`b7d00c2`/`617427a` | docs(py38)/chore(evidence) | 报告与清查表补正 |
+| `fix(py38)` 第三处 | `tools/ai_upper/native/deps.py`（`BluetoothApis.dll` 进宿主库清单） |
+| `test(py38)` 第三处 | `app/tests/test_native_deployment.py`（`test_windows_web_bluetooth_is_system_provided`） |
 
 对照 `py38-compat-audit.md` 的条目：
 
@@ -185,11 +230,37 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 
 ## 9. CI 逐 job 结论
 
-见 `out/ci-fix/closeout/job-table-py38-round2.txt`，由推送后的新 run 回填。
+权威 run：`43605493485`（commit `617427a`，`in_progress` → `completed/failure`，
+2026-11-14T15:00:21Z）。完整快照 `out/ci-fix/run-43605493485/{run,jobs}.json`，
+逐 job 表 `out/ci-fix/closeout/job-table-py38-round2.txt`。
 
-已知项：`windows-11-arm windows-arm64` 保持**已知平台阻塞**——PySide6 从未发布带
-`QtWebEngineCore` 的 win_arm64 wheel，矩阵条目保留、不加 skip、不放宽
-`requires-python`。
+| job | 结论 | 说明 |
+|---|---|---|
+| Build Tool Python 3.8 / 3.9 / 3.10 / 3.11 / 3.12 / 3.13 | ✅ 6/6 success | 构建工具 + 兼容性测试全绿 |
+| native-integration (ubuntu-24.04, linux-x86_64) | ✅ success | |
+| native-integration (ubuntu-24.04-arm, linux-arm64) | ✅ success | |
+| native-integration (macos-15, macos-arm64) | ✅ success | |
+| native-integration (macos-15-intel, macos-x86_64) | ✅ success | |
+| native-integration (windows-2025, windows-x86) | ✅ success | 仅 `pyserial==3.5` 的 32 位链路 |
+| native-integration (windows-2025, windows-x86_64) | ✅ success | 3.13 + 应用完整依赖 |
+| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ❌ failure | step 15 `[4/6] Package + native dependency closure`：`BluetoothApis.dll` 未解析 |
+| native-integration (windows-11-arm, windows-arm64) | ❌ failure | 已知平台阻塞，见下 |
+| aggregate-artifacts | — skipped | 上游有 job 失败时不汇总 |
+
+**3.8.10 已推进但未转绿。** 相对 run `43600186928`（`[6/6]` 失败）本轮修掉的两处
+让 job 前进到了 `[4/6]`；第 4 阶段的原生闭包缺口（2.4 节）已修，但**修复本身尚未
+经过一次真实 CI 运行验证**，因此现在不能声称「3.8.10 真绿」。
+
+**`windows-arm64` 保持已知平台阻塞**：PySide6 的 win_arm64 wheel **里没有
+`Qt6WebEngineCore.dll`**（6.11.2 与 6.6.3 都一样，已核 wheel 内容），而
+`app/src/mvvm/views/web_shell_window.py` 在类体阶段就要这个类。矩阵条目保留、
+不加 skip、不放宽 `requires-python`。该 job 的注解是 `[6/6]` 下的
+`qt_compat.py` ImportError 链——与 3.8.10 当时不同的失败点，且根因是上游不发轮子。
+
+**副作用（须知）**：`.github/workflows/validate.yml` 没有 `concurrency:` 组，因此
+每推一次都会新起一整轮 14 个 job。本轮为了补证据推了 `d44fac5`/`b7d00c2`/`617427a`，
+产生了 `43605158930`/`43605423736`/`43605493485` 三轮重叠。`43605493485` 被指定为
+权威；后续修复提交会再起一轮，以最后那一轮为准。
 
 ## 10. 一处未处理但已判定不影响本目标的差异
 

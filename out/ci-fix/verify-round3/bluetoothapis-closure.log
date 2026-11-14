@@ -1,0 +1,45 @@
+=== Evidence: PySide6 6.6.3 (last cp38 release) win_amd64 wheels ===
+wheels: PySide6-6.6.3, PySide6_Essentials-6.6.3, PySide6_Addons-6.6.3, shiboken6-6.6.3
+shipped native images: 338
+
+=== unresolved after this change (target windows-x86_64) ===
+  MIMAPI64.dll                             x1
+  LIBPQ.dll                                x1
+  Qt6QuickControls2Basic.dll               x1
+  Qt6QuickControls2BasicStyleImpl.dll      x1
+  Qt6QuickControls2Fusion.dll              x1
+  Qt6QuickControls2FusionStyleImpl.dll     x1
+  Qt6QuickControls2Imagine.dll             x1
+  Qt6QuickControls2ImagineStyleImpl.dll    x1
+  Qt6QuickControls2Material.dll            x1
+  Qt6QuickControls2MaterialStyleImpl.dll   x1
+  Qt6QuickControls2Universal.dll           x1
+  Qt6QuickControls2UniversalStyleImpl.dll  x1
+  Qt6VirtualKeyboardSettings.dll           x1
+  avformat-60.dll                          x1
+  avcodec-60.dll                           x1
+  swresample-4.dll                         x1
+  swscale-7.dll                            x1
+  avutil-58.dll                            x1
+total distinct: 18
+
+=== BluetoothApis.dll status on each target ===
+  windows-x86_64 system_dependency=True
+  windows-x86    system_dependency=True
+  windows-arm64  system_dependency=True
+  linux-x86_64   system_dependency=False
+  macos-arm64    system_dependency=False
+
+=== Note on the remaining 18 ==="
+They live only in optional plugin payloads that the Windows runner's
+[tool.ai_upper.optimize] qt = "imports" policy prunes before the closure runs:
+  - sqldrivers/qsqlmimer  -> MIMAPI64.dll  (already in [tool.ai_upper.native].exclude)
+  - sqldrivers/qsqlpsql   -> LIBPQ.dll     (already in [tool.ai_upper.native].exclude)
+  - multimedia/ffmpegmediaplugin -> av*-60 / sw*    (category not kept)
+  - qml/QtQuick/Controls/*Style* -> Qt6QuickControls2* (QtQuick not imported)
+  - qml/QtQuick/VirtualKeyboard -> Qt6VirtualKeyboardSettings (not imported)
+Proof: run 43605493485 job 132479119483 failed with exactly ONE unresolved line,
+  site-packages\PySide6\Qt6WebEngineCore.dll: BluetoothApis.dll
+so the pruner had already removed every other entry above on the Windows host.
+This host (Linux) cannot run the windows-x86_64 target interpreter, so
+qt_prune returns None here and keeps the full payload -- that is why they show.

@@ -1,0 +1,6 @@
+python 3.8.20
+modules scanned: 78
+IMPORT OK: 78
+THIRD-PARTY MISSING (not counted as compat failures): 0
+COMPAT FAILURES: 0
+EXIT=0
