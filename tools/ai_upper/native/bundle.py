@@ -247,7 +247,7 @@ def bundle_native_dependencies(root: Path, target, env: dict[str, str] | None = 
         lines = sorted(set(f"{dep.owner.relative_to(root)}: {dep.name}" for dep in unresolved))
         raise RuntimeError(
             "Unresolved native dependencies:\n  " + "\n  ".join(lines)
-            + "\nOptional native payloads can be dropped with [tool.py_upper.native].exclude "
+            + "\nOptional native payloads can be dropped with [tool.ai_upper.native].exclude "
               "in app/pyproject.toml."
         )
 

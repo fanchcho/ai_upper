@@ -74,7 +74,7 @@ def _vs_install(host_arch: str) -> Path | None:
     vswhere = _vswhere()
     if not vswhere:
         return None
-    if os.environ.get("PY_UPPER_WINDOWS_TOOLCHAIN") == "zig":
+    if os.environ.get("AI_UPPER_WINDOWS_TOOLCHAIN") == "zig":
         return None
     result = subprocess.run([str(vswhere), "-latest", "-products", "*", "-requires", VC_HOST_COMPONENT[host_arch], "-property", "installationPath"], capture_output=True, text=True, check=False)
     values = [line.strip() for line in result.stdout.splitlines() if line.strip()]
@@ -155,7 +155,7 @@ def _msvc_environment(bat: Path, vc_target: str) -> dict[str, str]:
 # host platform and the Windows target is selected with clang's -target flag.
 # Zig bundles the Windows headers and static CRT the launcher links. The
 # archive identity is verified against the upstream index before unpacking.
-ZIG_VERSION = os.environ.get("PY_UPPER_ZIG_VERSION", "0.16.0")
+ZIG_VERSION = os.environ.get("AI_UPPER_ZIG_VERSION", "0.16.0")
 ZIG_INDEX_URL = "https://ziglang.org/download/index.json"
 ZIG_HOST_KEYS = {
     "x86_64": {"Windows": "x86_64-windows", "Darwin": "x86_64-macos", "Linux": "x86_64-linux"},
@@ -186,7 +186,7 @@ def _zig_release(host_os: str, host_arch: str) -> tuple[str, str]:
         raise RuntimeError(f"Unable to resolve Zig {ZIG_VERSION} from {ZIG_INDEX_URL}: {exc}") from exc
     entry = index.get(ZIG_VERSION) if isinstance(index, dict) else None
     if not isinstance(entry, dict):
-        raise RuntimeError(f"Zig {ZIG_VERSION} is not published in {ZIG_INDEX_URL}; update ZIG_VERSION in tools/py_upper/toolchain.py")
+        raise RuntimeError(f"Zig {ZIG_VERSION} is not published in {ZIG_INDEX_URL}; update ZIG_VERSION in tools/ai_upper/toolchain.py")
     return _zig_entry(entry.get(_zig_host_key(host_os, host_arch)) or {})
 
 
@@ -353,8 +353,8 @@ def resolve_toolchain(target: Target) -> Toolchain:
     host_os = platform.system()
     host_arch = _host_arch()
     if target.os == "windows":
-        if host_os != "Windows" and os.environ.get("PY_UPPER_WINDOWS_TOOLCHAIN") != "zig":
-            raise RuntimeError("Windows targets require a Windows/MSVC build host; set PY_UPPER_WINDOWS_TOOLCHAIN=zig to opt into executable Zig")
+        if host_os != "Windows" and os.environ.get("AI_UPPER_WINDOWS_TOOLCHAIN") != "zig":
+            raise RuntimeError("Windows targets require a Windows/MSVC build host; set AI_UPPER_WINDOWS_TOOLCHAIN=zig to opt into executable Zig")
         install = _vs_install(host_arch)
         if not install:
             return ensure_zig(target)

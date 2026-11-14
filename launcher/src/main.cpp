@@ -1,4 +1,4 @@
-#include "PyUpper.h"
+#include "AiUpper.h"
 #include <string>
 #include <vector>
 
@@ -24,12 +24,12 @@ int run_wide(int argc, wchar_t** argv) {
     std::vector<std::string> args;
     args.reserve(argc > 0 ? (size_t)argc : 0);
     for (int i = 0; i < argc; ++i) args.emplace_back(utf8(argv[i]));
-    return PyUpper::run(args);
+    return AiUpper::run(args);
 }
 
 }  // namespace
 
-#ifdef PY_UPPER_CONSOLE
+#ifdef AI_UPPER_CONSOLE
 int wmain(int argc, wchar_t** argv) { return run_wide(argc, argv); }
 #else
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
@@ -47,6 +47,6 @@ int main(int argc, char** argv) {
     std::vector<std::string> args;
     args.reserve(argc > 0 ? (size_t)argc : 0);
     for (int i = 0; i < argc; ++i) args.emplace_back(argv[i]);
-    return PyUpper::run(args);
+    return AiUpper::run(args);
 }
 #endif

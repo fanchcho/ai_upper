@@ -2,7 +2,7 @@
 
 Qt pruning removes what the application's imports prove is dead. Every project
 also ships payload no import can describe: C++ headers, example trees, type
-stubs, and a runtime's development-only stdlib modules. ``[tool.py_upper.trim]``
+stubs, and a runtime's development-only stdlib modules. ``[tool.ai_upper.trim]``
 names those paths, and ``--trim-site`` / ``--trim-runtime`` do the same for one
 build.
 
@@ -209,7 +209,7 @@ def _preset_name(value) -> str:
     name = str(value or "safe").strip().lower()
     if name not in PRESETS:
         choices = ", ".join(sorted(PRESETS))
-        raise RuntimeError(f"[tool.py_upper.trim].preset must be one of: {choices}")
+        raise RuntimeError(f"[tool.ai_upper.trim].preset must be one of: {choices}")
     return name
 
 
@@ -255,27 +255,27 @@ class TrimPolicy:
     def __post_init__(self) -> None:
         for name in ("site_packages", "site_packages_keep", "runtime", "runtime_keep"):
             value = getattr(self, name)
-            object.__setattr__(self, name, _pattern_tuple(value, f"[tool.py_upper.trim].{name}"))
+            object.__setattr__(self, name, _pattern_tuple(value, f"[tool.ai_upper.trim].{name}"))
 
     @classmethod
     def from_config(cls, config=None, preset=None) -> "TrimPolicy":
         """Build the policy, expanding the named preset plus explicit patterns.
 
-        ``preset`` overrides ``[tool.py_upper.trim].preset`` for one build, which
+        ``preset`` overrides ``[tool.ai_upper.trim].preset`` for one build, which
         is how ``--trim-preset`` selects the aggressive bundle without editing
         the configuration.
         """
         cfg = config if isinstance(config, dict) else {}
         selected = _preset_name(cfg.get("preset", "safe") if preset is None else preset)
         bundle = PRESETS[selected]
-        site = _pattern_tuple(cfg.get("site_packages", ()), "[tool.py_upper.trim].site_packages")
-        site_keep = _pattern_tuple(cfg.get("site_packages_keep", ()), "[tool.py_upper.trim].site_packages_keep")
-        runtime = _pattern_tuple(cfg.get("runtime", ()), "[tool.py_upper.trim].runtime")
-        runtime_keep = _pattern_tuple(cfg.get("runtime_keep", ()), "[tool.py_upper.trim].runtime_keep")
-        preset_site = _pattern_tuple(bundle["site_packages"], "[tool.py_upper.trim].preset")
-        preset_runtime = _pattern_tuple(bundle["runtime"], "[tool.py_upper.trim].preset")
-        global_site = _pattern_tuple(GLOBAL_SITE_PACKAGES, "[tool.py_upper.trim].global")
-        global_runtime = _pattern_tuple(GLOBAL_RUNTIME, "[tool.py_upper.trim].global")
+        site = _pattern_tuple(cfg.get("site_packages", ()), "[tool.ai_upper.trim].site_packages")
+        site_keep = _pattern_tuple(cfg.get("site_packages_keep", ()), "[tool.ai_upper.trim].site_packages_keep")
+        runtime = _pattern_tuple(cfg.get("runtime", ()), "[tool.ai_upper.trim].runtime")
+        runtime_keep = _pattern_tuple(cfg.get("runtime_keep", ()), "[tool.ai_upper.trim].runtime_keep")
+        preset_site = _pattern_tuple(bundle["site_packages"], "[tool.ai_upper.trim].preset")
+        preset_runtime = _pattern_tuple(bundle["runtime"], "[tool.ai_upper.trim].preset")
+        global_site = _pattern_tuple(GLOBAL_SITE_PACKAGES, "[tool.ai_upper.trim].global")
+        global_runtime = _pattern_tuple(GLOBAL_RUNTIME, "[tool.ai_upper.trim].global")
         return cls(
             site_packages=_dedupe(global_site + site + preset_site),
             site_packages_keep=site_keep,
@@ -293,12 +293,12 @@ class TrimPolicy:
     ) -> "TrimPolicy":
         """Add one build's command-line patterns to the configured policy."""
         return TrimPolicy(
-            site_packages=self.site_packages + _pattern_tuple(site_packages, "[tool.py_upper.trim].site_packages"),
+            site_packages=self.site_packages + _pattern_tuple(site_packages, "[tool.ai_upper.trim].site_packages"),
             site_packages_keep=self.site_packages_keep + _pattern_tuple(
-                site_packages_keep, "[tool.py_upper.trim].site_packages_keep"
+                site_packages_keep, "[tool.ai_upper.trim].site_packages_keep"
             ),
-            runtime=self.runtime + _pattern_tuple(runtime, "[tool.py_upper.trim].runtime"),
-            runtime_keep=self.runtime_keep + _pattern_tuple(runtime_keep, "[tool.py_upper.trim].runtime_keep"),
+            runtime=self.runtime + _pattern_tuple(runtime, "[tool.ai_upper.trim].runtime"),
+            runtime_keep=self.runtime_keep + _pattern_tuple(runtime_keep, "[tool.ai_upper.trim].runtime_keep"),
         )
 
     @property

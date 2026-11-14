@@ -9,7 +9,7 @@ import subprocess
 import zipfile
 from pathlib import Path, PureWindowsPath
 
-from .config import APP, BUILD, LOCK, ROOT, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
+from .config import APP, BUILD, LEGACY_LOCK, LOCK, ROOT, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
 from .fs import make_executable
 
 WHEEL_MANIFEST = "manifest.json"
@@ -28,7 +28,7 @@ def _find_links() -> list[str]:
     if value in (None, ""):
         return []
     if not isinstance(value, list):
-        raise RuntimeError("[tool.py_upper.dependencies].find_links must be an array")
+        raise RuntimeError("[tool.ai_upper.dependencies].find_links must be an array")
     links: list[str] = []
     for item in value:
         value = str(item).strip()
@@ -62,7 +62,7 @@ def _tag_args(target: Target) -> list[str]:
 
 
 def _resolver_args() -> list[str]:
-    """Wheel sources from ``[tool.py_upper.dependencies]``.
+    """Wheel sources from ``[tool.ai_upper.dependencies]``.
 
     These describe where wheels may come from, not what counts as compatible,
     so they apply to every resolution: an offline wheelhouse has to be honored
@@ -352,7 +352,7 @@ def _write_manifest(
 def resolve_wheels(target: Target) -> Path:
     out = wheel_dir(target)
     manifest = _manifest_path(target)
-    locked = os.environ.get("PY_UPPER_LOCKED") == "1"
+    locked = os.environ.get("AI_UPPER_LOCKED") == "1"
     if locked:
         records = {}
         if manifest.exists():
@@ -362,8 +362,8 @@ def resolve_wheels(target: Target) -> Path:
             if data.get("requirements", []) != dependency_specs():
                 raise RuntimeError("Locked wheel requirements do not match app/pyproject.toml")
             records = {str(item["file"]): item for item in data.get("wheels", []) if isinstance(item, dict) and item.get("file")}
-        elif LOCK.exists():
-            lock = json.loads(LOCK.read_text(encoding="utf-8"))
+        elif LOCK.exists() or LEGACY_LOCK.exists():
+            lock = json.loads((LOCK if LOCK.exists() else LEGACY_LOCK).read_text(encoding="utf-8"))
             target_data = lock.get("targets", {}).get(target.key, {}) if isinstance(lock, dict) else {}
             if isinstance(target_data, dict):
                 if target_data.get("requirements", []) != dependency_specs():
@@ -389,7 +389,7 @@ def resolve_wheels(target: Target) -> Path:
         return out
 
     python, tag_args = resolution_python(target)
-    # Downloads go through a py_upper-owned cache so repeated builds and CI runs
+    # Downloads go through a ai_upper-owned cache so repeated builds and CI runs
     # do not refetch multi-hundred-megabyte wheels such as PySide6 Addons.
     cmd = [
         str(python), "-m", "pip", "download",
@@ -412,7 +412,7 @@ def optimize_site(site: Path, target: Target | None = None, trim=None) -> dict[s
     cfg = optimize_config()
     profile = str(cfg.get("profile") or "safe").lower()
     if profile not in {"safe", "aggressive"}:
-        raise RuntimeError("[tool.py_upper.optimize].profile must be 'safe' or 'aggressive'")
+        raise RuntimeError("[tool.ai_upper.optimize].profile must be 'safe' or 'aggressive'")
     removed_files = removed_dirs = 0
     remove_caches = bool(cfg.get("remove_python_caches", True))
     for path in sorted(site.rglob("*"), key=lambda value: len(value.parts), reverse=True):

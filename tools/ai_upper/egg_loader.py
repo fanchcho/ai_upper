@@ -1,7 +1,7 @@
-# py_upper encrypted egg loader.
+# ai_upper encrypted egg loader.
 #
 # The loader is deliberately plain ASCII and uses only single quoted strings:
-# tools/py_upper/package.py embeds this file into the launcher as a C++ raw
+# tools/ai_upper/package.py embeds this file into the launcher as a C++ raw
 # string literal, and the bootstrap wraps that text in a Python triple quoted
 # literal. A triple quote or a non-ASCII character would break that handoff.
 #
@@ -13,13 +13,13 @@
 # Backends:
 #   memory  - extension modules are mapped from memory through _memimporter.
 #             This is the Windows path and needs the py2exe MemoryModule
-#             helper that tools/py_upper builds into the bundle.
+#             helper that tools/ai_upper builds into the bundle.
 #   extract - the egg is decrypted into a content-addressed cache directory
 #             and added to sys.path. The directory name is the SHA-256 of the
 #             decrypted archive, so a rebuilt egg gets a fresh root and an
 #             existing one is reused without extracting again. This is the
 #             portable fallback for Linux and macOS, where no stable in-memory
-#             dlopen API exists. PY_UPPER_EGG_CACHE overrides the cache root.
+#             dlopen API exists. AI_UPPER_EGG_CACHE overrides the cache root.
 #   auto    - memory on Windows when _memimporter imports, extract otherwise.
 #
 # The key stream is obfuscation, not modern cryptography: it raises the cost of
@@ -44,7 +44,7 @@ DEFAULT_KEY_HEX = '047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c
 BACKENDS = ('auto', 'memory', 'extract')
 CACHE_PREFIX = 'egg-'
 # Merged bundles are consumed by the launcher before this loader runs.
-BUNDLE_PREFIX = 'py_upper_bundles/'
+BUNDLE_PREFIX = 'ai_upper_bundles/'
 CACHE_MARKER = '.complete'
 CACHE_ATTEMPTS = 3
 
@@ -84,20 +84,20 @@ def _safe_member(name):
 
 
 def _cache_root():
-    override = os.environ.get('PY_UPPER_EGG_CACHE')
+    override = os.environ.get('AI_UPPER_EGG_CACHE') or os.environ.get('PY_UPPER_EGG_CACHE')
     if override:
         root = os.path.abspath(os.path.expanduser(override))
     elif os.name == 'nt':
         base = os.environ.get('LOCALAPPDATA') or os.path.join(
             os.path.expanduser('~'), 'AppData', 'Local')
-        root = os.path.join(base, 'py_upper', 'cache', 'eggs')
+        root = os.path.join(base, 'ai_upper', 'cache', 'eggs')
     elif sys.platform == 'darwin':
         root = os.path.join(os.path.expanduser('~'), 'Library', 'Caches',
-                            'py_upper', 'eggs')
+                            'ai_upper', 'eggs')
     else:
         base = os.environ.get('XDG_CACHE_HOME') or os.path.join(
             os.path.expanduser('~'), '.cache')
-        root = os.path.join(base, 'py_upper', 'eggs')
+        root = os.path.join(base, 'ai_upper', 'eggs')
     try:
         os.makedirs(root, mode=0o700, exist_ok=True)
     except OSError:
@@ -226,7 +226,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         digest = hashlib.sha256(self.payload).hexdigest()
         cache_root = _cache_root()
         if cache_root is None:
-            root = tempfile.mkdtemp(prefix='py_upper_egg_')
+            root = tempfile.mkdtemp(prefix='ai_upper_egg_')
             try:
                 self._extract_into(root)
             except Exception:

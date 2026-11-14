@@ -10,13 +10,13 @@ from pathlib import Path
 
 import pytest
 
-from py_upper import egg as egg_module
-from py_upper.egg import (
+from ai_upper import egg as egg_module
+from ai_upper.egg import (
     EGG_DIR, EGG_META_NAME, EGG_NAME, EggConfig, application_files, egg_config,
     egg_loader_source, pack_egg, read_egg_members, read_egg_meta,
     remove_packed_files, write_egg_meta,
 )
-from py_upper.egg_loader import (
+from ai_upper.egg_loader import (
     DEFAULT_KEY_HEX, MAGIC, BuiltinSubmoduleFinder, EncryptedEggImporter,
     decrypt_if_needed, install, keystream_xor,
 )
@@ -27,7 +27,7 @@ EXT = importlib.machinery.EXTENSION_SUFFIXES[0]
 
 @pytest.fixture(autouse=True)
 def isolated_egg_cache(tmp_path, monkeypatch):
-    monkeypatch.setenv("PY_UPPER_EGG_CACHE", str(tmp_path / "egg-cache"))
+    monkeypatch.setenv("AI_UPPER_EGG_CACHE", str(tmp_path / "egg-cache"))
     existing = [entry for entry in sys.meta_path
                 if isinstance(entry, BuiltinSubmoduleFinder)]
     yield
@@ -46,7 +46,7 @@ def make_site(tmp_path, files, name="site"):
     return site
 
 
-def make_egg(tmp_path, files, name="py_upper.dat", key=KEY, compression="stored"):
+def make_egg(tmp_path, files, name="ai_upper.dat", key=KEY, compression="stored"):
     site = make_site(tmp_path, files, "site_" + name.replace(".", "_"))
     config = EggConfig(enabled=True, key_hex=key, compression=compression)
     return pack_egg(site, tmp_path / name, list(files), config)
@@ -106,12 +106,12 @@ def test_pack_egg_stores_launcher_bundles_uncompressed(tmp_path):
         tmp_path,
         {
             "pkg/mod.py": "VALUE = 1\n" * 200,
-            "py_upper_bundles/py_upper_pkg.so": b"\x7fELF" + b"\x00" * 512,
+            "ai_upper_bundles/ai_upper_pkg.so": b"\x7fELF" + b"\x00" * 512,
         },
         compression="deflated",
     )
     with zipfile.ZipFile(io.BytesIO(decrypt_if_needed(egg.read_bytes(), bytes.fromhex(KEY)))) as archive:
-        bundle = archive.getinfo("py_upper_bundles/py_upper_pkg.so")
+        bundle = archive.getinfo("ai_upper_bundles/ai_upper_pkg.so")
         source = archive.getinfo("pkg/mod.py")
         assert bundle.compress_type == zipfile.ZIP_STORED
         assert bundle.compress_size == bundle.file_size
@@ -184,13 +184,13 @@ def test_extract_backend_leaves_launcher_bundles_to_the_launcher(tmp_path):
         tmp_path,
         {
             "mod.py": "VALUE = 1\n",
-            "py_upper_bundles/py_upper_pkg.so": b"bundle",
+            "ai_upper_bundles/ai_upper_pkg.so": b"bundle",
         },
     )
     importer = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
     root = Path(importer.extract_root)
     assert (root / "mod.py").read_text(encoding="utf-8") == "VALUE = 1\n"
-    assert not (root / "py_upper_bundles").exists()
+    assert not (root / "ai_upper_bundles").exists()
 
 
 def test_extract_cache_is_content_addressed_and_reused(tmp_path):
@@ -298,7 +298,7 @@ def test_builtin_submodule_finder_resolves_only_dotted_builtins(monkeypatch):
         calls.append(name)
         return sentinel
 
-    monkeypatch.setattr("py_upper.egg_loader._imp", types.SimpleNamespace(
+    monkeypatch.setattr("ai_upper.egg_loader._imp", types.SimpleNamespace(
         is_builtin=lambda name: name == "pkg.leaf"))
     monkeypatch.setattr(importlib.machinery, "BuiltinImporter", types.SimpleNamespace(
         find_spec=find_spec))
@@ -398,7 +398,7 @@ def test_remove_packed_files_prunes_emptied_directories(tmp_path):
 
 
 def test_egg_config_reads_the_section_and_applies_overrides(monkeypatch):
-    monkeypatch.setattr(egg_module, "py_upper_config", lambda: {
+    monkeypatch.setattr(egg_module, "ai_upper_config", lambda: {
         "egg": {"enabled": True, "key_hex": KEY, "backend": "extract", "compression": "stored"}
     })
     config = egg_config()
@@ -408,7 +408,7 @@ def test_egg_config_reads_the_section_and_applies_overrides(monkeypatch):
 
 
 def test_egg_config_defaults_to_enabled_without_a_section(monkeypatch):
-    monkeypatch.setattr(egg_module, "py_upper_config", lambda: {})
+    monkeypatch.setattr(egg_module, "ai_upper_config", lambda: {})
     config = egg_config()
     assert config.enabled is True
     assert config.key_hex == KEY
@@ -416,7 +416,7 @@ def test_egg_config_defaults_to_enabled_without_a_section(monkeypatch):
 
 
 def test_egg_config_honours_an_explicit_false(monkeypatch):
-    monkeypatch.setattr(egg_module, "py_upper_config", lambda: {
+    monkeypatch.setattr(egg_module, "ai_upper_config", lambda: {
         "egg": {"enabled": False},
     })
     assert egg_config().enabled is False
@@ -430,7 +430,7 @@ def test_egg_config_honours_an_explicit_false(monkeypatch):
     {"compression": "bzip2"},
 ])
 def test_egg_config_rejects_invalid_values(monkeypatch, value):
-    monkeypatch.setattr(egg_module, "py_upper_config", lambda: {"egg": value})
+    monkeypatch.setattr(egg_module, "ai_upper_config", lambda: {"egg": value})
     with pytest.raises(RuntimeError):
         egg_config()
 
@@ -446,7 +446,7 @@ def test_egg_meta_roundtrips_and_ignores_a_stage_without_one(tmp_path):
 
 
 def test_egg_loader_source_is_embeddable_and_compiles():
-    from py_upper.package import RAW_STRING_DELIMITER, _embedded_literal
+    from ai_upper.package import RAW_STRING_DELIMITER, _embedded_literal
 
     source = egg_loader_source()
     source.encode("ascii")
@@ -458,8 +458,8 @@ def test_egg_loader_source_is_embeddable_and_compiles():
 
 
 def test_write_embedded_source_carries_the_loader_only_when_enabled(tmp_path):
-    from py_upper.config import TARGETS
-    from py_upper.package import write_embedded_source
+    from ai_upper.config import TARGETS
+    from ai_upper.package import write_embedded_source
 
     (tmp_path / "off").mkdir()
     (tmp_path / "on").mkdir()
@@ -472,7 +472,7 @@ def test_write_embedded_source_carries_the_loader_only_when_enabled(tmp_path):
     config = EggConfig(enabled=True, key_hex=KEY, backend="extract")
     enabled = write_embedded_source(tmp_path / "on", TARGETS["windows-x86_64"], config)
     text = enabled.read_text(encoding="utf-8")
-    assert "kEggLoader = R\"pyupper(" in text
+    assert "kEggLoader = R\"aiupper(" in text
     assert "extern const char* const kEggLoader;" in text
     assert '"' + KEY + '"' in text
     assert '"extract"' in text
@@ -482,12 +482,12 @@ def test_write_embedded_source_carries_the_loader_only_when_enabled(tmp_path):
 def test_pack_egg_targets_the_stage_name_used_by_packaging(tmp_path):
     egg = make_egg(tmp_path, {"mod.py": ""})
     assert egg.name == EGG_NAME
-    assert EGG_NAME == "py_upper.dat"
+    assert EGG_NAME == "ai_upper.dat"
     assert EGG_DIR == "bundle"
 
 
 def test_stage_egg_config_honours_a_no_egg_build(tmp_path, monkeypatch):
-    from py_upper import verify as verify_module
+    from ai_upper import verify as verify_module
 
     monkeypatch.setattr(verify_module, "read_egg_meta", lambda stage: None)
     monkeypatch.setattr(verify_module, "egg_config", lambda enabled=None: EggConfig(

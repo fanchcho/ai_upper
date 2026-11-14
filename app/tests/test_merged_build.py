@@ -17,10 +17,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from py_upper import python_build, verify
-from py_upper.config import TARGETS
-from py_upper.egg import EggConfig, pack_egg, read_egg_members
-from py_upper.toolchain import Toolchain
+from ai_upper import python_build, verify
+from ai_upper.config import TARGETS
+from ai_upper.egg import EggConfig, pack_egg, read_egg_members
+from ai_upper.toolchain import Toolchain
 
 
 def _source(app_root: Path, relative: str) -> Path:
@@ -68,10 +68,10 @@ def test_entry_point_rewrite_is_unique_and_rejects_ambiguous_units(tmp_path, mon
     monkeypatch.setattr(python_build, "APP", app_root)
     text = "PyObject* PyInit_demo(void) { return 0; }\n"
 
-    renamed = python_build._renamed_translation_unit(text, "PyInit_py_upper_demo_abc", source)
+    renamed = python_build._renamed_translation_unit(text, "PyInit_ai_upper_demo_abc", source)
 
     assert "PyInit_demo" not in renamed
-    assert "PyInit_py_upper_demo_abc" in renamed
+    assert "PyInit_ai_upper_demo_abc" in renamed
     with pytest.raises(RuntimeError, match="no PyInit"):
         python_build._renamed_translation_unit("/* empty */\n", "PyInit_x", source)
     with pytest.raises(RuntimeError, match="more than one"):
@@ -98,7 +98,7 @@ def test_registration_table_names_every_module(tmp_path, monkeypatch):
     assert "(char*)\"pkg.a\"" in text
     assert "(char*)\"pkg.b\"" in text
     assert "PyImport_ExtendInittab" in text
-    assert "py_upper_register_modules" in text
+    assert "ai_upper_register_modules" in text
     for path in inputs:
         assert "PyInit_a(" not in path.read_text(encoding="utf-8")
         assert "PyInit_b(" not in path.read_text(encoding="utf-8")
@@ -118,8 +118,8 @@ def test_windows_merged_setup_exports_the_registration_entry_point(tmp_path):
     )
 
     assert "def get_export_symbols(self, ext):" in script
-    assert "return ['py_upper_register_modules']" in script
-    assert "PyInit_py_upper" not in script
+    assert "return ['ai_upper_register_modules']" in script
+    assert "PyInit_ai_upper" not in script
 
 
 def test_merged_compile_links_every_translation_unit_once(tmp_path, monkeypatch):
@@ -151,7 +151,7 @@ def test_merged_compile_links_every_translation_unit_once(tmp_path, monkeypatch)
     second_run = python_build.compile_merged_unix_extensions(target, {"pkg": [first, second]}, generated)
 
     assert outputs == second_run
-    assert [path.name for path in outputs] == ["py_upper_pkg.cpython-313-x86_64-linux-gnu.so"]
+    assert [path.name for path in outputs] == ["ai_upper_pkg.cpython-313-x86_64-linux-gnu.so"]
     assert len(commands) == 1
     cmd = commands[0]
     linked = [Path(token).name for token in cmd if token.endswith(".c")]
@@ -187,26 +187,26 @@ def test_merge_mode_cythonizes_only_leaves(tmp_path, monkeypatch):
 
 @pytest.mark.skipif(shutil.which("c++") is None, reason="no C++ compiler")
 def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
-    from py_upper.egg_loader import decrypt_if_needed
+    from ai_upper.egg_loader import decrypt_if_needed
 
     config = EggConfig()
-    relative = "py_upper_bundles/py_upper_pkg.so"
+    relative = "ai_upper_bundles/ai_upper_pkg.so"
     payload = b"\x7fELF" + bytes(range(256)) * 4
     site = tmp_path / "site"
     (site / "pkg").mkdir(parents=True)
     (site / "pkg" / "mod.py").write_text("VALUE = 1\n", encoding="utf-8")
     (site / relative).parent.mkdir(parents=True)
     (site / relative).write_bytes(payload)
-    egg = pack_egg(site, tmp_path / "py_upper.dat", ["pkg/mod.py", relative], config)
+    egg = pack_egg(site, tmp_path / "ai_upper.dat", ["pkg/mod.py", relative], config)
 
     source = tmp_path / "probe.cpp"
     source.write_text(
         '#include "egg_bundles.h"\n'
         '#include <iostream>\n'
         'int main(int argc, char** argv) {\n'
-        '    std::vector<pyupper::EggBundleFile> files;\n'
+        '    std::vector<aiupper::EggBundleFile> files;\n'
         '    std::string key, error;\n'
-        '    if (!pyupper::read_egg_bundles(argv[1], argv[2], "py_upper_bundles/", files, key, error)) {\n'
+        '    if (!aiupper::read_egg_bundles(argv[1], argv[2], "ai_upper_bundles/", files, key, error)) {\n'
         '        std::cout << "ERROR " << error << "\\n";\n'
         '        return 1;\n'
         '    }\n'
@@ -245,7 +245,7 @@ def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkey
     site = tmp_path / "site-packages"
     (site / "pkg").mkdir(parents=True)
     (site / "pkg" / "__init__.py").write_text("x = 1\n", encoding="utf-8")
-    relative = "py_upper_bundles/py_upper_pkg.cp313-darwin.so"
+    relative = "ai_upper_bundles/ai_upper_pkg.cp313-darwin.so"
     bundle = site / relative
     bundle.parent.mkdir(parents=True)
     bundle.write_bytes(b"bundle")
@@ -262,7 +262,7 @@ def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkey
     assert all(ok for ok, _ in checks), checks
 
     config = EggConfig()
-    egg = pack_egg(site, tmp_path / "bundle" / "py_upper.dat", ["pkg/__init__.py", relative], config)
+    egg = pack_egg(site, tmp_path / "bundle" / "ai_upper.dat", ["pkg/__init__.py", relative], config)
     egg_members = set(read_egg_members(egg, config.key_hex))
     assert relative in egg_members
 
@@ -278,8 +278,8 @@ def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkey
 
 
 def test_launcher_registers_bundles_before_interpreter_initialization():
-    launcher = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
     text = launcher.read_text(encoding="utf-8")
-    assert "py_upper_bundles" in text
-    assert "py_upper_register_modules" in text
+    assert "ai_upper_bundles" in text
+    assert "ai_upper_register_modules" in text
     assert text.index("load_module_bundles(site, egg, runtime)") < text.index("PyStatus status = init(&config)")

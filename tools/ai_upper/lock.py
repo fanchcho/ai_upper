@@ -4,11 +4,22 @@ import hashlib
 import json
 from pathlib import Path
 
-from .config import LOCK, Target, load_app_config, python_version, runtime_provider, runtime_spec, wheel_dir
+from .config import (
+    LEGACY_LOCK, LEGACY_RUNTIME_MARKER, LEGACY_SDK_MARKER, LOCK, Target, load_app_config,
+    python_version, runtime_provider, runtime_spec, wheel_dir,
+)
+from .fs import marker_file
 from .manifest import manifest_hash, read_manifest
+from .pbs import SDK_MARKER
+from .runtime import RUNTIME_MARKER
 from .third_party import dependency_specs
 
 FORMAT = 5
+
+
+def lock_path() -> Path:
+    """The lock file to read: the current name, else the pre-rename one."""
+    return LOCK if LOCK.exists() or not LEGACY_LOCK.exists() else LEGACY_LOCK
 
 
 def _sha256(path: Path) -> str:
@@ -26,9 +37,9 @@ def _wheel_records(target: Target) -> list[dict]:
     ]
 
 
-def _marker(root: Path, name: str) -> dict:
-    path = root / name
-    if not path.exists():
+def _marker(root: Path, name: str, legacy: str) -> dict:
+    path = marker_file(root, name, legacy)
+    if path is None:
         return {}
     data = json.loads(path.read_text(encoding="utf-8"))
     return data if isinstance(data, dict) else {}
@@ -37,7 +48,7 @@ def _marker(root: Path, name: str) -> dict:
 def write_lock(target: Target) -> Path:
     spec = runtime_spec(target)
     manifest = read_manifest(spec.root)
-    project = str(load_app_config().get("project", {}).get("name") or "py_upper")
+    project = str(load_app_config().get("project", {}).get("name") or "ai_upper")
     data = {
         "format": FORMAT,
         "project": project,
@@ -45,9 +56,10 @@ def write_lock(target: Target) -> Path:
         "runtime_provider": runtime_provider(),
         "targets": {},
     }
-    if LOCK.exists():
+    existing_path = lock_path()
+    if existing_path.exists():
         try:
-            existing = json.loads(LOCK.read_text(encoding="utf-8"))
+            existing = json.loads(existing_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             existing = {}
         if (
@@ -65,8 +77,8 @@ def write_lock(target: Target) -> Path:
         "wheels": _wheel_records(target),
     }
     if runtime_provider() == "pbs":
-        runtime = _marker(spec.root, ".py_upper-runtime.json")
-        sdk = _marker(spec.sdk_root, ".py_upper-sdk.json")
+        runtime = _marker(spec.root, RUNTIME_MARKER, LEGACY_RUNTIME_MARKER)
+        sdk = _marker(spec.sdk_root, SDK_MARKER, LEGACY_SDK_MARKER)
         target_data["runtime"] = {key: runtime.get(key) for key in ("source", "tag", "asset", "url", "sha256", "python", "target") if runtime.get(key) is not None}
         target_data["sdk"] = {key: sdk.get(key) for key in ("tag", "asset", "url", "sha256", "python", "target") if sdk.get(key) is not None}
     data["targets"][target.key] = target_data
@@ -75,16 +87,17 @@ def write_lock(target: Target) -> Path:
 
 
 def verify_lock(target: Target) -> None:
-    if not LOCK.exists():
-        raise RuntimeError(f"Lock file not found: {LOCK}; run python tools/build.py --lock")
-    data = json.loads(LOCK.read_text(encoding="utf-8"))
+    path = lock_path()
+    if not path.exists():
+        raise RuntimeError(f"Lock file not found: {path}; run python tools/build.py --lock")
+    data = json.loads(path.read_text(encoding="utf-8"))
     if data.get("format") != FORMAT:
         raise RuntimeError(f"Unsupported lock format: {data.get('format')!r}")
     if data.get("python") != python_version() or data.get("runtime_provider") != runtime_provider():
         raise RuntimeError("Lock Python/runtime provider does not match app configuration")
     target_data = data.get("targets", {}).get(target.key)
     if not isinstance(target_data, dict):
-        raise RuntimeError(f"Target {target.key} is not present in {LOCK}")
+        raise RuntimeError(f"Target {target.key} is not present in {path}")
     if target_data.get("requirements", []) != dependency_specs():
         raise RuntimeError("Lock dependency requirements do not match app/pyproject.toml")
 
@@ -99,11 +112,11 @@ def verify_lock(target: Target) -> None:
         if target.os == "windows" and (not isinstance(recorded_runtime, dict)
                                        or recorded_runtime.get("source") != "python.org"):
             raise RuntimeError("Locked Windows PBS build requires an official python.org embeddable runtime; recreate lock")
-        for label, root, marker_name in (
-            ("runtime", spec.root, ".py_upper-runtime.json"),
-            ("sdk", spec.sdk_root, ".py_upper-sdk.json"),
+        for label, root, marker_name, legacy_marker in (
+            ("runtime", spec.root, RUNTIME_MARKER, LEGACY_RUNTIME_MARKER),
+            ("sdk", spec.sdk_root, SDK_MARKER, LEGACY_SDK_MARKER),
         ):
-            current = _marker(root, marker_name)
+            current = _marker(root, marker_name, legacy_marker)
             if not current:
                 raise RuntimeError(f"Locked build requires cached PBS {label}: {root}")
             for key, expected in target_data.get(label, {}).items():

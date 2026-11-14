@@ -1,19 +1,23 @@
 """本工程的真实入口：承载原版渲染层的 `DevaWebWindow`。
 
 `main.py` 仍然是模板参考应用的入口（`application.main()` → GreetingService /
-MainWindow），这里**不改它的语义**；`[tool.py_upper].entry` 指向本模块，所以打包
+MainWindow），这里**不改它的语义**；`[tool.ai_upper].entry` 指向本模块，所以打包
 产物起的是原版界面，而不是模板窗口。
 
-入口只做装配与启动：数据目录、密钥库、角色种子都从 `DEVA_HOME`（缺省 `~/.deva`）
-读取，窗口内部再装配回合宿主、模型网关与工具运行时（见 `mvvm.webui.assembly`）。
-装配写两份就会漂移，因此这里不重复。
+入口只做装配与启动：数据目录、密钥库、角色种子都从 `AI_UPPER_HOME`
+（缺省 `~/.ai_upper`，旧 `DEVA_HOME` / `~/.deva` 仍被读取）读取，窗口内部再装配回合
+宿主、模型网关与工具运行时（见 `mvvm.webui.assembly`）。装配写两份就会漂移，
+因此这里不重复。
 
 环境变量：
-- `DEVA_HOME`：数据目录，缺省 `~/.deva`；
+- `AI_UPPER_HOME`：数据目录，缺省 `~/.ai_upper`（旧 `DEVA_HOME` 兼容）；
 - `DEVA_APP_WORKSPACE`：启动时登记为受信根的工作区（不设则没有受信根，工具一律拒绝）；
-- `DEVA_APP_HEADLESS=1`：offscreen 装配、等渲染层 `loadFinished`、打印结果后退出。
+- `AI_UPPER_HEADLESS=1`：offscreen 装配、等渲染层 `loadFinished`、打印结果后退出
+  （旧 `DEVA_APP_HEADLESS` 仍被接受）。
 
-`DEVA_APP_HEADLESS` 是打包后的冒烟路径：失败时返回非零并打印原因，绝不假装启动成功。
+`AI_UPPER_HEADLESS` 是打包后的冒烟路径：失败时返回非零并打印原因，绝不假装启动成功。
+CI 的 `build.py --run` 用的就是它——两个入口（本模块与 `application.py`）认同一个
+变量，否则设了变量却 blocker 在窗口服务器上。
 """
 from __future__ import annotations
 
@@ -23,12 +27,17 @@ import time
 from pathlib import Path
 from typing import Any, Optional
 
-HEADLESS_ENV = "DEVA_APP_HEADLESS"
+HEADLESS_ENV = "AI_UPPER_HEADLESS"
+LEGACY_HEADLESS_ENV = "DEVA_APP_HEADLESS"
 HEADLESS_TIMEOUT_S = 90.0
 
 
 def _env_flag(name: str) -> bool:
     return os.environ.get(name, "").strip() == "1"
+
+
+def _headless_requested() -> bool:
+    return _env_flag(HEADLESS_ENV) or _env_flag(LEGACY_HEADLESS_ENV)
 
 
 def _prepare_environment(headless: bool) -> None:
@@ -43,7 +52,9 @@ def _prepare_environment(headless: bool) -> None:
 
 
 def _data_home() -> Path:
-    return Path(os.environ.get("DEVA_HOME") or (Path.home() / ".deva"))
+    from utils.app_home import app_home
+
+    return app_home()
 
 
 def _create_window() -> Any:
@@ -96,7 +107,7 @@ def _probe_renderer(app: Any, window: Any, timeout: float) -> dict[str, Any]:
 
 def run(headless: Optional[bool] = None) -> int:
     if headless is None:
-        headless = _env_flag(HEADLESS_ENV)
+        headless = _headless_requested()
     _prepare_environment(headless)
 
     from utils.qt_compat import QtWidgets, exec_loop

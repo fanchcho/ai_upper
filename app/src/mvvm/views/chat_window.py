@@ -16,6 +16,7 @@ from mvvm.views.chat_pane import (
     streaming_to_text,
 )
 from mvvm.views.transcript_render import MESSAGE_ROLE_HEAD, transcript_plain_text
+from utils.paths import app_name
 
 # 旧名保留：脚本/测试按 `ROLE_PREFIX` / `transcript_to_text` 引用；两者现在都住在
 # `transcript_render`（纯函数、无 Qt），这里只做转出，避免调用方被迫改 import 路径。
@@ -30,7 +31,7 @@ class ChatWindow(ViewBase):
 
         self._pane = ChatPane(viewmodel)
         window = QtWidgets.QMainWindow()
-        window.setWindowTitle("Deva")
+        window.setWindowTitle(app_name())
         window.setCentralWidget(self._pane.widget())
         window.resize(720, 560)
         self._window = window

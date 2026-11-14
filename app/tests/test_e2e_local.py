@@ -13,12 +13,12 @@ from pathlib import Path
 
 import pytest
 
-from py_upper.compat import tomllib
-from py_upper.config import host_target
-from py_upper.native.bundle import ad_hoc_sign
-from py_upper.native.deps import _system_dependency
-from py_upper.native.inspect import native_files
-from py_upper.toolchain import resolve_toolchain
+from ai_upper.compat import tomllib
+from ai_upper.config import host_target
+from ai_upper.native.bundle import ad_hoc_sign
+from ai_upper.native.deps import _system_dependency
+from ai_upper.native.inspect import native_files
+from ai_upper.toolchain import resolve_toolchain
 
 
 def _host_libpython() -> Path:
@@ -261,7 +261,7 @@ def _make_test_wheels(repo: Path) -> Path:
 
 def _prepare_repo() -> Path:
     source_repo = Path(__file__).parents[2]
-    temp_root = Path(tempfile.mkdtemp(prefix="py-upper-e2e-"))
+    temp_root = Path(tempfile.mkdtemp(prefix="ai-upper-e2e-"))
     repo = temp_root / "repo"
     shutil.copytree(
         source_repo,
@@ -274,10 +274,10 @@ def _prepare_repo() -> Path:
 
     pyproject = repo / "app" / "pyproject.toml"
     project = pyproject.read_text(encoding="utf-8")
-    start = project.index("[tool.py_upper.runtime]")
-    end = project.index("[tool.py_upper.dependencies]")
+    start = project.index("[tool.ai_upper.runtime]")
+    end = project.index("[tool.ai_upper.dependencies]")
     project = project[:start] + (
-        "[tool.py_upper.runtime]\n"
+        "[tool.ai_upper.runtime]\n"
         'provider = "local"\n'
         f'python = "{version}"\n'
         'runtime = "runtimes/{target}/{python}"\n'
@@ -289,13 +289,13 @@ def _prepare_repo() -> Path:
     # the manylinux baselines, so the fixture wheel kept the host's tag while
     # the build resolved the fallback baseline, and pip rejected the wheel.
     project, injected = re.subn(
-        r"^\[tool\.py_upper\.dependencies\]\n",
+        r"^\[tool\.ai_upper\.dependencies\]\n",
         lambda match: match.group(0) + f'find_links = ["{wheel_dir.relative_to(repo).as_posix()}"]\nno_index = true\n',
         project,
         count=1,
         flags=re.M,
     )
-    assert injected == 1, "app/pyproject.toml must declare [tool.py_upper.dependencies]"
+    assert injected == 1, "app/pyproject.toml must declare [tool.ai_upper.dependencies]"
     project, replaced = re.subn(
         # Anchor to the start of the line: a commented-out example of the key
         # must never win over the declaration that is actually in effect.
@@ -320,7 +320,7 @@ def _prepare_repo() -> Path:
         count=1,
         flags=re.M,
     )
-    assert replaced == 1, "could not rewrite [tool.py_upper].entry in the E2E fixture"
+    assert replaced == 1, "could not rewrite [tool.ai_upper].entry in the E2E fixture"
     pyproject.write_text(project, encoding="utf-8")
 
     entry_py = repo / "app" / "src" / "e2e_entry.py"
@@ -343,10 +343,10 @@ def _prepare_repo() -> Path:
 
 def _run_build(repo: Path, *args: str) -> subprocess.CompletedProcess:
     env = dict(os.environ)
-    env["PY_UPPER_PYTHON"] = sys.executable
-    env["PY_UPPER_E2E"] = "1"
+    env["AI_UPPER_PYTHON"] = sys.executable
+    env["AI_UPPER_E2E"] = "1"
     # --run must not wait for a window server.
-    env["PY_UPPER_HEADLESS"] = "1"
+    env["AI_UPPER_HEADLESS"] = "1"
     return subprocess.run(
         [sys.executable, "tools/build.py", *args],
         cwd=repo,
@@ -365,7 +365,7 @@ def _packaged_root(repo: Path, target) -> Path:
     exists.
     """
     with (repo / "app" / "pyproject.toml").open("rb") as handle:
-        app_name = tomllib.load(handle)["tool"]["py_upper"]["app"]["name"]
+        app_name = tomllib.load(handle)["tool"]["ai_upper"]["app"]["name"]
     if target.os == "macos":
         return repo / "dist" / f"{app_name}.app" / "Contents" / "Resources"
     return repo / "dist" / app_name
@@ -399,8 +399,8 @@ def _assert_relocated_launcher(repo: Path, target, destination: Path) -> None:
     env.update({
         "PATH": str(binary_dir), "HOME": str(profile), "USERPROFILE": str(profile),
         "LOCALAPPDATA": str(profile / "AppData"), "XDG_CACHE_HOME": str(profile / ".cache"),
-        "PY_UPPER_EGG_CACHE": str(profile / "中文 缓存"),
-        "PY_UPPER_NO_DIALOG": "1", "PY_UPPER_HEADLESS": "1",
+        "AI_UPPER_EGG_CACHE": str(profile / "中文 缓存"),
+        "AI_UPPER_NO_DIALOG": "1", "AI_UPPER_HEADLESS": "1",
     })
     # An isolated embedded interpreter must select its own UTF-8 codec. A
     # desktop locale or PYTHONUTF8 override must not make Unicode installs work.
@@ -430,13 +430,13 @@ def _assert_relocated_launcher(repo: Path, target, destination: Path) -> None:
         options = {"executable": str(executable)} if os.name == "nt" else {}
         for smoke in (False, True):
             if smoke:
-                env["PY_UPPER_SMOKE"] = "1"
+                env["AI_UPPER_SMOKE"] = "1"
             result = subprocess.run(
                 [executable.name], cwd=cwd, env=env, capture_output=True,
                 text=True, encoding="utf-8", timeout=60, **options,
             )
             assert result.returncode == 0, result.stdout + result.stderr
-            assert ("SMOKE PASS launcher" if smoke else "Hello from py_upper") in result.stdout
+            assert ("SMOKE PASS launcher" if smoke else "Hello from ai_upper") in result.stdout
         assert snapshot() == before, "launching must not modify the installed bundle"
     finally:
         hidden.rename(repo)
@@ -444,7 +444,7 @@ def _assert_relocated_launcher(repo: Path, target, destination: Path) -> None:
             path.chmod(mode)
 
 
-@pytest.mark.skipif(os.environ.get("PY_UPPER_E2E") != "1", reason="set PY_UPPER_E2E=1 to run the full local build E2E")
+@pytest.mark.skipif(os.environ.get("AI_UPPER_E2E") != "1", reason="set AI_UPPER_E2E=1 to run the full local build E2E")
 def test_local_build_end_to_end_with_third_party_dependency():
     target = host_target()
     temp_root = _prepare_repo()
@@ -453,7 +453,7 @@ def test_local_build_end_to_end_with_third_party_dependency():
         result = _run_build(repo, "--run", "--target", target.key)
         assert result.returncode == 0, result.stdout + "\n" + result.stderr
         assert "SMOKE PASS launcher" in result.stdout
-        assert "Hello from py_upper" in result.stdout
+        assert "Hello from ai_upper" in result.stdout
         # The Qt window is gated by the integration run, which builds the real
         # dependency set; this fixture application has no PySide6.
 
@@ -477,7 +477,7 @@ def test_local_build_end_to_end_with_third_party_dependency():
         # runtime, SDK and wheel inputs without re-resolving anything.
         lock = _run_build(repo, "--lock", "--target", target.key)
         assert lock.returncode == 0, lock.stdout + "\n" + lock.stderr
-        assert (repo / "py_upper.lock.json").exists()
+        assert (repo / "ai_upper.lock.json").exists()
         locked = _run_build(repo, "--locked", "--target", target.key)
         assert locked.returncode == 0, locked.stdout + "\n" + locked.stderr
         _assert_relocated_launcher(repo, target, temp_root / "deployment")
@@ -485,7 +485,7 @@ def test_local_build_end_to_end_with_third_party_dependency():
         shutil.rmtree(temp_root, ignore_errors=True)
 
 
-@pytest.mark.skipif(os.environ.get("PY_UPPER_E2E") != "1", reason="set PY_UPPER_E2E=1 to run the full local build E2E")
+@pytest.mark.skipif(os.environ.get("AI_UPPER_E2E") != "1", reason="set AI_UPPER_E2E=1 to run the full local build E2E")
 def test_local_build_embeds_application_owned_native_libraries():
     """Application-owned libraries must resolve their own dependency closure."""
     target = host_target()
@@ -495,7 +495,7 @@ def test_local_build_embeds_application_owned_native_libraries():
         _make_app_native_tree(repo, target)
         result = _run_build(repo, "--run", "--target", target.key)
         assert result.returncode == 0, result.stdout + "\n" + result.stderr
-        assert "Hello from py_upper" in result.stdout
+        assert "Hello from ai_upper" in result.stdout
 
         site = _packaged_root(repo, target) / "site-packages"
         bundled = sorted(path.name for path in (site / "config").iterdir())

@@ -32,7 +32,7 @@ _API_SEGMENTS = {"openai", "anthropic", "google"}
 
 def app_version() -> str:
     """本应用版本号（用于 User-Agent 自报身份）。取不到就退回 0.0.0，不抛错。"""
-    for package in ("py_upper", "deva"):
+    for package in ("ai_upper", "deva"):
         try:
             return metadata.version(package)
         except metadata.PackageNotFoundError:

@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from py_upper.config import TARGETS, runtime_spec
+from ai_upper.config import TARGETS, runtime_spec
 
 def test_targets_and_abi():
     assert TARGETS["windows-x86"].triple == "i686-pc-windows-msvc"
@@ -9,7 +9,7 @@ def test_targets_and_abi():
 
 def test_development_python_is_independent(monkeypatch):
     monkeypatch.setenv("PYSTAND_PYTHON", sys.executable)
-    from py_upper.config import require_local_python
+    from ai_upper.config import require_local_python
     assert require_local_python().resolve() == Path(sys.executable).resolve()
 
 def test_all_release_targets_are_declared():
@@ -21,23 +21,23 @@ def test_all_release_targets_are_declared():
 
 
 def test_project_version_and_user_agent():
-    from py_upper.config import load_app_config, project_version, user_agent
+    from ai_upper.config import load_app_config, project_version, user_agent
     assert project_version() == load_app_config()["project"]["version"]
-    assert user_agent() == f"py_upper/{project_version()}"
+    assert user_agent() == f"ai_upper/{project_version()}"
 
 
 def test_app_name_is_configurable(monkeypatch):
-    import py_upper.config as config
+    import ai_upper.config as config
     monkeypatch.setattr(config, "load_app_config", lambda: {
         "project": {"version": "0.16.3"},
-        "tool": {"py_upper": {"app": {"name": "Demo Tool", "identifier": "com.example.demo"}}},
+        "tool": {"ai_upper": {"app": {"name": "Demo Tool", "identifier": "com.example.demo"}}},
     })
     assert config.app_name() == "Demo Tool"
     assert config.app_identifier() == "com.example.demo"
 
 
 def test_target_extension_suffix_matches_cpython_importer_conventions():
-    from py_upper.config import TARGETS, target_extension_suffix
+    from ai_upper.config import TARGETS, target_extension_suffix
 
     assert target_extension_suffix(TARGETS["windows-x86_64"], "3.13", "cp313") == ".cp313-win_amd64.pyd"
     assert target_extension_suffix(TARGETS["linux-x86_64"], "3.13", "cp313") == ".cpython-313-x86_64-linux-gnu.so"

@@ -464,7 +464,7 @@ MAPPING: dict[str, tuple[str, str, str, str]] = {
             "无（明确不做）",
             "丢弃",
             "无",
-            "自动更新链（electron-updater + 签名校验 + 增量包）在 Qt 路线下要整体重做，且需要代码签名证书与发布渠道。本阶段明确不做；打包/签名只在 py_upper 既有工具链范围内验证，不承诺线上更新",
+            "自动更新链（electron-updater + 签名校验 + 增量包）在 Qt 路线下要整体重做，且需要代码签名证书与发布渠道。本阶段明确不做；打包/签名只在 ai_upper 既有工具链范围内验证，不承诺线上更新",
         )
         for ch in ("update:get-state", "update:check", "update:download", "update:install")
     },
@@ -592,7 +592,7 @@ def main() -> int:
     lines: list[str] = []
     add = lines.append
 
-    add("# Deva → py_upper 迁移计划（契约主轴：158 个 IPC 通道）")
+    add("# Deva → ai_upper 迁移计划（契约主轴：158 个 IPC 通道）")
     add("")
     add("> 状态：第一阶段（骨架 + 首批业务 + 首批界面）的**计划与契约文档**。")
     add("> 本文只回答「Deva 的哪个能力，在新工程落到哪个模块、怎么处置、有什么坑」，")
@@ -643,7 +643,7 @@ def main() -> int:
     add("")
     add("- **通道**：Deva 主进程实际注册的 IPC 名（`ipcMain.handle` 或 `ipcMain.on`）。")
     add("- **Deva 位置**：`源文件:行号`，行号是通道名字面量所在行（跨行写法取 `ipcMain.` 那一行）。")
-    add("- **新工程落点**：按 py_upper 现有 MVVM 分层的命名（`app/src/mvvm/services|models|view_models|views`），")
+    add("- **新工程落点**：按 ai_upper 现有 MVVM 分层的命名（`app/src/mvvm/services|models|view_models|views`），")
     add("  `services/x.py::Class.method` 是建议形态；标「无（不迁移）」的是明确不搬的。")
     add("- **处置**：`直搬` / `重写` / `丢弃` / `待定`，括号里是阶段（P1 本阶段、P2、P3）。")
     add("- **依赖**：新实现要依赖的模块或外部能力。")
@@ -722,7 +722,7 @@ def main() -> int:
     add("  - `settings_service.py`（明文 `config.json`，顶层浅合并）、`secrets_vault.py`（keyring，后端不可用即拒绝）。")
     add("- **界面**（Qt 原生）：左侧会话列表（增删改查）、聊天视图（Markdown + 流式 + 代码块 + 滚底）、")
     add("  输入区（Enter 发送 / Shift+Enter 换行）、设置页（服务商/模型/密钥）。")
-    add("- **工程**：接入 py_upper 既有装配处与入口，保持原有 377 个测试全绿。")
+    add("- **工程**：接入 ai_upper 既有装配处与入口，保持原有 377 个测试全绿。")
     add("")
     add("### 3.2 后续阶段")
     add("")
@@ -735,7 +735,7 @@ def main() -> int:
     add("")
     add("| 项 | 原因 | 风险 / 代价 |")
     add("|---|---|---|")
-    add("| 自动更新与签名链（`update:*`） | Qt 路线的更新器要整体重做，且需要代码签名证书与发布渠道 | 用户需手动替换安装包；打包只验证 py_upper 既有构建链，不承诺线上更新 |")
+    add("| 自动更新与签名链（`update:*`） | Qt 路线的更新器要整体重做，且需要代码签名证书与发布渠道 | 用户需手动替换安装包；打包只验证 ai_upper 既有构建链，不承诺线上更新 |")
     add("| 内置浏览器（`browser:*` 16 条） | 路线明确不嵌 Chromium/WebEngine | agent 的浏览器操作能力整体缺失；只能外开系统浏览器 |")
     add("| 手机端远程（`remote:*` 10 条） | 依赖 Web 服务端 + 配对链路，属另一部署形态 | 无远程控制；如需，应作为独立服务重做 |")
     add("| 内置终端（`terminal:*` 5 条） | 需真 pty，Qt 无内置，引入需新依赖 | P3 之前无终端；`focusRoot` 只存值不提供终端 cwd |")

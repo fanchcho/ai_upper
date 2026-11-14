@@ -1,4 +1,4 @@
-"""Compatibility helpers for the py_upper build tool.
+"""Compatibility helpers for the ai_upper build tool.
 
 The build tool supports Python 3.8+ independently of the Python runtime that
 will eventually be bundled into the application.

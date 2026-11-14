@@ -1,6 +1,6 @@
 """演示 ViewModel：一个可双向绑定的字符串属性 + 一个派生属性 + 一个命令。
 
-只用于验证 py_upper 的 MVVM 骨架能否承载新页面，不含业务逻辑。
+只用于验证 ai_upper 的 MVVM 骨架能否承载新页面，不含业务逻辑。
 """
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any, Optional
 
 from mvvm.core import BaseViewModel, PropertyChangedEvent, PropertyFactory, RelayCommand
 
-DEFAULT_NAME = "py_upper"
+DEFAULT_NAME = "ai_upper"
 EMPTY_HINT = "（请输入名字）"
 
 

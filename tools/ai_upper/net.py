@@ -41,8 +41,8 @@ def _retry_delay(error: urllib.error.HTTPError, attempt: int) -> float:
 
 
 def open_url(request: urllib.request.Request) -> BinaryIO:
-    retries = _env_int("PY_UPPER_HTTP_RETRIES", DEFAULT_RETRIES)
-    timeout = _env_float("PY_UPPER_HTTP_TIMEOUT", DEFAULT_TIMEOUT)
+    retries = _env_int("AI_UPPER_HTTP_RETRIES", DEFAULT_RETRIES)
+    timeout = _env_float("AI_UPPER_HTTP_TIMEOUT", DEFAULT_TIMEOUT)
     last_error: Exception | None = None
 
     for attempt in range(retries + 1):
@@ -75,7 +75,7 @@ def open_url(request: urllib.request.Request) -> BinaryIO:
 
 def http_json(url: str, headers: dict[str, str] | None = None) -> Any:
     request_headers = {
-        "User-Agent": "py_upper",
+        "User-Agent": "ai_upper",
         "Accept": "application/json",
     }
     if headers:
@@ -86,7 +86,7 @@ def http_json(url: str, headers: dict[str, str] | None = None) -> Any:
 
 
 def http_text(url: str) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": "py_upper", "Accept": "text/plain"})
+    request = urllib.request.Request(url, headers={"User-Agent": "ai_upper", "Accept": "text/plain"})
     with open_url(request) as response:
         return response.read().decode("utf-8")
 
@@ -95,7 +95,7 @@ def download(url: str, destination: Path, headers: dict[str, str] | None = None)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
         return
-    request_headers = {"User-Agent": "py_upper"}
+    request_headers = {"User-Agent": "ai_upper"}
     if headers:
         request_headers.update(headers)
     request = urllib.request.Request(url, headers=request_headers)

@@ -37,7 +37,7 @@ from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.views.title_bar_overlay import TITLEBAR_HEIGHT, TitleBarOverlay
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from mvvm.webui.bridge import DevaBridge
-from utils.paths import assets_root
+from utils.paths import app_name, assets_root
 
 # 回合线程攒下的界面写入（busy / status / streaming）由 GUI 线程周期性 drain。
 DRAIN_INTERVAL_MS = 50
@@ -90,7 +90,7 @@ class DevaWebWindow(QMainWindow):
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Deva")
+        self.setWindowTitle(app_name())
         self.resize(1280, 820)
         self.setMinimumSize(940, 600)
 

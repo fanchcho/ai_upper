@@ -1,5 +1,5 @@
 #!/bin/bash
-# py_upper 端口逐页截图：与原版脚本走同一套 Xvfb 尺寸、窗口几何、点击坐标、取图方式。
+# ai_upper 端口逐页截图：与原版脚本走同一套 Xvfb 尺寸、窗口几何、点击坐标、取图方式。
 #
 # 用法: scripts/parity/port_shots.sh <输出目录> [DEVA_HOME]
 # 前置: xvfb / xdotool / imagemagick；端口依赖装在 .venv。

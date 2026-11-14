@@ -6,10 +6,10 @@
   `mcp` 外部 MCP 工具与未知工具名（默认不放行）；
 - **交互轮**：所有内置工具一律放行，文件读写与命令执行不设任何限制（Deva 2026-10-09 起
   的纯同步策略、零弹框）；**唯一**的拒绝是「本地工作区未挂载 + 相对路径没有基准」；
-- **密封轮**（无人值守；py_upper 暂不触发，仅预留判定）：交互/创建类工具与未知工具名拒绝，
+- **密封轮**（无人值守；ai_upper 暂不触发，仅预留判定）：交互/创建类工具与未知工具名拒绝，
   读写执行照常放行。
 
-py_upper 与 Deva 的一处刻意差异：Deva 的文件工具**不**过路径守卫；本工程所有文件类工具在
+ai_upper 与 Deva 的一处刻意差异：Deva 的文件工具**不**过路径守卫；本工程所有文件类工具在
 执行前必须过 `WorkspaceGuard`（见 `tool_runtime.py` 模块头）。那是执行期的安全底线，
 与本模块「调不调得动」的判定是两件事，互不替代。
 """
@@ -24,7 +24,7 @@ from typing import Any, Optional
 EDIT_TOOLS = frozenset({"write_file", "edit_file"})
 # 执行类：与 Deva `EXEC_TOOLS` 同集（`browser` 尚未迁移，暂不加）。
 EXEC_TOOLS = frozenset({"run_command"})
-# 只读 / 无副作用：Deva `READ_TOOLS` 中属于 py_upper 已注册工具的子集。
+# 只读 / 无副作用：Deva `READ_TOOLS` 中属于 ai_upper 已注册工具的子集。
 READ_TOOLS = frozenset(
     {
         "read_file",
@@ -74,7 +74,7 @@ DENY_SCAN_ROOT = (
 )
 
 # 用户已在会话里拒绝过挂载（Deva 的 `mountDeclined`）：用于「不再重复弹卡」的会话级去重。
-# py_upper 目前没有挂载卡 UI，判定照常返回 mount 需求，由调用方决定是否打断；见台账差异记录。
+# ai_upper 目前没有挂载卡 UI，判定照常返回 mount 需求，由调用方决定是否打断；见台账差异记录。
 
 
 @dataclass(frozen=True)

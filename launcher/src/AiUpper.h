@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-class PyUpper {
+class AiUpper {
 public:
     // argv[0] is the launcher path; the remaining entries are passed through to
     // the application. The path arrives as UTF-8 on every platform, including

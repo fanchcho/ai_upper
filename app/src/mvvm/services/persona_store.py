@@ -1,4 +1,4 @@
-"""角色（Personas）服务：读写 `~/.deva/personas/<id>.md`，格式与 Deva `services/personas.ts` 一致。
+"""角色（Personas）服务：读写 `<数据目录>/personas/<id>.md`（缺省 `~/.ai_upper`），格式与 Deva `services/personas.ts` 一致。
 
 读写范围：列表 / 单条读取 / 首启种子 / upsert / 删除 / 启用位 / 排序 / 头像图片。
 所有写路径都对齐原版语义（含「忽略非法 id 但仍回成功」「写异常吞掉仍返回记录」这类
@@ -83,8 +83,9 @@ class PersonaStore:
 
     @staticmethod
     def _default_home() -> Path:
-        override = os.environ.get("DEVA_HOME")
-        return Path(override) if override else Path.home() / ".deva"
+        from utils.app_home import app_home
+
+        return app_home()
 
     @property
     def home(self) -> Path:

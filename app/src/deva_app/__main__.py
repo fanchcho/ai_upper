@@ -5,8 +5,9 @@
 只换对象图（`DevaApplication`）。
 
 环境变量：
-- `DEVA_HOME`：数据目录，缺省 `~/.deva`（与 Deva 桌面端同口径，两边可互相读写）；
-- `DEVA_APP_HEADLESS=1`：offscreen 装配一次就退出，供 CI/验收真实启动；
+- `AI_UPPER_HOME`：数据目录，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 仍被读取）；
+- `AI_UPPER_HEADLESS=1`：offscreen 装配一次就退出，供 CI/验收真实启动
+  （旧 `DEVA_APP_HEADLESS` 仍被接受）；
 - `DEVA_APP_WORKSPACE`：启动时登记为受信根的工作区目录（不设则没有受信根，工具一律拒绝）。
 """
 from __future__ import annotations
@@ -26,7 +27,8 @@ from mvvm.view_models.chat_sessions_vm import ChatSessionsViewModel
 from mvvm.view_models.chat_vm import ChatViewModel
 from mvvm.view_models.settings_vm import SettingsViewModel
 
-HEADLESS_ENV = "DEVA_APP_HEADLESS"
+HEADLESS_ENV = "AI_UPPER_HEADLESS"
+LEGACY_HEADLESS_ENV = "DEVA_APP_HEADLESS"
 WORKSPACE_ENV = "DEVA_APP_WORKSPACE"
 DEFAULT_SESSION_ID = "main"
 
@@ -40,7 +42,9 @@ class DevaApplication(MVVMQtApplication):
 
     def initialize_viewmodels(self) -> None:
         app = self.mvvm_app
-        home = os.environ.get("DEVA_HOME") or None
+        from utils.app_home import app_home
+
+        home = app_home()
         store = ChatSessionStore(home)
         guard = WorkspaceGuard()
         workspace = os.environ.get(WORKSPACE_ENV, "").strip()
@@ -105,7 +109,7 @@ class DevaApplication(MVVMQtApplication):
 def run(headless: Optional[bool] = None) -> int:
     """真实启动 Qt 应用。headless 时走 offscreen 装配一次再退出。"""
     if headless is None:
-        headless = _env_flag(HEADLESS_ENV)
+        headless = _env_flag(HEADLESS_ENV) or _env_flag(LEGACY_HEADLESS_ENV)
     if headless:
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 

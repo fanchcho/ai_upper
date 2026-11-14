@@ -11,7 +11,7 @@
 #include <cstdint>
 #include <cstring>
 
-namespace pyupper {
+namespace aiupper {
 
 inline std::uint64_t rotl64(std::uint64_t value, int bits) {
     return (value << bits) | (value >> (64 - bits));
@@ -112,4 +112,4 @@ inline void shake256_xor(std::uint8_t* data, std::size_t length,
     shake.squeeze_xor(data, length);
 }
 
-}  // namespace pyupper
+}  // namespace aiupper

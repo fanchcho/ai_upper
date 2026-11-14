@@ -1,4 +1,4 @@
-"""MVVM framework for py_upper applications.
+"""MVVM framework for ai_upper applications.
 
 Ported from pcs_upper/mvvm. The core layer (ObservableProperty,
 BaseViewModel, RelayCommand) is binding-agnostic; the views layer resolves Qt

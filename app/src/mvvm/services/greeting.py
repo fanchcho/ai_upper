@@ -9,4 +9,4 @@ class GreetingService:
     """
 
     def message(self) -> str:
-        return "Hello from py_upper"
+        return "Hello from ai_upper"

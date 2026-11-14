@@ -16,9 +16,9 @@ def main(argv: list[str]) -> int:
     src = Path(__file__).resolve().parents[1] / "app" / "src"
     sys.path.insert(0, str(src))
 
-    from application import PyUpperApplication
+    from application import AiUpperApplication
 
-    app = PyUpperApplication()
+    app = AiUpperApplication()
     app.prepare()
     qt_app = app.qt_app
     qt_app.processEvents()

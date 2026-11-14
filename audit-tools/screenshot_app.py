@@ -4,7 +4,7 @@ Not part of the application. Run from the repository's app/ directory:
 
     ../.venv/bin/python ../audit-tools/screenshot_app.py /abs/out/dir
 
-Uses the repo's own assembly (application.PyUpperApplication), so the widgets
+Uses the repo's own assembly (application.AiUpperApplication), so the widgets
 grabbed are the ones the shipped app builds.
 """
 from __future__ import annotations
@@ -23,9 +23,9 @@ def main(argv: list[str]) -> int:
     src = Path(__file__).resolve().parents[1] / "app" / "src"
     sys.path.insert(0, str(src))
 
-    from application import PyUpperApplication  # noqa: E402
+    from application import AiUpperApplication  # noqa: E402
 
-    app = PyUpperApplication()
+    app = AiUpperApplication()
     app.prepare()
     qt_app = app.qt_app
     qt_app.processEvents()

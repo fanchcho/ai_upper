@@ -7,7 +7,7 @@
 1. **keyring**（首选）：Python `keyring` 包 + 真实系统后端（GNOME Keyring / KWallet /
    macOS Keychain / Windows Credential Manager）。后端可用时，密钥只存在系统钥匙串里。
 2. **加密文件**（回退）：没有可用钥匙串时（典型是本容器：`keyring.backends.fail.Keyring`），
-   用 AES-256-GCM 加密后写 `DEVA_HOME/secrets.enc`，主密钥材料来自 `DEVA_HOME/.secrets.key`
+   用 AES-256-GCM 加密后写 `<数据目录>/secrets.enc`（缺省 `~/.ai_upper`），主密钥材料来自同目录的 `.secrets.key`
    （首次生成，0600）。
 
 **回退方案的安全边界必须说清楚**：`.secrets.key` 与 `secrets.enc` 在同一目录下，能读到密文的
@@ -165,7 +165,7 @@ class SecretsVault:
         self._salt = salt
 
     def _master_key(self) -> bytes:
-        """主密钥材料：`DEVA_HOME/.secrets.key`，首次使用时生成（0600，O_EXCL 防并发覆盖）。"""
+        """主密钥材料：`<数据目录>/.secrets.key`，首次使用时生成（0600，O_EXCL 防并发覆盖）。"""
         if self._master is not None:
             return self._master
         try:
@@ -283,8 +283,9 @@ class SecretsVault:
 
 
 def _default_home() -> Path:
-    override = os.environ.get("DEVA_HOME")
-    return Path(override) if override else Path.home() / ".deva"
+    from utils.app_home import app_home
+
+    return app_home()
 
 
 __all__ = [

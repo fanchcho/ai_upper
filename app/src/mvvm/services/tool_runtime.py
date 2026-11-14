@@ -57,7 +57,7 @@ GREP_LINE_CHARS_MAX = 200
 WEB_FETCH_TIMEOUT_S = 30.0
 WEB_FETCH_MAX_BYTES = 5 * 1024 * 1024
 WEB_TEXT_MAX = 100_000
-WEB_USER_AGENT = "Deva (py_upper)"
+WEB_USER_AGENT = "ai_upper"
 
 EXEC_OUTPUT_MAX = 30_000
 EXEC_TIMEOUT_DEFAULT = 600_000
@@ -393,7 +393,7 @@ class ToolRuntime:
         # run_command 的取消检查：由回合层注入，返回 True 表示本轮已被用户停止。
         self.cancel_check: Optional[Callable[[], bool]] = None
         # 本轮是否交互式（有人在场）。False = 密封执行（定时任务），走 sealed_decision。
-        # py_upper 暂不触发密封轮，但判定路径必须先存在，否则将来接定时任务时是空的。
+        # ai_upper 暂不触发密封轮，但判定路径必须先存在，否则将来接定时任务时是空的。
         self.interactive = True
         # 界面是否真的提供挂载卡。没有卡时（当前默认）缺失基准的调用放行到路径解析去报
         # 「请改用绝对路径」，而不是拦成一句没人能应答的挂载请求。

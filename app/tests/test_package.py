@@ -1,7 +1,7 @@
 import json
 
-from py_upper.config import TARGETS, project_version
-from py_upper.package import write_release_manifest
+from ai_upper.config import TARGETS, project_version
+from ai_upper.package import write_release_manifest
 
 
 def test_supporting_trees_ship_beside_the_launcher_payload(tmp_path, monkeypatch):
@@ -11,7 +11,7 @@ def test_supporting_trees_ship_beside_the_launcher_payload(tmp_path, monkeypatch
     without it starts, shows nothing, and says nothing. Both trees are
     optional, but when present they must land where `utils.paths` reads them.
     """
-    from py_upper import package as pkg
+    from ai_upper import package as pkg
 
     app = tmp_path / "app"
     (app / "assets" / "renderer").mkdir(parents=True)

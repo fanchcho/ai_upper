@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from py_upper.trim import TrimPolicy, trim_tree
+from ai_upper.trim import TrimPolicy, trim_tree
 
 
 def _tree(root: Path) -> Path:
@@ -216,7 +216,7 @@ def test_keep_protects_distribution_metadata_from_explicit_trim(tmp_path, preset
 
 
 def test_runtime_optimizer_applies_the_runtime_patterns(tmp_path, monkeypatch):
-    from py_upper import runtime as runtime_module
+    from ai_upper import runtime as runtime_module
 
     monkeypatch.setattr(runtime_module, "optimize_config", lambda: {})
     root = tmp_path / "runtime"
@@ -244,7 +244,7 @@ def test_runtime_optimizer_applies_the_runtime_patterns(tmp_path, monkeypatch):
 
 
 def test_site_optimizer_applies_the_site_patterns(tmp_path, monkeypatch):
-    from py_upper import third_party
+    from ai_upper import third_party
 
     monkeypatch.setattr(third_party, "optimize_config", lambda: {"remove_python_caches": False})
     site = tmp_path / "site-packages"
@@ -292,7 +292,7 @@ def test_trim_preserves_runtime_version_and_plugin_discovery(tmp_path, monkeypat
         encoding="utf-8",
     )
     (distribution / "entry_points.txt").write_text(
-        "[py_upper.tests.plugins]\njson_probe = json:loads\n", encoding="utf-8"
+        "[ai_upper.tests.plugins]\njson_probe = json:loads\n", encoding="utf-8"
     )
     policy = TrimPolicy.from_config(config)
 
@@ -304,7 +304,7 @@ def test_trim_preserves_runtime_version_and_plugin_discovery(tmp_path, monkeypat
     monkeypatch.syspath_prepend(str(site))
     assert metadata.version("trim-metadata-demo") == "1.2.3"
     (entry,) = discovered[0].entry_points
-    assert entry.group == "py_upper.tests.plugins"
+    assert entry.group == "ai_upper.tests.plugins"
     assert entry.name == "json_probe"
     assert entry.load()('{"result": 42}') == {"result": 42}
 
@@ -469,12 +469,12 @@ def test_an_unknown_preset_is_rejected():
 
 
 def test_template_declares_the_trim_interface():
-    from py_upper.compat import tomllib
-    from py_upper.config import APP_CONFIG_EXAMPLE
-    from py_upper.trim import GLOBAL_RUNTIME, GLOBAL_SITE_PACKAGES
+    from ai_upper.compat import tomllib
+    from ai_upper.config import APP_CONFIG_EXAMPLE
+    from ai_upper.trim import GLOBAL_RUNTIME, GLOBAL_SITE_PACKAGES
 
     data = tomllib.loads(APP_CONFIG_EXAMPLE.read_text(encoding="utf-8"))
-    trim = data["tool"]["py_upper"]["trim"]
+    trim = data["tool"]["ai_upper"]["trim"]
     assert trim["preset"] == "safe"
     # Universal payload lives in the code, not in every project's config.
     assert trim["site_packages"] == []

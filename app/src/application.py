@@ -17,14 +17,14 @@ from utils.paths import app_name
 
 # Set by the build tool's smoke step and by CI: build the real window, pump the
 # event loop once and exit instead of blocking on a window server.
-HEADLESS_ENV = "PY_UPPER_HEADLESS"
+HEADLESS_ENV = "AI_UPPER_HEADLESS"
 
 
 def run_application() -> None:
     print(GreetingService().message())
 
 
-class PyUpperApplication(MVVMQtApplication):
+class AiUpperApplication(MVVMQtApplication):
     """这个应用的装配：谁是谁的依赖，全在这里说清楚"""
 
     def initialize_viewmodels(self) -> None:
@@ -63,7 +63,7 @@ def run_gui() -> int:
         # whole Qt stack. An explicit QT_QPA_PLATFORM always wins.
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-    application = PyUpperApplication()
+    application = AiUpperApplication()
     if headless:
         # Same assembly as the interactive run, minus the blocking event loop:
         # start() shows the registered views, processEvents() runs the window's

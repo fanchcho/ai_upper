@@ -24,13 +24,13 @@ CYTHON_REQUIREMENT = "Cython>=3.1,<3.3"
 # Cache schemas. Each names the exact recipe that produced an artifact, so
 # bumping one discards every output it describes. Without that, a cache written
 # by an older tool would keep answering a question the tool no longer asks.
-CYTHON_CACHE_SCHEMA = "py_upper-cython-1"
-NATIVE_CACHE_SCHEMA = "py_upper-native-1"
-MERGED_CACHE_SCHEMA = "py_upper-merged-native-1"
+CYTHON_CACHE_SCHEMA = "ai_upper-cython-1"
+NATIVE_CACHE_SCHEMA = "ai_upper-native-1"
+MERGED_CACHE_SCHEMA = "ai_upper-merged-native-1"
 
 # Cython emits one module entry point named after the source module's basename.
 # Linking several units into one image would collide on that name, so every
-# generated unit is rewritten to a unique ``PyInit_py_upper_...`` symbol before
+# generated unit is rewritten to a unique ``PyInit_ai_upper_...`` symbol before
 # the compiler sees it. The U variant is the spelling CPython uses for
 # non-ASCII module names.
 _PYINIT_RE = re.compile(r"(?<![A-Za-z0-9_])(PyInitU?_[A-Za-z0-9_]+)(?![A-Za-z0-9_])")
@@ -131,11 +131,11 @@ def merged_init_symbol(name: str) -> str:
     """A unique C entry point for a module linked into a shared bundle."""
     safe = re.sub(r"[^A-Za-z0-9_]", "_", name)
     digest = hashlib.sha256(name.encode("utf-8")).hexdigest()[:12]
-    return f"PyInit_py_upper_{safe}_{digest}"
+    return f"PyInit_ai_upper_{safe}_{digest}"
 
 
 def merged_bundle_name(group: str, suffix: str) -> str:
-    return f"py_upper_{group}{suffix}"
+    return f"ai_upper_{group}{suffix}"
 
 
 def merged_bundle_relative(group: str, suffix: str) -> str:
@@ -415,19 +415,19 @@ def merged_register_source(sources: list[Path]) -> str:
             "",
             *declarations,
             "",
-            "static struct _inittab py_upper_inittab[] = {",
+            "static struct _inittab ai_upper_inittab[] = {",
             *entries,
             "    {NULL, NULL},",
             "};",
             "",
             "#if defined(_WIN32)",
-            "#define PY_UPPER_EXPORT __declspec(dllexport)",
+            "#define AI_UPPER_EXPORT __declspec(dllexport)",
             "#else",
-            "#define PY_UPPER_EXPORT __attribute__((visibility(\"default\")))",
+            "#define AI_UPPER_EXPORT __attribute__((visibility(\"default\")))",
             "#endif",
             "",
-            "PY_UPPER_EXPORT int py_upper_register_modules(void) {",
-            "    return PyImport_ExtendInittab(py_upper_inittab);",
+            "AI_UPPER_EXPORT int ai_upper_register_modules(void) {",
+            "    return PyImport_ExtendInittab(ai_upper_inittab);",
             "}",
             "",
         ]
@@ -572,7 +572,7 @@ def windows_merged_setup_script(
     the same ``TargetBuildExt`` override the per-module path uses is needed
     here. Each extension carries all translation units of one directory group.
     """
-    extension_repr = repr([(f"py_upper_{group}", [str(path) for path in files]) for group, files in groups.items()])
+    extension_repr = repr([(f"ai_upper_{group}", [str(path) for path in files]) for group, files in groups.items()])
     return (
         "import os\n"
         "from setuptools import setup, Extension\n"
@@ -595,9 +595,9 @@ def windows_merged_setup_script(
         "        # unit was renamed individually and register.c exports the single\n"
         "        # symbol the launcher resolves. MSVC would otherwise add\n"
         "        # /EXPORT:PyInit_<bundle> and fail with LNK2001.\n"
-        "        return ['py_upper_register_modules']\n"
+        "        return ['ai_upper_register_modules']\n"
         "extensions=[Extension(n,s,include_dirs=[TARGET_INCLUDE],library_dirs=[TARGET_LIBDIR],libraries=TARGET_LIBRARIES) for n,s in EXTENSIONS]\n"
-        "setup(name='py-upper-target-merged',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
+        "setup(name='ai-upper-target-merged',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
     )
 
 
@@ -664,7 +664,7 @@ def _compile_merged_windows_extensions_msvc(
     build_root = BUILD / "native-merged" / target.key
     env = dict(os.environ)
     env.update(tc.env)
-    env["PY_UPPER_TARGET"] = target.key
+    env["AI_UPPER_TARGET"] = target.key
     env["DISTUTILS_USE_SDK"] = "1"
     env["MSSdk"] = "1"
     incremental = incremental_build_enabled()
@@ -701,7 +701,7 @@ def _compile_merged_windows_extensions_msvc(
     finally:
         setup.unlink(missing_ok=True)
     for group, inputs in stale.items():
-        expected = build_root / (f"py_upper_{group}" + suffix)
+        expected = build_root / (f"ai_upper_{group}" + suffix)
         if not expected.exists():
             raise RuntimeError(f"Merged target extension missing: {expected}")
         copy_file_contents(expected, bundle_root / merged_bundle_name(group, suffix))
@@ -761,7 +761,7 @@ def windows_setup_script(
         "        fullname = self.get_ext_fullname(ext_name)\n"
         "        return os.path.join(self.build_lib, *fullname.split('.')) + TARGET_SUFFIX\n"
         "extensions=[Extension(n,[s],include_dirs=[TARGET_INCLUDE],library_dirs=[TARGET_LIBDIR],libraries=TARGET_LIBRARIES) for n,s in zip(NAMES,SOURCES)]\n"
-        "setup(name='py-upper-target-native',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
+        "setup(name='ai-upper-target-native',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
     )
 
 
@@ -909,7 +909,7 @@ def _compile_windows_extensions_msvc(
     build_root = BUILD / "native" / target.key
     env = dict(os.environ)
     env.update(tc.env)
-    env["PY_UPPER_TARGET"] = target.key
+    env["AI_UPPER_TARGET"] = target.key
     env["DISTUTILS_USE_SDK"] = "1"
     env["MSSdk"] = "1"
     incremental = incremental_build_enabled()

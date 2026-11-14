@@ -36,7 +36,7 @@ def make_wheel(root: Path, name="demo_pkg", version="1.0.0", payload="ok", requi
 
 
 def test_wheel_extraction_and_direct_import_discovery(tmp_path):
-    from py_upper.third_party import _extract_wheel
+    from ai_upper.third_party import _extract_wheel
 
     wheel = make_wheel(tmp_path)
     site = tmp_path / "site-packages"
@@ -45,13 +45,13 @@ def test_wheel_extraction_and_direct_import_discovery(tmp_path):
     staging.mkdir()
     _extract_wheel(wheel, site, staging)
     assert (site / "demo_pkg" / "__init__.py").exists()
-    from py_upper.third_party import _top_level_imports
+    from ai_upper.third_party import _top_level_imports
     dist = site / "demo_pkg-1.0.0.dist-info"
     assert _top_level_imports(dist) == ["demo_pkg"]
 
 
 def test_wheel_collision_with_different_content_fails(tmp_path):
-    from py_upper.third_party import _extract_wheel
+    from ai_upper.third_party import _extract_wheel
 
     a = make_wheel(tmp_path / "a")
     b = make_wheel(tmp_path / "b", payload="different")
@@ -69,7 +69,7 @@ def test_wheel_collision_with_different_content_fails(tmp_path):
 
 
 def test_wheel_data_buckets_are_mapped_into_the_bundle(tmp_path):
-    from py_upper.third_party import _extract_wheel
+    from ai_upper.third_party import _extract_wheel
 
     wheel = make_wheel(tmp_path)
     with zipfile.ZipFile(wheel, "a") as archive:
@@ -99,7 +99,7 @@ def test_wheel_data_buckets_are_mapped_into_the_bundle(tmp_path):
     "pkg/../escape.py", "pkg//escape.py", "pkg/./escape.py",
 ])
 def test_wheel_member_must_be_portable_and_relative(tmp_path, member):
-    from py_upper.third_party import _extract_wheel, _wheel_records
+    from ai_upper.third_party import _extract_wheel, _wheel_records
 
     wheel = make_wheel(tmp_path)
     with zipfile.ZipFile(wheel, "a") as archive:
@@ -115,7 +115,7 @@ def test_wheel_member_must_be_portable_and_relative(tmp_path, member):
     "demo_pkg-1.0.0.data/purelib", "demo_pkg-1.0.0.data/unknown/file.py",
 ])
 def test_invalid_wheel_data_member_is_rejected(tmp_path, member):
-    from py_upper.third_party import _extract_wheel
+    from ai_upper.third_party import _extract_wheel
 
     wheel = make_wheel(tmp_path)
     with zipfile.ZipFile(wheel, "a") as archive:
@@ -126,8 +126,8 @@ def test_invalid_wheel_data_member_is_rejected(tmp_path, member):
 
 
 def test_pip_target_arguments_use_target_compatibility_set():
-    from py_upper.third_party import _pip_args
-    from py_upper.config import TARGETS
+    from ai_upper.third_party import _pip_args
+    from ai_upper.config import TARGETS
 
     args = _pip_args(TARGETS["macos-arm64"])
     platforms = [args[i + 1] for i, value in enumerate(args[:-1]) if value == "--platform"]
@@ -136,9 +136,9 @@ def test_pip_target_arguments_use_target_compatibility_set():
 
 
 def test_pip_target_arguments_honor_offline_find_links(monkeypatch):
-    from py_upper.third_party import _pip_args
-    from py_upper.config import TARGETS
-    import py_upper.third_party as third_party
+    from ai_upper.third_party import _pip_args
+    from ai_upper.config import TARGETS
+    import ai_upper.third_party as third_party
 
     monkeypatch.setattr(third_party, "dependency_config", lambda: {"no_index": True, "find_links": ["wheelhouse"]})
     args = _pip_args(TARGETS["linux-x86_64"])
@@ -175,7 +175,7 @@ def _windows_extension_compiler() -> tuple[str, Path, dict[str, str]]:
 
     The mingw gcc shipped on the Windows images is an x86_64-hosted build
     (mingw-builds publishes no arm64 host), so it cannot emit code for an arm64
-    runner. The MSVC toolchain py_upper resolves for the target is the only
+    runner. The MSVC toolchain ai_upper resolves for the target is the only
     compiler that always matches the interpreter running the tests.
 
     The environment is handed back with the compiler because cl.exe finds the C
@@ -191,8 +191,8 @@ def _windows_extension_compiler() -> tuple[str, Path, dict[str, str]]:
     import os
     import shutil
 
-    from py_upper.config import host_target
-    from py_upper.toolchain import resolve_toolchain
+    from ai_upper.config import host_target
+    from ai_upper.toolchain import resolve_toolchain
 
     env = {**os.environ, **resolve_toolchain(host_target()).env}
     cl = shutil.which("cl", path=env.get("PATH"))
@@ -322,7 +322,7 @@ def test_direct_import_discovery_rejects_a_declared_module_the_wheel_does_not_in
     intact PySide2 payload fails [6/6] with "No module named 'QtCore'". RECORD
     is the record of what was installed, so a declared name has to appear there.
     """
-    from py_upper.third_party import _top_level_imports
+    from ai_upper.third_party import _top_level_imports
 
     dist = tmp_path / "PySide2-5.15.2.1.dist-info"
     dist.mkdir()
@@ -351,7 +351,7 @@ def test_direct_import_fallback_reads_record_instead_of_sibling_scan(tmp_path):
     would then try to import unrelated packages (pyobjc ships an empty
     PyObjCTest directory that breaks exactly that way).
     """
-    from py_upper.third_party import _top_level_imports
+    from ai_upper.third_party import _top_level_imports
 
     dist = tmp_path / "some-distribution-1.0.0.dist-info"
     dist.mkdir()
@@ -374,8 +374,8 @@ def test_manifest_records_imports_before_distribution_metadata_trim(tmp_path, mo
     import json
     import shutil
 
-    import py_upper.third_party as third_party
-    from py_upper.config import host_target
+    import ai_upper.third_party as third_party
+    from ai_upper.config import host_target
 
     wheel = make_wheel(tmp_path / "wheelhouse")
     staging = tmp_path / "staging"
@@ -405,7 +405,7 @@ def test_wheel_execute_bits_survive_extraction(tmp_path):
     ``execvp`` the helper, and showed a blank window — while pip-installed
     site-packages (which applies the mode) worked fine.
     """
-    from py_upper.third_party import _extract_wheel
+    from ai_upper.third_party import _extract_wheel
 
     wheel = make_wheel(tmp_path)
     with zipfile.ZipFile(wheel, "a") as archive:

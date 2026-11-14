@@ -252,7 +252,7 @@ def test_the_viewmodel_reads_its_model_and_service():
     viewmodel = MainViewModel(model, GreetingService(), AboutModel())
 
     assert viewmodel.title == "Demo"
-    assert viewmodel.message == "Hello from py_upper"
+    assert viewmodel.message == "Hello from ai_upper"
     assert viewmodel.about_visible is False
 
     changed: list[str] = []
@@ -279,10 +279,10 @@ def test_about_model_round_trips():
 
 
 def test_the_composition_root_registers_every_layer(fake_qt):
-    from application import PyUpperApplication
+    from application import AiUpperApplication
     from mvvm.services import GreetingService
 
-    application = PyUpperApplication()
+    application = AiUpperApplication()
     application.prepare()
 
     container = application.mvvm_app
@@ -294,9 +294,9 @@ def test_the_composition_root_registers_every_layer(fake_qt):
 
 
 def test_the_about_button_opens_and_closes_the_window(fake_qt):
-    from application import PyUpperApplication
+    from application import AiUpperApplication
 
-    application = PyUpperApplication()
+    application = AiUpperApplication()
     application.prepare()
 
     viewmodel = application.mvvm_app.get_viewmodel("main")
@@ -311,7 +311,7 @@ def test_the_about_button_opens_and_closes_the_window(fake_qt):
 
     # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
     assert window.title == viewmodel.title != ""
-    assert fake_qt["labels"][0].text == "Hello from py_upper"
+    assert fake_qt["labels"][0].text == "Hello from ai_upper"
     assert dialog.title == ABOUT_BUTTON
     assert fake_qt["browsers"][0].plain_text == viewmodel.about_body
 
@@ -327,7 +327,7 @@ def test_the_about_button_opens_and_closes_the_window(fake_qt):
 def test_run_gui_headless_uses_the_same_assembly(fake_qt, monkeypatch, capsys):
     from application import run_gui
 
-    monkeypatch.setenv("PY_UPPER_HEADLESS", "1")
+    monkeypatch.setenv("AI_UPPER_HEADLESS", "1")
     monkeypatch.delenv("QT_QPA_PLATFORM", raising=False)
 
     assert run_gui() == 0
@@ -349,7 +349,7 @@ def test_run_gui_enters_the_loop_the_binding_ships(fake_qt5, monkeypatch):
     """
     from application import run_gui
 
-    monkeypatch.delenv("PY_UPPER_HEADLESS", raising=False)
+    monkeypatch.delenv("AI_UPPER_HEADLESS", raising=False)
 
     assert run_gui() == 0
     assert fake_qt5["applications"][-1].loops == 1
@@ -364,8 +364,8 @@ def test_the_qt5_high_dpi_attribute_is_set_before_the_window(fake_qt5):
     to be built before the attribute is recorded, so the order is part of the
     test rather than a comment.
     """
-    from application import PyUpperApplication
+    from application import AiUpperApplication
 
-    PyUpperApplication()
+    AiUpperApplication()
 
     assert fake_qt5["qt_attributes"] == [FakeQtFlags.AA_EnableHighDpiScaling]

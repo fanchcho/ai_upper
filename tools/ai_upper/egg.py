@@ -1,7 +1,7 @@
 """Encrypted application egg: packing, key handling and the loader source.
 
 The application's own Python modules and compiled extensions are packed into a
-single ``bundle/py_upper.dat`` instead of shipping as loose files in
+single ``bundle/ai_upper.dat`` instead of shipping as loose files in
 ``site-packages``:
 
     MAGIC (8 bytes) + XOR(zip bytes, SHAKE-256 key stream)
@@ -17,7 +17,7 @@ the pack format and the import order do not depend on the platform.
 This is obfuscation, not modern cryptography: it raises the cost of reading the
 shipped application code, and it is not a secret storage format. It also barely
 changes the bundle size -- the bulk is the runtime and third-party wheels; use
-``[tool.py_upper.trim]`` and Qt pruning for size.
+``[tool.ai_upper.trim]`` and Qt pruning for size.
 """
 from __future__ import annotations
 
@@ -32,13 +32,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .config import (
-    APP, BUILD, BUNDLE_DIR, Target, py_upper_config, resolve_target_python,
+    APP, BUILD, BUNDLE_DIR, Target, ai_upper_config, resolve_target_python,
 )
 from .egg_loader import BACKENDS, DEFAULT_KEY_HEX, MAGIC, keystream_xor
 from .native.inspect import inspect as inspect_native
 
 EGG_DIR = "bundle"
-EGG_NAME = "py_upper.dat"
+EGG_NAME = "ai_upper.dat"
 # The resolved configuration of the build that produced a stage. It records the
 # per-build overrides (--egg-key and friends) so --verify and the smoke step
 # read the key an egg was actually written with, not the project default.
@@ -61,7 +61,7 @@ _KEY_PATTERN = re.compile(r"^[0-9a-fA-F]+$")
 
 @dataclass(frozen=True)
 class EggConfig:
-    """``[tool.py_upper.egg]`` plus per-build CLI overrides."""
+    """``[tool.ai_upper.egg]`` plus per-build CLI overrides."""
 
     enabled: bool = True
     key_hex: str = DEFAULT_KEY_HEX
@@ -71,15 +71,15 @@ class EggConfig:
     def __post_init__(self) -> None:
         text = str(self.key_hex or "").strip()
         if not _KEY_PATTERN.match(text):
-            raise RuntimeError("[tool.py_upper.egg].key_hex must be a hexadecimal string")
+            raise RuntimeError("[tool.ai_upper.egg].key_hex must be a hexadecimal string")
         if len(bytes.fromhex(text)) < 16:
-            raise RuntimeError("[tool.py_upper.egg].key_hex must contain at least 16 bytes")
+            raise RuntimeError("[tool.ai_upper.egg].key_hex must contain at least 16 bytes")
         backend = str(self.backend or "auto").strip().lower()
         if backend not in BACKENDS:
-            raise RuntimeError("[tool.py_upper.egg].backend must be one of: " + ", ".join(BACKENDS))
+            raise RuntimeError("[tool.ai_upper.egg].backend must be one of: " + ", ".join(BACKENDS))
         compression = str(self.compression or "deflated").strip().lower()
         if compression not in COMPRESSIONS:
-            raise RuntimeError("[tool.py_upper.egg].compression must be one of: " + ", ".join(COMPRESSIONS))
+            raise RuntimeError("[tool.ai_upper.egg].compression must be one of: " + ", ".join(COMPRESSIONS))
         object.__setattr__(self, "key_hex", text.lower())
         object.__setattr__(self, "backend", backend)
         object.__setattr__(self, "compression", compression)
@@ -97,9 +97,9 @@ def egg_config(enabled=None, key_hex=None, backend=None, compression=None) -> Eg
     project without the section still packs the egg, and ``--no-egg`` opts out
     for one build.
     """
-    value = py_upper_config().get("egg", {})
+    value = ai_upper_config().get("egg", {})
     if not isinstance(value, dict):
-        raise RuntimeError("[tool.py_upper.egg] must be a table")
+        raise RuntimeError("[tool.ai_upper.egg] must be a table")
     resolved = EggConfig(
         enabled=bool(value.get("enabled", True)),
         key_hex=str(value.get("key_hex") or DEFAULT_KEY_HEX),
@@ -290,8 +290,8 @@ def egg_loader_source() -> str:
         raise RuntimeError("egg_loader.py must be pure ASCII: " + str(exc))
     if '"""' in text:
         raise RuntimeError('egg_loader.py contains a triple quote and cannot be embedded')
-    if ')pyupper"' in text:
-        raise RuntimeError('egg_loader.py contains the C++ raw string delimiter )pyupper"')
+    if ')aiupper"' in text:
+        raise RuntimeError('egg_loader.py contains the C++ raw string delimiter )aiupper"')
     compile(text, "egg_loader.py", "exec")
     return text
 

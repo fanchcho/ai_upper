@@ -16,7 +16,7 @@ def _checksums(*names):
 
 
 def _target():
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
     return TARGETS["macos-arm64"]
 
 
@@ -26,8 +26,8 @@ def _target():
     "macos-x86_64", "macos-arm64",
 ])
 def test_cold_resolution_does_not_need_github_api_or_login(tmp_path, monkeypatch, token, target_name):
-    from py_upper import net, pbs
-    from py_upper.config import TARGETS
+    from ai_upper import net, pbs
+    from ai_upper.config import TARGETS
 
     target = TARGETS[target_name]
     tag = "20250723"
@@ -67,7 +67,7 @@ def test_cold_resolution_does_not_need_github_api_or_login(tmp_path, monkeypatch
 
 
 def test_release_checksums_preserve_hashes_and_encode_download_names():
-    from py_upper.pbs import release_assets
+    from ai_upper.pbs import release_assets
 
     name = "cpython-3.13.5+20250723-aarch64-apple-darwin-pgo+lto-full.tar.zst"
     # Both text and binary sha256sum markers, CRLF, and uppercase hex are valid.
@@ -84,14 +84,14 @@ def test_release_checksums_preserve_hashes_and_encode_download_names():
     f"{DIGEST}  ../escape", f"{DIGEST}  C:\\escape", _checksums("duplicate", "duplicate"),
 ])
 def test_release_checksums_reject_corruption(checksums):
-    from py_upper.pbs import release_assets
+    from ai_upper.pbs import release_assets
 
     with pytest.raises(RuntimeError, match="PBS SHA256SUMS.*20250723"):
         release_assets(checksums, "20250723")
 
 
 def test_release_download_failure_is_visible_without_api_fallback():
-    from py_upper.pbs import resolve_pbs_inputs
+    from ai_upper.pbs import resolve_pbs_inputs
 
     def fail_download(url):
         raise urllib.error.HTTPError(url, 403, "Forbidden", {}, None)
@@ -106,7 +106,7 @@ def test_release_download_failure_is_visible_without_api_fallback():
 
 
 def test_explicit_release_never_substitutes_a_different_version():
-    from py_upper.pbs import resolve_pbs_inputs
+    from ai_upper.pbs import resolve_pbs_inputs
 
     with pytest.raises(RuntimeError, match="Requested Python: 3.13.5") as error:
         resolve_pbs_inputs(
@@ -121,7 +121,7 @@ def test_explicit_release_never_substitutes_a_different_version():
 
 
 def test_sdk_download_verifies_release_checksum_before_extraction(tmp_path, monkeypatch):
-    from py_upper import pbs
+    from ai_upper import pbs
 
     sdk_name = "cpython-3.13.5+20250723-x86_64-pc-windows-msvc-pgo-full.tar.zst"
     sdk = pbs.release_assets(_checksums(sdk_name), "20250723")[0]
@@ -141,7 +141,7 @@ def test_sdk_download_verifies_release_checksum_before_extraction(tmp_path, monk
 
 
 def test_exact_pbs_metadata_entry_maps_31110_to_20241016():
-    from py_upper.pbs import metadata_asset, metadata_key
+    from ai_upper.pbs import metadata_asset, metadata_key
 
     target = _target()
     data = {
@@ -157,7 +157,7 @@ def test_exact_pbs_metadata_entry_maps_31110_to_20241016():
 
 
 def test_pbs_auto_resolves_one_release_and_requires_sdk(tmp_path, monkeypatch):
-    from py_upper.pbs import PBS_RELEASE_URL, PBS_RUNTIME_METADATA_URLS, metadata_key, resolve_pbs_inputs
+    from ai_upper.pbs import PBS_RELEASE_URL, PBS_RUNTIME_METADATA_URLS, metadata_key, resolve_pbs_inputs
 
     target = _target()
     runtime_url = "https://github.com/astral-sh/python-build-standalone/releases/download/20241016/cpython-3.11.10%2B20241016-aarch64-apple-darwin-install_only_stripped.tar.gz"
@@ -165,7 +165,7 @@ def test_pbs_auto_resolves_one_release_and_requires_sdk(tmp_path, monkeypatch):
     metadata = {metadata_key(target, "3.11.10"): {"url": runtime_url, "sha256": "runtime"}}
     checksums_url = PBS_RELEASE_URL.format(tag="20241016") + "/SHA256SUMS"
     calls=[]
-    from py_upper import pbs
+    from ai_upper import pbs
     # The metadata index is cached on disk. A test must never write its fixture
     # into the project's real cache: a leftover fake index then makes every
     # later build fail with a misleading "No PBS runtime metadata" error.
@@ -192,8 +192,8 @@ def test_pbs_release_without_sha256sums_uses_the_full_build_metadata_asset(tmp_p
     ZIP for — only exists in such a release, so the 3.8 compatibility build
     resolved every asset through this path.
     """
-    from py_upper import pbs
-    from py_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
+    from ai_upper import pbs
+    from ai_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
 
     target = _windows_target()
     tag = "20210506"
@@ -226,8 +226,8 @@ def test_pbs_release_without_sha256sums_uses_the_full_build_metadata_asset(tmp_p
 def test_pbs_missing_checksums_rejects_an_install_only_metadata_asset(tmp_path, monkeypatch):
     """An install-only archive cannot stand in for the SDK, so a release that
     has neither SHA256SUMS nor a full-build metadata entry must fail loudly."""
-    from py_upper import pbs
-    from py_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
+    from ai_upper import pbs
+    from ai_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
 
     target = _target()
     tag = "20241016"
@@ -248,7 +248,7 @@ def test_pbs_missing_checksums_rejects_an_install_only_metadata_asset(tmp_path, 
 
 
 def test_pbs_explicit_old_release_without_checksums_is_actionable():
-    from py_upper.pbs import PBS_RELEASE_URL, resolve_pbs_inputs
+    from ai_upper.pbs import PBS_RELEASE_URL, resolve_pbs_inputs
 
     def fetch_text(candidate):
         assert candidate == PBS_RELEASE_URL.format(tag="20210506") + "/SHA256SUMS"
@@ -265,8 +265,8 @@ def test_pbs_metadata_index_falls_back_when_uv_moves_the_file(tmp_path, monkeypa
     """uv reorganised its tree once (crates/uv-python -> crates/uv-python-managed)
     and the old raw URL started returning 404, which took down every build with a
     cold cache. The next candidate must be used instead of failing the build."""
-    from py_upper import pbs
-    from py_upper.pbs import PBS_RELEASE_URL, PBS_RUNTIME_METADATA_URLS, metadata_key, resolve_pbs_inputs
+    from ai_upper import pbs
+    from ai_upper.pbs import PBS_RELEASE_URL, PBS_RUNTIME_METADATA_URLS, metadata_key, resolve_pbs_inputs
 
     target = _target()
     runtime_url = "https://github.com/astral-sh/python-build-standalone/releases/download/20241016/cpython-3.11.10%2B20241016-aarch64-apple-darwin-install_only_stripped.tar.gz"
@@ -294,8 +294,8 @@ def test_pbs_metadata_index_falls_back_when_uv_moves_the_file(tmp_path, monkeypa
 
 
 def test_pbs_metadata_index_error_names_every_candidate(tmp_path, monkeypatch):
-    from py_upper import pbs
-    from py_upper.pbs import PBS_RUNTIME_METADATA_URLS, resolve_pbs_inputs
+    from ai_upper import pbs
+    from ai_upper.pbs import PBS_RUNTIME_METADATA_URLS, resolve_pbs_inputs
 
     monkeypatch.setattr(pbs, "_METADATA_CACHE", tmp_path / "uv-download-metadata.json")
 
@@ -313,7 +313,7 @@ def test_pbs_metadata_index_error_names_every_candidate(tmp_path, monkeypatch):
 
 
 def test_pbs_explicit_release_uses_only_public_checksums():
-    from py_upper.pbs import resolve_pbs_inputs, PBS_RELEASE_URL
+    from ai_upper.pbs import resolve_pbs_inputs, PBS_RELEASE_URL
 
     def fetch(url):
         assert url == PBS_RELEASE_URL.format(tag="20241016") + "/SHA256SUMS"
@@ -331,7 +331,7 @@ def test_pbs_explicit_release_uses_only_public_checksums():
 
 
 def test_no_runtime_asset_error_is_actionable():
-    from py_upper.pbs import no_asset_error, release_assets
+    from ai_upper.pbs import no_asset_error, release_assets
 
     release = release_assets(_checksums(
         "cpython-3.10.15+20241016-aarch64-apple-darwin-install_only_stripped.tar.gz",
@@ -344,7 +344,7 @@ def test_no_runtime_asset_error_is_actionable():
 
 
 def _windows_target():
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
     return TARGETS["windows-x86_64"]
 
 
@@ -368,7 +368,7 @@ def test_sdk_info_finds_the_windows_interpreter_that_python_json_records(tmp_pat
     """A Windows PBS tree has no install/bin: python.exe sits next to python3XX.dll.
     Searching for POSIX names reported a complete SDK as missing an interpreter."""
     import json
-    from py_upper import pbs
+    from ai_upper import pbs
 
     root = tmp_path / "sdk"
     _fake_sdk(root, "install/python.exe", "install/include")
@@ -385,7 +385,7 @@ def test_sdk_info_finds_the_windows_interpreter_that_python_json_records(tmp_pat
 
 def test_sdk_info_still_reads_the_posix_layout(tmp_path, monkeypatch):
     import json
-    from py_upper import pbs
+    from ai_upper import pbs
 
     root = tmp_path / "sdk"
     _fake_sdk(root, "install/bin/python3.11", "install/include/python3.11")
@@ -400,7 +400,7 @@ def test_sdk_info_still_reads_the_posix_layout(tmp_path, monkeypatch):
 
 
 def test_sdk_interpreter_refuses_a_recorded_path_outside_the_sdk(tmp_path):
-    from py_upper import pbs
+    from ai_upper import pbs
 
     root = tmp_path / "sdk"
     (root / "install").mkdir(parents=True)
@@ -414,7 +414,7 @@ def test_sdk_interpreter_refuses_a_recorded_path_outside_the_sdk(tmp_path):
 
 def test_sdk_include_refuses_an_ambiguous_tree(tmp_path):
     """Four Python.h directories used to be resolved by picking matches[0]."""
-    from py_upper import pbs
+    from ai_upper import pbs
 
     root = tmp_path / "sdk"
     for name in ("a", "b"):
@@ -432,7 +432,7 @@ def test_best_sdk_follows_the_runtime_build_flavour():
     """Windows releases of that era shipped shared-pgo and static-noopt SDKs under
     names that sort the static one first. Extension modules link the versioned
     import library, which only the shared flavour carries."""
-    from py_upper.pbs import _best_sdk, release_assets
+    from ai_upper.pbs import _best_sdk, release_assets
 
     assets = release_assets(_checksums(
         "cpython-3.10.11+20230507-x86_64-pc-windows-msvc-shared-pgo-full.tar.zst",
@@ -453,7 +453,7 @@ def test_best_sdk_follows_the_runtime_build_flavour():
 
 
 def test_best_sdk_keeps_pgo_lto_when_the_runtime_records_no_flavour():
-    from py_upper.pbs import _best_sdk, release_assets
+    from ai_upper.pbs import _best_sdk, release_assets
 
     assets = release_assets(_checksums(
         "cpython-3.11.13+20251007-aarch64-apple-darwin-full.tar.zst",
@@ -464,8 +464,8 @@ def test_best_sdk_keeps_pgo_lto_when_the_runtime_records_no_flavour():
 
 
 def test_windows_metadata_resolution_pairs_a_shared_sdk_with_a_shared_runtime(tmp_path, monkeypatch):
-    from py_upper import pbs
-    from py_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
+    from ai_upper import pbs
+    from ai_upper.pbs import PBS_RELEASE_URL, metadata_key, resolve_pbs_inputs
 
     target = _windows_target()
     runtime_name = "cpython-3.10.11+20230507-x86_64-pc-windows-msvc-shared-install_only.tar.gz"
@@ -490,8 +490,8 @@ def test_windows_metadata_resolution_pairs_a_shared_sdk_with_a_shared_runtime(tm
 
 
 def test_windows_embeddable_asset_uses_official_architecture_names():
-    from py_upper.pbs import windows_embed_asset
-    from py_upper.config import TARGETS
+    from ai_upper.pbs import windows_embed_asset
+    from ai_upper.config import TARGETS
 
     for arch, suffix in (("x86", "win32"), ("x86_64", "amd64"), ("arm64", "arm64")):
         asset = windows_embed_asset(TARGETS[f"windows-{arch}"], "3.13.5")
@@ -500,8 +500,8 @@ def test_windows_embeddable_asset_uses_official_architecture_names():
 
 
 def test_windows_embed_archive_is_checked_before_install(tmp_path, monkeypatch):
-    from py_upper import runtime
-    from py_upper.config import TARGETS
+    from ai_upper import runtime
+    from ai_upper.config import TARGETS
 
     target = TARGETS["windows-x86_64"]
     out = tmp_path / "runtime"
@@ -532,8 +532,8 @@ def test_windows_embed_archive_is_checked_before_install(tmp_path, monkeypatch):
 
 
 def test_windows_embed_archive_rejects_path_traversal_without_writing(tmp_path, monkeypatch):
-    from py_upper import runtime
-    from py_upper.config import TARGETS
+    from ai_upper import runtime
+    from ai_upper.config import TARGETS
 
     out = tmp_path / "runtime"
     monkeypatch.setattr(runtime, "target_runtime_dir", lambda _: out)
@@ -553,8 +553,8 @@ def test_windows_embed_archive_rejects_path_traversal_without_writing(tmp_path, 
 def test_windows_embed_version_without_official_zip_fails_with_the_version(tmp_path, monkeypatch):
     import urllib.error
 
-    from py_upper import runtime
-    from py_upper.config import TARGETS
+    from ai_upper import runtime
+    from ai_upper.config import TARGETS
 
     target = TARGETS["windows-arm64"]
     monkeypatch.setattr(runtime, "target_runtime_dir", lambda _: tmp_path / "runtime")
@@ -576,8 +576,8 @@ def test_pbs_runtime_reuses_the_sdk_install_tree_of_a_full_build(tmp_path, monke
     ``install/`` tree keeps the runtime path away from ``tarfile``, which only
     reads gzip, and avoids extracting the same archive twice.
     """
-    from py_upper import pbs, runtime
-    from py_upper.config import TARGETS
+    from ai_upper import pbs, runtime
+    from ai_upper.config import TARGETS
 
     target = TARGETS["macos-x86_64"]
     out = tmp_path / "runtime"

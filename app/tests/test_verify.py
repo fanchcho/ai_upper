@@ -6,7 +6,7 @@ import pytest
 
 
 def test_smoke_modules_include_entry_and_direct_dependencies(tmp_path, monkeypatch):
-    import py_upper.verify as smoke
+    import ai_upper.verify as smoke
 
     monkeypatch.setattr(smoke, "selected_sources", lambda: [])
     monkeypatch.setattr(smoke, "entry_module", lambda: "main")
@@ -14,13 +14,13 @@ def test_smoke_modules_include_entry_and_direct_dependencies(tmp_path, monkeypat
     manifest_dir.mkdir(parents=True)
     (manifest_dir / "manifest.json").write_text(json.dumps({"imports": ["PySide6"]}), encoding="utf-8")
     monkeypatch.setattr(smoke, "wheel_dir", lambda target: manifest_dir)
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
     assert smoke.smoke_modules(TARGETS["linux-x86_64"]) == ["PySide6", "main"]
 
 
 def test_windows_pbs_package_requires_embeddable_layout(tmp_path, monkeypatch):
-    from py_upper import verify
-    from py_upper.config import TARGETS, runtime_spec
+    from ai_upper import verify
+    from ai_upper.config import TARGETS, runtime_spec
 
     target = TARGETS["windows-x86_64"]
     # The version-dependent names follow the configured pin; the check reads its
@@ -42,8 +42,8 @@ def test_windows_pbs_package_requires_embeddable_layout(tmp_path, monkeypatch):
 
 
 def test_windows_pbs_stage_smoke_uses_sdk_interpreter(tmp_path, monkeypatch):
-    from py_upper import verify, runtime
-    from py_upper.config import TARGETS
+    from ai_upper import verify, runtime
+    from ai_upper.config import TARGETS
 
     target = TARGETS["windows-x86_64"]
     sdk_python = tmp_path / "sdk" / "install" / "python.exe"
@@ -60,19 +60,19 @@ def test_windows_pbs_stage_smoke_uses_sdk_interpreter(tmp_path, monkeypatch):
     assert calls[0][1]["env"]["PYTHONPATH"].endswith("site-packages")
 
 
-@pytest.mark.parametrize("member", ["module.pyd", "py_upper_bundles/py_upper_demo.pyd"])
+@pytest.mark.parametrize("member", ["module.pyd", "ai_upper_bundles/ai_upper_demo.pyd"])
 def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, member):
-    from py_upper import verify
-    from py_upper.config import TARGETS
-    from py_upper.egg import EggConfig, pack_egg, remove_packed_files
-    from py_upper.native import deps
+    from ai_upper import verify
+    from ai_upper.config import TARGETS
+    from ai_upper.egg import EggConfig, pack_egg, remove_packed_files
+    from ai_upper.native import deps
     from test_native_deployment import _pe
 
     monkeypatch.setattr(deps, "_dumpbin_dependencies", lambda path, env=None: [])
     site = tmp_path / "site-packages"
     _pe(site / member, ["vendor_driver.dll"])
     config = EggConfig()
-    egg = pack_egg(site, tmp_path / "py_upper.dat", [member], config)
+    egg = pack_egg(site, tmp_path / "ai_upper.dat", [member], config)
     remove_packed_files(site, [member])
 
     checks = verify._verify_egg_native_dependencies(egg, config.key_hex, TARGETS["windows-x86_64"], tmp_path / "runtime")
@@ -84,17 +84,17 @@ def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, membe
 
 
 def test_egg_windows_runtime_dependency_must_be_bundled(tmp_path, monkeypatch):
-    from py_upper import verify
-    from py_upper.config import TARGETS
-    from py_upper.egg import EggConfig, pack_egg
-    from py_upper.native import deps
+    from ai_upper import verify
+    from ai_upper.config import TARGETS
+    from ai_upper.egg import EggConfig, pack_egg
+    from ai_upper.native import deps
     from test_native_deployment import _pe
 
     monkeypatch.setattr(deps, "_dumpbin_dependencies", lambda path, env=None: [])
     site = tmp_path / "site-packages"
     _pe(site / "module.pyd", ["vcruntime140.dll", "kernel32.dll"])
     config = EggConfig()
-    egg = pack_egg(site, tmp_path / "py_upper.dat", ["module.pyd"], config)
+    egg = pack_egg(site, tmp_path / "ai_upper.dat", ["module.pyd"], config)
     runtime = tmp_path / "runtime"
     target = TARGETS["windows-x86_64"]
 

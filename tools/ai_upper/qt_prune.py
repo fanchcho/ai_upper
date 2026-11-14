@@ -2,7 +2,7 @@
 
 A PySide6 install ships every Qt module, and QtWebEngineCore alone is roughly
 450 MB of Chromium. Other packagers look smaller because they only bundle the Qt
-modules the application imports; py_upper does the same here:
+modules the application imports; ai_upper does the same here:
 
 1. read the Qt modules ``app/src`` imports, whichever binding it names and
    whether it names the binding directly or through ``utils.qt_compat``;
@@ -304,7 +304,7 @@ def _qt_layout(pyside: Path, binding: str) -> _QtLayout:
 
 @dataclass(frozen=True)
 class _QtPayloadOptions:
-    """Optional Qt payload cuts, all opt-in through ``[tool.py_upper.optimize]``.
+    """Optional Qt payload cuts, all opt-in through ``[tool.ai_upper.optimize]``.
 
     ``None`` in an allowlist means "keep everything", which keeps every default
     build byte-for-byte compatible with the previous policy. ``qt = "all"``
@@ -331,16 +331,16 @@ def _qt_option_list(value, name: str, default: tuple[str, ...] | None) -> frozen
         if text.lower() in {"all", "*"}:
             return None
         if not text:
-            raise RuntimeError(f"[tool.py_upper.optimize].{name} must not be empty")
+            raise RuntimeError(f"[tool.ai_upper.optimize].{name} must not be empty")
         return frozenset({text})
     if isinstance(value, (list, tuple)):
         if not value or any(not isinstance(item, str) or not item.strip() for item in value):
             raise RuntimeError(
-                f"[tool.py_upper.optimize].{name} must be a non-empty array of strings"
+                f"[tool.ai_upper.optimize].{name} must be a non-empty array of strings"
             )
         return frozenset(item.strip() for item in value)
     raise RuntimeError(
-        f"[tool.py_upper.optimize].{name} must be 'all' or an array of strings"
+        f"[tool.ai_upper.optimize].{name} must be 'all' or an array of strings"
     )
 
 
@@ -349,7 +349,7 @@ def _qt_option_bool(value, name: str, default: bool) -> bool:
         return default
     if isinstance(value, bool):
         return value
-    raise RuntimeError(f"[tool.py_upper.optimize].{name} must be true or false")
+    raise RuntimeError(f"[tool.ai_upper.optimize].{name} must be true or false")
 
 
 def _payload_options() -> _QtPayloadOptions:
@@ -537,7 +537,7 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
         if setting in {"all", ""}:
             return None
         if setting != "imports":
-            raise RuntimeError("[tool.py_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
+            raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
         requested = used_qt_modules()
         if not requested:
             print("Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload")
@@ -545,9 +545,9 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
     elif isinstance(value, list):
         requested = {str(item).strip() for item in value if str(item).strip()}
         if not requested:
-            raise RuntimeError("[tool.py_upper.optimize].qt must not be an empty array")
+            raise RuntimeError("[tool.ai_upper.optimize].qt must not be an empty array")
     else:
-        raise RuntimeError("[tool.py_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
+        raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
 
     closure = _runtime_closure(site, target, requested)
     if closure is None:
@@ -633,7 +633,7 @@ def _reachable_libraries(layout: _QtLayout, roots: list[Path]) -> tuple[set[Path
 def prune(site: Path, target: Target, modules: set[str] | None = None) -> dict[str, int] | None:
     """Drop Qt payload the application does not need; returns removal counters.
 
-    ``modules`` defaults to the configured policy (``[tool.py_upper.optimize].qt``).
+    ``modules`` defaults to the configured policy (``[tool.ai_upper.optimize].qt``).
     """
     binding = detect_binding(site)
     if binding is None:

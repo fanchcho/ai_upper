@@ -21,8 +21,9 @@ from mvvm.views.base_view import ViewBase
 from mvvm.views.chat_pane import ChatPane
 from mvvm.views.session_list import SessionListPane
 from mvvm.views.settings_pane import SettingsPane
+from utils.paths import app_name
 
-WINDOW_TITLE = "Deva"
+WINDOW_TITLE = app_name()
 SPLIT_SIZES = (280, 780)
 STATUS_DEFAULT = "就绪"
 

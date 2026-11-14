@@ -7,19 +7,19 @@ from pathlib import Path
 
 import pytest
 
-from py_upper.config import TARGETS
-from py_upper.qt_prune import QT_COMPAT_MODULE, _qt_module_of, prune, used_qt_modules
+from ai_upper.config import TARGETS
+from ai_upper.qt_prune import QT_COMPAT_MODULE, _qt_module_of, prune, used_qt_modules
 
 
 @pytest.fixture(autouse=True)
 def _isolate_payload_options(monkeypatch):
     """Prune tests exercise the documented defaults, not the local app config.
 
-    ``prune()`` reads ``[tool.py_upper.optimize]`` for the optional payload
+    ``prune()`` reads ``[tool.ai_upper.optimize]`` for the optional payload
     cuts. The working copy deliberately enables those cuts, so without this
     isolation the expected files would depend on the machine's pyproject.toml.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {})
 
@@ -170,8 +170,8 @@ def test_qt_compat_module_names_a_real_shim():
     Rotting on either side is invisible: the scanner finds nothing and keeps the
     whole payload instead of failing.
     """
-    from py_upper.config import APP
-    from py_upper.qt_prune import QT_COMPAT_MODULE
+    from ai_upper.config import APP
+    from ai_upper.qt_prune import QT_COMPAT_MODULE
 
     path = APP / "src" / Path(*QT_COMPAT_MODULE.split(".")).with_suffix(".py")
     assert path.is_file(), f"{QT_COMPAT_MODULE} names no module under {APP / 'src'}"
@@ -179,7 +179,7 @@ def test_qt_compat_module_names_a_real_shim():
 
 
 def test_prune_keeps_only_the_imported_qt_payload(tmp_path, monkeypatch):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -257,7 +257,7 @@ def test_prune_keeps_only_the_imported_qt_payload_on_windows(tmp_path, monkeypat
     in the bundle, and the native closure then failed on the optional payload
     those extra modules link (the database clients, the ffmpeg libraries).
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -315,7 +315,7 @@ def test_windows_pruning_never_touches_the_package_itself(tmp_path, monkeypatch)
     extension modules and the packaging metadata, so a reachability sweep that
     treated every entry as a library would delete the modules it just kept.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -342,7 +342,7 @@ def test_windows_pruning_drops_the_binding_prefixed_tool_copy(tmp_path, monkeypa
     site-packages/PySide2/pyside2-lupdate.exe: Qt5Xml.dll" -- over a translation
     tool that is developer tooling, not runtime payload.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = site / "PySide2"
@@ -372,7 +372,7 @@ def test_windows_pruning_drops_the_binding_prefixed_tool_copy(tmp_path, monkeypa
 
 
 def test_configured_modules_expands_explicit_lists_through_the_closure(tmp_path, monkeypatch):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     _fake_pyside(site)
@@ -382,7 +382,7 @@ def test_configured_modules_expands_explicit_lists_through_the_closure(tmp_path,
 
 
 def test_configured_modules_rejects_unknown_settings(tmp_path, monkeypatch):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {"qt": "everything"})
     try:
@@ -400,7 +400,7 @@ def test_configured_modules_reports_a_runtime_that_cannot_import_the_payload(tmp
     indirectly, because importing QtWidgets alone never mentions QtCore and
     QtGui; the bundle then only breaks in the packaged smoke run.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     _fake_pyside(site)
@@ -417,7 +417,7 @@ def test_configured_modules_reports_a_runtime_that_cannot_import_the_payload(tmp
 
 def test_configured_modules_keeps_the_payload_when_the_target_cannot_run(tmp_path, monkeypatch):
     """Without the target interpreter the closure is unknown, so nothing goes."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     _fake_pyside(site)
@@ -429,7 +429,7 @@ def test_configured_modules_keeps_the_payload_when_the_target_cannot_run(tmp_pat
 
 def test_prune_ignores_a_site_without_a_qt_payload(tmp_path, monkeypatch):
     """A staged site without PySide6 has nothing to prune, so nothing is probed."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {"qt": "imports"})
 
@@ -441,7 +441,7 @@ def test_prune_ignores_a_site_without_a_qt_payload(tmp_path, monkeypatch):
 
 
 def test_prune_is_disabled_by_default(tmp_path, monkeypatch):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -462,7 +462,7 @@ def test_runtime_closure_probe_inherits_the_host_environment(tmp_path, monkeypat
     Python", which failed every Windows host build with qt = "imports" before
     the launcher step.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     site.mkdir()
@@ -496,7 +496,7 @@ def test_prune_drops_build_payload_and_webengine_resources(tmp_path, monkeypatch
     ``qoffscreen`` has to stay because the headless smoke test opens a window
     through it.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -521,7 +521,7 @@ def test_prune_drops_build_payload_and_webengine_resources(tmp_path, monkeypatch
 
 def test_prune_keeps_webengine_resources_when_the_module_is_used(tmp_path, monkeypatch):
     """``resources`` is WebEngine payload, not unconditional build output."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -548,7 +548,7 @@ def test_qt_layout_reads_each_bindings_payload_directory(tmp_path, binding, qt_d
     layout: ``plugins``, ``qml`` and ``translations`` were then read from the
     package root, where they do not exist, and pruning became a no-op.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     package = tmp_path / "site-packages" / binding
     plugins = package / qt_dir / "plugins"
@@ -566,7 +566,7 @@ def test_qt_layout_reads_each_bindings_payload_directory(tmp_path, binding, qt_d
 
 
 def test_qt_layout_falls_back_to_the_flat_windows_pyside_root(tmp_path):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     package = tmp_path / "site-packages" / "PySide2"
     (package / "plugins" / "platforms").mkdir(parents=True)
@@ -586,7 +586,7 @@ def test_prune_reads_the_pyqt_payload_directory(tmp_path, monkeypatch):
     PyQt it treated the package root as the payload root and left examples,
     headers and unused translations in the bundle.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     package = site / "PyQt6"
@@ -623,7 +623,7 @@ def test_prune_drops_binding_tooling_docs_and_link_libraries(tmp_path, monkeypat
     shiboken signature directory. ``docs`` alone is ~1.9 MB, and ``.lib`` files
     are link-time inputs no frozen application can use.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -660,7 +660,7 @@ def test_prune_drops_posix_docs_headers_cmake_and_stale_stubs(tmp_path, monkeypa
     headers plus CMake package files sit beside the binding on POSIX too. The
     type stubs of pruned wrappers describe modules that are no longer shipped.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -695,7 +695,7 @@ def test_prune_platform_allowlist_spans_every_desktop_layout(tmp_path, monkeypat
     matched after normalizing those spellings, so a Windows build does not need
     a different configuration from a Linux or macOS build.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -732,7 +732,7 @@ def test_prune_image_format_allowlist_drops_svg_and_unused_formats(tmp_path, mon
     Dropping the SVG image plugin also drops the SVG icon engine and Qt5Svg:
     nothing else in a widgets-only application reaches that library.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -770,7 +770,7 @@ def test_prune_image_format_allowlist_drops_svg_and_unused_formats(tmp_path, mon
 def test_prune_locale_allowlist_keeps_the_requested_translations(
     tmp_path, monkeypatch, locales, kept, dropped
 ):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -793,7 +793,7 @@ def test_prune_locale_allowlist_keeps_the_requested_translations(
 
 def test_prune_can_drop_the_software_opengl_fallback(tmp_path, monkeypatch):
     """``qt_software_opengl = false`` removes the ~20 MB DLL."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_windows_pyside(site)
@@ -806,7 +806,7 @@ def test_prune_can_drop_the_software_opengl_fallback(tmp_path, monkeypatch):
 
 
 def test_prune_rejects_malformed_payload_options(tmp_path, monkeypatch):
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     _fake_windows_pyside(site)
@@ -833,7 +833,7 @@ def test_prune_keeps_the_webengine_helper_process_with_its_module(tmp_path, monk
     blank with no error. The helper has to follow its module; plain tooling
     still goes.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -863,7 +863,7 @@ def test_prune_keeps_the_webengine_helper_process_with_its_module(tmp_path, monk
 
 def test_prune_drops_the_webengine_helper_with_its_module(tmp_path, monkeypatch):
     """The helper is dead weight once QtWebEngineCore itself is gone."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -883,7 +883,7 @@ def test_prune_keeps_the_webengine_locale_packs_with_its_module(tmp_path, monkey
     directory as tooling and removed it from the bundle. Every launch then
     logged ``could not find the translation file for the current locale``.
     """
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)
@@ -903,7 +903,7 @@ def test_prune_keeps_the_webengine_locale_packs_with_its_module(tmp_path, monkey
 
 def test_webengine_locale_allowlist_matches_chromium_spelling(tmp_path, monkeypatch):
     """One allowlist covers Qt's ``zh_CN`` and Chromium's ``zh-CN``."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     monkeypatch.setattr(
         qt_prune,
@@ -933,7 +933,7 @@ def test_webengine_locale_allowlist_matches_chromium_spelling(tmp_path, monkeypa
 
 def test_prune_drops_the_webengine_locale_packs_with_its_module(tmp_path, monkeypatch):
     """No QtWebEngineCore, no Chromium locale packs."""
-    from py_upper import qt_prune
+    from ai_upper import qt_prune
 
     site = tmp_path / "site-packages"
     pyside = _fake_pyside(site)

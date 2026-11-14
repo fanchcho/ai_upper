@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def _load_build_cli():
     """Load tools/build.py without running its ``main()``."""
-    spec = importlib.util.spec_from_file_location("py_upper_build_cli", ROOT / "tools" / "build.py")
+    spec = importlib.util.spec_from_file_location("ai_upper_build_cli", ROOT / "tools" / "build.py")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
@@ -18,7 +18,7 @@ def _load_build_cli():
 
 def test_doctor_fails_when_a_build_tool_is_missing(monkeypatch, capsys):
     """The diagnostic doubles as the CI toolchain gate, so a missing tool must exit non-zero."""
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
 
     build = _load_build_cli()
     monkeypatch.setattr(build, "shutil", type("S", (), {"which": staticmethod(lambda name: None)}))
@@ -29,7 +29,7 @@ def test_doctor_fails_when_a_build_tool_is_missing(monkeypatch, capsys):
 
 
 def test_doctor_passes_when_the_toolchain_resolves(monkeypatch, capsys):
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
 
     build = _load_build_cli()
     monkeypatch.setattr(
@@ -42,7 +42,7 @@ def test_doctor_passes_when_the_toolchain_resolves(monkeypatch, capsys):
 
 
 def test_doctor_reports_an_unresolvable_toolchain_as_missing(monkeypatch, capsys):
-    from py_upper.config import TARGETS
+    from ai_upper.config import TARGETS
 
     build = _load_build_cli()
     monkeypatch.setattr(

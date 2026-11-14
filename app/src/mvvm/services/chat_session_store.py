@@ -6,7 +6,7 @@
     <home>/data/chats/_index.json          仅元信息，供列表 O(1) 读取
     <home>/data/chats/<id>.compacted-*.jsonl   已压缩掉的早期消息段（一行一条）
 
-为什么保持这个格式而不是换 JSONL/SQLite：迁移期间要和 Deva 用同一个 `DEVA_HOME`
+为什么保持这个格式而不是换 JSONL/SQLite：迁移期间要和 Deva 用同一个数据目录
 互相读写，格式一变就得写双份解析与迁移脚本，而且历史文件里的 `bucket`、`notices`
 等边车字段只有原样保留才对得上。索引是**派生数据**：缺失或损坏时扫描 `*.json`
 重建（Deva 修过的老 bug，这里不退回只读索引）。
@@ -96,9 +96,10 @@ class ChatSessionStore:
 
     @staticmethod
     def _default_home() -> Path:
-        """与 Deva 的 `getDevaHome()` 同口径：`DEVA_HOME` 优先，缺省 `~/.deva`。"""
-        override = os.environ.get("DEVA_HOME")
-        return Path(override) if override else Path.home() / ".deva"
+        """`AI_UPPER_HOME` 优先，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 仍被读取）。"""
+        from utils.app_home import app_home
+
+        return app_home()
 
     # ── 路径 ──────────────────────────────────────────────────────────────
     @property

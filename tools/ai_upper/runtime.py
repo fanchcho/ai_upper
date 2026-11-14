@@ -10,16 +10,16 @@ import zipfile
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
 from .config import (
-    CACHE, Target, optimize_config, pbs_release, python_version, runtime_provider,
-    runtime_spec, target_runtime_dir,
+    CACHE, LEGACY_RUNTIME_MARKER, Target, optimize_config, pbs_release, python_version,
+    runtime_provider, runtime_spec, target_runtime_dir,
 )
-from .fs import copy_tree_contents, sha256
+from .fs import copy_tree_contents, marker_file, sha256
 from .manifest import build_manifest, read_manifest, validate_manifest, write_manifest
 from .net import download
 from .pbs import ensure_pbs_sdk, resolve_inputs, sdk_info as pbs_sdk_info, windows_embed_asset
 
 
-RUNTIME_MARKER = ".py_upper-runtime.json"
+RUNTIME_MARKER = ".ai_upper-runtime.json"
 
 
 def safe_extract(tar_path: Path, dest: Path) -> None:
@@ -36,9 +36,10 @@ def safe_extract(tar_path: Path, dest: Path) -> None:
 def ensure_pbs_runtime(target: Target) -> Path:
     out = target_runtime_dir(target)
     marker = out / RUNTIME_MARKER
-    if marker.exists():
+    existing = marker_file(out, RUNTIME_MARKER, LEGACY_RUNTIME_MARKER)
+    if existing is not None:
         try:
-            data = json.loads(marker.read_text(encoding="utf-8"))
+            data = json.loads(existing.read_text(encoding="utf-8"))
             expected_tag = str(data.get("tag") or "")
             if (
                 data.get("format") == 1
@@ -106,9 +107,10 @@ def ensure_windows_embed_runtime(target: Target) -> Path:
     out = target_runtime_dir(target)
     asset = windows_embed_asset(target, python_version())
     marker = out / RUNTIME_MARKER
-    if marker.is_file():
+    existing = marker_file(out, RUNTIME_MARKER, LEGACY_RUNTIME_MARKER)
+    if existing is not None:
         try:
-            data = json.loads(marker.read_text(encoding="utf-8"))
+            data = json.loads(existing.read_text(encoding="utf-8"))
             if (data.get("format") == 2 and data.get("source") == "python.org"
                     and data.get("asset") == asset.name and data.get("target") == target.key
                     and data.get("python") == python_version()):

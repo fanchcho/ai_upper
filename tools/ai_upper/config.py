@@ -17,7 +17,16 @@ BUILD = ROOT / "build"
 DIST = ROOT / "dist"
 RUNTIMES = ROOT / "runtimes"
 LAUNCHER = ROOT / "launcher"
-LOCK = ROOT / "py_upper.lock.json"
+LOCK = ROOT / "ai_upper.lock.json"
+# Pre-rename lock file. Reads fall back to it, writes always go to LOCK, so an
+# existing checkout keeps a `--locked` build working without a forced re-lock.
+LEGACY_LOCK = ROOT / "py_upper.lock.json"
+# Pre-rename runtime/SDK cache markers. A cached runtime is hundreds of
+# megabytes and its SDK archive is zstd-compressed, so a checkout built before
+# the rename must keep being recognised instead of re-downloading both. Reads
+# fall back to these names; writes always use the current ones.
+LEGACY_RUNTIME_MARKER = ".py_upper-runtime.json"
+LEGACY_SDK_MARKER = ".py_upper-sdk.json"
 MIN_BUILD_PYTHON = (3, 8)
 # The tracked template and the Git-ignored working copy of the application
 # configuration. Everything reads the working copy; the template is what a
@@ -164,14 +173,14 @@ def manylinux_baselines() -> list[str]:
         baselines = [str(item) for item in value]
     else:
         raise RuntimeError(
-            "[tool.py_upper.dependencies].manylinux must be a manylinux_X_Y string or an array of them"
+            "[tool.ai_upper.dependencies].manylinux must be a manylinux_X_Y string or an array of them"
         )
     cleaned = [baseline.strip() for baseline in baselines if str(baseline).strip()]
     if not cleaned:
-        raise RuntimeError("[tool.py_upper.dependencies].manylinux must not be empty")
+        raise RuntimeError("[tool.ai_upper.dependencies].manylinux must not be empty")
     for baseline in cleaned:
         if baseline != "manylinux2014" and not baseline.startswith("manylinux_"):
-            raise RuntimeError("[tool.py_upper.dependencies].manylinux must be manylinux_X_Y or manylinux2014")
+            raise RuntimeError("[tool.ai_upper.dependencies].manylinux must be manylinux_X_Y or manylinux2014")
     return cleaned
 
 
@@ -206,9 +215,22 @@ def load_app_config() -> dict:
         return tomllib.load(f)
 
 
-def py_upper_config() -> dict:
-    value = load_app_config().get("tool", {}).get("py_upper", {})
-    return value if isinstance(value, dict) else {}
+# The section this packager reads. `py_upper` is the pre-rename spelling: a
+# working copy written before the rename keeps building, and the new section
+# wins when both are present.
+CONFIG_SECTION = "ai_upper"
+LEGACY_CONFIG_SECTIONS = ("py_upper",)
+
+
+def ai_upper_config() -> dict:
+    tool = load_app_config().get("tool", {})
+    if not isinstance(tool, dict):
+        return {}
+    for section in (CONFIG_SECTION, *LEGACY_CONFIG_SECTIONS):
+        value = tool.get(section)
+        if isinstance(value, dict):
+            return value
+    return {}
 
 
 def project_config() -> dict:
@@ -224,32 +246,32 @@ def project_version() -> str:
 
 
 def app_config() -> dict:
-    value = py_upper_config().get("app", {})
+    value = ai_upper_config().get("app", {})
     return value if isinstance(value, dict) else {}
 
 
 def app_name() -> str:
-    value = str(app_config().get("name") or "Upper").strip()
+    value = str(app_config().get("name") or "ai_upper").strip()
     if not value or value in {".", ".."} or any(sep in value for sep in ("/", "\\")):
-        raise RuntimeError("[tool.py_upper.app].name must be a single application name")
+        raise RuntimeError("[tool.ai_upper.app].name must be a single application name")
     return value
 
 
 def app_identifier() -> str:
-    value = str(app_config().get("identifier") or "com.example.pyupper").strip()
+    value = str(app_config().get("identifier") or "com.example.aiupper").strip()
     if not value:
-        raise RuntimeError("[tool.py_upper.app].identifier must not be empty")
+        raise RuntimeError("[tool.ai_upper.app].identifier must not be empty")
     return value
 
 
 def entry_path() -> Path:
-    value = str(py_upper_config().get("entry") or "main.py").strip()
+    value = str(ai_upper_config().get("entry") or "main.py").strip()
     root = (APP / "src").resolve()
     path = (root / value).resolve()
     try:
         path.relative_to(root)
     except ValueError as exc:
-        raise RuntimeError("[tool.py_upper].entry must stay under app/src") from exc
+        raise RuntimeError("[tool.ai_upper].entry must stay under app/src") from exc
     if path.suffix != ".py" or not path.exists():
         raise RuntimeError(f"Application entry file does not exist: {path}")
     return path
@@ -272,7 +294,7 @@ def entry_source() -> str:
 
 
 def user_agent() -> str:
-    return f"py_upper/{project_version()}"
+    return f"ai_upper/{project_version()}"
 
 
 def host_target() -> Target:
@@ -309,7 +331,7 @@ def validate_target(name: str | None) -> Target:
 
 
 def runtime_config() -> dict:
-    value = py_upper_config().get("runtime", {})
+    value = ai_upper_config().get("runtime", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -317,7 +339,7 @@ def python_version() -> str:
     value = str(runtime_config().get("python") or "").strip()
     parts = value.split(".")
     if len(parts) != 3 or not all(part.isdigit() for part in parts):
-        raise RuntimeError("[tool.py_upper.runtime].python must be an exact X.Y.Z Python version")
+        raise RuntimeError("[tool.ai_upper.runtime].python must be an exact X.Y.Z Python version")
     return value
 
 
@@ -343,14 +365,14 @@ def runtime_spec(target: Target) -> RuntimeSpec:
 def local_runtime_path(target: Target) -> Path:
     value = runtime_config().get("runtime")
     if not value:
-        raise RuntimeError("[tool.py_upper.runtime].runtime is required when provider = 'local'")
+        raise RuntimeError("[tool.ai_upper.runtime].runtime is required when provider = 'local'")
     return _expand_target_path(str(value), target)
 
 
 def local_sdk_path(target: Target) -> Path:
     value = runtime_config().get("sdk")
     if not value:
-        raise RuntimeError("[tool.py_upper.runtime].sdk is required when provider = 'local'")
+        raise RuntimeError("[tool.ai_upper.runtime].sdk is required when provider = 'local'")
     return _expand_target_path(str(value), target)
 
 
@@ -359,12 +381,12 @@ def _expand_target_path(value: str, target: Target) -> Path:
 
 
 def pbs_release() -> str:
-    cfg = py_upper_config().get("pbs", {})
+    cfg = ai_upper_config().get("pbs", {})
     return str(cfg.get("release") or "").strip() if isinstance(cfg, dict) else ""
 
 
 def cython_config() -> dict:
-    value = py_upper_config().get("cython", {})
+    value = ai_upper_config().get("cython", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -373,7 +395,7 @@ MERGE_MODES = ("none", "directory")
 # Merged extension bundles live under this directory. The build packs them into
 # the egg as stored entries and the launcher extracts and registers them before
 # Py_Initialize; the Python egg loader never extracts this prefix.
-BUNDLE_DIR = "py_upper_bundles"
+BUNDLE_DIR = "ai_upper_bundles"
 
 
 def cython_merge_mode() -> str:
@@ -397,18 +419,18 @@ def cython_merge_mode() -> str:
     if text in ("directory", "dir", "package", "on", "true", "yes", "1"):
         return "directory"
     raise RuntimeError(
-        "[tool.py_upper.cython].merge must be one of: " + ", ".join(MERGE_MODES)
+        "[tool.ai_upper.cython].merge must be one of: " + ", ".join(MERGE_MODES)
     )
 
 
 def optimize_config() -> dict:
-    value = py_upper_config().get("optimize", {})
+    value = ai_upper_config().get("optimize", {})
     return value if isinstance(value, dict) else {}
 
 
 def trim_config() -> dict:
-    """``[tool.py_upper.trim]``: declarative payload removal patterns."""
-    value = py_upper_config().get("trim", {})
+    """``[tool.ai_upper.trim]``: declarative payload removal patterns."""
+    value = ai_upper_config().get("trim", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -424,7 +446,7 @@ def trim_policy(preset=None):
 
 
 def native_config() -> dict:
-    value = py_upper_config().get("native", {})
+    value = ai_upper_config().get("native", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -441,12 +463,12 @@ def native_exclude_patterns() -> list[str]:
     if value in (None, ""):
         return []
     if not isinstance(value, list):
-        raise RuntimeError("[tool.py_upper.native].exclude must be an array of glob patterns")
+        raise RuntimeError("[tool.ai_upper.native].exclude must be an array of glob patterns")
     return [str(item).strip() for item in value if str(item).strip()]
 
 
 def dependency_config() -> dict:
-    value = py_upper_config().get("dependencies", {})
+    value = ai_upper_config().get("dependencies", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -471,18 +493,18 @@ def pip_transfer_args() -> list[str]:
 
     The default 15 second socket timeout aborts a multi-hundred-megabyte wheel
     such as PySide6 Addons on any single stall, which then discards the whole
-    download. ``[tool.py_upper.dependencies].timeout`` / ``.retries`` and the
-    PY_UPPER_PIP_TIMEOUT / PY_UPPER_PIP_RETRIES environment variables override
+    download. ``[tool.ai_upper.dependencies].timeout`` / ``.retries`` and the
+    AI_UPPER_PIP_TIMEOUT / AI_UPPER_PIP_RETRIES environment variables override
     the defaults.
     """
     cfg = dependency_config()
-    timeout = _positive_int(cfg.get("timeout"), _env_int("PY_UPPER_PIP_TIMEOUT", PIP_TIMEOUT_DEFAULT), "[tool.py_upper.dependencies].timeout")
-    retries = _positive_int(cfg.get("retries"), _env_int("PY_UPPER_PIP_RETRIES", PIP_RETRIES_DEFAULT), "[tool.py_upper.dependencies].retries")
+    timeout = _positive_int(cfg.get("timeout"), _env_int("AI_UPPER_PIP_TIMEOUT", PIP_TIMEOUT_DEFAULT), "[tool.ai_upper.dependencies].timeout")
+    retries = _positive_int(cfg.get("retries"), _env_int("AI_UPPER_PIP_RETRIES", PIP_RETRIES_DEFAULT), "[tool.ai_upper.dependencies].retries")
     return ["--timeout", str(timeout), "--retries", str(retries)]
 
 
 def pip_cache_dir() -> Path:
-    """py_upper-owned pip download cache, reused across builds and CI runs."""
+    """ai_upper-owned pip download cache, reused across builds and CI runs."""
     return CACHE / "pip"
 
 
@@ -527,13 +549,13 @@ def validate_build_python_version(version_info=None) -> None:
     actual = (int(info.major), int(info.minor))
     if actual < MIN_BUILD_PYTHON:
         raise RuntimeError(
-            f"py_upper build tool requires Python {MIN_BUILD_PYTHON[0]}.{MIN_BUILD_PYTHON[1]}+; "
+            f"ai_upper build tool requires Python {MIN_BUILD_PYTHON[0]}.{MIN_BUILD_PYTHON[1]}+; "
             f"current interpreter is {info.major}.{info.minor}"
         )
 
 
 def python_executable() -> Path:
-    explicit = os.environ.get("PY_UPPER_PYTHON") or os.environ.get("PYSTAND_PYTHON")
+    explicit = os.environ.get("AI_UPPER_PYTHON") or os.environ.get("PYSTAND_PYTHON")
     if explicit:
         return Path(explicit).expanduser().resolve()
     local = APP / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
@@ -546,7 +568,7 @@ def python_executable() -> Path:
         found = shutil.which(name)
         if found:
             return Path(found).resolve()
-    raise RuntimeError("No development Python found. Set PY_UPPER_PYTHON or install Python.")
+    raise RuntimeError("No development Python found. Set AI_UPPER_PYTHON or install Python.")
 
 
 def require_local_python() -> Path:
@@ -637,7 +659,7 @@ def resolve_target_python(target: Target) -> TargetPython:
 
 
 def build_config() -> dict:
-    value = py_upper_config().get("build", {})
+    value = ai_upper_config().get("build", {})
     return value if isinstance(value, dict) else {}
 
 
@@ -654,11 +676,11 @@ def build_jobs() -> int:
     try:
         jobs = int(value)
     except (TypeError, ValueError) as exc:
-        raise RuntimeError("[tool.py_upper.build].jobs must be an integer") from exc
+        raise RuntimeError("[tool.ai_upper.build].jobs must be an integer") from exc
     if jobs == 0:
         return max(1, os.cpu_count() or 1)
     if jobs < 0:
-        raise RuntimeError("[tool.py_upper.build].jobs must not be negative")
+        raise RuntimeError("[tool.ai_upper.build].jobs must not be negative")
     return jobs
 
 
@@ -666,5 +688,5 @@ def incremental_build_enabled() -> bool:
     """Whether a module that did not change reuses its cached build output."""
     value = build_config().get("incremental", True)
     if not isinstance(value, bool):
-        raise RuntimeError("[tool.py_upper.build].incremental must be a boolean")
+        raise RuntimeError("[tool.ai_upper.build].incremental must be a boolean")
     return value

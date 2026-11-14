@@ -46,7 +46,7 @@ def main(argv: list[str]) -> int:
 
     print("platform:", qt_app.platformName())
     print("initial vm.name =", repr(vm.name), "widget =", repr(view._line_edit.text()))
-    check("initial UI == VM", view._line_edit.text() == vm.name == "py_upper")
+    check("initial UI == VM", view._line_edit.text() == vm.name == "ai_upper")
 
     # 1. Real user typing: QtTest.keyClicks delivers genuine QKeyEvents, so the
     #    textEdited signal fires exactly as it would for a human.
@@ -71,8 +71,8 @@ def main(argv: list[str]) -> int:
     QtTest.QTest.mouseClick(view._reset_button, QtCore.Qt.MouseButton.LeftButton)
     qt_app.processEvents()
     print("after reset click vm.name =", repr(vm.name), "widget =", repr(view._line_edit.text()))
-    check("command reset VM", vm.name == "py_upper")
-    check("command reset widget via binding", view._line_edit.text() == "py_upper")
+    check("command reset VM", vm.name == "ai_upper")
+    check("command reset widget via binding", view._line_edit.text() == "ai_upper")
     shot_reset = out_dir / "demo-page-reset.png"
     check("reset screenshot saved", window.grab().save(str(shot_reset)), str(shot_reset))
 

@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Any, Callable
 from urllib.parse import quote, unquote
 
-from .config import CACHE, Target, pbs_release, pbs_sdk_dir, python_version
-from .fs import copy_tree_contents, sha256
+from .config import CACHE, LEGACY_SDK_MARKER, Target, pbs_release, pbs_sdk_dir, python_version
+from .fs import copy_tree_contents, marker_file, sha256
 from .net import download, http_json, http_text
 
 
@@ -153,7 +153,7 @@ def _fetch_metadata_index(fetch_json: Callable[[str], Any]) -> dict[str, Any]:
     raise RuntimeError(
         "Could not fetch the uv python-build-standalone metadata index.\n"
         + "\n".join(failures)
-        + "\nuv moves this file between releases; update PBS_RUNTIME_METADATA_URLS in tools/py_upper/pbs.py."
+        + "\nuv moves this file between releases; update PBS_RUNTIME_METADATA_URLS in tools/ai_upper/pbs.py."
     )
 
 
@@ -243,8 +243,8 @@ def no_asset_error(release_tag: str, target: Target, pyver: str, assets: list[PB
         f"Target: {target.triple}\n"
         f"Available runtime Python versions: {', '.join(available_python_versions(assets, target, kind='runtime')) or 'none'}\n"
         f"Available SDK Python versions: {', '.join(available_python_versions(assets, target, kind='sdk')) or 'none'}\n"
-        "Set [tool.py_upper.pbs].release to a release containing the requested exact Python version; "
-        "py_upper will not silently substitute another version."
+        "Set [tool.ai_upper.pbs].release to a release containing the requested exact Python version; "
+        "ai_upper will not silently substitute another version."
     )
 
 
@@ -266,7 +266,7 @@ def resolve_pbs_inputs(
                 raise
             raise RuntimeError(
                 f"PBS release {configured_tag} publishes no SHA256SUMS. Releases before "
-                "20210724 predate that inventory; leave [tool.py_upper.pbs].release empty "
+                "20210724 predate that inventory; leave [tool.ai_upper.pbs].release empty "
                 "so the uv metadata index can select the exact full build."
             ) from exc
         runtime_assets = matching_assets(assets, target, pyver, kind="runtime")
@@ -287,7 +287,7 @@ def resolve_pbs_inputs(
                 f"Requested Python: {pyver}\n"
                 f"Target: {target.triple}\n"
                 f"Available Python versions from PBS metadata for this target: {', '.join(available)}\n"
-                "py_upper will not silently substitute another Python version."
+                "ai_upper will not silently substitute another Python version."
             )
         data = _load_metadata(fetch_json, force=True)
         runtime = metadata_asset(data, target, pyver)
@@ -311,7 +311,7 @@ def resolve_pbs_inputs(
             raise RuntimeError(
                 f"PBS release {tag} publishes no SHA256SUMS and its metadata asset is "
                 f"not a full build: {runtime.name}\n"
-                "py_upper cannot resolve a matching SDK for this release."
+                "ai_upper cannot resolve a matching SDK for this release."
             ) from exc
         return PBSInputs(tag, runtime, runtime, "metadata-full")
 
@@ -322,7 +322,7 @@ def resolve_pbs_inputs(
     return PBSInputs(tag, runtime, sdk, "metadata")
 
 
-SDK_MARKER = ".py_upper-sdk.json"
+SDK_MARKER = ".ai_upper-sdk.json"
 
 
 def _safe_extract_zst(archive: Path, destination: Path) -> None:
@@ -431,10 +431,10 @@ def resolve_inputs(target: Target) -> PBSInputs:
 
 def ensure_pbs_sdk(target: Target) -> Path:
     out = pbs_sdk_dir(target)
-    marker_path = out / SDK_MARKER
-    if marker_path.exists():
+    existing = marker_file(out, SDK_MARKER, LEGACY_SDK_MARKER)
+    if existing is not None:
         try:
-            marker = json.loads(marker_path.read_text(encoding="utf-8"))
+            marker = json.loads(existing.read_text(encoding="utf-8"))
             if (
                 marker.get("format") == 2
                 and marker.get("target") == target.key
@@ -476,7 +476,10 @@ def ensure_pbs_sdk(target: Target) -> Path:
 
 def sdk_info(target: Target) -> dict:
     root = ensure_pbs_sdk(target)
-    marker = json.loads((root / SDK_MARKER).read_text(encoding="utf-8"))
+    marker_path = marker_file(root, SDK_MARKER, LEGACY_SDK_MARKER)
+    if marker_path is None:
+        raise RuntimeError(f"PBS SDK marker missing under {root}")
+    marker = json.loads(marker_path.read_text(encoding="utf-8"))
     metadata = _sdk_metadata(root)
     include = _sdk_include(root, metadata)
     executable = _sdk_interpreter(root, target, metadata)

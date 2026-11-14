@@ -40,7 +40,7 @@ def gateway(tmp_path, monkeypatch):
     settings.set_config({"models": MODELS})
     vault = SecretsVault(tmp_path)
     # 没有真实网络：显式给一个「一调用就失败」的传输，测试只验证装配，不发请求。
-    from tests.scripted_transport import ScriptedTransport
+    from scripted_transport import ScriptedTransport
 
     return ModelGateway(settings, vault, ScriptedTransport())
 
@@ -52,7 +52,7 @@ def test_default_model_resolves_and_provider_is_built(tmp_path, monkeypatch):
     vault = SecretsVault(tmp_path)
     vault.set_secret("p1", "sk-test-123")
 
-    from tests.scripted_transport import ScriptedTransport
+    from scripted_transport import ScriptedTransport
 
     gw = ModelGateway(settings, vault, ScriptedTransport())
     provider, model = gw.turn_provider(None, None)
@@ -158,7 +158,7 @@ def test_list_models_probes_the_configured_provider(tmp_path, monkeypatch):
     import asyncio
     import json as jsonlib
 
-    from tests.scripted_transport import ScriptedTransport
+    from scripted_transport import ScriptedTransport
 
     monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
     settings = SettingsService(tmp_path)
@@ -188,7 +188,7 @@ def test_list_models_failure_is_reported_not_raised(tmp_path, monkeypatch):
     """探针失败只回 ok=False，界面据此退回手动输入（不是崩溃，也不是假成功）。"""
     import asyncio
 
-    from tests.scripted_transport import ScriptedTransport
+    from scripted_transport import ScriptedTransport
 
     monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
     settings = SettingsService(tmp_path)

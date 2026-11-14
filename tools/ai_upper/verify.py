@@ -81,7 +81,7 @@ def _verify_egg_bundle(
     except Exception as exc:
         return [(False, f"merged bundle in egg: {exc}")]
     checks = [(method == zipfile.ZIP_STORED, f"merged bundle stored {member}")]
-    with tempfile.TemporaryDirectory(prefix="py_upper-verify-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="ai_upper-verify-") as tmp:
         probe = Path(tmp) / Path(member).name
         probe.write_bytes(data)
         try:
@@ -115,7 +115,7 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
             preloaded.add(name)
             pending.extend(dep.lower() for dep in dependency_names(libraries[name])
                            if dep.lower() in libraries and dep.lower() not in preloaded)
-    with tempfile.TemporaryDirectory(prefix="py_upper-egg-check-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="ai_upper-egg-check-") as tmp:
         root = Path(tmp)
         with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
             for member in archive.infolist():
@@ -284,11 +284,11 @@ def _launcher_subsystem_check(executable: Path) -> tuple[bool, str]:
     the build: CMake's WIN32_EXECUTABLE relies on -mwindows, which MSVC honours
     and Zig's clang frontend silently ignores, so a cross-built launcher used to
     come out as a console image that flashes a console window on every start.
-    PY_UPPER_LAUNCHER_CONSOLE=1 is the documented debugging escape hatch that
+    AI_UPPER_LAUNCHER_CONSOLE=1 is the documented debugging escape hatch that
     builds the console variant on purpose, and is the only case console is
     expected.
     """
-    expected = PE_SUBSYSTEM_CONSOLE if os.environ.get("PY_UPPER_LAUNCHER_CONSOLE") == "1" else PE_SUBSYSTEM_GUI
+    expected = PE_SUBSYSTEM_CONSOLE if os.environ.get("AI_UPPER_LAUNCHER_CONSOLE") == "1" else PE_SUBSYSTEM_GUI
     try:
         subsystem = inspect(executable).subsystem
     except Exception as exc:
@@ -542,9 +542,9 @@ def run_launcher_smoke(target: Target, launcher: Path) -> None:
     # The smoke program is compiled into the launcher like the entry is, so the
     # run below is what proves it: there is no file to check first.
     env = dict(os.environ)
-    env["PY_UPPER_SMOKE"] = "1"
+    env["AI_UPPER_SMOKE"] = "1"
     # The smoke test is non-interactive by definition: a failure must surface as
     # a non-zero exit code, not as a dialog waiting for a click.
-    env["PY_UPPER_NO_DIALOG"] = "1"
+    env["AI_UPPER_NO_DIALOG"] = "1"
     print("+", launcher, "[launcher smoke]")
     run_packaged_launcher(launcher, cwd=launcher.parent, env=env, check=True)

@@ -9,7 +9,7 @@ from application import run_application
 
 def test_application(capsys):
     run_application()
-    assert "py_upper" in capsys.readouterr().out
+    assert "ai_upper" in capsys.readouterr().out
 
 
 def test_resource_root_prefers_the_launcher_exported_home(monkeypatch, tmp_path):
@@ -30,7 +30,7 @@ def test_assets_root_follows_the_launcher_exported_home(monkeypatch, tmp_path):
 
     The packager copies `app/assets` to `<bundle>/assets`; that is the only
     location that exists after the egg is unpacked, and the launcher exports
-    its root as PY_UPPER_HOME.
+    its root as AI_UPPER_HOME.
     """
     from utils import paths
 
@@ -67,7 +67,7 @@ def test_assets_root_names_the_packaged_location_when_nothing_exists(monkeypatch
 
 def test_app_name_agrees_with_the_packaging_configuration(monkeypatch):
     """The name is written once, in app/pyproject.toml, and read from there."""
-    from py_upper.config import app_name as packaged_app_name
+    from ai_upper.config import app_name as packaged_app_name
     from utils import paths
 
     monkeypatch.delenv(paths.APP_NAME_ENV, raising=False)
@@ -100,7 +100,7 @@ def test_declared_app_name_ignores_the_project_section(tmp_path, monkeypatch):
     project = tmp_path / "app" / "pyproject.toml"
     project.parent.mkdir(parents=True)
     project.write_text(
-        '[project]\nname = "not-the-app-name"\n\n[tool.py_upper.app]\nname = "Real App"  # inline comment\n',
+        '[project]\nname = "not-the-app-name"\n\n[tool.ai_upper.app]\nname = "Real App"  # inline comment\n',
         encoding="utf-8",
     )
     module = project.parent / "src" / "utils" / "paths.py"
@@ -122,7 +122,7 @@ def test_gui_opens_a_window_headlessly(monkeypatch, capsys):
 
     from application import run_gui
 
-    monkeypatch.setenv("PY_UPPER_HEADLESS", "1")
+    monkeypatch.setenv("AI_UPPER_HEADLESS", "1")
     monkeypatch.delenv("QT_QPA_PLATFORM", raising=False)
 
     assert run_gui() == 0

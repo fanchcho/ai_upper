@@ -136,6 +136,21 @@ def retire_tree(path: Path, *, trash: Path) -> None:
     _housekeeping(lambda: shutil.rmtree(retired), path=path)
 
 
+def marker_file(root: Path, name: str, legacy: str) -> Path | None:
+    """The marker to read: the current name, else its pre-rename spelling.
+
+    Cache markers record a verified download (a runtime tree, an SDK archive),
+    so losing one costs a re-download of hundreds of megabytes. A tree written
+    before the rename carries only the old name and must keep counting as
+    valid; every write goes to the current name.
+    """
+    current = Path(root) / name
+    if current.is_file():
+        return current
+    older = Path(root) / legacy
+    return older if older.is_file() else None
+
+
 def make_executable(path: Path) -> None:
     """Add execute bits without replaying source metadata."""
     mode = stat.S_IMODE(path.stat().st_mode)

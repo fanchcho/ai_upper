@@ -2,8 +2,8 @@
 
 // Reads the merged application bundles out of an encrypted egg without a
 // CPython interpreter. The egg is MAGIC + XOR(zip, SHAKE-256(key)); bundle
-// members are stored uncompressed by tools/py_upper/egg.py so this parser
-// needs no zlib or lzma. Only `py_upper_bundles/...` entries are returned.
+// members are stored uncompressed by tools/ai_upper/egg.py so this parser
+// needs no zlib or lzma. Only `ai_upper_bundles/...` entries are returned.
 //
 // The launcher calls this before Py_Initialize: PyImport_ExtendInittab only
 // accepts modules while the interpreter is unborn, so the bundles cannot wait
@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-namespace pyupper {
+namespace aiupper {
 
 struct EggBundleFile {
     std::string name;                  // Zip member name, always UTF-8/ASCII here.
@@ -283,4 +283,4 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
     return true;
 }
 
-}  // namespace pyupper
+}  // namespace aiupper

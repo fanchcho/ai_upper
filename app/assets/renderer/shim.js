@@ -1,4 +1,4 @@
-// py_upper 宿主注入脚本：在页面文档创建前补齐 `window.deva`。
+// ai_upper 宿主注入脚本：在页面文档创建前补齐 `window.deva`。
 //
 // 原版渲染层只认 `window.deva`（Electron preload 用 contextBridge 暴露）。QtWebEngine 里没有
 // preload，所以这里复刻同一份对象形状：每个方法把调用转成一次 `bridge.invoke(requestId, channel, argsJson)`，

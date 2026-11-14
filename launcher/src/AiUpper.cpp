@@ -1,4 +1,4 @@
-#include "PyUpper.h"
+#include "AiUpper.h"
 #include "egg_bundles.h"
 // Including Python.h must not drag the CPython import library into the link.
 // The launcher resolves every entry point from the bundled libpython at
@@ -36,19 +36,19 @@
 
 namespace fs = std::filesystem;
 
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-// The entry programs, written by tools/py_upper at packaging time; see
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+// The entry programs, written by tools/ai_upper at packaging time; see
 // write_embedded_source(). Declared here, at file scope, because that is where
 // the generated translation unit defines them: a declaration inside the
 // anonymous namespace below would name a different, internal symbol and the
 // link would fail with "has internal linkage but is not defined".
-namespace py_upper_embedded {
+namespace ai_upper_embedded {
 extern const char* const kEntry;
 extern const char* const kSmoke;
 extern const char* const kEggLoader;
 extern const char* const kEggKey;
 extern const char* const kEggBackend;
-}  // namespace py_upper_embedded
+}  // namespace ai_upper_embedded
 #endif
 
 namespace {
@@ -76,25 +76,32 @@ constexpr const char* kRuntimeEntrySymbol = "PyConfig_InitIsolatedConfig";
 // Entry file that does not depend on the executable name, so a launcher built
 // without an embedded entry still finds its application after being renamed
 // (PyStand's _pystand_static.int).
-constexpr const char* kStaticEntry = "_py_upper_static.int";
+constexpr const char* kStaticEntry = "_ai_upper_static.int";
 
 // The encrypted application archive. It lives in its own directory so the
 // bundle root stays readable, and one name keeps the build and the loader in
 // sync without another setting.
 constexpr const char* kEggDir = "bundle";
-constexpr const char* kEggFile = "py_upper.dat";
+constexpr const char* kEggFile = "ai_upper.dat";
 
 // Merged application extensions. They are loaded and registered with CPython's
 // inittab before Py_Initialize, because PyImport_ExtendInittab only accepts
 // built-in modules while the interpreter is still unborn.
-constexpr const char* kBundlesDir = "py_upper_bundles";
-constexpr const char* kBundlesPrefix = "py_upper_bundles/";
+constexpr const char* kBundlesDir = "ai_upper_bundles";
+constexpr const char* kBundlesPrefix = "ai_upper_bundles/";
 
 // Fatal errors must be visible: on Windows the launcher is a GUI-subsystem
 // binary and a macOS bundle started from Finder has no terminal, so a broken
 // package would otherwise look like nothing happened at all. Non-interactive
 // runs (smoke tests, CI) opt out instead of blocking on a dialog.
-constexpr const char* kNoDialogEnv = "PY_UPPER_NO_DIALOG";
+constexpr const char* kNoDialogEnv = "AI_UPPER_NO_DIALOG";
+// Pre-rename spellings of the two debugging switches. Still honoured so an
+// existing CI job or script keeps its behaviour after the rename.
+constexpr const char* kLegacyNoDialogEnv = "PY_UPPER_NO_DIALOG";
+constexpr const char* kLegacySmokeEnv = "PY_UPPER_SMOKE";
+constexpr const char* kSmokeEnv = "AI_UPPER_SMOKE";
+constexpr const char* kLegacyEggCacheEnv = "PY_UPPER_EGG_CACHE";
+constexpr const char* kEggCacheEnv = "AI_UPPER_EGG_CACHE";
 constexpr unsigned kDialogTimeoutSeconds = 120;
 constexpr std::size_t kMaxDialogChars = 4000;
 
@@ -242,10 +249,10 @@ std::string clip_for_dialog(const std::string& text) {
 }
 
 void report_fatal(const std::string& message) {
-    std::cerr << "py_upper: " << message << "\n";
-    if (std::getenv(kNoDialogEnv)) return;
+    std::cerr << "ai_upper: " << message << "\n";
+    if (std::getenv(kNoDialogEnv) || std::getenv(kLegacyNoDialogEnv)) return;
     if (visible_stream()) return;
-    show_error("py_upper", clip_for_dialog(message));
+    show_error("ai_upper", clip_for_dialog(message));
 }
 
 fs::path executable_path() {
@@ -287,19 +294,19 @@ std::vector<fs::path> entry_candidates(const fs::path& dir, const std::string& s
 }
 
 // The programs the launcher runs. A packaged launcher carries both compiled in
-// (tools/py_upper generates them); a launcher built by hand has neither and
+// (tools/ai_upper generates them); a launcher built by hand has neither and
 // resolves its entry from a file next to the executable instead.
 const char* embedded_entry() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEntry;
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+    return ai_upper_embedded::kEntry;
 #else
     return nullptr;
 #endif
 }
 
 const char* embedded_smoke() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kSmoke;
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+    return ai_upper_embedded::kSmoke;
 #else
     return nullptr;
 #endif
@@ -308,24 +315,24 @@ const char* embedded_smoke() {
 // The egg loader and the key it needs. Both are null/empty in a launcher built
 // without an egg, which makes the bootstrap skip installation entirely.
 const char* embedded_egg_loader() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEggLoader;
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+    return ai_upper_embedded::kEggLoader;
 #else
     return nullptr;
 #endif
 }
 
 const char* embedded_egg_key() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEggKey;
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+    return ai_upper_embedded::kEggKey;
 #else
     return "";
 #endif
 }
 
 const char* embedded_egg_backend() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEggBackend;
+#ifdef AI_UPPER_HAS_EMBEDDED_SOURCE
+    return ai_upper_embedded::kEggBackend;
 #else
     return "auto";
 #endif
@@ -343,7 +350,7 @@ fs::path crash_report_path() {
     const char* tmp = std::getenv("TMPDIR");
     fs::path directory = (tmp && *tmp) ? fs::path(tmp) : fs::path("/tmp");
 #endif
-    return directory / ("py_upper-" + std::to_string(process_id()) + ".log");
+    return directory / ("ai_upper-" + std::to_string(process_id()) + ".log");
 }
 
 std::string read_text_file(const fs::path& path) {
@@ -389,7 +396,7 @@ import traceback
 import linecache
 
 
-def _py_upper_streams():
+def _ai_upper_streams():
     if sys.stdout is not None and sys.stderr is not None:
         return
     stream = None
@@ -412,7 +419,7 @@ def _py_upper_streams():
         sys.stderr = stream
 
 
-def _py_upper_report():
+def _ai_upper_report():
     try:
         with open(CRASH_REPORT, "w", encoding="utf-8", errors="replace") as handle:
             traceback.print_exc(file=handle)
@@ -420,7 +427,7 @@ def _py_upper_report():
         pass
 
 
-def _py_upper_run():
+def _ai_upper_run():
     if ENTRY_SOURCE is not None:
         # The entry rides in the launcher, so there is no file to read. The
         # namespace is the one runpy gives a script, and __file__ is a path that
@@ -437,15 +444,15 @@ def _py_upper_run():
         runpy.run_path(ENTRY_SCRIPT, run_name="__main__")
 
 
-def _py_upper_install_egg():
+def _ai_upper_install_egg():
     if EGG_LOADER_SOURCE is None or not EGG_PATH or not os.path.isfile(EGG_PATH):
         return
-    namespace = {"__name__": "py_upper_eggloader", "__file__": EGG_PATH}
-    exec(compile(EGG_LOADER_SOURCE, "<py_upper_eggloader>", "exec"), namespace)
+    namespace = {"__name__": "ai_upper_eggloader", "__file__": EGG_PATH}
+    exec(compile(EGG_LOADER_SOURCE, "<ai_upper_eggloader>", "exec"), namespace)
     namespace["install"](EGG_PATH, key_hex=EGG_KEY_HEX, backend=EGG_BACKEND)
 
 
-_py_upper_streams()
+_ai_upper_streams()
 if ENTRY_SOURCE is not None:
     linecache.cache[ENTRY_FILE] = (
         len(ENTRY_SOURCE), None, ENTRY_SOURCE.splitlines(True), ENTRY_FILE)
@@ -454,12 +461,12 @@ if ENTRY_SOURCE is not None:
 # API does not refresh, so publish the same values inside the interpreter too.
 os.environ.update(LAUNCHER_ENV)
 try:
-    _py_upper_install_egg()
-    _py_upper_run()
+    _ai_upper_install_egg()
+    _ai_upper_run()
 except SystemExit:
     raise
 except BaseException:
-    _py_upper_report()
+    _ai_upper_report()
     raise
 )PYUPPER";
 
@@ -487,7 +494,7 @@ std::string bootstrap(const fs::path& script, const fs::path& entry_file, const 
     if (source != nullptr) {
         // The generator refuses a payload that carries a triple double quote,
         // which is what keeps this raw literal from ending early
-        // (see write_embedded_source in tools/py_upper/package.py).
+        // (see write_embedded_source in tools/ai_upper/package.py).
         text += std::string("ENTRY_SOURCE = r\"\"\"") + source + "\"\"\"\n";
     } else {
         text += "ENTRY_SCRIPT = " + py_quote(path_to_utf8(script)) + "\n";
@@ -514,7 +521,7 @@ struct RuntimeLoad {
     std::string error;
 };
 
-// Owns the dlopen/LoadLibrary handle for the whole of PyUpper::run so that every
+// Owns the dlopen/LoadLibrary handle for the whole of AiUpper::run so that every
 // exit path — including an exception raised while configuring the interpreter —
 // releases the runtime before the process ends.
 struct RuntimeGuard {
@@ -531,31 +538,32 @@ struct RuntimeGuard {
 // cache is content-addressed by the decrypted archive, so a rebuilt egg gets a
 // fresh directory and a warm start reuses the old one without rewriting it.
 fs::path bundle_cache_root() {
-    const fs::path override = environment_path("PY_UPPER_EGG_CACHE");
+    fs::path override = environment_path(kEggCacheEnv);
+    if (override.empty()) override = environment_path(kLegacyEggCacheEnv);
     if (!override.empty()) return override;
 #ifdef _WIN32
     const fs::path local = environment_path("LOCALAPPDATA");
-    if (!local.empty()) return local / "py_upper" / "cache" / "eggs";
+    if (!local.empty()) return local / "ai_upper" / "cache" / "eggs";
     const fs::path profile = environment_path("USERPROFILE");
     if (!profile.empty()) {
-        return profile / "AppData" / "Local" / "py_upper" / "cache" / "eggs";
+        return profile / "AppData" / "Local" / "ai_upper" / "cache" / "eggs";
     }
 #elif defined(__APPLE__)
     const fs::path home = environment_path("HOME");
-    if (!home.empty()) return home / "Library" / "Caches" / "py_upper" / "eggs";
+    if (!home.empty()) return home / "Library" / "Caches" / "ai_upper" / "eggs";
 #else
     const fs::path xdg = environment_path("XDG_CACHE_HOME");
-    if (!xdg.empty()) return xdg / "py_upper" / "eggs";
+    if (!xdg.empty()) return xdg / "ai_upper" / "eggs";
     const fs::path home = environment_path("HOME");
-    if (!home.empty()) return home / ".cache" / "py_upper" / "eggs";
+    if (!home.empty()) return home / ".cache" / "ai_upper" / "eggs";
 #endif
     std::error_code ec;
     fs::path fallback = fs::temp_directory_path(ec);
     if (ec) fallback = fs::path(".");
-    return fallback / "py_upper" / "eggs";
+    return fallback / "ai_upper" / "eggs";
 }
 
-std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& files,
+std::string publish_bundle_cache(const std::vector<aiupper::EggBundleFile>& files,
                                  const std::string& cache_key, fs::path& root) {
     std::error_code ec;
     const fs::path base = bundle_cache_root();
@@ -646,10 +654,10 @@ std::string load_module_bundles(const fs::path& site, const fs::path& egg, Runti
     fs::path directory = site / kBundlesDir;
     std::error_code ec;
     if (fs::is_regular_file(egg, ec)) {
-        std::vector<pyupper::EggBundleFile> packed;
+        std::vector<aiupper::EggBundleFile> packed;
         std::string cache_key;
         std::string error;
-        if (!pyupper::read_egg_bundles(egg, embedded_egg_key(), kBundlesPrefix, packed, cache_key, error)) {
+        if (!aiupper::read_egg_bundles(egg, embedded_egg_key(), kBundlesPrefix, packed, cache_key, error)) {
             return "Could not read merged bundles from " + path_to_utf8(egg) + ": " + error;
         }
         if (!packed.empty()) {
@@ -686,9 +694,9 @@ std::string load_module_bundles(const fs::path& site, const fs::path& egg, Runti
         }
 #endif
         guard.bundles.push_back(handle);
-        auto register_modules = (RegisterModules)symbol(handle, "py_upper_register_modules");
+        auto register_modules = (RegisterModules)symbol(handle, "ai_upper_register_modules");
         if (!register_modules) {
-            return "Module bundle " + path_to_utf8(path) + " does not export py_upper_register_modules";
+            return "Module bundle " + path_to_utf8(path) + " does not export ai_upper_register_modules";
         }
         if (register_modules() != 0) {
             return "Registering modules from " + path_to_utf8(path) + " failed";
@@ -794,7 +802,7 @@ RuntimeLoad load_python(const fs::path& home) {
 
 }  // namespace
 
-int PyUpper::run(const std::vector<std::string>& argv) {
+int AiUpper::run(const std::vector<std::string>& argv) {
     RuntimeGuard runtime;
     FinalizeEx finalize = nullptr;
     IsInitialized initialized = nullptr;
@@ -829,7 +837,8 @@ int PyUpper::run(const std::vector<std::string>& argv) {
         // copies it. It is simply absent when the project ships loose files.
         const fs::path egg = entry_dir / kEggDir / kEggFile;
 
-        const char* smoke = std::getenv("PY_UPPER_SMOKE");
+        const char* smoke = std::getenv(kSmokeEnv);
+        if (smoke == nullptr) smoke = std::getenv(kLegacySmokeEnv);
         const bool smoke_mode = smoke && std::string(smoke) == "1";
 
         // The program compiled into the launcher wins over a file next to it: a
@@ -869,22 +878,26 @@ int PyUpper::run(const std::vector<std::string>& argv) {
             set_env(name, value);
             exported_env.emplace_back(name, value);
         };
-        export_env("PY_UPPER_HOME", path_to_utf8(entry_dir));
-        export_env("PY_UPPER_RUNTIME", path_to_utf8(home));
-        export_env("PY_UPPER_SITE_PACKAGES", path_to_utf8(site));
+        export_env("AI_UPPER_HOME", path_to_utf8(entry_dir));
+        export_env("AI_UPPER_RUNTIME", path_to_utf8(home));
+        export_env("AI_UPPER_SITE_PACKAGES", path_to_utf8(site));
         // Exported only when the entry really is a file. A packaged launcher
         // carries its entry, and naming a path that does not exist would be
         // worse than saying nothing.
-        if (!script.empty()) export_env("PY_UPPER_SCRIPT", path_to_utf8(script));
-        if (fs::exists(egg)) export_env("PY_UPPER_EGG", path_to_utf8(egg));
-        export_env("PY_UPPER_EXECUTABLE", exe);
-#ifdef PY_UPPER_APP_NAME
-        export_env("PY_UPPER_APP_NAME", PY_UPPER_APP_NAME);
+        if (!script.empty()) export_env("AI_UPPER_SCRIPT", path_to_utf8(script));
+        if (fs::exists(egg)) export_env("AI_UPPER_EGG", path_to_utf8(egg));
+        export_env("AI_UPPER_EXECUTABLE", exe);
+#ifdef AI_UPPER_APP_NAME
+        export_env("AI_UPPER_APP_NAME", AI_UPPER_APP_NAME);
 #else
         // A launcher built by hand has no compiled-in name; the executable stem
         // is the best answer available.
-        export_env("PY_UPPER_APP_NAME", stem);
+        export_env("AI_UPPER_APP_NAME", stem);
 #endif
+        // The pre-rename names stay exported alongside the new ones: a bundle
+        // whose Python side predates the rename keeps finding its paths.
+        export_env("PY_UPPER_HOME", path_to_utf8(entry_dir));
+        export_env("PY_UPPER_EXECUTABLE", exe);
         std::string launcher_env = "LAUNCHER_ENV = {\n";
         for (const auto& entry : exported_env) {
             launcher_env += "    " + py_quote(entry.first) + ": " + py_quote(entry.second) + ",\n";

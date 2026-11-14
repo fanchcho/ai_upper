@@ -18,7 +18,7 @@ def launcher_probe(tmp_path_factory):
     launcher = Path(__file__).parents[2] / "launcher" / "src"
     source = root / "probe.cpp"
     source.write_text(
-        '#include "PyUpper.cpp"\n'
+        '#include "AiUpper.cpp"\n'
         'int main() {\n'
         '  std::cout << path_to_utf8(executable_path()) << "\\n";\n'
         '  std::cout << path_to_utf8(bundle_cache_root()) << "\\n";\n'
@@ -76,17 +76,17 @@ def test_launcher_resolves_path_and_symlink_launches(launcher_probe, tmp_path):
 def test_launcher_cache_paths_preserve_unicode(launcher_probe, tmp_path, override):
     home = tmp_path / "用户 目录"
     env = dict(os.environ)
-    env.pop("PY_UPPER_EGG_CACHE", None)
+    env.pop("AI_UPPER_EGG_CACHE", None)
     env.update(HOME=str(home), LOCALAPPDATA=str(home), XDG_CACHE_HOME=str(home))
     if override:
         expected = home / "指定 缓存"
-        env["PY_UPPER_EGG_CACHE"] = str(expected)
+        env["AI_UPPER_EGG_CACHE"] = str(expected)
     elif os.name == "nt":
-        expected = home / "py_upper" / "cache" / "eggs"
+        expected = home / "ai_upper" / "cache" / "eggs"
     elif sys.platform == "darwin":
-        expected = home / "Library" / "Caches" / "py_upper" / "eggs"
+        expected = home / "Library" / "Caches" / "ai_upper" / "eggs"
     else:
-        expected = home / "py_upper" / "eggs"
+        expected = home / "ai_upper" / "eggs"
     result = subprocess.run(
         [str(launcher_probe)], env=env, cwd=tmp_path, capture_output=True,
         text=True, encoding="utf-8", check=True, timeout=10,

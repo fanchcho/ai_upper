@@ -13,9 +13,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from py_upper import python_build
-from py_upper.config import TARGETS
-from py_upper.toolchain import Toolchain
+from ai_upper import python_build
+from ai_upper.config import TARGETS
+from ai_upper.toolchain import Toolchain
 
 
 def _app_source(root: Path, relative: str = "pkg/demo.py") -> Path:
@@ -192,32 +192,32 @@ def test_windows_unchanged_extension_skips_the_setuptools_driver(tmp_path, monke
 
 
 def test_build_jobs_and_incremental_are_configurable(monkeypatch):
-    from py_upper import config
+    from ai_upper import config
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {})
     assert config.build_jobs() >= 1
     assert config.incremental_build_enabled() is True
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {"build": {"jobs": 3, "incremental": False}})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {"build": {"jobs": 3, "incremental": False}})
     assert config.build_jobs() == 3
     assert config.incremental_build_enabled() is False
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {"build": {"jobs": 0}})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {"build": {"jobs": 0}})
     assert config.build_jobs() >= 1
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {"build": {"jobs": -1}})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {"build": {"jobs": -1}})
     with pytest.raises(RuntimeError, match="jobs"):
         config.build_jobs()
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {"build": {"jobs": "many"}})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {"build": {"jobs": "many"}})
     with pytest.raises(RuntimeError, match="jobs"):
         config.build_jobs()
 
 
 @pytest.mark.parametrize("value", ["sometimes", "", 1, 0, [], None])
 def test_incremental_rejects_non_boolean_config(monkeypatch, value):
-    from py_upper import config
+    from ai_upper import config
 
-    monkeypatch.setattr(config, "py_upper_config", lambda: {"build": {"incremental": value}})
+    monkeypatch.setattr(config, "ai_upper_config", lambda: {"build": {"incremental": value}})
     with pytest.raises(RuntimeError, match="incremental.*boolean"):
         config.incremental_build_enabled()

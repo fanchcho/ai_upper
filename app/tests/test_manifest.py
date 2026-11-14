@@ -1,7 +1,7 @@
 import json
 
-from py_upper.config import RuntimeSpec, TARGETS
-from py_upper.manifest import build_manifest, canonical_json, manifest_hash, validate_manifest
+from ai_upper.config import RuntimeSpec, TARGETS
+from ai_upper.manifest import build_manifest, canonical_json, manifest_hash, validate_manifest
 
 
 def test_manifest_round_trip_is_portable_and_hashed(tmp_path):

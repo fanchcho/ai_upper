@@ -9,9 +9,9 @@ from pathlib import Path
 
 import pytest
 
-from py_upper.config import TARGETS
-from py_upper import egg
-from py_upper.native import bundle, deps
+from ai_upper.config import TARGETS
+from ai_upper import egg
+from ai_upper.native import bundle, deps
 
 
 def _elf(path: Path, machine: int = 62, file_type: int = 3) -> Path:
@@ -170,7 +170,7 @@ def test_linux_relocation_leaves_self_contained_wheel_paths_untouched(tmp_path, 
 
 @pytest.mark.skipif(not sys.platform.startswith("linux"), reason="requires native ELF tools")
 def test_linux_bundled_external_chain_loads_after_removing_source(tmp_path, monkeypatch):
-    from py_upper.config import host_target
+    from ai_upper.config import host_target
 
     required = ("cc", "patchelf", "readelf")
     if not all(shutil.which(tool) for tool in required):
@@ -222,7 +222,7 @@ def test_native_discovery_skips_relocatable_objects(tmp_path):
     macho_object = _macho(tmp_path / "config" / "python-mac.o", file_type=1)
     macho_library = _macho(tmp_path / "libpython.dylib")
 
-    from py_upper.native.inspect import inspect
+    from ai_upper.native.inspect import inspect
 
     assert inspect(elf_object).loadable is False
     assert inspect(macho_object).loadable is False
@@ -232,7 +232,7 @@ def test_native_discovery_skips_relocatable_objects(tmp_path):
 
 @pytest.mark.parametrize("endian,fat64", [(">", False), ("<", False), (">", True), ("<", True)])
 def test_native_discovery_checks_universal_slices(tmp_path, endian, fat64):
-    from py_upper.native.inspect import inspect, verify_arch
+    from ai_upper.native.inspect import inspect, verify_arch
 
     obj = _macho(tmp_path / "object", file_type=1).read_bytes()
     dylib = _macho(tmp_path / "library").read_bytes()
@@ -471,12 +471,12 @@ def test_egg_leaves_native_inputs_visible_to_the_closure(closure_workspace, monk
     (source / "settings.so.1").write_text("plain text settings\n", encoding="utf-8")
     shutil.copytree(source, site, dirs_exist_ok=True)
     (site / "main.py").unlink()
-    compiled = _elf(site / "py_upper_bundles" / "py_upper_main.so")
+    compiled = _elf(site / "ai_upper_bundles" / "ai_upper_main.so")
     monkeypatch.setattr(egg, "APP", app)
 
     files = egg.application_files(site, {compiled.relative_to(site).as_posix()})
 
-    assert files == ["py_upper_bundles/py_upper_main.so", "settings.so.1"]
+    assert files == ["ai_upper_bundles/ai_upper_main.so", "settings.so.1"]
     config = egg.EggConfig()
     archive = egg.pack_egg(site, root / "bundle" / egg.EGG_NAME, files, config)
     egg.remove_packed_files(site, files)

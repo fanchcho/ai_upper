@@ -10,12 +10,12 @@ import pytest
 
 
 def test_build_python_minimum_and_toml_compatibility():
-    from py_upper.compat import tomllib
-    from py_upper.config import validate_build_python_version
+    from ai_upper.compat import tomllib
+    from ai_upper.config import validate_build_python_version
 
     validate_build_python_version(type("V", (), {"major": 3, "minor": 8})())
-    data = tomllib.loads('[tool.py_upper]\nentry = "main.py"\n')
-    assert data["tool"]["py_upper"]["entry"] == "main.py"
+    data = tomllib.loads('[tool.ai_upper]\nentry = "main.py"\n')
+    assert data["tool"]["ai_upper"]["entry"] == "main.py"
 
 
 def test_every_build_tool_module_imports():
@@ -30,10 +30,10 @@ def test_every_build_tool_module_imports():
     import importlib
     import pkgutil
 
-    import py_upper
+    import ai_upper
 
-    names = sorted(module.name for module in pkgutil.walk_packages(py_upper.__path__, py_upper.__name__ + "."))
-    assert "py_upper.python_build" in names and "py_upper.pbs" in names
+    names = sorted(module.name for module in pkgutil.walk_packages(ai_upper.__path__, ai_upper.__name__ + "."))
+    assert "ai_upper.python_build" in names and "ai_upper.pbs" in names
     for name in names:
         importlib.import_module(name)
 
@@ -89,7 +89,7 @@ def test_every_source_module_defers_its_annotations():
 
 
 def test_msvc_host_target_pairs_cover_every_combination():
-    from py_upper.toolchain import VC_HOST_COMPONENT, VCVARSALL_HOST_TARGET
+    from ai_upper.toolchain import VC_HOST_COMPONENT, VCVARSALL_HOST_TARGET
 
     for host in ("x86", "x86_64", "arm64"):
         assert host in VC_HOST_COMPONENT
@@ -104,7 +104,7 @@ def test_msvc_host_target_pairs_cover_every_combination():
 
 def test_host_arch_normalizes_windows_and_linux_spellings(monkeypatch):
     """platform.machine() reports AMD64/ARM64 on Windows and x86_64/aarch64 on Linux."""
-    from py_upper import toolchain
+    from ai_upper import toolchain
 
     for machine, expected in (
         ("AMD64", "x86_64"),
@@ -127,7 +127,7 @@ def test_windows_environment_parser_keeps_only_variable_assignments():
     search path is ``Path`` there, while ``os.environ`` and every caller spell it
     ``PATH``.
     """
-    from py_upper import toolchain
+    from ai_upper import toolchain
 
     parsed = toolchain._parse_windows_environment(
         "\n".join(
@@ -157,7 +157,7 @@ def test_windows_environment_parser_keeps_only_variable_assignments():
 
 def test_windows_environment_parser_reports_its_own_output_on_failure():
     """A failed ``vcvarsall`` run must describe itself; the exit code cannot."""
-    from py_upper import toolchain
+    from ai_upper import toolchain
 
     assert toolchain._output_tail("", "") == "(no output)"
     assert toolchain._output_tail("first\n\nsecond") == "first\nsecond"
@@ -169,8 +169,8 @@ def test_tracked_pyproject_template_is_complete():
     """A fresh clone copies this file, so it must be buildable on its own."""
     import re
 
-    from py_upper.compat import tomllib
-    from py_upper.config import APP_CONFIG_EXAMPLE
+    from ai_upper.compat import tomllib
+    from ai_upper.config import APP_CONFIG_EXAMPLE
 
     assert APP_CONFIG_EXAMPLE.is_file()
     data = tomllib.loads(APP_CONFIG_EXAMPLE.read_text(encoding="utf-8"))
@@ -179,7 +179,7 @@ def test_tracked_pyproject_template_is_complete():
     # whoever cloned first. The integration job materializes its own working
     # copy for the build, so an empty list here still builds.
     assert data["project"]["dependencies"] == []
-    tool = data["tool"]["py_upper"]
+    tool = data["tool"]["ai_upper"]
     assert tool["entry"].endswith(".py")
     assert tool["app"]["name"] and tool["app"]["identifier"]
     assert tool["runtime"]["provider"] in {"pbs", "local"}
@@ -198,11 +198,11 @@ def test_template_drops_the_pyside_arm64_orphan():
     of shipping a bundle that cannot load. Both bindings are listed because the
     Python 3.8 compatibility job builds against PySide2.
     """
-    from py_upper.compat import tomllib
-    from py_upper.config import APP_CONFIG_EXAMPLE
+    from ai_upper.compat import tomllib
+    from ai_upper.config import APP_CONFIG_EXAMPLE
 
     data = tomllib.loads(APP_CONFIG_EXAMPLE.read_text(encoding="utf-8"))
-    exclude = data["tool"]["py_upper"]["native"]["exclude"]
+    exclude = data["tool"]["ai_upper"]["native"]["exclude"]
     assert "PySide6/vccorlib140.dll" in exclude
     assert "shiboken6/vccorlib140.dll" in exclude
     assert "PySide2/vccorlib140.dll" in exclude
@@ -222,11 +222,11 @@ def test_template_drops_the_32_bit_ucrt_orphan():
     bundle that cannot load. Both bindings are listed because the Python 3.8
     compatibility job builds against PySide2.
     """
-    from py_upper.compat import tomllib
-    from py_upper.config import APP_CONFIG_EXAMPLE
+    from ai_upper.compat import tomllib
+    from ai_upper.config import APP_CONFIG_EXAMPLE
 
     data = tomllib.loads(APP_CONFIG_EXAMPLE.read_text(encoding="utf-8"))
-    exclude = data["tool"]["py_upper"]["native"]["exclude"]
+    exclude = data["tool"]["ai_upper"]["native"]["exclude"]
     assert "PySide6/ucrtbase.dll" in exclude
     assert "shiboken6/ucrtbase.dll" in exclude
     assert "PySide2/ucrtbase.dll" in exclude
@@ -314,7 +314,7 @@ def test_ci_builds_the_oldest_supported_windows_runtime():
             target: windows-x86_64
             runtime-python: '3.8.10'
             run: true""" in text
-    assert "PY_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}" in text
+    assert "AI_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}" in text
     assert "dependencies: '[\"PySide2==5.15.2.1\"]'" in text
     assert "artifact: py38-compat-windows-x86_64" in text
 
@@ -346,7 +346,7 @@ def test_vscode_never_watches_the_built_trees():
 
 
 def test_missing_local_configuration_points_at_the_template(tmp_path, monkeypatch):
-    from py_upper import config
+    from ai_upper import config
 
     monkeypatch.setattr(config, "APP_CONFIG", tmp_path / "pyproject.toml")
     monkeypatch.setattr(config, "APP_CONFIG_EXAMPLE", tmp_path / "pyproject.toml.example")
@@ -365,7 +365,7 @@ def test_missing_local_configuration_survives_a_foreign_drive(tmp_path, monkeypa
     Windows drives, which is what happens when the working copy lives on D: and
     the temporary configuration on C:.
     """
-    from py_upper import config
+    from ai_upper import config
 
     def cross_drive(*_args, **_kwargs):
         raise ValueError("path is on mount 'C:', start on mount 'D:'")
@@ -379,8 +379,8 @@ def test_missing_local_configuration_survives_a_foreign_drive(tmp_path, monkeypa
 
 
 def test_target_matrix_and_platform_contract(monkeypatch):
-    from py_upper import config
-    from py_upper.config import TARGETS
+    from ai_upper import config
+    from ai_upper.config import TARGETS
 
     assert set(TARGETS) == {
         "windows-x86", "windows-x86_64", "windows-arm64",
@@ -399,7 +399,7 @@ def test_target_matrix_and_platform_contract(monkeypatch):
 
 
 def test_manylinux_baselines_are_validated(monkeypatch):
-    from py_upper import config
+    from ai_upper import config
 
     for value in ("manylinux_2_17", ["manylinux_2_28"], "manylinux2014"):
         monkeypatch.setattr(config, "dependency_config", lambda value=value: {"manylinux": value})
@@ -421,7 +421,7 @@ def test_manylinux_baselines_are_validated(monkeypatch):
 
 
 def test_extension_suffixes_follow_target_import_conventions():
-    from py_upper.config import TARGETS, target_extension_suffix
+    from ai_upper.config import TARGETS, target_extension_suffix
 
     assert target_extension_suffix(TARGETS["windows-x86_64"], "3.13", "cp313") == ".cp313-win_amd64.pyd"
     assert target_extension_suffix(TARGETS["macos-arm64"], "3.13", "cp313") == ".cpython-313-darwin.so"
@@ -442,8 +442,8 @@ def test_windows_extensions_are_named_for_the_target_not_the_build_host(tmp_path
     import setuptools
     from setuptools.dist import Distribution
 
-    from py_upper.config import APP
-    from py_upper.python_build import module_name, windows_setup_script
+    from ai_upper.config import APP
+    from ai_upper.python_build import module_name, windows_setup_script
 
     source = APP / "src" / "utils" / "paths.py"
     module = module_name(source)
@@ -473,7 +473,7 @@ def test_windows_extensions_are_named_for_the_target_not_the_build_host(tmp_path
 
 
 def test_source_selection_is_layout_agnostic():
-    from py_upper.python_build import APP, extension_name, module_name, selected_sources
+    from ai_upper.python_build import APP, extension_name, module_name, selected_sources
 
     sources = selected_sources()
     modules = {module_name(path) for path in sources}
@@ -490,7 +490,7 @@ def test_source_selection_is_layout_agnostic():
 
 
 def test_cython_cache_is_keyed_by_development_python(monkeypatch, tmp_path):
-    from py_upper import python_build
+    from ai_upper import python_build
 
     monkeypatch.setattr(python_build, "BUILD", tmp_path / "build")
     calls = []
@@ -506,25 +506,25 @@ def test_cython_cache_is_keyed_by_development_python(monkeypatch, tmp_path):
 
 
 def test_pip_transfer_args_are_configurable(monkeypatch):
-    from py_upper import config
+    from ai_upper import config
 
     monkeypatch.setattr(config, "dependency_config", lambda: {})
-    monkeypatch.delenv("PY_UPPER_PIP_TIMEOUT", raising=False)
-    monkeypatch.delenv("PY_UPPER_PIP_RETRIES", raising=False)
+    monkeypatch.delenv("AI_UPPER_PIP_TIMEOUT", raising=False)
+    monkeypatch.delenv("AI_UPPER_PIP_RETRIES", raising=False)
     assert config.pip_transfer_args() == ["--timeout", "120", "--retries", "10"]
 
     monkeypatch.setattr(config, "dependency_config", lambda: {"timeout": 300, "retries": 3})
     assert config.pip_transfer_args() == ["--timeout", "300", "--retries", "3"]
 
-    monkeypatch.setenv("PY_UPPER_PIP_TIMEOUT", "45")
+    monkeypatch.setenv("AI_UPPER_PIP_TIMEOUT", "45")
     monkeypatch.setattr(config, "dependency_config", lambda: {})
     assert config.pip_transfer_args() == ["--timeout", "45", "--retries", "10"]
 
 
 def test_native_wheel_resolution_uses_the_target_interpreter(tmp_path, monkeypatch):
     """pip evaluates environment markers against the interpreter that runs it."""
-    from py_upper import third_party
-    from py_upper.config import TARGETS
+    from ai_upper import third_party
+    from ai_upper.config import TARGETS
 
     target = TARGETS["macos-arm64"]
     runtime_python = tmp_path / "bin" / "python3.10"
@@ -540,8 +540,8 @@ def test_native_wheel_resolution_uses_the_target_interpreter(tmp_path, monkeypat
 
 
 def test_cross_target_resolution_keeps_the_host_interpreter(tmp_path, monkeypatch):
-    from py_upper import third_party
-    from py_upper.config import TARGETS
+    from ai_upper import third_party
+    from ai_upper.config import TARGETS
 
     target = TARGETS["windows-x86_64"]
     host_python = tmp_path / "host-python"
@@ -554,7 +554,7 @@ def test_cross_target_resolution_keeps_the_host_interpreter(tmp_path, monkeypatc
 
 
 def test_cython_supported_versions():
-    from py_upper.python_build import _supported_cython
+    from ai_upper.python_build import _supported_cython
 
     assert _supported_cython("3.1.6")
     assert _supported_cython("3.2.4")
@@ -562,7 +562,7 @@ def test_cython_supported_versions():
 
 
 def test_package_copy_does_not_replay_source_metadata(tmp_path, monkeypatch):
-    from py_upper import fs
+    from ai_upper import fs
 
     source = tmp_path / "src"
     destination = tmp_path / "dst"
@@ -585,7 +585,7 @@ def test_package_copy_does_not_replay_source_metadata(tmp_path, monkeypatch):
 @pytest.mark.skipif(sys.platform == "win32", reason="Windows has no POSIX execute bits")
 def test_copy_preserves_execute_bits_without_replaying_restrictive_modes(tmp_path):
     """A copied interpreter must stay runnable; 0444 sources must not be replayed."""
-    from py_upper import fs
+    from ai_upper import fs
 
     source = tmp_path / "src"
     destination = tmp_path / "dst"
@@ -606,7 +606,7 @@ def test_copy_preserves_execute_bits_without_replaying_restrictive_modes(tmp_pat
 
 
 def test_package_copy_can_reject_collisions(tmp_path):
-    from py_upper.fs import copy_file_contents, copy_tree_contents
+    from ai_upper.fs import copy_file_contents, copy_tree_contents
 
     source = tmp_path / "src"
     destination = tmp_path / "dst"
@@ -623,7 +623,7 @@ def test_package_copy_can_reject_collisions(tmp_path):
 
 def test_optional_resource_tree_is_skipped_when_absent(tmp_path):
     """app/resources is optional: a project without it must still package."""
-    from py_upper.fs import copy_optional_tree, copy_tree_contents
+    from ai_upper.fs import copy_optional_tree, copy_tree_contents
 
     source = tmp_path / "resources"
     destination = tmp_path / "out" / "resources"
@@ -646,13 +646,13 @@ def test_optional_resource_tree_is_skipped_when_absent(tmp_path):
 
 
 def test_launcher_uses_global_python_symbols_and_smoke_switch():
-    launcher = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
     text = launcher.read_text(encoding="utf-8")
     # Whitespace-insensitive: the launcher is reformatted from time to time and
     # the assertion is about the flags, not the spacing.
     compact = "".join(text.split())
     assert "RTLD_NOW|RTLD_GLOBAL" in compact
-    assert "PY_UPPER_SMOKE" in text
+    assert "AI_UPPER_SMOKE" in text
     assert "RTLD_LOCAL" not in text
     # PyConfig_InitIsolatedConfig ignores PYTHONDONTWRITEBYTECODE, so the
     # launcher must disable bytecode caching through the config field. Writing
@@ -660,13 +660,13 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "config.write_bytecode=0;" in compact
     # A hand-made launcher still resolves its entry from a file next to it, so
     # the rename-safe fallback name has to stay in the binary.
-    assert "_py_upper_static.int" in text
+    assert "_ai_upper_static.int" in text
     # A fatal error in a GUI-subsystem launcher has nowhere to print, so the
     # dialog is the report channel and the env switch is the way out of it.
-    assert "PY_UPPER_NO_DIALOG" in text
+    assert "AI_UPPER_NO_DIALOG" in text
     # The application name is compiled in: a renamed executable must still
     # report the configured name, not its own filename.
-    assert "PY_UPPER_APP_NAME" in text
+    assert "AI_UPPER_APP_NAME" in text
     # SetEnvironmentVariableW updates the process block but not the CRT copy
     # Python snapshots into os.environ, so the bootstrap republishes every
     # exported value inside the interpreter.
@@ -678,13 +678,13 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     # The packaged entry programs are compiled in, which is what lets a bundle
     # ship no .int sidecar at all. The define is what tells the launcher the
     # generated symbols exist, and the accessors are what resolve them.
-    assert "PY_UPPER_HAS_EMBEDDED_SOURCE" in text
-    assert "py_upper_embedded::kEntry" in text
-    assert "py_upper_embedded::kSmoke" in text
+    assert "AI_UPPER_HAS_EMBEDDED_SOURCE" in text
+    assert "ai_upper_embedded::kEntry" in text
+    assert "ai_upper_embedded::kSmoke" in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
-    assert "PY_UPPER_APP_NAME" in cmake
-    assert "PY_UPPER_EMBEDDED_SOURCE" in cmake
-    assert "PY_UPPER_HAS_EMBEDDED_SOURCE" in cmake
+    assert "AI_UPPER_APP_NAME" in cmake
+    assert "AI_UPPER_EMBEDDED_SOURCE" in cmake
+    assert "AI_UPPER_HAS_EMBEDDED_SOURCE" in cmake
 
 
 def test_launcher_compiles_against_python38_snprintf_alias():
@@ -698,7 +698,7 @@ def test_launcher_compiles_against_python38_snprintf_alias():
     """
     cmake = (Path(__file__).parents[2] / "launcher" / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "if(MSVC)" in cmake
-    assert "target_compile_definitions(PyUpper PRIVATE HAVE_SNPRINTF)" in cmake
+    assert "target_compile_definitions(AiUpper PRIVATE HAVE_SNPRINTF)" in cmake
 
 
 def test_launcher_escapes_python_literals_without_a_raw_prefix():
@@ -709,7 +709,7 @@ def test_launcher_escapes_python_literals_without_a_raw_prefix():
     separator written twice. The quoting is a normal literal with real escapes
     now, so ``\\t`` and control bytes are emitted as escapes as well.
     """
-    launcher = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
     body = launcher.read_text(encoding="utf-8").split("std::string py_quote", 1)[1].split("\n}\n", 1)[0]
     backslash = chr(92)
     # The literal is opened without the raw prefix; that prefix is what made the
@@ -724,8 +724,8 @@ def test_launcher_escapes_python_literals_without_a_raw_prefix():
 def test_launcher_build_passes_the_configured_app_name(tmp_path, monkeypatch):
     from types import SimpleNamespace
 
-    from py_upper import package
-    from py_upper.config import TARGETS, app_name
+    from ai_upper import package
+    from ai_upper.config import TARGETS, app_name
 
     monkeypatch.setattr(package, "BUILD", tmp_path)
     monkeypatch.setattr(package, "resolve_target_python", lambda target: SimpleNamespace(include_dir=tmp_path / "include"))
@@ -735,7 +735,7 @@ def test_launcher_build_passes_the_configured_app_name(tmp_path, monkeypatch):
     def fake_run(cmd, **kwargs):
         calls.append(cmd)
         if "--build" in cmd:
-            (tmp_path / "launcher" / "macos-arm64" / "PyUpper").write_text("", encoding="utf-8")
+            (tmp_path / "launcher" / "macos-arm64" / "AiUpper").write_text("", encoding="utf-8")
 
     monkeypatch.setattr(package.subprocess, "run", fake_run)
 
@@ -743,12 +743,12 @@ def test_launcher_build_passes_the_configured_app_name(tmp_path, monkeypatch):
 
     configure = calls[0]
     assert configure[0] == "cmake"
-    assert f"-DPY_UPPER_APP_NAME={app_name()}" in configure
+    assert f"-DAI_UPPER_APP_NAME={app_name()}" in configure
     # The entry programs are generated into the build directory and compiled in
     # through this define; without it the launcher is the hand-made variant. The
     # path is spelled for CMake, see test_launcher_configure_spells_every_path_for_cmake.
-    embedded = tmp_path / "launcher" / "macos-arm64" / "py_upper_embedded.cpp"
-    assert f"-DPY_UPPER_EMBEDDED_SOURCE={embedded.as_posix()}" in configure
+    embedded = tmp_path / "launcher" / "macos-arm64" / "ai_upper_embedded.cpp"
+    assert f"-DAI_UPPER_EMBEDDED_SOURCE={embedded.as_posix()}" in configure
     assert embedded.is_file()
 
 
@@ -761,9 +761,9 @@ def test_zig_launcher_configure_names_every_windows_architecture(tmp_path, monke
     """
     from types import SimpleNamespace
 
-    from py_upper import package
-    from py_upper.config import TARGETS
-    from py_upper.package import CMAKE_WINDOWS_PROCESSOR
+    from ai_upper import package
+    from ai_upper.config import TARGETS
+    from ai_upper.package import CMAKE_WINDOWS_PROCESSOR
 
     for target in TARGETS.values():
         if target.os == "windows":
@@ -781,7 +781,7 @@ def test_zig_launcher_configure_names_every_windows_architecture(tmp_path, monke
     def fake_run(cmd, **kwargs):
         calls.append(cmd)
         if "--build" in cmd:
-            (tmp_path / "launcher" / "windows-arm64" / "PyUpper.exe").write_text("", encoding="utf-8")
+            (tmp_path / "launcher" / "windows-arm64" / "AiUpper.exe").write_text("", encoding="utf-8")
 
     monkeypatch.setattr(package.subprocess, "run", fake_run)
 
@@ -806,8 +806,8 @@ def test_launcher_configure_spells_every_path_for_cmake(tmp_path, monkeypatch):
     """
     from types import SimpleNamespace
 
-    from py_upper import package
-    from py_upper.config import TARGETS
+    from ai_upper import package
+    from ai_upper.config import TARGETS
 
     monkeypatch.setattr(package, "BUILD", tmp_path)
     monkeypatch.setattr(package, "resolve_target_python", lambda target: SimpleNamespace(include_dir=tmp_path / "include"))
@@ -819,7 +819,7 @@ def test_launcher_configure_spells_every_path_for_cmake(tmp_path, monkeypatch):
     def fake_run(cmd, **kwargs):
         calls.append(cmd)
         if "--build" in cmd:
-            (tmp_path / "launcher" / "windows-x86_64" / "PyUpper.exe").write_text("", encoding="utf-8")
+            (tmp_path / "launcher" / "windows-x86_64" / "AiUpper.exe").write_text("", encoding="utf-8")
 
     monkeypatch.setattr(package.subprocess, "run", fake_run)
 
@@ -848,23 +848,23 @@ def test_launcher_cmake_requests_the_gui_subsystem_from_every_toolchain():
     """
     cmake = (Path(__file__).parents[2] / "launcher" / "CMakeLists.txt").read_text(encoding="utf-8")
     compact = "".join(cmake.split())
-    assert "set_target_properties(PyUpperPROPERTIESWIN32_EXECUTABLETRUE)" in compact
+    assert "set_target_properties(AiUpperPROPERTIESWIN32_EXECUTABLETRUE)" in compact
     assert 'if(NOTMSVC)' in compact
-    assert 'target_link_options(PyUpperPRIVATE"-Wl,--subsystem,windows")' in compact
+    assert 'target_link_options(AiUpperPRIVATE"-Wl,--subsystem,windows")' in compact
     # The console escape hatch is the one build that must stay a console image.
-    assert "PY_UPPER_LAUNCHER_CONSOLE" in cmake
+    assert "AI_UPPER_LAUNCHER_CONSOLE" in cmake
 
 
 def test_embedded_source_carries_the_entry_and_the_smoke_program(tmp_path):
     """The entry programs are generated as one translation unit, not as files.
 
     A packaged bundle used to ship ``<App>.int``, a rename-safe copy of the same
-    program under ``_py_upper_static.int``, and the smoke program: two copies of
+    program under ``_ai_upper_static.int``, and the smoke program: two copies of
     one entry plus build-verification data no user installs. Both now compile
     into the launcher, so this generated file is the only home the entry has.
     """
-    from py_upper.config import TARGETS, entry_module, entry_source
-    from py_upper.package import (
+    from ai_upper.config import TARGETS, entry_module, entry_source
+    from ai_upper.package import (
         EMBEDDED_SOURCE_FILE, RAW_STRING_DELIMITER, smoke_source,
         write_embedded_source,
     )
@@ -874,7 +874,7 @@ def test_embedded_source_carries_the_entry_and_the_smoke_program(tmp_path):
 
     assert path == tmp_path / EMBEDDED_SOURCE_FILE
     text = path.read_text(encoding="utf-8")
-    assert "namespace py_upper_embedded" in text
+    assert "namespace ai_upper_embedded" in text
     assert "extern const char* const kEntry;" in text
     assert "extern const char* const kSmoke;" in text
     # Raw literals: the program text is not escaped, so what the launcher
@@ -894,7 +894,7 @@ def test_embedded_literal_refuses_a_payload_it_cannot_carry():
     """
     import pytest
 
-    from py_upper.package import RAW_STRING_DELIMITER, _embedded_literal
+    from ai_upper.package import RAW_STRING_DELIMITER, _embedded_literal
 
     ok = _embedded_literal("print('hi')\n", "the application entry")
     assert ok.startswith(f'R"{RAW_STRING_DELIMITER}(') and ok.endswith(f'){RAW_STRING_DELIMITER}"')
@@ -907,8 +907,8 @@ def test_embedded_literal_refuses_a_payload_it_cannot_carry():
 def test_windows_version_resource_carries_a_four_part_version(tmp_path):
     import re
 
-    from py_upper.config import app_name, project_version
-    from py_upper.package import _windows_version_resource
+    from ai_upper.config import app_name, project_version
+    from ai_upper.package import _windows_version_resource
 
     path = _windows_version_resource(tmp_path)
     # rc.exe reads a resource script with the ANSI code page unless the file is
@@ -928,9 +928,9 @@ def test_macos_ad_hoc_signing_seals_the_bundle_last(tmp_path, monkeypatch):
     """Signing the launcher seals the .app, so nested images must be signed first."""
     from types import SimpleNamespace
 
-    from py_upper.config import TARGETS
-    from py_upper.native import bundle
-    from py_upper.native.inspect import BinaryInfo
+    from ai_upper.config import TARGETS
+    from ai_upper.native import bundle
+    from ai_upper.native.inspect import BinaryInfo
 
     target = TARGETS["macos-arm64"]
     root = tmp_path / "MyApp.app"
@@ -976,8 +976,8 @@ def test_macos_universal_images_are_thinned_to_the_target_architecture(tmp_path,
     import shutil as real_shutil
     from types import SimpleNamespace
 
-    from py_upper.native import bundle
-    from py_upper.native.inspect import BinaryInfo
+    from ai_upper.native import bundle
+    from ai_upper.native.inspect import BinaryInfo
 
     universal = tmp_path / "QtDBus"
     universal.write_bytes(b"\xca\xfe\xba\xbe")
@@ -1020,8 +1020,8 @@ def test_macos_thinning_without_lipo_fails_instead_of_leaving_the_image_universa
     import shutil as real_shutil
     from types import SimpleNamespace
 
-    from py_upper.native import bundle
-    from py_upper.native.inspect import BinaryInfo
+    from ai_upper.native import bundle
+    from ai_upper.native.inspect import BinaryInfo
 
     universal = tmp_path / "QtDBus"
     universal.write_bytes(b"\xca\xfe\xba\xbe")
@@ -1037,9 +1037,9 @@ def test_macos_bundle_thins_universal_images_before_rewriting_install_names(tmp_
     import shutil as real_shutil
     from types import SimpleNamespace
 
-    from py_upper.config import TARGETS
-    from py_upper.native import bundle, deps
-    from py_upper.native.inspect import BinaryInfo
+    from ai_upper.config import TARGETS
+    from ai_upper.native import bundle, deps
+    from ai_upper.native.inspect import BinaryInfo
 
     target = TARGETS["macos-arm64"]
     root = (tmp_path / "MyApp.app").resolve()
@@ -1094,7 +1094,7 @@ def test_macos_bundle_thins_universal_images_before_rewriting_install_names(tmp_
 
 
 def test_native_dependency_names_use_binary_format_not_filename_suffix(monkeypatch, tmp_path):
-    from py_upper.native import deps
+    from ai_upper.native import deps
 
     binary = tmp_path / "QtWidgets.abi3.so"
     binary.write_bytes(b"fake")
@@ -1105,7 +1105,7 @@ def test_native_dependency_names_use_binary_format_not_filename_suffix(monkeypat
 
 
 def test_native_alias_resolver_can_map_dylib_install_name_to_real_file(tmp_path):
-    from py_upper.native.deps import DependencyResolver
+    from ai_upper.native.deps import DependencyResolver
 
     actual = tmp_path / "config" / "PCBUSB.dylib"
     actual.parent.mkdir()
@@ -1116,7 +1116,7 @@ def test_native_alias_resolver_can_map_dylib_install_name_to_real_file(tmp_path)
 
 
 def test_native_dependency_parser_excludes_own_macho_id(monkeypatch, tmp_path):
-    from py_upper.native import deps
+    from ai_upper.native import deps
 
     dylib = tmp_path / "PCBUSB.dylib"
     dylib.write_bytes(b"fake")
@@ -1131,8 +1131,8 @@ def test_native_dependency_parser_excludes_own_macho_id(monkeypatch, tmp_path):
 
 
 def test_macho_arm64_and_universal_validation(tmp_path):
-    from py_upper.config import TARGETS
-    from py_upper.native.inspect import inspect, verify_arch
+    from ai_upper.config import TARGETS
+    from ai_upper.native.inspect import inspect, verify_arch
     from test_native_deployment import _macho, _fat_macho
 
     single = _macho(tmp_path / "arm.dylib")
@@ -1172,7 +1172,7 @@ def test_pe_subsystem_is_reported(tmp_path):
     frontend drops without an error, so the subsystem is the only honest way to
     tell a cross-built GUI launcher from a console one.
     """
-    from py_upper.native.inspect import PE_SUBSYSTEM, PE_SUBSYSTEM_CONSOLE, PE_SUBSYSTEM_GUI, inspect
+    from ai_upper.native.inspect import PE_SUBSYSTEM, PE_SUBSYSTEM_CONSOLE, PE_SUBSYSTEM_GUI, inspect
 
     gui = tmp_path / "gui.exe"
     gui.write_bytes(_synthetic_pe(0x8664, (".text",), subsystem=PE_SUBSYSTEM_GUI))
@@ -1195,10 +1195,10 @@ def test_pe_subsystem_is_reported(tmp_path):
 
 
 def test_launcher_subsystem_check_expects_a_gui_image(tmp_path, monkeypatch):
-    from py_upper.native.inspect import PE_SUBSYSTEM_CONSOLE, PE_SUBSYSTEM_GUI
-    from py_upper.verify import _launcher_subsystem_check
+    from ai_upper.native.inspect import PE_SUBSYSTEM_CONSOLE, PE_SUBSYSTEM_GUI
+    from ai_upper.verify import _launcher_subsystem_check
 
-    monkeypatch.delenv("PY_UPPER_LAUNCHER_CONSOLE", raising=False)
+    monkeypatch.delenv("AI_UPPER_LAUNCHER_CONSOLE", raising=False)
     gui = tmp_path / "gui.exe"
     gui.write_bytes(_synthetic_pe(0x8664, (".text",), subsystem=PE_SUBSYSTEM_GUI))
     assert _launcher_subsystem_check(gui) == (True, "launcher subsystem=gui")
@@ -1208,9 +1208,9 @@ def test_launcher_subsystem_check_expects_a_gui_image(tmp_path, monkeypatch):
     ok, message = _launcher_subsystem_check(console)
     assert not ok and "console, expected gui" in message
 
-    # PY_UPPER_LAUNCHER_CONSOLE=1 is the documented console build, so it is the
+    # AI_UPPER_LAUNCHER_CONSOLE=1 is the documented console build, so it is the
     # one case where a console subsystem is the expected answer.
-    monkeypatch.setenv("PY_UPPER_LAUNCHER_CONSOLE", "1")
+    monkeypatch.setenv("AI_UPPER_LAUNCHER_CONSOLE", "1")
     assert _launcher_subsystem_check(console) == (True, "launcher subsystem=console")
     assert not _launcher_subsystem_check(gui)[0]
 
@@ -1224,8 +1224,8 @@ def test_arm64ec_images_satisfy_the_arm64_target(tmp_path):
     every windows-arm64 bundle. The .hexpthk section is the only thing that tells
     an ARM64EC image apart from a real x64 one.
     """
-    from py_upper.config import TARGETS
-    from py_upper.native.inspect import inspect, verify_arch
+    from ai_upper.config import TARGETS
+    from ai_upper.native.inspect import inspect, verify_arch
 
     arm64ec = tmp_path / "vcruntime140_1.dll"
     arm64ec.write_bytes(_synthetic_pe(0x8664, (".text", ".hexpthk", ".a64xrm", ".reloc")))
@@ -1245,8 +1245,8 @@ def test_arm64ec_images_satisfy_the_arm64_target(tmp_path):
 
 def test_arm64ec_detection_reads_the_section_table_past_the_header(tmp_path):
     """The section table can start beyond the bytes read for the machine field."""
-    from py_upper.config import TARGETS
-    from py_upper.native.inspect import inspect, verify_arch
+    from ai_upper.config import TARGETS
+    from ai_upper.native.inspect import inspect, verify_arch
 
     deep = tmp_path / "deep.dll"
     deep.write_bytes(_synthetic_pe(0x8664, (".text",) * 200 + (".hexpthk",)))
@@ -1262,8 +1262,8 @@ def test_arch_mismatch_names_the_documented_remedy(tmp_path):
     right answer is to drop the file through the configuration. An error that
     stops at "Architecture mismatch" invites relaxing the guard instead.
     """
-    from py_upper.config import TARGETS
-    from py_upper.native.inspect import verify_arch
+    from ai_upper.config import TARGETS
+    from ai_upper.native.inspect import verify_arch
 
     foreign = tmp_path / "ucrtbase.dll"
     foreign.write_bytes(_synthetic_pe(0x14C, (".text", ".rdata", ".reloc")))
@@ -1271,11 +1271,11 @@ def test_arch_mismatch_names_the_documented_remedy(tmp_path):
         verify_arch(foreign, TARGETS["windows-x86_64"])
     message = str(excinfo.value)
     assert "ucrtbase.dll: x86, expected x86_64" in message
-    assert "[tool.py_upper.native].exclude" in message
+    assert "[tool.ai_upper.native].exclude" in message
 
 
 def test_network_retries_transient_gateway_errors(monkeypatch):
-    from py_upper import net
+    from ai_upper import net
     calls = []
 
     class Error(net.urllib.error.HTTPError):
@@ -1309,7 +1309,7 @@ def test_network_retries_transient_gateway_errors(monkeypatch):
 def test_public_build_downloads_ignore_github_credentials(tmp_path, monkeypatch):
     """Public downloads must work identically with absent or stale login state."""
     import io
-    from py_upper import net
+    from ai_upper import net
 
     seen: list[dict[str, str]] = []
 
@@ -1331,8 +1331,8 @@ def test_public_build_downloads_ignore_github_credentials(tmp_path, monkeypatch)
 
 
 def test_local_runtime_manifest_round_trip(tmp_path):
-    from py_upper.config import RuntimeSpec, TARGETS
-    from py_upper.manifest import build_manifest, validate_manifest, write_manifest
+    from ai_upper.config import RuntimeSpec, TARGETS
+    from ai_upper.manifest import build_manifest, validate_manifest, write_manifest
 
     target = TARGETS["linux-x86_64"]
     runtime = tmp_path / "runtime"
@@ -1356,28 +1356,28 @@ def test_local_runtime_manifest_round_trip(tmp_path):
 
 
 def test_project_version_and_user_agent():
-    from py_upper.config import load_app_config, project_version, user_agent
+    from ai_upper.config import load_app_config, project_version, user_agent
 
     configured = load_app_config()["project"]["version"]
     assert project_version() == configured
-    assert user_agent() == f"py_upper/{configured}"
+    assert user_agent() == f"ai_upper/{configured}"
 
 
 def test_runtime_and_build_python_are_independent():
-    from py_upper.config import load_app_config, python_version, require_local_python
+    from ai_upper.config import load_app_config, python_version, require_local_python
 
     path = require_local_python()
     assert Path(path).exists()
     # The target runtime version is a project decision that lives in
     # app/pyproject.toml; the development Python is discovered separately.
     # Asserting a literal here would just duplicate the config.
-    configured = load_app_config()["tool"]["py_upper"]["runtime"]["python"]
+    configured = load_app_config()["tool"]["ai_upper"]["runtime"]["python"]
     assert python_version() == configured
 
 
 def test_target_python_smoke_does_not_write_bytecode_into_staging(tmp_path, monkeypatch):
-    from py_upper import verify as smoke
-    from py_upper.config import TARGETS
+    from ai_upper import verify as smoke
+    from ai_upper.config import TARGETS
 
     target = TARGETS["macos-arm64"]
     captured: dict[str, str] = {}
@@ -1408,9 +1408,9 @@ def test_windows_extensions_link_the_versioned_import_library(tmp_path, monkeypa
     """
     from types import SimpleNamespace
 
-    from py_upper import python_build
-    from py_upper.config import TARGETS
-    from py_upper.toolchain import Toolchain
+    from ai_upper import python_build
+    from ai_upper.config import TARGETS
+    from ai_upper.toolchain import Toolchain
 
     target = TARGETS["windows-x86_64"]
     sdk = tmp_path / "sdk"
@@ -1487,9 +1487,9 @@ def test_zig_compiled_windows_extensions_name_the_64_bit_abi(tmp_path, monkeypat
     """
     from types import SimpleNamespace
 
-    from py_upper import python_build
-    from py_upper.config import TARGETS
-    from py_upper.toolchain import windows_gnu_cpython_defines
+    from ai_upper import python_build
+    from ai_upper.config import TARGETS
+    from ai_upper.toolchain import windows_gnu_cpython_defines
 
     app_root = tmp_path / "app"
     source = app_root / "src" / "demo.py"
@@ -1555,7 +1555,7 @@ def test_target_python_points_the_compiler_at_the_sdk(tmp_path, monkeypatch):
     the local provider filled that key with its *runtime* path. Both providers
     now say ``sdk_root``, so a lookup cannot end up walking ``dist/``.
     """
-    from py_upper import config, runtime
+    from ai_upper import config, runtime
 
     target = config.TARGETS["windows-x86_64"]
     runtime_root = tmp_path / "runtimes" / "windows-x86_64" / "3.13.5"
@@ -1601,7 +1601,7 @@ def test_windows_launcher_does_not_ask_for_the_python_import_library(tmp_path):
     import subprocess
     import sysconfig
 
-    launcher = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
     source = launcher.read_text(encoding="utf-8")
     guard = "#define Py_NO_ENABLE_SHARED 1"
     include = "#include <Python.h>"
@@ -1700,7 +1700,7 @@ def test_packaged_launcher_streams_reach_the_caller(tmp_path):
         "import sys\n"
         "from pathlib import Path\n"
         "sys.path.insert(0, {tools!r})\n"
-        "from py_upper.verify import run_packaged_launcher\n"
+        "from ai_upper.verify import run_packaged_launcher\n"
         "run_packaged_launcher(Path({probe!r}), cwd=Path({cwd!r}), check=True)\n"
     ).format(
         tools=str(Path(__file__).parents[2] / "tools"),
@@ -1722,9 +1722,9 @@ def test_macos_extensions_link_as_bundles_with_deferred_symbols(tmp_path, monkey
     """
     from types import SimpleNamespace
 
-    from py_upper import python_build
-    from py_upper.config import TARGETS
-    from py_upper.toolchain import Toolchain
+    from ai_upper import python_build
+    from ai_upper.config import TARGETS
+    from ai_upper.toolchain import Toolchain
 
     target = TARGETS["macos-arm64"]
     include = tmp_path / "sdk" / "include" / "python3.10"
@@ -1759,11 +1759,11 @@ def test_macos_extensions_link_as_bundles_with_deferred_symbols(tmp_path, monkey
 
 def test_package_verification_skips_foreign_format_binaries(tmp_path, monkeypatch):
     """Inert Windows launcher stubs inside a macOS runtime are not ABI inputs."""
-    from py_upper import verify
-    from py_upper.config import TARGETS
-    from py_upper.native.inspect import BinaryInfo
+    from ai_upper import verify
+    from ai_upper.config import TARGETS
+    from ai_upper.native.inspect import BinaryInfo
 
-    from py_upper.config import entry_source
+    from ai_upper.config import entry_source
 
     target = TARGETS["macos-arm64"]
     root = tmp_path / "MyApp.app"
@@ -1810,10 +1810,10 @@ def test_package_verification_skips_foreign_format_binaries(tmp_path, monkeypatc
 
 def test_lock_preserves_existing_target_entries(tmp_path, monkeypatch):
     import json
-    import py_upper.lock as lock
-    from py_upper.config import TARGETS
+    import ai_upper.lock as lock
+    from ai_upper.config import TARGETS
 
-    lock_path = tmp_path / "py_upper.lock.json"
+    lock_path = tmp_path / "ai_upper.lock.json"
     monkeypatch.setattr(lock, "LOCK", lock_path)
     monkeypatch.setattr(lock, "runtime_provider", lambda: "local")
     monkeypatch.setattr(lock, "python_version", lambda: "3.13.5")
@@ -1823,7 +1823,7 @@ def test_lock_preserves_existing_target_entries(tmp_path, monkeypatch):
     monkeypatch.setattr(lock, "read_manifest", lambda root: {"format": 4})
     monkeypatch.setattr(lock, "manifest_hash", lambda data: "hash")
     monkeypatch.setattr(lock, "_wheel_records", lambda target: [])
-    first = {"format": 5, "project": "py_upper", "python": "3.13.5", "runtime_provider": "local", "targets": {"linux-x86_64": {"sentinel": True}}}
+    first = {"format": 5, "project": "ai_upper", "python": "3.13.5", "runtime_provider": "local", "targets": {"linux-x86_64": {"sentinel": True}}}
     lock_path.write_text(json.dumps(first), encoding="utf-8")
     lock.write_lock(TARGETS["linux-arm64"])
     data = json.loads(lock_path.read_text(encoding="utf-8"))
@@ -1832,7 +1832,7 @@ def test_lock_preserves_existing_target_entries(tmp_path, monkeypatch):
 
 
 def test_runtime_optimization_is_applied_to_package_copy(tmp_path, monkeypatch):
-    from py_upper import runtime as runtime_optimize
+    from ai_upper import runtime as runtime_optimize
     monkeypatch.setattr(runtime_optimize, "optimize_config", lambda: {"remove_python_caches": True, "remove_runtime_pip": True})
     root = tmp_path / "runtime"
     pip = root / "lib/python3.13/site-packages/pip"
@@ -1846,27 +1846,27 @@ def test_runtime_optimization_is_applied_to_package_copy(tmp_path, monkeypatch):
 
 
 def test_native_strip_is_opt_in(monkeypatch):
-    from py_upper.native import bundle
+    from ai_upper.native import bundle
     monkeypatch.setattr(bundle, "optimize_config", lambda: {"strip_native": False})
     assert bundle.optimize_config()["strip_native"] is False
 
 
 def test_linux_native_rpath_rewrite_is_opt_in(monkeypatch, tmp_path):
-    from py_upper.native import bundle
+    from ai_upper.native import bundle
 
     monkeypatch.setattr(bundle.shutil, "which", lambda name: "/usr/bin/patchelf" if name == "patchelf" else None)
     monkeypatch.setattr(bundle, "inspect", lambda path: type("Info", (), {"format": "ELF", "arch": "x86_64"})())
     monkeypatch.setattr(bundle.optimize_config, "__call__", lambda: {})
     # The default path is asserted through source-level behavior: package builds
     # must not rewrite third-party Linux RPATHs unless explicitly requested.
-    source = Path(__file__).parents[2] / "tools" / "py_upper" / "native" / "bundle.py"
+    source = Path(__file__).parents[2] / "tools" / "ai_upper" / "native" / "bundle.py"
     text = source.read_text(encoding="utf-8")
     assert 'optimize_config().get("rewrite_rpath", False)' in text
 
 
 def test_windows_python_runtime_dll_is_version_specific(monkeypatch):
-    import py_upper.native.deps as deps
-    from py_upper.config import TARGETS
+    import ai_upper.native.deps as deps
+    from ai_upper.config import TARGETS
 
     target = TARGETS["windows-x86_64"]
     monkeypatch.setattr(deps, "python_version", lambda: "3.11.10")
@@ -1883,8 +1883,8 @@ def test_windows_stable_abi_forwarder_is_runtime_provided(monkeypatch):
     runtime-provided exactly like the versioned library. Looking for it in the
     wheel leaves it unresolved on every Windows target; POSIX has no counterpart.
     """
-    import py_upper.native.deps as deps
-    from py_upper.config import TARGETS
+    import ai_upper.native.deps as deps
+    from ai_upper.config import TARGETS
 
     monkeypatch.setattr(deps, "python_version", lambda: "3.11.13")
     assert deps._system_dependency("python3.dll", TARGETS["windows-x86_64"])
@@ -1900,7 +1900,7 @@ def test_launcher_resolves_entry_points_from_the_runtime_not_the_forwarder():
     null, which is what made every Windows package exit 5. The runtime directory
     holds python3XX.dll next to it, and that is where the entry points come from.
     """
-    launcher = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
     text = launcher.read_text(encoding="utf-8")
     compact = "".join(text.split())
     assert 'constexprconstchar*kRuntimeEntrySymbol="PyConfig_InitIsolatedConfig";' in compact
@@ -1919,7 +1919,7 @@ def test_retire_tree_takes_the_tree_out_of_its_published_path_first(tmp_path, mo
     published name has to be gone before the recursive delete starts, so every
     writer that loses the race writes into a path that no longer exists.
     """
-    from py_upper import fs
+    from ai_upper import fs
 
     tree = tmp_path / "dist" / "MyApp.app"
     (tree / "Contents" / "Resources" / "runtime" / "lib").mkdir(parents=True)
@@ -1970,7 +1970,7 @@ def test_retire_tree_waits_out_a_tree_windows_still_holds(tmp_path, monkeypatch)
     holder is short-lived, so waiting it out is what makes the build succeed
     instead of looking for a rename that does not need fixing.
     """
-    from py_upper import fs
+    from ai_upper import fs
 
     tree = tmp_path / "dist" / "MyApp"
     (tree / "runtime").mkdir(parents=True)
@@ -2003,7 +2003,7 @@ def test_retire_tree_names_what_holds_a_tree_it_cannot_retire(tmp_path, monkeypa
     payload. The message has to name the processes that hold a tree instead,
     and the payload has to be left whole rather than half-deleted.
     """
-    from py_upper import fs
+    from ai_upper import fs
 
     tree = tmp_path / "dist" / "MyApp"
     (tree / "runtime").mkdir(parents=True)
@@ -2028,7 +2028,7 @@ def test_retire_tree_names_what_holds_a_tree_it_cannot_retire(tmp_path, monkeypa
 
 def test_retire_tree_does_not_retry_a_real_permission_error(tmp_path, monkeypatch):
     """Only the "someone holds it" shape may wait; a real denial stays immediate."""
-    from py_upper import fs
+    from ai_upper import fs
 
     tree = tmp_path / "dist" / "MyApp"
     tree.mkdir(parents=True)
@@ -2058,9 +2058,9 @@ def test_package_assembles_outside_the_published_path(tmp_path, monkeypatch):
     private tree instead, and the finished bundle is renamed into the published
     path in one step.
     """
-    import py_upper.package as pkg
-    import py_upper.runtime as runtime_module
-    from py_upper.config import TARGETS, publish_dir
+    import ai_upper.package as pkg
+    import ai_upper.runtime as runtime_module
+    from ai_upper.config import TARGETS, publish_dir
 
     root = tmp_path / "root"
     runtime = root / "runtimes" / "macos-arm64"
@@ -2068,7 +2068,7 @@ def test_package_assembles_outside_the_published_path(tmp_path, monkeypatch):
     (runtime / "lib" / "python3.11" / "__pycache__" / "stale.pyc").write_bytes(b"stale")
     stage = root / "build" / "staging" / "macos-arm64"
     (stage / "site-packages").mkdir(parents=True)
-    launcher = tmp_path / "PyUpper"
+    launcher = tmp_path / "AiUpper"
     launcher.write_bytes(b"launcher")
     assembly = root / "build" / "publish" / f"macos-arm64.{os.getpid()}"
     target = TARGETS["macos-arm64"]
@@ -2113,8 +2113,8 @@ def test_package_assembles_outside_the_published_path(tmp_path, monkeypatch):
 
 
 def test_zig_triple_converts_msvc_to_gnu():
-    from py_upper.config import Target
-    from py_upper.toolchain import Toolchain
+    from ai_upper.config import Target
+    from ai_upper.toolchain import Toolchain
 
     target = Target("windows", "x86_64", "x86_64-pc-windows-msvc")
     toolchain = Toolchain(target, {}, "zig", "zig", "zig", compiler_args=("cc", "-target", "x86_64-windows-gnu"))
@@ -2125,7 +2125,7 @@ def test_zig_safe_archive_rejects_unsafe_paths(tmp_path, monkeypatch):
     import io
     import tarfile
 
-    from py_upper.toolchain import _safe_archive_members
+    from ai_upper.toolchain import _safe_archive_members
 
     archive = tmp_path / "evil.tar.xz"
     with tarfile.open(archive, "w:xz") as tf:
@@ -2144,7 +2144,7 @@ def test_zig_safe_archive_rejects_unsafe_paths(tmp_path, monkeypatch):
 
 
 def test_zig_host_key_requires_native_host():
-    from py_upper.toolchain import _zig_host_key
+    from ai_upper.toolchain import _zig_host_key
 
     assert _zig_host_key("Darwin", "arm64") == "aarch64-macos"
     assert _zig_host_key("Linux", "x86_64") == "x86_64-linux"
@@ -2168,8 +2168,8 @@ def test_zig_cross_compiles_windows_x86_from_a_verified_toolchain(tmp_path, monk
     """
     import platform as platform_module
 
-    from py_upper import toolchain
-    from py_upper.config import TARGETS
+    from ai_upper import toolchain
+    from ai_upper.config import TARGETS
 
     monkeypatch.setattr(toolchain, "BUILD", tmp_path)
     host_key = toolchain._zig_host_key(platform_module.system(), toolchain._host_arch())
@@ -2204,8 +2204,8 @@ def test_zig_windows_frontend_carries_the_cpython_header_corrections(tmp_path, m
     """
     import platform as platform_module
 
-    from py_upper import toolchain
-    from py_upper.config import TARGETS
+    from ai_upper import toolchain
+    from ai_upper.config import TARGETS
 
     monkeypatch.setattr(toolchain, "BUILD", tmp_path)
     host_key = toolchain._zig_host_key(platform_module.system(), toolchain._host_arch())

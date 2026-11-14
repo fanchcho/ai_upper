@@ -3,7 +3,7 @@
 对应 Deva `apps/desktop/src/main/services/config.ts` 的 `config:get-sync` / `config:get` / `config:set`。
 语义逐条对齐：
 
-- 根目录 `DEVA_HOME` 优先，缺省 `~/.deva`；
+- 根目录 `AI_UPPER_HOME` 优先，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 兼容）；
 - 整个文件是一份 JSON 对象，**顶层浅合并**：`set({"models": {...}})` 整段替换 `models`，
   不是深层合并。这条必须照搬——渲染层依赖它整段写回模型配置（Deva `store/models.tsx:195`）；
 - 值写成 `None` 等于删除该键（Deva 的 `undefined` 语义在 Python 里没有对应物，用 `None`）；
@@ -25,7 +25,7 @@ from mvvm.services.chat_session_store import write_file_atomic
 
 CONFIG_FILE = "config.json"
 
-# 本工程真正读取的配置键（其余键原样保留，供 Deva 两侧共用同一个 DEVA_HOME）。
+# 本工程真正读取的配置键（其余键原样保留，供 Deva 两侧共用同一个数据目录）。
 THEME_KEY = "theme"
 LANGUAGE_KEY = "language"
 LAYOUT_KEY = "layout"
@@ -35,9 +35,10 @@ PROXY_KEY = "proxy"
 
 
 def default_home() -> Path:
-    """与 Deva `getDevaHome()` 同口径：`DEVA_HOME` 优先，缺省 `~/.deva`。"""
-    override = (os.environ.get("DEVA_HOME") or "").strip()
-    return Path(override) if override else Path.home() / ".deva"
+    """`AI_UPPER_HOME` 优先，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 仍被读取）。"""
+    from utils.app_home import app_home
+
+    return app_home()
 
 
 class SettingsService:
