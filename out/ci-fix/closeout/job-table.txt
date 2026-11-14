@@ -1,0 +1,16 @@
+run 43588462742  head=591c7e3d0a38565b3ec9d8e26247a983b541e420  jobs=15
+failure  	completed             	native-integration (windows-11-arm, windows-arm64, true)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904347
+failure  	completed             	native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySide2==5.15.2.1", "pydantic==...	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904497
+skipped  	completed             	aggregate-artifacts	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132432431939
+success  	completed             	Build Tool Python 3.10	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904412
+success  	completed             	Build Tool Python 3.11	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904422
+success  	completed             	Build Tool Python 3.12	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904491
+success  	completed             	Build Tool Python 3.13	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904744
+success  	completed             	Build Tool Python 3.8	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427903887
+success  	completed             	Build Tool Python 3.9	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904471
+success  	completed             	native-integration (macos-15, macos-arm64, true)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904472
+success  	completed             	native-integration (macos-15-intel, macos-x86_64, true)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904578
+success  	completed             	native-integration (ubuntu-24.04, linux-x86_64, true)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904385
+success  	completed             	native-integration (ubuntu-24.04-arm, linux-arm64, false)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904468
+success  	completed             	native-integration (windows-2025, windows-x86, false, ["pyserial==3.5"])	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904580
+success  	completed             	native-integration (windows-2025, windows-x86_64, true)	https://github.com/fanchcho/ai_upper/actions/runs/43588462742/job/132427904527

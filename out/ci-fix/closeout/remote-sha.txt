@@ -1,0 +1,9 @@
+# 取证时间：2026-11-14（本机）
+$ GIT_SSH_COMMAND='ssh -i /root/.ssh/fanchcho -o IdentitiesOnly=yes' git ls-remote origin refs/heads/develop
+7903f44ba4c4b9bf53d0e8bab002216132b6a0fb	refs/heads/develop
+
+$ git rev-parse HEAD
+7903f44ba4c4b9bf53d0e8bab002216132b6a0fb
+
+# 推送前（收尾提交的父提交）：
+591c7e3d0a38565b3ec9d8e26247a983b541e420  refs/heads/develop  ==  git rev-parse HEAD（当时一致）
