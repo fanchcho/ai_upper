@@ -202,6 +202,27 @@ def test_workflow_publishers_delegate_to_ci_tail():
     assert "splitlines()[-60:]" not in text
 
 
+def test_no_publisher_invents_an_exit_code_for_a_step_that_never_ran():
+    """Both log publishers, not just the build one, must check first.
+
+    The build publisher was fixed in ee6c219, but the unit-test publisher kept
+    ``cat app/pytest.exitcode 2>/dev/null || echo 255``. That is the same bug:
+    a job that goes red before pytest runs gets a fabricated
+    "pytest (exit 255)" annotation pointing at tests nobody executed.
+    """
+    text = VALIDATION_WORKFLOW.read_text(encoding="utf-8")
+    assert "|| echo 255" not in text
+
+    start = text.index("- name: Publish unit test log")
+    publish = text[start : text.index("- name: Upload unit test log", start)]
+    assert "if [ -f app/pytest.exitcode ]" in publish
+    assert "Not run: an earlier step in this job failed." in publish
+    not_run = publish.index("Not run: an earlier step")
+    early_exit = publish.index("exit 0", not_run)
+    emitter = publish.index("tools/ci_tail.py")
+    assert not_run < early_exit < emitter
+
+
 def test_ci_tail_runs_on_the_oldest_ci_interpreter():
     """The Build Tool job runs Python 3.8; the tool must be importable there.
 

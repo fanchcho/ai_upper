@@ -260,7 +260,19 @@ jobs:
         shell: bash
         run: |
           log=app/pytest.log
-          rc="$(cat app/pytest.exitcode 2>/dev/null || echo 255)"
+          if [ -f app/pytest.exitcode ]; then
+            rc="$(cat app/pytest.exitcode)"
+          else
+            # The unit test step never ran (an earlier step failed, so the job
+            # is already red). A default here would file a fabricated
+            # "pytest (exit 255)" against tests that never executed -- the same
+            # mistake ee6c219 removed from the build publisher.
+            echo '### Unit tests — ${{ matrix.target }} (${{ matrix.os }})'
+            echo ''
+            echo 'Not run: an earlier step in this job failed.'
+            echo 'Not run: an earlier step in this job failed.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           {
             echo '### Unit tests — ${{ matrix.target }} (${{ matrix.os }})'
             echo ''
