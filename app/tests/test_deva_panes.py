@@ -486,6 +486,43 @@ def test_main_window_reports_missing_fetch_gateway(tmp_path, settings_env, fake_
 
 
 # ── 聊天面板：工具卡、图片、待办胶囊 ─────────────────────────────────────
+def test_chat_window_binds_transcript_status_and_send(tmp_path, monkeypatch, fake_qt):
+    """ChatWindow 的属性绑定与发送命令：输入 → ViewModel → 回合 → 界面刷新。
+
+    原在 `test_deva_app.py` 里（那个模块测的是已移除的 `deva_app` 入口装配），
+    用例本身只碰 `ChatWindow` 与 ViewModel，随入口一起删会白白丢掉这条断言。
+    """
+    monkeypatch.setenv("DEVA_HOME", str(tmp_path / "home"))
+
+    from mvvm.views.chat_window import ChatWindow
+
+    (tmp_path / "notes.txt").write_text("你好\n", encoding="utf-8")
+    guard = WorkspaceGuard([tmp_path])
+    vm = ChatViewModel(
+        ChatSessionStore(tmp_path / "home"),
+        FakeProvider(),
+        ToolRuntime(guard, tmp_path),
+    )
+    vm.open_session("ui")
+    window = ChatWindow(vm)
+    window.show()
+
+    # 输入框 → ViewModel（双向绑定），再点发送：回合跑完，界面被命令与属性推送刷新
+    window._input.setPlainText("看一下 notes.txt")
+    assert vm.input_text_property.get_value() == "看一下 notes.txt"
+    assert vm.can_send() is True
+
+    window._send_button.click()
+    # 按钮只在后台线程起回合、立即返回；等回合结束 + 事件落地后再断言界面。
+    assert vm.wait_idle(5.0)
+
+    assert vm.transcript[-1]["role"] == "assistant"
+    assert "你好" in window._transcript.plain_text
+    assert window._status.text() == "就绪"
+    assert window._error.text() == ""
+    window.close()
+
+
 def _pane(tmp_path):
     from mvvm.views.chat_pane import ChatPane
 

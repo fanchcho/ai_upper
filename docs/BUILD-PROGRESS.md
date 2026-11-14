@@ -183,8 +183,8 @@ $ cd app && ../.venv/bin/python -m pytest -q | tail -3
 | 6 | 路径守卫（越界 / `..` / 符号链接穿越） | 同上；不能建链接的平台 skip 并注明 |
 | 7 | `read_file` 文本分支（行号 / 2000 行 / 2000 字符 / 100k 输出护栏） | 同上 |
 | 8 | 纵向切片端到端（发送 → 假 provider → 工具允许/拒绝 → 落盘 → 重启读回） | `pytest tests/test_chat_vm.py -q` → `9 passed` |
-| 9 | 应用入口与装配（服务/ViewModel/View 注册） | `pytest tests/test_deva_app.py -q` → `3 passed` |
-| 10 | 真实 Qt offscreen 启动新入口 | `DEVA_HOME=/tmp/deva-smoke3 QT_QPA_PLATFORM=offscreen DEVA_APP_HEADLESS=1 PYTHONPATH=app/src .venv/bin/python -m deva_app` → exit 0，`DEVA GUI OK offscreen session=main title=''` |
+| 9 | 应用入口与装配（服务/ViewModel/View 注册） | 原 `tests/test_deva_app.py -q` → `3 passed`；该入口与用例已随 `app/src/deva_app/` 一并移除，见 §1.15 |
+| 10 | 真实 Qt offscreen 启动新入口 | 原 `python -m deva_app` → `DEVA GUI OK`；入口已移除，当前冒烟入口见 §1.15 |
 | 11 | 切片真机脚本 | `PYTHONPATH=app/src .venv/bin/python scripts/deva_slice.py` → `SLICE PASS` |
 
 ### 1.3 阶段 D：密钥与配置（commit `99fdb2c`）
@@ -236,7 +236,7 @@ $ cd app && ../.venv/bin/python -m pytest -q
 | 28 | 轮中压缩：工具结果回灌后、下一步发送前再查一次 `needs_compaction_mid_turn` | 同上（工具调用与结果不被拆散、无悬空 tool_use） |
 | 29 | 手动 `/compact`：`compact_now()`，事件 `scope=manual`；无压缩模型时明确失败 | 同上 |
 | 30 | 压缩失败不阻断回合；界面事件 `compacting`（开始/结束）与 `compacted` | 同上 |
-| 31 | 回合移入后台线程：worker 只入队、UI 线程 `drain()` 执行属性写入 | 同上 + `pytest tests/test_chat_vm.py tests/test_deva_app.py -q` |
+| 31 | 回合移入后台线程：worker 只入队、UI 线程 `drain()` 执行属性写入 | 同上 + `pytest tests/test_chat_vm.py tests/test_deva_app.py -q`（后者已随入口移除，见 §1.15） |
 | 32 | 全量回归 | `pytest -q` → `619 passed, 5 skipped` |
 
 ### 1.7 阶段 G：真实服务商装配（commit `ba20847`）
@@ -248,7 +248,7 @@ $ cd app && ../.venv/bin/python -m pytest -q
 | 35 | 缺密钥继续、按空串发请求（本地 Ollama 等可无钥）；密钥不进 VM / 不进日志 | 同上 |
 | 36 | 思考档位：会话定格值 > `models.activeEffort` > 默认（不发思考参数） | 同上 |
 | 37 | 压缩模型、模型段、压缩配置、思考参数全部「每轮现查」：设置页改动下一轮生效 | 同上 + `ChatViewModel._*_now()` |
-| 38 | 入口 `python -m deva_app` 不再用 `FakeProvider` | 见 #10 的 offscreen 启动（本轮重跑通过） |
+| 38 | 入口不再用 `FakeProvider` | 见 #10 的 offscreen 启动；该入口已移除，见 §1.15 |
 
 ### 1.8 阶段 H：流式刷新与停止（commit `61053ae`）
 
@@ -257,7 +257,7 @@ $ cd app && ../.venv/bin/python -m pytest -q
 | 39 | 流式正文在回合**进行中**就能到达界面（`streaming` 属性 + 事件队列） | `pytest tests/test_chat_streaming.py -q` → `3 passed` |
 | 40 | 停止按钮 → `cancel()`：回合在下一个检查点收尾，状态「已停止」，半截正文落盘并展示 | 同上 |
 | 41 | 修复两处中止语义：适配器无 `Done` 收流时补判取消；中止正文不再被重复追加 | 同上 |
-| 42 | 聊天窗口：流式区（空时收起）、停止按钮（busy 可用）、40ms `drain` 定时器 | `pytest tests/test_deva_app.py -q` |
+| 42 | 聊天窗口：流式区（空时收起）、停止按钮（busy 可用）、40ms `drain` 定时器 | `pytest tests/test_deva_app.py -q`（已随入口移除）；对应断言现有 `tests/test_deva_panes.py::test_chat_pane_*` 覆盖 |
 | 43 | 全量回归 | `pytest -q` → `634 passed, 5 skipped` |
 
 **三协议真实网络调用仍未验证**（无密钥、容器不保证出网），见 §2。
@@ -950,6 +950,41 @@ EXIT=0
 新增 `test_every_third_party_import_is_a_declared_runtime_dependency()` 用 AST 扫
 `app/src` 的顶层第三方 import，与 `requirements.txt` 比对，以后再漏声明会直接红灯。
 （该次启动的原始日志未落盘，只有终端输出；判据以上述两处 import 与修复后的声明为准。）
+
+---
+
+### 1.15 移除冗余入口 `app/src/deva_app/`（本轮）
+
+`app/src/deva_app/`（`__init__.py` + `__main__.py`，2 个被跟踪文件，32K）是第二阶段做的
+**Qt 原生桌面入口**，`DevaApplication` 组装 `ChatViewModel` + `ChatSessionsViewModel` +
+`SettingsViewModel` 并注册 `DevaMainWindow`。第四阶段起打包入口已切到 `deva_web.py`
+（`[tool.ai_upper].entry`），第五阶段用户又明确改为「界面与原版完全一致」，这个入口
+与主入口重复，故整体移除。
+
+**判定依据（没有唯一实现被丢掉）**
+
+- 入口本身（环境变量、装配、headless 打印）由 `app/src/deva_web.py:108-157` 与
+  `app/src/application.py:52-82` 承担；打包用的是前者。
+- 同一套对象图另有 `mvvm/webui/assembly.py:27-84::build_chat_host()`，它比
+  `deva_app` 的装配更完整（按会话 `focusRoot` 造 `ToolRuntime`、按会话 `modelRef` 现解析模型），
+  且被 `views/web_shell_window.py:139` 与端口启动器共用。
+- 受信根登记 `DEVA_APP_WORKSPACE` → `WorkspaceGuard.trust_root()` 在
+  `web_shell_window.py:135-138` 与 `assembly.py:87-92` 里已有实现，未随目录丢失。
+- 目录里唯一不属于框架/服务层的是 `DevaApplication` 这个装配类；它注册的
+  `DevaMainWindow` 仍在 `mvvm/views/deva_main_window.py`，由
+  `tests/test_deva_panes.py:91-108` 的 `main_window` 夹具装配并覆盖（状态栏、
+  设置页切换、会话切换、重命名/归档/删除、发送消息）。
+- 随目录删除的 `app/tests/test_deva_app.py` 原有 3 个用例：其中
+  `test_window_binds_transcript_status_and_send` 测的是 `ChatWindow`（不是 `deva_app`），
+  同一条链现有 `tests/test_deva_panes.py::test_main_window_sends_message_in_chat_pane`
+  与 `tests/test_chat_streaming.py` 覆盖；另两个用例测的装配/View 注册随入口一起消失。
+- 同时删除 `docs/APP-SKELETON.md`：整篇描述该入口，且其「待确认」项（打包入口指向）
+  已由 §1.14 落定，留在仓库只会误导。
+
+**验证**：删前 `app/` 下 `python -m pytest tests -q` → `959 passed, 6 skipped`；
+删后同命令结果见 commit 说明与本节末尾，二者数字一致（删除只减去入口自身的 3 个用例，
+其中可复用断言已在 `test_deva_panes.py` 覆盖）。打包入口冒烟
+`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
 
 ---
 

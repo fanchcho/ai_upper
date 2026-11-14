@@ -1,4 +1,4 @@
-"""假 Qt 控件集：给 `test_deva_app.py` 与 `test_deva_panes.py` 共用。
+"""假 Qt 控件集：给 `test_deva_panes.py` 等视图测试用。
 
 只实现被视图真正调用的方法（`setText`/`setEnabled`/`addItem`/信号……），
 行为上尽量贴近真 Qt 的两条约定：`blockSignals(True)` 会抑制信号，

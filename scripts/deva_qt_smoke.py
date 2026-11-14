@@ -1,6 +1,6 @@
 """真实 Qt（offscreen）界面冒烟：输入 → 点发送 → 绑定刷新。
 
-与 `app/tests/test_deva_app.py` 的区别：那边用假 Qt 测装配与绑定，这里用真实
+与假 Qt 用例（`app/tests/test_deva_panes.py`）的区别：那边用假 Qt 测装配与绑定，这里用真实
 PySide6 跑一遍控件与信号，确认 `bind_property` / `bind_command` 在真 Qt 上确实生效。
 
 跑法：QT_QPA_PLATFORM=offscreen PYTHONPATH=app/src .venv/bin/python scripts/deva_qt_smoke.py

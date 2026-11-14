@@ -1,6 +1,7 @@
 """主窗口：左侧会话列表 + 右侧对话 / 设置，底部状态栏。
 
-这是新应用实际启动时看到的窗口（`DevaApplication` 注册的就是它）。它不直接读写
+这是 Qt 原生三栏主窗口，由 `tests/test_deva_panes.py` 装配并驱动（打包入口走的是
+Web 承载窗口 `web_shell_window.DevaWebWindow`）。它不直接读写
 磁盘或网络：会话列表与设置各有一个 ViewModel，聊天是 `ChatViewModel`；窗口只做
 三件事——把面板摆好、在用户切换会话时让聊天 ViewModel `open_session`、把跨面板的
 提示写到状态栏。
@@ -37,7 +38,7 @@ def notice_text(message: str, *, level: str = "info") -> str:
 
 
 class DevaMainWindow(ViewBase):
-    """装配后的主窗口。构造参数都是已就绪的 ViewModel（由 `deva_app` 提供）。"""
+    """装配后的主窗口。构造参数都是已就绪的 ViewModel（由装配处提供）。"""
 
     def __init__(
         self,
