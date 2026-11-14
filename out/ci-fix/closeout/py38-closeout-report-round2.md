@@ -12,8 +12,8 @@
 ## 一句话结论
 
 **是——`windows-x86_64 3.8.10` 真绿了。** 权威 run `43608380890`（commit `91d934e`）
-的该 job（`132487823907`，2026-11-14T15:06:42Z → 15:17:16Z）**success**，21 个执行步骤
-全绿（`[6/6]` 与 `Full integration run` 都在其中），公开 check-run 注解给出
+的该 job（`132487823907`，2026-11-14T15:06:42Z → 15:17:16Z）**success**，25 个步骤里 23 个 success、
+2 个按平台 skip（`Install Linux build tools` / `Install macOS build tools`），零失败，公开 check-run 注解给出
 `Application exit code: 0`。
 
 走到这一步修了三处真实缺陷：上一轮漏掉的两处运行期问题（2.1 Qt binding 类布局、
@@ -256,11 +256,11 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | native-integration (macos-15-intel, macos-x86_64) | ✅ success | |
 | native-integration (windows-2025, windows-x86) | ✅ success | 仅 `pyserial==3.5` 的 32 位链路 |
 | native-integration (windows-2025, windows-x86_64) | ✅ success | 3.13 + 应用完整依赖 |
-| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ✅ **success** | job `132487823907`，21 个执行步骤全绿；`Application exit code: 0` |
+| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ✅ **success** | job `132487823907`，23 success + 2 平台 skip，零失败；`Application exit code: 0` |
 | native-integration (windows-11-arm, windows-arm64) | ❌ failure | 已知平台阻塞，见下 |
 | aggregate-artifacts | — skipped | 上游有 job 失败时不汇总 |
 
-`windows-x86_64 3.8.10` 的 21 个执行步骤依次为：Set up job → checkout →
+`windows-x86_64 3.8.10` 的 23 个执行步骤依次为：Set up job → checkout →
 setup-python → 写本地配置 → 缓存 → 装 Python 构建工具 →（Linux/macOS 工具 step 7/8
 按平台 skip）→ 装应用依赖 → Unit tests → Publish/Upload 测试日志 → Local end-to-end
 build → Doctor → **Full integration build（`[1/6]`…`[5/6]`）** → Publish/Upload 构建日志
