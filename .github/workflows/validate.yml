@@ -82,7 +82,15 @@ jobs:
             # require >=3.10 (pydantic 2.14.3 itself declares Requires-Python
             # >=3.10), so this entry pins the last cp38-compatible major of
             # each dependency instead of reusing that list.
-            dependencies: '["PySide2==5.15.2.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1"]'
+            #
+            # typing_extensions is in this list because the application imports
+            # it on 3.8: `typing.Annotated` does not exist there and
+            # chat_models.py falls back to `typing_extensions.Annotated` under
+            # an explicit `sys.version_info` check. It is not an implicit
+            # dependency of pydantic here -- the file imports the name directly
+            # -- so the requirement is spelled out. 4.13.2 is the last release
+            # that supports 3.8 (4.14.0+ requires >=3.9).
+            dependencies: '["PySide2==5.15.2.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
             # Keep this compatibility build out of the seven-target release
             # manifest: it duplicates windows-x86_64 and is not a release artifact.
             artifact: py38-compat-windows-x86_64

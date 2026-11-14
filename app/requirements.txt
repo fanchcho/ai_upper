@@ -16,3 +16,9 @@ cryptography==46.0.3
 # Win32 CredRead/CredWrite），自己写等于重新实现一遍跨平台凭据管理。
 # 后端不可用时（本容器解析到 keyring.backends.fail）自动退到加密文件，见 secrets_vault.py。
 keyring==25.7.0
+# Python 3.8 没有 typing.Annotated：app/src/mvvm/models/chat_models.py 按
+# sys.version_info 显式分支，3.8 走 typing_extensions。
+# 4.13.2 是最后一个支持 3.8 的版本（4.14.0 起 Requires-Python >=3.9），不能随手升级。
+# 必须带环境标记：pydantic 2.14.3 要求 typing-extensions>=4.16.0，把 4.13.2 钉死在
+# 3.9+ 上会让解析直接冲突。3.9+ 由 pydantic 自己拉取满足其下限的版本。
+typing_extensions==4.13.2; python_version < "3.9"
