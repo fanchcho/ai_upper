@@ -33,15 +33,39 @@ except ImportError as exc:  # pragma: no cover - 取决于安装的 binding
 else:
     _WEBENGINE_ERROR = None
 
+
+def _webengine_class(name: str) -> Any:
+    """取一个 QtWebEngine 类，不论它落在哪个子模块。
+
+    Qt5 的 PySide2 把 ``QWebEngineScript``/``QWebEngineSettings`` 放在
+    ``QtWebEngineWidgets`` 里，``QtWebEngineCore`` 只有 URL 与请求拦截那一批；
+    Qt6 把这两个类移到了 ``QtWebEngineCore``。按「哪个子模块有这个名字」探测，
+    而不是把类→模块的对应关系写成一张会过时的表：两个 binding 上都只有一处定义。
+    """
+    for module in (QtWebEngineCore, QtWebEngineWidgets):
+        if module is None:
+            continue
+        try:
+            return getattr(module, name)
+        except (AttributeError, ImportError):
+            # 代理对缺失的名字抛 ImportError，普通模块抛 AttributeError；
+            # 两种都要落到下一个子模块，默认值（getattr 的三参形式）只挡后者。
+            continue
+    raise ImportError(
+        f"该 binding 的 QtWebEngine 里没有 {name!r}"
+        f"（QtWebEngineCore={QtWebEngineCore!r}, QtWebEngineWidgets={QtWebEngineWidgets!r}）"
+    )
+
+
 QFile = QtCore.QFile
 QIODevice = QtCore.QIODevice
 QSize = QtCore.QSize
 Qt = QtCore.Qt
 QUrl = QtCore.QUrl
 QWebChannel = QtWebChannel.QWebChannel
-QWebEngineScript = QtWebEngineCore.QWebEngineScript if QtWebEngineCore is not None else None
-QWebEngineSettings = QtWebEngineCore.QWebEngineSettings if QtWebEngineCore is not None else None
-QWebEngineView = QtWebEngineWidgets.QWebEngineView if QtWebEngineWidgets is not None else None
+QWebEngineScript = _webengine_class("QWebEngineScript") if _WEBENGINE_ERROR is None else None
+QWebEngineSettings = _webengine_class("QWebEngineSettings") if _WEBENGINE_ERROR is None else None
+QWebEngineView = _webengine_class("QWebEngineView") if _WEBENGINE_ERROR is None else None
 QMainWindow = QtWidgets.QMainWindow
 QWidget = QtWidgets.QWidget
 

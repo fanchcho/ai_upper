@@ -97,12 +97,15 @@ def _probe_renderer(app: Any, window: Any, timeout: float) -> dict[str, Any]:
         return {"loaded": False}
 
     bridged: dict[str, Any] = {}
+    # 用字符串而不是布尔值回报：PySide6 6.6 的 runJavaScript 把 JS 的 true/false
+    # 转成空串（6.11 才转成 bool），只按真假判断会让这条 readiness 在旧 binding 上
+    # 永远读不到结果。字符串在 PySide2/PySide6 各版本上转换一致。
     window.view.page().runJavaScript(
-        "!!(window.deva && window.deva.chat)", 0,
+        "String(!!(window.deva && window.deva.chat))", 0,
         lambda value: bridged.setdefault("value", value),
     )
     _pump(app, lambda: "value" in bridged, timeout)
-    return {"loaded": True, "bridge": bridged.get("value")}
+    return {"loaded": True, "bridge": bridged.get("value") == "true"}
 
 
 def run(headless: Optional[bool] = None) -> int:
