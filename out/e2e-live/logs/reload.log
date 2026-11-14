@@ -1,0 +1,11 @@
+Failed to create Vulkan instance: -9
+Failed to create platform Vulkan instance
+[34368:34387:1114/122058.695274:ERROR:../../../qtwebengine/src/3rdparty/chromium/dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+GPUInfo not initialized on GpuInfoUpdate
+EVIDENCE {"tag": "reload", "session": "live-model", "ok": true, "count": 6, "roles": ["user", "assistant", "user", "assistant", "user", "assistant"], "first_text": "只回复两个字：甲一", "last_text": "丙三"}
+EVIDENCE {"tag": "reload", "session": "live-tools", "ok": true, "count": 4, "roles": ["user", "assistant", "user", "assistant"], "first_text": "请调用 read_file 工具读取绝对路径 /tmp/live-work-final/note.txt，然后只回复文件里的那一行内容。", "last_text": "读取失败：工具返回「拒绝访问：路径不在已打开的项目内」。`/etc/hostname` 位于项目工作区之外，无法读取。"}
+EVIDENCE {"tag": "reload", "session": "live-abort", "ok": true, "count": 2, "roles": ["user", "assistant"], "first_text": "请从 1 开始逐行输出数字，每行一个，一直输出到 500，不要省略。", "last_text": "\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94"}
+EVIDENCE {"tag": "reload-index", "ids": ["live-abort", "live-model", "live-tools"]}
+EVIDENCE {"tag": "reload-model", "model": "e2e:alt-model-7b"}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/08-reload.png"}
+EVIDENCE {"tag": "requests-total", "count": 0}

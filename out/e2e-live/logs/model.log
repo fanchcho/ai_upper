@@ -1,0 +1,19 @@
+Failed to create Vulkan instance: -9
+Failed to create platform Vulkan instance
+[33965:33984:1114/122021.680076:ERROR:../../../qtwebengine/src/3rdparty/chromium/dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+GPUInfo not initialized on GpuInfoUpdate
+EVIDENCE {"tag": "create-session", "result": {"ok": true, "result": {"ok": true}}}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 1, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "send-1", "result": {"ok": true, "result": {"turnId": "5c6f12564ba247aab5408c71495dd6da"}}}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/01-model-before.png"}
+EVIDENCE {"tag": "picker-switch", "clicked": true, "label": "alt-model-7b"}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "alt-model-7b", "stream": true, "messages": 3, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "send-2", "result": {"ok": true, "result": {"turnId": "ae33dcf82ca94a37b38a5b7afc8616bf"}}}
+EVIDENCE {"tag": "composer-picker", "label": "alt-model-7b"}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/02-model-after.png"}
+EVIDENCE {"tag": "ui-send", "clicked": true}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "alt-model-7b", "stream": true, "messages": 5, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "ui-send-result", "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 1746}], "delta_chars": 2, "text": "丙三"}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/02c-ui-send.png"}
+EVIDENCE {"tag": "session-file", "model": "e2e:alt-model-7b", "messages": 6, "roles": ["user", "assistant", "user", "assistant", "user", "assistant"]}
+EVIDENCE {"tag": "requests-total", "count": 3}

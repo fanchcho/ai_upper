@@ -552,6 +552,293 @@ Web 承载层三个模块在**类体求值**时即需 Qt（继承 `QWidget` / `Q
 
 ---
 
+### 1.12 阶段 L：写路径接通（第六阶段 s1 / s2）
+
+第五阶段收口时，Web 承载层只做到了「七页渲染正确」——`chat:send` 一类写通道一条都没注册，
+新界面只能看、不能发消息。本阶段把它接上。
+
+#### 1.12.1 分层：桥只做分发，生命周期在宿主，转换只做一次
+
+| 文件 | 职责 | 行数 |
+|---|---|---|
+| `app/src/mvvm/webui/host.py`（新） | `ChatHost`：turnId ↔ 会话注册表、回合线程、事件形状转换（`to_chat_event`）、中止；不依赖 Qt，可纯 Python 单测 | 549 |
+| `app/src/mvvm/webui/assembly.py`（新） | `build_chat_host(...)`：把 `SettingsService` / `SecretsVault` / `ChatSessionStore` / `WorkspaceGuard` / `ModelGateway` / `ToolRuntime` / `ChatViewModel` 接成一张图。窗口与端口启动器共用这一份，写两份必然漂移 | 95 |
+| `app/src/mvvm/webui/bridge.py`（改） | 14 条写通道注册为「宿主方法包装」；宿主未接线时抛 `UnimplementedChannel`，**不返回假成功** | `bridge.py:221-237`、`bridge.py:267-276` |
+| `app/src/mvvm/views/web_shell_window.py`（改） | 构造里建 `WorkspaceGuard`、按 `DEVA_APP_WORKSPACE` 登记受信根、装配宿主与网关、注入桥；`DRAIN_INTERVAL_MS=50` 定时调 `host.drain` | `:97-127`、`:157-162` |
+
+已注册的写通道（`bridge.py:221-237`）：`chat:send` / `chat:abort` / `chat:compact` /
+`chat:create-session` / `chat:set-model` / `chat:set-effort` / `chat:set-focus` /
+`chat:rename-session` / `chat:set-archived` / `chat:delete-session` / `chat:reset` /
+`chat:delete-turns` / `chat:todos` / `chat:todo-cancel`。
+
+配套的三个服务层写入口（此前只有读）：
+
+- `chat_session_store.py`：`set_model` / `set_effort` / `set_focus`（`:402/:419/:432`，未建档返回
+  `False` 且不动 `updatedAt`）、`reset_messages`（`:444`，清 messages 与 notices/background/
+  checkpoints/lastKnown/baselines/restoreNote/token 计数）、`delete_turns`（`:469`，按
+  `is_genuine_user_turn` 切轮，越界忽略）。
+- `persona_store.py`：`upsert` / `remove` / `set_enabled` / `reorder` / `set_avatar_image` /
+  `clear_avatar_image`（`:200-275`）+ 顶层浅合并写 `config.json`（`:102`）。
+- `skill_store.py`：`set_enabled` / `set_roles` / `remove`（`:285-316`）+ `_write_section`（`:265`）。
+
+#### 1.12.2 事件形状：按渲染层的判别联合逐字段对齐
+
+渲染层消费的是 Deva `ChatStreamEvent`（camelCase、外层 `{turnId,sessionId,event}`），
+`ChatViewModel.emit` 给的是自家简化形状。转换只在 `host.to_chat_event` 做一次：
+
+| 渲染层要求 | 移植版做法 | 覆盖用例 |
+|---|---|---|
+| 本轮**第一个**事件必须是 `turn_start`，带 `user: DisplayMessage` | `send` 里先推 `turn_start` 再起线程 | `test_send_streams_text_and_finishes_with_done`（断言 `kinds[0] == "turn_start"`） |
+| `done` 带 `stopReason` + `durationMs` | 回合结束按 `_stop_reason` 归一化，`durationMs` 为**整数毫秒** | 同上（`isinstance(done["durationMs"], int)`） |
+| `tool_call` / `tool_result` 按 `id` 配对 | 事件透传 `id`；`ChatViewModel` 的 `tool_call` 也补了 `id`（`chat_vm.py:511-517`） | `test_tool_call_events_carry_ids_matching_results` |
+| 中止以 `stopReason:'aborted'` 收尾 | `abort` 直接作用于本轮 cancel 标记（不等 UI 线程 drain 到 `busy`） | `test_abort_stops_the_turn_and_reports_aborted` |
+
+另外 `ChatViewModel.start_turn` 增加可选 `cancel=...`（`chat_vm.py:293-302`），让宿主能把
+`chat:abort` 打到**同一个**取消标记上——否则中止要等 `busy` 被 drain 到才生效，表现为「点停止没反应」。
+
+#### 1.12.3 s2：设置类写通道（同一轮补完）
+
+`config:set` / `secrets:set|delete` / `personas:*` / `skills:*` / `profile:*` 之前也只有读。
+本阶段补齐，并新增 `app/tests/test_web_settings_write.py`（28 用例），全部从**桥的真实入口**
+`bridge._handlers[channel](*args)` 调，断言落盘结果与返回值。
+
+写这批用例时抓到一个**真实缺陷**（不是测试问题）：
+
+| 现象 | 根因 | 修复 |
+|---|---|---|
+| 界面「拉取模型」永远失败，控制台报 `'ListModelsResult' object has no attribute 'model_dump'` | `ListModelsResult` 是 frozen dataclass，桥里按 pydantic 模型调 `model_dump()` | 新增 `list_models_payload()`（`bridge.py:465`）按契约只输出 `{ok, models?, kind?, message?}`；用例从 26 passed / 2 failed 变 **28 passed** |
+
+#### 1.12.4 实测（原始命令与输出）
+
+```text
+$ cd app && ../.venv/bin/python -m pytest -q tests/test_web_chat_write.py
+..................                                                       [100%]
+18 passed in 0.54s
+
+$ cd app && ../.venv/bin/python -m pytest -q tests/test_web_chat_write.py tests/test_web_settings_write.py tests/test_web_shell_modules.py
+..........................................................               [100%]
+58 passed in 0.92s
+
+$ cd app && ../.venv/bin/python -m pytest -q -rs          # 全量
+...
+891 passed, 6 skipped in 22.41s
+```
+
+6 条 skip 中 5 条与 §1.11.7 相同（环境型），新增的 1 条是端到端实跑的门控：
+
+```text
+SKIPPED [1] tests/test_web_e2e_stream.py:131: 端到端实跑需要真 provider：设 DEVA_E2E_PROVIDER=1 并提供 ANTHROPIC_BASE_URL / ANTHROPIC_API_KEY / ANTHROPIC_MODEL（或 DEVA_E2E_* 同名变量）
+```
+
+**这条 skip 不是为了让检查变绿**：设了开关它就会真跑，见 §1.13 的实跑记录。
+
+#### 1.12.5 「在 Web 承载窗口里从输入框发一条消息并拿到流式回复」——已达成
+
+两条证据，一条自动化、一条真窗口截图：
+
+1. **真页面 + 真 provider**（`tests/test_web_e2e_stream.py`）：真的 QtWebEngine 载入
+   `app/assets/renderer`，JS 里调 `window.deva.chat.send(...)`，事件经 `window.__devaEmit`
+   回到页面，断言 `turn_start` 第一、有 `text_delta`、`done.stopReason == 'end_turn'`，
+   并且回复正文**真的进了 DOM**（`document.body.innerText` 里能读到）。
+
+   ```text
+   $ cd app && DEVA_E2E_PROVIDER=1 ../.venv/bin/python -m pytest -q tests/test_web_e2e_stream.py -s
+   .                                                                        [100%]
+   1 passed in 4.26s
+   ```
+
+   provider 是**真的**：本机 Claude Code 代理（`ANTHROPIC_BASE_URL=http://127.0.0.1:6060/…`、
+   `ANTHROPIC_MODEL=deepseek-v4.1-flash`、37 字符密钥）。密钥只经 `SecretsVault(backend="file")`
+   写入，未在命令、日志或测试参数里出现明文。
+
+2. **真窗口截图**（Xvfb `:96`，`1400x900x24`，`import -window root`）：
+
+   - 流式中间态：`out/e2e/13-stream3-2.png`——第三轮「Say exactly: hello web」已发出，
+     Deva 气泡下是三个点的输入指示，输入框为「Add a note or correction…」占位（回合进行中）。
+   - 完成态：`out/e2e/13-stream3-10.png`——同一轮回复渲染为正文 `hello web`，输入框回到
+     「Message Deva…」、右侧显示 **Send**（回合已结束）。
+
+   会话落盘 `/tmp/e2e-home/data/chats/sess_mwfqc8u9_2.json`：4 条消息
+   （user ×3、assistant ×1，最后一条 `hello web`），`model: "e2e:deepseek-v4.1-flash"`。
+
+   同一张图里还留着前两轮的**真实失败**（401「鉴权失败：请检查 API 密钥」、503「Gateway attempt
+   budget is exhausted」），没有抹掉：第一次是密钥库为空，第二次是代理侧瞬时配额；用同一把密钥
+   `curl` 直连 `/v1/messages` 返回 200 才能证伪，第三次才通。这两条失败正好证明错误路径也是
+   **真数据驱动**的，不是占位文案。
+
+> 说明：这一步证明的是「输入框那条链路（`chat:send` → 宿主 → 适配器 → 事件 → 渲染层 DOM）通」。
+> 切模型 / 工具调用 / 中断 / 重载会话的实跑证据见 §1.13。
+
+---
+
+### 1.13 四项交互实跑（真窗口 + 真渲染层 + 真 provider）
+
+§1.12.5 只证了「发一条消息能流式回来」；用户另外点名的四项（切模型、工具调用与审批、
+中断、重载会话）由 `scripts/parity/live_scenarios.py` 一次性补上。这个脚本刻意不写成
+pytest：要的是**真实环境下的原始输出**（真代理、真模型吐出的流），把失败原样留在日志里，
+判定留给读者。
+
+**运行方式（四个场景共用一份 `DEVA_HOME`，顺序不能换：`reload` 要读前三项落盘的会话）**
+
+```text
+$ cd /home/agent/shared_workspace/py_upper
+$ for s in model tools abort reload; do
+>   timeout 400 xvfb-run -a -s "-screen 0 1400x900x24" \
+>     .venv/bin/python scripts/parity/live_scenarios.py \
+>     --scenario $s --home /tmp/live-home-final --workspace /tmp/live-work-final \
+>     --shots out/e2e-live > out/e2e-live/logs/$s.log 2>&1
+> done
+$ echo $?          # 四次都退出 0（脚本只在断言不成立时非零）
+```
+
+原始日志（完整、未删行，含 Chromium 的 Vulkan/dbus 噪声）：
+
+| 场景 | 日志 | EVIDENCE 行数 |
+|---|---|---|
+| 切模型 | `out/e2e-live/logs/model.log` | 15 |
+| 工具调用 | `out/e2e-live/logs/tools.log` | 10 |
+| 中断 | `out/e2e-live/logs/abort.log` | 12 |
+| 重载会话 | `out/e2e-live/logs/reload.log` | 7 |
+
+四个日志开头都有同样的三行环境噪声（`Failed to create Vulkan instance: -9`、
+`Failed to connect to the bus … /run/dbus/system_bus_socket`），是容器无 GPU/无 dbus 的
+软渲染环境报告，不影响下面任何一条结论；原样保留，不裁剪。
+
+provider 为**真实**本机代理：`ANTHROPIC_BASE_URL` 指向本机 HTTP 代理、
+`ANTHROPIC_MODEL=deepseek-v4.1-flash`，密钥由环境读入后写进本次运行的临时
+`SecretsVault(backend="file")`（`live_scenarios.py::_open_window`），
+**未以明文出现在命令、日志或证据文件里**——日志里的请求记录只有路径 `/v1/messages`
+与请求体字段，没有 URL 前缀与密钥。
+
+#### 1.13.1 切模型：界面点击 → `chat:set-model` → 下一轮请求体真的换模型
+
+做法不只调桥：点开输入框里的模型 chip → 弹层 → 点中 `alt-model-7b`（`_pick_model`），
+走的是渲染层自己的 `setSessionModel`；再用真发送按钮提交一轮。判据是旁路录下的**请求体**，
+不是界面文案。
+
+`out/e2e-live/logs/model.log` 原文（节选 EVIDENCE 行，行首保留原样）：
+
+```text
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 1, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "picker-switch", "clicked": true, "label": "alt-model-7b"}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "alt-model-7b", "stream": true, "messages": 3, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "composer-picker", "label": "alt-model-7b"}
+EVIDENCE {"tag": "ui-send", "clicked": true}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "alt-model-7b", "stream": true, "messages": 5, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "ui-send-result", "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 1746}], "delta_chars": 2, "text": "丙三"}
+EVIDENCE {"tag": "session-file", "model": "e2e:alt-model-7b", "messages": 6, "roles": ["user", "assistant", "user", "assistant", "user", "assistant"]}
+EVIDENCE {"tag": "requests-total", "count": 3}
+```
+
+**结论（通过）**：① 第 2 次请求 `model` 字段从 `deepseek-v4.1-flash` 变成 `alt-model-7b`，
+且这次变化由**界面点击**触发（`picker-switch.clicked: true`，`composer-picker` 也显示新
+chip）；② 输入框打字 + 点发送按钮（`ui-send.clicked: true`）后发出的第 3 次请求仍是
+`alt-model-7b`，`done.stopReason == "end_turn"`，正文 `丙三` 与提示词一致；③ 落盘会话
+`model: "e2e:alt-model-7b"`、6 条消息 3 轮问答——切换在落盘与后续请求两侧都生效。
+
+截图（绝对路径）：切换前 `…/out/e2e-live/01-model-before.png`，
+切换后 `…/out/e2e-live/02-model-after.png`，真按钮发送后 `…/out/e2e-live/02c-ui-send.png`
+（前缀均为 `/home/agent/shared_workspace/py_upper`）。
+
+#### 1.13.2 工具调用与审批：工作区内放行、工作区外由执行期守卫拒绝
+
+Deva 的工具语义是**零弹框**（`tools.ts` 的交互轮全放行），审批不走 IPC 弹窗，因此这里
+测的是「判定层放行 + 执行期守卫」这条组合路径；对应的交互型审批通道
+`chat:ask-response` / `chat:plan-response` / `chat:mount-response` 本轮**仍未移植**，
+在 158 条表里是「未实现」，不在本节冒充通过（见 §1.13.5）。
+
+`out/e2e-live/logs/tools.log` 原文（节选）：
+
+```text
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 3, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "tool-inside", "calls": [{"type": "tool_call", "id": "call_00_Vfix09jdbAXLtxe7L9lS2221", "name": "read_file", "args": {"path": "/tmp/live-work-final/note.txt"}}], "results": [{"type": "tool_result", "id": "call_00_Vfix09jdbAXLtxe7L9lS2221", "name": "read_file", "summary": "1 行", "isError": false}], "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 4969}]}
+EVIDENCE {"tag": "tool-outside", "calls": [{"type": "tool_call", "id": "call_00_SG31FMMsoDLwkk4N7XKx1743", "name": "read_file", "args": {"path": "/etc/hostname"}}], "results": [{"type": "tool_result", "id": "call_00_SG31FMMsoDLwkk4N7XKx1743", "name": "read_file", "summary": "越界拒绝", "isError": true}], "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 3334}]}
+EVIDENCE {"tag": "tool-uses-in-store", "count": 2, "names": ["read_file", "read_file"], "inputs": [{"path": "/tmp/live-work-final/note.txt"}, {"path": "/etc/hostname"}]}
+EVIDENCE {"tag": "requests-total", "count": 4}
+```
+
+**结论（通过）**：① 模型真的发起了 `read_file`（10 个工具的清单在请求体里可见，证明工具
+schema 已随请求发出）；② 工作区内 `/tmp/live-work-final/note.txt` 的调用
+`isError: false`、结果「1 行」，即文件内容真的被读进上下文；③ 工作区外 `/etc/hostname`
+的同一工具调用 `isError: true`、结果「越界拒绝」，是 `WorkspaceGuard` 的执行期拒绝
+（判定层按 Deva 语义放行，守卫是安全底线，两者互不替代）；④ 两次调用都按 `id` 配对成
+`tool_call` / `tool_result`，并作为 `tool_use` 块落盘（`tool-uses-in-store.count: 2`）。
+
+截图：工作区内 `…/out/e2e-live/03-tool-inside.png`，工作区外
+`…/out/e2e-live/04-tool-outside.png`。
+
+**未做到的项（照实写）**：`ask_user` / `exit_plan` / 挂载卡三种**交互式审批**没有实跑——
+py_upper 的工具层没有 `ask_user` 工具，也没有待答请求注册表，所以没有可审批的对象
+（158 条表里这三条是「未实现」，见 §3）。“审批”在这里只覆盖了「判定层允许 / 执行期拒绝」
+这条真实存在的路径。
+
+#### 1.13.3 中断：流到一半 `chat:abort` → `stopReason: "aborted"`，半截正文落盘
+
+等正文真的吐出来再停（`first-deltas` 等到了才发 abort），避免测成「请求还没发」。
+
+`out/e2e-live/logs/abort.log` 原文（节选）：
+
+```text
+EVIDENCE {"tag": "send", "result": {"ok": true, "result": {"turnId": "976c83467bcd4f549859d4553668fa52"}}}
+EVIDENCE {"tag": "first-deltas", "deltas": ["1", "\n", "2"]}
+EVIDENCE {"tag": "abort-call", "result": {"ok": true, "result": {"ok": true}}}
+EVIDENCE {"tag": "abort-done", "done": [{"type": "done", "stopReason": "aborted", "durationMs": 2312}], "delta_chars": 272, "tail_text": "68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94"}
+EVIDENCE {"tag": "abort-store", "roles": ["user", "assistant"], "last_role": "assistant", "last_chars": 272}
+EVIDENCE {"tag": "abort-ui-after-2s", "state": {"responding": false, "stopped": false}}
+EVIDENCE {"tag": "requests-total", "count": 1}
+```
+
+**结论（通过）**：① `chat:abort` 返回 `{ok: true}`，回合以 `done.stopReason == "aborted"`
+收尾（不是 `end_turn`）；② 流到 94 时被截断，`delta_chars: 272` 与落盘
+`abort-store.last_chars: 272` **完全相等**——中止后写入的是已收到的半截正文，没有补全、
+也没有清零；③ abort 后 2 秒界面状态 `responding: false`，输入框回到可发送态；
+④ 全程只有 1 次请求（没有因重试而多发）。
+
+**一处未验证（照实写）**：`abort-ui-after-2s.stopped` 为 `false`——界面没有出现「已停止」
+文案。截图 `…/out/e2e-live/07-abort-settled.png` 显示输入框已复位、可继续输入，
+说明「正在输出」确实收掉了；但原版可能有一条「已停止」提示条，本工程有没有渲染它
+**没有断言**（`/已停止|Stopped/` 未命中）。这一条归入 §2 未验证，不当成通过。
+
+截图：流式中 `…/out/e2e-live/05-abort-streaming.png`，刚结束
+`…/out/e2e-live/06-abort-just-done.png`，2 秒后 `…/out/e2e-live/07-abort-settled.png`。
+
+#### 1.13.4 重载会话：新进程读同一 `DEVA_HOME`，历史与模型都读回
+
+`reload` 是新起的一次进程（不是同进程重开），读的是前三项留下的
+`/tmp/live-home-final/data/chats/*.json`。
+
+`out/e2e-live/logs/reload.log` 原文（节选）：
+
+```text
+EVIDENCE {"tag": "reload", "session": "live-model", "ok": true, "count": 6, "roles": ["user", "assistant", "user", "assistant", "user", "assistant"], "first_text": "只回复两个字：甲一", "last_text": "丙三"}
+EVIDENCE {"tag": "reload", "session": "live-tools", "ok": true, "count": 4, "roles": ["user", "assistant", "user", "assistant"], "first_text": "请调用 read_file 工具读取绝对路径 /tmp/live-work-final/note.txt，然后只回复文件里的那一行内容。", "last_text": "读取失败：工具返回「拒绝访问：路径不在已打开的项目内」。`/etc/hostname` 位于项目工作区之外，无法读取。"}
+EVIDENCE {"tag": "reload", "session": "live-abort", "ok": true, "count": 2, "roles": ["user", "assistant"], "first_text": "请从 1 开始逐行输出数字，每行一个，一直输出到 500，不要省略。", "last_text": "\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94"}
+EVIDENCE {"tag": "reload-index", "ids": ["live-abort", "live-model", "live-tools"]}
+EVIDENCE {"tag": "reload-model", "model": "e2e:alt-model-7b"}
+EVIDENCE {"tag": "requests-total", "count": 0}
+```
+
+**结论（通过）**：① 三个会话 `chat:load-session` 全部 `ok: true`，消息条数
+（6 / 4 / 2）与角色序列同落盘时一致；② `live-model` 的模型读回仍是
+`e2e:alt-model-7b`——§1.13.1 的切换跨进程存活；③ 中止会话的最后一条正文
+（1…94）与 §1.13.3 落盘内容一致；④ 会话索引含三个 id；⑤ `requests-total: 0`，
+重载全程没有打任何模型请求，读的是本地文件。
+
+截图：`…/out/e2e-live/08-reload.png`。
+
+#### 1.13.5 与 158 条表的关系（避免两处数字打架）
+
+本节四项测的是**回合与界面链路**，不是通道清单的覆盖证明。四项涉及的通道在
+`docs/audit/IPC-158-LEDGER.md` 里的判定不变：
+
+- `chat:send` / `chat:set-model` / `chat:abort` / `chat:load-session` /
+  `chat:list-sessions` / `chat:create-session`：**通过**（判定表里的实现位置与测试名照旧；
+  本节补的是真页面实跑证据）；
+- `chat:ask-response` / `chat:plan-response` / `chat:mount-response`：**未实现**——
+  没有交互请求注册表与计划/挂载边车，`ask_user` 工具也不存在。本节没有把它们算作通过。
+
+---
+
 ## 2 档二：已实现未验证
 
 | 项 | 现状 | 为什么没验证 / 怎么验证 |
@@ -571,7 +858,7 @@ Web 承载层三个模块在**类体求值**时即需 Qt（继承 `QWidget` / `Q
 |---|---|---|
 | 158 通道逐条结论表 | 本轮时间用尽（用户已明确「时间不够就只把阻塞原因写准，不要虚报」） | 迁移契约尚未闭环；`docs/MIGRATION-PLAN.md` 仍是逐条清单，没有判定列。桥接层已实现的是渲染层实际调用的那一批通道（`config:*` / `chat:*` / `skills:*` / `browser:state` / `window:set-overlay`），其余通道在桥边界显式 reject（不假成功），但**没有逐条列出「已落地 / 不适用 / 阻塞」的结论表** |
 | 打包入口指向 Web 承载窗口并真实构建一次 | 同上，本轮未做 | 当前 `deva_app` 入口起的仍是 Qt 原生窗口；Web 窗口只能经 `scripts/parity/port_run.py` 启动。打包产物因此**没有**被证明能起新界面 |
-| 聊天/工具/待办等**写路径**通道接通 | Web 承载层本轮只做到「七页渲染正确」，`chat:send` 一类写通道尚未接到 `ChatViewModel` | 新界面目前只能看，不能发消息。这是第五阶段最大的功能缺口 |
+| ~~聊天/工具/待办等**写路径**通道接通~~ | **第六阶段已落地**，见 §1.12 | — |
 | 工作区挂载交互轮 | Deva 的挂载卡是交互轮唯一闸门，py_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区；需要做挂载卡才能对齐 |
 | 子智能体 / `task` 类工具（Deva 19 工具里的 9 个） | 依赖挂载工作区与多轮编排，未迁移 | 模型拿不到这几个工具时会退化为单轮 |
 | 真机人工验收（键盘焦点、IME、拖拽） | 容器无显示服务器 | 只能由人验 |

@@ -1,0 +1,14 @@
+Failed to create Vulkan instance: -9
+Failed to create platform Vulkan instance
+[34077:34096:1114/122037.875060:ERROR:../../../qtwebengine/src/3rdparty/chromium/dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+GPUInfo not initialized on GpuInfoUpdate
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 1, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 3, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "tool-inside", "calls": [{"type": "tool_call", "id": "call_00_Vfix09jdbAXLtxe7L9lS2221", "name": "read_file", "args": {"path": "/tmp/live-work-final/note.txt"}}], "results": [{"type": "tool_result", "id": "call_00_Vfix09jdbAXLtxe7L9lS2221", "name": "read_file", "summary": "1 行", "isError": false}], "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 4969}]}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/03-tool-inside.png"}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 5, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "request", "path": "v1/messages", "model": "deepseek-v4.1-flash", "stream": true, "messages": 7, "tools": ["read_file", "list_dir", "glob", "grep", "web_fetch", "write_file", "edit_file", "run_command", "present_files", "todo_write"]}
+EVIDENCE {"tag": "tool-outside", "calls": [{"type": "tool_call", "id": "call_00_SG31FMMsoDLwkk4N7XKx1743", "name": "read_file", "args": {"path": "/etc/hostname"}}], "results": [{"type": "tool_result", "id": "call_00_SG31FMMsoDLwkk4N7XKx1743", "name": "read_file", "summary": "越界拒绝", "isError": true}], "done": [{"type": "done", "stopReason": "end_turn", "durationMs": 3334}]}
+EVIDENCE {"tag": "screenshot", "path": "/home/agent/shared_workspace/py_upper/out/e2e-live/04-tool-outside.png"}
+EVIDENCE {"tag": "tool-uses-in-store", "count": 2, "names": ["read_file", "read_file"], "inputs": [{"path": "/tmp/live-work-final/note.txt"}, {"path": "/etc/hostname"}]}
+EVIDENCE {"tag": "requests-total", "count": 4}
