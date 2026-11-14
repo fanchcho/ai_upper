@@ -39,6 +39,11 @@ BACKEND_ENV = "DEVA_SECRETS_BACKEND"  # keyring | file | auto（缺省）
 
 _FILE_VERSION = 1
 _KEY_BYTES = 32
+# Windows 上 `os.open` 未指定 O_BINARY 时是文本模式，`os.write` 会把每个 0x0A 写成
+# 0x0D0A：32 字节随机主密钥约 12% 的概率被写坏（长度变 33+，此后读回必报「长度异常」），
+# 密文 JSON 里的换行同样会被改写。读写的都是二进制载荷，所以显式要二进制语义；
+# 该常量在 POSIX 上是 0，没有副作用。
+_BINARY = getattr(os, "O_BINARY", 0)
 _SALT_BYTES = 16
 _NONCE_BYTES = 12
 
@@ -156,7 +161,7 @@ class SecretsVault:
         }
         self._home.mkdir(parents=True, exist_ok=True)
         tmp = self._store_path.with_name(self._store_path.name + ".tmp")
-        fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | _BINARY, 0o600)
         try:
             os.write(fd, json.dumps(payload, indent=2).encode("utf-8"))
         finally:
@@ -180,7 +185,7 @@ class SecretsVault:
         self._home.mkdir(parents=True, exist_ok=True)
         key = _secrets.token_bytes(_KEY_BYTES)
         try:
-            fd = os.open(self._key_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            fd = os.open(self._key_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _BINARY, 0o600)
         except FileExistsError:
             # 并发首次使用：另一进程刚建好，读它写下的那一份（读不到/长度不对就明确报错）
             raw = self._key_path.read_bytes()

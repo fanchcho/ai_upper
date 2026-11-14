@@ -15,6 +15,7 @@ import pytest
 
 from mvvm.services.secrets_vault import (
     KEYRING_SERVICE,
+    _KEY_BYTES,
     SECRETS_FILE,
     SecretsDecryptError,
     SecretsVault,
@@ -148,6 +149,29 @@ def test_delete_is_idempotent(vault):
     assert vault.delete_secret("anthropic")["ok"] is True
     assert vault.delete_secret("anthropic")["ok"] is True
     assert vault.list_keys() == []
+
+
+def test_master_key_is_written_as_exact_bytes(home, monkeypatch):
+    """主密钥必须逐字节落盘：Windows 文本模式下 `os.write` 会展开 0x0A。
+
+    随机 32 字节里出现 0x0A 的概率约 12%，所以这里不靠运气，而是把主密钥固定成含
+    0x0A / 0x0D 的 32 字节再写入，按长度和内容精确比对。少了 `O_BINARY`，这份密钥
+    在 Windows 上会被写成 33+ 字节，此后每次读取都报「主密钥文件长度异常」——这正是
+    windows-arm64 那次唯一命中的失败。
+    """
+    from mvvm.services import secrets_vault as module
+
+    payload = bytes([0x0A, 0x0D, 0x0A, 0x0D]) + bytes(range(0, 28))
+    assert len(payload) == _KEY_BYTES
+    real = module._secrets.token_bytes
+    monkeypatch.setattr(
+        module._secrets,
+        "token_bytes",
+        lambda n=32: payload if n == _KEY_BYTES else real(n),
+    )
+
+    SecretsVault(home, backend="file").set_secret("anthropic", PLAINTEXT)
+    assert (home / ".secrets.key").read_bytes() == payload
 
 
 def test_key_material_survives_concurrent_first_use(home):
