@@ -16,7 +16,22 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from utils.qt_compat import QtCore, QtWebChannel, QtWebEngineCore, QtWebEngineWidgets, QtWidgets
+from utils.qt_compat import QtCore, QtWebChannel, QtWidgets
+
+# QtWebEngine 是可选组件：PySide6 的 win_arm64 wheel 根本不打包 QtWebEngineCore
+# （6.9–6.12 各版本实测都没有），PySide2 也没有。若在类体阶段就取
+# `QtWebEngineCore.QWebEngineScript`，整个模块连同 `import mvvm.views.*` 都会在
+# 这类解释器上失败，而失败信息是包装层给出的「PySide6 has no submodule」，
+# 看不出是平台缺件。这里沿用 views/__init__ 的约定：Qt 名字延到真正建窗口时，
+# 模块本身在任何 binding 上都能导入，缺件由 DevaWebWindow 用原文报出来。
+try:
+    from utils.qt_compat import QtWebEngineCore, QtWebEngineWidgets
+except ImportError as exc:  # pragma: no cover - 取决于安装的 binding
+    _WEBENGINE_ERROR: ImportError | None = exc
+    QtWebEngineCore = None  # type: ignore[assignment]
+    QtWebEngineWidgets = None  # type: ignore[assignment]
+else:
+    _WEBENGINE_ERROR = None
 
 QFile = QtCore.QFile
 QIODevice = QtCore.QIODevice
@@ -24,9 +39,9 @@ QSize = QtCore.QSize
 Qt = QtCore.Qt
 QUrl = QtCore.QUrl
 QWebChannel = QtWebChannel.QWebChannel
-QWebEngineScript = QtWebEngineCore.QWebEngineScript
-QWebEngineSettings = QtWebEngineCore.QWebEngineSettings
-QWebEngineView = QtWebEngineWidgets.QWebEngineView
+QWebEngineScript = QtWebEngineCore.QWebEngineScript if QtWebEngineCore is not None else None
+QWebEngineSettings = QtWebEngineCore.QWebEngineSettings if QtWebEngineCore is not None else None
+QWebEngineView = QtWebEngineWidgets.QWebEngineView if QtWebEngineWidgets is not None else None
 QMainWindow = QtWidgets.QMainWindow
 QWidget = QtWidgets.QWidget
 
@@ -91,6 +106,12 @@ class DevaWebWindow(QMainWindow):
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
+        if _WEBENGINE_ERROR is not None:
+            # 报原文：这是「这台机器/这个 binding 没有 QtWebEngine」，
+            # 不是应用装配错误。PySide6 的 win_arm64 wheel 实测不含该模块。
+            raise ImportError(
+                f"该 binding 没有 QtWebEngine，无法承载渲染层：{_WEBENGINE_ERROR}"
+            ) from _WEBENGINE_ERROR
         self.setWindowTitle(app_name())
         self.resize(1280, 820)
         self.setMinimumSize(940, 600)

@@ -44,6 +44,80 @@ def test_exempt_modules_import_with_real_binding():
     import mvvm.webui.bridge  # noqa: F401
 
 
+_NO_WEBENGINE_SCRIPT = r"""
+import importlib.abc
+import sys
+
+blocked = {"PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets", "PySide6.QtWebEngineQuick"}
+
+
+class _BlockWebEngine(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname in blocked:
+            raise ImportError("No module named '%s'" % fullname)
+        return None
+
+
+# 必须在导入 mvvm.views.web_shell_window 之前装好：类体求值阶段就会取 WebEngine。
+sys.meta_path.insert(0, _BlockWebEngine())
+
+import mvvm.views.web_shell_window as shell
+
+assert shell.QWebEngineView is None, shell.QWebEngineView
+assert isinstance(shell._WEBENGINE_ERROR, ImportError), shell._WEBENGINE_ERROR
+
+from PySide6.QtWidgets import QApplication
+
+app = QApplication([])
+try:
+    shell.DevaWebWindow(settings=None, personas=None, store=None)
+except ImportError as exc:
+    assert "没有 QtWebEngine" in str(exc), str(exc)
+else:
+    raise SystemExit("缺 QtWebEngine 的 binding 上，DevaWebWindow 竟然构造成功")
+print("NO-WEBENGINE OK:", shell._WEBENGINE_ERROR)
+"""
+
+
+def test_shell_module_imports_without_webengine(tmp_path):
+    """没有 QtWebEngine 的 binding 上，模块本身仍可导入，缺件在窗口构造时报。
+
+    PySide6 的 win_arm64 wheel 不打包 QtWebEngineCore（6.9–6.12 各版本实测都没有），
+    PySide2 也没有。类体若直接取 `QtWebEngineCore.QWebEngineScript`，`import
+    mvvm.views.web_shell_window` 就在这类解释器上失败，报的却是包装层的
+    「PySide6 has no submodule」——看不出是平台缺件，连「模块可导入」这条既有约定
+    也一起破了（见 views/__init__ 的说明）。
+
+    这里在**子进程**里屏蔽 WebEngine 子模块再导入，断言两件事：导入成功，且构造窗口
+    时抛出的 ImportError 带原文。用子进程而不是 `importlib.reload`：本进程已经有
+    活的 QApplication 和由 shiboken 注册的 Qt 类，重载会重复定义同名的 Qt 类型，
+    PySide6 直接 abort 整个解释器。子进程也更贴近真机——win_arm64 上 WebEngine
+    从来就没装上过。不是 skip：它检查的正是缺件时的真实行为。
+    """
+    import subprocess
+
+    script = tmp_path / "no_webengine.py"
+    script.write_text(_NO_WEBENGINE_SCRIPT, encoding="utf-8")
+    env = dict(os.environ)
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(SRC)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+    )
+    env["QT_QPA_PLATFORM"] = "offscreen"
+    env.setdefault("DEVA_HOME", str(tmp_path / "deva-home"))
+
+    proc = subprocess.run(
+        # 不能加 -I：它会忽略 PYTHONPATH，而脚本要导入 app/src 下的 mvvm。
+        [sys.executable, str(script)],
+        cwd=str(SRC),
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    assert proc.returncode == 0, f"stdout:\n{proc.stdout}\nstderr:\n{proc.stderr}"
+    assert "NO-WEBENGINE OK" in proc.stdout, proc.stdout
+
+
 # ── 标题栏叠加层 ──────────────────────────────────────────────────────────
 def test_overlay_geometry_matches_electron_linux_overlay(qapp):
     from mvvm.views.title_bar_overlay import (
