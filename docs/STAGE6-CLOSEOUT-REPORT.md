@@ -194,11 +194,13 @@ EXIT=0
 ## 五、本轮新增 commit
 
 ```text
+bbb0f5a chore(evidence): 落盘打包与全量测试原始日志
+0293c9c docs: 第六阶段收尾报告（三档清单 + 158 条分组 + 逐页判定 + 全量测试原始输出）
 abd6e1f docs: 台账刷新到打包实测（新增 §1.14，三档与下一轮起点按现状重写）
 9384804 feat(package): 打包产物起真实 Web 界面，入口切到 deva_web
 ```
 
-（本报告的提交在其后，见 `git log --oneline -3`。）
+（本报告与上方 `bbb0f5a` 这两条 docs/evidence 提交即本轮收尾；`9384804` 是代码提交。）
 
 ---
 
