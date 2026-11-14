@@ -188,9 +188,71 @@ jobs:
       # what running pytest from `app/` does. Running it from the repository
       # root instead left `tests.scripted_transport` unimportable and failed
       # the step on every platform.
+      #
+      # `set -o pipefail` is load-bearing: `tee` exits 0, so without it a failing
+      # pytest would turn this step green. The exit code is also recorded, since
+      # the publish step below needs to know whether the log shows a failure.
       - name: Unit tests
         working-directory: app
-        run: python -m pytest tests -q -rs
+        shell: bash
+        run: |
+          set -o pipefail
+          rc=0
+          python -m pytest tests -q -ra --tb=long 2>&1 | tee pytest.log || rc=$?
+          echo "$rc" > pytest.exitcode
+          exit "$rc"
+
+      # The failure text has to be readable without repository admin rights: the
+      # run/job log APIs answer 403 for anonymous callers even on a public
+      # repository, so a red job used to leave nothing but "exit code 1".
+      # Check-run annotations are public, so the tail of the log is emitted as
+      # an annotation; the step summary and the uploaded artifact keep the rest.
+      - name: Publish unit test log
+        if: always()
+        shell: bash
+        run: |
+          log=app/pytest.log
+          rc="$(cat app/pytest.exitcode 2>/dev/null || echo 255)"
+          {
+            echo '### Unit tests — ${{ matrix.target }} (${{ matrix.os }})'
+            echo ''
+            echo "pytest exit code: $rc (0 = passed, 1 = test failure, 2 = collection error)"
+            if [ -f "$log" ]; then
+              echo ''
+              echo '```'
+              tail -n 400 "$log"
+              echo '```'
+            else
+              echo ''
+              echo 'pytest.log was not created: the step failed before pytest ran.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ ! -f "$log" ]; then
+            echo "::error title=pytest log missing::pytest.log was not created; the step failed before pytest ran (exit $rc)."
+            exit 0
+          fi
+          rc="$rc" python - "$log" <<'PY'
+          import os
+          import pathlib
+          import sys
+
+          text = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
+          lines = text.splitlines()
+          tail = '\n'.join(lines[-60:]) if lines else '(empty log)'
+          # Workflow commands require %, CR and LF escaped inside the message.
+          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          level = 'error' if os.environ.get('rc', '0') != '0' else 'notice'
+          print(f'::{level} title=pytest (exit {os.environ["rc"]})::{message}')
+          PY
+
+      - name: Upload unit test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-log-${{ matrix.artifact || matrix.target }}
+          path: app/pytest.log
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Local end-to-end build with third-party wheel
         working-directory: app
@@ -206,13 +268,41 @@ jobs:
 
       - name: Full integration run
         if: matrix.run == true
+        shell: bash
         env:
           AI_UPPER_HEADLESS: '1'
           # A failed launcher must exit non-zero, never block the job on a
           # native error dialog that nobody can dismiss.
           AI_UPPER_NO_DIALOG: '1'
         run: |
-          python tools/build.py --run --target ${{ matrix.target }} > run.log 2>&1
+          set -o pipefail
+          # Keep the real exit code: the assertion below is a separate process.
+          rc=0
+          python tools/build.py --run --target ${{ matrix.target }} > run.log 2>&1 || rc=$?
+          {
+            echo '### Full integration run — ${{ matrix.target }}'
+            echo ''
+            echo "build.py --run exit code: $rc"
+            echo ''
+            echo '```'
+            tail -n 400 run.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat run.log
+          # Annotations are readable without admin rights; job logs are not.
+          # Only a failed run emits one, or every green job would carry an error.
+          RC="$rc" python - run.log <<'PY'
+          import os
+          import pathlib
+          import sys
+
+          text = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
+          tail = '\n'.join(text.splitlines()[-80:]) or '(empty log)'
+          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          rc = os.environ.get('RC', '0')
+          level = 'error' if rc != '0' else 'notice'
+          print(f'::{level} title=run.log (build.py --run exit {rc})::{message}')
+          PY
           python - <<'PY'
           import pathlib
           import sys
@@ -224,8 +314,19 @@ jobs:
           # on the template app's "GUI OK" passed only when this step silently
           # ran a different entry.
           ok = 'DEVA WEB OK' in text and 'bridge=True' in text
+          if not ok:
+              print('MISSING MARKER in run.log:', repr(text[-400:]), file=sys.stderr)
           sys.exit(0 if ok else 1)
           PY
+
+      - name: Upload integration run log
+        if: always() && matrix.run == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-log-${{ matrix.artifact || matrix.target }}
+          path: run.log
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Validate packaged release manifest inputs
         shell: bash
