@@ -275,23 +275,16 @@ jobs:
               echo 'pytest.log was not created: the step failed before pytest ran.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ ! -f "$log" ]; then
-            echo "::error title=pytest log missing::pytest.log was not created; the step failed before pytest ran (exit $rc)."
-            exit 0
-          fi
-          rc="$rc" python - "$log" <<'PY'
-          import os
-          import pathlib
-          import sys
-
-          text = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
-          lines = text.splitlines()
-          tail = '\n'.join(lines[-60:]) if lines else '(empty log)'
-          # Workflow commands require %, CR and LF escaped inside the message.
-          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
-          level = 'error' if os.environ.get('rc', '0') != '0' else 'notice'
-          print(f'::{level} title=pytest (exit {os.environ["rc"]})::{message}')
-          PY
+          # GitHub keeps the FIRST 4096 characters of an annotation message, so
+          # handing it the log tail verbatim is not enough: one long line is
+          # enough to push the failure out of view. tools/ci_tail.py emits the
+          # diagnostic lines themselves and only falls back to an end-first
+          # tail that fits.
+          python tools/ci_tail.py \
+            --log "$log" \
+            --title "pytest (exit $rc)" \
+            --exit-code-file app/pytest.exitcode \
+            --label pytest.log
 
       - name: Upload unit test log
         if: always()
@@ -358,19 +351,19 @@ jobs:
               echo 'build.log was not created: the build step failed before it could write one.'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-          RC="$rc" python - "$log" <<'PY'
-          import os
-          import pathlib
-          import sys
-
-          rc = os.environ.get('RC', '0')
-          if rc == '0':
-              raise SystemExit(0)
-          path = pathlib.Path(sys.argv[1])
-          tail = '\n'.join(path.read_text(encoding='utf-8', errors='replace').splitlines()[-80:]) if path.is_file() else '(no build.log)'
-          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
-          print(f'::error title=build.py (exit {rc})::{message}')
-          PY
+          # GitHub keeps the FIRST 4096 characters of an annotation message, so
+          # the log tail verbatim is not enough: a few `cl.exe` command lines
+          # are already longer than that, and the only thing left readable was
+          # the compiler invocation instead of its diagnostic. tools/ci_tail.py
+          # emits the diagnostic lines themselves, and an end-first tail when
+          # nothing matches.
+          if [ "$rc" != "0" ]; then
+            python tools/ci_tail.py \
+              --log "$log" \
+              --title "build.py (exit $rc)" \
+              --exit-code-file build.exitcode \
+              --label build.log
+          fi
 
       - name: Upload build log
         if: always()
@@ -404,35 +397,56 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
           cat run.log
-          # Annotations are readable without admin rights; job logs are not.
-          # Only a failed run emits one, or every green job would carry an error.
-          RC="$rc" python - run.log <<'PY'
-          import os
-          import pathlib
-          import sys
-
-          text = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace')
-          tail = '\n'.join(text.splitlines()[-80:]) or '(empty log)'
-          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
-          rc = os.environ.get('RC', '0')
-          level = 'error' if rc != '0' else 'notice'
-          print(f'::{level} title=run.log (build.py --run exit {rc})::{message}')
-          PY
-          python - <<'PY'
+          # The entry point is deva_web.py, so the readiness marker is the one
+          # it prints once the renderer loaded and the JS bridge is up. Asserting
+          # on the template app's "GUI OK" passed only when this step silently
+          # ran a different entry.
+          #
+          # The marker check runs before the annotation is emitted: a run that
+          # exits 0 without printing the marker is a failure too, and it used to
+          # leave an "exit 0" notice as the only readable text.
+          marker=1
+          if ! python - <<'PY'
           import pathlib
           import sys
 
           text = pathlib.Path('run.log').read_text(encoding='utf-8', errors='replace')
           print(text[-3000:])
-          # The entry point is deva_web.py, so the readiness marker is the one
-          # it prints once the renderer loaded and the JS bridge is up. Asserting
-          # on the template app's "GUI OK" passed only when this step silently
-          # ran a different entry.
           ok = 'DEVA WEB OK' in text and 'bridge=True' in text
           if not ok:
               print('MISSING MARKER in run.log:', repr(text[-400:]), file=sys.stderr)
           sys.exit(0 if ok else 1)
           PY
+          then
+            marker=0
+          fi
+          # Annotations are readable without admin rights; job logs are not.
+          # Only a failed run emits an error, or every green job would carry one.
+          # The annotation carries diagnostic lines, not a raw tail: GitHub keeps
+          # only the first 4096 characters of the message, which on Windows a
+          # few command lines already exhaust.
+          if [ "$rc" != "0" ]; then
+            python tools/ci_tail.py \
+              --log run.log \
+              --title "run.log (build.py --run exit $rc)" \
+              --label run.log
+          elif [ "$marker" != "1" ]; then
+            python tools/ci_tail.py \
+              --log run.log \
+              --title "run.log (build.py --run exit 0, readiness marker missing)" \
+              --label run.log
+          else
+            python tools/ci_tail.py \
+              --log run.log \
+              --title "run.log (build.py --run exit 0)" \
+              --level notice \
+              --label run.log
+          fi
+          # Either failure is the step's failure: build.py --run exiting non-zero
+          # and a run that "succeeded" without printing the marker.
+          if [ "$rc" != "0" ] || [ "$marker" != "1" ]; then
+            exit 1
+          fi
 
       - name: Upload integration run log
         if: always() && matrix.run == true

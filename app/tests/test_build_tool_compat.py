@@ -358,10 +358,12 @@ def test_ci_build_log_publisher_does_not_report_a_build_that_never_ran():
     assert 'cat build.exitcode 2>/dev/null || echo 255' not in publish
     assert "if [ -f build.exitcode ]" in publish
     assert "Not run: an earlier step in this job failed." in publish
-    # The early-exit path must not reach the annotation emitter below it.
+    # The early-exit path must run before anything emits an annotation; the
+    # emitter is tools/ci_tail.py, which files a build.py failure when reached.
     not_run = publish.index("Not run: an earlier step")
-    assert publish.count("exit 0") >= 1
-    assert not_run < publish.index("::error title=build.py")
+    early_exit = publish.index("exit 0", not_run)
+    emitter = publish.index("tools/ci_tail.py")
+    assert not_run < early_exit < emitter
 
 
 def test_vscode_never_watches_the_built_trees():
