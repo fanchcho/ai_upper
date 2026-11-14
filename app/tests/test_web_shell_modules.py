@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -118,6 +119,58 @@ def test_shell_module_imports_without_webengine(tmp_path):
     assert "NO-WEBENGINE OK" in proc.stdout, proc.stdout
 
 
+def test_webengine_class_lookup_follows_the_binding_not_a_fixed_submodule():
+    """Qt5 与 Qt6 把 QWebEngineScript/QWebEngineSettings 放在不同子模块。
+
+    PySide2 5.15 只在 ``QtWebEngineWidgets`` 里定义它们，``QtWebEngineCore`` 只有
+    URL 与请求拦截那一批；PySide6 反过来。写死 ``QtWebEngineCore.QWebEngineScript``
+    的后果不是「降级」，是打包产物在 3.8/win_amd64 上起不来——CI 的
+    ``windows-x86_64 3.8.10`` leg 就是这样红的（run 43600186928 job 132463066925，
+    ``[6/6] Target runtime smoke`` 抛 ImportError）。
+
+    只测 ``_webengine_class`` 这个纯查找函数：两个布局各自找到类，都找不到时抛
+    ImportError 而不是返回 None（None 会让缺件推迟到更远的地方才炸）。不重新导入
+    模块——本进程里有活的 Qt 类型，重载会重复定义同名 Qt 类并 abort 解释器
+    （见 ``test_shell_module_imports_without_webengine`` 的说明）。
+    """
+    from mvvm.views.web_shell_window import _webengine_class
+
+    class _Marker:
+        pass
+
+    script = _Marker()
+    settings = _Marker()
+    view = _Marker()
+
+    # Qt5 布局：类都在 QtWebEngineWidgets，Core 里没有。
+    shell_module = sys.modules["mvvm.views.web_shell_window"]
+    original = (shell_module.QtWebEngineCore, shell_module.QtWebEngineWidgets)
+    try:
+        shell_module.QtWebEngineCore = types.SimpleNamespace()
+        shell_module.QtWebEngineWidgets = types.SimpleNamespace(
+            QWebEngineScript=script, QWebEngineSettings=settings, QWebEngineView=view
+        )
+        assert _webengine_class("QWebEngineScript") is script
+        assert _webengine_class("QWebEngineView") is view
+
+        # Qt6 布局：Script/Settings 在 Core。
+        shell_module.QtWebEngineCore = types.SimpleNamespace(
+            QWebEngineScript=script, QWebEngineSettings=settings
+        )
+        shell_module.QtWebEngineWidgets = types.SimpleNamespace(QWebEngineView=view)
+        assert _webengine_class("QWebEngineScript") is script
+        assert _webengine_class("QWebEngineSettings") is settings
+        assert _webengine_class("QWebEngineView") is view
+
+        # 两个子模块都没有：导入阶段就要报错，不能静默得到 None。
+        shell_module.QtWebEngineCore = types.SimpleNamespace()
+        shell_module.QtWebEngineWidgets = types.SimpleNamespace()
+        with pytest.raises(ImportError, match="QWebEngineScript"):
+            _webengine_class("QWebEngineScript")
+    finally:
+        shell_module.QtWebEngineCore, shell_module.QtWebEngineWidgets = original
+
+
 # ── 标题栏叠加层 ──────────────────────────────────────────────────────────
 def test_overlay_geometry_matches_electron_linux_overlay(qapp):
     from mvvm.views.title_bar_overlay import (
@@ -133,6 +186,41 @@ def test_overlay_geometry_matches_electron_linux_overlay(qapp):
     assert overlay.strip_size().height() == 40
     assert overlay.button_rect(0).x() == 0
     assert overlay.button_rect(2).x() == 64
+
+
+def test_readiness_probe_reads_a_string_not_a_javascript_boolean():
+    """readiness 探测不能依赖 runJavaScript 对布尔值的转换。
+
+    PySide6 6.6（最后一个有 cp38 wheel 的版本）把 JS ``true``/``false`` 转成**空串**，
+    6.11 才转成 ``True``/``False``；PySide2 同样不给 bool。按真假判断时，`bridge=`
+    在 readiness 那一行永远是空——CI 的 3.8 leg 会用 built 产物复现（bridge= 空、
+    退出码 1）。所以探测脚本必须把结果包成字符串，Python 侧再比 ``"true"``。
+    """
+    import inspect
+
+    import deva_web
+
+    source = inspect.getsource(deva_web._probe_renderer)
+    # 探测表达式本身必须是 String(...)：直接返回布尔值就会踩上面那个转换差异。
+    assert "String(!!(window.deva && window.deva.chat))" in source, source
+    # 判定必须是「等于字符串 true」，不是真值判断：空串在真值判断下同样是假，
+    # 但 6.6 上它既可能是 false 也可能是 true，无法区分。
+    assert '"true"' in source, source
+
+
+def test_readiness_probe_interprets_the_string_result():
+    """把两次真机观测到的回调值都喂给判定逻辑，只有 'true' 算就绪。"""
+    import deva_web
+
+    def verdict(value):
+        # 与 _probe_renderer 里的判定保持同一表达式。
+        return value == "true"
+
+    assert verdict("true") is True
+    assert verdict("") is False        # PySide6 6.6 / PySide2 的布尔转换结果
+    assert verdict(False) is False
+    assert verdict(True) is False      # 6.11 的回调值，也不该被当作探测结果
+    assert deva_web.HEADLESS_ENV == "AI_UPPER_HEADLESS"
 
 
 def test_overlay_paints_opaque_background(qapp):

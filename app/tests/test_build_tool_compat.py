@@ -315,13 +315,41 @@ def test_ci_builds_the_oldest_supported_windows_runtime():
             runtime-python: '3.8.10'
             run: true""" in text
     assert "AI_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}" in text
-    # PySide6 6.11 has no cp38 wheel, so this entry must name PySide2 itself.
+    # PySide6 6.11 has no cp38 wheel, so this entry must override the pin.
+    # 6.6.3 is the last release with a cp38 wheel, and it has to be PySide6:
+    # PySide2 5.15 bundles Chromium 83 while the renderer bundle calls
+    # Object.hasOwn unguarded (Chromium 93+), so a PySide2 build starts and
+    # then fails while rendering instead of failing the smoke.
     # What it must NOT do is keep a private copy of the whole dependency set
     # that drifts away from the application: the default comes from
     # app/requirements.txt (see the test below), and this entry only overrides
     # the pins that have no cp38-compatible release.
-    assert 'dependencies: \'["PySide2==' in text
+    assert 'dependencies: \'["PySide6==6.6.3"' in text
+    assert "PySide2==" not in text
     assert "artifact: py38-compat-windows-x86_64" in text
+
+
+def _matrix_dependency_overrides(text):
+    """Every matrix entry that spells out its own pins, as raw lines."""
+    return [
+        line.strip()
+        for line in text.splitlines()
+        if line.strip().startswith("dependencies:")
+    ]
+
+
+def _workflow_body_without_matrix_overrides(text):
+    """The workflow with each matrix ``dependencies:`` line masked out.
+
+    Matrix entries legitimately override the pin set for targets the
+    application's own pins do not cover (win32 has no PySide6 wheel, cp38
+    stops at 6.6.3). The rule this test enforces is about the *default*: the
+    workflow body must not carry a second hand-written copy of it.
+    """
+    return "\n".join(
+        "" if line.strip().startswith("dependencies:") else line
+        for line in text.splitlines()
+    )
 
 
 def test_ci_default_dependencies_come_from_the_application_requirements():
@@ -338,8 +366,15 @@ def test_ci_default_dependencies_come_from_the_application_requirements():
     text = VALIDATION_WORKFLOW.read_text(encoding="utf-8")
     assert "AI_UPPER_CI_DEPENDENCIES: ${{ matrix.dependencies }}" in text
     assert "Path('app/requirements.txt').read_text" in text
-    # No second hand-written default may come back.
-    assert '"PySide6==' not in text
+    # No second hand-written default may come back. Matrix overrides are a
+    # different thing -- they exist because some targets cannot resolve the
+    # default pins at all -- so only the body outside those lines is checked.
+    body = _workflow_body_without_matrix_overrides(text)
+    assert '"PySide6==' not in body
+    # And every override that does exist has to be a plain JSON list.
+    for line in _matrix_dependency_overrides(text):
+        value = line[len("dependencies:"):].strip().strip("'")
+        assert value.startswith("[") and value.endswith("]"), line
 
 
 def test_ci_build_log_publisher_does_not_report_a_build_that_never_ran():
