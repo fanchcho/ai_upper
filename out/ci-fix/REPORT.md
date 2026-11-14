@@ -1022,6 +1022,20 @@ $ git rev-parse HEAD
 `git branch -a --contains 959faef` 中同时命中 `develop` 与 `remotes/origin/develop`，
 即已在远端 develop 上。
 
+收尾提交推送后（本报告本身与路线图追加记录）：
+
+```
+$ GIT_SSH_COMMAND='ssh -i /root/.ssh/fanchcho -o IdentitiesOnly=yes' \
+    git ls-remote origin refs/heads/develop
+03b8fd1fe28ec06890ce954f5abd882d4a123016	refs/heads/develop
+$ git rev-parse HEAD
+03b8fd1fe28ec06890ce954f5abd882d4a123016
+```
+
+收尾提交：`cc020bf`（本报告正文 + 本地 pytest 原始日志）、`7903f44`（路线图阻塞记录）、
+`03b8fd1`（远端 sha 与逐 job 表快照）、`④`（补记本小节）。推送均为快进
+（`591c7e3..7903f44`、`7903f44..03b8fd1`），无重写、无 force。最终 sha 见交付回复。
+
 ### 14.5 收尾账目
 
 改名覆盖（`8baf77d` 代码 + `8e4ecda` 兼容 + `496255b` 文档，75 个文件的内容改写清单
