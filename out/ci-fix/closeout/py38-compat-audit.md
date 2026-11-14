@@ -43,3 +43,18 @@
 | 18 | `sys.stdlib_module_names` | 否（3.10+） | 仅测试代码，且只在 3.13 的解释器上跑 | `app/tests/test_app.py:165` |
 | 19 | `tomllib` | 否（3.11+） | 已由 `tools/ai_upper/compat.py` 回退到 vendored `tomli` | `tools/ai_upper/config.py:11` |
 | 20 | 3.10 `match` 语句 / 3.9 括号化 `with` / 3.11 `except*` | — | 未使用；`ast.parse(feature_version=(3,8))` 对全部源码 0 失败 | — |
+
+## 二、改动 → 清查条目对照（提交 db2b416 / 069e31f）
+
+| 改动文件 | 改了什么 | 对应条目 | 为什么必须改 |
+|---|---|---|---|
+| `app/src/mvvm/models/chat_models.py` | `Annotated` 按 `sys.version_info >= (3, 9)` 分支，3.8 从 `typing_extensions` 导入 | 第 1 条 | 3.8 的 `typing` 没有这个名字，裸导入即 `ImportError`（红 job 的最内层帧） |
+| `app/src/mvvm/models/chat_models.py` | pydantic 字段 `list[...]`/`dict[...]` → `typing.List`/`typing.Dict` | 第 9 条 | pydantic 2.x 建类时调 `get_type_hints`，future import 不生效；实测 3.8 报 `Unable to evaluate type annotation` |
+| `app/src/mvvm/services/effort.py` | `LevelMap = dict[str, str]` → `typing.Dict[str, str]` | 第 9 条 | 模块级赋值是运行期求值，3.8 抛 `TypeError: 'type' object is not subscriptable` |
+| `app/src/mvvm/services/provider_gateway.py` | `StreamEvent = A \| B \| ...` → `typing.Union[...]` | 第 16 条 | PEP 604 的 `type.__or__` 3.10 才有，3.8/3.9 抛 `TypeError: unsupported operand type(s) for \|` |
+| `tools/ai_upper/third_party.py` | `str.removesuffix` → 切片 | 第 10 条 | `removesuffix` 是 3.9+；构建工具要在 3.8 上跑 |
+| `app/requirements.txt` | `typing_extensions==4.13.2; python_version < "3.9"` | 第 1 条（依赖侧） | 3.8 分支直接导入它，必须显式声明且只钉 3.8 |
+| `.github/workflows/validate.yml` | py38 matrix 依赖清单加 `typing_extensions==4.13.2` | 第 1 条（依赖侧） | 该 leg 不复用 `app/requirements.txt`，清单是手写的 |
+| `app/tests/test_py38_compat.py`（新增） | 5 条守卫用例 | 1 / 9 / 10 / 16 | 防止同类回归；条目 9 的 pydantic 子类需要追本地继承链 |
+
+未改动但已确认安全的条目：2–8、11–15、17–20（见上表判定列）。
