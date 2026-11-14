@@ -315,8 +315,31 @@ def test_ci_builds_the_oldest_supported_windows_runtime():
             runtime-python: '3.8.10'
             run: true""" in text
     assert "AI_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}" in text
-    assert "dependencies: '[\"PySide2==5.15.2.1\"]'" in text
+    # PySide6 6.11 has no cp38 wheel, so this entry must name PySide2 itself.
+    # What it must NOT do is keep a private copy of the whole dependency set
+    # that drifts away from the application: the default comes from
+    # app/requirements.txt (see the test below), and this entry only overrides
+    # the pins that have no cp38-compatible release.
+    assert 'dependencies: \'["PySide2==' in text
     assert "artifact: py38-compat-windows-x86_64" in text
+
+
+def test_ci_default_dependencies_come_from_the_application_requirements():
+    """The packaged runtime must carry what the application imports.
+
+    The workflow used to keep its own inline default dependency list. It was
+    never updated when the application started importing pydantic / httpx /
+    cryptography / keyring, so every CI package bundled a runtime without
+    pydantic and the launch step died on
+    ``ModuleNotFoundError: No module named 'pydantic'`` while the source test
+    suite (which runs on the runner's own interpreter) stayed green. One file
+    pins the runtime dependencies; the workflow reads it instead of copying it.
+    """
+    text = VALIDATION_WORKFLOW.read_text(encoding="utf-8")
+    assert "AI_UPPER_CI_DEPENDENCIES: ${{ matrix.dependencies }}" in text
+    assert "Path('app/requirements.txt').read_text" in text
+    # No second hand-written default may come back.
+    assert '"PySide6==' not in text
 
 
 def test_vscode_never_watches_the_built_trees():
