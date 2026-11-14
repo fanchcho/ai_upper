@@ -7,21 +7,40 @@ from pathlib import Path
 # Exported by the packaged launcher: the directory that holds `runtime/`,
 # `site-packages/` and the entry script. Counting parent directories only works
 # for the layout of the day; the launcher knows the real answer.
-BUNDLE_HOME_ENV = "PY_UPPER_HOME"
+BUNDLE_HOME_ENV = "AI_UPPER_HOME"
+# Pre-rename spellings, still honoured so a bundle built by the old launcher and
+# an environment set up before the rename both keep working.
+LEGACY_BUNDLE_HOME_ENV = ("PY_UPPER_HOME",)
 
 # Exported by the packaged launcher: the application name compiled in at
 # packaging time. The launcher cannot read it from its own filename, because
 # renaming the executable is supported.
-APP_NAME_ENV = "PY_UPPER_APP_NAME"
+APP_NAME_ENV = "AI_UPPER_APP_NAME"
+LEGACY_APP_NAME_ENV = ("PY_UPPER_APP_NAME",)
 
-_APP_NAME_SECTION = "tool.py_upper.app"
+_APP_NAME_SECTION = "tool.ai_upper.app"
+# Sections a working copy may still carry from before the rename; the current
+# one wins when both exist.
+_LEGACY_APP_NAME_SECTIONS = ("tool.py_upper.app",)
 # Mirrors the packager's own fallback, for the case where neither a launcher nor
 # a pyproject.toml is reachable.
-_DEFAULT_APP_NAME = "Upper"
+_DEFAULT_APP_NAME = "ai_upper"
+
+
+def _environment(name: str, legacy: tuple[str, ...] = ()) -> str:
+    """Read ``name``, falling back to the pre-rename spellings."""
+    value = os.environ.get(name)
+    if value:
+        return value
+    for old in legacy:
+        value = os.environ.get(old)
+        if value:
+            return value
+    return ""
 
 
 def bundle_home() -> Path | None:
-    value = os.environ.get(BUNDLE_HOME_ENV)
+    value = _environment(BUNDLE_HOME_ENV, LEGACY_BUNDLE_HOME_ENV).strip()
     return Path(value).resolve() if value else None
 
 
@@ -102,9 +121,9 @@ def app_name() -> str:
     The launcher exports it, so a renamed executable still reports the
     configured name. Running from a source tree (tests, `PYTHONPATH=src python
     src/main.py`) there is no launcher, so the name is read from the same
-    `[tool.py_upper.app].name` the packager uses instead of being written twice.
+    `[tool.ai_upper.app].name` the packager uses instead of being written twice.
     """
-    value = os.environ.get(APP_NAME_ENV, "").strip()
+    value = _environment(APP_NAME_ENV, LEGACY_APP_NAME_ENV).strip()
     if value:
         return value
     return _declared_app_name() or _DEFAULT_APP_NAME
@@ -121,15 +140,20 @@ def _declared_app_name() -> str | None:
     project = root / "pyproject.toml"
     if not project.is_file():
         return None
+    sections = (_APP_NAME_SECTION, *_LEGACY_APP_NAME_SECTIONS)
+    found: dict[str, str | None] = {}
     section = None
     for line in project.read_text(encoding="utf-8").splitlines():
         entry = line.strip()
         if entry.startswith("[") and entry.endswith("]"):
             section = entry[1:-1].strip()
-        elif section == _APP_NAME_SECTION and "=" in entry:
+        elif section in sections and "=" in entry:
             key, _, value = entry.partition("=")
-            if key.strip() == "name":
-                return _toml_string(value.strip())
+            if key.strip() == "name" and section not in found:
+                found[section] = _toml_string(value.strip())
+    for name in sections:
+        if found.get(name):
+            return found[name]
     return None
 
 
