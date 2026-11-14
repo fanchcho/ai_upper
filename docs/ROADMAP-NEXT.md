@@ -131,6 +131,11 @@
 - macOS 签名需要开发者证书，没有证书时只能 ad-hoc 签名，
   此时「签名通过」的结论不适用于发布；
 - 交叉构建的静态通过不代表运行通过，必须原生启动，不能用 `--target` 交叉冒充。
+- **已知阻塞（arm64 WebEngine 待上游，2026-11-14 记录）**：PySide6 从未发布含
+  `QtWebEngineCore` 的 win_arm64 wheel，产品契约（`ff89c4c`）要求缺件时明确报错，
+  因此 `windows-11-arm` 上「构建 + 启动」这一步必然红；该矩阵项保持
+  `run: true` 原样，不降级、不加 skip。验收口径＝Qt 发布 arm64 WebEngine 之后，
+  `windows-11-arm` 的 `run: true` 条目在 CI 上转绿，届时删除本条。
 
 ### R3　真实网络、真实 provider 与 `web_fetch`
 
