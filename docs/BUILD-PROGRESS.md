@@ -94,6 +94,8 @@ $ git branch -vv
 158 条通道判定表已生成（`docs/audit/IPC-158-LEDGER.md`：通过 60 / 已知差异 5 / 未实现 93）；
 打包入口已切到 `deva_web.py` 并真实构建、真实启动成功（§1.14）。
 当前未完成的只剩档二/档三里点名的项（真实网络、真桌面观感、非 linux-arm64 目标等）。
+全量测试基线：**939 passed, 5 skipped**（`PATH` 含 `patchelf`；原始输出见 §5）。
+第六阶段收尾报告：`docs/STAGE6-CLOSEOUT-REPORT.md`。
 
 ### 0.5 第六阶段起点（功能测试：写路径 + 158 条结论表）
 
