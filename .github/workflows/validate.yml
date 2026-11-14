@@ -196,17 +196,26 @@ jobs:
           # Both the Qt pruning probe and the packaged smoke run load it.
           sudo apt-get install -y libegl1
           # Qt's own libQt6WebEngineCore.so.6 and QtWebEngineProcess link the
-          # Chromium runtime dependencies libopus.so.0, libgbm.so.1,
-          # libasound.so.2, libnss3.so and libfontconfig.so.1. The x86_64 image
-          # happens to carry all of them; ubuntu-24.04-arm carries neither
-          # libopus nor libgbm, so merely importing PySide6.QtWebEngineWidgets
-          # failed there with "libopus.so.0: cannot open shared object file"
-          # (a collection error, because pytest 9 deliberately does not turn a
-          # found-but-unloadable module into a skip). Installing them is a
-          # property of the runner image, not of the application.
-          sudo apt-get install -y libopus0 libgbm1 libasound2t64 libnss3 \
-            libfontconfig1 libxdamage1 libxcomposite1 libxrandr2 libxtst6 \
-            libxcursor1 libxi6 libcups2t64
+          # Chromium runtime dependencies. The x86_64 image happens to carry
+          # most of them; ubuntu-24.04-arm carries far fewer, and each missing
+          # one surfaces the same way: importing PySide6.QtWebEngineWidgets
+          # dies on "libX.so.N: cannot open shared object file", which pytest 9
+          # reports as a collection error (it deliberately does not turn a
+          # found-but-unloadable module into a skip). Guessing one library per
+          # run cost two runs already (libopus.so.0, then libminizip.so.1), so
+          # this installs the non-Qt leaves of Ubuntu's own
+          # libqt6webenginecore6 dependency list -- Qt's own libraries are
+          # deliberately excluded, because the bundle ships its own copy and a
+          # system Qt in the loader path could shadow it.
+          sudo apt-get install -y \
+            libdbus-1-3 libevent-2.1-7t64 libexpat1 libfontconfig1 \
+            libfreetype6 libharfbuzz-subset0 libharfbuzz0b libicu74 \
+            libjpeg8 liblcms2-2 libminizip1t64 libnspr4 libnss3 \
+            libopenjp2-7 libopus0 libpng16-16t64 libsnappy1v5 libvpx9 \
+            libwebp7 libwebpdemux2 libwebpmux3 libx11-6 libxcb1 \
+            libxcomposite1 libxdamage1 libxext6 libxfixes3 libxkbcommon0 \
+            libxkbfile1 libxml2 libxrandr2 libxslt1.1 libxtst6 zlib1g \
+            libgbm1 libasound2t64 libcups2t64 libegl1 libxi6 libxcursor1
 
       - name: Install macOS build tools
         if: runner.os == 'macOS'
@@ -302,8 +311,62 @@ jobs:
       - name: Doctor
         run: python tools/build.py --doctor --target ${{ matrix.target }}
 
+      # The build is the longest step and it is where a missing host tool
+      # (cmake, ninja, a compiler, a toolchain) shows up. Without this block its
+      # failure left exactly "exit code 1" and no text: the job log needs a
+      # token that anonymous callers do not have, and the annotations only carry
+      # the run below. `pipefail` keeps the real exit code behind `tee`.
       - name: Full integration build
-        run: python tools/build.py --target ${{ matrix.target }}
+        shell: bash
+        run: |
+          set -o pipefail
+          rc=0
+          python tools/build.py --target ${{ matrix.target }} 2>&1 | tee build.log || rc=$?
+          echo "$rc" > build.exitcode
+          exit "$rc"
+
+      - name: Publish build log
+        if: always()
+        shell: bash
+        run: |
+          log=build.log
+          rc="$(cat build.exitcode 2>/dev/null || echo 255)"
+          {
+            echo '### Full integration build — ${{ matrix.target }} (${{ matrix.os }})'
+            echo ''
+            echo "build.py exit code: $rc"
+            if [ -f "$log" ]; then
+              echo ''
+              echo '```'
+              tail -n 400 "$log"
+              echo '```'
+            else
+              echo ''
+              echo 'build.log was not created: the step failed before the build ran.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          RC="$rc" python - "$log" <<'PY'
+          import os
+          import pathlib
+          import sys
+
+          rc = os.environ.get('RC', '0')
+          if rc == '0':
+              raise SystemExit(0)
+          path = pathlib.Path(sys.argv[1])
+          tail = '\n'.join(path.read_text(encoding='utf-8', errors='replace').splitlines()[-80:]) if path.is_file() else '(no build.log)'
+          message = tail.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print(f'::error title=build.py (exit {rc})::{message}')
+          PY
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ matrix.artifact || matrix.target }}
+          path: build.log
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Full integration run
         if: matrix.run == true
