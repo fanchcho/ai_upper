@@ -444,6 +444,22 @@ def test_windows_cng_primitives_are_system_provided(closure_workspace):
     assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
 
 
+def test_windows_uniscribe_is_system_provided(closure_workspace):
+    """``USP10.dll`` ships with Windows, like the other text-shaping DLLs.
+
+    PySide2's ``Qt5WebEngineCore.dll`` links it for complex-script shaping. A
+    system library missing from the host list is treated as wheel payload, so
+    the whole bundle fails on one import of a DLL the OS already has.
+    """
+    root = closure_workspace
+    _pe(root / "site-packages" / "PySide2" / "Qt5WebEngineCore.dll", ["USP10.dll"])
+
+    assert deps._system_dependency("usp10.dll", TARGETS["windows-x86_64"])
+    assert deps._system_dependency("USP10.DLL", TARGETS["windows-arm64"])
+    assert not deps._system_dependency("usp10.dll", TARGETS["linux-x86_64"])
+    assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
+
+
 def test_closure_resolves_vc_runtime_from_bundled_python(closure_workspace):
     root = closure_workspace
     extension = _pe(root / "site-packages" / "extension.pyd", ["VCRUNTIME140.dll"])

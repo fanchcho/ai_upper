@@ -402,7 +402,7 @@ WINDOWS_HOST_LIBRARIES = frozenset({
     "d2d1.dll", "d3d9.dll", "d3d11.dll", "d3d12.dll", "d3dcompiler_47.dll",
     "dxgi.dll", "dxva2.dll", "evr.dll", "mf.dll", "mfplat.dll",
     "mfreadwrite.dll", "mmdevapi.dll", "avrt.dll", "winmm.dll",
-    "fontsub.dll", "dwrite.dll",
+    "fontsub.dll", "dwrite.dll", "usp10.dll",
     # Networking, diagnostics, security and data access.
     "ws2_32.dll", "winhttp.dll", "iphlpapi.dll", "dnsapi.dll", "dhcpcsvc.dll",
     "secur32.dll", "crypt32.dll", "dbghelp.dll", "imagehlp.dll", "pdh.dll",
