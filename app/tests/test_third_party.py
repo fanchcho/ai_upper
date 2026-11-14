@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import os
+import stat
 import subprocess
 import sys
 import sysconfig
@@ -419,5 +421,19 @@ def test_wheel_execute_bits_survive_extraction(tmp_path):
     site = tmp_path / "site"
     _extract_wheel(wheel, site, tmp_path / "stage")
 
-    assert (site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess").stat().st_mode & 0o111
-    assert not (site / "demo_pkg" / "Qt" / "libexec" / "README.txt").stat().st_mode & 0o111
+    helper_path = site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess"
+    plain_path = site / "demo_pkg" / "Qt" / "libexec" / "README.txt"
+    assert helper_path.is_file() and plain_path.is_file()
+    if os.name == "nt":
+        # Windows has no POSIX execute bit: `st_mode` reports 0o666 for every
+        # writable file, so `& 0o111` is always 0 and cannot express "this
+        # helper is executable". What still has to hold — and what the wheel
+        # extractor can actually be wrong about — is that the payload landed
+        # byte for byte and neither file was made read-only.
+        assert helper_path.read_bytes() == b"\x7fELF"
+        assert plain_path.read_bytes() == b"text"
+        assert helper_path.stat().st_mode & stat.S_IWRITE
+        assert plain_path.stat().st_mode & stat.S_IWRITE
+        return
+    assert helper_path.stat().st_mode & 0o111
+    assert not plain_path.stat().st_mode & 0o111

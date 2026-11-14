@@ -63,9 +63,23 @@ def test_plaintext_never_lands_on_disk(vault, home):
 
 
 def test_key_and_store_files_are_private(vault, home):
+    """POSIX 上新建文件必须是 0600；Windows 没有 POSIX 权限位。
+
+    `os.open(..., 0o600)` 在 Windows 上只映射到只读位，`st_mode` 对普通文件恒为
+    0o666（可写），私密性由用户数据目录的 ACL 决定而不是 mode。所以这里按平台断言
+    真实语义：Windows 上至少要求两件可验证的事——文件确实创建了、且不是只读位被
+    误设（那会让后续写入失败）。
+    """
     vault.set_secret("anthropic", PLAINTEXT)
     for name in (SECRETS_FILE, ".secrets.key"):
-        mode = stat.S_IMODE(os.stat(home / name).st_mode)
+        path = home / name
+        assert path.is_file(), f"{name} 没有被创建"
+        assert path.stat().st_size > 0, f"{name} 是空文件"
+        if os.name == "nt":
+            # Windows: chmod 只有只读位有意义；确认没有被误设成只读。
+            assert path.stat().st_mode & stat.S_IWRITE, f"{name} 被误设为只读"
+            continue
+        mode = stat.S_IMODE(path.stat().st_mode)
         assert mode == 0o600, f"{name} 权限是 {oct(mode)}，期望 0600"
 
 
