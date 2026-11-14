@@ -604,3 +604,46 @@ def test_pbs_runtime_reuses_the_sdk_install_tree_of_a_full_build(tmp_path, monke
     assert not (out / "build").exists()
     marker = json.loads((out / runtime.RUNTIME_MARKER).read_text(encoding="utf-8"))
     assert marker["asset"] == asset.name
+
+
+def test_sdk_extraction_never_hands_tar_a_windows_drive_letter(tmp_path, monkeypatch):
+    """The archive argument must be colon-free even when the cache is on D:.
+
+    GNU tar (which is what Git for Windows puts on PATH) parses ``host:path``
+    as an rsh request. A cached archive under ``D:\\a\\...`` has no leading
+    slash, so passing it as an absolute argument made every Windows build die
+    with ``tar: Cannot connect to D: resolve failed`` (exit 128) before the
+    first file was unpacked. Running tar from the archive's directory with a
+    bare name is the fix, and it also works for bsdtar, which has no
+    ``--force-local``.
+    """
+    from ai_upper import pbs
+
+    calls = []
+
+    def fake_run(argv, **kwargs):
+        calls.append((argv, kwargs))
+
+        class Result:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+
+        return Result()
+
+    monkeypatch.setattr(pbs.shutil, "which", lambda name: "tar")
+    monkeypatch.setattr(pbs.subprocess, "run", fake_run)
+
+    archive = tmp_path / "D:" / "a" / "sdk.tar.zst"
+    archive.parent.mkdir(parents=True)
+    archive.write_bytes(b"")
+    destination = tmp_path / "sdk-extract"
+
+    pbs._safe_extract_zst(archive, destination)
+
+    assert calls, "tar was never invoked"
+    argv, kwargs = calls[0]
+    assert argv[1:] == ["-axf", "sdk.tar.zst", "-C", str(destination)], argv
+    assert kwargs["cwd"] == str(archive.parent)
+    # The whole point: the argument tar parses must not carry the drive letter.
+    assert argv[2] == archive.name

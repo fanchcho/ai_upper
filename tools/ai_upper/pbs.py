@@ -325,21 +325,39 @@ def resolve_pbs_inputs(
 SDK_MARKER = ".ai_upper-sdk.json"
 
 
+def _run_tar(tar: str, flags: str, archive: Path, destination: Path, **kwargs: Any) -> subprocess.CompletedProcess:
+    """Run tar on `archive` without letting a drive letter look like a remote host.
+
+    GNU tar reads `host:path` as an rsh request. A Windows path such as
+    ``D:\\a\\...`` reaches Git's tar (which is GNU tar) as exactly that shape,
+    because it has no leading slash, so every Windows build died with
+    ``tar: Cannot connect to D: resolve failed`` (exit 128) before unpacking a
+    single file. Passing a bare file name with the archive's own directory as
+    the working directory keeps the argument colon-free on every platform, and
+    needs no GNU-only flag such as ``--force-local`` (bsdtar on macOS has none).
+    """
+    return subprocess.run(
+        [tar, flags, archive.name, "-C", str(destination)],
+        cwd=str(archive.parent),
+        **kwargs,
+    )
+
+
 def _safe_extract_zst(archive: Path, destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     tar = shutil.which("tar")
     if not tar:
         raise RuntimeError("Extracting PBS SDK requires tar on PATH")
-    result = subprocess.run([tar, "-axf", str(archive), "-C", str(destination)], capture_output=True, text=True, check=False)
+    result = _run_tar(tar, "-axf", archive, destination, capture_output=True, text=True, check=False)
     if result.returncode == 0:
         return
     zstd = shutil.which("zstd")
     if not zstd:
         raise RuntimeError(f"Unable to extract {archive.name}: tar could not read zstd archive and zstd is not installed")
     raw = archive.with_suffix("")
-    subprocess.run([zstd, "-d", "-f", str(archive), "-o", str(raw)], check=True)
+    subprocess.run([zstd, "-d", "-f", archive.name, "-o", raw.name], cwd=str(archive.parent), check=True)
     try:
-        subprocess.run([tar, "-xf", str(raw), "-C", str(destination)], check=True)
+        _run_tar(tar, "-xf", raw, destination, check=True)
     finally:
         raw.unlink(missing_ok=True)
 
