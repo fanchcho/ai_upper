@@ -168,7 +168,7 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | `158a36c` | fix(py38) | `app/src/deva_web.py`、`app/src/mvvm/views/web_shell_window.py` |
 | `c49161b` | build(py38) | `.github/workflows/validate.yml` |
 | `28aeec5` | test(py38) | `app/tests/test_web_shell_modules.py`、`app/tests/test_build_tool_compat.py` |
-| （本次） | chore(evidence) | `out/ci-fix/closeout/*`、`out/ci-fix/verify-7476558/*` |
+| `289749b` | chore(evidence) | `out/ci-fix/closeout/*`、`out/ci-fix/verify-7476558/*` |
 
 对照 `py38-compat-audit.md` 的条目：
 
@@ -187,3 +187,14 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 已知项：`windows-11-arm windows-arm64` 保持**已知平台阻塞**——PySide6 从未发布带
 `QtWebEngineCore` 的 win_arm64 wheel，矩阵条目保留、不加 skip、不放宽
 `requires-python`。
+
+## 10. 一处未处理但已判定不影响本目标的差异
+
+`app/src/mvvm/views/title_bar_overlay.py:78,89` 用 `event.position().toPoint()`，
+这是 Qt6 的 `QMouseEvent` 接口；Qt5 只有 `pos()` / `localPos()`。
+
+**本轮不修**，理由是本目标下没有任何 leg 走 Qt5：矩阵里 3.8.10 已改用 PySide6 6.6.3，
+其余 leg 用 `app/requirements.txt` 的 PySide6 6.11.2。也就是说这条路径在**当前矩阵**
+里不可达，修它属于未被要求的扩展，按「实现用户所要求的，不添加未被要求的功能」不做。
+若日后真有人用 PySide2 跑窗口层，这里会先于 WebEngine 的类查找问题暴露——
+届时按同一个 `qt_major()` 分支处理即可。
