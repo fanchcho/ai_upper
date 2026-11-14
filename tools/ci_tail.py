@@ -112,12 +112,22 @@ def tail_message(lines, budget=MESSAGE_BUDGET):
         if chosen and len(escape_command_message(candidate)) > budget:
             break
         chosen.insert(0, line)
-    # A single line longer than the budget still has to be reported: keep its
-    # tail, which is where a compiler puts the diagnostic.
-    message = escape_command_message("\n".join(chosen))
-    if len(message) > budget:
-        message = message[-budget:]
-    return message
+    raw = "\n".join(chosen)
+    if len(escape_command_message(raw)) > budget:
+        # A single line longer than the budget still has to be reported: keep
+        # its tail, which is where a compiler puts the diagnostic. The suffix
+        # is measured on the ESCAPED form, one character at a time: escaping a
+        # slice and then cutting it can leave half a sequence ("%0") behind.
+        kept = []
+        size = 0
+        for char in reversed(raw):
+            width = 3 if char in "%\r\n" else 1
+            if size + width > budget:
+                break
+            kept.append(char)
+            size += width
+        raw = "".join(reversed(kept))
+    return escape_command_message(raw)
 
 
 def emit(level, title, message):
