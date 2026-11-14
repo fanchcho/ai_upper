@@ -57,4 +57,20 @@
 | `.github/workflows/validate.yml` | py38 matrix 依赖清单加 `typing_extensions==4.13.2` | 第 1 条（依赖侧） | 该 leg 不复用 `app/requirements.txt`，清单是手写的 |
 | `app/tests/test_py38_compat.py`（新增） | 5 条守卫用例 | 1 / 9 / 10 / 16 | 防止同类回归；条目 9 的 pydantic 子类需要追本地继承链 |
 
-未改动但已确认安全的条目：2–8、11–15、17–20（见上表判定列）。
+## 三、第二轮追加（提交 158a36c / c49161b / 28aeec5）
+
+第二轮红点不在语言特性层，而在 Qt binding 能力层——第一轮修完「能导入」之后，
+打包产物冒烟（`[6/6] Target runtime smoke`）才把它暴露出来。
+
+| 改动文件 | 改了什么 | 对应条目 | 为什么必须改 |
+|---|---|---|---|
+| `app/src/mvvm/views/web_shell_window.py` | 类体按名探测 `QWebEngineScript`/`QWebEngineSettings`/`QWebEngineView`，替代写死 `QtWebEngineCore.*` | 第 21 条（binding 类布局差异） | Qt6 把 Script/Settings 放 `QtWebEngineCore`，Qt5 的 PySide2 全放 `QtWebEngineWidgets`；写死一边必炸 |
+| `app/src/deva_web.py` | readiness 探测改为 JS `String(...)` 回报、Python 侧比 `"true"` | 第 22 条（`runJavaScript` 布尔转换差异） | PySide6 6.6 把 JS bool 转成空串，6.11 才转 bool；按真假判断在 6.6 上永远读不到就绪 |
+| `.github/workflows/validate.yml` | 3.8.10 leg 的 `PySide2==5.15.2.1` → `PySide6==6.6.3` | 第 23 条（Qt 自带 Chromium 版本） | PySide2 5.15 是 Chromium 83，渲染产物无保护使用 `Object.hasOwn`（Chromium 93+）；不改会得到「冒烟 OK、渲染链接时抛错」的假绿 |
+| `app/tests/test_web_shell_modules.py` | 新增 3 条守卫 | 21 / 22 | 两种子模块布局各测一遍；都缺时抛 ImportError；探测格式与判定表达式钉死 |
+| `app/tests/test_build_tool_compat.py` | 断言改为 PySide6 6.6.3，并遮罩矩阵覆盖行再查默认依赖来源 | 23 + 依赖侧 | 原来断言 PySide2，是上一轮的错误决定 |
+
+第 21–23 条是新判定的类别，不在第一轮条目表（1–20）里：那一轮只按「语言特性 →
+运行期/注解期」判定，没有覆盖「同一个类名在不同 Qt binding 的不同子模块」与
+「同一调用在不同 binding 版本的返回值转换」。这两类只会在打包产物真正跑起来时显形。
+
