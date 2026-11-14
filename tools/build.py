@@ -6,23 +6,23 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from py_upper.config import (
+from ai_upper.config import (
     BUILD, DIST, TARGETS, app_name, host_description, host_target, pbs_release,
     pbs_sdk_dir, python_version, runtime_provider, target_runtime_dir,
     trim_policy, validate_build_python_version, validate_target, require_local_python,
 )
-from py_upper.egg import COMPRESSIONS, egg_config
-from py_upper.lock import verify_lock, write_lock
-from py_upper.package import build_launcher, package, write_release_manifest
-from py_upper.python_build import build_python_package
-from py_upper.runtime import ensure_runtime, ensure_sdk
-from py_upper.fs import retire_tree
-from py_upper.verify import run_launcher_smoke, run_packaged_launcher, run_target_python_smoke
-from py_upper.toolchain import describe_toolchain
-from py_upper.third_party import resolve_wheels
-from py_upper.trim import PRESETS
-from py_upper.egg_loader import BACKENDS
-from py_upper.verify import verify
+from ai_upper.egg import COMPRESSIONS, egg_config
+from ai_upper.lock import verify_lock, write_lock
+from ai_upper.package import build_launcher, package, write_release_manifest
+from ai_upper.python_build import build_python_package
+from ai_upper.runtime import ensure_runtime, ensure_sdk
+from ai_upper.fs import retire_tree
+from ai_upper.verify import run_launcher_smoke, run_packaged_launcher, run_target_python_smoke
+from ai_upper.toolchain import describe_toolchain
+from ai_upper.third_party import resolve_wheels
+from ai_upper.trim import PRESETS
+from ai_upper.egg_loader import BACKENDS
+from ai_upper.verify import verify
 
 
 def _run_app(out: Path, target) -> int:
@@ -80,7 +80,7 @@ def _doctor(target) -> int:
 
 def main(argv=None) -> int:
     validate_build_python_version()
-    parser = argparse.ArgumentParser(description="py_upper - standalone Python application builder")
+    parser = argparse.ArgumentParser(description="ai_upper - standalone Python application builder")
     parser.add_argument("command", nargs="?", choices=["doctor", "build", "run", "verify", "lock", "release", "clean"])
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--doctor", action="store_true")
@@ -109,7 +109,7 @@ def main(argv=None) -> int:
     egg_actions.add_argument("--no-egg", dest="egg", action="store_false", default=None,
                              help="ship loose application files even when the project enables the egg")
     parser.add_argument("--egg-key", metavar="HEX",
-                        help="override [tool.py_upper.egg].key_hex (at least 16 hex bytes)")
+                        help="override [tool.ai_upper.egg].key_hex (at least 16 hex bytes)")
     parser.add_argument("--egg-backend", choices=BACKENDS, metavar="NAME",
                         help="egg extension loader: auto, memory or extract")
     parser.add_argument("--egg-compression", choices=COMPRESSIONS, metavar="NAME",
@@ -150,7 +150,7 @@ def main(argv=None) -> int:
             raise RuntimeError(f"--run requires host target; host={host_target().key}, target={target.key}")
         if args.locked:
             verify_lock(target)
-            os.environ["PY_UPPER_LOCKED"] = "1"
+            os.environ["AI_UPPER_LOCKED"] = "1"
             os.environ["PYSTAND_LOCKED"] = "1"
 
         trim = trim_policy(args.trim_preset).merge(
@@ -191,7 +191,7 @@ def main(argv=None) -> int:
         return exc.returncode or 1
     except Exception as exc:
         print(f"ERROR: {type(exc).__name__}: {exc}")
-        if os.environ.get("PY_UPPER_TRACEBACK") == "1":
+        if os.environ.get("AI_UPPER_TRACEBACK") == "1":
             raise
         return 1
 
@@ -202,9 +202,9 @@ def release(target, identity=None, notary_profile=None) -> int:
         return 0
     if target.os == "windows":
         tool = shutil.which("signtool")
-        cert = os.environ.get("PY_UPPER_SIGN_CERT") or os.environ.get("PYSTAND_SIGN_CERT")
+        cert = os.environ.get("AI_UPPER_SIGN_CERT") or os.environ.get("PYSTAND_SIGN_CERT")
         if not tool or not cert:
-            raise RuntimeError("Windows release requires signtool and PY_UPPER_SIGN_CERT")
+            raise RuntimeError("Windows release requires signtool and AI_UPPER_SIGN_CERT")
         for path in (DIST / app_name()).rglob("*"):
             if path.is_file() and path.suffix.lower() in {".exe", ".dll", ".pyd"}:
                 subprocess.run([tool, "sign", "/fd", "SHA256", "/a", "/f", cert, str(path)], check=True)
@@ -212,7 +212,7 @@ def release(target, identity=None, notary_profile=None) -> int:
     app = DIST / f"{app_name()}.app"
     codesign = shutil.which("codesign")
     xcrun = shutil.which("xcrun")
-    ident = identity or os.environ.get("PY_UPPER_CODESIGN_IDENTITY") or os.environ.get("PYSTAND_CODESIGN_IDENTITY")
+    ident = identity or os.environ.get("AI_UPPER_CODESIGN_IDENTITY") or os.environ.get("PYSTAND_CODESIGN_IDENTITY")
     if not codesign or not xcrun or not ident:
         raise RuntimeError("macOS release requires codesign/xcrun and --identity")
     nested = [p for p in app.rglob("*") if p.is_file() and p.suffix.lower() in {".dylib", ".so"}]
