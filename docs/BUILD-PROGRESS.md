@@ -94,8 +94,72 @@ $ git branch -vv
 全量测试 `845 passed, 5 skipped`；收口报告见 `docs/STAGE5-CLOSEOUT-REPORT.md`。
 尚未完成：把新界面的写路径接通、158 通道结论表、打包入口指向 Web 承载窗口并真实构建。
 
+### 0.5 第六阶段起点（功能测试：写路径 + 158 条结论表）
 
----
+用户判定上一轮（约 2 小时）**只产出了契约文书，功能测试本身没落地**。本轮先产出可核对的
+文本事实，再写代码。以下为真实命令输出（2026-11-14 实跑）。
+
+```text
+$ git log --oneline -10
+8e78123 docs: 第五阶段收口数据复核（845 passed / 桥接假成功清理入账）
+e289b45 fix(webui): 窗口控制与剪贴板改为真实实现，不再返回假成功
+188cfed docs: 第五阶段收口（逐页一致性判定 + 三档报告 + 差异量化）
+64a8402 chore(assets): 补齐首启种子角色文件
+06841f9 test(webui): 修好全量测试的红灯，豁免项补真实 binding 覆盖
+f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+4f53a1e feat(ext): 技能服务（内置元技能 + 自定义目录 + frontmatter 解析）
+c08da9d feat(tools): 工具权限判定层（交互轮放行/密封轮拒绝/挂载判据）接入执行入口
+ed1a61f docs: 台账刷新到第四阶段收尾（772 passed / 5 skipped）
+044cda0 feat(ui): 工具卡 / 内联图片 / 待办胶囊，历史重开后保留工具名与图片
+
+$ git status --porcelain
+?? audit-tools/screenshot_app.py
+?? audit-tools/verify_demo_page.py
+?? audit-tools/xvfb_run.py
+?? core
+?? docs/audit/
+?? out/about-window-xvfb.png
+?? out/about-window.png
+?? out/demo-page-reset.png
+?? out/demo-page.png
+?? out/main-window-xvfb.png
+?? out/main-window.png
+?? out/parity/deva/01-under-xvfb.png
+?? out/parity/proto-shell.png
+?? out/ui/
+
+$ ls docs/audit/
+contracts-browser-terminal-deliverables-remote-update.md
+contracts-chat.md
+contracts-fs-secrets-personas-skills-config-profile-provider-window-clipboard.md
+contracts-git-tasks-memory-mcp.md
+
+$ for f in docs/audit/*.md; do grep -c '^### ' "$f"; done
+39  contracts-browser-terminal-deliverables-remote-update.md
+33  contracts-chat.md          # 31 条 invoke + chat:event / chat:sessions-changed 两条事件
+43  contracts-fs-secrets-personas-skills-config-profile-provider-window-clipboard.md
+45  contracts-git-tasks-memory-mcp.md
+# 合计 160 条小节 = 158 条 invoke（154 handle + 4 on）+ 2 条事件推送
+
+$ cd app && ../.venv/bin/python -m pytest -q --collect-only | tail -3
+850 tests collected in 1.92s
+
+$ cd app && ../.venv/bin/python -m pytest -q | tail -3
+845 passed, 5 skipped in 21.63s
+```
+
+**对账结论（与用户指出的三点逐一对上，全部成立）：**
+
+| 用户指出的缺口 | 起点实测 | 证据 |
+|---|---|---|
+| 写路径未接通 | 成立。`app/src/mvvm/webui/bridge.py` 只注册约 30 条只读通道；`chat:send`/`abort`/`create-session` 等 31 条 chat 通道**一条都没注册**；`web_shell_window.py` 没有 store/gateway/tools/VM 装配 | `bridge.py:136-172`（`_register_defaults`）、`web_shell_window.py:68-129`（构造里只建 bridge） |
+| 158 条结论表未合并 | 成立。`docs/audit/` 只有四份**分域契约**台账（原版侧入参/出参/错误边界），没有「移植版实现位置 + 测试方式 + 实测结果」的合并表 | `docs/audit/` 目录清单 |
+| 测试未补 | 成立。`850 collected` 中与写路径相关的为 0：`test_web_shell_modules.py` 的 10 个用例全部只测只读通道、窗口几何、shim 占位符 | `app/tests/test_web_shell_modules.py` |
+
+**本阶段暂不推翻的既有工作：** 界面七页一致性判定（§1.11）继续有效；`deva` 工程保持只读。
+
+**本阶段中断点（若再次被截断从这里续）：** 结论表见 `docs/audit/IPC-158-LEDGER.md`；
+写路径实现见 §1.12；测试与端到端证据见 §1.12 各小节。
 
 ## 1 档一：已实现并验证
 
