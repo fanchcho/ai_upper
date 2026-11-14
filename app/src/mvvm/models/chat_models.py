@@ -10,9 +10,18 @@
 """
 from __future__ import annotations
 
+import sys
 import time
 import types
-from typing import Annotated, Any, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
+
+# `typing.Annotated` 是 3.9 才有的名字。这里按解释器版本显式分支，而不是
+# `try: from typing import ...; except ImportError:`——后者会把「3.8 上没有」
+# 和「typing_extensions 没装」两类不同的故障混成一个静默回退，装漏了依赖也照样过。
+if sys.version_info >= (3, 9):
+    from typing import Annotated
+else:  # 3.8：Annotated 由 typing_extensions 提供（已列入 app/requirements.txt）
+    from typing_extensions import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -70,7 +79,7 @@ class TextPart(_Model):
     type: Literal["text"] = "text"
     text: str
     # 清单块（技能/记忆/成员告知记录），Deva 只在主进程内部使用；保留以便原样写回。
-    listing: Optional[dict[str, Any]] = None
+    listing: Optional[Dict[str, Any]] = None
 
 
 class ToolUsePart(_Model):
@@ -99,8 +108,8 @@ class ToolResultPart(_Model):
     toolUseId: str  # noqa: N815 - 与 Deva 的 JSON 字段名一致
     content: str
     isError: Optional[bool] = None  # noqa: N815
-    images: Optional[list[ImagePart]] = None
-    listing: Optional[dict[str, Any]] = None
+    images: Optional[List[ImagePart]] = None
+    listing: Optional[Dict[str, Any]] = None
 
 
 ContentPart = Annotated[
@@ -113,7 +122,7 @@ class Message(_Model):
     """一条模型上下文消息。content 可以是纯文本，也可以是内容块数组（Anthropic 风味）。"""
 
     role: MessageRole
-    content: Union[str, list[ContentPart]]
+    content: Union[str, List[ContentPart]]
 
     def text(self) -> str:
         """只取文本部分，按顺序拼接（展示用；工具调用不算正文）。"""
@@ -145,7 +154,7 @@ class StoredSession(_Model):
     title: str = ""
     createdAt: int = Field(default_factory=now_ms)  # noqa: N815 - Deva 字段名
     updatedAt: int = Field(default_factory=now_ms)  # noqa: N815
-    messages: list[Message] = Field(default_factory=list)
+    messages: List[Message] = Field(default_factory=list)
 
     compacted: Optional[CompactedRef] = None
     lastInputTokens: Optional[int] = None  # noqa: N815
@@ -158,23 +167,23 @@ class StoredSession(_Model):
     model: Optional[str] = None
     effort: Optional[str] = None
     archived: Optional[bool] = None
-    members: Optional[list[dict[str, Any]]] = None
+    members: Optional[List[Dict[str, Any]]] = None
     parentId: Optional[str] = None  # noqa: N815
-    notices: Optional[list[StoredNotice]] = None
-    proposals: Optional[dict[str, str]] = None
-    asks: Optional[dict[str, dict[str, Any]]] = None
-    summaries: Optional[dict[str, str]] = None
-    delivered: Optional[dict[str, list[str]]] = None
-    background: Optional[dict[str, str]] = None
-    durations: Optional[dict[str, int]] = None
-    plans: Optional[dict[str, dict[str, Any]]] = None
-    autotasks: Optional[dict[str, dict[str, Any]]] = None
-    todos: Optional[list[dict[str, Any]]] = None
-    todoCancelled: Optional[list[str]] = None  # noqa: N815
+    notices: Optional[List[StoredNotice]] = None
+    proposals: Optional[Dict[str, str]] = None
+    asks: Optional[Dict[str, Dict[str, Any]]] = None
+    summaries: Optional[Dict[str, str]] = None
+    delivered: Optional[Dict[str, List[str]]] = None
+    background: Optional[Dict[str, str]] = None
+    durations: Optional[Dict[str, int]] = None
+    plans: Optional[Dict[str, Dict[str, Any]]] = None
+    autotasks: Optional[Dict[str, Dict[str, Any]]] = None
+    todos: Optional[List[Dict[str, Any]]] = None
+    todoCancelled: Optional[List[str]] = None  # noqa: N815
     todoCancelNote: Optional[str] = None  # noqa: N815
-    checkpoints: Optional[dict[str, list[dict[str, Any]]]] = None
-    lastKnown: Optional[dict[str, Optional[str]]] = None  # noqa: N815
-    baselines: Optional[dict[str, Optional[str]]] = None
+    checkpoints: Optional[Dict[str, List[Dict[str, Any]]]] = None
+    lastKnown: Optional[Dict[str, Optional[str]]] = None  # noqa: N815
+    baselines: Optional[Dict[str, Optional[str]]] = None
     restoreNote: Optional[str] = None  # noqa: N815
 
     def meta(self) -> "ChatSessionMeta":
@@ -210,7 +219,7 @@ class ChatSessionMeta(_Model):
     model: Optional[str] = None
     effort: Optional[str] = None
     archived: Optional[bool] = None
-    members: Optional[list[dict[str, Any]]] = None
+    members: Optional[List[Dict[str, Any]]] = None
     parentId: Optional[str] = None  # noqa: N815
 
 

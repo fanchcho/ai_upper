@@ -17,7 +17,7 @@ import json
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Literal, Optional, Sequence, TYPE_CHECKING
+from typing import Any, AsyncIterator, Literal, Optional, Sequence, TYPE_CHECKING, Union
 
 from mvvm.models.chat_models import ContentPart, Message, StopReason
 
@@ -303,7 +303,12 @@ class Done:
     type: Literal["done"] = "done"
 
 
-StreamEvent = TextDelta | ThinkingDelta | ToolCall | ToolCallTruncated | Usage | StreamError | Done
+# 模块级 `A | B` 是运行期求值（PEP 604 的 `type.__or__` 在 3.10 才有），
+# `from __future__ import annotations` 只字符串化注解、不管这里的赋值。
+# 3.8/3.9 上这会抛 `TypeError: unsupported operand type(s) for |`。
+StreamEvent = Union[
+    TextDelta, ThinkingDelta, ToolCall, ToolCallTruncated, Usage, StreamError, Done
+]
 
 
 @dataclass(frozen=True)

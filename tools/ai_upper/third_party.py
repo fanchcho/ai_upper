@@ -163,7 +163,11 @@ def _dist_name(dist_info: Path) -> str:
         for line in metadata.read_text(encoding="utf-8", errors="replace").splitlines():
             if line.startswith("Name:"):
                 return re.sub(r"[-_.]+", "-", line.split(":", 1)[1].strip()).lower()
-    stem = dist_info.name.removesuffix(".dist-info")
+    # `str.removesuffix` 是 3.9+；构建工具必须在 3.8 上跑（build-tool-compat
+    # job 的最老一条），这里用切片而不是回退到 str.endswith 的两分支。
+    suffix = ".dist-info"
+    name = dist_info.name
+    stem = name[:-len(suffix)] if name.endswith(suffix) else name
     return re.sub(r"[-_.]+", "-", re.sub(r"-\d.*$", "", stem)).lower()
 
 

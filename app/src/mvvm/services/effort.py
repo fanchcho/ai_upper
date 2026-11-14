@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Dict, Optional
 from urllib.parse import urlparse
 
 EffortLevel = str  # 'default' | 'low' | 'medium' | 'high' | 'xhigh' | 'max'
@@ -48,7 +48,10 @@ class EffortRequest:
     thinking: Optional[str] = None
 
 
-LevelMap = dict[str, str]
+# 模块级赋值里的 `dict[str, str]` 是**运行期求值**：PEP 563 只字符串化注解，
+# 不管赋值右侧。3.8 的内置 dict 不可下标，会抛
+# `TypeError: 'type' object is not subscriptable`，所以这里用 typing.Dict。
+LevelMap = Dict[str, str]
 
 LMH: LevelMap = {"low": "low", "medium": "medium", "high": "high"}
 LMHX: LevelMap = {**LMH, "xhigh": "xhigh"}
