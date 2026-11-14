@@ -1,4 +1,2 @@
-deps import OK on 3.8.20
-bluetoothapis in host set: True
-system_dependency: True
+3.8 import OK, bluetoothapis host: True
 EXIT=0

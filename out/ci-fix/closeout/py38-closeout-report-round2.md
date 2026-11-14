@@ -159,14 +159,16 @@ COMPAT FAILURES: 0
 
 ## 6. 打包链路与产物启动
 
-证据：`out/ci-fix/verify-7476558/packaging-build.log`、
-`out/ci-fix/verify-7476558/packaged-launch.log`
+证据：`out/ci-fix/verify-round3/packaging-build.log`（在 HEAD `91d934e` 上重跑，
+`deps.py` 的改动已在其中）、`out/ci-fix/verify-round3/packaged-launch.log`
 
 - 六阶段全跑完（`[1/6]`…`[6/6]`）：`SMOKE PASS 6 modules`、
   `SMOKE PASS launcher`、`READY: .../dist/ai_upper`，`BUILD_EXIT=0`；
-- 耗时 `real 0m26.7s`（`packaging-build.time`）——命中 pip 缓存与既有 build 目录，
-  不是从零冷构建；六阶段本身都真实执行了（`[2/6]` 的 pip download 有输出，
-  `[5/6]` 静态校验 114 个原生二进制、逐模块 PASS，`[6/6]` 两个 SMOKE PASS）；
+- `[2/6]` 的 pip download 有完整输出（`Ignoring typing_extensions: markers ...
+  don't match your environment` 也在，证明 3.9+ 侧环境标记按预期生效），
+  `[5/6]` 静态校验 `PASS native binaries checked=114`、逐模块 PASS，`[6/6]` 两个 SMOKE PASS；
+- 单次耗时约 27s——命中 pip 缓存与既有 build 目录，**不是从零冷构建**（这一点如实记录，
+  以免把「增量构建很快」误读成「全量构建已证明很快」）；
 - 产物名 `ai_upper`（`dist/ai_upper/ai_upper`，154344 字节）；
 - 产物 headless 启动：`DEVA WEB OK platform=offscreen title='ai_upper'
   url=.../dist/ai_upper/assets/renderer/index.html bridge=True`，`LAUNCH_EXIT=0`。
