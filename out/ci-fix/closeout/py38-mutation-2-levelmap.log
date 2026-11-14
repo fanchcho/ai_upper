@@ -1,7 +1,7 @@
-### 变异 2：`LevelMap = Dict[str, str]` 退回 `dict[str, str]`
-# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：1 failed, 4 passed / GUARD_EXIT=1
-# 真 3.8（TypeError: 'type' object is not subscriptable（effort.py:54））：见下方 IMPORT38_EXIT
-# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+### 变异 2：模块级赋值改回 `LevelMap = dict[str, str]`（PEP 585）
+# 守卫：pytest app/tests/test_py38_compat.py（CPython 3.13.5）
+# 真 3.8：/tmp/venv38/bin/python（3.8.20；pydantic/pydantic versions in py38-mutation-env.log）
+# 生成：/tmp/mutate_all.sh
 # ----------------------------------------------------------------
 F....                                                                    [100%]
 =================================== FAILURES ===================================
@@ -29,5 +29,5 @@ E       assert not ['/home/agent/shared_workspace/py_upper/app/src/mvvm/services
 app/tests/test_py38_compat.py:209: AssertionError
 =========================== short test summary info ============================
 FAILED app/tests/test_py38_compat.py::test_import_time_type_expressions_are_python38_safe
-1 failed, 4 passed in 0.99s
+1 failed, 4 passed in 0.96s
 GUARD_EXIT=1

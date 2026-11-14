@@ -1,7 +1,7 @@
-### 变异 1 的真 3.8 结果
-# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：（守卫见 py38-mutation-1-annotated.log）
-# 真 3.8（CPython 3.8.20）：见下方 IMPORT38_EXIT
-# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+### 变异 1（真 3.8）：裸 `from typing import Annotated` 在 3.8 上 ImportError
+# 守卫：pytest app/tests/test_py38_compat.py（CPython 3.13.5）
+# 真 3.8：/tmp/venv38/bin/python（3.8.20；pydantic/pydantic versions in py38-mutation-env.log）
+# 生成：/tmp/mutate_all.sh
 # ----------------------------------------------------------------
 Traceback (most recent call last):
   File "<string>", line 1, in <module>

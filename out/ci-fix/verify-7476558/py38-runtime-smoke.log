@@ -1,0 +1,6 @@
+Attribute Qt::AA_ShareOpenGLContexts must be set before QCoreApplication is created.
+Path override failed for key base::DIR_APP_DICTIONARIES and path '/tmp/py38/python/bin/qtwebengine_dictionaries'
+Path override failed for key base::DIR_APP_DICTIONARIES and path '/tmp/venv38/lib/python3.8/site-packages/PySide6/Qt/libexec/qtwPath override failed for key base::DIR_APP_DICTIONARIES and path '/tmp/venv38/lib/python3.8/site-packages/PySide6/Qt/libexec/qtwebengine_dictionaries'
+ebengine_dictionaries'
+DEVA WEB OK platform=offscreen title='ai_upper' url=/home/agent/shared_workspace/py_upper/app/assets/renderer/index.html bridge=True
+SMOKE_EXIT=0

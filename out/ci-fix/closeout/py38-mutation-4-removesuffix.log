@@ -1,7 +1,7 @@
-### 变异 4：切片退回 `str.removesuffix`
-# 守卫（pytest app/tests/test_py38_compat.py, CPython 3.13.5）：1 failed, 4 passed / GUARD_EXIT=1
-# 真 3.8（AttributeError: 'str' object has no attribute 'removesuffix'（third_party.py:169））：见下方 IMPORT38_EXIT
-# 生成方式：/tmp/mutate_runner.sh（守卫）+ /tmp/mutate_real38.sh（真 3.8，venv38 = CPython 3.8.20 + pydantic 2.10.6 + typing_extensions 4.13.2）
+### 变异 4：构建工具改回 `str.removesuffix`（3.9+ 运行期 API）
+# 守卫：pytest app/tests/test_py38_compat.py（CPython 3.13.5）
+# 真 3.8：/tmp/venv38/bin/python（3.8.20；pydantic/pydantic versions in py38-mutation-env.log）
+# 生成：/tmp/mutate_all.sh
 # ----------------------------------------------------------------
 ..F..                                                                    [100%]
 =================================== FAILURES ===================================
@@ -29,11 +29,11 @@ ______________________ test_no_python39_only_runtime_apis ______________________
             "APIs and modules that only exist from Python 3.9:\n" + "\n".join(problems)
         )
 E       AssertionError: APIs and modules that only exist from Python 3.9:
-E         /home/agent/shared_workspace/py_upper/tools/ai_upper/third_party.py:169: .removesuffix(
-E       assert not ['/home/agent/shared_workspace/py_upper/tools/ai_upper/third_party.py:169: .removesuffix(']
+E         /home/agent/shared_workspace/py_upper/tools/ai_upper/third_party.py:170: .removesuffix(
+E       assert not ['/home/agent/shared_workspace/py_upper/tools/ai_upper/third_party.py:170: .removesuffix(']
 
 app/tests/test_py38_compat.py:283: AssertionError
 =========================== short test summary info ============================
 FAILED app/tests/test_py38_compat.py::test_no_python39_only_runtime_apis - As...
-1 failed, 4 passed in 1.03s
+1 failed, 4 passed in 0.95s
 GUARD_EXIT=1

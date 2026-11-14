@@ -1,0 +1,15 @@
+python 3.8.20
+modules scanned: 78
+IMPORT OK: 78
+THIRD-PARTY MISSING (not counted as compat failures): 0
+COMPAT FAILURES: 0
+SWEEP_EXIT=0
+=== classifier positive control on real 3.8 ===
+  keyring            ours=False ModuleNotFoundError: No module named 'keyring'
+  typing_extensions  ours=False importable
+  httpx              ours=False importable
+  mvvm               ours=True  importable
+  deva_web           ours=True  importable
+  no_such_pkg_zzz    ours=False ModuleNotFoundError: No module named 'no_such_pkg_zzz'
+=== why keyring absence is not a failure: who imports it, and when ===
+app/src/mvvm/services/secrets_vault.py:58:        import keyring
