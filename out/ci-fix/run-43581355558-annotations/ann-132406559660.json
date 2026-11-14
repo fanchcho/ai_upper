@@ -1,0 +1,62 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/ee6c2193e180ffa37e84e76d430757c49721c0ed/.github",
+    "start_line": 4,
+    "start_column": null,
+    "end_line": 4,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/ee6c2193e180ffa37e84e76d430757c49721c0ed/.github",
+    "start_line": 19,
+    "start_column": null,
+    "end_line": 19,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "No files were found with the provided path: run.log. No artifacts will be uploaded.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/ee6c2193e180ffa37e84e76d430757c49721c0ed/.github",
+    "start_line": 52,
+    "start_column": null,
+    "end_line": 52,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "build.py (exit 1)",
+    "message": "\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.obj\n0057_mvvm_views_transcript_render.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.obj\n0058_mvvm_views_web_shell_window.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.obj\n0059_mvvm_webui_assembly.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/ee6c2193e180ffa37e84e76d430757c49721c0ed/.github",
+    "start_line": 385,
+    "start_column": null,
+    "end_line": 385,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/ee6c2193e180ffa37e84e76d430757c49721c0ed/.github",
+    "start_line": 43,
+    "start_column": null,
+    "end_line": 43,
+    "end_column": null,
+    "annotation_level": "notice",
+    "title": "pytest (exit 0)",
+    "message": "........................................................................ [  7%]\n....s................................................................... [ 14%]\n........................................................................ [ 22%]\n.....................................................ss................. [ 29%]\n......................................s................................. [ 37%]\n...........................s...............ss..s........................ [ 44%]\n........................................................................ [ 52%]\n........................................................................ [ 59%]\n........................................................................ [ 67%]\n........................................................................ [ 74%]\n..................................................................ssssss [ 82%]\n........................................................................ [ 89%]\n.....................................................s.................. [ 96%]\n.............................                                            [100%]\n=========================== short test summary info ===========================\nSKIPPED [1] tests\\test_build_tool_compat.py:630: Windows has no POSIX execute bits\nSKIPPED [1] tests\\test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E\nSKIPPED [1] tests\\test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E\nSKIPPED [1] tests\\test_launcher_deployment.py:61: POSIX PATH lookup and symlink entry\nSKIPPED [1] tests\\test_native_deployment.py:171: requires native ELF tools\nSKIPPED [1] tests\\test_native_deployment.py:314: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\test_native_deployment.py:325: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\test_native_deployment.py:370: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\\\test_tools_full.py:358: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:367: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:374: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:381: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:389: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:396: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_web_e2e_stream.py:131: \\u7aef\\u5230\\u7aef\\u5b9e\\u8dd1\\u9700\\u8981\\u771f provider\\uff1a\\u8bbe DEVA_E2E_PROVIDER=1 \\u5e76\\u63d0\\u4f9b ANTHROPIC_BASE_URL / ANTHROPIC_API_KEY / ANTHROPIC_MODEL\\uff08\\u6216 DEVA_E2E_* \\u540c\\u540d\\u53d8\\u91cf\\uff09\n950 passed, 15 skipped in 54.44s\n[9312:8404:1114/093807.543:ERROR:../../../qtwebengine/src/3rdparty/chromium/gpu/ipc/service/gpu_channel_manager.cc:920] Failed to create GLES3 context, fallback to GLES2.\n[9312:8404:1114/093807.543:ERROR:../../../qtwebengine/src/3rdparty/chromium/gpu/ipc/service/gpu_channel_manager.cc:931] ContextResult::kFatalFailure: Failed to create shared context for virtualization.",
+    "raw_details": ""
+  }
+]

@@ -1,0 +1,2405 @@
+{
+  "total_count": 14,
+  "jobs": [
+    {
+      "id": 132398995364,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hXpA",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995364",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995364",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:30Z",
+      "name": "Build Tool Python 3.9",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:21Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:21Z",
+          "completed_at": "2026-11-14T09:05:21Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:21Z",
+          "completed_at": "2026-11-14T09:05:21Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:21Z",
+          "completed_at": "2026-11-14T09:05:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:27Z",
+          "completed_at": "2026-11-14T09:05:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:27Z",
+          "completed_at": "2026-11-14T09:05:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:27Z",
+          "completed_at": "2026-11-14T09:05:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995364",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000259,
+      "runner_name": "GitHub Actions 1000000259",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995613,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hYnQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995613",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995613",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:11:58Z",
+      "name": "native-integration (windows-11-arm, windows-arm64, true)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:22Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:22Z",
+          "completed_at": "2026-11-14T09:05:37Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:37Z",
+          "completed_at": "2026-11-14T09:05:37Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:37Z",
+          "completed_at": "2026-11-14T09:05:37Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:37Z",
+          "completed_at": "2026-11-14T09:05:57Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:57Z",
+          "completed_at": "2026-11-14T09:07:06Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:07:06Z",
+          "completed_at": "2026-11-14T09:07:07Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:07:07Z",
+          "completed_at": "2026-11-14T09:07:08Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:07:08Z",
+          "completed_at": "2026-11-14T09:11:40Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:11:40Z",
+          "completed_at": "2026-11-14T09:11:43Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 15,
+          "started_at": "2026-11-14T09:11:43Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Publish build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Upload build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Full integration run",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 40,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 41,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:52Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-11-14T09:11:52Z",
+          "completed_at": "2026-11-14T09:11:56Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-11-14T09:11:56Z",
+          "completed_at": "2026-11-14T09:11:57Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995613",
+      "labels": [
+        "windows-11-arm"
+      ],
+      "runner_id": 1000000265,
+      "runner_name": "GitHub Actions 1000000265",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995638,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hYtg",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995638",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995638",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:11:55Z",
+      "name": "native-integration (windows-2025, windows-x86_64, 3.8.10, true, [\"PySide2==5.15.2.1\", \"pydantic==...",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:16Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:16Z",
+          "completed_at": "2026-11-14T09:05:16Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:16Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:28Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:28Z",
+          "completed_at": "2026-11-14T09:05:28Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:28Z",
+          "completed_at": "2026-11-14T09:05:28Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:28Z",
+          "completed_at": "2026-11-14T09:05:48Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:48Z",
+          "completed_at": "2026-11-14T09:06:38Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:06:38Z",
+          "completed_at": "2026-11-14T09:06:38Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:06:38Z",
+          "completed_at": "2026-11-14T09:06:39Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:06:39Z",
+          "completed_at": "2026-11-14T09:11:40Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:11:40Z",
+          "completed_at": "2026-11-14T09:11:42Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 15,
+          "started_at": "2026-11-14T09:11:42Z",
+          "completed_at": "2026-11-14T09:11:49Z"
+        },
+        {
+          "name": "Publish build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-14T09:11:49Z",
+          "completed_at": "2026-11-14T09:11:50Z"
+        },
+        {
+          "name": "Upload build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-14T09:11:50Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Full integration run",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 40,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 41,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:51Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-11-14T09:11:51Z",
+          "completed_at": "2026-11-14T09:11:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-11-14T09:11:53Z",
+          "completed_at": "2026-11-14T09:11:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995638",
+      "labels": [
+        "windows-2025"
+      ],
+      "runner_id": 1000000266,
+      "runner_name": "GitHub Actions 1000000266",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995641,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hYuQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995641",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995641",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:26Z",
+      "name": "Build Tool Python 3.8",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:23Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:23Z",
+          "completed_at": "2026-11-14T09:05:23Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:23Z",
+          "completed_at": "2026-11-14T09:05:23Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:23Z",
+          "completed_at": "2026-11-14T09:05:23Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995641",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000262,
+      "runner_name": "GitHub Actions 1000000262",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995661,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hYzQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995661",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995661",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:11Z",
+      "completed_at": null,
+      "name": "native-integration (ubuntu-24.04-arm, linux-arm64, false)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:13Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:13Z",
+          "completed_at": "2026-11-14T09:05:14Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:14Z",
+          "completed_at": "2026-11-14T09:05:14Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:14Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:21Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:21Z",
+          "completed_at": "2026-11-14T09:05:51Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:51Z",
+          "completed_at": "2026-11-14T09:05:51Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:51Z",
+          "completed_at": "2026-11-14T09:06:03Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:06:03Z",
+          "completed_at": "2026-11-14T09:06:28Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:06:28Z",
+          "completed_at": "2026-11-14T09:06:28Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:06:28Z",
+          "completed_at": "2026-11-14T09:06:29Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:06:29Z",
+          "completed_at": "2026-11-14T09:13:16Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:13:16Z",
+          "completed_at": "2026-11-14T09:13:16Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 15,
+          "started_at": "2026-11-14T09:13:16Z",
+          "completed_at": null
+        },
+        {
+          "name": "Publish build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 16,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Full integration run",
+          "status": "pending",
+          "conclusion": null,
+          "number": 18,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 19,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 20,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "pending",
+          "conclusion": null,
+          "number": 21,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 40,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "pending",
+          "conclusion": null,
+          "number": 41,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 42,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995661",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000000261,
+      "runner_name": "GitHub Actions 1000000261",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995702,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hY9g",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995702",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995702",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:23Z",
+      "name": "Build Tool Python 3.13",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995702",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000263,
+      "runner_name": "GitHub Actions 1000000263",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995723,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZCw",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995723",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995723",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:10Z",
+      "completed_at": null,
+      "name": "native-integration (macos-15-intel, macos-x86_64, true)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:14Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:14Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:19Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:19Z",
+          "completed_at": "2026-11-14T09:05:35Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:35Z",
+          "completed_at": "2026-11-14T09:05:35Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:35Z",
+          "completed_at": "2026-11-14T09:05:35Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:35Z",
+          "completed_at": "2026-11-14T09:06:45Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:06:45Z",
+          "completed_at": "2026-11-14T09:07:54Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:07:54Z",
+          "completed_at": "2026-11-14T09:07:54Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:07:54Z",
+          "completed_at": "2026-11-14T09:07:56Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:07:56Z",
+          "completed_at": "2026-11-14T09:15:32Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:15:32Z",
+          "completed_at": "2026-11-14T09:15:32Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 15,
+          "started_at": "2026-11-14T09:15:32Z",
+          "completed_at": null
+        },
+        {
+          "name": "Publish build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 16,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Full integration run",
+          "status": "pending",
+          "conclusion": null,
+          "number": 18,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 19,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 20,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "pending",
+          "conclusion": null,
+          "number": 21,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 40,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "pending",
+          "conclusion": null,
+          "number": 41,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 42,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995723",
+      "labels": [
+        "macos-15-intel"
+      ],
+      "runner_id": 1000000267,
+      "runner_name": "GitHub Actions 1000000267",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995729,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZEQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995729",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995729",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:13:42Z",
+      "name": "native-integration (macos-15, macos-arm64, true)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:09Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:26Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:26Z",
+          "completed_at": "2026-11-14T09:05:49Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:49Z",
+          "completed_at": "2026-11-14T09:05:49Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:49Z",
+          "completed_at": "2026-11-14T09:05:50Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:50Z",
+          "completed_at": "2026-11-14T09:10:00Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:10:00Z",
+          "completed_at": "2026-11-14T09:10:00Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-14T09:10:00Z",
+          "completed_at": "2026-11-14T09:12:15Z"
+        },
+        {
+          "name": "Publish build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-14T09:12:15Z",
+          "completed_at": "2026-11-14T09:12:15Z"
+        },
+        {
+          "name": "Upload build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-14T09:12:15Z",
+          "completed_at": "2026-11-14T09:12:16Z"
+        },
+        {
+          "name": "Full integration run",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-14T09:12:16Z",
+          "completed_at": "2026-11-14T09:13:07Z"
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-14T09:13:07Z",
+          "completed_at": "2026-11-14T09:13:09Z"
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-11-14T09:13:09Z",
+          "completed_at": "2026-11-14T09:13:09Z"
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-11-14T09:13:09Z",
+          "completed_at": "2026-11-14T09:13:25Z"
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 40,
+          "started_at": "2026-11-14T09:13:25Z",
+          "completed_at": "2026-11-14T09:13:36Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41,
+          "started_at": "2026-11-14T09:13:36Z",
+          "completed_at": "2026-11-14T09:13:37Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-11-14T09:13:37Z",
+          "completed_at": "2026-11-14T09:13:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-11-14T09:13:37Z",
+          "completed_at": "2026-11-14T09:13:40Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995729",
+      "labels": [
+        "macos-15"
+      ],
+      "runner_id": 1000000260,
+      "runner_name": "GitHub Actions 1000000260",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995732,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZFA",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995732",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995732",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:24Z",
+      "name": "Build Tool Python 3.10",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:09Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:22Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:22Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:22Z",
+          "completed_at": "2026-11-14T09:05:22Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995732",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000264,
+      "runner_name": "GitHub Actions 1000000264",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995733,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZFQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995733",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995733",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": null,
+      "name": "native-integration (ubuntu-24.04, linux-x86_64, true)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:13Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:13Z",
+          "completed_at": "2026-11-14T09:05:13Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:13Z",
+          "completed_at": "2026-11-14T09:05:19Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:19Z",
+          "completed_at": "2026-11-14T09:05:39Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:39Z",
+          "completed_at": "2026-11-14T09:05:39Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:39Z",
+          "completed_at": "2026-11-14T09:05:48Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:48Z",
+          "completed_at": "2026-11-14T09:06:16Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:06:16Z",
+          "completed_at": "2026-11-14T09:06:17Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:06:17Z",
+          "completed_at": "2026-11-14T09:06:18Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:06:18Z",
+          "completed_at": "2026-11-14T09:13:30Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:13:30Z",
+          "completed_at": "2026-11-14T09:13:30Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 15,
+          "started_at": "2026-11-14T09:13:30Z",
+          "completed_at": null
+        },
+        {
+          "name": "Publish build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 16,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload build log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 17,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Full integration run",
+          "status": "pending",
+          "conclusion": null,
+          "number": 18,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "pending",
+          "conclusion": null,
+          "number": 19,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 20,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "pending",
+          "conclusion": null,
+          "number": 21,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "pending",
+          "conclusion": null,
+          "number": 40,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "pending",
+          "conclusion": null,
+          "number": 41,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 42,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995733",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000268,
+      "runner_name": "GitHub Actions 1000000268",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995741,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZHQ",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995741",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995741",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:19Z",
+      "name": "Build Tool Python 3.11",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:11Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:11Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995741",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000269,
+      "runner_name": "GitHub Actions 1000000269",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995755,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZKw",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995755",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995755",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:05:21Z",
+      "name": "Build Tool Python 3.12",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Create the local configuration from the template",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:12Z"
+        },
+        {
+          "name": "Verify Build Tool imports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:12Z",
+          "completed_at": "2026-11-14T09:05:13Z"
+        },
+        {
+          "name": "Run compatibility tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:13Z",
+          "completed_at": "2026-11-14T09:05:18Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:05:18Z",
+          "completed_at": "2026-11-14T09:05:19Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:05:19Z",
+          "completed_at": "2026-11-14T09:05:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:05:19Z",
+          "completed_at": "2026-11-14T09:05:19Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995755",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000270,
+      "runner_name": "GitHub Actions 1000000270",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995763,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZMw",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995763",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995763",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:11:42Z",
+      "name": "native-integration (windows-2025, windows-x86, false, [\"pyserial==3.5\"])",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:09Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:17Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:17Z",
+          "completed_at": "2026-11-14T09:05:20Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:20Z",
+          "completed_at": "2026-11-14T09:05:30Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:30Z",
+          "completed_at": "2026-11-14T09:05:30Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:30Z",
+          "completed_at": "2026-11-14T09:05:30Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:30Z",
+          "completed_at": "2026-11-14T09:05:55Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:55Z",
+          "completed_at": "2026-11-14T09:06:53Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:06:53Z",
+          "completed_at": "2026-11-14T09:06:53Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:06:53Z",
+          "completed_at": "2026-11-14T09:06:54Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:06:54Z",
+          "completed_at": "2026-11-14T09:11:29Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:11:29Z",
+          "completed_at": "2026-11-14T09:11:31Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 15,
+          "started_at": "2026-11-14T09:11:31Z",
+          "completed_at": "2026-11-14T09:11:38Z"
+        },
+        {
+          "name": "Publish build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-14T09:11:38Z",
+          "completed_at": "2026-11-14T09:11:38Z"
+        },
+        {
+          "name": "Upload build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-14T09:11:38Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Full integration run",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 19,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 40,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 41,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:39Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-11-14T09:11:39Z",
+          "completed_at": "2026-11-14T09:11:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-11-14T09:11:41Z",
+          "completed_at": "2026-11-14T09:11:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995763",
+      "labels": [
+        "windows-2025"
+      ],
+      "runner_id": 1000000272,
+      "runner_name": "GitHub Actions 1000000272",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 132398995788,
+      "run_id": 43578841766,
+      "workflow_name": "ai_upper validation",
+      "head_branch": "develop",
+      "run_url": "https://api.github.com/repos/fanchcho/ai_upper/actions/runs/43578841766",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVtDn1M8AAAAe05hZTA",
+      "head_sha": "5e7d309f3b5651640c01c79e08661512cb012907",
+      "url": "https://api.github.com/repos/fanchcho/ai_upper/actions/jobs/132398995788",
+      "html_url": "https://github.com/fanchcho/ai_upper/actions/runs/43578841766/job/132398995788",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-14T09:05:07Z",
+      "started_at": "2026-11-14T09:05:09Z",
+      "completed_at": "2026-11-14T09:10:29Z",
+      "name": "native-integration (windows-2025, windows-x86_64, true)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-14T09:05:09Z",
+          "completed_at": "2026-11-14T09:05:10Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-14T09:05:10Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:15Z"
+        },
+        {
+          "name": "Create the local configuration with the repository's dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-14T09:05:15Z",
+          "completed_at": "2026-11-14T09:05:16Z"
+        },
+        {
+          "name": "Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-14T09:05:16Z",
+          "completed_at": "2026-11-14T09:05:16Z"
+        },
+        {
+          "name": "Install Python build tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-14T09:05:16Z",
+          "completed_at": "2026-11-14T09:05:25Z"
+        },
+        {
+          "name": "Install Linux build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-14T09:05:25Z",
+          "completed_at": "2026-11-14T09:05:25Z"
+        },
+        {
+          "name": "Install macOS build tools",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-14T09:05:25Z",
+          "completed_at": "2026-11-14T09:05:25Z"
+        },
+        {
+          "name": "Install application dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-14T09:05:25Z",
+          "completed_at": "2026-11-14T09:05:45Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-14T09:05:45Z",
+          "completed_at": "2026-11-14T09:06:29Z"
+        },
+        {
+          "name": "Publish unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-14T09:06:29Z",
+          "completed_at": "2026-11-14T09:06:29Z"
+        },
+        {
+          "name": "Upload unit test log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-14T09:06:29Z",
+          "completed_at": "2026-11-14T09:06:30Z"
+        },
+        {
+          "name": "Local end-to-end build with third-party wheel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-14T09:06:30Z",
+          "completed_at": "2026-11-14T09:10:15Z"
+        },
+        {
+          "name": "Doctor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-14T09:10:15Z",
+          "completed_at": "2026-11-14T09:10:17Z"
+        },
+        {
+          "name": "Full integration build",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 15,
+          "started_at": "2026-11-14T09:10:17Z",
+          "completed_at": "2026-11-14T09:10:24Z"
+        },
+        {
+          "name": "Publish build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-14T09:10:24Z",
+          "completed_at": "2026-11-14T09:10:24Z"
+        },
+        {
+          "name": "Upload build log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-14T09:10:24Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Full integration run",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Upload integration run log",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Validate packaged release manifest inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Upload packaged artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Post Cache ai_upper build inputs",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 40,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 41,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:25Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42,
+          "started_at": "2026-11-14T09:10:25Z",
+          "completed_at": "2026-11-14T09:10:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43,
+          "started_at": "2026-11-14T09:10:27Z",
+          "completed_at": "2026-11-14T09:10:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/fanchcho/ai_upper/check-runs/132398995788",
+      "labels": [
+        "windows-2025"
+      ],
+      "runner_id": 1000000271,
+      "runner_name": "GitHub Actions 1000000271",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

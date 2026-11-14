@@ -1,0 +1,74 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 4,
+    "start_column": null,
+    "end_line": 4,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 19,
+    "start_column": null,
+    "end_line": 19,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "No files were found with the provided path: run.log. No artifacts will be uploaded.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 53,
+    "start_column": null,
+    "end_line": 53,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "build.py (exit 1)",
+    "message": "ERROR: RuntimeError: Unresolved native dependencies:",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 52,
+    "start_column": null,
+    "end_line": 52,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "build.py (exit 1)",
+    "message": "[4/6] Package + native dependency closure",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 355,
+    "start_column": null,
+    "end_line": 355,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/daec08377eb8ef348c464d1c03b45fbae8541ebf/.github",
+    "start_line": 36,
+    "start_column": null,
+    "end_line": 36,
+    "end_column": null,
+    "annotation_level": "notice",
+    "title": "pytest (exit 0)",
+    "message": "[5588:4396:1114/101018.514:ERROR:../../../qtwebengine/src/3rdparty/chromium/gpu/ipc/service/gpu_channel_manager.cc:931] ContextResult::kFatalFailure: Failed to create shared context for virtualization.",
+    "raw_details": ""
+  }
+]

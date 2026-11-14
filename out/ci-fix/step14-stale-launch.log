@@ -1,0 +1,29 @@
+Detected locale "C" with character encoding "ANSI_X3.4-1968", which is not UTF-8.
+Qt depends on a UTF-8 locale, and has switched to "C.UTF-8" instead.
+If this causes problems, reconfigure your locale. See the locale(1) manual
+for more information.
+Traceback (most recent call last):
+  File "<string>", line 452, in <module>
+  File "<string>", line 429, in _ai_upper_run
+  File "/home/agent/shared_workspace/py_upper/dist/ai_upper/ai_upper", line 4, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "deva_web.py", line 154, in deva_web.main
+  File "deva_web.py", line 116, in deva_web.run
+  File "deva_web.py", line 62, in deva_web._create_window
+  File "chat_session_store.py", line 30, in init mvvm.services.chat_session_store
+  File "chat_models.py", line 17, in init mvvm.models.chat_models
+ModuleNotFoundError: No module named 'pydantic'
+ai_upper: Traceback (most recent call last):
+  File "<string>", line 452, in <module>
+  File "<string>", line 429, in _ai_upper_run
+  File "/home/agent/shared_workspace/py_upper/dist/ai_upper/ai_upper", line 4, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "deva_web.py", line 154, in deva_web.main
+  File "deva_web.py", line 116, in deva_web.run
+  File "deva_web.py", line 62, in deva_web._create_window
+  File "chat_session_store.py", line 30, in init mvvm.services.chat_session_store
+  File "chat_models.py", line 17, in init mvvm.models.chat_models
+ModuleNotFoundError: No module named 'pydantic'
+

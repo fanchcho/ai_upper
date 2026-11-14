@@ -1,0 +1,8 @@
+exclude patterns: 28
+pruned: PySide2/plugins/sqldrivers/qsqlodbc.dll
+pruned: PySide2/plugins/sqldrivers/qsqlpsql.dll
+pruned: PySide2/ucrtbase.dll
+pruned: PySide2/vccorlib140.dll
+pruned: shiboken2/ucrtbase.dll
+pruned: shiboken2/vccorlib140.dll
+OK: closure resolved, bundled entries = 1477

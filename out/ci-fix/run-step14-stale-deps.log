@@ -1,0 +1,42 @@
+[1/6] Runtime + SDK
+[2/6] Third-party dependencies
++ /home/agent/shared_workspace/py_upper/runtimes/linux-arm64/3.13.5/bin/python3.13 -m pip download --disable-pip-version-check --only-binary=:all: --prefer-binary --cache-dir /home/agent/shared_workspace/py_upper/.cache/pip --dest /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64 --timeout 120 --retries 10 PySide6==6.11.0 pyserial==3.5 bleak==3.0.2 qasync==0.28.0
+Collecting PySide6==6.11.0
+  Using cached pyside6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (5.3 kB)
+Collecting pyserial==3.5
+  Using cached pyserial-3.5-py2.py3-none-any.whl.metadata (1.6 kB)
+Collecting bleak==3.0.2
+  Using cached bleak-3.0.2-py3-none-any.whl.metadata (4.7 kB)
+Collecting qasync==0.28.0
+  Using cached qasync-0.28.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting shiboken6==6.11.0 (from PySide6==6.11.0)
+  Using cached shiboken6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (2.4 kB)
+Collecting PySide6_Essentials==6.11.0 (from PySide6==6.11.0)
+  Using cached pyside6_essentials-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (3.6 kB)
+Collecting PySide6_Addons==6.11.0 (from PySide6==6.11.0)
+  Using cached pyside6_addons-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (4.0 kB)
+Collecting dbus-fast>=1.83.0 (from bleak==3.0.2)
+  Using cached dbus_fast-5.2.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+Using cached pyside6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl (571 kB)
+Using cached pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Using cached bleak-3.0.2-py3-none-any.whl (146 kB)
+Using cached qasync-0.28.0-py3-none-any.whl (16 kB)
+Using cached pyside6_addons-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl (170.4 MB)
+Using cached pyside6_essentials-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl (77.4 MB)
+Using cached shiboken6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl (267 kB)
+Using cached dbus_fast-5.2.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (844 kB)
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyserial-3.5-py2.py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/bleak-3.0.2-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/qasync-0.28.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6_addons-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/pyside6_essentials-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/shiboken6-6.11.0-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/py_upper/build/wheels/linux-arm64/dbus_fast-5.2.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
+Successfully downloaded PySide6 pyserial bleak qasync PySide6_Addons PySide6_Essentials shiboken6 dbus-fast
+Qt pruning: removed 506 file(s) and 34 director(ies), freed 274 MB
+Trim (site-packages): removed 10 file(s) and 0 director(ies), freed 2.0 MB
+Third-party optimization: removed 518 files and 35 directories
++ /usr/bin/python3.13 -m pip install --disable-pip-version-check --no-input --target /home/agent/shared_workspace/py_upper/build/host-tools/cython-py3_13 --timeout 120 --retries 10 Cython>=3.1,<3.3
+/usr/bin/python3.13: No module named pip
+ERROR: RuntimeError: Command failed (1): /usr/bin/python3.13 -m pip install --disable-pip-version-check --no-input --target /home/agent/shared_workspace/py_upper/build/host-tools/cython-py3_13 --timeout 120 --retries 10 Cython>=3.1,<3.3

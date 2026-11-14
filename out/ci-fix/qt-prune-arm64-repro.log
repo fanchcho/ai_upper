@@ -1,0 +1,4 @@
+required: ['QtCore', 'QtGui', 'QtWebChannel', 'QtWidgets']
+optional: ['QtWebEngineCore', 'QtWebEngineWidgets']
+Qt pruning: PySide6 has no QtWebEngineCore, QtWebEngineWidgets; the application imports them behind ImportError and starts without
+closure: ['QtCore', 'QtGui', 'QtWebChannel', 'QtWidgets']

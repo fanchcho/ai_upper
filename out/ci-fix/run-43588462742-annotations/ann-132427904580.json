@@ -1,0 +1,26 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/591c7e3d0a38565b3ec9d8e26247a983b541e420/.github",
+    "start_line": 4,
+    "start_column": null,
+    "end_line": 4,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/591c7e3d0a38565b3ec9d8e26247a983b541e420/.github",
+    "start_line": 48,
+    "start_column": null,
+    "end_line": 48,
+    "end_column": null,
+    "annotation_level": "notice",
+    "title": "pytest (exit 0)",
+    "message": "[2704:9752:1114/110833.308:ERROR:../../../qtwebengine/src/3rdparty/chromium/gpu/ipc/service/gpu_channel_manager.cc:931] ContextResult::kFatalFailure: Failed to create shared context for virtualization.",
+    "raw_details": ""
+  }
+]
