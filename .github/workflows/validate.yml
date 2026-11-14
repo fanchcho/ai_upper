@@ -76,8 +76,13 @@ jobs:
             runtime-python: '3.8.10'
             run: true
             # PySide6 6.11 has no cp38 wheel, and this job needs a real GUI
-            # payload; PySide2 still publishes a cp38 win_amd64 wheel.
-            dependencies: '["PySide2==5.15.2.1"]'
+            # payload; PySide2 still publishes a cp38 win_amd64 wheel. The
+            # rest of the pin set has to be spelled out here for the same
+            # reason: the application's own pins in app/requirements.txt
+            # require >=3.10 (pydantic 2.14.3 itself declares Requires-Python
+            # >=3.10), so this entry pins the last cp38-compatible major of
+            # each dependency instead of reusing that list.
+            dependencies: '["PySide2==5.15.2.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1"]'
             # Keep this compatibility build out of the seven-target release
             # manifest: it duplicates windows-x86_64 and is not a release artifact.
             artifact: py38-compat-windows-x86_64
@@ -111,18 +116,39 @@ jobs:
         shell: bash
         env:
           # The application's own dependency set, unless the matrix entry
-          # overrides it because no wheel of it exists for that target.
-          AI_UPPER_CI_DEPENDENCIES: ${{ matrix.dependencies || '["PySide6==6.11.0", "pyserial==3.5", "bleak==3.0.2", "qasync==0.28.0"]' }}
+          # overrides it because no wheel of it exists for that target. The
+          # default is read from app/requirements.txt further below, so this
+          # list cannot drift away from what the application actually imports.
+          AI_UPPER_CI_DEPENDENCIES: ${{ matrix.dependencies }}
           # The template pins the newest supported runtime. The Windows 3.8
           # compatibility entry overrides it to exercise the older runtime line.
           AI_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}
         run: |
           python - <<'PY'
+          import json
           import os
           import re
           from pathlib import Path
 
-          dependencies = os.environ['AI_UPPER_CI_DEPENDENCIES']
+          # The default set is read from app/requirements.txt -- the file the
+          # application itself pins and that the "Install application
+          # dependencies" step installs -- instead of a second hand-written
+          # list in this workflow. The previous inline list was never updated
+          # when the application started importing pydantic / httpx /
+          # cryptography / keyring, so every packaged build in CI bundled a
+          # runtime without pydantic and step 14 died on
+          # "ModuleNotFoundError: No module named 'pydantic'" while the source
+          # test suite was green.
+          def requirements() -> list[str]:
+              pinned = []
+              for line in Path('app/requirements.txt').read_text(encoding='utf-8').splitlines():
+                  entry = line.split('#', 1)[0].strip()
+                  if entry and not entry.startswith('-'):
+                      pinned.append(entry)
+              return pinned
+
+          override = os.environ.get('AI_UPPER_CI_DEPENDENCIES', '').strip()
+          dependencies = override or json.dumps(requirements())
           runtime_python = os.environ['AI_UPPER_CI_RUNTIME_PYTHON']
           text = Path('app/pyproject.toml.example').read_text(encoding='utf-8')
           text, runtime_replaced = re.subn(
@@ -142,6 +168,7 @@ jobs:
           )
           assert dependencies_replaced == 1, 'app/pyproject.toml.example must declare an empty dependencies list'
           Path('app/pyproject.toml').write_text(text, encoding='utf-8')
+          print('packaged dependencies:', dependencies)
           PY
 
       - name: Cache ai_upper build inputs
