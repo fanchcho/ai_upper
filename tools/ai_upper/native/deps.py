@@ -387,7 +387,7 @@ WINDOWS_HOST_LIBRARIES = frozenset({
     # Kernel, CRT and device management.
     "kernel32.dll", "ntdll.dll", "msvcrt.dll", "ucrtbase.dll",
     "advapi32.dll", "rpcrt4.dll",
-    "bcrypt.dll", "ncrypt.dll", "cfgmgr32.dll", "setupapi.dll",
+    "bcrypt.dll", "bcryptprimitives.dll", "ncrypt.dll", "cfgmgr32.dll", "setupapi.dll",
     "winusb.dll", "hid.dll", "winscard.dll",
     # Windows Installer and cabinet APIs used by CPython's _msi extension
     # (the embeddable runtime ships it on Python 3.8-3.12).

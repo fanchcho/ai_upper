@@ -427,6 +427,23 @@ def test_windows_installer_apis_are_system_provided(closure_workspace):
     assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
 
 
+def test_windows_cng_primitives_are_system_provided(closure_workspace):
+    """``bcryptprimitives.dll`` is a System32 DLL like the ``bcrypt.dll`` beside it.
+
+    ``cryptography``'s Rust extension and ``pydantic_core`` both import it, so
+    leaving it out of the host library set makes every Windows package fail the
+    native closure on the two files that only need what the OS already has.
+    """
+    root = closure_workspace
+    _pe(root / "site-packages" / "cryptography" / "hazmat" / "bindings" / "_rust.pyd", ["bcryptprimitives.dll"])
+    _pe(root / "site-packages" / "pydantic_core" / "_pydantic_core.pyd", ["bcryptprimitives.dll"])
+
+    assert deps._system_dependency("bcryptprimitives.dll", TARGETS["windows-x86_64"])
+    assert deps._system_dependency("BCRYPTPRIMITIVES.DLL", TARGETS["windows-arm64"])
+    assert not deps._system_dependency("bcryptprimitives.dll", TARGETS["linux-x86_64"])
+    assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
+
+
 def test_closure_resolves_vc_runtime_from_bundled_python(closure_workspace):
     root = closure_workspace
     extension = _pe(root / "site-packages" / "extension.pyd", ["VCRUNTIME140.dll"])
