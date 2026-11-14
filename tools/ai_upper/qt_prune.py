@@ -55,27 +55,77 @@ def detect_binding(site: Path) -> str | None:
     return None
 
 
-def _imported_modules(path: Path) -> set[str]:
-    """Dotted paths of every module this source file imports.
+# Handlers that turn a failed import into something the application carries on
+# without. ``except ImportError`` is what the sources use; the broader names are
+# included because a bare ``except:`` and ``except Exception:`` swallow the same
+# failure, so the import is just as optional to the running program.
+_IMPORT_ERROR_HANDLERS = {"ImportError", "ModuleNotFoundError", "Exception", "BaseException"}
+
+
+def _catches_import_error(handler: ast.ExceptHandler) -> bool:
+    """Whether this handler lets a failing import go by."""
+    node = handler.type
+    if node is None:  # bare except
+        return True
+    names = []
+    if isinstance(node, ast.Tuple):
+        names = [elt.id for elt in node.elts if isinstance(elt, ast.Name)]
+    elif isinstance(node, ast.Name):
+        names = [node.id]
+    return any(name in _IMPORT_ERROR_HANDLERS for name in names)
+
+
+def _imported_paths(path: Path) -> tuple[set[str], set[str]]:
+    """Dotted import paths in this source file, split by optionality.
 
     ``import a.b`` contributes ``a.b``; ``from a.b import c`` contributes both
     ``a.b`` and ``a.b.c``, because that form imports the module ``c`` when one
     exists. Reading the import statements instead of matching text keeps a
     parenthesised multi-line import from being invisible.
+
+    An import inside a ``try`` whose handlers catch ``ImportError`` is
+    *optional*: the application is written to run without it. PySide6's
+    win_arm64 wheels ship no QtWebEngineCore at all, and ``web_shell_window``
+    imports it exactly that way, so treating every import as mandatory made the
+    packaging layer reject a payload the application itself accepts.
     """
     try:
         tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"), filename=str(path))
     except SyntaxError as exc:
         raise RuntimeError(f"Qt pruning: cannot parse {path}: {exc}") from exc
 
-    modules: set[str] = set()
-    for node in ast.walk(tree):
+    required: set[str] = set()
+    optional: set[str] = set()
+
+    def record(node, guarded: bool) -> None:
+        target = optional if guarded else required
         if isinstance(node, ast.Import):
-            modules.update(alias.name for alias in node.names)
+            target.update(alias.name for alias in node.names)
         elif isinstance(node, ast.ImportFrom) and node.module:
-            modules.add(node.module)
-            modules.update(f"{node.module}.{alias.name}" for alias in node.names)
-    return modules
+            target.add(node.module)
+            target.update("%s.%s" % (node.module, alias.name) for alias in node.names)
+
+    def visit(node, guarded: bool) -> None:
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            record(node, guarded)
+            return
+        if isinstance(node, ast.Try):
+            # Only the try body is protected; a failing import in a handler or
+            # in ``else``/``finally`` is not caught by this statement.
+            protected = guarded or any(_catches_import_error(h) for h in node.handlers)
+            for child in node.body:
+                visit(child, protected)
+            for child in node.orelse + node.finalbody:
+                visit(child, guarded)
+            for handler in node.handlers:
+                for child in handler.body:
+                    visit(child, guarded)
+            return
+        for child in ast.iter_child_nodes(node):
+            visit(child, guarded)
+
+    visit(tree, False)
+    return required, optional
 
 
 def _qt_module_of_import(dotted: str) -> str | None:
@@ -455,29 +505,54 @@ def _allowed_locale(name: str, allowed: frozenset[str] | None) -> bool:
     return False
 
 
-def used_qt_modules(source_root: Path | None = None) -> set[str]:
-    """Qt modules referenced by the application's own Python sources."""
+def qt_module_usage(source_root: Path | None = None) -> tuple[set[str], set[str]]:
+    """Qt modules the application sources name, split into required and optional.
+
+    "Optional" means every import of that module sits in a ``try`` that catches
+    ``ImportError``: the application is written to start without it. A module
+    imported unconditionally somewhere is required, whatever else guards it.
+    """
     root = source_root or (APP / "src")
-    modules: set[str] = set()
+    required: set[str] = set()
+    optional: set[str] = set()
     for path in sorted(root.rglob("*.py")):
-        for dotted in _imported_modules(path):
+        hard, soft = _imported_paths(path)
+        for dotted in hard:
             module = _qt_module_of_import(dotted)
             if module:
-                modules.add(module)
-    return modules
+                required.add(module)
+        for dotted in soft:
+            module = _qt_module_of_import(dotted)
+            if module:
+                optional.add(module)
+    return required, optional - required
 
 
-def _runtime_closure(site: Path, target: Target, modules: set[str]) -> set[str] | None:
+def used_qt_modules(source_root: Path | None = None) -> set[str]:
+    """Every Qt module referenced by the application's own Python sources."""
+    required, optional = qt_module_usage(source_root)
+    return required | optional
+
+
+def _runtime_closure(site: Path, target: Target, modules: set[str], optional=()) -> set[str] | None:
     """Import the modules with the target runtime and return what it loaded.
+
+    ``modules`` are required: a failure is an error. ``optional`` are the ones
+    the application imports behind ``except ImportError``; each is imported
+    best-effort -- when the wheel has it, its transitive closure is kept like
+    any other module, and when the wheel does not (PySide6 ships no
+    QtWebEngineCore for win_arm64), it is reported and skipped instead of
+    failing a build whose product code already runs without it.
 
     ``None`` means the target interpreter cannot run on this host, so the
     closure is unknown and the caller keeps its requested modules untouched
     rather than guessing.
 
-    An interpreter that does start and still fails is reported as an error. Its
-    partial closure is a trap: importing QtWidgets alone never mentions QtCore
-    and QtGui, so the payload those two provide is deleted and the bundle only
-    breaks in the packaged smoke run, far away from the cause.
+    An interpreter that does start and still fails a required import is
+    reported as an error. Its partial closure is a trap: importing QtWidgets
+    alone never mentions QtCore and QtGui, so the payload those two provide is
+    deleted and the bundle only breaks in the packaged smoke run, far away from
+    the cause.
     """
     python = _native_runtime_python(target)
     if python is None:
@@ -485,9 +560,16 @@ def _runtime_closure(site: Path, target: Target, modules: set[str]) -> set[str] 
     binding = detect_binding(site) or "PySide6"
     script = (
         "import importlib, json, sys\n"
+        f"result = {{'loaded': [], 'absent': []}}\n"
         f"for name in {sorted(modules)!r}:\n"
         f"    importlib.import_module('{binding}.' + name)\n"
-        f"print(json.dumps(sorted(m for m in sys.modules if m.startswith('{binding}.'))))\n"
+        f"for name in {sorted(optional)!r}:\n"
+        "    try:\n"
+        f"        importlib.import_module('{binding}.' + name)\n"
+        "    except ImportError:\n"
+        "        result['absent'].append(name)\n"
+        f"result['loaded'] = sorted(m for m in sys.modules if m.startswith('{binding}.'))\n"
+        "print(json.dumps(result))\n"
     )
     # The probe has to import from the staged payload, and nothing else about
     # the child environment is this function's business. A hand-built
@@ -502,14 +584,23 @@ def _runtime_closure(site: Path, target: Target, modules: set[str]) -> set[str] 
     env["PYTHONPATH"] = str(site)
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     probe = subprocess.run([str(python), "-c", script], capture_output=True, text=True, check=False, env=env)
-    requested = ", ".join(sorted(modules))
+    requested = ", ".join(sorted(modules)) or "(none)"
     if probe.returncode != 0:
         detail = probe.stderr.strip() or probe.stdout.strip() or "(no output)"
         raise RuntimeError(f"Qt pruning: {python} cannot import {requested}:\n{detail}")
     try:
-        loaded = json.loads(probe.stdout.strip().splitlines()[-1])
-    except (ValueError, IndexError):
+        result = json.loads(probe.stdout.strip().splitlines()[-1])
+        loaded = result["loaded"]
+        absent = result["absent"]
+    except (ValueError, IndexError, KeyError, TypeError):
         raise RuntimeError(f"Qt pruning: {python} printed no {binding} module list for {requested}")
+    if absent:
+        # Say it out loud. An optional module the wheel lacks is a platform gap
+        # the bundle carries, not something to discover at runtime.
+        print(
+            "Qt pruning: %s has no %s; the application imports %s behind "
+            "ImportError and starts without" % (binding, ", ".join(sorted(absent)), "it" if len(absent) == 1 else "them")
+        )
     return {name.split(".", 1)[1] for name in loaded if name.count(".") == 1}
 
 
@@ -538,18 +629,21 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
             return None
         if setting != "imports":
             raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
-        requested = used_qt_modules()
-        if not requested:
+        requested, optional = qt_module_usage()
+        if not requested and not optional:
             print("Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload")
             return None
     elif isinstance(value, list):
+        # An explicit list is a statement about what to keep, not a reading of
+        # the sources, so nothing in it is optional.
         requested = {str(item).strip() for item in value if str(item).strip()}
+        optional = set()
         if not requested:
             raise RuntimeError("[tool.ai_upper.optimize].qt must not be an empty array")
     else:
         raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
 
-    closure = _runtime_closure(site, target, requested)
+    closure = _runtime_closure(site, target, requested, optional)
     if closure is None:
         # Without the target interpreter the closure cannot be computed, and a
         # guessed subset is what deletes the Qt libraries the application loads

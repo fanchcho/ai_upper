@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -377,7 +378,9 @@ def test_configured_modules_expands_explicit_lists_through_the_closure(tmp_path,
     site = tmp_path / "site-packages"
     _fake_pyside(site)
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {"qt": ["QtWidgets"]})
-    monkeypatch.setattr(qt_prune, "_runtime_closure", lambda site, target, modules: modules | {"QtGui", "QtCore"})
+    monkeypatch.setattr(
+        qt_prune, "_runtime_closure", lambda site, target, modules, optional=None: modules | {"QtGui", "QtCore"}
+    )
     assert qt_prune.configured_modules(TARGETS["macos-arm64"], site) == {"QtWidgets", "QtGui", "QtCore"}
 
 
@@ -409,7 +412,7 @@ def test_configured_modules_reports_a_runtime_that_cannot_import_the_payload(tmp
     # of the staged payload.
     (site / "PySide6" / "__init__.py").write_text("", encoding="utf-8")
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {"qt": "imports"})
-    monkeypatch.setattr(qt_prune, "used_qt_modules", lambda *args, **kwargs: {"QtWidgets"})
+    monkeypatch.setattr(qt_prune, "qt_module_usage", lambda *args, **kwargs: ({"QtWidgets"}, set()))
     monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: Path(sys.executable))
     with pytest.raises(RuntimeError, match="QtWidgets"):
         qt_prune.configured_modules(TARGETS["macos-arm64"], site)
@@ -422,7 +425,7 @@ def test_configured_modules_keeps_the_payload_when_the_target_cannot_run(tmp_pat
     site = tmp_path / "site-packages"
     _fake_pyside(site)
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {"qt": "imports"})
-    monkeypatch.setattr(qt_prune, "used_qt_modules", lambda *args, **kwargs: {"QtWidgets"})
+    monkeypatch.setattr(qt_prune, "qt_module_usage", lambda *args, **kwargs: ({"QtWidgets"}, set()))
     monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: None)
     assert qt_prune.configured_modules(TARGETS["macos-arm64"], site) is None
 
@@ -471,8 +474,8 @@ def test_runtime_closure_probe_inherits_the_host_environment(tmp_path, monkeypat
     def fake_run(cmd, **kwargs):
         recorded["cmd"] = cmd
         recorded["env"] = kwargs["env"]
-        loaded = '["PySide6.QtWidgets", "PySide6.QtCore"]'
-        return subprocess.CompletedProcess(cmd, 0, stdout=f"{loaded}\n", stderr="")
+        loaded = {"loaded": ["PySide6.QtWidgets", "PySide6.QtCore"], "absent": []}
+        return subprocess.CompletedProcess(cmd, 0, stdout=json.dumps(loaded) + "\n", stderr="")
 
     monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: Path(sys.executable))
     monkeypatch.setattr(qt_prune.subprocess, "run", fake_run)
@@ -946,3 +949,137 @@ def test_prune_drops_the_webengine_locale_packs_with_its_module(tmp_path, monkey
     prune(site, TARGETS["macos-arm64"], {"QtCore"})
 
     assert not locales.exists()
+
+
+def test_an_import_guarded_by_importerror_is_optional(tmp_path):
+    """The application runs without it, so the packaging layer must not demand it.
+
+    PySide6's win_arm64 wheels ship no QtWebEngineCore at all, and
+    ``web_shell_window`` imports it behind ``except ImportError`` precisely so
+    the application starts on such a binding. Scanning every import as
+    mandatory made the build fail on a payload the product code accepts.
+    """
+    from ai_upper import qt_prune
+
+    source = tmp_path / "src"
+    source.mkdir()
+    (source / "window.py").write_text(
+        "try:\n"
+        f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+        "except ImportError:\n"
+        "    QtWebEngineCore = None\n"
+        "    QtWebEngineWidgets = None\n"
+        f"from {QT_COMPAT_MODULE} import QtWidgets\n",
+        encoding="utf-8",
+    )
+
+    required, optional = qt_prune.qt_module_usage(source)
+
+    assert required == {"QtWidgets"}
+    assert optional == {"QtWebEngineCore", "QtWebEngineWidgets"}
+
+
+def test_an_unconditional_import_wins_over_a_guarded_one(tmp_path):
+    """One hard import anywhere makes the module required, whatever else guards it."""
+    from ai_upper import qt_prune
+
+    source = tmp_path / "src"
+    source.mkdir()
+    (source / "optional.py").write_text(
+        "try:\n"
+        f"    from {QT_COMPAT_MODULE} import QtGui\n"
+        "except ImportError:\n"
+        "    QtGui = None\n",
+        encoding="utf-8",
+    )
+    (source / "required.py").write_text(f"from {QT_COMPAT_MODULE} import QtGui\n", encoding="utf-8")
+
+    required, optional = qt_prune.qt_module_usage(source)
+
+    assert required == {"QtGui"}
+    assert optional == set()
+
+
+def test_a_bare_except_hides_a_failed_import_just_as_well(tmp_path):
+    """``except:`` and ``except Exception:`` protect the import too.
+
+    Only the try body is protected: an import in the handler body runs when the
+    try body failed, and is not caught by the same statement.
+    """
+    from ai_upper import qt_prune
+
+    source = tmp_path / "src"
+    source.mkdir()
+    (source / "window.py").write_text(
+        "try:\n"
+        f"    from {QT_COMPAT_MODULE} import QtGui\n"
+        "except Exception:\n"
+        f"    from {QT_COMPAT_MODULE} import QtCore\n",
+        encoding="utf-8",
+    )
+
+    required, optional = qt_prune.qt_module_usage(source)
+
+    assert required == {"QtCore"}
+    assert optional == {"QtGui"}
+
+
+def test_the_application_imports_qt_webengine_optionally():
+    """Pin the product contract this scanner has to agree with.
+
+    ``app/src/mvvm/views/web_shell_window.py`` guards WebEngine behind
+    ImportError; if that ever becomes unconditional the arm64 wheel genuinely
+    cannot run, and the build should say so rather than quietly prune.
+    """
+    from ai_upper import qt_prune
+
+    required, optional = qt_prune.qt_module_usage()
+
+    assert "QtWidgets" in required
+    assert {"QtWebEngineCore", "QtWebEngineWidgets"} <= optional
+    assert not ({"QtWebEngineCore", "QtWebEngineWidgets"} & required)
+
+
+def test_runtime_closure_skips_only_the_optional_module_the_wheel_lacks(tmp_path, monkeypatch, capsys):
+    """Required modules are still hard; a missing optional one is reported.
+
+    Both halves matter. Failing on the optional module reproduces the arm64
+    failure; silently ignoring a missing *required* module would prune the
+    payload down to modules that are not there and only break at runtime.
+    """
+    from ai_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = site / "PySide6"
+    pyside.mkdir(parents=True)
+    (pyside / "__init__.py").write_text("", encoding="utf-8")
+    (pyside / "QtCore.py").write_text("", encoding="utf-8")
+    (pyside / "QtWidgets.py").write_text("import PySide6.QtCore\n", encoding="utf-8")
+    (pyside / "QtWebChannel.py").write_text("", encoding="utf-8")
+    monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: Path(sys.executable))
+
+    closure = qt_prune._runtime_closure(
+        site,
+        TARGETS["macos-arm64"],
+        {"QtWidgets"},
+        {"QtWebChannel", "QtWebEngineCore"},
+    )
+
+    assert closure == {"QtWidgets", "QtCore", "QtWebChannel"}
+    out = capsys.readouterr().out
+    assert "QtWebEngineCore" in out, "an optional module missing from the wheel must be reported"
+    assert "QtWebChannel" not in out.split("has no", 1)[1].split(";", 1)[0]
+
+
+def test_runtime_closure_still_errors_for_a_missing_required_module(tmp_path, monkeypatch):
+    from ai_upper import qt_prune
+
+    site = tmp_path / "site-packages"
+    pyside = site / "PySide6"
+    pyside.mkdir(parents=True)
+    (pyside / "__init__.py").write_text("", encoding="utf-8")
+    (pyside / "QtCore.py").write_text("", encoding="utf-8")
+    monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: Path(sys.executable))
+
+    with pytest.raises(RuntimeError, match="QtWebEngineCore"):
+        qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
