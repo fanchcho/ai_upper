@@ -37,6 +37,7 @@ from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.settings_service import SettingsService
 from mvvm.services.skill_store import SkillStore
 from mvvm.services.workspace_guard import WorkspaceGuard
+from utils.platform_name import runtime_platform
 
 # 后台任务通知前缀，与 Deva `main/services/compaction.ts` 的 NOTIFY_MARKER 同值。
 NOTIFY_MARKER = "⟦deva:notify⟧"
@@ -295,7 +296,7 @@ class DevaBridge(QObject):
         self.register("window:toggle-maximize", self._window_action("toggle_maximize"))
         self.register("window:close", self._window_action("close"))
         self.register("window:is-fullscreen", self._window_action("is_fullscreen"))
-        self.register("app:get-platform", lambda: "linux")
+        self.register("app:get-platform", runtime_platform)
 
         self.register("clipboard:read-text", self._clipboard_read)
         self.register("clipboard:write-text", self._clipboard_write)

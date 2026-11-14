@@ -269,12 +269,15 @@ def test_shell_window_builds_with_overlay(qapp, tmp_path, monkeypatch):
 def test_shell_shim_source_substitutes_placeholders(tmp_path):
     """shim 里两个占位符必须被替换掉；漏一个渲染层就拿到不是 JSON 的配置。"""
     from mvvm.views.web_shell_window import DevaWebWindow
+    from utils.platform_name import runtime_platform
 
     source = DevaWebWindow._shim_source({"theme": "light"})
     assert "__CONFIG_JSON__" not in source
     assert "__PLATFORM__" not in source
     assert '"theme": "light"' in source
-    assert "'linux'" in source
+    # 渲染层按 Electron 的拼写判断平台（'darwin' / 'win32' / 'linux'）；这里钉的
+    # 是「注入的是本机平台」，不是某台机器恰好是 linux。
+    assert f"'{runtime_platform()}'" in source
 
 
 # ── 空态通道：形状与契约一致（不是「占位式成功」）─────────────────────────
@@ -305,9 +308,12 @@ def test_remote_state_is_bots_only(qapp, tmp_path):
 
 
 def test_app_platform_matches_shim(qapp, tmp_path):
-    """`app:get-platform` 恒回 'linux'，与 shim 注入的 `__PLATFORM__` 同值。"""
+    """`app:get-platform` 与 shim 注入的 `__PLATFORM__` 同值，且是本机平台。"""
     from mvvm.views.web_shell_window import DevaWebWindow
+    from utils.platform_name import runtime_platform
 
     bridge = _make_bridge(tmp_path)
-    assert bridge._handlers["app:get-platform"]() == "linux"
-    assert "'linux'" in DevaWebWindow._shim_source({})
+    current = runtime_platform()
+    assert current in {"linux", "darwin", "win32"}
+    assert bridge._handlers["app:get-platform"]() == current
+    assert f"'{current}'" in DevaWebWindow._shim_source({})

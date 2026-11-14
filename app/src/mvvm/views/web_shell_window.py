@@ -38,6 +38,7 @@ from mvvm.views.title_bar_overlay import TITLEBAR_HEIGHT, TitleBarOverlay
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from mvvm.webui.bridge import DevaBridge
 from utils.paths import app_name, assets_root
+from utils.platform_name import runtime_platform
 
 # 回合线程攒下的界面写入（busy / status / streaming）由 GUI 线程周期性 drain。
 DRAIN_INTERVAL_MS = 50
@@ -219,7 +220,7 @@ class DevaWebWindow(QMainWindow):
         source = (assets_dir() / "shim.js").read_text(encoding="utf-8")
         return (
             source.replace("__CONFIG_JSON__", json.dumps(config, ensure_ascii=False))
-            .replace("__PLATFORM__", "linux")
+            .replace("__PLATFORM__", runtime_platform())
         )
 
     def _toggle_maximize(self) -> None:
