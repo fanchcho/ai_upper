@@ -389,6 +389,14 @@ WINDOWS_HOST_LIBRARIES = frozenset({
     "advapi32.dll", "rpcrt4.dll",
     "bcrypt.dll", "bcryptprimitives.dll", "ncrypt.dll", "cfgmgr32.dll", "setupapi.dll",
     "winusb.dll", "hid.dll", "winscard.dll",
+    # Web Bluetooth. Qt 6.6's Qt6WebEngineCore.dll imports BluetoothApis.dll
+    # from System32 directly (a load-time import, not delay-loaded): it is the
+    # OS implementation of the Web Bluetooth API, and Chromium in that Qt
+    # generation links it unconditionally. Qt 6.11 dropped the import, so only
+    # the cp38-compatible PySide6 6.6.3 exposes it. Same class as hid.dll and
+    # winusb.dll above -- the OS keeps it updated, so bundling a copy would
+    # ship a stale one.
+    "bluetoothapis.dll",
     # Windows Installer and cabinet APIs used by CPython's _msi extension
     # (the embeddable runtime ships it on Python 3.8-3.12).
     "msi.dll", "cabinet.dll",
