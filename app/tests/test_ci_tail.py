@@ -235,3 +235,65 @@ def test_ci_tail_runs_on_the_oldest_ci_interpreter():
     # 3.9+/3.10+ construct slips into a file the 3.8 job imports.
     assert "=}" not in source
     assert not any(line.strip().startswith("match ") for line in source.splitlines())
+
+
+def test_a_diagnostic_keeps_the_detail_indented_under_it(capsys, tmp_path):
+    """The header names the failure class; the indented lines name the library.
+
+    ``ERROR: RuntimeError: Unresolved native dependencies:`` under an
+    ``[4/6]`` stage is all a header-only picker reported for the windows-x86_64
+    build, and the six files it could not resolve -- the actual cause -- were
+    in the indented lines below it.
+    """
+    log = tmp_path / "build.log"
+    log.write_text(
+        "\n".join(
+            [
+                "[4/6] Package + native dependency closure",
+                "ERROR: RuntimeError: Unresolved native dependencies:",
+                "  site-packages/PySide6/plugins/sqldrivers/qsqlmysql.dll: libmysql.dll",
+                "  site-packages/PySide6/plugins/sqldrivers/qsqlpsql.dll: libpq.dll",
+                ">>> closing",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    rc = tmp_path / "build.exitcode"
+    rc.write_text("1\n", encoding="utf-8")
+
+    ci_tail.main(
+        [
+            "--log",
+            str(log),
+            "--title",
+            "build.py (exit 1)",
+            "--exit-code-file",
+            str(rc),
+            "--label",
+            "build.log",
+        ]
+    )
+
+    out = capsys.readouterr().out
+    assert "libmysql.dll" in out
+    assert "libpq.dll" in out
+    # The detail rides with its header, not as a separate annotation.
+    assert out.count("=>") == 0
+    assert "::error title=build.py (exit 1)::ERROR: RuntimeError" in out
+
+
+def test_an_unindented_line_ends_the_detail_block():
+    """Detail collection must stop before swallowing the next statement."""
+    lines = [
+        "ERROR: RuntimeError: Unresolved native dependencies:",
+        "  a.dll: b.dll",
+        "and now something else entirely",
+        "Traceback (most recent call last):",
+    ]
+
+    found = ci_tail.diagnostic_lines(lines)
+
+    assert found == [
+        "ERROR: RuntimeError: Unresolved native dependencies:\n  a.dll: b.dll",
+        "Traceback (most recent call last):",
+    ]

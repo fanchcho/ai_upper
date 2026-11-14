@@ -76,19 +76,53 @@ def read_log_lines(path):
         return None
 
 
-def diagnostic_lines(lines, limit=8):
-    """Return the last ``limit`` distinct lines that look like diagnostics."""
+def diagnostic_lines(lines, limit=8, continuation_limit=40):
+    """Return the last ``limit`` distinct diagnostics, each with its detail.
+
+    A diagnostic is often a header plus indented detail: build.py prints
+    ``ERROR: RuntimeError: Unresolved native dependencies:`` and then one
+    ``  <file>: <library>`` line per unresolved dependency. Emitting the header
+    alone names the class of failure and withholds the only part that says
+    which library. The indented continuation lines are carried with it.
+    """
     patterns = [re.compile(p, re.IGNORECASE) for p in DIAGNOSTIC_PATTERNS]
     picked = []
     seen = set()
-    for line in lines:
-        stripped = line.strip()
+    index = 0
+    while index < len(lines):
+        stripped = lines[index].strip()
+        index += 1
         if not stripped or stripped in seen:
             continue
-        if any(pattern.search(stripped) for pattern in patterns):
-            picked.append(stripped)
-            seen.add(stripped)
+        if not any(pattern.search(stripped) for pattern in patterns):
+            continue
+        seen.add(stripped)
+        block = [stripped]
+        while index < len(lines) and len(block) <= continuation_limit:
+            follow = lines[index]
+            # Detail belongs to the diagnostic above it; the next unindented
+            # line is a new statement and ends the block.
+            if not follow.strip() or not follow[:1].isspace():
+                break
+            block.append(follow.rstrip())
+            index += 1
+        picked.append(_fit_block(block))
     return picked[-limit:]
+
+
+def _fit_block(block):
+    """Join a diagnostic with its detail, keeping the block inside the budget.
+
+    The header comes first and GitHub keeps the front of an over-long message,
+    so the header would survive a truncation -- but the detail is the part
+    worth reading, and a second annotation is not needed for it.
+    """
+    kept = [block[0]]
+    for line in block[1:]:
+        if len(escape_command_message("\n".join(kept + [line]))) > MESSAGE_BUDGET:
+            break
+        kept.append(line)
+    return "\n".join(kept)
 
 
 def last_stage(lines):
