@@ -91,8 +91,9 @@ $ git branch -vv
 `deva` 工程（`/home/agent/shared_workspace/deva`）全程只读，未写入任何文件。
 
 **本轮中断点（若被截断从这里续）：** 界面七页实拍全部判定「已一致」（§1.11）；
-全量测试 `845 passed, 5 skipped`；收口报告见 `docs/STAGE5-CLOSEOUT-REPORT.md`。
-尚未完成：把新界面的写路径接通、158 通道结论表、打包入口指向 Web 承载窗口并真实构建。
+158 条通道判定表已生成（`docs/audit/IPC-158-LEDGER.md`：通过 60 / 已知差异 5 / 未实现 93）；
+打包入口已切到 `deva_web.py` 并真实构建、真实启动成功（§1.14）。
+当前未完成的只剩档二/档三里点名的项（真实网络、真桌面观感、非 linux-arm64 目标等）。
 
 ### 0.5 第六阶段起点（功能测试：写路径 + 158 条结论表）
 
@@ -837,6 +838,117 @@ EVIDENCE {"tag": "requests-total", "count": 0}
 - `chat:ask-response` / `chat:plan-response` / `chat:mount-response`：**未实现**——
   没有交互请求注册表与计划/挂载边车，`ask_user` 工具也不存在。本节没有把它们算作通过。
 
+### 1.14 打包：入口切到 Web 承载窗口，linux-arm64 构建 + 产物启动实测
+
+结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+`EXIT=0`，产物 headless 启动打印 `DEVA WEB OK … bridge=True`、`EXIT=0`。
+Windows / macOS 目标本轮**未构建**（见 §2）。
+
+#### 1.14.1 入口与资产
+
+| 改动 | 文件 | 要点 |
+|---|---|---|
+| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+| 包装配置 | `app/pyproject.toml.example`、`app/pyproject.toml` | `[tool.py_upper] entry = "deva_web.py"`；构建期验证行 `PASS entry module Cythonized: deva_web`（`out/packaging/build8.log:176`） |
+| 资产入产物 | `tools/py_upper/package.py` | `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；linux/windows 落 bundle 根，macOS 落 `Contents/Resources` |
+| 资产定位 | `app/src/utils/paths.py` | 新增 `assets_root()`，以 launcher 导出的 `PY_UPPER_HOME` 为准，再退到 `_project_root()`、`sys.executable` 目录——不再靠 `parents[3]` 计数（Cython 合并 + egg 后不可靠） |
+| 调用点 | `web_shell_window.py`、`persona_store.py` | `ASSETS_DIR = assets_root() / "renderer"`；角色资产走 `assets_root() / "personas"` |
+
+#### 1.14.2 构建命令与结果（原始）
+
+```text
+$ cd /home/agent/shared_workspace/py_upper && PATH=/tmp/ninja-bin:/tmp/buildtools/patchelf/bin:$PATH \
+    PY_UPPER_PYTHON=/home/agent/shared_workspace/py_upper/.venv/bin/python-real \
+    .venv/bin/python tools/build.py build --target linux-arm64
+[1/6] Runtime + SDK
+[2/6] Third-party dependencies
+Third-party optimization: removed 559 files and 36 directories
+[3/6] Target launcher
+[4/6] Package + native dependency closure
+[5/6] Static verification
+SMOKE PASS 5 modules (launcher registers merged bundles)
+[6/6] Target runtime smoke
+SMOKE PASS launcher
+READY: /home/agent/shared_workspace/py_upper/dist/Upper
+EXIT=0
+```
+
+完整日志：`out/packaging/build8.log`。构建机需要 `cmake`、`ninja`、`patchelf`；
+本机 `patchelf` 不在 `/usr/bin`，装在 `/tmp/buildtools/patchelf/bin` 后经 `PATH` 传入。
+
+产物绝对路径：**`/home/agent/shared_workspace/py_upper/dist/Upper`**（499 MB）。
+
+#### 1.14.3 产物内容核对（原始命令与输出）
+
+```text
+$ find dist/Upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+dist/Upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+dist/Upper/site-packages/PySide6/QtWebChannel.abi3.so
+dist/Upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+
+$ diff -rq app/assets/renderer dist/Upper/assets/renderer && echo IDENTICAL
+IDENTICAL
+
+$ ls dist/Upper/assets
+personas
+renderer
+
+$ ls dist/Upper/assets/personas | head -3
+general.md
+xiaomajiang.md
+
+$ strings dist/Upper/Upper | grep -c "from deva_web import main"
+1
+```
+
+完整输出：`out/packaging/bundle-check8.log`。注意 `.so` 只有模块包装层，
+真正的 `libQt6WebEngineCore.so.6` 在 `site-packages/PySide6/Qt/lib/` 下，
+由 native 闭包一起搬入。
+
+#### 1.14.4 产物启动实测（headless/offscreen）
+
+```text
+$ rm -rf /tmp/pack-smoke && mkdir -p /tmp/pack-smoke
+$ DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen timeout 180 ./dist/Upper/Upper
+…
+DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/Upper/assets/renderer/index.html bridge=True
+EXIT=0
+```
+
+完整日志：`out/packaging/launch8.log`。`DEVA_APP_HEADLESS=1` 走的是 `deva_web.run()` 的
+冒烟分支：等 `loadFinished`，再 `runJavaScript("!!(window.deva && window.deva.chat)")`；
+只有加载成功且桥对象在位才打印 `OK`，否则打印 `DEVA WEB FAILED …` 并返回 1。
+
+日志里仍可见的两条**非致命**输出，不冒充通过、也不影响结论：
+
+- `Failed to connect to the bus: … /run/dbus/system_bus_socket`——容器没有 D-Bus；
+- `GPUInfo not initialized on GpuInfoUpdate`——`--disable-gpu` 软渲染下 Chromium 的常规提示。
+
+#### 1.14.5 真跑产物才暴露的三个缺陷（源码态测试全绿，均已修 + 回归测试）
+
+1. **pydantic × Cython 方法类型**：合并 bundle 把 `Message.text` 编成
+   `cython_function_or_method`，pydantic 2.14 只按 `types.FunctionType` 等忽略方法，
+   产物一启动即 `PydanticUserError: A non-annotated attribute was detected`。
+   修：`chat_models._Model.model_config` 加 `ignored_types=_method_types()`。
+2. **`QtWebEngineProcess` 丢失 execute 位**：`third_party._extract_wheel()` 用
+   `write_bytes()` 落盘，umask 抹成 0o644；wheel 在 `external_attr` 里记录的是 `0o100755`。
+   产物启动日志 `LaunchProcess: failed to execvp: …/QtWebEngineProcess`，窗口空白。
+   修：解包后按 wheel 记录的 mode 补 execute 位（`_apply_wheel_mode`），
+   回归测试 `test_wheel_execute_bits_survive_extraction`。**pip 安装会应用 mode，
+   所以 site-packages 里一直是好的**——这正是源码态看不出来的原因。
+3. **Chromium locale pak 被当 Qt 翻译删掉**：`qtwebengine_locales/`（53 个 `.pak`）
+   不符合 `qt_`/`qtbase_` 形状，被翻译裁剪整目录删除，每次启动都打印
+   `could not find the translation file for the current locale: en-US.pak`。
+   修：该目录按 `QtWebEngineCore` 归属判定，并单独走 `qt_locales` 允许清单
+   （`zh_CN` ↔ `zh-CN` 双向归一，`en-US` 作回退恒留）；三条回归测试覆盖保留/裁剪/随模块消失。
+
+另有一个**构建期**缺陷：`httpx` 被 `http_client.py` 与 `tool_runtime.py` 直接 import，
+却没写进 `[project].dependencies`，产物装配阶段 `ModuleNotFoundError`。
+修：`app/pyproject.toml` 与 `app/requirements.txt` 都补 `httpx==0.28.1`；
+新增 `test_every_third_party_import_is_a_declared_runtime_dependency()` 用 AST 扫
+`app/src` 的顶层第三方 import，与 `requirements.txt` 比对，以后再漏声明会直接红灯。
+（该次启动的原始日志未落盘，只有终端输出；判据以上述两处 import 与修复后的声明为准。）
+
 ---
 
 ## 2 档二：已实现未验证
@@ -848,7 +960,8 @@ EVIDENCE {"tag": "requests-total", "count": 0}
 | Web 承载窗口在真桌面（真显卡、HiDPI、Wayland）下的观感 | 已在 Xvfb 软渲染下实拍七页并与原版逐像素比对（§1.11） | 容器只有 Xvfb。真显卡/缩放的合成差异无法在容器验证；截图结论只对 `1400x900x24 + 软渲染` 这一配置成立 |
 | `titleBarOverlay` 的窗口控制（最小化/最大化/关闭真实生效） | 叠加层画得与原版一致，按钮几何有测试 | 截图对比只能证明**画对**，证明不了**点了有效**；Xvfb 无窗口管理器，最小化/最大化行为需要真桌面验 |
 | 深色主题下的七页对比 | 叠加层深色切换有单测（`OVERLAY_BG_DARK`） | 只实拍了浅色七页；深色需要原版切主题再拍一轮，本轮时间不够 |
-| 打包后产物能起 Web 承载窗口 | 打包裁剪已保留 `QtWebEngineCore`/`QtWebChannel`（`qt_prune.used_qt_modules` 扫得到），入口尚未切到 Web 窗口 | 见 §3；入口没切之前，打包产物跑的仍是 Qt 原生窗口 |
+| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/Upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+| Windows / macOS 打包产物 | 同一套 `package()` / `qt_prune` 代码路径，有单测覆盖两平台的目录布局 | **未构建、未启动**。`qt_prune` 保留了 `QtWebEngineProcess.exe` 与 `qtwebengine_locales` 的 Windows 布局，但没有真产物证据；不许拿 linux 结果冒充 |
 | 流式刷新在真窗口里的观感（40ms 节流） | 逻辑与假控件都有测试 | 需要长回复 + 真人观察；Xvfb 能跑但看不出手感 |
 | 技能目录里**自定义**技能的排序 | 按 `casefold()` 排，ASCII 名与原版 `localeCompare` 等价 | 非 ASCII 名（中文）在 `localeCompare` 默认 ICU 排序下与 `casefold()` 可能不同，未实拍对比 |
 
@@ -856,12 +969,43 @@ EVIDENCE {"tag": "requests-total", "count": 0}
 
 | 项 | 原因 | 风险 |
 |---|---|---|
-| 158 通道逐条结论表 | 本轮时间用尽（用户已明确「时间不够就只把阻塞原因写准，不要虚报」） | 迁移契约尚未闭环；`docs/MIGRATION-PLAN.md` 仍是逐条清单，没有判定列。桥接层已实现的是渲染层实际调用的那一批通道（`config:*` / `chat:*` / `skills:*` / `browser:state` / `window:set-overlay`），其余通道在桥边界显式 reject（不假成功），但**没有逐条列出「已落地 / 不适用 / 阻塞」的结论表** |
-| 打包入口指向 Web 承载窗口并真实构建一次 | 同上，本轮未做 | 当前 `deva_app` 入口起的仍是 Qt 原生窗口；Web 窗口只能经 `scripts/parity/port_run.py` 启动。打包产物因此**没有**被证明能起新界面 |
+| ~~158 通道逐条结论表~~ | **已生成**，见 `docs/audit/IPC-158-LEDGER.md`（158 行 = 154 `ipcMain.handle` + 4 `ipcMain.on`；判定 **通过 60 / 已知差异 5 / 不适用 0 / 未实现 93**；桥内注册 64 条，每行有 `文件:行号` 与测试名）。它不再是档三项——**未实现的 93 条**才是档三内容，逐条列在 §3.1 | — |
 | ~~聊天/工具/待办等**写路径**通道接通~~ | **第六阶段已落地**，见 §1.12 | — |
 | 工作区挂载交互轮 | Deva 的挂载卡是交互轮唯一闸门，py_upper 改为启动时 `DEVA_APP_WORKSPACE` | 运行中不能换工作区；需要做挂载卡才能对齐 |
 | 子智能体 / `task` 类工具（Deva 19 工具里的 9 个） | 依赖挂载工作区与多轮编排，未迁移 | 模型拿不到这几个工具时会退化为单轮 |
 | 真机人工验收（键盘焦点、IME、拖拽） | 容器无显示服务器 | 只能由人验 |
+
+### 3.1 158 条里未实现的 93 条，按域分组
+
+逐条明细（入参/出参/原版位置/阻塞原因）在 `docs/audit/IPC-158-LEDGER.md`，这里只汇总条数，
+避免两处数字打架。**总数 158 = 通过 60 + 已知差异 5 + 不适用 0 + 未实现 93。**
+
+| 域 | 通道数 | 通过 | 已知差异 | 未实现 | 说明 |
+|---|---|---|---|---|---|
+| `chat:` | 31 | 18 | 0 | 13 | 缺 `ask-response` / `plan-response` / `mount-response` 等交互审批类（无待答注册表）及部分边车 |
+| `git:` | 24 | 0 | 0 | 24 | 整域未移植（原版走 `git.ts` 直接起子进程） |
+| `browser:` | 16 | 0 | 3 | 13 | 内置浏览器（Electron BrowserView）未移植；3 条返回契约形状的空态 |
+| `remote:` | 10 | 0 | 1 | 9 | 飞书/Telegram 机器人接入未移植，`get-state` 回 `{bots:[]}` |
+| `mcp:` | 9 | 0 | 0 | 9 | MCP 客户端未移植 |
+| `fs:` | 9 | 9 | 0 | 0 | 全部通过 |
+| `tasks:` | 8 | 0 | 0 | 8 | 待办仅 `chat:todos` 读路径通，独立 tasks 域未建 |
+| `personas:` | 8 | 8 | 0 | 0 | 全部通过 |
+| `window:` | 5 | 5 | 0 | 0 | 全部通过 |
+| `skills:` | 6 | 5 | 0 | 1 | 差 1 条（见台账） |
+| `terminal:` | 5 | 0 | 0 | 5 | xterm 终端未移植 |
+| `secrets:` | 5 | 5 | 0 | 0 | 全部通过 |
+| `update:` | 4 | 0 | 1 | 3 | 自动更新（electron-updater）未移植，`get-state` 恒 `{phase:'idle'}` |
+| `memory:` | 4 | 0 | 0 | 4 | 记忆域未移植 |
+| `deliverables:` | 4 | 0 | 0 | 4 | 交付物域未移植 |
+| `config:` | 3 | 3 | 0 | 0 | 全部通过（含 `config:get-sync` 在 shim 里） |
+| `profile:` | 3 | 3 | 0 | 0 | 全部通过 |
+| `clipboard:` | 2 | 2 | 0 | 0 | 全部通过 |
+| `provider:` | 1 | 1 | 0 | 0 | 通过 |
+| `app:` | 1 | 1 | 0 | 0 | 通过 |
+| **合计** | **158** | **60** | **5** | **93** | |
+
+这 93 条不是「写了但没测」，而是**桥里没有注册**：调用会显式 reject（`UnimplementedChannel`），
+不会假成功。逐条的阻塞原因写在台账「实测结果」列。
 
 ## 4. commit 列表
 
@@ -895,6 +1039,18 @@ EVIDENCE {"tag": "requests-total", "count": 0}
 | `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
 | `06841f9` | test(webui): 修好全量测试的红灯，豁免项补真实 binding 覆盖 |
 | `64a8402` | chore(assets): 补齐首启种子角色文件 |
+| `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
+| `06841f9` | test(webui): 修好全量测试的红灯，豁免项补真实 binding 覆盖 |
+| `4f53a1e` | feat(ext): 技能服务（内置元技能 + 自定义目录 + frontmatter 解析） |
+| `8e78123` | docs: 第五阶段收口数据复核（845 passed / 桥接假成功清理入账） |
+| `0e0dcb1` | docs: 第六阶段起点对账落盘（HEAD/未跟踪/契约条目/850 collected/845 passed） |
+| `5a0d87b` | docs(audit): 158 条 IPC 通道逐条结论表（机器生成 + 桥内注册交叉校验） |
+| `c528169` | feat(webui): 接通对话与设置写通道，Web 承载窗口可真实发送并流式回复 |
+| `fbccf2e` | fix(webui): 附件链路接通真实对话框，桥与宿主共用一份白名单 |
+| `20dccf1` | docs(audit): 158 条通道判定按真实注册重算（通过 60 / 已知差异 5 / 未实现 93） |
+| `25f2f22` | docs(audit): 158 条判定表按当前桥内注册重生成（通过 60 / 已知差异 5 / 未实现 93） |
+| `b0727b7` | docs(audit): 补 §1.13 四项交互实跑记录与原始证据 |
+| `9384804` | feat(package): 打包产物起真实 Web 界面，入口切到 deva_web（§1.14） |
 
 ## 5. 下一轮入口
 
@@ -902,21 +1058,30 @@ EVIDENCE {"tag": "requests-total", "count": 0}
 
 ```text
 $ git branch -vv
-* develop e289b45 [origin/develop: ahead 18]
+* develop 9384804 [origin/develop: ahead 27]
   main    f91562b [upstream/main] Initial commit
 
 $ cd app && ../.venv/bin/python -m pytest -q
-845 passed, 5 skipped in 21.51s
+938 passed, 6 skipped in 22.66s
+
+$ PATH=/tmp/buildtools/patchelf/bin:$PATH ../.venv/bin/python -m pytest -q
+939 passed, 5 skipped in 22.86s
 ```
+
+两次的差别只有一条：`test_native_deployment.py:177` 在找不到 `patchelf` 时跳过，
+把 `patchelf` 放进 `PATH` 后它变绿。构建机本来就要求 `patchelf`（§1.14.2），
+所以**以 939 passed / 5 skipped 为基线**；剩下 5 条 skip 的原因分别是 Windows 专属
+（2 条）、需 `PY_UPPER_E2E=1` 跑完整本地构建（2 条）、需真 provider 密钥（1 条）。
+原始日志：`out/packaging/pytest-full.log`、`out/packaging/pytest-full-patchelf.log`。
 
 按优先级：
 
-1. **把新界面的写路径接上**（最大功能缺口）：`chat:send` / `chat:cancel` / `chat:answer`
-   等通道接到 `ChatViewModel`，让 Web 承载窗口能真发消息；这是 §3 第三行。
-2. 158 通道结论表（唯一硬缺口）：重写项给「通道 → 新实现文件:行号 → 覆盖测试」；
-   逐条判定已落地 / 不适用 / 阻塞。
-3. 打包：入口指向 `web_shell_window.DevaWebWindow` 并实际构建一次
-   （linux-arm64 跑通后，Windows/macOS 仍未验）。
-4. 深色主题七页对比 + 窗口控制按钮的真实生效验证（需真桌面）。
-5. 工作区挂载交互轮（对齐 Deva 的挂载卡），完成后才能谈子智能体类工具。
-6. 真实密钥接上后跑一次三协议真实请求，把 §2 第一行落到档一。
+1. **Windows / macOS 目标真构建一次**：同一套 `package()` / `qt_prune` 代码路径已有单测，
+   但没有真产物证据（§2）。这是打包链路上唯一剩下的档二项。
+2. 深色主题七页对比 + 窗口控制按钮的真实生效验证（需真桌面）。
+3. 工作区挂载交互轮（对齐 Deva 的挂载卡），完成后才能谈子智能体类工具。
+4. 真实密钥接上后跑一次三协议真实请求，把 §2 第一行落到档一。
+5. 158 条里未实现的 93 条按 §3.1 的分域推进（git / tasks / memory / mcp 是最大的四块）。
+
+~~把新界面的写路径接上~~、~~158 通道结论表~~、~~打包入口指向 Web 承载窗口~~ 三项已完成
+（分别见 §1.12、`docs/audit/IPC-158-LEDGER.md`、§1.14），不再列为下一轮入口。
