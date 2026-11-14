@@ -1,8 +1,11 @@
 # windows-x86_64 3.8.10 收尾报告（第二轮）
 
-HEAD 在本次提交前为 `7476558`（develop）。本报告取代上一版
-`py38-closeout-report.md` 里「**是**：…已修好」的结论——那一版与远端实际结果不符，
-见 `py38-authoritative-run-failure.md`。
+本报告取代上一版 `py38-closeout-report.md` 里「**是**：…已修好」的结论——那一版与
+远端实际结果不符，见 `py38-authoritative-run-failure.md`。
+
+提交序列（本轮，均已推送 develop）：
+`158a36c` fix(py38) → `c49161b` build(py38) → `28aeec5` test(py38) →
+`289749b` chore(evidence) → `d44fac5`/`b7d00c2` docs/evidence 补正。
 
 ## 一句话结论
 
