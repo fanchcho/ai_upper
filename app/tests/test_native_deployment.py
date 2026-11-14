@@ -460,6 +460,25 @@ def test_windows_uniscribe_is_system_provided(closure_workspace):
     assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
 
 
+def test_windows_web_bluetooth_is_system_provided(closure_workspace):
+    """``BluetoothApis.dll`` is the System32 implementation of Web Bluetooth.
+
+    PySide6 6.6.3 -- the last cp38-compatible release -- ships a
+    ``Qt6WebEngineCore.dll`` that imports it at load time. Qt 6.11 dropped the
+    import, so only the compatibility entry sees it, but the closure is shared:
+    a missing host entry fails ``[4/6] Package + native dependency closure``
+    before the app is ever launched.
+    """
+    root = closure_workspace
+    _pe(root / "site-packages" / "PySide6" / "Qt6WebEngineCore.dll", ["BluetoothApis.dll"])
+
+    assert deps._system_dependency("bluetoothapis.dll", TARGETS["windows-x86_64"])
+    assert deps._system_dependency("BLUETOOTHAPIS.DLL", TARGETS["windows-arm64"])
+    assert not deps._system_dependency("bluetoothapis.dll", TARGETS["linux-x86_64"])
+    assert not deps._system_dependency("bluetoothapis.dll", TARGETS["macos-arm64"])
+    assert bundle.bundle_native_dependencies(root, TARGETS["windows-x86_64"]) == []
+
+
 def test_closure_resolves_vc_runtime_from_bundled_python(closure_workspace):
     root = closure_workspace
     extension = _pe(root / "site-packages" / "extension.pyd", ["VCRUNTIME140.dll"])
