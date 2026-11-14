@@ -44,8 +44,8 @@ header() { # "$1" = file, "$2" = title
   cat >"$1" <<EOF
 ### $2
 # 守卫：pytest app/tests/test_py38_compat.py（CPython $($PY313 -V 2>&1 | cut -d' ' -f2)）
-# 真 3.8：$PY38（$($PY38 -V 2>&1 | cut -d' ' -f2)；pydantic/pydantic versions in py38-mutation-env.log）
-# 生成：/tmp/mutate_all.sh
+# 真 3.8：$PY38（$($PY38 -V 2>&1 | cut -d' ' -f2)；pydantic / typing_extensions 版本见 py38-mutation-env.log）
+# 生成：out/ci-fix/closeout/mutate_all.sh
 # ----------------------------------------------------------------
 EOF
 }
