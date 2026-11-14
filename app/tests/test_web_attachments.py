@@ -417,3 +417,25 @@ def _wait_idle(rig, session_id: str, timeout: float = 10.0) -> bool:
             return True
         time.sleep(0.02)
     return False
+
+
+# ── fs:attachment-image（输入框里的图片贴片）──────────────────────────────
+def test_attachment_image_channel_returns_data_url_only_for_allowed_images(rig, tmp_path):
+    """缩略图/原图都走 `fs:attachment-image`：未授权或非图片一律 null，不抛错。"""
+    image = rig.workspace / "shot.png"
+    image.write_bytes(PNG)
+    rig.attachments.set_file_dialogs(pick_files=lambda: [str(image)])
+    rig.call("fs:pick-attachments")  # 登记进 allowed
+
+    full = rig.call("fs:attachment-image", str(image), True)
+    assert full.startswith("data:image/png;base64,")
+    assert rig.call("fs:attachment-image", str(image)).startswith("data:image/")
+
+    note = rig.workspace / "readme.md"
+    note.write_text("正文", encoding="utf-8")
+    assert rig.call("fs:attachment-image", str(note), True) is None  # 非图片
+    outside = tmp_path / "outside.png"
+    outside.write_bytes(PNG)
+    assert rig.call("fs:attachment-image", str(outside), True) is None  # 未授权
+    assert rig.call("fs:attachment-image", 42, True) is None
+    assert rig.call("fs:attachment-image", "", True) is None

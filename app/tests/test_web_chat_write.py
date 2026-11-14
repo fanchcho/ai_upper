@@ -413,3 +413,73 @@ def test_tool_call_events_carry_ids_matching_results(rig):
     assert result_event["event"] == {
         "type": "tool_result", "id": "toolu_9", "name": "read_file", "summary": "读到 1 行", "isError": False,
     }
+
+
+# ── chat:compact ─────────────────────────────────────────────────────────
+def test_compact_returns_turn_id_and_finishes_with_done(rig):
+    """`/compact`：立即回 turnId，压缩在后台跑，收尾必定是 compacted + done。
+
+    本用例的会话没有可压缩的历史，压缩器回 `status:'none'`——这正是原版「没什么可压」
+    的分支；断言的是**通道链路与事件收尾**，不是压缩算法本身（那在 test_compaction.py）。
+    """
+    call(rig, "chat:create-session", {"sessionId": "cp-1"})
+    result = call(rig, "chat:compact", {"sessionId": "cp-1", "model": MODELS, "workspaceRoot": None})
+    assert isinstance(result, dict) and result["turnId"]
+    assert wait_for(lambda: any(e["type"] == "compacted" for e in events(rig)), 10.0)
+    assert wait_for(lambda: any(e["type"] == "done" for e in events(rig)), 10.0)
+    assert wait_for(lambda: not rig.host.is_busy("cp-1"), 10.0)
+
+    compacted = [e for e in events(rig) if e["type"] == "compacted"][-1]
+    assert compacted["scope"] == "manual"
+    assert compacted["status"] in {"none", "compacted", "failed"}
+    done = [e for e in events(rig) if e["type"] == "done"][-1]
+    assert done["stopReason"] == "end_turn"
+
+
+def test_compact_on_missing_session_raises(rig):
+    with pytest.raises(Exception) as excinfo:
+        call(rig, "chat:compact", {"sessionId": "nope"})
+    assert "会话不存在" in str(excinfo.value)
+
+
+def test_compact_without_session_id_raises(rig):
+    with pytest.raises(Exception) as excinfo:
+        call(rig, "chat:compact", {})
+    assert "sessionId" in str(excinfo.value)
+
+
+# ── chat:todos / chat:todo-cancel：有清单时的真实形状 ────────────────────
+def _seed_todos(rig, session_id: str, list_id: str = "L1") -> None:
+    from mvvm.models.chat_models import Message
+
+    rig.store.ensure_session(session_id)
+    session = rig.store.load_session(session_id)
+    session.todos = [
+        {
+            "listId": list_id,
+            "title": "收尾清单",
+            "at": 1,
+            "items": [
+                {"content": "写台账", "status": "pending"},
+                {"content": "跑测试", "status": "in_progress"},
+            ],
+        }
+    ]
+    session.messages.append(Message(role="user", content="开始"))
+    rig.store.save(session_id)
+
+
+def test_todos_returns_active_list_shape(rig):
+    _seed_todos(rig, "td-1")
+    active = call(rig, "chat:todos", "td-1")["active"]
+    assert active["id"] == "L1"
+    assert active["title"] == "收尾清单"
+    assert [item["content"] for item in active["items"]] == ["写台账", "跑测试"]
+
+
+def test_todo_cancel_marks_list_and_hides_it(rig):
+    _seed_todos(rig, "td-2")
+    assert call(rig, "chat:todos", "td-2")["active"] is not None
+    result = call(rig, "chat:todo-cancel", "td-2")
+    assert result == {"active": None}
+    assert rig.store.load_session("td-2").todoCancelled == ["L1"]

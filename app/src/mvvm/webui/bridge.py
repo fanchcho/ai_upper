@@ -488,10 +488,17 @@ class DevaBridge(QObject):
         return bool(getattr(self, "vault", None) and self.vault.available())
 
     def _update_state(self) -> dict[str, Any]:
-        return {"status": "idle"}
+        """`update:get-state`：`UpdateState` 判别联合，空态是 `{phase:'idle'}`。
+
+        键名必须叫 `phase`（原版 `shared/update.ts` 的 `UpdateState`）：渲染层按
+        `state.phase` 分支渲染，写成 `status` 会让设置页的更新区块读到 `undefined`。
+        自动更新本身未移植，故只回空态，不发起任何网络请求（与原版 handler 一致）。
+        """
+        return {"phase": "idle"}
 
     def _remote_state(self) -> dict[str, Any]:
-        return {"bots": [], "enabled": False}
+        """`remote:get-state`：`{bots: BotView[]}`；远端接入未移植，空清单即当前事实。"""
+        return {"bots": []}
 
 
 # Deva `services/profile.ts` 的默认用户头像（同一份 Humation spec，界面首帧必须一致）

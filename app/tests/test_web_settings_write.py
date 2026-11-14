@@ -353,3 +353,20 @@ def test_profile_avatar_image_round_trip(rig):
     assert (rig.home / "profile" / "avatar.png").exists()
     assert call(rig, "profile:set-avatar-image", "") == ""
     assert not (rig.home / "profile" / "avatar.png").exists()
+
+
+# ── personas:get / skills:get（读单条）───────────────────────────────────
+def test_personas_get_returns_record_or_null(rig):
+    created = call(rig, "personas:upsert", {"name": "核实角色", "prompt": "你是核实角色。"})
+    got = call(rig, "personas:get", created["id"])
+    assert got["id"] == created["id"]
+    assert got["name"] == "核实角色"
+    assert got["avatarImage"] == ""
+    assert call(rig, "personas:get", "no-such-persona") is None
+
+
+def test_skills_get_returns_body_or_null(rig):
+    builtin = call(rig, "skills:get", "create-skill")
+    assert builtin["id"] == "create-skill"
+    assert builtin["instructions"].strip()
+    assert call(rig, "skills:get", "no-such-skill") is None

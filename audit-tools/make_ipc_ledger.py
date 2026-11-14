@@ -33,15 +33,35 @@ EXPECTED_TOTAL = 158
 EXPECTED_HANDLE = 154
 EXPECTED_ON = 4
 
-REGISTER_CALL = re.compile(r'self\.register\(\s*"([^"]+)"')
+REGISTER_CALL = re.compile(r'self\.register(?:_deferred)?\(\s*"([^"]+)"')
+# 循环注册：`for channel, method in (("chat:send", "send"), …): self.register(channel, ...)`
+LOOP_REGISTER = re.compile(r"self\.register\(\s*channel\s*,\s*self\._host_method\(")
+LOOP_ENTRY = re.compile(r'\(\s*"([a-z][a-z0-9:-]*)",\s*"\w+"\s*\)')
 
 
 def bridge_register_lines() -> dict[str, int]:
-    """通道 → bridge.py 里 `self.register("通道", …)` 的行号（现查，不手写）。"""
+    """通道 → bridge.py 里注册该通道的行号（现查，不手写）。
+
+    两种注册形态都要认得：字面量 `self.register("x", …)` / `register_deferred`，以及
+    写通道批量循环 `for channel, method in ((...)): self.register(channel, …)`。只认字面量
+    会让 14 条写通通在台账里显示「—（未注册）」，而桥明明注册了——那种台账比没有更坏。
+    """
     out: dict[str, int] = {}
-    for number, line in enumerate(BRIDGE_PY.read_text(encoding="utf-8").splitlines(), 1):
+    lines = BRIDGE_PY.read_text(encoding="utf-8").splitlines()
+    loop_line: int | None = None
+    for number, line in enumerate(lines, 1):
         for match in REGISTER_CALL.finditer(line):
             out.setdefault(match.group(1), number)
+        if LOOP_REGISTER.search(line):
+            loop_line = number
+    if loop_line is not None:
+        # 循环体在同一语句块里：从注册行往前找成对的 `(`，把其中的 (通道, 方法) 全收进来。
+        start = loop_line - 1
+        while start > 0 and "for channel, method in (" not in lines[start - 1]:
+            start -= 1
+        for line in lines[start:loop_line]:
+            for match in LOOP_ENTRY.finditer(line):
+                out.setdefault(match.group(1), loop_line)
     return out
 
 
@@ -168,7 +188,18 @@ def main() -> None:
         add(f"| {word} | {tally.get(word, 0)} |")
     add(f"| **合计** | **{sum(tally.values())}** |")
     add("")
-    add(f"生成时桥内已注册通道数：**{len(registered)}**（158 条中的一部分；其余逐条列在下方）。")
+    # 自洽校验的第二半：声称有实现的位置（impl != '—'）必须能和「桥内注册 + shim 实现」
+    # 对上账。对不上说明台账在虚标——宁可这里报错，也不要把矛盾数字写进文档。
+    claims = [c for c in STATUS if STATUS[c][0] != "—"]
+    shim_only = [c for c in claims if c not in registered]
+    assert len(claims) - len(shim_only) == len(registered), (
+        len(claims), len(shim_only), len(registered)
+    )
+    add(f"生成时桥内已注册通道数：**{len(registered)}**；"
+        f"判定有实现位置的条目 **{len(claims)}** 条，其中 "
+        f"{len(shim_only)} 条在渲染层 shim 里实现（{', '.join(f'`{c}`' for c in shim_only) or '无'}），"
+        f"其余 {len(claims) - len(shim_only)} 条与桥内注册逐条对应。"
+        "桥里没有的通道在「实测结果」列写明阻塞原因。")
     add("")
     add("## 逐条结论")
     add("")

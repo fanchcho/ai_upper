@@ -275,3 +275,39 @@ def test_shell_shim_source_substitutes_placeholders(tmp_path):
     assert "__PLATFORM__" not in source
     assert '"theme": "light"' in source
     assert "'linux'" in source
+
+
+# ── 空态通道：形状与契约一致（不是「占位式成功」）─────────────────────────
+def test_browser_ready_and_preview_pinned_follow_contract(qapp, tmp_path):
+    """`browser:ready` 与 `browser:state` 同形状；`browser:preview-pinned` 回 `{ok:true}`。
+
+    内置浏览器未移植，这两个通道的**语义**是空态；契约要求的键集与返回形状仍必须对上，
+    否则渲染层读 `state.tabs` / `handoff[id]` 时整棵树抛错白屏。这里钉的是形状，不是浏览
+    器能力——能力缺口在台账里判「已知差异」。
+    """
+    bridge = _make_bridge(tmp_path)
+    state = bridge._handlers["browser:state"]()
+    assert bridge._handlers["browser:ready"]() == state
+    assert bridge._handlers["browser:preview-pinned"](None) == {"ok": True}
+    assert bridge._handlers["browser:preview-pinned"]("tab-1") == {"ok": True}
+
+
+def test_update_state_uses_phase_key(qapp, tmp_path):
+    """`UpdateState` 是 `{phase:'idle'}` 判别联合；键名写成 status 渲染层读不到。"""
+    bridge = _make_bridge(tmp_path)
+    assert bridge._handlers["update:get-state"]() == {"phase": "idle"}
+
+
+def test_remote_state_is_bots_only(qapp, tmp_path):
+    """`remote:get-state` 契约是 `{bots: BotView[]}`；多出来的键会把设置页的渲染分支带偏。"""
+    bridge = _make_bridge(tmp_path)
+    assert bridge._handlers["remote:get-state"]() == {"bots": []}
+
+
+def test_app_platform_matches_shim(qapp, tmp_path):
+    """`app:get-platform` 恒回 'linux'，与 shim 注入的 `__PLATFORM__` 同值。"""
+    from mvvm.views.web_shell_window import DevaWebWindow
+
+    bridge = _make_bridge(tmp_path)
+    assert bridge._handlers["app:get-platform"]() == "linux"
+    assert "'linux'" in DevaWebWindow._shim_source({})
