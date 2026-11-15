@@ -23,6 +23,14 @@ def _isolate_payload_options(monkeypatch):
     from ai_upper import qt_prune
 
     monkeypatch.setattr(qt_prune, "optimize_config", lambda: {})
+    # Same reason, one step further: the working copy ships .qml files, and a
+    # prune test that inherited them would keep a QML payload its fake wheel
+    # does not have. Only the tests that pass ``source_root`` see QML sources;
+    # the default lookup is pinned to "no QML shipped".
+    real_roots = qt_prune.qml_source_roots
+    monkeypatch.setattr(
+        qt_prune, "qml_source_roots", lambda root=None: () if root is None else real_roots(root)
+    )
 
 
 def _touch(path: Path, payload: bytes = b"\xcf\xfa\xed\xfe") -> Path:
@@ -1083,3 +1091,186 @@ def test_runtime_closure_still_errors_for_a_missing_required_module(tmp_path, mo
 
     with pytest.raises(RuntimeError, match="QtWebEngineCore"):
         qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
+
+
+# ── QML 保留 ──────────────────────────────────────────────────────────────
+# 应用只把 ``.qml`` 当资源加载时，``app/src`` 的 Python import 里没有一行
+# ``QtQml``/``QtQuick``；旧判定只看那个集合，于是整棵 ``qml`` 树、qml 插件的
+# 原生库和 shiboken 的 QML bridge 全被删掉，产物启动时 QML 引擎报
+# "module is not installed"，窗口空白。下面的用例把这条判定锁住。
+
+QMLDIR = """module {module}
+linktarget Qt6::{plugin}
+plugin {plugin}
+{extra}depends QtQuick auto
+"""
+
+
+def _write_qml_module(root: Path, module: str, plugin: str, extra: str = "") -> Path:
+    directory = root.joinpath(*module.split("."))
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / "qmldir").write_text(
+        QMLDIR.format(module=module, plugin=plugin, extra=extra), encoding="utf-8"
+    )
+    _touch(directory / ("lib%s.so" % plugin))
+    return directory
+
+
+def _fake_qml_tree(pyside: Path) -> None:
+    """A QtQuick + QtQuick.Controls tree shipping styles and tooling nobody imports."""
+    root = pyside / "Qt" / "qml"
+    _write_qml_module(root, "QtQuick", "qtquick2plugin")
+    _write_qml_module(root, "QtQuick.Templates", "qtquicktemplates2plugin")
+    _write_qml_module(
+        root,
+        "QtQuick.Controls",
+        "qtquickcontrols2plugin",
+        extra=(
+            "import QtQuick.Controls.Basic auto\n"
+            "optional import QtQuick.Controls.Material auto\n"
+            "optional import QtQuick.Controls.Fusion auto\n"
+        ),
+    )
+    _write_qml_module(
+        root,
+        "QtQuick.Controls.Basic",
+        "qtquickcontrols2basicstyleplugin",
+        extra="depends QtQuick.Templates auto\n",
+    )
+    # optional import: only a QML file that names it may pull it in.
+    _write_qml_module(root, "QtQuick.Controls.Material", "qtquickcontrols2materialstyleplugin")
+    _write_qml_module(root, "QtQuick.Controls.Fusion", "qtquickcontrols2fusionstyleplugin")
+    # tooling: never loaded by a running application.
+    _write_qml_module(root, "QtQuick.Shapes", "qmlshapesplugin")
+    _touch(root / "QtQuick" / "tooling" / "libquicktoolingplugin.so")
+    (root / "QtQuick" / "tooling" / "Inspector.qml").write_text(
+        "import QtQuick\nimport QtQuick.Shapes\nItem { }\n", encoding="utf-8"
+    )
+
+
+def _qml_dependencies(path: Path) -> list[str]:
+    return {
+        "libqtquick2plugin.so": ["libQt6Quick.so.6", "libQt6Qml.so.6"],
+        "libqtquicktemplates2plugin.so": ["libQt6QuickTemplates2.so.6", "libQt6Qml.so.6"],
+        "libqtquickcontrols2plugin.so": ["libQt6QuickControls2.so.6", "libQt6QuickTemplates2.so.6"],
+        "libqtquickcontrols2basicstyleplugin.so": ["libQt6QuickControls2Basic.so.6"],
+        "QtQml.abi3.so": ["libQt6Qml.so.6"],
+    }.get(path.name, [])
+
+
+def _qml_wheel(tmp_path: Path) -> tuple[Path, Path]:
+    site = tmp_path / "site-packages"
+    pyside = site / "PySide6"
+    _touch(pyside / "QtQml.abi3.so")
+    for name in ("Quick", "Qml", "QuickControls2", "QuickTemplates2", "QuickControls2Basic"):
+        _touch(pyside / "Qt" / "lib" / ("libQt6%s.so.6" % name))
+    _touch(pyside / "libpyside6qml.abi3.6.11.dylib")
+    _touch(pyside / "Qt" / "plugins" / "platforms" / "libqoffscreen.dylib")
+    return site, pyside
+
+
+def _qml_source(tmp_path: Path, text: str) -> Path:
+    source = tmp_path / "src"
+    source.mkdir(parents=True, exist_ok=True)
+    (source / "Main.qml").write_text(text, encoding="utf-8")
+    return source
+
+
+MAIN_QML = "import QtQuick\nimport QtQuick.Controls\nApplicationWindow { }\n"
+
+
+def test_qml_sources_are_scanned_from_the_application_tree(tmp_path):
+    from ai_upper import qt_prune
+
+    source = _qml_source(tmp_path, MAIN_QML)
+    assert qt_prune.qml_sources_present(source) is True
+    assert qt_prune.qml_imports(source) == {"QtQuick", "QtQuick.Controls"}
+    # QtQuick.Controls 由 Qt6QuickControls2 提供，QtQuick 由 Qt6Quick 提供。
+    assert {"QtQuick", "QtQml", "QtQuickControls2"} <= qt_prune.qml_required_modules(source)
+    # 没有 .qml 的应用照旧不保留 QML 运行时。
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    assert qt_prune.qml_sources_present(empty) is False
+    assert qt_prune.qml_required_modules(empty) == set()
+
+
+def test_prune_keeps_the_qml_runtime_for_a_resource_only_qml_app(tmp_path, monkeypatch):
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    source = _qml_source(tmp_path, MAIN_QML)
+
+    # Python 源码只 import 了 QtCore，QML 用到的模块一个都没写进 Python。
+    counters = prune(site, TARGETS["macos-arm64"], {"QtCore"}, source_root=source)
+
+    assert counters and counters["bytes"] > 0
+    tree = pyside / "Qt" / "qml"
+    # 保住：应用 import 的模块、它的传递依赖，以及加载它们所需的本机库
+    for module in ("QtQuick", "QtQuick.Templates", "QtQuick.Controls", "QtQuick.Controls.Basic"):
+        assert tree.joinpath(*module.split(".")).is_dir(), module
+    assert (pyside / "Qt" / "lib" / "libQt6Quick.so.6").exists()
+    assert (pyside / "Qt" / "lib" / "libQt6QuickControls2.so.6").exists()
+    assert (pyside / "Qt" / "lib" / "libQt6QuickTemplates2.so.6").exists()
+    assert (pyside / "Qt" / "lib" / "libQt6QuickControls2Basic.so.6").exists()
+    # shiboken 的 QML bridge 是 QML 包装模块的运行时依赖
+    assert (pyside / "libpyside6qml.abi3.6.11.dylib").exists()
+    # QtQml 包装模块也只由 .qml 的 import 推出来，Python 侧没有 import 过它
+    assert (pyside / "QtQml.abi3.so").exists()
+    # 删掉：没被 import 的样式和 tooling 插件
+    assert not (tree / "QtQuick" / "Controls" / "Fusion").exists()
+    assert not (tree / "QtQuick" / "Controls" / "Material").exists()
+    assert not (tree / "QtQuick" / "tooling").exists()
+    # tooling 里的 .qml 写了 Shapes，但只有 Designer 会加载它：不能因此保留
+    assert not (tree / "QtQuick" / "Shapes").exists()
+
+
+def test_prune_still_drops_the_qml_tree_without_qml_sources(tmp_path, monkeypatch):
+    """反向：没有 ``.qml`` 的应用不许因为 QML 的存在而变大。"""
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    empty = tmp_path / "src"
+    empty.mkdir()
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore"}, source_root=empty)
+
+    assert not (pyside / "Qt" / "qml").exists()
+    assert not (pyside / "libpyside6qml.abi3.6.11.dylib").exists()
+
+
+def test_prune_drops_the_qml_tree_when_the_python_import_is_absent_too(tmp_path, monkeypatch):
+    """反向：既没有 ``.qml`` 也没有 QML 包装模块时，树整个消失。"""
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    empty = tmp_path / "src"
+    empty.mkdir()
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore"}, source_root=empty)
+
+    assert not (pyside / "Qt" / "qml").exists()
+    assert not (pyside / "Qt" / "lib" / "libQt6Quick.so.6").exists()
+
+
+def test_qml_optional_imports_are_only_kept_when_used(tmp_path, monkeypatch):
+    """``optional import`` 只在应用的 ``.qml`` 真的写了那个模块时才保留。"""
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    source = _qml_source(
+        tmp_path,
+        "import QtQuick\nimport QtQuick.Controls\nimport QtQuick.Controls.Material\nItem { }\n",
+    )
+
+    prune(site, TARGETS["macos-arm64"], {"QtQml"}, source_root=source)
+
+    assert (pyside / "Qt" / "qml" / "QtQuick" / "Controls" / "Material").is_dir()
+    assert not (pyside / "Qt" / "qml" / "QtQuick" / "Controls" / "Fusion").exists()
