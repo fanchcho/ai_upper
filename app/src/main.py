@@ -12,10 +12,14 @@
 - `AI_UPPER_HOME`：数据目录，缺省 `~/.ai_upper`（旧 `DEVA_HOME` 兼容）；
 - `DEVA_APP_WORKSPACE`：启动时登记为受信根的工作区（不设则没有受信根，工具一律拒绝）；
 - `AI_UPPER_HEADLESS=1`：offscreen 装配、等渲染层 `loadFinished`、打印结果后退出
-  （旧 `DEVA_APP_HEADLESS` 仍被接受）。
+  （旧 `DEVA_APP_HEADLESS` 仍被接受）；
+- `AI_UPPER_UI=qml`：改用 QML 三栏壳（`qml/Main.qml`），不装配 WebEngine 窗口；
+  与 `AI_UPPER_HEADLESS=1` 同时给出时，等首帧画出来后 `grabWindow()` 存 PNG 到
+  `out/qml-shell/shot.png`，成功打印 `QML OK`，失败打印具体原因。
 
 `AI_UPPER_HEADLESS` 是打包后的冒烟路径：失败时返回非零并打印原因，绝不假装启动成功。
-CI 的 `build.py --run` 用的就是它。
+CI 的 `build.py --run` 用的就是它。QML 路径是同一语义的第二条冒烟路径，缺省不启用，
+所以现有 WebEngine 探针的判定与退出码不因它改变。
 """
 from __future__ import annotations
 
@@ -27,6 +31,8 @@ from typing import Any, Optional
 
 HEADLESS_ENV = "AI_UPPER_HEADLESS"
 LEGACY_HEADLESS_ENV = "DEVA_APP_HEADLESS"
+UI_ENV = "AI_UPPER_UI"
+QML_UI = "qml"
 HEADLESS_TIMEOUT_S = 90.0
 
 
@@ -38,13 +44,23 @@ def _headless_requested() -> bool:
     return _env_flag(HEADLESS_ENV) or _env_flag(LEGACY_HEADLESS_ENV)
 
 
+def _qml_requested() -> bool:
+    return os.environ.get(UI_ENV, "").strip().lower() == QML_UI
+
+
 def _prepare_environment(headless: bool) -> None:
     """Chromium 与平台插件在 QtWebEngine 被导入**之前**就要定好。
 
     以 root 运行时 Chromium 的 setuid sandbox 不可用；没有可用 GPU 的机器上
     软渲染才不会黑屏。用户显式设置这两个变量时以用户的为准。
+
+    只给 WebEngine 路径设 Chromium 开关：QML 路径根本不加载 QtWebEngine，把
+    `--no-sandbox` 之类的 Chromium 参数留在环境里没有作用，只会让日志误导。
     """
-    os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+    if _qml_requested():
+        os.environ.setdefault("QT_QUICK_BACKEND", "software")
+    else:
+        os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
     if headless:
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -110,6 +126,11 @@ def run(headless: Optional[bool] = None) -> int:
     if headless is None:
         headless = _headless_requested()
     _prepare_environment(headless)
+
+    if _qml_requested():
+        from qml_shell import run as run_qml
+
+        return run_qml(headless)
 
     from utils.qt_compat import QtWidgets, exec_loop
 

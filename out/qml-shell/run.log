@@ -1,0 +1,26 @@
+++ dirname out/qml-shell/run.sh
++ cd out/qml-shell/../..
++ .venv/bin/python -c 'import PySide6, sys; print("python", sys.version.split()[0], "PySide6", PySide6.__version__)'
+python 3.13.5 PySide6 6.11.2
++ AI_UPPER_UI=qml
++ AI_UPPER_HEADLESS=1
++ .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='ai_upper · QML 壳' sessions=3 plain=False png=/home/agent/shared_workspace/py_upper/out/qml-shell/shot.png size=1280x820
++ echo 'EXIT(run) 0'
+EXIT(run) 0
++ AI_UPPER_UI=qml
++ AI_UPPER_HEADLESS=1
++ AI_UPPER_QML_PLAIN=1
++ AI_UPPER_QML_SHOT=out/qml-shell/shot-plain.png
++ .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='ai_upper · QML 壳' sessions=3 plain=True png=out/qml-shell/shot-plain.png size=1280x820
++ echo 'EXIT(plain) 0'
+EXIT(plain) 0
++ ls -l out/qml-shell/shot.png out/qml-shell/shot-plain.png
+-rw-r--r-- 1 root hermes 116702 Nov 15 12:06 out/qml-shell/shot-plain.png
+-rw-r--r-- 1 root hermes 113742 Nov 15 12:06 out/qml-shell/shot.png
++ .venv/bin/python -
+out/qml-shell/shot.png PNG 1280 x 820
+out/qml-shell/shot-plain.png PNG 1280 x 820
++ echo 'EXIT(check) 0'
+EXIT(check) 0
