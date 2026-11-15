@@ -1,0 +1,3 @@
+case=border exit=139
+case=border0 exit=0
+case=cell exit=0
