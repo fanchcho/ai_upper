@@ -1,0 +1,4 @@
+file:///home/agent/shared_workspace/py_upper/app/src/qml/SettingsModal.qml:277: TypeError: Property 'language' of object ShellBridge(0x23147fa0) is not a function
+file:///home/agent/shared_workspace/py_upper/app/src/qml/SettingsModal.qml:284: TypeError: Property 'themeIndex' of object ShellBridge(0x23147fa0) is not a function
+file:///home/agent/shared_workspace/py_upper/app/src/qml/SettingsModal.qml:291: TypeError: Property 'textSizeIndex' of object ShellBridge(0x23147fa0) is not a function
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=/home/agent/shared_workspace/py_upper/out/qml-shell/probe-regress.png size=1280x820

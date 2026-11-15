@@ -105,6 +105,9 @@ class BodyPalette:
 
 LIGHT = BodyPalette()
 DARK = BodyPalette(
+    # 逐项取自原版深色主题的真实计算值（CDP 实测，见 out/qml-shell/dom/dark-chat.json）：
+    # mdCode bg #191919 / border #2f2f33、mdCodeHead bg #252528、mdQuote 左边框 #3d3d42、
+    # mdHr #2f2f33。
     fg="#e4e4e7",
     fg_muted="#a1a1aa",
     fg_subtle="#71717a",
@@ -112,11 +115,11 @@ DARK = BodyPalette(
     bg_panel="#252528",
     bg_inset="#191919",
     bg_hover="rgba(255,255,255,0.06)",
-    border="#3a3a3f",
-    border_strong="#4a4a52",
+    border="#2f2f33",
+    border_strong="#3d3d42",
     accent="#7c7cf0",
     code_bg="#191919",
-    code_border="#3a3a3f",
+    code_border="#2f2f33",
     code_head_bg="#252528",
     error_fg="#f2a7a0",
     error_bg="#3a1d1c",

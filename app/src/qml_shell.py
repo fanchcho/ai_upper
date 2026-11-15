@@ -32,6 +32,7 @@ from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services.settings_service import SettingsService
+from mvvm.services.skill_store import SkillStore
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from qml_shell_sessions import session_rows, transcript_markdown
@@ -47,7 +48,38 @@ SHOT_PATH = Path(__file__).resolve().parents[2] / "out" / "qml-shell" / "shot.pn
 PLAIN_ENV = "AI_UPPER_QML_PLAIN"
 SHOT_ENV = "AI_UPPER_QML_SHOT"
 SEND_ENV = "AI_UPPER_QML_SEND"
+PAGE_ENV = "AI_UPPER_QML_PAGE"
 RENDER_TIMEOUT_S = 90.0
+
+# 原版「文字大小」倍率（deva tokens.css `--chat-scale`）：标准 = 1，其余据 14px 基准。
+CHAT_SCALES = {"sm": 13.0 / 14.0, "md": 1.0, "lg": 15.5 / 14.0, "xl": 17.0 / 14.0}
+CHAT_SIZE_ORDER = ("sm", "md", "lg", "xl")
+THEME_ORDER = ("system", "light", "dark")
+# 界面文案：壳里只有设置页的行标签需要本地化（其余来自数据或图标）。
+SETTINGS_LABELS = {
+    "zh": {
+        "language": "语言", "theme": "主题", "textSize": "文字大小",
+        "themeSystem": "跟随系统", "themeLight": "浅色", "themeDark": "深色",
+        "fontSm": "小", "fontMd": "标准", "fontLg": "大", "fontXl": "特大",
+        "providers": "模型服务商", "noProviders": "还没有可用的服务商，点右上角 + 添加",
+        "modelCount": "{count} 个模型", "extensions": "扩展", "builtIn": "内置",
+    },
+    "en": {
+        "language": "Language", "theme": "Theme", "textSize": "Text size",
+        "themeSystem": "System", "themeLight": "Light", "themeDark": "Dark",
+        "fontSm": "Small", "fontMd": "Default", "fontLg": "Large", "fontXl": "Extra large",
+        "providers": "Providers", "noProviders": "No providers yet — click + to add one",
+        "modelCount": "{count} models", "extensions": "Extensions", "builtIn": "Built-in",
+    },
+}
+
+# 页面名 → 让壳呈现该状态的标识；与 scripts/parity/qml_pages_all.sh 的清单一致。
+PAGE_NAMES = (
+    "chat", "empty", "first-run", "search-open", "search-results", "search-none",
+    "settings-general", "settings-models", "settings-extensions", "settings-about",
+    "model-picker", "ctx-menu", "delete-confirm", "hover-thread", "focus-composer",
+    "long-mid", "long-bottom", "dark-chat",
+)
 # 正文列宽 = 窗口宽 - 侧栏 - 中列 - 左右外边距（1280-264-300-40）。
 BODY_WIDTH = 676.0
 
@@ -88,13 +120,26 @@ def new_session_id() -> str:
 class ShellBridge(QtCore.QObject):
     """QML 调过来的入口，以及回合事件回写 QML 属性的唯一出口。"""
 
-    def __init__(self, *, host: Any, store: ChatSessionStore, plain: bool) -> None:
+    def __init__(
+        self,
+        *,
+        host: Any,
+        store: ChatSessionStore,
+        plain: bool,
+        settings: Any = None,
+        vault: Any = None,
+        skills: Any = None,
+    ) -> None:
         super().__init__()
         self._host = host
         self._store = store
         self._plain = plain
+        self._settings = settings
+        self._vault = vault
+        self._skills = skills
         self._document: Any = None
         self._window: Any = None
+        self._engine: Any = None
         self._events: "queue.Queue[Dict[str, Any]]" = queue.Queue()
         self._active = ""
         self._pump: Any = None
@@ -107,10 +152,135 @@ class ShellBridge(QtCore.QObject):
         from markdown.body import BodyDocument
 
         self._body = BodyDocument(content_width=BODY_WIDTH)
+        self._sync_body_style()
 
     # ── 装配 ──────────────────────────────────────────────────────────────
     def bind_window(self, window: Any) -> None:
         self._window = window
+        self._sync_theme_singleton()
+
+    # ── 配置（设置页读写的真实来源：config.json）────────────────────────────
+    def _config(self) -> Dict[str, Any]:
+        return self._settings.get_config_sync() if self._settings is not None else {}
+
+    def _write_config(self, patch: Dict[str, Any]) -> bool:
+        if self._settings is None:
+            return False
+        try:
+            self._settings.set_config(patch)
+        except OSError as exc:  # 落盘失败必须显式暴露（原版 persist 吞异常，本工程不吞）
+            print("QML CONFIG FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+            return False
+        return True
+
+    @QtCore.Slot(result=str)
+    def language(self) -> str:
+        """界面语言：原版存在 config.json 的 `locale`（zh-CN | en）。
+
+        兼容旧键 `language`（zh | en）；两处都没有时按系统语言，和原版 detectLocale 一致。
+        """
+        config = self._config()
+        locale = config.get("locale")
+        if locale in ("zh-CN", "zh"):
+            return "zh"
+        if locale == "en":
+            return "en"
+        legacy = config.get("language")
+        if legacy in ("zh", "en"):
+            return str(legacy)
+        return "en"
+
+    @QtCore.Slot(result="QVariantMap")
+    def labels(self) -> Dict[str, str]:
+        """设置页文案（界面语言跟随 config.json 的 locale）。"""
+        return dict(SETTINGS_LABELS[self.language()])
+
+    @QtCore.Slot(result=str)
+    def theme(self) -> str:
+        value = self._config().get("theme")
+        return value if value in THEME_ORDER else "system"
+
+    @QtCore.Slot(result=int)
+    def themeIndex(self) -> int:
+        return THEME_ORDER.index(self.theme())
+
+    @QtCore.Slot(result=int)
+    def textSizeIndex(self) -> int:
+        value = self._config().get("chatFontSize")
+        return CHAT_SIZE_ORDER.index(value) if value in CHAT_SIZE_ORDER else 1
+
+    @QtCore.Slot(str, result=bool)
+    def setLanguage(self, value: str) -> bool:
+        """写 `locale`（原版键名）。zh → zh-CN，en → en。"""
+        target = "zh-CN" if value in ("zh", "zh-CN") else "en"
+        if not self._write_config({"locale": target}):
+            return False
+        self._publish()
+        return True
+
+    @QtCore.Slot(str, result=bool)
+    def setTheme(self, value: str) -> bool:
+        if value not in THEME_ORDER:
+            return False
+        if not self._write_config({"theme": value}):
+            return False
+        self._apply_theme()
+        return True
+
+    @QtCore.Slot(int, result=bool)
+    def setTextSize(self, index: int) -> bool:
+        if not isinstance(index, int) or not 0 <= index < len(CHAT_SIZE_ORDER):
+            return False
+        if not self._write_config({"chatFontSize": CHAT_SIZE_ORDER[index]}):
+            return False
+        self._sync_body_style()
+        self._render()
+        return True
+
+    # ── 主题与字号：QML 单例 Theme 与正文 QTextDocument 同步 ──────────────────
+    def _resolve_dark(self) -> bool:
+        """`system` 按应用配色方案解析（原版 prefers-color-scheme）。"""
+        choice = self.theme()
+        if choice == "dark":
+            return True
+        if choice == "light":
+            return False
+        hints = QtGui.QGuiApplication.styleHints() if QtGui.QGuiApplication.instance() else None
+        scheme = getattr(hints, "colorScheme", None) if hints is not None else None
+        return scheme == QtCore.Qt.ColorScheme.Dark
+
+    def _theme_singleton(self) -> Any:
+        engine = self._engine
+        if engine is None:
+            return None
+        try:
+            return engine.singletonInstance("", "Theme")
+        except (RuntimeError, TypeError):
+            return None
+
+    def _sync_theme_singleton(self) -> None:
+        """把解析后的深/浅写进 Theme 单例，QML 侧所有颜色随之切换。"""
+        singleton = self._theme_singleton()
+        if singleton is not None:
+            singleton.setProperty("dark", self._resolve_dark())
+
+    def _apply_theme(self) -> None:
+        self._sync_theme_singleton()
+        self._sync_body_style()
+        self._render()
+        self._publish()
+
+    def _sync_body_style(self) -> None:
+        """正文层与主题/字号同步：QTextDocument 的颜色与字体不能和壳各说各话。"""
+        scale = CHAT_SCALES.get(self._config().get("chatFontSize"), 1.0)
+        self._body.set_style(
+            self._body.style.__class__(
+                scale=scale,
+                dark=self._resolve_dark(),
+                sans=self._body.style.sans,
+                mono=self._body.style.mono,
+            )
+        )
 
     def emit(self, payload: Dict[str, Any]) -> None:
         """宿主回调（可能来自回合线程）：只入队，GUI 线程的 tick 再动界面。"""
@@ -132,6 +302,91 @@ class ShellBridge(QtCore.QObject):
         self._render()
         self._publish()
         return True
+
+    @QtCore.Slot(result=str)
+    def newSession(self) -> str:
+        """加号按钮：建一条真实会话并切过去（原版 chat:create-session 同语义）。"""
+        session_id = new_session_id()
+        self._host.create_session({"sessionId": session_id})
+        self._active = session_id
+        self._turn = None
+        self._turn_session = ""
+        self._render()
+        self._publish()
+        return session_id
+
+    # ── 设置页数据（真实来源：config.json / skills 目录 / secrets 库）────────────
+    @QtCore.Slot(result=list)
+    def modelRows(self) -> List[Dict[str, Any]]:
+        """模型页：原版只列「在用」的服务商（已启用 / 已配密钥 / 自定义）。
+
+        行的形状对齐原版 `provider-row`：名称、`N models`、启用点、缺密钥警告、详情箭头。
+        """
+        config = self._config()
+        section = config.get("models") if isinstance(config.get("models"), dict) else {}
+        providers = section.get("providers") if isinstance(section, dict) else None
+        labels = SETTINGS_LABELS[self.language()]
+        rows: List[Dict[str, Any]] = []
+        for provider in providers if isinstance(providers, list) else []:
+            if not isinstance(provider, dict):
+                continue
+            if (provider.get("purpose") or "llm") != "llm":
+                continue
+            provider_id = str(provider.get("id") or "")
+            enabled = provider.get("enabled") is True
+            has_key = bool(self._vault is not None and provider_id and self._vault.has_secret(provider_id))
+            if not (enabled or has_key or provider.get("kind") == "custom"):
+                continue
+            models = provider.get("models")
+            count = len(models) if isinstance(models, list) else 0
+            rows.append(
+                {
+                    "id": provider_id,
+                    "name": str(provider.get("name") or provider_id),
+                    "accent": str(provider.get("accent") or "#8a8a94"),
+                    "enabled": enabled,
+                    "detail": labels["modelCount"].replace("{count}", str(count)),
+                    "warn": enabled and not has_key,
+                }
+            )
+        return rows
+
+    @QtCore.Slot(result=list)
+    def extensionRows(self) -> List[Dict[str, Any]]:
+        """扩展页：真实技能列表（内置三条 + 磁盘技能），启用态来自 config.json。"""
+        if self._skills is None:
+            return []
+        labels = SETTINGS_LABELS[self.language()]
+        rows: List[Dict[str, Any]] = []
+        for skill in self._skills.list_skills():
+            rows.append(
+                {
+                    "id": str(skill.get("id") or ""),
+                    "name": str(skill.get("name") or skill.get("id") or ""),
+                    "description": str(skill.get("description") or ""),
+                    "enabled": skill.get("enabled") is not False,
+                    "builtin": skill.get("source") == "builtin",
+                    "sourceLabel": labels["builtIn"] if skill.get("source") == "builtin" else "Skill",
+                }
+            )
+        return rows
+
+    @QtCore.Slot(str, result=bool)
+    def setSkillEnabled(self, skill_id: str) -> bool:
+        """扩展页开关：写 `skills.enabled[id]`（原版 set-enabled 语义）。"""
+        if self._skills is None or not skill_id:
+            return False
+        try:
+            current = self._config().get("skills")
+            section = dict(current) if isinstance(current, dict) else {}
+            enabled = section.get("enabled")
+            enabled_map = dict(enabled) if isinstance(enabled, dict) else {}
+            enabled_map[skill_id] = not bool(enabled_map.get(skill_id, True))
+            section["enabled"] = enabled_map
+            return self._write_config({"skills": section})
+        except OSError as exc:  # noqa: BLE001 - 保持与 SkillStore 的异常口径一致
+            print("QML CONFIG FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+            return False
 
     @QtCore.Slot(str, result=bool)
     def send(self, text: str) -> bool:
@@ -294,6 +549,16 @@ class ShellBridge(QtCore.QObject):
         self._publish()
 
 
+def _select_page(window: Any) -> str:
+    """按环境变量让壳呈现指定页面状态（逐页对比用；缺省 chat 即真实启动态）。"""
+    page = os.environ.get(PAGE_ENV, "").strip() or "chat"
+    if page not in PAGE_NAMES:
+        print("QML PAGE UNKNOWN", f"{page!r}", file=sys.stderr, flush=True)
+        page = "chat"
+    window.setProperty("page", page)
+    return page
+
+
 def _pump(app: Any, predicate: Any, timeout: float) -> bool:
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
@@ -350,10 +615,18 @@ def run(headless: bool) -> int:
     )
 
     plain = _plain_mode()
-    bridge = ShellBridge(host=host, store=store, plain=plain)
+    bridge = ShellBridge(
+        host=host,
+        store=store,
+        plain=plain,
+        settings=settings,
+        vault=vault,
+        skills=SkillStore(home),
+    )
     bridge_box["bridge"] = bridge
 
     engine = QtQml.QQmlApplicationEngine()
+    bridge._engine = engine
     engine.rootContext().setContextProperty("shellBridge", bridge)
     engine.load(QtCore.QUrl.fromLocalFile(str(qml_main_path)))
     roots = engine.rootObjects()
@@ -363,6 +636,7 @@ def run(headless: bool) -> int:
     window = roots[0]
     bridge.bind_window(window)
     bridge.initial()
+    _select_page(window)
 
     window.show()
     ticker = _start_ticker(bridge)

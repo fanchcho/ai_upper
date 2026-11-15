@@ -1,0 +1,1279 @@
+{
+  "viewport": {
+    "w": 1280,
+    "h": 820,
+    "dpr": 1
+  },
+  "rootTheme": "light",
+  "rootChatFs": "(none)",
+  "fontSans": "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei',\n    Roboto, Helvetica, Arial, sans-serif",
+  "threadTree": [],
+  "railTree": [
+    {
+      "tag": "button",
+      "cls": "cf-iconrail__me",
+      "rect": {
+        "x": 8.5,
+        "y": 20,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "display": "block",
+        "padding": "2px",
+        "gap": "normal",
+        "position": "static",
+        "width": "38px",
+        "height": "38px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(31, 31, 36)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button type=\"button\" class=\"cf-iconrail__me\" title=\"Profile\" aria-label=\"Profile\"><div class=\"cf-ava is-user\" style=\"--sz: 34px;\"><span class=\"cf-ava__face\"><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"hm-ava hm-ava--gen is-pop\" viewBox=\"4 12 72 72\" width=\"100%\" height=\"100%\" overflow=\"visible\" aria-hidden=\"true\" style=\"--hm-hair: #B0B0B0; --hm-skin: #FFE0BD; --hm-clothes: #2D2D2D; --hm-stroke:"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn is-active",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "color": "rgb(91, 91, 214)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn is-active\" title=\"Collapse conversation list\" aria-label=\"Collapse conversation list\" aria-current=\"true\" aria-expanded=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-message-circle\"><path d=\"M7.9 20A9 9 0 1 0 4 1"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 114,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Roster\" aria-label=\"Roster\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M22 "
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 158,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Tasks\" aria-label=\"Tasks\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-alarm-clock\"><circle cx=\"12\" cy=\"13\" r=\"8\"></circle><path d=\"M12 9v4l2 2\"></path><path d=\"M5 3 2 6\"></path><path d=\"m2"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-spacer",
+      "rect": {
+        "x": 27.5,
+        "y": 202,
+        "w": 0,
+        "h": 518
+      },
+      "style": {
+        "display": "block",
+        "padding": "0px",
+        "gap": "normal",
+        "position": "static",
+        "width": "0px",
+        "height": "518px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "color": "rgb(31, 31, 36)",
+        "overflow": "visible"
+      },
+      "kidCount": 0,
+      "html": "<div class=\"cf-spacer\"></div>"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 724,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Bots\" aria-label=\"Bots\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-bot\"><path d=\"M12 8V4H8\"></path><rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\"></rect><path d=\"M2 14h2\"></path><path d="
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 768,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Settings\" aria-label=\"Settings\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-cog\"><path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\"></path><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\"></path><path d=\"M12 2v2\"></"
+    }
+  ],
+  "headTree": null,
+  "convTree": {
+    "tag": "main",
+    "cls": "cf-conv",
+    "rect": {
+      "x": 356,
+      "y": 0,
+      "w": 924,
+      "h": 820
+    },
+    "text": "",
+    "style": {
+      "display": "flex",
+      "padding": "0px",
+      "gap": "normal",
+      "font-size": "13px",
+      "font-weight": "400",
+      "color": "rgb(31, 31, 36)",
+      "background-color": "rgb(255, 255, 255)",
+      "border-radius": "0px",
+      "border-width": "0px",
+      "border-color": "rgb(31, 31, 36)",
+      "max-width": "none",
+      "margin": "0px",
+      "align-items": "normal",
+      "justify-content": "normal",
+      "text-align": "start",
+      "line-height": "19.5px",
+      "opacity": "1"
+    },
+    "children": [
+      {
+        "tag": "div",
+        "cls": "cf-dragbar",
+        "rect": {
+          "x": 356,
+          "y": 0,
+          "w": 924,
+          "h": 40
+        },
+        "text": "",
+        "style": {
+          "display": "block",
+          "padding": "0px",
+          "gap": "normal",
+          "font-size": "13px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px",
+          "border-color": "rgb(31, 31, 36)",
+          "max-width": "none",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "19.5px",
+          "opacity": "1"
+        }
+      },
+      {
+        "tag": "div",
+        "cls": "cf-quick",
+        "rect": {
+          "x": 356,
+          "y": 40,
+          "w": 924,
+          "h": 780
+        },
+        "text": "",
+        "style": {
+          "display": "block",
+          "padding": "0px",
+          "gap": "normal",
+          "font-size": "13px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px",
+          "border-color": "rgb(31, 31, 36)",
+          "max-width": "none",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "19.5px",
+          "opacity": "1"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "cls": "cf-quick__inner",
+            "rect": {
+              "x": 428,
+              "y": 40,
+              "w": 780,
+              "h": 780
+            },
+            "text": "",
+            "style": {
+              "display": "flex",
+              "padding": "24px 20px",
+              "gap": "normal",
+              "font-size": "13px",
+              "font-weight": "400",
+              "color": "rgb(31, 31, 36)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "0px",
+              "border-width": "0px",
+              "border-color": "rgb(31, 31, 36)",
+              "max-width": "780px",
+              "margin": "0px 72px",
+              "align-items": "center",
+              "justify-content": "center",
+              "text-align": "start",
+              "line-height": "19.5px",
+              "opacity": "1"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "cls": "cf-quick__title",
+                "rect": {
+                  "x": 702.8,
+                  "y": 390.25,
+                  "w": 230.41,
+                  "h": 30
+                },
+                "text": "Start a conversation",
+                "style": {
+                  "display": "block",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "20px",
+                  "font-weight": "750",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(31, 31, 36)",
+                  "max-width": "none",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "start",
+                  "line-height": "30px",
+                  "opacity": "1"
+                }
+              },
+              {
+                "tag": "div",
+                "cls": "cf-quick__hint",
+                "rect": {
+                  "x": 687.67,
+                  "y": 426.25,
+                  "w": 260.64,
+                  "h": 19.5
+                },
+                "text": "Pick a persona — tap its avatar to begin",
+                "style": {
+                  "display": "block",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "13px",
+                  "font-weight": "400",
+                  "color": "rgb(92, 92, 102)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(92, 92, 102)",
+                  "max-width": "none",
+                  "margin": "6px 0px 0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "start",
+                  "line-height": "19.5px",
+                  "opacity": "1"
+                }
+              },
+              {
+                "tag": "div",
+                "cls": "cf-quick__grid",
+                "rect": {
+                  "x": 448,
+                  "y": 469.75,
+                  "w": 740,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "flex",
+                  "padding": "0px",
+                  "gap": "16px",
+                  "font-size": "13px",
+                  "font-weight": "400",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(31, 31, 36)",
+                  "max-width": "none",
+                  "margin": "24px 0px 0px",
+                  "align-items": "normal",
+                  "justify-content": "center",
+                  "text-align": "start",
+                  "line-height": "19.5px",
+                  "opacity": "1"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "textRects": [
+    {
+      "text": "Start a conversation",
+      "rect": {
+        "x": 702.8,
+        "y": 393.25,
+        "w": 230.41,
+        "h": 24
+      },
+      "parentCls": "cf-quick__title",
+      "font": {
+        "font-size": "20px",
+        "font-weight": "750",
+        "color": "rgb(31, 31, 36)",
+        "line-height": "30px",
+        "text-align": "start"
+      }
+    },
+    {
+      "text": "Pick a persona — tap its avatar to begin",
+      "rect": {
+        "x": 687.67,
+        "y": 428.25,
+        "w": 260.64,
+        "h": 15
+      },
+      "parentCls": "cf-quick__hint",
+      "font": {
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(92, 92, 102)",
+        "line-height": "19.5px",
+        "text-align": "start"
+      }
+    }
+  ],
+  "modalTree": null,
+  "searchTree": {
+    "tag": "div",
+    "cls": "cf-search cf-search--filter",
+    "rect": {
+      "x": 68,
+      "y": 12,
+      "w": 235,
+      "h": 32
+    },
+    "text": "",
+    "style": {
+      "display": "flex",
+      "grid-template-columns": "none",
+      "padding": "0px 8px 0px 2px",
+      "gap": "6px",
+      "font-size": "12px",
+      "font-weight": "400",
+      "color": "rgb(92, 92, 102)",
+      "background-color": "rgb(255, 255, 255)",
+      "border-radius": "8px",
+      "border-width": "1px",
+      "border-color": "rgb(230, 230, 234)",
+      "margin": "0px",
+      "align-items": "center",
+      "justify-content": "normal",
+      "text-align": "start",
+      "line-height": "18px",
+      "width": "235px",
+      "height": "32px",
+      "box-shadow": "none",
+      "opacity": "1",
+      "flex-direction": "row"
+    },
+    "children": [
+      {
+        "tag": "button",
+        "cls": "cf-search__filter",
+        "rect": {
+          "x": 71,
+          "y": 15,
+          "w": 26,
+          "h": 26
+        },
+        "text": "",
+        "style": {
+          "display": "flex",
+          "grid-template-columns": "none",
+          "padding": "0px 5.5px",
+          "gap": "4px",
+          "font-size": "12px",
+          "font-weight": "400",
+          "color": "rgb(138, 138, 148)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "6px",
+          "border-width": "0px",
+          "border-color": "rgb(138, 138, 148)",
+          "margin": "0px",
+          "align-items": "center",
+          "justify-content": "normal",
+          "text-align": "center",
+          "line-height": "normal",
+          "width": "26px",
+          "height": "26px",
+          "box-shadow": "none",
+          "opacity": "1",
+          "flex-direction": "row"
+        },
+        "children": [
+          {
+            "tag": "svg",
+            "cls": "",
+            "rect": {
+              "x": 76.5,
+              "y": 20.5,
+              "w": 15,
+              "h": 15
+            },
+            "text": "",
+            "style": {
+              "display": "block",
+              "grid-template-columns": "none",
+              "padding": "0px",
+              "gap": "normal",
+              "font-size": "12px",
+              "font-weight": "400",
+              "color": "rgb(138, 138, 148)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "0px",
+              "border-width": "0px",
+              "border-color": "rgb(138, 138, 148)",
+              "margin": "0px",
+              "align-items": "normal",
+              "justify-content": "normal",
+              "text-align": "center",
+              "line-height": "normal",
+              "width": "15px",
+              "height": "15px",
+              "box-shadow": "none",
+              "opacity": "1",
+              "flex-direction": "row"
+            },
+            "children": [
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 78.38,
+                  "y": 24.25,
+                  "w": 11.25,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              },
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 80.88,
+                  "y": 28,
+                  "w": 6.25,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              },
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 82.75,
+                  "y": 31.75,
+                  "w": 2.5,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "input",
+        "cls": "cf-search__input",
+        "rect": {
+          "x": 103,
+          "y": 20,
+          "w": 191,
+          "h": 16
+        },
+        "text": "",
+        "style": {
+          "display": "block",
+          "grid-template-columns": "none",
+          "padding": "1px 2px",
+          "gap": "normal",
+          "font-size": "12px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px",
+          "border-color": "rgb(31, 31, 36)",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "normal",
+          "width": "191px",
+          "height": "16px",
+          "box-shadow": "none",
+          "opacity": "1",
+          "flex-direction": "row"
+        }
+      }
+    ]
+  },
+  "ctxTree": null,
+  "boxes": [],
+  "detail": [
+    {
+      "tag": "div",
+      "cls": "cf-ava is-user",
+      "rect": {
+        "x": 10.5,
+        "y": 22,
+        "w": 34,
+        "h": 34
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "padding": "0px",
+        "margin": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top": "0px none rgb(31, 31, 36)",
+        "border-bottom": "0px none rgb(31, 31, 36)",
+        "border-left": "0px none rgb(31, 31, 36)",
+        "border-right": "0px none rgb(31, 31, 36)",
+        "border-radius": "0px",
+        "border-collapse": "separate",
+        "border-spacing": "0px 0px",
+        "text-align": "center",
+        "white-space": "normal",
+        "overflow-x": "visible",
+        "overflow-y": "visible",
+        "letter-spacing": "normal",
+        "vertical-align": "baseline",
+        "opacity": "1",
+        "width": "34px",
+        "max-width": "none"
+      }
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 10.5,
+        "y": 22,
+        "w": 34,
+        "h": 34
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "padding": "0px",
+        "margin": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top": "0px none rgb(31, 31, 36)",
+        "border-bottom": "0px none rgb(31, 31, 36)",
+        "border-left": "0px none rgb(31, 31, 36)",
+        "border-right": "0px none rgb(31, 31, 36)",
+        "border-radius": "0px",
+        "border-collapse": "separate",
+        "border-spacing": "0px 0px",
+        "text-align": "center",
+        "white-space": "normal",
+        "overflow-x": "visible",
+        "overflow-y": "visible",
+        "letter-spacing": "normal",
+        "vertical-align": "baseline",
+        "opacity": "1",
+        "width": "34px",
+        "max-width": "none"
+      }
+    }
+  ],
+  "composerTree": [],
+  "msgTree": [],
+  "mdTop": [],
+  "painted": {
+    "iconrail": {
+      "bg": "rgb(240, 240, 242)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "rail": {
+      "bg": "rgb(247, 247, 248)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "conv": {
+      "bg": "rgb(255, 255, 255)",
+      "borderRight": "rgb(31, 31, 36)",
+      "borderRightWidth": "0px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "railTop": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "borderRight": "rgb(31, 31, 36)",
+      "borderRightWidth": "0px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "search": {
+      "bg": "rgb(255, 255, 255)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(230, 230, 234)"
+    }
+  },
+  "named": {
+    "shell": {
+      "sel": ".cf-shell",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": "No conversations\nStart a conversation\nPick a persona — tap its avatar to begin"
+    },
+    "body": {
+      "sel": ".cf-body",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": "No conversations\nStart a conversation\nPick a persona — tap its avatar to begin"
+    },
+    "iconrail": {
+      "sel": ".cf-iconrail",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(240, 240, 242)",
+        "border-radius": "0px",
+        "padding": "20px 0px 12px",
+        "border-width": "0px 1px 0px 0px",
+        "border-color": "rgb(31, 31, 36) rgb(230, 230, 234) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "4px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "me": {
+      "sel": ".cf-iconrail__me",
+      "rect": {
+        "x": 8.5,
+        "y": 20,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "2px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "navActive": {
+      "sel": ".cf-navbtn.is-active",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(91, 91, 214)",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "0px",
+        "border-color": "rgb(91, 91, 214)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "navAll": {
+      "sel": ".cf-iconrail .cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(91, 91, 214)",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "0px",
+        "border-color": "rgb(91, 91, 214)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "rail": {
+      "sel": ".cf-rail",
+      "rect": {
+        "x": 56,
+        "y": 0,
+        "w": 300,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(247, 247, 248)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px 1px 0px 0px",
+        "border-color": "rgb(31, 31, 36) rgb(230, 230, 234) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "flex"
+      },
+      "text": "No conversations"
+    },
+    "railTop": {
+      "sel": ".cf-rail__top",
+      "rect": {
+        "x": 56,
+        "y": 0,
+        "w": 299,
+        "h": 56
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "8px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "search": {
+      "sel": ".cf-search",
+      "rect": {
+        "x": 68,
+        "y": 12,
+        "w": 235,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "18px",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "8px",
+        "padding": "0px 8px 0px 2px",
+        "border-width": "1px",
+        "border-color": "rgb(230, 230, 234)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "6px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "searchInput": {
+      "sel": ".cf-search__input",
+      "rect": {
+        "x": 103,
+        "y": 20,
+        "w": 191,
+        "h": 16
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "1px 2px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "addBtn": {
+      "sel": ".cf-rail__addbtn",
+      "rect": {
+        "x": 311,
+        "y": 12,
+        "w": 32,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "1px",
+        "border-color": "rgb(230, 230, 234)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "list": {
+      "sel": ".cf-list",
+      "rect": {
+        "x": 56,
+        "y": 56,
+        "w": 299,
+        "h": 764
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px 8px 8px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "No conversations"
+    },
+    "thread": null,
+    "threadActive": null,
+    "threadFace": null,
+    "threadTitle": null,
+    "conv": {
+      "sel": ".cf-conv",
+      "rect": {
+        "x": 356,
+        "y": 0,
+        "w": 924,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "flex"
+      },
+      "text": "Start a conversation\nPick a persona — tap its avatar to begin"
+    },
+    "head": null,
+    "idbtn": null,
+    "idname": null,
+    "msgs": null,
+    "msgsInner": null,
+    "msg": null,
+    "msgName": null,
+    "msgText": null,
+    "md": null,
+    "mdP": null,
+    "mdH2": null,
+    "mdTable": null,
+    "mdCode": null,
+    "mdCodeBody": null,
+    "mdCodeHead": null,
+    "mdQuote": null,
+    "mdHr": null,
+    "mdUl": null,
+    "mdOl": null,
+    "mdTask": null,
+    "composer": null,
+    "composerInner": null,
+    "box": null,
+    "draft": null,
+    "send": null,
+    "toolbar": null,
+    "modelPickerTrigger": null,
+    "statusDot": null,
+    "empty": {
+      "sel": ".cf-empty",
+      "rect": {
+        "x": 64,
+        "y": 56,
+        "w": 283,
+        "h": 61.59
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "21.6px",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "20px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "No conversations"
+    },
+    "quickstart": null,
+    "ctx": null,
+    "ctxItem": null,
+    "modalBackdrop": null,
+    "modal": null,
+    "modalHead": null,
+    "modalTitle": null,
+    "modalNav": null,
+    "modalNavActive": null,
+    "modalBody": null,
+    "modalPanel": null,
+    "settingsRow": null,
+    "seg": null,
+    "segItem": null,
+    "switch": null,
+    "picker": null,
+    "about": null,
+    "aboutIcon": null,
+    "aboutName": null,
+    "aboutVer": null,
+    "updateBtn": null,
+    "tag": null,
+    "scrollbar": null
+  },
+  "threads": [],
+  "threadParts": [],
+  "messages": [],
+  "mdBlocks": [],
+  "mdAll": 0,
+  "listScroll": {
+    "scrollTop": 0,
+    "scrollHeight": 764,
+    "clientHeight": 764
+  },
+  "texts": {
+    "search": [
+      "Search chats"
+    ],
+    "empty": [
+      "No conversations"
+    ],
+    "composer": null,
+    "ctx": [],
+    "modal": [],
+    "thread": [],
+    "messages": [],
+    "buttons": [],
+    "labels": [
+      "No conversations"
+    ],
+    "placeholders": [
+      "Search chats"
+    ]
+  },
+  "active": {
+    "tag": "BODY",
+    "cls": ""
+  },
+  "hovered": {
+    "tag": "DIV",
+    "cls": "cf-list"
+  }
+}

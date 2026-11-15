@@ -1,0 +1,5769 @@
+{
+  "viewport": {
+    "w": 1280,
+    "h": 820,
+    "dpr": 1
+  },
+  "rootTheme": "light",
+  "rootChatFs": "(none)",
+  "fontSans": "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei',\n    Roboto, Helvetica, Arial, sans-serif",
+  "threadTree": [
+    {
+      "tag": "button",
+      "cls": "cf-thread",
+      "rect": {
+        "x": 64,
+        "y": -1144,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "display": "grid",
+        "grid-template-columns": "38px 201px",
+        "gap": "12px",
+        "padding": "8px 12px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "width": "275px",
+        "height": "54px",
+        "overflow": "visible",
+        "text-overflow": "clip",
+        "white-space": "normal",
+        "line-height": "normal",
+        "align-items": "flex-start"
+      },
+      "children": [
+        {
+          "tag": "span",
+          "cls": "cf-thread__face",
+          "rect": {
+            "x": 76,
+            "y": -1136,
+            "w": 38,
+            "h": 38
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "38px",
+            "height": "38px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-ava",
+              "rect": {
+                "x": 76,
+                "y": -1136,
+                "w": 38,
+                "h": 38
+              },
+              "style": {
+                "display": "block",
+                "grid-template-columns": "none",
+                "gap": "normal",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "38px",
+                "height": "38px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "normal"
+              }
+            }
+          ]
+        },
+        {
+          "tag": "div",
+          "cls": "cf-thread__main",
+          "rect": {
+            "x": 126,
+            "y": -1136,
+            "w": 201,
+            "h": 21
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "201px",
+            "height": "21px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-thread__top",
+              "rect": {
+                "x": 126,
+                "y": -1136,
+                "w": 201,
+                "h": 19
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "8px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "19px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "baseline"
+              },
+              "children": [
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__title",
+                  "rect": {
+                    "x": 126,
+                    "y": -1136,
+                    "w": 138.34,
+                    "h": 19
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "13px",
+                    "font-weight": "600",
+                    "color": "rgb(31, 31, 36)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "138.344px",
+                    "height": "19px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "对比用会话：一条完整回合"
+                },
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__time",
+                  "rect": {
+                    "x": 272.34,
+                    "y": -1131,
+                    "w": 54.66,
+                    "h": 13
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "54.6562px",
+                    "height": "13px",
+                    "overflow": "visible",
+                    "text-overflow": "clip",
+                    "white-space": "normal",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "yesterday"
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "cls": "cf-thread__sub",
+              "rect": {
+                "x": 126,
+                "y": -1115,
+                "w": 201,
+                "h": 0
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "6px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "0px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "center"
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "cls": "cf-thread__owner",
+                  "rect": {
+                    "x": 126,
+                    "y": -1115,
+                    "w": 201,
+                    "h": 0
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "201px",
+                    "height": "0px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "button",
+      "cls": "cf-thread",
+      "rect": {
+        "x": 64,
+        "y": -1090,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "display": "grid",
+        "grid-template-columns": "38px 201px",
+        "gap": "12px",
+        "padding": "8px 12px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "width": "275px",
+        "height": "54px",
+        "overflow": "visible",
+        "text-overflow": "clip",
+        "white-space": "normal",
+        "line-height": "normal",
+        "align-items": "flex-start"
+      },
+      "children": [
+        {
+          "tag": "span",
+          "cls": "cf-thread__face",
+          "rect": {
+            "x": 76,
+            "y": -1082,
+            "w": 38,
+            "h": 38
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "38px",
+            "height": "38px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-ava",
+              "rect": {
+                "x": 76,
+                "y": -1082,
+                "w": 38,
+                "h": 38
+              },
+              "style": {
+                "display": "block",
+                "grid-template-columns": "none",
+                "gap": "normal",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "38px",
+                "height": "38px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "normal"
+              }
+            }
+          ]
+        },
+        {
+          "tag": "div",
+          "cls": "cf-thread__main",
+          "rect": {
+            "x": 126,
+            "y": -1082,
+            "w": 201,
+            "h": 21
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "201px",
+            "height": "21px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-thread__top",
+              "rect": {
+                "x": 126,
+                "y": -1082,
+                "w": 201,
+                "h": 19
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "8px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "19px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "baseline"
+              },
+              "children": [
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__title",
+                  "rect": {
+                    "x": 126,
+                    "y": -1082,
+                    "w": 138.34,
+                    "h": 19
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "13px",
+                    "font-weight": "600",
+                    "color": "rgb(31, 31, 36)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "138.344px",
+                    "height": "19px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "会话 001：准备发布说明"
+                },
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__time",
+                  "rect": {
+                    "x": 272.34,
+                    "y": -1077,
+                    "w": 54.66,
+                    "h": 13
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "54.6562px",
+                    "height": "13px",
+                    "overflow": "visible",
+                    "text-overflow": "clip",
+                    "white-space": "normal",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "yesterday"
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "cls": "cf-thread__sub",
+              "rect": {
+                "x": 126,
+                "y": -1061,
+                "w": 201,
+                "h": 0
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "6px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "0px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "center"
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "cls": "cf-thread__owner",
+                  "rect": {
+                    "x": 126,
+                    "y": -1061,
+                    "w": 201,
+                    "h": 0
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "201px",
+                    "height": "0px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "button",
+      "cls": "cf-thread",
+      "rect": {
+        "x": 64,
+        "y": -1036,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "display": "grid",
+        "grid-template-columns": "38px 201px",
+        "gap": "12px",
+        "padding": "8px 12px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "width": "275px",
+        "height": "54px",
+        "overflow": "visible",
+        "text-overflow": "clip",
+        "white-space": "normal",
+        "line-height": "normal",
+        "align-items": "flex-start"
+      },
+      "children": [
+        {
+          "tag": "span",
+          "cls": "cf-thread__face",
+          "rect": {
+            "x": 76,
+            "y": -1028,
+            "w": 38,
+            "h": 38
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "38px",
+            "height": "38px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-ava",
+              "rect": {
+                "x": 76,
+                "y": -1028,
+                "w": 38,
+                "h": 38
+              },
+              "style": {
+                "display": "block",
+                "grid-template-columns": "none",
+                "gap": "normal",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "38px",
+                "height": "38px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "normal"
+              }
+            }
+          ]
+        },
+        {
+          "tag": "div",
+          "cls": "cf-thread__main",
+          "rect": {
+            "x": 126,
+            "y": -1028,
+            "w": 201,
+            "h": 21
+          },
+          "style": {
+            "display": "block",
+            "grid-template-columns": "none",
+            "gap": "normal",
+            "padding": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "color": "rgb(31, 31, 36)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "width": "201px",
+            "height": "21px",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "normal",
+            "line-height": "normal",
+            "align-items": "normal"
+          },
+          "children": [
+            {
+              "tag": "div",
+              "cls": "cf-thread__top",
+              "rect": {
+                "x": 126,
+                "y": -1028,
+                "w": 201,
+                "h": 19
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "8px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "19px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "baseline"
+              },
+              "children": [
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__title",
+                  "rect": {
+                    "x": 126,
+                    "y": -1028,
+                    "w": 138.34,
+                    "h": 19
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "13px",
+                    "font-weight": "600",
+                    "color": "rgb(31, 31, 36)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "138.344px",
+                    "height": "19px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "会话 002：准备发布说明"
+                },
+                {
+                  "tag": "span",
+                  "cls": "cf-thread__time",
+                  "rect": {
+                    "x": 272.34,
+                    "y": -1023,
+                    "w": 54.66,
+                    "h": 13
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "54.6562px",
+                    "height": "13px",
+                    "overflow": "visible",
+                    "text-overflow": "clip",
+                    "white-space": "normal",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  },
+                  "ownText": "yesterday"
+                }
+              ]
+            },
+            {
+              "tag": "div",
+              "cls": "cf-thread__sub",
+              "rect": {
+                "x": 126,
+                "y": -1007,
+                "w": 201,
+                "h": 0
+              },
+              "style": {
+                "display": "flex",
+                "grid-template-columns": "none",
+                "gap": "6px",
+                "padding": "0px",
+                "font-size": "13px",
+                "font-weight": "400",
+                "color": "rgb(31, 31, 36)",
+                "background-color": "rgba(0, 0, 0, 0)",
+                "border-radius": "0px",
+                "width": "201px",
+                "height": "0px",
+                "overflow": "visible",
+                "text-overflow": "clip",
+                "white-space": "normal",
+                "line-height": "normal",
+                "align-items": "center"
+              },
+              "children": [
+                {
+                  "tag": "div",
+                  "cls": "cf-thread__owner",
+                  "rect": {
+                    "x": 126,
+                    "y": -1007,
+                    "w": 201,
+                    "h": 0
+                  },
+                  "style": {
+                    "display": "block",
+                    "grid-template-columns": "none",
+                    "gap": "normal",
+                    "padding": "0px",
+                    "font-size": "11px",
+                    "font-weight": "400",
+                    "color": "rgb(138, 138, 148)",
+                    "background-color": "rgba(0, 0, 0, 0)",
+                    "border-radius": "0px",
+                    "width": "201px",
+                    "height": "0px",
+                    "overflow": "hidden",
+                    "text-overflow": "ellipsis",
+                    "white-space": "nowrap",
+                    "line-height": "normal",
+                    "align-items": "normal"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "railTree": [
+    {
+      "tag": "button",
+      "cls": "cf-iconrail__me",
+      "rect": {
+        "x": 8.5,
+        "y": 20,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "display": "block",
+        "padding": "2px",
+        "gap": "normal",
+        "position": "static",
+        "width": "38px",
+        "height": "38px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(31, 31, 36)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button type=\"button\" class=\"cf-iconrail__me\" title=\"Profile\" aria-label=\"Profile\"><div class=\"cf-ava is-user\" style=\"--sz: 34px;\"><span class=\"cf-ava__face\"><svg xmlns=\"http://www.w3.org/2000/svg\" class=\"hm-ava hm-ava--gen is-pop\" viewBox=\"4 12 72 72\" width=\"100%\" height=\"100%\" overflow=\"visible\" aria-hidden=\"true\" style=\"--hm-hair: #B0B0B0; --hm-skin: #FFE0BD; --hm-clothes: #2D2D2D; --hm-stroke:"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn is-active",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "color": "rgb(91, 91, 214)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn is-active\" title=\"Collapse conversation list\" aria-label=\"Collapse conversation list\" aria-current=\"true\" aria-expanded=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-message-circle\"><path d=\"M7.9 20A9 9 0 1 0 4 1"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 114,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Roster\" aria-label=\"Roster\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M22 "
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 158,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Tasks\" aria-label=\"Tasks\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-alarm-clock\"><circle cx=\"12\" cy=\"13\" r=\"8\"></circle><path d=\"M12 9v4l2 2\"></path><path d=\"M5 3 2 6\"></path><path d=\"m2"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-spacer",
+      "rect": {
+        "x": 27.5,
+        "y": 202,
+        "w": 0,
+        "h": 518
+      },
+      "style": {
+        "display": "block",
+        "padding": "0px",
+        "gap": "normal",
+        "position": "static",
+        "width": "0px",
+        "height": "518px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "color": "rgb(31, 31, 36)",
+        "overflow": "visible"
+      },
+      "kidCount": 0,
+      "html": "<div class=\"cf-spacer\"></div>"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 724,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Bots\" aria-label=\"Bots\" aria-current=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-bot\"><path d=\"M12 8V4H8\"></path><rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\"></rect><path d=\"M2 14h2\"></path><path d="
+    },
+    {
+      "tag": "button",
+      "cls": "cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 768,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "display": "grid",
+        "padding": "1px 6px",
+        "gap": "normal",
+        "position": "relative",
+        "width": "40px",
+        "height": "40px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "color": "rgb(138, 138, 148)",
+        "overflow": "visible"
+      },
+      "kidCount": 1,
+      "html": "<button class=\"cf-navbtn\" title=\"Settings\" aria-label=\"Settings\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-cog\"><path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\"></path><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\"></path><path d=\"M12 2v2\"></"
+    }
+  ],
+  "headTree": [
+    {
+      "tag": "button",
+      "cls": "cf-idbtn",
+      "rect": {
+        "x": 372,
+        "y": 8,
+        "w": 20,
+        "h": 10
+      },
+      "text": "",
+      "html": "<button class=\"cf-idbtn\" title=\"View profile\"><div class=\"cf-idbtn__name\"></div></button>",
+      "style": {
+        "display": "flex",
+        "gap": "12px",
+        "padding": "5px 10px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "border-width": "0px",
+        "align-items": "center"
+      }
+    }
+  ],
+  "convTree": {
+    "tag": "main",
+    "cls": "cf-conv",
+    "rect": {
+      "x": 356,
+      "y": 0,
+      "w": 924,
+      "h": 820
+    },
+    "text": "",
+    "style": {
+      "display": "flex",
+      "padding": "0px",
+      "gap": "normal",
+      "font-size": "13px",
+      "font-weight": "400",
+      "color": "rgb(31, 31, 36)",
+      "background-color": "rgb(255, 255, 255)",
+      "border-radius": "0px",
+      "border-width": "0px",
+      "border-color": "rgb(31, 31, 36)",
+      "max-width": "none",
+      "margin": "0px",
+      "align-items": "normal",
+      "justify-content": "normal",
+      "text-align": "start",
+      "line-height": "19.5px",
+      "opacity": "1"
+    },
+    "children": [
+      {
+        "tag": "div",
+        "cls": "cf-conv__head",
+        "rect": {
+          "x": 356,
+          "y": 0,
+          "w": 924,
+          "h": 27
+        },
+        "text": "",
+        "style": {
+          "display": "flex",
+          "padding": "8px 140px 8px 16px",
+          "gap": "12px",
+          "font-size": "13px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px 0px 1px",
+          "border-color": "rgb(31, 31, 36) rgb(31, 31, 36) rgb(230, 230, 234)",
+          "max-width": "none",
+          "margin": "0px",
+          "align-items": "center",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "19.5px",
+          "opacity": "1"
+        },
+        "children": [
+          {
+            "tag": "button",
+            "cls": "cf-idbtn",
+            "rect": {
+              "x": 372,
+              "y": 8,
+              "w": 20,
+              "h": 10
+            },
+            "text": "",
+            "style": {
+              "display": "flex",
+              "padding": "5px 10px",
+              "gap": "12px",
+              "font-size": "13px",
+              "font-weight": "400",
+              "color": "rgb(31, 31, 36)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "8px",
+              "border-width": "0px",
+              "border-color": "rgb(31, 31, 36)",
+              "max-width": "none",
+              "margin": "0px",
+              "align-items": "center",
+              "justify-content": "normal",
+              "text-align": "center",
+              "line-height": "normal",
+              "opacity": "1"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "cls": "cf-idbtn__name",
+                "rect": {
+                  "x": 382,
+                  "y": 13,
+                  "w": 0,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "block",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "14px",
+                  "font-weight": "700",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(31, 31, 36)",
+                  "max-width": "none",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "opacity": "1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "cls": "cf-convmid",
+        "rect": {
+          "x": 356,
+          "y": 27,
+          "w": 924,
+          "h": 618
+        },
+        "text": "",
+        "style": {
+          "display": "flex",
+          "padding": "0px",
+          "gap": "normal",
+          "font-size": "13px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px",
+          "border-color": "rgb(31, 31, 36)",
+          "max-width": "none",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "19.5px",
+          "opacity": "1"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "cls": "cf-msgs",
+            "rect": {
+              "x": 356,
+              "y": 27,
+              "w": 924,
+              "h": 618
+            },
+            "text": "",
+            "style": {
+              "display": "block",
+              "padding": "20px 0px",
+              "gap": "normal",
+              "font-size": "13px",
+              "font-weight": "400",
+              "color": "rgb(31, 31, 36)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "0px",
+              "border-width": "0px",
+              "border-color": "rgb(31, 31, 36)",
+              "max-width": "none",
+              "margin": "0px",
+              "align-items": "normal",
+              "justify-content": "normal",
+              "text-align": "start",
+              "line-height": "19.5px",
+              "opacity": "1"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "cls": "cf-msgs__inner",
+                "rect": {
+                  "x": 424,
+                  "y": 47,
+                  "w": 780,
+                  "h": 107.45
+                },
+                "text": "",
+                "style": {
+                  "display": "flex",
+                  "padding": "0px 20px",
+                  "gap": "20px",
+                  "font-size": "13px",
+                  "font-weight": "400",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(31, 31, 36)",
+                  "max-width": "780px",
+                  "margin": "0px 68px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "start",
+                  "line-height": "19.5px",
+                  "opacity": "1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "cls": "cf-composer",
+        "rect": {
+          "x": 356,
+          "y": 645,
+          "w": 924,
+          "h": 175
+        },
+        "text": "",
+        "style": {
+          "display": "block",
+          "padding": "12px 16px 16px",
+          "gap": "normal",
+          "font-size": "13px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "1px 0px 0px",
+          "border-color": "rgba(0, 0, 0, 0) rgb(31, 31, 36) rgb(31, 31, 36)",
+          "max-width": "none",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "19.5px",
+          "opacity": "1"
+        },
+        "children": [
+          {
+            "tag": "div",
+            "cls": "cf-composer__inner",
+            "rect": {
+              "x": 428,
+              "y": 658,
+              "w": 780,
+              "h": 146
+            },
+            "text": "",
+            "style": {
+              "display": "block",
+              "padding": "0px",
+              "gap": "normal",
+              "font-size": "13px",
+              "font-weight": "400",
+              "color": "rgb(31, 31, 36)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "0px",
+              "border-width": "0px",
+              "border-color": "rgb(31, 31, 36)",
+              "max-width": "780px",
+              "margin": "0px 56px",
+              "align-items": "normal",
+              "justify-content": "normal",
+              "text-align": "start",
+              "line-height": "19.5px",
+              "opacity": "1"
+            },
+            "children": [
+              {
+                "tag": "div",
+                "cls": "cf-dock",
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "none",
+                  "padding": "0px",
+                  "gap": "8px",
+                  "font-size": "13px",
+                  "font-weight": "400",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(31, 31, 36)",
+                  "max-width": "none",
+                  "margin": "0px 0px 8px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "start",
+                  "line-height": "19.5px",
+                  "opacity": "1"
+                }
+              },
+              {
+                "tag": "div",
+                "cls": "cf-box",
+                "rect": {
+                  "x": 428,
+                  "y": 658,
+                  "w": 780,
+                  "h": 146
+                },
+                "text": "",
+                "style": {
+                  "display": "block",
+                  "padding": "12px",
+                  "gap": "normal",
+                  "font-size": "13px",
+                  "font-weight": "400",
+                  "color": "rgb(31, 31, 36)",
+                  "background-color": "rgb(255, 255, 255)",
+                  "border-radius": "12px",
+                  "border-width": "1px",
+                  "border-color": "rgb(213, 213, 219)",
+                  "max-width": "none",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "start",
+                  "line-height": "19.5px",
+                  "opacity": "1"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "textRects": [
+    {
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。",
+      "rect": {
+        "x": 789.69,
+        "y": 59,
+        "w": 336.31,
+        "h": 16
+      },
+      "parentCls": "cf-msg__clamp is-clamped",
+      "font": {
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "line-height": "21.87px",
+        "text-align": "start"
+      }
+    },
+    {
+      "text": "Assistant",
+      "rect": {
+        "x": 488,
+        "y": 110.86,
+        "w": 68.19,
+        "h": 15
+      },
+      "parentCls": "cf-msg__name",
+      "font": {
+        "font-size": "13px",
+        "font-weight": "700",
+        "color": "rgb(31, 31, 36)",
+        "line-height": "19.5px",
+        "text-align": "start"
+      }
+    },
+    {
+      "text": "这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。",
+      "rect": {
+        "x": 488,
+        "y": 134.36,
+        "w": 395.81,
+        "h": 16
+      },
+      "parentCls": "",
+      "font": {
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "text-align": "start"
+      }
+    },
+    {
+      "text": "Message Assistant…",
+      "rect": {
+        "x": 443,
+        "y": 675,
+        "w": 138.47,
+        "h": 16
+      },
+      "parentCls": "cf-draft__ph",
+      "font": {
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "line-height": "20.25px",
+        "text-align": "start"
+      }
+    },
+    {
+      "text": "Mount workspace",
+      "rect": {
+        "x": 504,
+        "y": 768,
+        "w": 105.67,
+        "h": 14
+      },
+      "parentCls": "cf-wschip",
+      "font": {
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "line-height": "normal",
+        "text-align": "center"
+      }
+    },
+    {
+      "text": "DeepSeek V4.1 Flash",
+      "rect": {
+        "x": 878.06,
+        "y": 768,
+        "w": 127.33,
+        "h": 14
+      },
+      "parentCls": "chip__label",
+      "font": {
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "line-height": "normal",
+        "text-align": "center"
+      }
+    },
+    {
+      "text": "Default",
+      "rect": {
+        "x": 1051.39,
+        "y": 768,
+        "w": 43.86,
+        "h": 14
+      },
+      "parentCls": "chip__label",
+      "font": {
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "line-height": "normal",
+        "text-align": "center"
+      }
+    },
+    {
+      "text": "Send",
+      "rect": {
+        "x": 1142.25,
+        "y": 767.5,
+        "w": 36.75,
+        "h": 15
+      },
+      "parentCls": "cf-send",
+      "font": {
+        "font-size": "13px",
+        "font-weight": "600",
+        "color": "rgb(255, 255, 255)",
+        "line-height": "normal",
+        "text-align": "center"
+      }
+    }
+  ],
+  "modalTree": null,
+  "searchTree": {
+    "tag": "div",
+    "cls": "cf-search cf-search--filter",
+    "rect": {
+      "x": 68,
+      "y": 12,
+      "w": 235,
+      "h": 32
+    },
+    "text": "",
+    "style": {
+      "display": "flex",
+      "grid-template-columns": "none",
+      "padding": "0px 8px 0px 2px",
+      "gap": "6px",
+      "font-size": "12px",
+      "font-weight": "400",
+      "color": "rgb(92, 92, 102)",
+      "background-color": "rgb(255, 255, 255)",
+      "border-radius": "8px",
+      "border-width": "1px",
+      "border-color": "rgb(230, 230, 234)",
+      "margin": "0px",
+      "align-items": "center",
+      "justify-content": "normal",
+      "text-align": "start",
+      "line-height": "18px",
+      "width": "235px",
+      "height": "32px",
+      "box-shadow": "none",
+      "opacity": "1",
+      "flex-direction": "row"
+    },
+    "children": [
+      {
+        "tag": "button",
+        "cls": "cf-search__filter",
+        "rect": {
+          "x": 71,
+          "y": 15,
+          "w": 26,
+          "h": 26
+        },
+        "text": "",
+        "style": {
+          "display": "flex",
+          "grid-template-columns": "none",
+          "padding": "0px 5.5px",
+          "gap": "4px",
+          "font-size": "12px",
+          "font-weight": "400",
+          "color": "rgb(138, 138, 148)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "6px",
+          "border-width": "0px",
+          "border-color": "rgb(138, 138, 148)",
+          "margin": "0px",
+          "align-items": "center",
+          "justify-content": "normal",
+          "text-align": "center",
+          "line-height": "normal",
+          "width": "26px",
+          "height": "26px",
+          "box-shadow": "none",
+          "opacity": "1",
+          "flex-direction": "row"
+        },
+        "children": [
+          {
+            "tag": "svg",
+            "cls": "",
+            "rect": {
+              "x": 76.5,
+              "y": 20.5,
+              "w": 15,
+              "h": 15
+            },
+            "text": "",
+            "style": {
+              "display": "block",
+              "grid-template-columns": "none",
+              "padding": "0px",
+              "gap": "normal",
+              "font-size": "12px",
+              "font-weight": "400",
+              "color": "rgb(138, 138, 148)",
+              "background-color": "rgba(0, 0, 0, 0)",
+              "border-radius": "0px",
+              "border-width": "0px",
+              "border-color": "rgb(138, 138, 148)",
+              "margin": "0px",
+              "align-items": "normal",
+              "justify-content": "normal",
+              "text-align": "center",
+              "line-height": "normal",
+              "width": "15px",
+              "height": "15px",
+              "box-shadow": "none",
+              "opacity": "1",
+              "flex-direction": "row"
+            },
+            "children": [
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 78.38,
+                  "y": 24.25,
+                  "w": 11.25,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              },
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 80.88,
+                  "y": 28,
+                  "w": 6.25,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              },
+              {
+                "tag": "path",
+                "cls": "",
+                "rect": {
+                  "x": 82.75,
+                  "y": 31.75,
+                  "w": 2.5,
+                  "h": 0
+                },
+                "text": "",
+                "style": {
+                  "display": "inline",
+                  "grid-template-columns": "none",
+                  "padding": "0px",
+                  "gap": "normal",
+                  "font-size": "12px",
+                  "font-weight": "400",
+                  "color": "rgb(138, 138, 148)",
+                  "background-color": "rgba(0, 0, 0, 0)",
+                  "border-radius": "0px",
+                  "border-width": "0px",
+                  "border-color": "rgb(138, 138, 148)",
+                  "margin": "0px",
+                  "align-items": "normal",
+                  "justify-content": "normal",
+                  "text-align": "center",
+                  "line-height": "normal",
+                  "width": "auto",
+                  "height": "auto",
+                  "box-shadow": "none",
+                  "opacity": "1",
+                  "flex-direction": "row"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "input",
+        "cls": "cf-search__input",
+        "rect": {
+          "x": 103,
+          "y": 20,
+          "w": 191,
+          "h": 16
+        },
+        "text": "",
+        "style": {
+          "display": "block",
+          "grid-template-columns": "none",
+          "padding": "1px 2px",
+          "gap": "normal",
+          "font-size": "12px",
+          "font-weight": "400",
+          "color": "rgb(31, 31, 36)",
+          "background-color": "rgba(0, 0, 0, 0)",
+          "border-radius": "0px",
+          "border-width": "0px",
+          "border-color": "rgb(31, 31, 36)",
+          "margin": "0px",
+          "align-items": "normal",
+          "justify-content": "normal",
+          "text-align": "start",
+          "line-height": "normal",
+          "width": "191px",
+          "height": "16px",
+          "box-shadow": "none",
+          "opacity": "1",
+          "flex-direction": "row"
+        }
+      }
+    ]
+  },
+  "ctxTree": null,
+  "boxes": [],
+  "detail": [
+    {
+      "group": "msg",
+      "sel": ".cf-msg__name",
+      "tag": "span",
+      "cls": "cf-msg__name",
+      "rect": {
+        "x": 488,
+        "y": 108.86,
+        "w": 68.19,
+        "h": 19.5
+      },
+      "text": "Assistant",
+      "style": {
+        "display": "block",
+        "padding": "0px",
+        "margin": "0px",
+        "font-size": "13px",
+        "font-weight": "700",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top": "0px none rgb(31, 31, 36)",
+        "border-bottom": "0px none rgb(31, 31, 36)",
+        "border-left": "0px none rgb(31, 31, 36)",
+        "border-right": "0px none rgb(31, 31, 36)",
+        "border-radius": "0px",
+        "border-collapse": "separate",
+        "border-spacing": "0px 0px",
+        "text-align": "start",
+        "white-space": "normal",
+        "overflow-x": "visible",
+        "overflow-y": "visible",
+        "letter-spacing": "normal",
+        "vertical-align": "baseline",
+        "opacity": "1",
+        "width": "68.1875px",
+        "max-width": "none"
+      }
+    },
+    {
+      "group": "msg",
+      "sel": ".cf-msg__text",
+      "tag": "div",
+      "cls": "cf-msg__text",
+      "rect": {
+        "x": 775.69,
+        "y": 47,
+        "w": 364.31,
+        "h": 41.86
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "padding": "10px 14px",
+        "margin": "0px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "line-height": "21.87px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(237, 239, 251)",
+        "border-top": "0px none rgb(31, 31, 36)",
+        "border-bottom": "0px none rgb(31, 31, 36)",
+        "border-left": "0px none rgb(31, 31, 36)",
+        "border-right": "0px none rgb(31, 31, 36)",
+        "border-radius": "12px 6px 12px 12px",
+        "border-collapse": "separate",
+        "border-spacing": "0px 0px",
+        "text-align": "start",
+        "white-space": "pre-wrap",
+        "overflow-x": "visible",
+        "overflow-y": "visible",
+        "letter-spacing": "normal",
+        "vertical-align": "baseline",
+        "opacity": "1",
+        "width": "364.312px",
+        "max-width": "none"
+      }
+    },
+    {
+      "group": "overlay",
+      "sel": ".cf-search__filter",
+      "tag": "button",
+      "cls": "cf-search__filter",
+      "rect": {
+        "x": 71,
+        "y": 15,
+        "w": 26,
+        "h": 26
+      },
+      "text": "",
+      "style": {
+        "display": "flex",
+        "padding": "0px 5.5px",
+        "margin": "0px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top": "0px none rgb(138, 138, 148)",
+        "border-bottom": "0px none rgb(138, 138, 148)",
+        "border-left": "0px none rgb(138, 138, 148)",
+        "border-right": "0px none rgb(138, 138, 148)",
+        "border-radius": "6px",
+        "border-collapse": "separate",
+        "border-spacing": "0px 0px",
+        "text-align": "center",
+        "white-space": "normal",
+        "overflow-x": "visible",
+        "overflow-y": "visible",
+        "letter-spacing": "normal",
+        "vertical-align": "baseline",
+        "opacity": "1",
+        "width": "26px",
+        "max-width": "none"
+      },
+      "attrs": "Filter"
+    }
+  ],
+  "composerTree": [
+    {
+      "tag": "div",
+      "cls": "cf-composer__inner",
+      "rect": {
+        "x": 428,
+        "y": 658,
+        "w": 780,
+        "h": 146
+      },
+      "text": "\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDe",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "780px",
+        "height": "146px"
+      }
+    },
+    {
+      "tag": "div",
+      "cls": "cf-dock",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "text": "",
+      "style": {
+        "display": "none",
+        "gap": "8px",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<div class=\"cf-dock\"></div>"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-box",
+      "rect": {
+        "x": 428,
+        "y": 658,
+        "w": 780,
+        "h": 146
+      },
+      "text": "\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDe",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "12px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "12px",
+        "border-width": "1px",
+        "border-color": "rgb(213, 213, 219)",
+        "width": "780px",
+        "height": "146px"
+      }
+    },
+    {
+      "tag": "div",
+      "cls": "cf-resizer cf-resizer--y cf-resizer--box",
+      "rect": {
+        "x": 441,
+        "y": 655,
+        "w": 754,
+        "h": 6
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "754px",
+        "height": "6px"
+      },
+      "html": "<div class=\"cf-resizer cf-resizer--y cf-resizer--box\" title=\"Drag to resize the input box, double-click to reset\" role=\"separator\" aria-orientation=\"horizontal\"></div>"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-draft",
+      "rect": {
+        "x": 441,
+        "y": 671,
+        "w": 754,
+        "h": 80
+      },
+      "text": "\n\n\nMessage Assistant…",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "754px",
+        "height": "80px"
+      }
+    },
+    {
+      "tag": "div",
+      "cls": "cf-draft__input",
+      "rect": {
+        "x": 441,
+        "y": 671,
+        "w": 754,
+        "h": 80
+      },
+      "text": "\n",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "2px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "754px",
+        "height": "80px"
+      }
+    },
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 443,
+        "y": 673,
+        "w": 750,
+        "h": 20.25
+      },
+      "text": "\n",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "750px",
+        "height": "20.25px"
+      }
+    },
+    {
+      "tag": "br",
+      "cls": "",
+      "rect": {
+        "x": 443,
+        "y": 675,
+        "w": 0,
+        "h": 16
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<br data-lexical-managed-linebreak=\"true\">"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-draft__ph",
+      "rect": {
+        "x": 443,
+        "y": 673,
+        "w": 750,
+        "h": 20.25
+      },
+      "text": "Message Assistant…",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "750px",
+        "height": "20.25px"
+      },
+      "html": "<div class=\"cf-draft__ph\">Message Assistant…</div>"
+    },
+    {
+      "tag": "div",
+      "cls": "cf-box__bar",
+      "rect": {
+        "x": 441,
+        "y": 759,
+        "w": 754,
+        "h": 32
+      },
+      "text": "Mount workspace\nDeepSeek V4.1 Flash\nDefault\nSend",
+      "style": {
+        "display": "flex",
+        "gap": "4px",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "754px",
+        "height": "32px"
+      }
+    },
+    {
+      "tag": "button",
+      "cls": "cf-iconbtn",
+      "rect": {
+        "x": 441,
+        "y": 760,
+        "w": 30,
+        "h": 30
+      },
+      "text": "",
+      "style": {
+        "display": "flex",
+        "gap": "normal",
+        "padding": "1px 6px",
+        "font-size": "15px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "6px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "30px",
+        "height": "30px"
+      }
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 448,
+        "y": 767,
+        "w": 16,
+        "h": 16
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "15px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "16px",
+        "height": "16px"
+      }
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 449.34,
+        "y": 768.34,
+        "w": 12.96,
+        "h": 13.33
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "15px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48\"></path>"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-wschip",
+      "rect": {
+        "x": 475,
+        "y": 760,
+        "w": 142.67,
+        "h": 30
+      },
+      "text": "Mount workspace",
+      "style": {
+        "display": "flex",
+        "gap": "6px",
+        "padding": "0px 8px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "142.672px",
+        "height": "30px"
+      }
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 483,
+        "y": 767.5,
+        "w": 15,
+        "h": 15
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "15px",
+        "height": "15px"
+      }
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 490.5,
+        "y": 773.75,
+        "w": 0,
+        "h": 3.75
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M12 10v6\"></path>"
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 488.63,
+        "y": 775.63,
+        "w": 3.75,
+        "h": 0
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M9 13h6\"></path>"
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 484.25,
+        "y": 769.38,
+        "w": 12.5,
+        "h": 10.63
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "400",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"></path>"
+    },
+    {
+      "tag": "div",
+      "cls": "model-pick",
+      "rect": {
+        "x": 857.06,
+        "y": 761,
+        "w": 171.33,
+        "h": 28
+      },
+      "text": "DeepSeek V4.1 Flash",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "171.328px",
+        "height": "28px"
+      }
+    },
+    {
+      "tag": "button",
+      "cls": "chip",
+      "rect": {
+        "x": 857.06,
+        "y": 761,
+        "w": 171.33,
+        "h": 28
+      },
+      "text": "DeepSeek V4.1 Flash",
+      "style": {
+        "display": "inline-flex",
+        "gap": "5px",
+        "padding": "0px 4px 0px 8px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "border-width": "1px",
+        "border-color": "rgba(0, 0, 0, 0)",
+        "width": "171.328px",
+        "height": "28px"
+      }
+    },
+    {
+      "tag": "span",
+      "cls": "chip__dot",
+      "rect": {
+        "x": 866.06,
+        "y": 771.5,
+        "w": 7,
+        "h": 7
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgb(217, 119, 87)",
+        "border-radius": "50%",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "7px",
+        "height": "7px"
+      },
+      "html": "<span class=\"chip__dot\" style=\"background: rgb(217, 119, 87);\"></span>"
+    },
+    {
+      "tag": "span",
+      "cls": "chip__label",
+      "rect": {
+        "x": 878.06,
+        "y": 768,
+        "w": 127.33,
+        "h": 14
+      },
+      "text": "DeepSeek V4.1 Flash",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "127.328px",
+        "height": "14px"
+      },
+      "html": "<span class=\"chip__label\">DeepSeek V4.1 Flash</span>"
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 1010.39,
+        "y": 768.5,
+        "w": 13,
+        "h": 13
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "13px",
+        "height": "13px"
+      }
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 1013.64,
+        "y": 773.38,
+        "w": 6.5,
+        "h": 3.25
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"m6 9 6 6 6-6\"></path>"
+    },
+    {
+      "tag": "div",
+      "cls": "model-pick",
+      "rect": {
+        "x": 1028.39,
+        "y": 761,
+        "w": 93.86,
+        "h": 28
+      },
+      "text": "Default",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "width": "93.8594px",
+        "height": "28px"
+      }
+    },
+    {
+      "tag": "button",
+      "cls": "chip",
+      "rect": {
+        "x": 1028.39,
+        "y": 761,
+        "w": 93.86,
+        "h": 28
+      },
+      "text": "Default",
+      "style": {
+        "display": "inline-flex",
+        "gap": "5px",
+        "padding": "0px 8px 0px 4px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "border-width": "1px",
+        "border-color": "rgba(0, 0, 0, 0)",
+        "width": "93.8594px",
+        "height": "28px"
+      }
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 1033.39,
+        "y": 768.5,
+        "w": 13,
+        "h": 13
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "13px",
+        "height": "13px"
+      }
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 1036.64,
+        "y": 769.58,
+        "w": 6.5,
+        "h": 6.5
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"></path>"
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 1038.27,
+        "y": 778.25,
+        "w": 3.25,
+        "h": 0
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M9 18h6\"></path>"
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 1038.81,
+        "y": 780.42,
+        "w": 2.17,
+        "h": 0
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"M10 22h4\"></path>"
+    },
+    {
+      "tag": "span",
+      "cls": "chip__label",
+      "rect": {
+        "x": 1051.39,
+        "y": 768,
+        "w": 43.86,
+        "h": 14
+      },
+      "text": "Default",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "43.8594px",
+        "height": "14px"
+      },
+      "html": "<span class=\"chip__label\">Default</span>"
+    },
+    {
+      "tag": "svg",
+      "cls": "",
+      "rect": {
+        "x": 1100.25,
+        "y": 768.5,
+        "w": 13,
+        "h": 13
+      },
+      "text": "",
+      "style": {
+        "display": "block",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "13px",
+        "height": "13px"
+      }
+    },
+    {
+      "tag": "path",
+      "cls": "",
+      "rect": {
+        "x": 1103.5,
+        "y": 773.38,
+        "w": 6.5,
+        "h": 3.25
+      },
+      "text": "",
+      "style": {
+        "display": "inline",
+        "gap": "normal",
+        "padding": "0px",
+        "font-size": "12px",
+        "font-weight": "500",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(92, 92, 102)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "html": "<path d=\"m6 9 6 6 6-6\"></path>"
+    },
+    {
+      "tag": "button",
+      "cls": "cf-send",
+      "rect": {
+        "x": 1126.25,
+        "y": 759,
+        "w": 68.75,
+        "h": 32
+      },
+      "text": "Send",
+      "style": {
+        "display": "flex",
+        "gap": "6px",
+        "padding": "0px 16px",
+        "font-size": "13px",
+        "font-weight": "600",
+        "color": "rgb(255, 255, 255)",
+        "background-color": "rgb(91, 91, 214)",
+        "border-radius": "8px",
+        "border-width": "0px",
+        "border-color": "rgb(255, 255, 255)",
+        "width": "68.75px",
+        "height": "32px"
+      },
+      "html": "<button class=\"cf-send\" type=\"button\" disabled=\"\">Send</button>"
+    }
+  ],
+  "msgTree": [
+    {
+      "cls": "cf-msg is-user",
+      "rect": {
+        "x": 444,
+        "y": 47,
+        "w": 740,
+        "h": 41.86
+      },
+      "style": {
+        "display": "grid",
+        "grid-template-columns": "696px 32px",
+        "gap": "12px",
+        "padding": "0px",
+        "margin": "0px"
+      },
+      "children": [
+        {
+          "tag": "div",
+          "cls": "cf-msg__body",
+          "rect": {
+            "x": 775.69,
+            "y": 47,
+            "w": 364.31,
+            "h": 41.86
+          },
+          "text": "帮我看看这个目录里有什么，并说明 README 的用途。",
+          "style": {
+            "display": "block",
+            "padding": "0px",
+            "margin": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "color": "rgb(31, 31, 36)",
+            "white-space": "normal"
+          }
+        },
+        {
+          "tag": "div",
+          "cls": "cf-ava is-user",
+          "rect": {
+            "x": 1152,
+            "y": 47,
+            "w": 32,
+            "h": 32
+          },
+          "text": "",
+          "style": {
+            "display": "block",
+            "padding": "0px",
+            "margin": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "color": "rgb(31, 31, 36)",
+            "white-space": "normal"
+          }
+        }
+      ]
+    },
+    {
+      "cls": "cf-msg",
+      "rect": {
+        "x": 444,
+        "y": 108.86,
+        "w": 740,
+        "h": 45.59
+      },
+      "style": {
+        "display": "grid",
+        "grid-template-columns": "32px 696px",
+        "gap": "12px",
+        "padding": "0px",
+        "margin": "0px"
+      },
+      "children": [
+        {
+          "tag": "div",
+          "cls": "cf-ava",
+          "rect": {
+            "x": 444,
+            "y": 108.86,
+            "w": 32,
+            "h": 32
+          },
+          "text": "",
+          "style": {
+            "display": "block",
+            "padding": "0px",
+            "margin": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "color": "rgb(31, 31, 36)",
+            "white-space": "normal"
+          }
+        },
+        {
+          "tag": "div",
+          "cls": "cf-msg__body",
+          "rect": {
+            "x": 488,
+            "y": 108.86,
+            "w": 696,
+            "h": 45.59
+          },
+          "text": "Assistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。",
+          "style": {
+            "display": "block",
+            "padding": "0px",
+            "margin": "0px",
+            "font-size": "13px",
+            "font-weight": "400",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "border-radius": "0px",
+            "color": "rgb(31, 31, 36)",
+            "white-space": "normal"
+          }
+        }
+      ]
+    }
+  ],
+  "mdTop": [
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 131.36,
+        "w": 696,
+        "h": 23.09
+      },
+      "text": "这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "0px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    }
+  ],
+  "painted": {
+    "iconrail": {
+      "bg": "rgb(240, 240, 242)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "rail": {
+      "bg": "rgb(247, 247, 248)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "conv": {
+      "bg": "rgb(255, 255, 255)",
+      "borderRight": "rgb(31, 31, 36)",
+      "borderRightWidth": "0px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "railTop": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "borderRight": "rgb(31, 31, 36)",
+      "borderRightWidth": "0px",
+      "borderBottom": "rgb(31, 31, 36)"
+    },
+    "search": {
+      "bg": "rgb(255, 255, 255)",
+      "borderRight": "rgb(230, 230, 234)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(230, 230, 234)"
+    },
+    "box": {
+      "bg": "rgb(255, 255, 255)",
+      "borderRight": "rgb(213, 213, 219)",
+      "borderRightWidth": "1px",
+      "borderBottom": "rgb(213, 213, 219)"
+    }
+  },
+  "named": {
+    "shell": {
+      "sel": ".cf-shell",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday\n会话 001：准备发布说明\nyesterday\n会话 002：准备发布说明\nyesterday\n会话 003：准备发布说明\nyesterday\n会话 004：准备发布说明\nyesterday\n会"
+    },
+    "body": {
+      "sel": ".cf-body",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 1280,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday\n会话 001：准备发布说明\nyesterday\n会话 002：准备发布说明\nyesterday\n会话 003：准备发布说明\nyesterday\n会话 004：准备发布说明\nyesterday\n会"
+    },
+    "iconrail": {
+      "sel": ".cf-iconrail",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(240, 240, 242)",
+        "border-radius": "0px",
+        "padding": "20px 0px 12px",
+        "border-width": "0px 1px 0px 0px",
+        "border-color": "rgb(31, 31, 36) rgb(230, 230, 234) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "4px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "me": {
+      "sel": ".cf-iconrail__me",
+      "rect": {
+        "x": 8.5,
+        "y": 20,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "2px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "navActive": {
+      "sel": ".cf-navbtn.is-active",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(91, 91, 214)",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "0px",
+        "border-color": "rgb(91, 91, 214)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "navAll": {
+      "sel": ".cf-iconrail .cf-navbtn",
+      "rect": {
+        "x": 7.5,
+        "y": 70,
+        "w": 40,
+        "h": 40
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(91, 91, 214)",
+        "background-color": "rgba(0, 0, 0, 0.08)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "0px",
+        "border-color": "rgb(91, 91, 214)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "rail": {
+      "sel": ".cf-rail",
+      "rect": {
+        "x": 56,
+        "y": 0,
+        "w": 300,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(247, 247, 248)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px 1px 0px 0px",
+        "border-color": "rgb(31, 31, 36) rgb(230, 230, 234) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "flex"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday\n会话 001：准备发布说明\nyesterday\n会话 002：准备发布说明\nyesterday\n会话 003：准备发布说明\nyesterday\n会话 004：准备发布说明\nyesterday\n会"
+    },
+    "railTop": {
+      "sel": ".cf-rail__top",
+      "rect": {
+        "x": 56,
+        "y": 0,
+        "w": 299,
+        "h": 56
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "8px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "search": {
+      "sel": ".cf-search",
+      "rect": {
+        "x": 68,
+        "y": 12,
+        "w": 235,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "18px",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "8px",
+        "padding": "0px 8px 0px 2px",
+        "border-width": "1px",
+        "border-color": "rgb(230, 230, 234)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "6px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "searchInput": {
+      "sel": ".cf-search__input",
+      "rect": {
+        "x": 103,
+        "y": 20,
+        "w": 191,
+        "h": 16
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "1px 2px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "addBtn": {
+      "sel": ".cf-rail__addbtn",
+      "rect": {
+        "x": 311,
+        "y": 12,
+        "w": 32,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "8px",
+        "padding": "1px 6px",
+        "border-width": "1px",
+        "border-color": "rgb(230, 230, 234)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "grid"
+      },
+      "text": ""
+    },
+    "list": {
+      "sel": ".cf-list",
+      "rect": {
+        "x": 56,
+        "y": 56,
+        "w": 299,
+        "h": 764
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px 8px 8px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday\n会话 001：准备发布说明\nyesterday\n会话 002：准备发布说明\nyesterday\n会话 003：准备发布说明\nyesterday\n会话 004：准备发布说明\nyesterday\n会"
+    },
+    "thread": {
+      "sel": ".cf-thread",
+      "rect": {
+        "x": 64,
+        "y": -1144,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday"
+    },
+    "threadActive": {
+      "sel": ".cf-thread.is-active",
+      "rect": {
+        "x": 64,
+        "y": -820,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(91, 91, 214, 0.12)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 006：准备发布说明\nyesterday"
+    },
+    "threadFace": {
+      "sel": ".cf-thread__face",
+      "rect": {
+        "x": 76,
+        "y": -1136,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "threadTitle": {
+      "sel": ".cf-thread__title, .cf-thread__name",
+      "rect": {
+        "x": 126,
+        "y": -1136,
+        "w": 138.34,
+        "h": 19
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "600",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "对比用会话：一条完整回合"
+    },
+    "conv": {
+      "sel": ".cf-conv",
+      "rect": {
+        "x": 356,
+        "y": 0,
+        "w": 924,
+        "h": 820
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "flex"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。\nAssistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。\n\n\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V"
+    },
+    "head": {
+      "sel": ".cf-conv__head",
+      "rect": {
+        "x": 356,
+        "y": 0,
+        "w": 924,
+        "h": 27
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "8px 140px 8px 16px",
+        "border-width": "0px 0px 1px",
+        "border-color": "rgb(31, 31, 36) rgb(31, 31, 36) rgb(230, 230, 234)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "idbtn": {
+      "sel": ".cf-idbtn",
+      "rect": {
+        "x": 372,
+        "y": 8,
+        "w": 20,
+        "h": 10
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "5px 10px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "flex"
+      },
+      "text": ""
+    },
+    "idname": {
+      "sel": ".cf-idbtn__name",
+      "rect": {
+        "x": 382,
+        "y": 13,
+        "w": 0,
+        "h": 0
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "14px",
+        "font-weight": "700",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    "msgs": {
+      "sel": ".cf-msgs",
+      "rect": {
+        "x": 356,
+        "y": 27,
+        "w": 924,
+        "h": 618
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "20px 0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。\nAssistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    },
+    "msgsInner": {
+      "sel": ".cf-msgs__inner",
+      "rect": {
+        "x": 424,
+        "y": 47,
+        "w": 780,
+        "h": 107.45
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px 20px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "20px",
+        "display": "flex"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。\nAssistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    },
+    "msg": {
+      "sel": ".cf-msg",
+      "rect": {
+        "x": 444,
+        "y": 47,
+        "w": 740,
+        "h": 41.86
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。"
+    },
+    "msgName": {
+      "sel": ".cf-msg__name",
+      "rect": {
+        "x": 488,
+        "y": 108.86,
+        "w": 68.19,
+        "h": 19.5
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "700",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "Assistant"
+    },
+    "msgText": {
+      "sel": ".cf-msg__text",
+      "rect": {
+        "x": 775.69,
+        "y": 47,
+        "w": 364.31,
+        "h": 41.86
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "line-height": "21.87px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(237, 239, 251)",
+        "border-radius": "12px 6px 12px 12px",
+        "padding": "10px 14px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。"
+    },
+    "md": {
+      "sel": ".md",
+      "rect": {
+        "x": 488,
+        "y": 131.36,
+        "w": 696,
+        "h": 23.09
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "23.1px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    },
+    "mdP": {
+      "sel": ".md p",
+      "rect": {
+        "x": 488,
+        "y": 131.36,
+        "w": 696,
+        "h": 23.09
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "23.1px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    },
+    "mdH2": null,
+    "mdTable": null,
+    "mdCode": null,
+    "mdCodeBody": null,
+    "mdCodeHead": null,
+    "mdQuote": null,
+    "mdHr": null,
+    "mdUl": null,
+    "mdOl": null,
+    "mdTask": null,
+    "composer": {
+      "sel": ".cf-composer",
+      "rect": {
+        "x": 356,
+        "y": 645,
+        "w": 924,
+        "h": 175
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "12px 16px 16px",
+        "border-width": "1px 0px 0px",
+        "border-color": "rgba(0, 0, 0, 0) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDefault\nSend"
+    },
+    "composerInner": {
+      "sel": ".cf-composer__inner",
+      "rect": {
+        "x": 428,
+        "y": 658,
+        "w": 780,
+        "h": 146
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDefault\nSend"
+    },
+    "box": {
+      "sel": ".cf-box",
+      "rect": {
+        "x": 428,
+        "y": 658,
+        "w": 780,
+        "h": 146
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(255, 255, 255)",
+        "border-radius": "12px",
+        "padding": "12px",
+        "border-width": "1px",
+        "border-color": "rgb(213, 213, 219)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "rgba(0, 0, 0, 0.12) 0px 6px 24px 0px",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "\n\n\nMessage Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDefault\nSend"
+    },
+    "draft": {
+      "sel": ".cf-draft",
+      "rect": {
+        "x": 441,
+        "y": 671,
+        "w": 754,
+        "h": 80
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13.5px",
+        "font-weight": "400",
+        "line-height": "20.25px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "\n\n\nMessage Assistant…"
+    },
+    "send": {
+      "sel": ".cf-send",
+      "rect": {
+        "x": 1126.25,
+        "y": 759,
+        "w": 68.75,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "600",
+        "line-height": "normal",
+        "color": "rgb(255, 255, 255)",
+        "background-color": "rgb(91, 91, 214)",
+        "border-radius": "8px",
+        "padding": "0px 16px",
+        "border-width": "0px",
+        "border-color": "rgb(255, 255, 255)",
+        "letter-spacing": "normal",
+        "text-align": "center",
+        "box-shadow": "none",
+        "opacity": "0.45",
+        "gap": "6px",
+        "display": "flex"
+      },
+      "text": "Send"
+    },
+    "toolbar": {
+      "sel": ".cf-composer__bar, .cf-box__bar",
+      "rect": {
+        "x": 441,
+        "y": 759,
+        "w": 754,
+        "h": 32
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "4px",
+        "display": "flex"
+      },
+      "text": "Mount workspace\nDeepSeek V4.1 Flash\nDefault\nSend"
+    },
+    "modelPickerTrigger": null,
+    "statusDot": null,
+    "empty": null,
+    "quickstart": null,
+    "ctx": null,
+    "ctxItem": null,
+    "modalBackdrop": null,
+    "modal": null,
+    "modalHead": null,
+    "modalTitle": null,
+    "modalNav": null,
+    "modalNavActive": null,
+    "modalBody": null,
+    "modalPanel": null,
+    "settingsRow": null,
+    "seg": null,
+    "segItem": null,
+    "switch": null,
+    "picker": null,
+    "about": null,
+    "aboutIcon": null,
+    "aboutName": null,
+    "aboutVer": null,
+    "updateBtn": null,
+    "tag": {
+      "sel": ".cf-thread__time, .cf-thread__meta",
+      "rect": {
+        "x": 272.34,
+        "y": -1131,
+        "w": 54.66,
+        "h": 13
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "11px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(138, 138, 148)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(138, 138, 148)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "yesterday"
+    },
+    "scrollbar": null
+  },
+  "threads": [
+    {
+      "rect": {
+        "x": 64,
+        "y": -1144,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -1090,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 001：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -1036,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 002：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -982,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 003：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -928,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 004：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -874,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 005：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -820,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(91, 91, 214, 0.12)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 006：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -766,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 007：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -712,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 008：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -658,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 009：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -604,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 010：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -550,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 011：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -496,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 012：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -442,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 013：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -388,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 014：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -334,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 015：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -280,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 016：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -226,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 017：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -172,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 018：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 64,
+        "y": -118,
+        "w": 275,
+        "h": 54
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "8px",
+        "padding": "8px 12px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "会话 019：准备发布说明\nyesterday"
+    }
+  ],
+  "threadParts": [
+    {
+      "rect": {
+        "x": 76,
+        "y": -1136,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -1136,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "对比用会话：一条完整回合\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -1082,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -1082,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 001：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -1028,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -1028,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 002：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -974,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -974,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 003：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -920,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -920,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 004：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -866,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -866,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 005：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -812,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -812,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 006：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -758,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -758,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 007：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -704,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -704,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 008：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -650,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -650,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 009：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -596,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -596,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 010：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -542,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -542,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 011：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -488,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -488,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 012：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -434,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -434,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 013：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -380,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -380,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 014：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -326,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -326,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 015：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -272,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -272,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 016：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -218,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -218,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 017：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -164,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -164,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 018：准备发布说明\nyesterday"
+    },
+    {
+      "rect": {
+        "x": 76,
+        "y": -110,
+        "w": 38,
+        "h": 38
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": ""
+    },
+    {
+      "rect": {
+        "x": 126,
+        "y": -110,
+        "w": 201,
+        "h": 21
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "normal",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "left",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "会话 019：准备发布说明\nyesterday"
+    }
+  ],
+  "messages": [
+    {
+      "rect": {
+        "x": 444,
+        "y": 47,
+        "w": 740,
+        "h": 41.86
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "帮我看看这个目录里有什么，并说明 README 的用途。"
+    },
+    {
+      "rect": {
+        "x": 444,
+        "y": 108.86,
+        "w": 740,
+        "h": 45.59
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "13px",
+        "font-weight": "400",
+        "line-height": "19.5px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "12px",
+        "display": "grid"
+      },
+      "text": "Assistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    }
+  ],
+  "mdBlocks": [
+    {
+      "rect": {
+        "x": 488,
+        "y": 131.36,
+        "w": 696,
+        "h": 23.09
+      },
+      "style": {
+        "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "23.1px",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "padding": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "letter-spacing": "normal",
+        "text-align": "start",
+        "box-shadow": "none",
+        "opacity": "1",
+        "gap": "normal",
+        "display": "block"
+      },
+      "text": "这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    }
+  ],
+  "mdAll": 1,
+  "scroll": {
+    "scrollTop": 0,
+    "scrollHeight": 618,
+    "clientHeight": 618
+  },
+  "listScroll": {
+    "scrollTop": 1200,
+    "scrollHeight": 6488,
+    "clientHeight": 764
+  },
+  "texts": {
+    "search": [
+      "Search chats"
+    ],
+    "empty": [],
+    "composer": null,
+    "ctx": [],
+    "modal": [],
+    "thread": [
+      "对比用会话：一条完整回合\nyesterday",
+      "会话 001：准备发布说明\nyesterday",
+      "会话 002：准备发布说明\nyesterday",
+      "会话 003：准备发布说明\nyesterday",
+      "会话 004：准备发布说明\nyesterday",
+      "会话 005：准备发布说明\nyesterday",
+      "会话 006：准备发布说明\nyesterday",
+      "会话 007：准备发布说明\nyesterday",
+      "会话 008：准备发布说明\nyesterday",
+      "会话 009：准备发布说明\nyesterday",
+      "会话 010：准备发布说明\nyesterday",
+      "会话 011：准备发布说明\nyesterday",
+      "会话 012：准备发布说明\nyesterday",
+      "会话 013：准备发布说明\nyesterday",
+      "会话 014：准备发布说明\nyesterday",
+      "会话 015：准备发布说明\nyesterday",
+      "会话 016：准备发布说明\nyesterday",
+      "会话 017：准备发布说明\nyesterday",
+      "会话 018：准备发布说明\nyesterday",
+      "会话 019：准备发布说明\nyesterday",
+      "会话 020：准备发布说明\nyesterday",
+      "会话 021：准备发布说明\nyesterday",
+      "会话 022：准备发布说明\nyesterday",
+      "会话 023：准备发布说明\nyesterday",
+      "会话 024：准备发布说明\nyesterday",
+      "会话 025：准备发布说明\nyesterday",
+      "会话 026：准备发布说明\nyesterday",
+      "会话 027：准备发布说明\nyesterday",
+      "会话 028：准备发布说明\nyesterday",
+      "会话 029：准备发布说明\nyesterday",
+      "会话 030：准备发布说明\nyesterday",
+      "会话 031：准备发布说明\nyesterday",
+      "会话 032：准备发布说明\nyesterday",
+      "会话 033：准备发布说明\nyesterday",
+      "会话 034：准备发布说明\nyesterday",
+      "会话 035：准备发布说明\nyesterday",
+      "会话 036：准备发布说明\nyesterday",
+      "会话 037：准备发布说明\nyesterday",
+      "会话 038：准备发布说明\nyesterday",
+      "会话 039：准备发布说明\nyesterday",
+      "会话 040：准备发布说明\nyesterday",
+      "会话 041：准备发布说明\nyesterday",
+      "会话 042：准备发布说明\nyesterday",
+      "会话 043：准备发布说明\nyesterday",
+      "会话 044：准备发布说明\nyesterday",
+      "会话 045：准备发布说明\nyesterday",
+      "会话 046：准备发布说明\nyesterday",
+      "会话 047：准备发布说明\nyesterday",
+      "会话 048：准备发布说明\nyesterday",
+      "会话 049：准备发布说明\nyesterday",
+      "会话 050：准备发布说明\nyesterday",
+      "会话 051：准备发布说明\nyesterday",
+      "会话 052：准备发布说明\nyesterday",
+      "会话 053：准备发布说明\nyesterday",
+      "会话 054：准备发布说明\nyesterday",
+      "会话 055：准备发布说明\nyesterday",
+      "会话 056：准备发布说明\nyesterday",
+      "会话 057：准备发布说明\nyesterday",
+      "会话 058：准备发布说明\nyesterday",
+      "会话 059：准备发布说明\nyesterday"
+    ],
+    "messages": [
+      "帮我看看这个目录里有什么，并说明 README 的用途。\nAssistant\n\n这是第 6 条会话的回复正文，用来验证长列表滚动与委托复用。"
+    ],
+    "buttons": [
+      "对比用会话：一条完整回合\nyesterday",
+      "会话 001：准备发布说明\nyesterday",
+      "会话 002：准备发布说明\nyesterday",
+      "会话 003：准备发布说明\nyesterday",
+      "会话 004：准备发布说明\nyesterday",
+      "会话 005：准备发布说明\nyesterday",
+      "会话 006：准备发布说明\nyesterday",
+      "会话 007：准备发布说明\nyesterday",
+      "会话 008：准备发布说明\nyesterday",
+      "会话 009：准备发布说明\nyesterday",
+      "会话 010：准备发布说明\nyesterday",
+      "会话 011：准备发布说明\nyesterday",
+      "会话 012：准备发布说明\nyesterday",
+      "会话 013：准备发布说明\nyesterday",
+      "会话 014：准备发布说明\nyesterday",
+      "会话 015：准备发布说明\nyesterday",
+      "会话 016：准备发布说明\nyesterday",
+      "会话 017：准备发布说明\nyesterday",
+      "会话 018：准备发布说明\nyesterday",
+      "会话 019：准备发布说明\nyesterday",
+      "会话 020：准备发布说明\nyesterday",
+      "会话 021：准备发布说明\nyesterday",
+      "会话 022：准备发布说明\nyesterday",
+      "会话 023：准备发布说明\nyesterday",
+      "会话 024：准备发布说明\nyesterday",
+      "会话 025：准备发布说明\nyesterday",
+      "会话 026：准备发布说明\nyesterday",
+      "会话 027：准备发布说明\nyesterday",
+      "会话 028：准备发布说明\nyesterday",
+      "会话 029：准备发布说明\nyesterday",
+      "会话 030：准备发布说明\nyesterday",
+      "会话 031：准备发布说明\nyesterday",
+      "会话 032：准备发布说明\nyesterday",
+      "会话 033：准备发布说明\nyesterday",
+      "会话 034：准备发布说明\nyesterday",
+      "会话 035：准备发布说明\nyesterday",
+      "会话 036：准备发布说明\nyesterday",
+      "会话 037：准备发布说明\nyesterday",
+      "会话 038：准备发布说明\nyesterday",
+      "会话 039：准备发布说明\nyesterday",
+      "会话 040：准备发布说明\nyesterday",
+      "会话 041：准备发布说明\nyesterday",
+      "会话 042：准备发布说明\nyesterday",
+      "会话 043：准备发布说明\nyesterday",
+      "会话 044：准备发布说明\nyesterday",
+      "会话 045：准备发布说明\nyesterday",
+      "会话 046：准备发布说明\nyesterday",
+      "会话 047：准备发布说明\nyesterday",
+      "会话 048：准备发布说明\nyesterday",
+      "会话 049：准备发布说明\nyesterday",
+      "会话 050：准备发布说明\nyesterday",
+      "会话 051：准备发布说明\nyesterday",
+      "会话 052：准备发布说明\nyesterday",
+      "会话 053：准备发布说明\nyesterday",
+      "会话 054：准备发布说明\nyesterday",
+      "会话 055：准备发布说明\nyesterday",
+      "会话 056：准备发布说明\nyesterday",
+      "会话 057：准备发布说明\nyesterday",
+      "会话 058：准备发布说明\nyesterday",
+      "会话 059：准备发布说明\nyesterday"
+    ],
+    "labels": [
+      "对比用会话：一条完整回合\nyesterday\n会话 001：准备发布说明\nyesterday\n会话 002：准备发布说明\nyesterday\n会话 003：准备发布说明\nyesterday\n会话 004：准备发布说明\nyesterday\n会话 005：准备发布说明\nyesterday\n会话 006：准备发布说明\nyesterday\n会话 007：准备发布说明\nyesterday\n会话 008：准备发布说明\nyesterday\n会话 009：准备发布说明\nyesterday\n会话 010：准备发布说明\nyesterday\n会话 011：准备发布说明\nyesterday\n会话 012：准备发布说明\nyesterday\n会话 013：准备发布说明\nyesterday\n会话 014：准备发布说明\nyesterday\n会话 015：准备发布说明\nyesterday\n会话 016：准备发布说明\nyesterday\n会话 017：准备发布说明\nyesterday\n会话 018：准备发布说明\nyesterday\n会话 019：准备发布说明\nyesterday\n会话 020：准备发布说明\nyesterday\n会话 021：准备发布说明\nyesterday\n会话 022：准备发布说明\nyesterday\n会话 023：准备发布说明\nyesterday\n会话 024：准备发布说明\nyesterday\n会话 025：准备发布说明\nyesterday\n会话 026：准备发布说明\nyesterday\n会话 027：准备发布说明\nyesterday\n会话 028：准备发布说明\nyesterday\n会话 029：准备发布说明\nyesterday\n会话 030：准备发布说明\nyesterday\n会话 031：准备发布说明\nyesterday\n会话 032：准备发布说明\nyesterday\n会话 033：准备发布说明\nyesterday\n会话 034：准备发布说明\nyesterday\n会话 035：准备发布说明\nyesterday\n会话 036：准备发布说明\nyesterday\n会话 037：准备发布说明\nyesterday\n会话 038：准备发布说明\nyesterday\n会话 039：准备发布说明\nyesterday\n会话 040：准备发布说明\nyesterday\n会话 041：准备发布说明\nyesterday\n会话 042：准备发布说明\nyesterday\n会话 043：准备发布说明\nyesterday\n会话 044：准备发布说明\nyesterday\n会话 045：准备发布说明\nyesterday\n会话 046：准备发布说明\nyesterday\n会话 047：准备发布说明\nyesterday\n会话 048：准备发布说明\nyesterday\n会话 049：准备发布说明\nyesterday\n会",
+      "Message Assistant…\nMount workspace\nDeepSeek V4.1 Flash\nDefault\nSend"
+    ],
+    "placeholders": [
+      "Search chats"
+    ]
+  },
+  "active": {
+    "tag": "BUTTON",
+    "cls": "cf-thread is-active"
+  },
+  "hovered": {
+    "tag": "SPAN",
+    "cls": "cf-thread__title"
+  }
+}
