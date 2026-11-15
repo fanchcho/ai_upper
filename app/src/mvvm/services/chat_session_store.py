@@ -494,6 +494,21 @@ class ChatSessionStore:
             session.messages = [
                 message for index, message in enumerate(session.messages) if index not in drop
             ]
+            # 交付边车按 toolUseId 归属：只保留仍存活消息里的 tool_use（Deva chat.ts:968-980
+            # 的 `prune(s.delivered)`）。全部轮都删光时整体清空。
+            live_ids = {
+                str(getattr(part, "id", ""))
+                for message in session.messages
+                if not isinstance(message.content, str)
+                for part in message.content
+                if getattr(part, "type", "") == "tool_use"
+            }
+            if session.delivered:
+                session.delivered = {
+                    key: value
+                    for key, value in session.delivered.items()
+                    if key in live_ids
+                } or None
             session.lastInputTokens = None
             session.touch()
             self.save(session_id)

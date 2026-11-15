@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from mvvm.models.chat_models import ImagePart, Message, ToolResultPart
 from mvvm.services.todos import (
@@ -43,6 +43,27 @@ def tool_result_message(
             )
         ],
     )
+
+
+def record_delivered(
+    delivered: Optional[Dict[str, List[str]]],
+    tool_use_id: str,
+    result: ToolResult,
+) -> Optional[Dict[str, List[str]]]:
+    """把一次工具结果交付的文件写进 `StoredSession.delivered` 边车；无交付则原样返回。
+
+    语义对齐 Deva `chat.ts:5294-5297`：按 `toolUseId` 记**已解析的绝对路径**（`present_files`
+    在 `tool_runtime.py` 里已去重），messages 里保留模型原样发出的参数——改写它会让模型
+    以为没照做而反复重试。边车是纯展示产物，交付卡与「打开 / 定位」据此取路径。
+
+    返回新的边车字典（不改传入的那份）；`result.delivered` 为空时返回原值（可能是 None）。
+    """
+    paths = [str(p) for p in (result.delivered or []) if str(p)]
+    if not paths:
+        return delivered
+    merged: Dict[str, List[str]] = dict(delivered or {})
+    merged[str(tool_use_id)] = paths
+    return merged
 
 
 @dataclass
@@ -110,4 +131,9 @@ def apply_todo_write_to(
     )
 
 
-__all__ = ["TodoApplied", "apply_todo_write_to", "tool_result_message"]
+__all__ = [
+    "TodoApplied",
+    "apply_todo_write_to",
+    "record_delivered",
+    "tool_result_message",
+]

@@ -45,7 +45,11 @@ from mvvm.services.todos import (
     todo_reminder_text,
     todo_user_cancel_note_text,
 )
-from mvvm.services.tool_results import apply_todo_write_to, tool_result_message
+from mvvm.services.tool_results import (
+    apply_todo_write_to,
+    record_delivered,
+    tool_result_message,
+)
 from mvvm.services.model_view import (
     COMPACT_MARKER,
     is_auto_nudge,
@@ -586,6 +590,16 @@ class ChatViewModel(BaseViewModel):
                         return text, "aborted"
                     result = self.tools.execute(call.name, call.input, tool_use_id=call.id)
                     self._tool_results.append(result)
+                    # 交付文件：解析后的路径写进会话边车（Deva `chat.ts:5294-5297`），必须**先于**
+                    # tool_result 事件落盘——渲染层收到成功就会来取交付卡数据。messages 里保留
+                    # 模型原样发出的参数，改写会让模型以为自己没照做而反复重试。
+                    if result.delivered:
+                        session = self.store.ensure_session(session_id)
+                        session.delivered = record_delivered(
+                            session.delivered, call.id, result
+                        )
+                        session.touch()
+                        self.store.save(session.id)
                     self.store.append_message(
                         session_id,
                         tool_result_message(

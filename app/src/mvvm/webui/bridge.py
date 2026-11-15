@@ -19,7 +19,7 @@ import os
 import re
 import threading
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 from utils.qt_compat import QtCore, Signal, Slot
 
@@ -263,6 +263,12 @@ class DevaBridge(QObject):
         ):
             self.register(channel, self._host_method(method))
         self.register("chat:attachment-image", self._attachment_image)
+        # 交付卡（present_files）：参数顺序照 shim.js:264-268，路径只从会话边车 `delivered` 取，
+        # 渲染层拿不到任意路径的读写口子（见 mvvm/services/deliverables.py 文件头）。
+        self.register("deliverables:inspect", self._deliverables_inspect)
+        self.register("deliverables:thumbnail", self._deliverables_thumbnail)
+        self.register("deliverables:open", self._deliverables_open)
+        self.register("deliverables:reveal", self._deliverables_reveal)
         # 附件与工作区文件通道：参数名与顺序照 preload（见 contracts-fs-*）。
         # 全部经 `self.attachments` 现取：宿主接线后要立刻切到宿主那一份（同一份白名单）。
         self.register("fs:pick-attachments", lambda: self.attachments.pick_attachments())
@@ -435,6 +441,49 @@ class DevaBridge(QObject):
         if session is None:
             return None
         return attachment_image(session, ref, full)
+
+    # ── 交付卡（present_files）─────────────────────────────────────────────
+    # 四个入口的**唯一**路径来源是会话边车 `StoredSession.delivered[toolUseId]`：
+    # 渲染层只传 (sessionId, toolUseId[, index])，不传路径；服务层也只认绝对路径。
+    def _session_for_deliverables(self, session_id: Any) -> Any:
+        key = session_id if isinstance(session_id, str) else ""
+        return self.store.load_session(key) if key else None
+
+    def _deliverables_inspect(self, session_id: Any, tool_use_id: Any) -> list[dict[str, Any]]:
+        """`deliverables:inspect`：交付卡每一行（路径 / 名称 / 目录 / 大小 / 可打开）。"""
+        from mvvm.services.deliverables import inspect as _inspect
+
+        session = self._session_for_deliverables(session_id)
+        if session is None:
+            return []
+        return _inspect(session, tool_use_id)
+
+    def _deliverables_thumbnail(self, session_id: Any, tool_use_id: Any, index: Any) -> Optional[str]:
+        """`deliverables:thumbnail`：缩略图 data URI（图片），取不到回落文件类型图标。"""
+        from mvvm.services.deliverables import thumbnail as _thumbnail
+
+        session = self._session_for_deliverables(session_id)
+        if session is None:
+            return None
+        return _thumbnail(session, tool_use_id, index)
+
+    def _deliverables_open(self, session_id: Any, tool_use_id: Any, index: Any) -> dict[str, bool]:
+        """`deliverables:open`：仅白名单扩展名 + 文件存在，用默认应用打开。"""
+        from mvvm.services.deliverables import open_item
+
+        session = self._session_for_deliverables(session_id)
+        if session is None:
+            return {"ok": False}
+        return open_item(session, tool_use_id, index)
+
+    def _deliverables_reveal(self, session_id: Any, tool_use_id: Any, index: Any) -> dict[str, bool]:
+        """`deliverables:reveal`：在系统文件管理器里定位该文件。"""
+        from mvvm.services.deliverables import reveal as _reveal
+
+        session = self._session_for_deliverables(session_id)
+        if session is None:
+            return {"ok": False}
+        return _reveal(session, tool_use_id, index)
 
     def _browser_state(self) -> dict[str, Any]:
         """内置浏览器未接入：返回 Deva `BrowserUiState` 的空态。
