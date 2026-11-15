@@ -1,0 +1,59 @@
+++ dirname out/qml-shell/run2.sh
++ cd out/qml-shell/../..
++ .venv/bin/python -c 'import PySide6, sys; print("python", sys.version.split()[0], "PySide6", PySide6.__version__)'
+python 3.13.5 PySide6 6.11.2
++ rm -rf out/qml-shell/home-real out/qml-shell/home-empty
++ .venv/bin/python out/qml-shell/seed_home.py out/qml-shell/home-real
+home: /home/agent/shared_workspace/py_upper/out/qml-shell/home-real
+provider: anthropic@127.0.0.1:6060 model=deepseek-v4.1-flash
+sessions: ['qml-real-1', 'qml-real-2', 'qml-real-3']
++ .venv/bin/python out/qml-shell/seed_home.py out/qml-shell/home-empty --empty
+home: /home/agent/shared_workspace/py_upper/out/qml-shell/home-empty
+provider: anthropic@127.0.0.1:6060 model=deepseek-v4.1-flash
+sessions: []
++ AI_UPPER_UI=qml
++ AI_UPPER_HEADLESS=1
++ AI_UPPER_HOME=out/qml-shell/home-real
++ AI_UPPER_QML_SHOT=out/qml-shell/shot-real.png
++ .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='ai_upper · QML 壳' sessions=3 active='qml-real-1' plain=False turn_stop='' deltas=0 home=out/qml-shell/home-real png=out/qml-shell/shot-real.png size=1280x820
++ echo 'EXIT(real) 0'
+EXIT(real) 0
++ AI_UPPER_UI=qml
++ AI_UPPER_HEADLESS=1
++ AI_UPPER_HOME=out/qml-shell/home-empty
++ AI_UPPER_QML_SHOT=out/qml-shell/shot-empty.png
++ .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='ai_upper · QML 壳' sessions=0 active='' plain=False turn_stop='' deltas=0 home=out/qml-shell/home-empty png=out/qml-shell/shot-empty.png size=1280x820
++ echo 'EXIT(empty) 0'
+EXIT(empty) 0
++ AI_UPPER_UI=qml
++ AI_UPPER_HEADLESS=1
++ AI_UPPER_HOME=out/qml-shell/home-empty
++ AI_UPPER_QML_SHOT=out/qml-shell/shot-turn.png
++ AI_UPPER_QML_SEND=$'\345\217\252\350\257\264\344\270\211\344\270\252\345\255\227\357\274\232\346\224\266\345\210\260\343\200\202'
++ .venv/bin/python app/src/main.py
+QML SEND {"sessionId": "qml-mwhcd1m51451d9", "text": "只说三个字：收到。"}
+QML TURN 0fc449b2c468423c8d966cf319297c7f
+QML STREAM {"text": "收到"}
+QML STREAM {"text": "。"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 2}
+QML OK platform=offscreen title='ai_upper · QML 壳' sessions=1 active='qml-mwhcd1m51451d9' plain=False turn_stop='end_turn' deltas=2 home=out/qml-shell/home-empty png=out/qml-shell/shot-turn.png size=1280x820
++ echo 'EXIT(turn) 0'
+EXIT(turn) 0
++ ls -l out/qml-shell/shot-real.png out/qml-shell/shot-empty.png out/qml-shell/shot-turn.png
+-rw-r--r-- 1 root hermes 34212 Nov 15 12:35 out/qml-shell/shot-empty.png
+-rw-r--r-- 1 root hermes 97932 Nov 15 12:35 out/qml-shell/shot-real.png
+-rw-r--r-- 1 root hermes 31106 Nov 15 12:35 out/qml-shell/shot-turn.png
++ .venv/bin/python -
+out/qml-shell/shot-real.png PNG 1280 x 820
+out/qml-shell/shot-empty.png PNG 1280 x 820
+out/qml-shell/shot-turn.png PNG 1280 x 820
++ echo 'EXIT(check) 0'
+EXIT(check) 0
++ .venv/bin/python -
+CHAT out/qml-shell/home-empty/data/chats/qml-mwhcd1m51451d9.json title= 只说三个字：收到。 messages= 2
+   user : [{"type": "text", "text": "只说三个字：收到。"}]
+   assistant : [{"type": "text", "text": "收到。"}]
++ echo 'EXIT(disk) 0'
+EXIT(disk) 0

@@ -1,0 +1,3 @@
+# 证据跑用的临时 home：里面的 secrets.enc / .secrets.key 与 provider 配置含本机令牌，
+# 不入库；由 seed_home.py 每次重新生成（run2.sh 开头会删掉旧目录）。
+home-*/
