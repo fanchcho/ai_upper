@@ -106,8 +106,10 @@ Successfully downloaded PySide6 pydantic httpx cryptography keyring httpcore pyd
 Qt pruning: removed 496 file(s) and 141 director(ies), freed 258 MB
 Trim (site-packages): removed 48 file(s) and 0 director(ies), freed 3.5 MB
 Third-party optimization: removed 546 files and 142 directories
-Cython: 75 module(s) up to date
-Compile: 4 merged bundle(s) up to date
+Cython: 1 of 75 module(s) changed
++ /usr/bin/python3.13 -m cython --force -3 -o ../../build/cache/cython/main.c main.py
+Compile: 1 of 4 merged bundle(s) changed
++ merged _root (5 module(s)) -> ai_upper_bundles/ai_upper__root.cpython-313-aarch64-linux-gnu.so
 Encrypted egg: 16 application file(s), backend=auto
 Python stage ready: /home/agent/shared_workspace/py_upper/build/staging/linux-arm64/site-packages
 [3/6] Target launcher
