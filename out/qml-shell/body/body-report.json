@@ -71,7 +71,7 @@
             "height": 1.0
           }
         ],
-        "local_file": "/home/agent/shared_workspace/py_upper/out/qml-shell/body/dot.png",
+        "local_file": "/home/agent/shared_workspace/ai_upper/out/qml-shell/body/dot.png",
         "data_uri_len": 118
       }
     },
@@ -112,12 +112,12 @@
       "detail": {
         "one_long_message": {
           "paragraphs": 400,
-          "render_ms": 593.1,
+          "render_ms": 575.9,
           "doc_height_px": 15569.2
         },
         "hundred_messages": {
           "messages": 120,
-          "render_ms": 269.4,
+          "render_ms": 265.5,
           "doc_height_px": 8931.5
         },
         "scroll_60_steps_ms": 0.7,

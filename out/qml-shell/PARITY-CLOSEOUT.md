@@ -260,32 +260,43 @@ $ .venv/bin/python scripts/qml_body_probe.py out/qml-shell/body
 
 ## 5. CI（逐 job 终态）
 
-运行 `43719027496`（commit `b4f052f`，2026-11-15T13:45:36Z completed，conclusion=failure）。
-历史对照：`43708023866`（本轮起点 `4b8a220`）、`43716409758`（`21a1377`，标记修复后）。
+运行 `43721721512`（commit `5fbabeb`，`develop`，completed，conclusion=failure —— 唯一红项是
+起点就红的 windows-3.8.10）。
 
-| job | 终态 | 说明 |
-| --- | --- | --- |
-| Build Tool Python 3.8 / 3.9 / 3.10 / 3.11 / 3.12 / 3.13 | **success**（6/6） | 单元测试 1168 passed / 5 skipped |
-| native-integration (ubuntu-24.04, linux-x86_64, run=true) | **success** | 本轮曾红，`21a1377` 修好就绪标记后转绿 |
-| native-integration (ubuntu-24.04-arm, linux-arm64) | **success** | — |
-| native-integration (macos-15, macos-arm64, run=true) | **success** | 本轮曾红（offscreen 无 Quick 栅格化），`b4f052f` 的 darwin+headless 回退修好 |
-| native-integration (macos-15-intel, macos-x86_64, run=true) | **success** | — |
-| native-integration (windows-2025, windows-x86_64, run=true) | **success** | — |
-| native-integration (windows-2025, windows-x86, pyserial) | **success** | — |
-| native-integration (windows-11-arm, windows-arm64, run=true) | **success** | 本次转绿（历史上有平台阻塞记录） |
-| native-integration (windows-2025, windows-x86_64, 3.8.10, PySide6 6.6.3) | **failure** | **本轮起点 `4b8a220` 同一条报错就红**：`Unresolved native dependencies: Qt6QuickControls2BasicStyleImpl.dll / Qt6QuickControls2Basic.dll`，步骤 `[4/6] Package + native dependency closure`。非本轮引入，未修 |
-| aggregate-artifacts | skipped | 依赖聚合，前序有红项时按设计跳过 |
+| job | 终态 |
+| --- | --- |
+| Build Tool Python 3.8 | success |
+| Build Tool Python 3.9 | success |
+| Build Tool Python 3.10 | success |
+| Build Tool Python 3.11 | success |
+| Build Tool Python 3.12 | success |
+| Build Tool Python 3.13 | success |
+| native-integration (ubuntu-24.04, linux-x86_64, run=true) | success |
+| native-integration (ubuntu-24.04-arm, linux-arm64) | success |
+| native-integration (macos-15, macos-arm64, run=true) | success |
+| native-integration (macos-15-intel, macos-x86_64, run=true) | success |
+| native-integration (windows-2025, windows-x86_64, run=true) | success |
+| native-integration (windows-2025, windows-x86, pyserial) | success |
+| native-integration (windows-11-arm, windows-arm64, run=true) | success |
+| native-integration (windows-2025, windows-x86_64, 3.8.10, PySide6 6.6.3) | **failure** |
+| aggregate-artifacts | skipped（前序有红项时按设计跳过） |
+
+合计 **13 success / 1 skipped / 1 failure**。唯一失败项的证据：
+
+- 报错：`ERROR: RuntimeError: Unresolved native dependencies: site-packages\PySide6\qml\QtQuick\Controls\Basic\impl\qtquickcontrols2basicstyleimplplugin.dll: Qt6QuickControls2BasicStyleImpl.dll …`，失败步骤 `[4/6] Package + native dependency closure`。
+- **本轮起点 `4b8a220` 的同名 job 就是同一条报错**（run `43708023866`，job `132793259884`）→
+  非本轮引入，本轮未修（属于 QtQuick Controls 原生闭包在那条矩阵上的缺口）。
 
 本轮自己弄红、并已定位修复的两处（都有运行证据）：
 
-1. **就绪标记断言过时**（`21a1377`）：默认路线切 QML 后打印 `QML OK … size=1280x820`，
-   而 `.github/workflows/validate.yml` 仍只认 `'DEVA WEB OK' and 'bridge=True'` →
-   linux-x86_64 与 macos-arm64 的 `Full integration run` 判失败。改成两者并集后
-   linux-x86_64 在 `43716409758` 转绿。
-2. **macOS headless 无法栅格化 Quick**（`b4f052f`）：macos-arm64 的 `Full integration run`
-   仍红（日志尾部 `[6/6] Target runtime smoke`，实际是产物实跑没出首帧）。改为
-   darwin+headless 默认回退 WebEngine（显式 `AI_UPPER_UI=qml` 可强制），本次运行
-   macos-arm64 转绿。
+1. **就绪标记断言过时**（`21a1377`）：默认路线切 QML 后打印 `QML OK … size=1280x820`，而
+   `.github/workflows/validate.yml` 仍只认 `'DEVA WEB OK' and 'bridge=True'` → linux-x86_64 与
+   macos-arm64 的 `Full integration run` 判失败。改成两者并集后 linux-x86_64 转绿
+   （run `43716409758`）。
+2. **macOS headless 无法栅格化 Quick**（`b4f052f`）：macos-arm64 仍红（日志尾部
+   `[6/6] Target runtime smoke`，实为产物实跑未出首帧）。改为 darwin+headless 默认回退
+   WebEngine（显式 `AI_UPPER_UI=qml` 可强制），此后 macos-arm64 在 `43719027496` 与
+   `43721721512` 连续两次 success。
 
 ## 6. 仍未完成项
 
