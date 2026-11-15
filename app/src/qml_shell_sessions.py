@@ -18,9 +18,66 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+from mvvm.services.attachments import (
+    ATTACH_FOLDER_PREFIX,
+    ATTACH_PATH_PREFIX,
+    ATTACH_TEXT_PREFIX,
+)
+from mvvm.services.deliverables import delivered_paths
+from mvvm.services.transcript_parts import attachment_chips, delivery_row
+
 PREVIEW_MAX = 60
 USER_HEADING = "## 你"
 ASSISTANT_HEADING = "## 助手"
+
+
+def format_bytes(size: Any) -> str:
+    """体积文案，逐字对齐原版渲染层的 `formatSize`（`0 B` / `221 B` / `1 KB` / `1.5 MB`）。
+
+    交付卡与附件贴片都必须显示磁盘上的真实体积——原版占位值是 0，界面就曾显示 `0 B`。
+    """
+    try:
+        value = int(size)
+    except (TypeError, ValueError):
+        return ""
+    if value < 0:
+        return ""
+    if value < 1024:
+        return "%d B" % value
+    if value < 1024 * 1024:
+        return "%d KB" % round(value / 1024)
+    if value < 1024 * 1024 * 1024:
+        return "%.1f MB" % (value / 1024 / 1024)
+    return "%.1f GB" % (value / 1024 / 1024 / 1024)
+
+
+
+_ATTACH_PREFIXES = (ATTACH_TEXT_PREFIX, ATTACH_FOLDER_PREFIX, ATTACH_PATH_PREFIX)
+
+
+def message_body(message: Any) -> str:
+    """一条消息的**提问/回复正文**（不含附件注入块）。
+
+    `Message.text()` 按顺序拼接所有 `text` 块，用户消息里的附件是注入的 text 块
+    （`[附件文件] …` / `[附件文件夹] …` / `[附件文件路径] …`，见
+    `AttachmentService.build_attachment_part`），拼进来就会在正文里看到「[附件文件]
+    spec.txt」加一段原文。原版 `toDisplayMessages` 把这些块单独还原成贴片、只把最后
+    一个 text 块当提问正文；这里按同一口径过滤掉注入块。
+    """
+    content = getattr(message, "content", None)
+    if isinstance(content, str):
+        return content
+    if not isinstance(content, list):
+        return ""
+    texts: List[str] = []
+    for part in content:
+        if str(getattr(part, "type", "") or "") != "text":
+            continue
+        text = str(getattr(part, "text", "") or "")
+        if text.startswith(_ATTACH_PREFIXES):
+            continue
+        texts.append(text)
+    return "".join(texts)
 
 
 def _one_line(text: str) -> str:
@@ -31,9 +88,7 @@ def preview_text(session: Any) -> str:
     """会话预览：最后一条有正文的消息压成一行，超长截断加省略号。"""
     messages = getattr(session, "messages", None) or []
     for message in reversed(messages):
-        text = _one_line(
-            message.text() if hasattr(message, "text") else str(getattr(message, "content", ""))
-        )
+        text = _one_line(message_body(message))
         if text:
             return text[:PREVIEW_MAX] + "…" if len(text) > PREVIEW_MAX else text
     return ""
@@ -108,6 +163,43 @@ def _role_heading(role: str) -> str:
     return USER_HEADING if role == "user" else ASSISTANT_HEADING
 
 
+def _attachment_lines(parts: List[Any], msg_index: int) -> List[str]:
+    """用户消息里的附件 → 正文行（图片内联成 Markdown 图，其余列一行「附件：名 · 体积」）。
+
+    图片直接内联 `data:` URI：`markdown.body` 的 image_resolver 会解码成 QTextDocument
+    资源（`markdown/document.py:738-761`），QML 的 TextEdit 因此能在历史里看到缩略图，
+    位置也与原版一致（附件排在提问正文之前）。非图片附件没有可画的内容，按原版贴片的
+    信息量给一行文字（名称 + 真实体积），并且**不把正文塞进来**。
+    """
+    lines: List[str] = []
+    for part in parts:
+        kind = str(getattr(part, "type", "") or "")
+        if kind == "image":
+            data = str(getattr(part, "data", "") or "")
+            name = str(getattr(part, "name", "") or "图片")
+            mime = str(getattr(part, "mediaType", "") or "image/png")
+            if data:
+                lines.append("![%s](data:%s;base64,%s)" % (name, mime, data))
+            else:
+                lines.append("- 附件图片：%s（数据缺失）" % name)
+        elif kind == "document":
+            name = str(getattr(part, "name", "") or "文档")
+            size = len(str(getattr(part, "data", "") or ""))
+            lines.append("- 附件文档：%s（%s）" % (name, format_bytes(size)))
+    for chip in attachment_chips(parts, msg_index):
+        if chip.get("kind") in ("image", "document"):
+            continue  # 上面已按内容块输出
+        label = {
+            "text": "附件文件",
+            "folder": "附件文件夹",
+            "file": "附件文件路径",
+        }.get(str(chip.get("kind")), "附件")
+        size = format_bytes(chip.get("size")) if chip.get("size") is not None else ""
+        suffix = "（%s）" % size if size else ""
+        lines.append("- %s：%s%s" % (label, chip.get("name", ""), suffix))
+    return lines
+
+
 def transcript_markdown(
     messages: List[Any],
     pending_user: Optional[str] = None,
@@ -118,19 +210,102 @@ def transcript_markdown(
     顺序即落盘顺序；没有正文的消息（纯工具调用 / 纯工具结果）跳过。`pending_user`
     与 `streaming` 只在回合进行中使用——用户消息在 `run_turn` 里才落盘，先显示要
     自己补；增量在 `done` 之后会以落盘消息为准重新拼一遍。
+
+    用户消息的附件排在提问正文之前（与原版贴片顺序一致）：图片内联成 Markdown 图，
+    文档/文本/文件夹/只给位置的附件各一行「附件：名 · 体积」。
     """
     blocks: List[str] = []
-    for message in messages or []:
-        text = message.text() if hasattr(message, "text") else str(getattr(message, "content", ""))
-        if not text.strip():
+    for msg_index, message in enumerate(messages or []):
+        text = message_body(message)
+        attachment_lines: List[str] = []
+        content = getattr(message, "content", None)
+        if str(getattr(message, "role", "")) == "user" and not isinstance(content, str):
+            attachment_lines = _attachment_lines(list(content or []), msg_index)
+        if not text.strip() and not attachment_lines:
             continue
-        blocks.append("%s\n\n%s" % (_role_heading(str(getattr(message, "role", ""))), text.strip()))
+        pieces = list(attachment_lines)
+        if text.strip():
+            pieces.append(text.strip())
+        blocks.append("%s\n\n%s" % (_role_heading(str(getattr(message, "role", ""))), "\n\n".join(pieces)))
     if pending_user and pending_user.strip():
         blocks.append("%s\n\n%s" % (USER_HEADING, pending_user.strip()))
     if streaming is not None:
         # 空增量也起标题：界面上先出现「助手」，随后正文一段段长出来。
         blocks.append(("%s\n\n%s" % (ASSISTANT_HEADING, (streaming or "").strip())).rstrip())
     return "\n\n".join(blocks)
+
+
+def delivery_tool_use_ids(messages: List[Any]) -> List[str]:
+    """正文里出现过的 `present_files` 工具调用 id（按出现顺序，去重）。
+
+    交付卡只认这些 id，再去边车取路径——与 `deliverables:inspect` 同一条安全不变式。
+    """
+    ids: List[str] = []
+    for message in messages or []:
+        content = getattr(message, "content", None)
+        if isinstance(content, str):
+            continue
+        for part in content or []:
+            if str(getattr(part, "type", "") or "") != "tool_use":
+                continue
+            if str(getattr(part, "name", "") or "") != "present_files":
+                continue
+            tool_id = str(getattr(part, "id", "") or "")
+            if tool_id and tool_id not in ids:
+                ids.append(tool_id)
+    return ids
+
+
+def delivery_rows(session: Any) -> List[Dict[str, Any]]:
+    """当前会话的交付卡行：`present_files` 调用 id → 边车 `delivered` → 真实文件信息。
+
+    没有会话 / 没有边车时返回空列表（界面不画卡）。每行带 `sizeText`（真实体积文案）
+    与 `missing`（文件已不存在），QML 直接用，不再自己算。
+    """
+    if session is None:
+        return []
+    ids = delivery_tool_use_ids(getattr(session, "messages", None) or [])
+    rows: List[Dict[str, Any]] = []
+    seen: set = set()
+    for tool_id in ids:
+        for path in delivered_paths(session, tool_id):
+            if path in seen:
+                continue
+            seen.add(path)
+            row = delivery_row(path)
+            row["sizeText"] = format_bytes(row["size"]) if row["size"] is not None else ""
+            row["missing"] = row["size"] is None
+            row["toolUseId"] = tool_id
+            rows.append(row)
+    return rows
+
+
+def attachment_rows(session: Any) -> List[Dict[str, Any]]:
+    """当前会话里的用户附件贴片（供 QML 侧画缩略图条；正文里已经内联图片）。
+
+    每行：名称 / 类型 / 真实体积文案 / 图片的 data URI（非图片为空串）/ 所属消息下标。
+    图片 data URI 直接取自落盘消息，不额外读盘。
+    """
+    if session is None:
+        return []
+    rows: List[Dict[str, Any]] = []
+    for msg_index, message in enumerate(getattr(session, "messages", None) or []):
+        content = getattr(message, "content", None)
+        if str(getattr(message, "role", "")) != "user" or isinstance(content, str):
+            continue
+        parts = list(content or [])
+        for chip in attachment_chips(parts, msg_index):
+            row = dict(chip)
+            row["index"] = msg_index
+            row["thumb"] = ""
+            part_index = chip.get("partIndex")
+            if chip.get("kind") == "image" and isinstance(part_index, int) and 0 <= part_index < len(parts):
+                data = str(getattr(parts[part_index], "data", "") or "")
+                mime = str(getattr(parts[part_index], "mediaType", "") or "image/png")
+                row["thumb"] = "data:%s;base64,%s" % (mime, data) if data else ""
+            row["sizeText"] = format_bytes(row.get("size")) if row.get("size") is not None else ""
+            rows.append(row)
+    return rows
 
 
 class TurnState:
@@ -177,6 +352,11 @@ __all__ = [
     "PREVIEW_MAX",
     "TurnState",
     "USER_HEADING",
+    "attachment_rows",
+    "delivery_rows",
+    "delivery_tool_use_ids",
+    "format_bytes",
+    "message_body",
     "preview_text",
     "session_row",
     "session_rows",

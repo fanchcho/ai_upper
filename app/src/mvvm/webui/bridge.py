@@ -25,12 +25,8 @@ from utils.qt_compat import QtCore, Signal, Slot
 
 QObject = QtCore.QObject
 
-from mvvm.services.attachments import (
-    ATTACH_FOLDER_PREFIX,
-    ATTACH_PATH_PREFIX,
-    ATTACH_TEXT_PREFIX,
-    AttachmentService,
-)
+from mvvm.services.attachments import AttachmentService
+from mvvm.services.transcript_parts import attachment_chips, image_ref
 from mvvm.services.avatar_image import clear_avatar_image, read_avatar_image, write_avatar_image
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.chat_session_store import ChatSessionStore
@@ -675,7 +671,7 @@ def display_messages(
 
         # 真实用户消息（可能带附件）：附件贴片在前、提问正文在最后一个 text 块。
         text_parts = [str(getattr(p, "text", "")) for p in parts if getattr(p, "type", "") == "text"]
-        attachments = _attachment_chips(parts, msg_index)
+        attachments = attachment_chips(parts, msg_index)
         out.append(
             {
                 "role": "user",
@@ -685,100 +681,6 @@ def display_messages(
         )
         last_assistant = None
     return out
-
-
-def _attachment_chips(parts: list[Any], msg_index: int) -> list[dict[str, Any]]:
-    """用户消息里的附件 → `AttachmentChip[]`（同 Deva `toDisplayMessages` 的 user 分支）。
-
-    - 图片 / PDF 是结构化内容块：只回名称、类型、体积；图片另给 ref，界面按 ref 现取缩略图；
-    - 文本 / 文件夹 / 只给位置的文件是注入的 text 块，靠前缀标记认出来再还原贴片；
-    - 提问正文是最后一个 text 块，不在 chips 里。
-    """
-    chips: list[dict[str, Any]] = []
-    text_parts = [
-        str(getattr(p, "text", "")) for p in parts if getattr(p, "type", "") == "text"
-    ]
-    for part_index, part in enumerate(parts):
-        kind = getattr(part, "type", "")
-        if kind == "image":
-            data = str(getattr(part, "data", "") or "")
-            chips.append(
-                {
-                    "name": str(getattr(part, "name", "") or "图片"),
-                    "kind": "image",
-                    "size": _base64_bytes(data),
-                    "ref": _image_ref(msg_index, part_index, data),
-                }
-            )
-        elif kind == "document":
-            data = str(getattr(part, "data", "") or "")
-            chips.append(
-                {
-                    "name": str(getattr(part, "name", "") or "文档"),
-                    "kind": "document",
-                    "size": _base64_bytes(data),
-                }
-            )
-    # 注入文本块：除最后一个 text（提问正文）之外，其余按前缀重建。
-    for text in text_parts[:-1]:
-        if text.startswith(ATTACH_TEXT_PREFIX):
-            # 形如「前缀 + 文件名\n```\n正文\n```」，体积按正文算。
-            head, _, body = text.partition("\n")
-            body = body[4:] if body.startswith("```\n") else body
-            body = body[:-4] if body.endswith("\n```") else body
-            chips.append(
-                {
-                    "name": head[len(ATTACH_TEXT_PREFIX):].strip(),
-                    "kind": "text",
-                    "size": len(body.encode("utf-8")),
-                }
-            )
-        elif text.startswith(ATTACH_FOLDER_PREFIX):
-            directory = text[len(ATTACH_FOLDER_PREFIX):].split("\n", 1)[0].strip()
-            chips.append(
-                {
-                    "name": os.path.basename(directory) or directory,
-                    "kind": "folder",
-                    "path": directory,
-                }
-            )
-        elif text.startswith(ATTACH_PATH_PREFIX):
-            file_path = text[len(ATTACH_PATH_PREFIX):].split("\n", 1)[0].strip()
-            chips.append(
-                {
-                    "name": os.path.basename(file_path) or file_path,
-                    "kind": "file",
-                    "path": file_path,
-                }
-            )
-    return chips
-
-
-def _image_ref(msg_index: int, part_index: int, data: str) -> str:
-    """图片 ref：`消息下标:块下标:指纹`。
-
-    指纹取 base64 长度（36 进制）+ 中段 8 个字符——按轮删除后下标会前移，同一个
-    「下标:块下标」可能换成另一张图，取图时对不上就不给（同 Deva `imageRef`）。
-    """
-    mid = len(data) // 2
-    return f"{msg_index}:{part_index}:{_base36(len(data))}{data[mid:mid + 8]}"
-
-
-def _base36(value: int) -> str:
-    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
-    if value <= 0:
-        return "0"
-    out: list[str] = []
-    while value:
-        value, rem = divmod(value, 36)
-        out.append(digits[rem])
-    return "".join(reversed(out))
-
-
-def _base64_bytes(b64: str) -> int:
-    """base64 串解码后的字节数（同 Deva `base64Bytes`，不为解码多分配一份）。"""
-    pad = 2 if b64.endswith("==") else 1 if b64.endswith("=") else 0
-    return max(0, (len(b64) * 3) // 4 - pad)
 
 
 def attachment_image(session: Any, ref: Any, full: Any = False) -> str | None:
@@ -810,7 +712,7 @@ def attachment_image(session: Any, ref: Any, full: Any = False) -> str | None:
     if getattr(part, "type", "") != "image":
         return None
     data = str(getattr(part, "data", "") or "")
-    if _image_ref(msg_index, part_index, data) != ref:
+    if image_ref(msg_index, part_index, data) != ref:
         return None
     media_type = str(getattr(part, "mediaType", "") or "image/png")
     if full is True:
