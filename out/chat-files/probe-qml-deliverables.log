@@ -1,0 +1,47 @@
+QML 交付行文件名 = ["notes.md", "chart.png"]
+QML 交付行副标题 = ["53 B · /tmp/chat-files-qml/ws", "740 B · /tmp/chat-files-qml/ws"]
+QML 附件贴片     = ["spec.txt", "photo.png"] ["48 B", "1 KB"]
+QML 交付卡可见 = True / 附件条可见 = True
+截图 = /home/agent/shared_workspace/ai_upper/out/chat-files/qml-chat-files.png (1280, 820)
+按钮点击 open/reveal/copy = {"open": true, "reveal": true, "copy": true}
+后端记录到的命令 = [["xdg-open", "/tmp/chat-files-qml/ws/chart.png"], ["xdg-open", "/tmp/chat-files-qml/ws"]]
+剪贴板 = "/tmp/chat-files-qml/ws/chart.png"
+QML COPY REJECTED "/etc/passwd"
+越权 open/reveal/copy/未知路径 = [False, False, False, False]
+This plugin does not support propagateSizeHints()
+QML PICK ["/tmp/chat-files-qml/ws/photo.png"]
+回形针点击 = True / 对话框创建次数 = 1 / 非原生 = True / 选中 = ["/tmp/chat-files-qml/ws/photo.png"]
+QML pendingFiles = ["/tmp/chat-files-qml/ws/photo.png"]
+截图（待发附件）=  /home/agent/shared_workspace/ai_upper/out/chat-files/qml-chat-files-pending.png (1280, 820)
+QML SEND {"sessionId": "qml-files-demo", "text": "把这张图也一起看下", "attachments": ["/tmp/chat-files-qml/ws/photo.png"]}
+QML TURN 1f7e25e067ee4342ad67ce588603a1d0
+QML STREAM {"text": "收到，附件已读取。"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+带附件发送 = True / 回合结束 = True / 落盘内容块 = ['image', 'text']
+截图（附件入历史）=  /home/agent/shared_workspace/ai_upper/out/chat-files/qml-chat-files-after-send.png (1280, 820)
+发送后附件贴片 = ["photo.png", "spec.txt", "photo.png"]
+---- 断言 ----
+PASS 交付卡显示 chart.png
+PASS 交付卡显示 notes.md
+PASS 体积是真实值（chart.png）
+PASS 体积是真实值（notes.md）
+PASS 副标题带目录
+PASS 界面没有 0 B
+PASS 附件贴片显示 photo.png
+PASS 附件贴片有体积
+PASS 三个按钮都可点
+PASS 打开/定位各起了一次进程
+PASS 剪贴板拿到交付路径
+PASS 越权 open 失败
+PASS 越权 reveal 失败
+PASS 越权 copy 失败
+PASS 未登记路径 open 失败
+PASS 回形针弹出 QFileDialog
+PASS 选中文件进了待发列表
+PASS 待发贴片可见
+PASS 带附件发送成功
+PASS 落盘含图片内容块
+PASS 落盘含本轮提问
+PASS 历史里出现新附件贴片
+RESULT ALL PASS
+painted=True rendered=7

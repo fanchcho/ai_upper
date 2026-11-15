@@ -1,0 +1,32 @@
+== 会话文件 == /tmp/chat-files-web/data/chats/chat-files-web.json
+   delivered 边车 = {"tu_present_1": ["/tmp/chat-files-web/ws/chart.png", "/tmp/chat-files-web/ws/report.md"], "tu_script": ["/tmp/chat-files-web/ws/run.sh"]}
+   chart.png 字节 = 221  report.md 字节 = 43
+QRhiGles2: Failed to create temporary context
+QRhiGles2: Failed to create context
+Failed to create RHI for backend: OpenGL
+[53024:53031:1116/005524.383800:ERROR:../../../qtwebengine/src/3rdparty/chromium/dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+GPUInfo not initialized on GpuInfoUpdate
+== 打开会话 ==
+clicked DIV
+== 交付卡 DOM ==
+{"found":true,"text":"Deliverables 2 files chart.png 221 B · /tmp/chat-files-web/ws report.md 43 B · /tmp/chat-files-web/ws","rows":[{"text":"chart.png 221 B · /tmp/chat-files-web/ws","img":{"srcHead":"data:image/png;base64,iVBORw0K","w":96,"h":96}},{"text":"report.md 43 B · /tmp/chat-files-web/ws","img":{"srcHead":"data:image/png;base64,iVBORw0K","w":128,"h":128}}]}
+== 断言 ==
+   卡片出现 = True
+   不含 0 B = True
+   含真实文件名 chart.png = True
+   含真实文件名 report.md = True
+   含 chart.png 真实大小 221 B = True
+   含 report.md 真实大小 43 B = True
+== 缩略图（data URI 解码后的像素）==
+    chart.png 221 B · /tmp/chat-files-web/ws -> {'srcHead': 'data:image/png;base64,iVBORw0K', 'w': 96, 'h': 96}
+    report.md 43 B · /tmp/chat-files-web/ws -> {'srcHead': 'data:image/png;base64,iVBORw0K', 'w': 128, 'h': 128}
+== 直接调桥：inspect（渲染层同一条通道）==
+    OK:[{"path":"/tmp/chat-files-web/ws/chart.png","name":"chart.png","dir":"/tmp/chat-files-web/ws","size":221,"openable":true},{"path":"/tmp/chat-files-web/ws/report.md","name":"report.md","dir":"/tmp/chat-files-web/ws","size":43,"openable":true}]
+== 直接调桥：thumbnail / open / reveal ==
+This plugin does not support QPlatformServices::openDocument() for 'file:///tmp/chat-files-web/ws/report.md'.
+   thumbnail = OK:data:image/png;base64,iVBORw0K
+   open(idx=1 report.md，白名单内) = OK:{"ok":true}
+   open(tu_script 里的 run.sh，白名单外) = OK:{"ok":false}
+   reveal(idx=99 越界) = OK:{"ok":false}
+   reveal(idx=1 report.md) = OK:{"ok":true}
+== 截图 == /home/agent/shared_workspace/ai_upper/out/chat-files/web-deliverables-live.png True
