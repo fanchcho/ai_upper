@@ -440,7 +440,11 @@ jobs:
 
           text = pathlib.Path('run.log').read_text(encoding='utf-8', errors='replace')
           print(text[-3000:])
-          ok = 'DEVA WEB OK' in text and 'bridge=True' in text
+          # 默认路线已切到 QML 壳：主入口先试 QML（打印 `QML OK … size=1280x820`），
+          # 只有 AI_UPPER_UI=web 才装配 WebEngine 窗口（打印 `DEVA WEB OK … bridge=True`）。
+          # 两条都是「渲染层真的起来了」的证据，断言取并集；缺任何一个才算失败。
+          ok = ('QML OK' in text and 'size=1280x820' in text) or (
+              'DEVA WEB OK' in text and 'bridge=True' in text)
           if not ok:
               print('MISSING MARKER in run.log:', repr(text[-400:]), file=sys.stderr)
           sys.exit(0 if ok else 1)
