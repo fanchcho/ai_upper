@@ -1,0 +1,13 @@
+== 1/5 夹具（120 会话，相对时间）
+fixture ok sessions=120 at /tmp/fx-pages/data/chats
+config ok theme=light locale=en model=True at /tmp/fx-page-home/config.json
+== 2/5 原版 Deva 19 页实拍（Electron + Xvfb）
+ok   empty 1280x820 39873B
+ok   first-run 1280x820 153469B
+ok   chat 1280x820 155907B
+ok   search-open 1280x820 156701B
+ok   search-results 1280x820 154038B
+ok   search-none 1280x820 435B
+ok   ctx-menu 1280x820 435B
+ok   delete-confirm 1280x820 435B
+Terminated

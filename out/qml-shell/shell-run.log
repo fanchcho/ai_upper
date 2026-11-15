@@ -1,0 +1,2 @@
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=out/qml-shell/shell-run.png size=1280x820
+EXIT=0
