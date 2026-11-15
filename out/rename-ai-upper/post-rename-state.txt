@@ -1,0 +1,40 @@
+== HEAD ==
+0874716afa1b77d871c521965fbd9debefbcd77b
+== branch ==
+develop
+== status count ==
+99
+== files (excl .git) ==
+35008
+== files (all) ==
+36675
+== du ==
+4.4G	.
+== toplevel ==
+/home/agent/shared_workspace/ai_upper
+== ls -la ==
+total 83236
+drwxrwsr-x 18 root   hermes      4096 Nov 15 20:49 .
+drwxrwsr-x 27 hermes hermes      4096 Nov 15 21:50 ..
+drwxrwsr-x  5 root   hermes      4096 Nov 13 17:25 .cache
+drwxrwsr-x  8 root   hermes      4096 Nov 15 21:50 .git
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:18 .github
+-rw-rw-r--  1 root   hermes       274 Nov 13 17:18 .gitignore
+drwxrwsr-x  3 root   hermes      4096 Nov 13 18:31 .pytest_cache
+drwxrwsr-x  5 root   hermes      4096 Nov 13 17:18 .venv
+drwxrwsr-x  2 root   hermes      4096 Nov 13 17:18 .vscode
+-rw-rw-r--  1 root   hermes    148546 Nov 14 13:35 CHANGELOG.md
+-rw-rw-r--  1 root   hermes     89067 Nov 14 13:35 HISTORY.md
+-rw-rw-r--  1 root   hermes     28638 Nov 15 09:27 README.md
+-rw-rw-r--  1 root   hermes       820 Nov 14 13:35 THIRD_PARTY_NOTICES.md
+drwxrwsr-x  6 root   hermes      4096 Nov 15 11:01 app
+drwxrwsr-x  2 root   hermes      4096 Nov 14 14:24 audit-tools
+drwxrwsr-x 12 root   hermes      4096 Nov 14 21:18 build
+-rw-------  1 root   hermes 498552832 Nov 15 20:25 core
+drwxrwsr-x  3 root   hermes      4096 Nov 15 21:14 dist
+drwxrwsr-x  3 root   hermes      4096 Nov 14 20:07 docs
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:18 launcher
+drwxrwsr-x 16 root   hermes      4096 Nov 15 21:13 out
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:25 runtimes
+drwxrwsr-x  4 root   hermes      4096 Nov 15 20:22 scripts
+drwxrwsr-x  4 root   hermes      4096 Nov 14 19:29 tools

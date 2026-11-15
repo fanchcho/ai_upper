@@ -1,0 +1,138 @@
+== HEAD ==
+0874716afa1b77d871c521965fbd9debefbcd77b
+== branch ==
+develop
+== status count ==
+99
+== status ==
+ M out/ci-fix/closeout/job-table-py38-round2.txt
+ M out/ci-fix/closeout/py38-closeout-report-round2.md
+ M out/qml-shell/shot.png
+?? core
+?? out/about-window-xvfb.png
+?? out/about-window.png
+?? out/baseline-pytest-app.log
+?? out/baseline-pytest.log
+?? out/body/
+?? out/ci-fix/closeout/run-43610671432-authoritative.txt
+?? out/ci-fix/run-43599360678-jobs.json
+?? out/ci-fix/run-43605158930/
+?? out/ci-fix/run-43605423736/
+?? out/ci-fix/run-43610671432/
+?? out/demo-page-reset.png
+?? out/demo-page.png
+?? out/deva-app-audit/
+?? out/entry-refactor/
+?? out/main-window-xvfb.png
+?? out/main-window.png
+?? out/packaging/build.log
+?? out/packaging/build10.log
+?? out/packaging/build2.log
+?? out/packaging/build3.log
+?? out/packaging/build4.log
+?? out/packaging/build5.log
+?? out/packaging/build6.log
+?? out/packaging/build7.log
+?? out/packaging/build9.log
+?? out/packaging/launch10.log
+?? out/packaging/launch11.log
+?? out/packaging/launch7.log
+?? out/packaging/run-build.log
+?? out/parity/deva/01-under-xvfb.png
+?? out/parity/proto-shell.png
+?? out/qml-baseline-pytest.log
+?? out/qml-body/code-probe.png
+?? out/qml-body/crop-code.png
+?? out/qml-body/crop-list.png
+?? out/qml-body/crop-marks.png
+?? out/qml-body/crop-ol.png
+?? out/qml-body/crop-ol2.png
+?? out/qml-body/crop-table.png
+?? out/qml-body/crop-task.png
+?? out/qml-body/measure.py
+?? out/qml-body/probe10.py
+?? out/qml-body/probe11.py
+?? out/qml-body/probe12.py
+?? out/qml-body/probe13.py
+?? out/qml-body/probe14.py
+?? out/qml-body/probe15.py
+?? out/qml-body/probe16.py
+?? out/qml-body/probe17.py
+?? out/qml-body/probe18.py
+?? out/qml-body/probe19.py
+?? out/qml-body/probe20.py
+?? out/qml-body/probe21.py
+?? out/qml-body/probe22.py
+?? out/qml-body/probe23.py
+?? out/qml-body/probe24.py
+?? out/qml-body/probe25.py
+?? out/qml-body/probe26.py
+?? out/qml-body/probe27.py
+?? out/qml-body/probe28.py
+?? out/qml-body/probe29.py
+?? out/qml-body/probe30.py
+?? out/qml-body/probe31.py
+?? out/qml-body/probe32.py
+?? out/qml-body/probe33.py
+?? out/qml-body/probe34.py
+?? out/qml-body/probe35.py
+?? out/qml-body/probe36.py
+?? out/qml-body/probe37.py
+?? out/qml-body/probe38.py
+?? out/qml-body/probe39.py
+?? out/qml-body/probe4.py
+?? out/qml-body/probe40.py
+?? out/qml-body/probe5.py
+?? out/qml-body/probe6.py
+?? out/qml-body/probe7.py
+?? out/qml-body/probe8.py
+?? out/qml-body/probe9.py
+?? out/qml-body/probe_tricks.py
+?? out/qml-body/probe_tricks2.py
+?? out/qml-body/probe_tricks3.py
+?? out/qml-body/quote_table.png
+?? out/qml-body/render_sample.py
+?? out/qml-body/sample-light.png
+?? out/qml-body/sample.md
+?? out/qml-body/tabs.png
+?? out/qml-body/trick.png
+?? out/qml-shell/dom/chat-new.json
+?? out/qml-shell/m4/
+?? out/qml-shell/pages/
+?? out/qml-shell/probe-regress.png
+?? out/qml-shell/pytest-after-rewrite.log
+?? out/rename-ai-upper/
+?? out/rename/
+?? out/ui/
+== ls -la ==
+total 83236
+drwxrwsr-x 18 root   hermes      4096 Nov 15 20:49 .
+drwxrwsr-x 27 hermes hermes      4096 Nov 15 15:01 ..
+drwxrwsr-x  5 root   hermes      4096 Nov 13 17:25 .cache
+drwxrwsr-x  8 root   hermes      4096 Nov 15 21:50 .git
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:18 .github
+-rw-rw-r--  1 root   hermes       274 Nov 13 17:18 .gitignore
+drwxrwsr-x  3 root   hermes      4096 Nov 13 18:31 .pytest_cache
+drwxrwsr-x  5 root   hermes      4096 Nov 13 17:18 .venv
+drwxrwsr-x  2 root   hermes      4096 Nov 13 17:18 .vscode
+-rw-rw-r--  1 root   hermes    148546 Nov 14 13:35 CHANGELOG.md
+-rw-rw-r--  1 root   hermes     89067 Nov 14 13:35 HISTORY.md
+-rw-rw-r--  1 root   hermes     28638 Nov 15 09:27 README.md
+-rw-rw-r--  1 root   hermes       820 Nov 14 13:35 THIRD_PARTY_NOTICES.md
+drwxrwsr-x  6 root   hermes      4096 Nov 15 11:01 app
+drwxrwsr-x  2 root   hermes      4096 Nov 14 14:24 audit-tools
+drwxrwsr-x 12 root   hermes      4096 Nov 14 21:18 build
+-rw-------  1 root   hermes 498552832 Nov 15 20:25 core
+drwxrwsr-x  3 root   hermes      4096 Nov 15 21:14 dist
+drwxrwsr-x  3 root   hermes      4096 Nov 14 20:07 docs
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:18 launcher
+drwxrwsr-x 16 root   hermes      4096 Nov 15 21:13 out
+drwxrwsr-x  3 root   hermes      4096 Nov 13 17:25 runtimes
+drwxrwsr-x  4 root   hermes      4096 Nov 15 20:22 scripts
+drwxrwsr-x  4 root   hermes      4096 Nov 14 19:29 tools
+== files (excl .git) ==
+35008
+== files (all) ==
+36675
+== du ==
+4.4G	.

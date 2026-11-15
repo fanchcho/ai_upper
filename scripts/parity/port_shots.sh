@@ -7,7 +7,8 @@
 set -u
 OUT="${1:?用法: port_shots.sh <输出目录> [DEVA_HOME]}"
 HOME_DIR="${2:-/tmp/deva-home-port}"
-ROOT=/home/agent/shared_workspace/py_upper
+# 仓库根从脚本位置推（改名/换 checkout 都不用改脚本）。
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DISPLAY_NUM=:96
 
 mkdir -p "$OUT"

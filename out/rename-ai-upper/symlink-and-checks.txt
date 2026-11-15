@@ -1,0 +1,7 @@
+== 软链 ==
+lrwxrwxrwx 1 root hermes 8 Nov 15 21:50 /home/agent/shared_workspace/py_upper -> ai_upper
+ai_upper
+== 同设备 ==
+2050 /home/agent/shared_workspace
+== venv 旧路径残留 ==
+0

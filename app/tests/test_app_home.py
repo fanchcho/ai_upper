@@ -9,7 +9,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-# 宿主固定的工作区根：改名只动工程自己的名字，这条路径不随改名移动。
+# 宿主固定的工作区根：工程目录已改名为 ai_upper，但宿主的 workspaceRoot 仍写死这条
+# 旧路径，磁盘上以软链 `py_upper -> ai_upper` 兼容；历史报告里也留着这条前缀。
+# 常量保持旧值，下面按它把历史文本规范化掉。
 # 文档里写死它是「记录真实路径」，不是残留旧名——CI 的检出根在别处，
 # 所以这里必须是常量，不能靠 `str(root)` 推导。
 HOST_FIXED_WORKSPACE = "/home/agent/shared_workspace/py_upper"

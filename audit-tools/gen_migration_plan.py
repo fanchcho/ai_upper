@@ -600,7 +600,7 @@ def main() -> int:
     add("> 实现进度以阶段收尾时的「已完成 / 未完成」清单为准。")
     add("")
     add("- 参考工程（只读）：`/home/agent/shared_workspace/deva`，commit `109937f85b5d1b0c0a95c8875390e07ddccdf544`（2026-11-12）")
-    add("- 目标工程：`/home/agent/shared_workspace/py_upper`（PySide6 6.11.2 + Qt 原生 + MVVM + Cython 打包链）")
+    add("- 目标工程：`/home/agent/shared_workspace/ai_upper`（PySide6 6.11.2 + Qt 原生 + MVVM + Cython 打包链）")
     add("- 生成方式：`audit-tools/gen_migration_plan.py`（通道清单来自 `audit-tools/scan_deva_ipc.py` 的全量扫描，")
     add("  断言「158 条 / 154 handle / 4 on」后才出表，行数由脚本核对）")
     add("")

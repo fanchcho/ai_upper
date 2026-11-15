@@ -6,56 +6,101 @@
 
 1. **实跑回归通过**：QML 壳 offscreen 真启动，`QML OK … size=1280x820`，退出码 0；
    pytest `1168 passed / 5 skipped`（基线 1159/5，只增不减）。
-2. **逐页证据齐了**：`out/qml-shell/parity/` 下 **18 个页面状态**（覆盖要求的全部类别），
+2. **目录改名已落地**：`py_upper` 实体改名为 `ai_upper`，旧路径留软链；改名前后的
+   HEAD/文件数/du/git status 条目数逐项一致（99 条未提交改动一条未丢）。
+3. **逐页证据齐了**：`out/qml-shell/parity/` 下 **18 个页面状态**（覆盖要求的全部类别），
    每页 `original.png` / `qml.png` / `diff.png` 三件套 + 真实数值（`numbers.tsv`、
    `numbers-fuzz.tsv`）。整体差异 **1.46%–10.12%**，其中 4 个设置页 ≤3.73%。
-3. **正文层 9 项功能全部实测通过**（跨块选择复制、双击选词、代码块横向滚动、表格、
+4. **正文层 9 项功能全部实测通过**（跨块选择复制、双击选词、代码块横向滚动、表格、
    图片、深浅主题、超长/上百条消息耗时、中文与 emoji、1x/2x）。
-4. **默认入口已切 QML**，打包产物 `dist/ai_upper/ai_upper` 实跑 `QML OK … size=1280x820`，退出码 0。
-5. **仍未被「修到一致」**：剩余差异逐条列在 §3.4，主要是字形栅格化、列表/引用缩进、
+5. **默认入口已切 QML**，打包产物 `dist/ai_upper/ai_upper` 实跑 `QML OK … size=1280x820`，退出码 0。
+6. **仍未被「修到一致」**：剩余差异逐条列在 §3.4，主要是字形栅格化、列表/引用缩进、
    正文滚动落点与窗口控件；这是本轮的真实缺口，不掩饰。
 
 ---
 
-## 0. 路径与仓库对账（第一件事）
+## 0. 路径与仓库对账 + 目录改名（第一件事）
+
+### 0.1 改名落地
 
 ```
-$ ls -ld /home/agent/shared_workspace/ai_upper /home/agent/shared_workspace/py_upper
-ls: cannot access '/home/agent/shared_workspace/ai_upper': No such file or directory
-drwxrwsr-x 18 root hermes 4096 Nov 15 20:49 /home/agent/shared_workspace/py_upper
+# 改名前
+$ stat -c '%d %n' /home/agent/shared_workspace /home/agent/shared_workspace/py_upper
+2050 /home/agent/shared_workspace
+2050 /home/agent/shared_workspace/py_upper      # 同设备 → 直接 mv，无需 cp
+$ git rev-parse HEAD          0874716afa1b77d871c521965fbd9debefbcd77b
+$ git status --porcelain | wc -l   99           # 3 modified + 96 untracked，全部保留
+$ find . -type f | wc -l           36675
+$ du -sh .                         4.4G
 
-$ readlink -f /home/agent/shared_workspace/py_upper
-/home/agent/shared_workspace/py_upper          # 不是软链，是实体目录
-$ stat -c '%i %s %y' /home/agent/shared_workspace/py_upper
-1445458 4096 2026-11-15 20:49:07 +0800
+# 改名
+$ mv /home/agent/shared_workspace/py_upper /home/agent/shared_workspace/ai_upper
+$ ln -s ai_upper /home/agent/shared_workspace/py_upper
+
+# 改名后（逐项与改名前一致）
+$ git rev-parse HEAD          0874716afa1b77d871c521965fbd9debefbcd77b
+$ git rev-parse --abbrev-ref HEAD  develop
+$ git status --porcelain | wc -l   99
+$ find . -type f | wc -l           36675
+$ du -sh .                         4.4G
+$ git rev-parse --show-toplevel    /home/agent/shared_workspace/ai_upper
 ```
+前后两份完整 `ls -la` / 文件数 / du：`out/rename-ai-upper/pre-rename-state.txt`、
+`out/rename-ai-upper/post-rename-state.txt`；软链与校验：`out/rename-ai-upper/symlink-and-checks.txt`。
 
-- 轮询 60 秒（3 次，间隔 20s）：`ai_upper` 目标目录始终不存在，工作区里也没有
-  `rsync/mv/cp -a` 之类的迁移进程，`py_upper` 目录 mtime 未变 → **迁移没有在进行**，
-  不存在「半拉子目录」。按规则继续使用现路径。
-- **实际使用路径：`/home/agent/shared_workspace/py_upper`**；`ai_upper` 软链**不存在**。
-- `git rev-parse --show-toplevel` = `/home/agent/shared_workspace/py_upper`；
-  `git rev-parse --abbrev-ref HEAD` = `develop`；remote = `git@github.com:fanchcho/ai_upper.git`。
-- 本轮起点 HEAD `21a1377`（上一轮收尾提交）；本轮代码终点 `b4f052f`（CI 结论即针对它）。
-- 工作区里另有 3 个与本轮无关的上一轮遗留改动（`out/ci-fix/closeout/*`、`out/qml-shell/shot.png`），
-  未纳入本轮提交。
+- **实际使用路径：`/home/agent/shared_workspace/ai_upper`**（HEAD 见 §6）。
+- **旧路径现状：`/home/agent/shared_workspace/py_upper -> ai_upper`（软链，兼容宿主仍写死的 workspaceRoot 与本会话 cwd）。**
+- 改名前扫 `/proc/*/cwd`：只有 agent 运行时自身（dsh 主进程、ekko-studio MCP ×4、hindsight）与
+  我自己的 transient bash 落在该目录，没有构建/测试/编辑器在写；改名后 `/proc/30945/cwd`
+  自动解析为新路径 `…/ai_upper`。
+- git 未提交改动一条未丢（`git status` 条目数改名前 99、改名后 99）。
 
-> 与任务书描述不符的一点必须说清：磁盘上**已有**上一轮的 parity 产出（18 页 ×3 图 +
-> `numbers.tsv`）。本轮不是从零重做，而是**先核对再继续**：原来 `dark-chat` 差异
-> 99.38%、`delete-confirm` 92.68%（页面状态根本没拍对），本轮重截重算后分别降到 4.93%
-> 与 5.04%，并新增了容差口径与正文实测。
+### 0.2 旧绝对路径引用（`grep -rn shared_workspace/py_upper`，排除 .git/）
 
----
+| 位置 | 处理 | 原因 |
+| --- | --- | --- |
+| `.venv/**`（42 个文件：shebang、activate、pyvenv.cfg） | **已改** | 不改则 `.venv/bin/pytest` 等 41 个入口的 shebang 指向不存在的解释器 |
+| `scripts/parity/port_shots.sh:10` | **已改**为 `ROOT="$(cd "$(dirname "$0")/../.." && pwd)"` | 写死路径；改成从脚本位置推导，以后再改名也不用动 |
+| `audit-tools/gen_migration_plan.py:603` | **已改** | 报告生成器的正文里写的是工程目标路径 |
+| `app/tests/test_app_home.py:15` `HOST_FIXED_WORKSPACE` | **保留旧值 + 补注释** | 它记录的是宿主 `workspaceRoot`（仍写死旧路径，靠软链兼容），并且这个常量负责把历史文档里的旧前缀规范化后再查旧名残留；改成新路径会让历史文档被判成「残留旧名」 |
+| `docs/STAGE5-CLOSEOUT-REPORT.md:102-120,170`、`docs/STAGE6-CLOSEOUT-REPORT.md:68-69,80-160,212,236-237`、`docs/BUILD-PROGRESS.md:359-365,464,687,744,862-881,916,1031`、`docs/MIGRATION-PLAN.md:9` | **保留** | 历史结项/进度报告，记录的是当时真实的命令输出与产物路径；改写等于篡改证据。软链存在时这些路径仍可解析 |
+| `out/**` 全部日志与报告（约 1000 行） | **保留** | 同上，历史证据；且测试扫描已排除 `out/` |
+
+`git diff --stat` 见本次提交；关键 diff 就是上面三处「已改」。
+
+### 0.3 仓库外的旧路径引用（只报告，不擅自改）
+
+宿主侧仍是旧路径，靠软链兼容。命中清单（`grep -rIl shared_workspace/py_upper`）：
+
+```
+/home/agent/.hermes-web-ui/coding-agent/model/default/custom_cpa/dsh/runs/c7e79dd6…/launch.sh:3
+/home/agent/.hermes-web-ui/coding-agent/model/default/custom_cpa/dsh/runs/c7e79dd6…/AGENTS.md:596
+/home/agent/.hermes-web-ui/coding-agent/model/default/custom_cpa/dsh/runs/c7e79dd6…/dsh-purge/last-cwd.txt:1
+/home/agent/.hermes-web-ui/coding-agent/model/default/custom_cpa/dsh/runs/c7e79dd6…/sessions/--home-agent-shared_workspace-py_upper--/…/session.v4.jsonl
+/home/agent/.hermes-web-ui/coding-agent/model/default/custom_cpa/dsh/runs/c7e79dd6…/storages/session_projcache/sessions/…json
+（同目录另有 4 个 custom_fengwind 历史 run 的 hermes-rules.md / launch.sh）
+```
+这些是 Studio/DSH 自己生成的运行配置与会话记录，改它们属于账号/宿主配置变更 → **由用户执行**，
+本仓库不动；软链已保证它们继续可用（见 §1 的旧路径实跑）。
 
 ## 1. 实跑回归
 
 ```
+# 新路径
 $ AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/fx-qml-home \
-  AI_UPPER_QML_SHOT=out/qml-shell/shell-run.png .venv/bin/python app/src/main.py
+  AI_UPPER_QML_SHOT=$PWD/out/qml-shell/shell-run.png .venv/bin/python app/src/main.py
 QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False \
-  turn_stop='' deltas=0 home=/tmp/fx-qml-home png=out/qml-shell/shell-run.png size=1280x820
+  turn_stop='' deltas=0 home=/tmp/fx-qml-home \
+  png=/home/agent/shared_workspace/ai_upper/out/qml-shell/shell-run.png size=1280x820
+EXIT=0
+
+# 旧路径（软链）兼容入口，同一命令
+$ cd /home/agent/shared_workspace/py_upper && pwd -P
+/home/agent/shared_workspace/ai_upper
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' … size=1280x820
 EXIT=0
 ```
+证据：`out/qml-shell/shell-run.log`、`out/qml-shell/shell-run.png`、`out/rename-ai-upper/qml-run-new-path.log`。
 证据：`out/qml-shell/shell-run.log`、`out/qml-shell/shell-run.png`（1280×820 实拍）。
 software 光栅（`QT_QUICK_BACKEND=software`）+ offscreen，stderr 无 QML 警告与绑定报错。
 
