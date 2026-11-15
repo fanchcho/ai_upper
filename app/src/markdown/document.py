@@ -411,7 +411,10 @@ class _Renderer:
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        table_fmt.setMargin(12.0)
+        # 引用表外边距 6px（不是段落用的 12px）：原版 `border-left` 直接贴正文列，
+        # 实测 12px 时竖线比原版右 8px、二级引用右 19px；6px 与 12/0/4/5/7/8 逐档
+        # 实拍比对，聊天页差异 57264 → 56373 像素，是这几档里最小的。
+        table_fmt.setMargin(6.0)
         table_fmt.setWidth(QTextLength(QTextLength.Type.PercentageLength, 100.0))
         table_fmt.setColumnWidthConstraints(
             [
