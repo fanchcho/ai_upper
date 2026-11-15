@@ -20,6 +20,7 @@ import pytest
 
 from helpers_png import png_bytes
 from mvvm.models.chat_models import (
+    DocumentPart,
     ImagePart,
     Message,
     StoredSession,
@@ -169,6 +170,33 @@ def _delivered_session_light():
         ],
     )
     return session, None, None, None
+
+
+def test_document_line_reports_decoded_size_not_base64_length():
+    """PDF 文档行与贴片同一体积算法：base64 解码后的字节数（300 字节 → `300 B`）。"""
+    import base64
+
+    raw = b"%PDF-1.4 fixture" + b"x" * 300
+    session = StoredSession(
+        id="s-1",
+        messages=[
+            Message(
+                role="user",
+                content=[
+                    DocumentPart(
+                        type="document",
+                        mediaType="application/pdf",
+                        name="需求说明.pdf",
+                        data=base64.b64encode(raw).decode("ascii"),
+                    ),
+                    TextPart(text="读一下"),
+                ],
+            )
+        ],
+    )
+    markdown = transcript_markdown(session.messages)
+    assert "- 附件文档：需求说明.pdf（%s）" % format_bytes(len(raw)) in markdown
+    assert format_bytes(len(raw)) == "%d B" % len(raw)
 
 
 def test_preview_ignores_attachment_only_messages():

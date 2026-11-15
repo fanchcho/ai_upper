@@ -24,7 +24,7 @@ from mvvm.services.attachments import (
     ATTACH_TEXT_PREFIX,
 )
 from mvvm.services.deliverables import delivered_paths
-from mvvm.services.transcript_parts import attachment_chips, delivery_row
+from mvvm.services.transcript_parts import attachment_chips, base64_bytes, delivery_row
 
 PREVIEW_MAX = 60
 USER_HEADING = "## 你"
@@ -184,7 +184,8 @@ def _attachment_lines(parts: List[Any], msg_index: int) -> List[str]:
                 lines.append("- 附件图片：%s（数据缺失）" % name)
         elif kind == "document":
             name = str(getattr(part, "name", "") or "文档")
-            size = len(str(getattr(part, "data", "") or ""))
+            # 体积是 base64 解码后的字节数（与贴片同一算法），不是 base64 串长度。
+            size = base64_bytes(str(getattr(part, "data", "") or ""))
             lines.append("- 附件文档：%s（%s）" % (name, format_bytes(size)))
     for chip in attachment_chips(parts, msg_index):
         if chip.get("kind") in ("image", "document"):

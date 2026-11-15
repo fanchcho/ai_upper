@@ -17,7 +17,7 @@
 | 按钮状态真实（非白名单 / 已不存在 → 禁用） | **已跑通** | `build.py` 无「打开」图标；`已移走的报告.md` 打开/定位均禁用 |
 | 打开 / 定位 / 复制路径的实际返回值与失败拒绝 | **已跑通（通道层）** | §5 探针输出；**桌面会话里真的弹出文件管理器未验证**，见 §8 |
 | 回形针真弹 `QFileDialog` 并把选中文件带进消息 | **已跑通** | `qml-file-dialog.png` + `probe-qml-slots.log`（`QML PICK [...]` → `QML SEND {"attachments": [...]}` → 落盘 `['image','text']`） |
-| 回归 | **已跑通**：`1250 passed, 5 skipped` | §6（基线 1159，只增不减） |
+| 回归 | **已跑通**：`1251 passed, 5 skipped` | §6（基线 1159，只增不减） |
 | 会话「导出为文件」（审计口径 A） | **不在本轮范围**（原版也没有，见审计报告 §1） | — |
 
 ---
@@ -66,10 +66,14 @@ $ git status --porcelain=v1 -uall        # 本轮开工时
 | --- | --- |
 | `qml_shell_sessions.py:34` | `format_bytes()`：逐字对齐原版 `formatSize`（`0 B / 221 B / 1 KB / 1.5 MB`） |
 | `qml_shell_sessions.py:166` | `_attachment_lines()`：图片 → `![name](data:<mime>;base64,…)`（`markdown/document.py` 的 image_resolver 会解码成文档资源）；document/文本/文件夹/只给位置 → 一行「附件：名（真实体积）」 |
-| `qml_shell_sessions.py:203` | `transcript_markdown()`：用户消息的附件行排在提问正文**之前**；只有附件没有正文的消息不再被跳过 |
+| `qml_shell_sessions.py:204` | `transcript_markdown()`：用户消息的附件行排在提问正文**之前**；只有附件没有正文的消息不再被跳过 |
 | `qml_shell_sessions.py:238` | `delivery_tool_use_ids()`：只认 `name == "present_files"` 的工具调用 id（去重） |
 | `qml_shell_sessions.py:259` | `delivery_rows()`：id → 边车 `session.delivered` → 真实 `os.stat`；行带 `sizeText / missing / openable / toolUseId` |
 | `qml_shell_sessions.py:283` | `attachment_rows()`：贴片行（名称/类型/真实体积/图片 data URI/消息下标），图片直接从落盘消息取 base64，不额外读盘 |
+
+文档体积按 base64 解码后的字节数算（`transcript_parts.base64_bytes`），不是 base64 串长度——
+夹具里的 `需求说明.pdf` 是 316 B，界面就显示 `316 B`（此前误用串长度会显示 424 B，已在
+`app/tests/test_qml_chat_files.py::test_document_line_reports_decoded_size_not_base64_length` 钉住）。
 
 共用判据只有一份：`app/src/mvvm/services/transcript_parts.py:55`（`attachment_chips`）、`:49`（`image_ref`）、
 `:125`/`:143`（`delivery_rows`/`delivery_row`）；web 入口在 `app/src/mvvm/webui/bridge.py:29` 改为 import 它，
@@ -100,7 +104,7 @@ $ git status --porcelain=v1 -uall        # 本轮开工时
 
 截图（1280×820，`grabWindow` 原图）：
 `/home/agent/shared_workspace/ai_upper/out/chat-files/qml-attachments-deliverables.png`
-`sha256=b6c552f040c1e201e6153ee450213b65a9b20acef966817a0fcb8521659bbb4f`
+`sha256=3c13e03c9711ba0e1ab1b58410592ad9d6725e260a6622e273015357165dd2a2`
 
 图上可直接核对：
 
@@ -177,17 +181,17 @@ QML COPY REJECTED "/tmp/chat-files-slots-home/ws/\u9700\u6c42\u8bf4\u660e.pdf"
 
 ```
 $ cd app && QT_QPA_PLATFORM=offscreen ../.venv/bin/python -m pytest tests -q
-1250 passed, 5 skipped in 30.93s
+1251 passed, 5 skipped in 26.79s
 ```
 
-- 基线 `1159 passed, 5 skipped`（任务书）→ 本轮 `1250`（+91：上一轮交付卡 38 条 + 本轮 53 条），
+- 基线 `1159 passed, 5 skipped`（任务书）→ 本轮 `1251`（+92：上一轮交付卡 38 条 + 本轮 54 条），
   skipped 仍 5 条，**没有删/跳任何既有用例**。
 - 本轮 53 条分两个文件：
   - `app/tests/test_qml_chat_files_ui.py`（29 条，本会话新写）：附件正文行/贴片体积与缩略图、交付行（真实体积、
     missing、openable、去重、只认 `present_files`、无边车不出卡）、`format_bytes` 分档、回形针（真调
     `QFileDialog.getOpenFileNames` 的入参与取消路径）、带附件发送落成 `image` 内容块、打开/定位/复制路径的
     白名单拒绝；
-  - `app/tests/test_qml_chat_files.py`（24 条，接手时未提交的同题用例）：投影只取落盘与边车、正文不含
+  - `app/tests/test_qml_chat_files.py`（25 条，接手时未提交的同题用例，含本轮补的文档体积回归）：投影只取落盘与边车、正文不含
     `[附件文件]` 注入块、四个交付通道只认边车、`QJSValue`/str 附件路径归一。合并前复核过：未改动
     既有用例、24 条全绿，因此按「能用就接着做并单独提交」一并纳入。
 - 边车写入与 4 条 `deliverables:*` 通道的用例在 `app/tests/test_deliverables.py`（上一提交 `21277d8`），
