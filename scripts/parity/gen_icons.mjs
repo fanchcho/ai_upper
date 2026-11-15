@@ -24,7 +24,9 @@ const WANTED = [
   'message-circle', 'users', 'alarm-clock', 'bot', 'cog',
   'search', 'plus', 'paperclip', 'folder', 'chevron-down', 'arrow-up',
   'copy', 'x', 'settings-2', 'blocks', 'info', 'sparkles', 'square-pen', 'check',
-  'panel-left', 'panel-right', 'trash-2', 'pencil', 'archive'
+  'panel-left', 'panel-right', 'trash-2', 'pencil', 'archive',
+  // 交付卡「打开」按钮：原版 DeliverablesCard 用的就是 lucide 的 external-link。
+  'external-link'
 ]
 
 const ELEMENT_RE = /\[\s*"(path|circle|rect|line|polyline|polygon)"\s*,\s*\{([^}]*)\}/g

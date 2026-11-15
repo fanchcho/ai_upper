@@ -30,6 +30,13 @@ ApplicationWindow {
     property string activePersona: "Deva"
     property bool busy: false
     property string status: ""
+    // 附件与交付卡（Python 每次 _publish 按当前会话现算）：
+    //   attachments: [{name,kind,size,sizeText,thumb,index}]
+    //   deliveries:  [{path,name,dir,size,sizeText,openable,missing,toolUseId}]
+    property var attachments: []
+    property var deliveries: []
+    // 输入区待发送的附件（回形针选中后进来；未发送前可直接移除）
+    property var pendingFiles: []
     // 页名：由 Python 按环境变量选择要呈现的界面状态（设置页/搜索等，见 qml_shell.py）。
     property string page: "chat"
     property bool dark: Theme.dark
@@ -55,6 +62,47 @@ ApplicationWindow {
     // 输入区：true 时占位文案与模型名同步原版（原版就是这个形状）。
     property string modelLabel: "deepseek-v4.1-flash"
     property string effortLabel: "Default"
+
+    // 交付卡「复制路径」的短暂反馈：1.2s 后把对勾换回复制图标。
+    property string copiedPath: ""
+    Timer {
+        id: copyReset
+        interval: 1200
+        onTriggered: window.copiedPath = ""
+    }
+    // 交付卡动作的真实结果提示：通道返回 false 才弹（原版 chat.deliver.openFailed / reveal 失败）。
+    property string actionNotice: ""
+    Timer {
+        id: noticeReset
+        interval: 3200
+        onTriggered: window.actionNotice = ""
+    }
+
+    // 交付卡右侧 28×28 的动作按钮（打开 / 定位 / 复制路径共用）。
+    component CardAction: Rectangle {
+        id: act
+        signal triggered()
+        property string iconName
+        property color iconColor: Theme.fgMuted
+        width: 28
+        height: 28
+        radius: Theme.radiusSm
+        color: (actMouse.containsMouse && act.enabled) ? Theme.bgHover : "transparent"
+        opacity: act.enabled ? 1 : 0.4
+        Icon {
+            anchors.centerIn: parent
+            name: act.iconName
+            size: 14
+            color: act.iconColor
+        }
+        MouseArea {
+            id: actMouse
+            anchors.fill: parent
+            enabled: act.enabled
+            hoverEnabled: true
+            onClicked: act.triggered()
+        }
+    }
 
     // ── 图标栏 ────────────────────────────────────────────────────────
     component RailButton: Rectangle {
@@ -351,7 +399,8 @@ ApplicationWindow {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             contentWidth: width
-            contentHeight: bodyView.implicitHeight + 40
+            contentHeight: bodyView.y + bodyView.implicitHeight + 24
+                            + (cardsCol.visible ? cardsCol.height + 20 : 0)
             topMargin: 20
 
             TextEdit {
@@ -375,6 +424,312 @@ ApplicationWindow {
                     // focus-composer 页面：原版是真实点进输入框，这里让输入框拿到焦点。
                     if (window.page === "focus-composer")
                         inputField.forceActiveFocus()
+                }
+            }
+
+            // 正文之后：本轮会话的附件贴片（缩略图 + 名称 + 真实体积）与交付卡。
+            // 数据全部来自 Python 的 `attachment_rows()` / `delivery_rows()`（落盘会话 + 边车），
+            // 这里只画，不自己读盘、不自己算体积。
+            Column {
+                id: cardsCol
+                objectName: "cardsCol"
+                x: 56
+                y: bodyView.y + bodyView.implicitHeight + 16
+                width: 696
+                spacing: 12
+                visible: window.attachments.length > 0 || window.deliveries.length > 0
+                height: visible ? implicitHeight : 0
+
+                Flow {
+                    id: attachFlow
+                    objectName: "attachFlow"
+                    width: parent.width
+                    spacing: 8
+                    visible: window.attachments.length > 0
+                    height: visible ? implicitHeight : 0
+                    Repeater {
+                        model: window.attachments
+                        delegate: Rectangle {
+                            required property var modelData
+                            width: 210
+                            height: 64
+                            radius: Theme.radius
+                            color: Theme.bgInset
+                            border.width: 1
+                            border.color: Theme.border
+
+                            Image {
+                                visible: (modelData.thumb || "") !== ""
+                                x: 8
+                                y: 8
+                                width: 48
+                                height: 48
+                                fillMode: Image.PreserveAspectFit
+                                source: modelData.thumb || ""
+                            }
+                            Icon {
+                                visible: (modelData.thumb || "") === ""
+                                x: 8 + (48 - 20) / 2
+                                y: 8 + (48 - 20) / 2
+                                name: modelData.kind === "image" ? IconData.paperclip : IconData.folder
+                                size: 20
+                                color: Theme.fgMuted
+                            }
+                            Column {
+                                x: 64
+                                y: 11
+                                width: parent.width - 64 - 10
+                                spacing: 3
+                                Text {
+                                    objectName: "attachName"
+                                    width: parent.width
+                                    text: modelData.name || ""
+                                    elide: Text.ElideRight
+                                    color: Theme.fg
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 12
+                                    font.weight: 600
+                                }
+                                Text {
+                                    objectName: "attachSize"
+                                    width: parent.width
+                                    text: modelData.sizeText || ""
+                                    elide: Text.ElideRight
+                                    color: Theme.fgMuted
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 11
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: deliveryCard
+                    objectName: "deliveryCard"
+                    visible: window.deliveries.length > 0
+                    width: parent.width
+                    height: visible ? deliveryCol.implicitHeight : 0
+                    radius: Theme.radius
+                    color: Theme.bgPanel
+                    border.width: 1
+                    border.color: Theme.border
+
+                    Column {
+                        id: deliveryCol
+                        width: parent.width
+
+                        Item {
+                            width: parent.width
+                            height: 34
+                            Icon {
+                                x: 12
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: IconData.folder
+                                size: 14
+                                color: Theme.fgMuted
+                            }
+                            Text {
+                                x: 34
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "交付文件"
+                                color: Theme.fg
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 12
+                                font.weight: 600
+                            }
+                            Text {
+                                anchors.right: parent.right
+                                anchors.rightMargin: 12
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: window.deliveries.length + " 个文件"
+                                color: Theme.fgMuted
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 11
+                            }
+                        }
+
+                        Repeater {
+                            model: window.deliveries
+                            delegate: Item {
+                                id: delivRow
+                                required property var modelData
+                                width: deliveryCol.width
+                                height: 60
+
+                                Rectangle {
+                                    anchors.top: parent.top
+                                    width: parent.width
+                                    height: 1
+                                    color: Theme.border
+                                }
+
+                                Rectangle {
+                                    x: 12
+                                    y: 8
+                                    width: 44
+                                    height: 44
+                                    radius: Theme.radiusSm
+                                    color: Theme.bgInset
+                                    opacity: modelData.missing ? 0.5 : 1
+                                    Icon {
+                                        anchors.centerIn: parent
+                                        name: IconData.folder
+                                        size: 20
+                                        color: Theme.fgMuted
+                                    }
+                                }
+
+                                Text {
+                                    id: delivName
+                                    objectName: "delivName"
+                                    x: 68
+                                    y: 10
+                                    width: parent.width - 68 - 100
+                                    text: modelData.name || ""
+                                    elide: Text.ElideMiddle
+                                    color: modelData.missing ? Theme.fgMuted : Theme.fg
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 13
+                                    font.weight: 600
+                                }
+                                Text {
+                                    objectName: "delivSub"
+                                    x: 68
+                                    y: 31
+                                    width: parent.width - 68 - 100
+                                    text: modelData.missing
+                                          ? "文件已不存在"
+                                          : ((modelData.sizeText || "") + " · " + (modelData.dir || ""))
+                                    elide: Text.ElideMiddle
+                                    color: Theme.fgMuted
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 11
+                                }
+
+                                Row {
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 8
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    spacing: 2
+
+                                    // 打开：仅白名单类型可开；文件已不存在时禁用。
+                                    CardAction {
+                                        objectName: "delivOpen"
+                                        visible: modelData.openable && !modelData.missing
+                                        iconName: IconData.externalLink
+                                        iconColor: Theme.fgMuted
+                                        onTriggered: window.deliverableOpen(modelData)
+                                    }
+                                    // 在文件夹中显示。
+                                    CardAction {
+                                        objectName: "delivReveal"
+                                        iconName: IconData.folder
+                                        iconColor: Theme.fgMuted
+                                        enabled: !modelData.missing
+                                        onTriggered: window.deliverableReveal(modelData)
+                                    }
+                                    // 复制路径：只复制边车里登记过的路径。
+                                    CardAction {
+                                        objectName: "delivCopy"
+                                        iconName: window.copiedPath === modelData.path
+                                                  ? IconData.check : IconData.copy
+                                        iconColor: window.copiedPath === modelData.path
+                                                   ? Theme.accent : Theme.fgMuted
+                                        onTriggered: {
+                                            if (window.deliverableCopy(modelData)) {
+                                                window.copiedPath = modelData.path
+                                                copyReset.restart()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 交付卡动作失败提示（原版 toast 的等价物）：真实通道结果驱动。
+        Rectangle {
+            id: noticeBar
+            objectName: "noticeBar"
+            visible: window.actionNotice !== "" && !window.settingsOpen
+            x: (parent.width - 780) / 2
+            y: composer.y - 42
+            width: Math.min(780, noticeText.implicitWidth + 28)
+            height: 32
+            radius: Theme.radius
+            color: Theme.danger
+            z: 20
+            Text {
+                id: noticeText
+                anchors.centerIn: parent
+                text: window.actionNotice
+                color: "#ffffff"
+                font.family: Theme.sansFamily
+                font.pixelSize: 12
+            }
+        }
+
+        // 待发送附件：浮在输入卡上方一行；有文件才占位，空时不影响逐像素对位。
+        Flow {
+            id: pendingBar
+            objectName: "pendingBar"
+            visible: window.pendingFiles.length > 0 && !window.settingsOpen
+            x: (parent.width - 780) / 2
+            y: composer.y - (window.actionNotice !== "" ? 88 : 44)
+            width: 780
+            height: visible ? 36 : 0
+            spacing: 6
+            Repeater {
+                model: window.pendingFiles
+                delegate: Rectangle {
+                    required property int index
+                    required property var modelData
+                    width: pendingRow.implicitWidth
+                    height: 36
+                    radius: Theme.radius
+                    color: Theme.bgInset
+                    border.width: 1
+                    border.color: Theme.border
+
+                    Row {
+                        id: pendingRow
+                        x: 8
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 6
+                        Icon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: IconData.paperclip
+                            size: 13
+                            color: Theme.fgMuted
+                        }
+                        Text {
+                            id: pendingName
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: String(modelData).split("/").pop()
+                            color: Theme.fg
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 12
+                        }
+                        Item {
+                            width: 18
+                            height: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            Icon {
+                                anchors.centerIn: parent
+                                name: IconData.x
+                                size: 12
+                                color: Theme.fgMuted
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: window.removePending(index)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -432,21 +787,31 @@ ApplicationWindow {
                 width: parent.width - 26
                 height: 32
 
-                // 附件图标按钮 30×30
+                // 附件图标按钮 30×30：真弹 QFileDialog（Python 侧 pickAttachments），
+                // 选中的路径进 pendingFiles，随下一条消息发送。
                 Rectangle {
+                    id: clipBtn
+                    objectName: "clipBtn"
                     x: 0
                     width: 30
                     height: 30
                     y: (parent.height - height) / 2
                     radius: Theme.radiusSm
-                    color: clipHover.hovered ? Theme.bgHover : "transparent"
+                    color: (clipHover.hovered || clipMouse.containsMouse) ? Theme.bgHover : "transparent"
                     Icon {
                         anchors.centerIn: parent
                         name: IconData.paperclip
                         size: 16
                         color: Theme.fgSubtle
+                        opacity: clipBtn.enabled ? 1 : 0.5
                     }
                     HoverHandler { id: clipHover }
+                    MouseArea {
+                        id: clipMouse
+                        anchors.fill: parent
+                        enabled: !window.busy
+                        onClicked: window.pickAttachments()
+                    }
                 }
 
                 // 挂载工作区 chip
@@ -486,7 +851,7 @@ ApplicationWindow {
                     height: 32
                     y: 0
                     radius: Theme.radius
-                    color: window.busy || inputField.text.trim() === ""
+                    color: window.busy || (inputField.text.trim() === "" && window.pendingFiles.length === 0)
                            ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.45)
                            : Theme.accent
                     Text {
@@ -499,7 +864,8 @@ ApplicationWindow {
                     }
                     MouseArea {
                         anchors.fill: parent
-                        enabled: !window.busy && inputField.text.trim() !== ""
+                        enabled: !window.busy
+                                 && (inputField.text.trim() !== "" || window.pendingFiles.length > 0)
                         onClicked: window.submit()
                     }
                 }
@@ -617,10 +983,63 @@ ApplicationWindow {
 
     function submit() {
         var text = inputField.text
-        if (window.busy || text.trim() === "")
+        var files = window.pendingFiles
+        if (window.busy || (text.trim() === "" && files.length === 0))
             return
-        if (shellBridge.send(text))
+        // 带附件走同一条宿主链路（ChatHost.send 的 attachments 参数），
+        // 没有附件时仍走单参重载，保持既有行为。
+        var sent = files.length > 0 ? shellBridge.sendWithAttachments(text, files) : shellBridge.send(text)
+        if (sent) {
             inputField.text = ""
+            window.pendingFiles = []
+        }
+    }
+
+    // 回形针：真弹系统选择框（Python 侧 QFileDialog），选中项追加到待发列表。
+    function pickAttachments() {
+        var picked = shellBridge.pickAttachments()
+        if (!picked || picked.length === 0)
+            return
+        var merged = window.pendingFiles.slice()
+        for (var i = 0; i < picked.length; i++)
+            if (merged.indexOf(picked[i]) < 0)
+                merged.push(picked[i])
+        window.pendingFiles = merged
+    }
+
+    function removePending(index) {
+        var merged = window.pendingFiles.slice()
+        if (index >= 0 && index < merged.length)
+            merged.splice(index, 1)
+        window.pendingFiles = merged
+    }
+
+    function notify(text) {
+        window.actionNotice = text
+        noticeReset.restart()
+    }
+
+    // 三个动作都把通道返回的 bool 原样交给界面：false 就弹真实失败提示，
+    // 不做「点了就有反应」的假成功。
+    function deliverableOpen(item) {
+        var ok = shellBridge.openDeliverable(item.toolUseId, item.path)
+        if (!ok)
+            notify("无法打开该文件，可在文件夹中查看")
+        return ok
+    }
+
+    function deliverableReveal(item) {
+        var ok = shellBridge.revealDeliverable(item.toolUseId, item.path)
+        if (!ok)
+            notify("无法在文件夹中显示该文件")
+        return ok
+    }
+
+    function deliverableCopy(item) {
+        var ok = shellBridge.copyDeliverablePath(item.path)
+        if (!ok)
+            notify("无法复制该路径")
+        return ok
     }
 
     // 长列表页面状态：原版是真实滚轮事件，这里按同一目标位置摆好列表。

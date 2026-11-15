@@ -29,14 +29,21 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from mvvm.services.attachments import AttachmentService
 from mvvm.services.chat_session_store import ChatSessionStore
+from mvvm.services.deliverables import open_item, reveal
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services.settings_service import SettingsService
 from mvvm.services.skill_store import SkillStore
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
-from qml_shell_sessions import session_rows, transcript_markdown
+from qml_shell_sessions import (
+    attachment_rows,
+    delivery_rows,
+    session_rows,
+    transcript_markdown,
+)
 from utils.app_home import app_home
 from utils.paths import assets_root
 from utils.qt_compat import QtCore, QtGui, QtQml, QtQuick
@@ -144,6 +151,29 @@ def _load_image(src: str) -> Any:
     return image if image.load(str(path)) else None
 
 
+def _coerce_attachment_paths(attachments: Any) -> List[str]:
+    """QML 传来的附件列表 → Python 字符串列表。
+
+    QML 的 `var` 数组经 QVariantList 进来时，元素是 `QJSValue` 而不是 `str`
+    （实测 `["<PySide6.QtQml.QJSValue object at 0x...>"]`）。只认 `isinstance(p, str)`
+    会把用户亲手选中的文件全丢掉，消息于是「选了文件却没带上」。这里按 `toString()`
+    取值并丢弃空串，其余类型一律忽略。
+    """
+    if not isinstance(attachments, (list, tuple)):
+        return []
+    paths: List[str] = []
+    for item in attachments:
+        if isinstance(item, str):
+            text = item
+        elif hasattr(item, "toString"):
+            text = str(item.toString())
+        else:
+            continue
+        if text:
+            paths.append(text)
+    return paths
+
+
 def new_session_id() -> str:
     """新会话 id：渲染层用 `chat-<时间36><随机>` 的同一形状（复用 `base36`）。"""
     from mvvm.services.chat_session_store import base36
@@ -191,6 +221,17 @@ class ShellBridge(QtCore.QObject):
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
+        # 附件白名单与 web 入口同一套服务；对话框由这里的 QFileDialog 提供。
+        # **必须优先用宿主那一份**：`send()` 交给 `ChatHost.send` 读附件，宿主只认自己
+        # `self.attachments` 的白名单。各 new 一份的话，回形针选中的文件在发送时会被判
+        # 「已忽略未授权文件」——web 入口曾经就是这个故障（见 test_web_attachments 的
+        # `test_bridge_and_host_share_one_attachment_service`），这里沿用同一条规则。
+        self._attachments = getattr(host, "attachments", None) or AttachmentService(
+            store.home, WorkspaceGuard()
+        )
+        self._attachments.set_file_dialogs(
+            open_folder=self._pick_directory, pick_files=self._pick_files
+        )
         self.rendered = 0
         self.deltas: List[str] = []
         self.stop = ""
@@ -444,15 +485,25 @@ class ShellBridge(QtCore.QObject):
             print("QML CONFIG FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
             return False
 
+    @QtCore.Slot(str, "QVariantList", result=bool)
+    def sendWithAttachments(self, text: str, attachments: Any) -> bool:
+        """输入区发送（带附件）：附件路径交给 `ChatHost.send`，与 web 入口同一条链路。"""
+        return self.send(text, attachments)
+
     @QtCore.Slot(str, result=bool)
-    def send(self, text: str) -> bool:
+    def send(self, text: str, attachments: Any = None) -> bool:
         """输入区发送：走真实回合宿主，事件稍后经 emit → tick 回到界面。
 
         没有选中会话时（空状态）先建一条真实会话再发——界面写着「发一条消息就会出现在
         这里」，按钮就不能点了没反应。
+
+        `attachments` 是用户亲手选中的绝对路径列表（QML 回形针 → `pickAttachments` 的
+        返回值，也已登记进 `AttachmentService` 白名单）；透传给宿主后由它读成内容块，
+        与 web 入口 `chat:send` 完全相同，不存在第二条附件链路。
         """
         body = (text or "").strip()
-        if not body:
+        paths = _coerce_attachment_paths(attachments)
+        if not body and not paths:
             return False
         if not self._active:
             self._active = new_session_id()
@@ -468,11 +519,16 @@ class ShellBridge(QtCore.QObject):
         self.deltas = []
         print(
             "QML SEND",
-            json.dumps({"sessionId": self._active, "text": body}, ensure_ascii=False),
+            json.dumps(
+                {"sessionId": self._active, "text": body, "attachments": paths},
+                ensure_ascii=False,
+            ),
             flush=True,
         )
         try:
-            turn_id = self._host.send({"sessionId": self._active, "text": body})["turnId"]
+            turn_id = self._host.send(
+                {"sessionId": self._active, "text": body, "attachments": paths}
+            )["turnId"]
         except Exception as exc:  # noqa: BLE001 - 发送失败要显式暴露，不能装作已发出
             self._turn = None
             print("QML SEND FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
@@ -481,6 +537,128 @@ class ShellBridge(QtCore.QObject):
         self._render()
         self._publish()
         return True
+
+    # ── 附件与交付卡（与 web 入口同一套服务）──────────────────────────────
+    @QtCore.Slot(result="QVariantList")
+    def pickAttachments(self) -> List[str]:
+        """回形针：真弹 `QFileDialog`，选中的路径登记白名单后回给 QML 待发列表。
+
+        与 web 入口 `fs:pick-attachments` 走同一套 `AttachmentService.inspect`：类型 / 体积
+        不合规的文件会被判 `supported=false`，这里只把能进的交给消息，其余打印原因
+        （界面不静默吞掉用户的选择）。对话框取消返回空列表。
+        """
+        try:
+            picked = self._attachments.pick_attachments()
+        except Exception as exc:  # noqa: BLE001 - 没有对话框 / 被取消：显式打日志，不假成功
+            print("QML PICK FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+            return []
+        paths: List[str] = []
+        for item in picked:
+            if item.get("supported"):
+                paths.append(str(item.get("path") or ""))
+            else:
+                print(
+                    "QML PICK REJECTED",
+                    json.dumps(item, ensure_ascii=False),
+                    file=sys.stderr,
+                    flush=True,
+                )
+        print("QML PICK", json.dumps(paths, ensure_ascii=False), flush=True)
+        return paths
+
+    @QtCore.Slot(result="QVariantList")
+    def attachmentChips(self) -> List[Dict[str, Any]]:
+        """当前会话的用户附件贴片（名称 / 类型 / 真实体积 / 图片 data URI）。"""
+        return attachment_rows(self._session())
+
+    @QtCore.Slot(result="QVariantList")
+    def deliveryItems(self) -> List[Dict[str, Any]]:
+        """当前会话的交付卡行（文件名 / 真实体积 / 目录 / 能否打开 / 是否已不存在）。"""
+        return delivery_rows(self._session())
+
+    @QtCore.Slot(str, str, result=bool)
+    def openDeliverable(self, tool_use_id: str, path: str) -> bool:
+        """交付卡「打开」：只认边车登记的路径（`deliverables.open_item` 同一条不变式）。"""
+        return bool(open_item(self._session(), tool_use_id, self._delivered_index(tool_use_id, path))["ok"])
+
+    @QtCore.Slot(str, str, result=bool)
+    def revealDeliverable(self, tool_use_id: str, path: str) -> bool:
+        """交付卡「在文件夹中显示」：同样只认边车路径。"""
+        return bool(reveal(self._session(), tool_use_id, self._delivered_index(tool_use_id, path))["ok"])
+
+    @QtCore.Slot(str, result=bool)
+    def copyDeliverablePath(self, path: str) -> bool:
+        """交付卡「复制路径」：只复制边车里登记过的路径，任意字符串一律拒绝。"""
+        if not self._path_is_delivered(path):
+            print("QML COPY REJECTED", json.dumps(path), file=sys.stderr, flush=True)
+            return False
+        clipboard = QtGui.QGuiApplication.clipboard()
+        if clipboard is None:  # pragma: no cover - 无 GUI 平台插件时不存在
+            return False
+        clipboard.setText(path)
+        return clipboard.text() == path
+
+    def _session(self) -> Any:
+        """当前会话对象（没有选中会话时为 None）。"""
+        return self._store.load_session(self._active) if self._active else None
+
+    def _delivered_index(self, tool_use_id: str, path: str) -> int:
+        """边车里这条工具调用的第几个文件；不在边车里返回 -1（服务层据此拒绝）。"""
+        from mvvm.services.deliverables import delivered_paths
+
+        paths = delivered_paths(self._session(), tool_use_id)
+        try:
+            return paths.index(path)
+        except ValueError:
+            return -1
+
+    def _path_is_delivered(self, path: str) -> bool:
+        from mvvm.services.deliverables import delivered_paths
+
+        session = self._session()
+        if session is None or not isinstance(path, str) or not path:
+            return False
+        sidecar = getattr(session, "delivered", None)
+        if not isinstance(sidecar, dict):
+            return False
+        return any(path in delivered_paths(session, key) for key in sidecar)
+
+    def _dialog_parent(self) -> Any:
+        """对话框父窗口：QML 的根对象是 `QQuickWindow`（不是 `QWidget`）。
+
+        `QFileDialog` 的父参数只接受 `QWidget`；把 `QQuickWindow` 传进去会抛
+        `TypeError: __init__ called with wrong argument types`，回形针就永远弹不出来。
+        窗口是 widgets 时用它做模态父窗口，否则传 None（对话框照样模态于应用）。
+        """
+        from utils.qt_compat import QtWidgets
+
+        return self._window if isinstance(self._window, QtWidgets.QWidget) else None
+
+    def _pick_files(self) -> List[str]:
+        """`QFileDialog.getOpenFileNames`：过滤条件与 web 入口同一份（原版 showOpenDialog）。"""
+        from utils.qt_compat import QtWidgets
+
+        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
+            self._dialog_parent(),
+            "选择附加文件",
+            "",
+            "支持的文件 (*.png *.jpg *.jpeg *.gif *.webp *.pdf *.docx *.xlsx *.pptx *.doc "
+            "*.xls *.ppt *.txt *.md *.markdown *.json *.yaml *.yml *.toml *.csv *.log "
+            "*.js *.jsx *.ts *.tsx *.vue *.svelte *.html *.css *.scss *.xml *.py *.go "
+            "*.rs *.java *.kt *.c *.h *.cpp *.cs *.php *.sh *.sql);;"
+            "图片 (*.png *.jpg *.jpeg *.gif *.webp);;"
+            "PDF (*.pdf);;"
+            "所有文件 (*)",
+        )
+        return [str(path) for path in paths]
+
+    def _pick_directory(self) -> Optional[str]:
+        from utils.qt_compat import QtWidgets
+
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
+            self._dialog_parent(), "打开项目文件夹"
+        )
+        return directory or None
 
     # ── 事件回写（GUI 线程）───────────────────────────────────────────────
     def tick(self) -> bool:
@@ -625,6 +803,10 @@ class ShellBridge(QtCore.QObject):
         busy = bool(active) and self._host.is_busy(active)
         window.setProperty("busy", busy)
         window.setProperty("status", "输出中…" if busy else "就绪")
+        # 附件贴片与交付卡：每次重绘都按当前会话现算（落盘为唯一真相源）。
+        session = self._session() if active else None
+        window.setProperty("attachments", attachment_rows(session))
+        window.setProperty("deliveries", delivery_rows(session))
 
     def initial(self) -> None:
         """首帧之前：没有选中会话就选第一条（空数据时保持空状态）。"""
@@ -684,7 +866,13 @@ def run(headless: bool) -> int:
     if workspace:
         guard.trust_root(workspace)
 
-    app = QtGui.QGuiApplication.instance() or QtGui.QGuiApplication([])
+    # 必须是真 `QApplication`（而不是 `QGuiApplication`）：附件选择要 `QFileDialog`，
+    # 文件类型图标回落要 `QFileIconProvider`，复制路径要剪贴板——三者都只在 QApplication
+    # 下可用；只建 QGuiApplication 时 `provider.icon(...)` 会段错误（见
+    # mvvm/services/deliverables.py 的 `_icon_data_url`）。
+    from utils.qt_compat import QtWidgets
+
+    app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
     bridge_box: Dict[str, ShellBridge] = {}
 
     def emit(payload: Dict[str, Any]) -> None:
