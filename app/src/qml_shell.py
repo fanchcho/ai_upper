@@ -186,6 +186,7 @@ class ShellBridge(QtCore.QObject):
         self._window: Any = None
         self._engine: Any = None
         self._events: "queue.Queue[Dict[str, Any]]" = queue.Queue()
+        self._persona_names: Dict[str, str] = {}
         self._active = ""
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
@@ -584,11 +585,32 @@ class ShellBridge(QtCore.QObject):
         """窗口尺寸稳定/画面首帧之后重排一次（代码块宽度取容器宽）。"""
         self._render()
 
+    def _persona_name(self, persona_id: str) -> str:
+        """会话行副标题显示的角色名（原版 `.cf-thread__owner`）。未知 id 回落默认角色。"""
+        if not self._persona_names:
+            try:
+                for item in PersonaStore(app_home()).list_personas():
+                    self._persona_names[str(item.get("id"))] = str(item.get("name") or "")
+            except OSError:
+                self._persona_names = {}
+        return self._persona_names.get(persona_id or "", "") or "Deva"
+
+    def _rows(self) -> List[Dict[str, Any]]:
+        """列表行：会话行 + 角色 id/名（副标题）。角色名只影响显示，不参与排序。"""
+        rows = session_rows(self._store, lang=self.language())
+        owner = {str(getattr(m, "id", "")): str(getattr(m, "personaId", "") or "general")
+                 for m in self._store.visible_sessions()}
+        for row in rows:
+            persona = owner.get(row["id"], "general")
+            row["persona"] = persona
+            row["personaName"] = self._persona_name(persona)
+        return rows
+
     def _publish(self) -> None:
         window = self._window
         if window is None:
             return
-        rows = session_rows(self._store, lang=self.language())
+        rows = self._rows()
         active = self._active if any(row["id"] == self._active for row in rows) else ""
         window.setProperty("sessions", rows)
         window.setProperty("activeId", active)
@@ -596,13 +618,17 @@ class ShellBridge(QtCore.QObject):
             "activeTitle",
             next((row["title"] for row in rows if row["id"] == active), ""),
         )
+        window.setProperty(
+            "activePersona",
+            next((row.get("personaName", "") for row in rows if row["id"] == active), "Deva"),
+        )
         busy = bool(active) and self._host.is_busy(active)
         window.setProperty("busy", busy)
         window.setProperty("status", "输出中…" if busy else "就绪")
 
     def initial(self) -> None:
         """首帧之前：没有选中会话就选第一条（空数据时保持空状态）。"""
-        rows = session_rows(self._store, lang=self.language())
+        rows = self._rows()
         if rows:
             self._active = rows[0]["id"]
             self._render()

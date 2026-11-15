@@ -27,6 +27,7 @@ ApplicationWindow {
     property var sessions: []
     property string activeId: ""
     property string activeTitle: ""
+    property string activePersona: "Deva"
     property bool busy: false
     property string status: ""
     // 页名：由 Python 按环境变量选择要呈现的界面状态（设置页/搜索等，见 qml_shell.py）。
@@ -42,13 +43,17 @@ ApplicationWindow {
     property string searchQuery: page === "search-results" ? "00"
                                : page === "search-none" ? "zzz" : ""
     property bool modelPickerOpen: page === "model-picker"
+    // 交互态页面：hover 指定行、右键菜单、删除确认框
+    property int forceHoverRow: page === "hover-thread" ? 1 : -1
+    property bool ctxOpen: page === "ctx-menu" || page === "delete-confirm"
+    property bool confirmOpen: page === "delete-confirm"
 
     // 深浅主题：Python 侧把 config.json 的 theme 解析成 bool，QML 用 Binding 写进
     // Theme 单例（单例的 property 不能从 Python 直接 setProperty，实测落不下去）。
     Binding { target: Theme; property: "dark"; value: shellBridge ? shellBridge.darkMode : false }
 
     // 输入区：true 时占位文案与模型名同步原版（原版就是这个形状）。
-    property string modelLabel: "DeepSeek V4.1 Flash"
+    property string modelLabel: "deepseek-v4.1-flash"
     property string effortLabel: "Default"
 
     // ── 图标栏 ────────────────────────────────────────────────────────
@@ -243,6 +248,9 @@ ApplicationWindow {
             model: window.sessions
             spacing: 0
             boundsBehavior: Flickable.StopAtBounds
+            // 长列表两张页面：滚到中途 / 滚到底（原版是真实滚轮事件）。
+            onContentHeightChanged: window.applyListScroll()
+            Component.onCompleted: window.applyListScroll()
 
             delegate: ThreadRow {
                 required property int index
@@ -251,7 +259,9 @@ ApplicationWindow {
                 title: modelData.title || ""
                 time: modelData.time || ""
                 persona: modelData.persona || "general"
+                ownerName: modelData.personaName || "Deva"
                 active: modelData.id === window.activeId
+                forceHover: index === window.forceHoverRow
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -298,7 +308,7 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.verticalCenter: parent.verticalCenter
-                text: window.activeTitle
+                text: window.activePersonaName
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 13
@@ -360,7 +370,12 @@ ApplicationWindow {
                 color: Theme.fg
                 selectionColor: Theme.bgSelected
                 selectedTextColor: Theme.fg
-                Component.onCompleted: shellBridge.attach(textDocument)
+                Component.onCompleted: {
+                    shellBridge.attach(textDocument)
+                    // focus-composer 页面：原版是真实点进输入框，这里让输入框拿到焦点。
+                    if (window.page === "focus-composer")
+                        inputField.forceActiveFocus()
+                }
             }
         }
 
@@ -606,6 +621,137 @@ ApplicationWindow {
             return
         if (shellBridge.send(text))
             inputField.text = ""
+    }
+
+    // 长列表页面状态：原版是真实滚轮事件，这里按同一目标位置摆好列表。
+    function applyListScroll() {
+        if (window.page === "long-bottom")
+            sessionList.positionViewAtEnd()
+        else if (window.page === "long-mid")
+            sessionList.contentY = Math.max(0, (sessionList.contentHeight - sessionList.height) * 0.45)
+    }
+
+    // 右键菜单：原版 .cf-menu 实测 (165,88) 175×124，圆角 10，1px #e6e6ea，四项各 31。
+    Rectangle {
+        id: ctxMenu
+        objectName: "ctxMenu"
+        visible: window.ctxOpen
+        x: 165
+        y: 88
+        width: 175
+        height: 124
+        radius: 10
+        color: Theme.bg
+        border.width: 1
+        border.color: Theme.border
+        z: 40
+
+        Column {
+            x: 5
+            y: 5
+            spacing: 0
+            Repeater {
+                model: [
+                    { label: "New chat", icon: IconData.plus, danger: false },
+                    { label: "Rename", icon: IconData.pencil, danger: false },
+                    { label: "Archive", icon: IconData.archive, danger: false },
+                    { label: "Delete conversation", icon: IconData.trash2, danger: true }
+                ]
+                delegate: Rectangle {
+                    required property var modelData
+                    width: 165
+                    height: 28
+                    radius: Theme.radiusSm
+                    color: "transparent"
+                    Row {
+                        x: 8
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
+                        Icon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: modelData.icon
+                            size: 14
+                            color: modelData.danger ? Theme.danger : Theme.fg
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: modelData.label
+                            color: modelData.danger ? Theme.danger : Theme.fg
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 删除确认框：背板 42%，弹窗 420×180 居中偏上（实测 430,320），标题 15/700。
+    Item {
+        id: confirmLayer
+        objectName: "confirmLayer"
+        visible: window.confirmOpen
+        anchors.fill: parent
+        z: 60
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.backdrop
+        }
+        Rectangle {
+            x: 430
+            y: 320
+            width: 420
+            height: 180
+            radius: Theme.radiusLg
+            color: Theme.bg
+            Text {
+                x: 20
+                y: 18
+                width: parent.width - 40
+                wrapMode: Text.WordWrap
+                text: "Delete conversation “" + window.activeTitle + "”?"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 15
+                font.weight: 700
+            }
+            Text {
+                x: 20
+                y: 74
+                width: parent.width - 40
+                wrapMode: Text.WordWrap
+                text: "This conversation and all its messages will be permanently removed. This cannot be undone."
+                color: Theme.fgMuted
+                font.family: Theme.sansFamily
+                font.pixelSize: 13
+                lineHeight: 1.5
+            }
+            Text {
+                id: cancelText
+                x: 266
+                y: 135
+                text: "Cancel"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 13
+            }
+            Rectangle {
+                x: 330
+                y: 127
+                width: 70
+                height: 30
+                radius: Theme.radiusSm
+                color: Theme.danger
+                Text {
+                    anchors.centerIn: parent
+                    text: "Delete"
+                    color: "#ffffff"
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 600
+                }
+            }
+        }
     }
 
     // 当前会话的头像角色（用于输入框占位文案 "Message <name>…"）

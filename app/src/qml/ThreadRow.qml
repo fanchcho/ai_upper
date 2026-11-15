@@ -9,27 +9,30 @@ Rectangle {
     property string title: ""
     property string time: ""
     property string persona: "general"
+    property string ownerName: ""
     property bool active: false
+    // 交互态：逐页对比里 hover-thread 需要指定某一行处于 hover（原版是真实鼠标悬停）。
+    property bool forceHover: false
 
     height: 54
     radius: Theme.radius
     color: active ? Theme.bgSelected
-                  : hover.hovered ? Theme.bgHover
-                                  : "transparent"
+                  : (hover.hovered || forceHover) ? Theme.bgHover
+                                                  : "transparent"
 
     HoverHandler { id: hover }
 
-    // 头像位（38×38，x=12/y=8）保留但不画内容：原版 `.cf-ava` 在这份数据里是空的
-    // div（DOM 实测无子节点、背景透明），只有外框占位。这里如实留空，别画自造的头像。
-    Item {
+    // 头像：原版 `.cf-ava` 是 38×38 的 humation SVG（DOM 实测 x=12/y=8，相对行）。
+    Avatar {
         id: face
         objectName: "threadFace"
+        persona: row.persona
+        size: 38
         x: 12
         y: 8
-        width: 38
-        height: 38
     }
 
+    // 主列：标题行 17px（13/600）+ 角色名 13px（11px）
     Text {
         id: titleText
         x: 62
@@ -41,7 +44,7 @@ Rectangle {
         font.pixelSize: 13
         font.weight: 600
         elide: Text.ElideRight
-        height: 19
+        height: 17
         verticalAlignment: Text.AlignVCenter
     }
 
@@ -49,12 +52,26 @@ Rectangle {
         id: timeText
         anchors.right: parent.right
         anchors.rightMargin: 12
-        y: 8 + (19 - height) / 2 + 2
+        y: 12
         text: row.time
         color: Theme.fgSubtle
         font.family: Theme.sansFamily
         font.pixelSize: 11
         height: 13
         verticalAlignment: Text.AlignVCenter
+    }
+
+    // 角色名：原版 `.cf-thread__owner`，11px、次要色，紧贴标题行下方。
+    Text {
+        id: ownerText
+        x: 62
+        y: 27
+        width: row.width - 62 - 12
+        text: row.ownerName
+        color: Theme.fgSubtle
+        font.family: Theme.sansFamily
+        font.pixelSize: 11
+        height: 13
+        elide: Text.ElideRight
     }
 }
