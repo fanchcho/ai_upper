@@ -1,0 +1,29 @@
+This plugin does not support propagateSizeHints()
+QML PICK ["/tmp/chat-files-slots-home/ws/截图-2026-11-16.png"]
+== pickAttachments() ==
+   真的弹出了对话框 = QFileDialog  modal= True  selectedFiles= ['/tmp/chat-files-slots-home/ws/截图-2026-11-16.png']
+   对话框截图 = /home/agent/shared_workspace/ai_upper/out/chat-files/qml-file-dialog.png
+   返回 = ["/tmp/chat-files-slots-home/ws/截图-2026-11-16.png"]
+QML SEND {"sessionId": "slot-probe", "text": "这张图里的文件能给我吗", "attachments": ["/tmp/chat-files-slots-home/ws/截图-2026-11-16.png"]}
+QML TURN 8044d604624f439886f104c090d1bb39
+QML STREAM {"text": "收到附件"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+== sendWithAttachments() ==
+   send 返回 = True  turn stop = end_turn
+   落盘用户消息块类型 = ['image', 'text']
+   附件贴片（QML 属性源）= [{"name": "截图-2026-11-16.png", "kind": "image", "size": 329, "ref": "0:0:c8CgIFgYJA", "partIndex": 0, "index": 0, "thumb": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAIAAABt+uBvAAAACXBIWX
+== deliveryItems() ==
+    {"name": "季度报告.md", "size": 3087, "sizeText": "3 KB", "openable": true, "missing": false}
+    {"name": "数据汇总.xlsx", "size": 5124, "sizeText": "5 KB", "openable": true, "missing": false}
+    {"name": "build.py", "size": 47, "sizeText": "47 B", "openable": false, "missing": false}
+    {"name": "已移走的报告.md", "size": null, "sizeText": "", "openable": true, "missing": true}
+== 交付卡按钮 ==
+   open(边车路径)   = True → ['/tmp/chat-files-slots-home/ws/季度报告.md']
+   open(伪造路径)   = False → ['/tmp/chat-files-slots-home/ws/季度报告.md']
+   reveal(边车路径) = True → ['/tmp/chat-files-slots-home/ws/季度报告.md']
+   reveal(/etc/passwd) = False
+   copy(边车路径)   = True
+   剪贴板内容       = /tmp/chat-files-slots-home/ws/季度报告.md
+QML COPY REJECTED "/tmp/chat-files-slots-home/ws/\u9700\u6c42\u8bf4\u660e.pdf"
+   copy(伪造路径)   = False
+   剪贴板内容(拒绝后不变) = /tmp/chat-files-slots-home/ws/季度报告.md

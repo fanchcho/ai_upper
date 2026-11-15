@@ -1,0 +1,10 @@
+== 夹具文件 ==
+   截图-2026-11-16.png                           329 B
+   季度报告.md                                    3087 B
+   数据汇总.xlsx                                  5124 B
+   build.py                                     47 B
+   已移走的报告.md                                已删除（用于验证 missing 态）
+== 会话 JSON == /tmp/chat-files-home/data/chats/chat-files.json
+   delivered 边车 = {"tu_present_chat_files": ["/tmp/chat-files-home/ws/季度报告.md", "/tmp/chat-files-home/ws/数据汇总.xlsx", "/tmp/chat-files-home/ws/build.py", "/tmp/chat-files-home/ws/已移走的报告.md"]}
+   messages 条数 = 2
+   图片附件 = 截图-2026-11-16.png base64 长度 = 440 原始 = 329 B
