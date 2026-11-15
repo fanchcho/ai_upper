@@ -51,9 +51,21 @@ def _headless_requested() -> bool:
 
 
 def _qml_requested() -> bool:
-    """默认 QML；只有显式 `AI_UPPER_UI=web`（或 `webengine`）才回退 WebEngine 窗口。"""
+    """默认 QML；只有显式 `AI_UPPER_UI=web`（或 `webengine`）才回退 WebEngine 窗口。
+
+    **macOS headless 例外**：CI 的 macOS runner 没有可用的 WindowServer 会话，
+    `offscreen` 平台插件也不给 Quick 场景做栅格化，`QQuickWindow.grabWindow()` 拿回
+    空图（macos-arm64 的 Full integration run 因此判失败，日志尾部是
+    `[6/6] Target runtime smoke`）。这条路径上默认回退到 WebEngine 渲染层，保持
+    「产物能起来、能探到渲染层」的冒烟语义；要强制 QML 就显式设 `AI_UPPER_UI=qml`。
+    桌面 macOS（有窗口会话）不受影响，仍然默认 QML。
+    """
     value = os.environ.get(UI_ENV, "").strip().lower()
-    return value not in (WEB_UI, WEBENGINE_UI)
+    if value == QML_UI:
+        return True
+    if value in (WEB_UI, WEBENGINE_UI):
+        return False
+    return not (sys.platform == "darwin" and _headless_requested())
 
 
 def _prepare_environment(headless: bool) -> None:
@@ -70,12 +82,7 @@ def _prepare_environment(headless: bool) -> None:
     else:
         os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
     if headless:
-        # macOS 不强制 offscreen：`offscreen` 平台插件在 macOS 上不给 Quick 场景做
-        # 栅格化，`QQuickWindow.grabWindow()` 拿回空图（CI 的 macos-arm64 job 就是
-        # 因此判失败）。macOS 跑测的机器有 WindowServer，走默认 cocoa 能正常出窗口与
-        # 首帧；Linux/Windows 继续用 offscreen。
-        if sys.platform != "darwin":
-            os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+        os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 
 def _data_home() -> Path:
