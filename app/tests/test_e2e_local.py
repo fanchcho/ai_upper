@@ -310,7 +310,7 @@ def _prepare_repo() -> Path:
 
     # The fixture builds the project's *configured* entry, whatever it is. Pin
     # it to a fixture module instead of rewriting the real one: the shipped
-    # entry (deva_web.py) imports Qt, and this fixture application has no Qt
+    # entry (app/src/main.py) imports Qt, and this fixture application has no Qt
     # payload at all. Reading the entry from the configuration also keeps the
     # embedded-entry check meaningful — it must match this module.
     project, replaced = re.subn(

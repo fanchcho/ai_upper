@@ -32,10 +32,10 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# The web-hosted window, not the template application: `main.py` still
-# opens the reference MVVM window, and packaging must start the real one.
+# Single entry point for both the source tree and the packaged launcher:
+# `app/src/main.py` assembles and starts the web-hosted window.
 [tool.ai_upper]
-entry = "deva_web.py"
+entry = "main.py"
 
 [tool.ai_upper.app]
 # APP NAME, single source of truth: derives the .app / executable /

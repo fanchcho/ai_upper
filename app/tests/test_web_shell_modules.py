@@ -198,9 +198,9 @@ def test_readiness_probe_reads_a_string_not_a_javascript_boolean():
     """
     import inspect
 
-    import deva_web
+    import main as entry
 
-    source = inspect.getsource(deva_web._probe_renderer)
+    source = inspect.getsource(entry._probe_renderer)
     # 探测表达式本身必须是 String(...)：直接返回布尔值就会踩上面那个转换差异。
     assert "String(!!(window.deva && window.deva.chat))" in source, source
     # 判定必须是「等于字符串 true」，不是真值判断：空串在真值判断下同样是假，
@@ -210,7 +210,7 @@ def test_readiness_probe_reads_a_string_not_a_javascript_boolean():
 
 def test_readiness_probe_interprets_the_string_result():
     """把两次真机观测到的回调值都喂给判定逻辑，只有 'true' 算就绪。"""
-    import deva_web
+    import main as entry
 
     def verdict(value):
         # 与 _probe_renderer 里的判定保持同一表达式。
@@ -220,7 +220,7 @@ def test_readiness_probe_interprets_the_string_result():
     assert verdict("") is False        # PySide6 6.6 / PySide2 的布尔转换结果
     assert verdict(False) is False
     assert verdict(True) is False      # 6.11 的回调值，也不该被当作探测结果
-    assert deva_web.HEADLESS_ENV == "AI_UPPER_HEADLESS"
+    assert entry.HEADLESS_ENV == "AI_UPPER_HEADLESS"
 
 
 def test_overlay_paints_opaque_background(qapp):

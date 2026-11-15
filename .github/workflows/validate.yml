@@ -424,10 +424,11 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
           cat run.log
-          # The entry point is deva_web.py, so the readiness marker is the one
-          # it prints once the renderer loaded and the JS bridge is up. Asserting
-          # on the template app's "GUI OK" passed only when this step silently
-          # ran a different entry.
+          # The entry point is app/src/main.py (the single launch path for the
+          # source tree and the packaged launcher), so the readiness marker is
+          # the one it prints once the renderer loaded and the JS bridge is up.
+          # Asserting on the template app's "GUI OK" passed only when this step
+          # silently ran a different entry.
           #
           # The marker check runs before the annotation is emitted: a run that
           # exits 0 without printing the marker is a failure too, and it used to

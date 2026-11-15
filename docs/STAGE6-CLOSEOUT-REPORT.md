@@ -12,7 +12,7 @@
 
 | # | 项 | 验证方式（可复现） |
 |---|---|---|
-| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web`（入口已于 2026-11-15 收敛到 `app/src/main.py`：同一命令现在为 `from main import main` → `1`、`PASS entry module Cythonized: main`，见 `docs/BUILD-PROGRESS.md` §1.16） |
 | 2 | 产物含 QtWebEngine 运行载荷 | `find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \)` → 3 条；helper 权限 `-rwxr-xr-x` |
 | 3 | 产物含原版渲染层，且与源逐文件一致 | `diff -rq app/assets/renderer dist/ai_upper/assets/renderer` → `IDENTICAL` |
 | 4 | 产物含角色种子资产 | `ls dist/ai_upper/assets/personas` → `general.md` 等 |
@@ -53,8 +53,10 @@
 
 - 新增 `app/src/deva_web.py`：薄入口，装配 `SettingsService` / `PersonaStore` /
   `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
-  的模板语义**未改**。
+  的模板语义**未改**。（2026-11-15 后续：该薄入口整段并入 `app/src/main.py` 并删除，
+  见 `docs/BUILD-PROGRESS.md` §1.16。）
 - `[tool.ai_upper] entry = "deva_web.py"`（`app/pyproject.toml.example` 与本地 `app/pyproject.toml`）。
+  该值现为 `entry = "main.py"`。
 - `tools/ai_upper/package.py` 的 `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；
   linux/windows 落 bundle 根，macOS 落 `Contents/Resources`。
 - `app/src/utils/paths.py` 新增 `assets_root()`：以 launcher 导出的 `AI_UPPER_HOME`

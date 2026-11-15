@@ -2,7 +2,7 @@
 
 > 规则：只写**实际跑出来的**结果。命令与输出都是真的；没跑过的一律归入「已实现未验证」或
 > 「未实现」，不许把没跑通的说成跑通。
-> 最近更新：2026-11-14（第五阶段：界面与原版逐页对齐，七页实拍全部判定「已一致」）
+> 最近更新：2026-11-15（入口收敛：`app/src/main.py` 成为唯一入口，`deva_web.py` 退场，§1.16）
 
 ## 0. 本轮起点（续跑对账）
 
@@ -92,7 +92,7 @@ $ git branch -vv
 
 **本轮中断点（若被截断从这里续）：** 界面七页实拍全部判定「已一致」（§1.11）；
 158 条通道判定表已生成（`docs/audit/IPC-158-LEDGER.md`：通过 60 / 已知差异 5 / 未实现 93）；
-打包入口已切到 `deva_web.py` 并真实构建、真实启动成功（§1.14）。
+打包入口已收敛到 `app/src/main.py`（原 `deva_web.py` 的逻辑与入口一并迁入，§1.16）并真实构建、真实启动成功。
 当前未完成的只剩档二/档三里点名的项（真实网络、真桌面观感、非 linux-arm64 目标等）。
 全量测试基线：**939 passed, 5 skipped**（`PATH` 含 `patchelf`；原始输出见 §5）。
 第六阶段收尾报告：`docs/STAGE6-CLOSEOUT-REPORT.md`。
@@ -850,7 +850,7 @@ Windows / macOS 目标本轮**未构建**（见 §2）。
 
 | 改动 | 文件 | 要点 |
 |---|---|---|
-| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改**（该薄入口已于 §1.16 并入 `main.py` 并删除） |
 | 包装配置 | `app/pyproject.toml.example`、`app/pyproject.toml` | `[tool.ai_upper] entry = "deva_web.py"`；构建期验证行 `PASS entry module Cythonized: deva_web`（`out/packaging/build8.log:176`） |
 | 资产入产物 | `tools/ai_upper/package.py` | `_copy_supporting_trees()` 在 `resources` 之外新增 `app/assets`；linux/windows 落 bundle 根，macOS 落 `Contents/Resources` |
 | 资产定位 | `app/src/utils/paths.py` | 新增 `assets_root()`，以 launcher 导出的 `AI_UPPER_HOME` 为准，再退到 `_project_root()`、`sys.executable` 目录——不再靠 `parents[3]` 计数（Cython 合并 + egg 后不可靠） |
@@ -964,7 +964,8 @@ EXIT=0
 **判定依据（没有唯一实现被丢掉）**
 
 - 入口本身（环境变量、装配、headless 打印）由 `app/src/deva_web.py:108-157` 与
-  `app/src/application.py:52-82` 承担；打包用的是前者。
+  `app/src/application.py:52-82` 承担；打包用的当时是前者（该模块已于 §1.16 整段并入
+  `app/src/main.py` 并删除）。
 - 同一套对象图另有 `mvvm/webui/assembly.py:27-84::build_chat_host()`，它比
   `deva_app` 的装配更完整（按会话 `focusRoot` 造 `ToolRuntime`、按会话 `modelRef` 现解析模型），
   且被 `views/web_shell_window.py:139` 与端口启动器共用。
@@ -984,9 +985,106 @@ EXIT=0
 **验证**：删前 `app/` 下 `python -m pytest tests -q` → `959 passed, 6 skipped`；
 删后同命令结果见 commit 说明与本节末尾，二者数字一致（删除只减去入口自身的 3 个用例，
 其中可复用断言已在 `test_deva_panes.py` 覆盖）。打包入口冒烟
-`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
+`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`
+（该命令的入口现为 `app/src/main.py`，见 §1.16.3）。
 
 ---
+
+---
+
+### 1.16 入口收敛：`app/src/main.py` 成为唯一入口，`deva_web.py` 退场（2026-11-15）
+
+**改动范围只有入口本身**：启动逻辑（环境准备、`QApplication`、窗口装配、headless
+探针、退出码语义）从 `app/src/deva_web.py` 整段迁进 `app/src/main.py`，签名
+`main(argv=None) -> int`；`[tool.ai_upper].entry` 改为 `main.py`；`deva_web.py` 删除。
+窗口、桥、宿主、渲染层资产一律未动（`DevaWebWindow` 仍在
+`app/src/mvvm/views/web_shell_window.py:120`）。
+
+**为什么不会丢实现**：
+
+- `deva_web.py` 里唯一独有的东西就是「启动顺序」：`_prepare_environment()`（
+  `QTWEBENGINE_CHROMIUM_FLAGS` 默认 `--no-sandbox --disable-gpu`、headless 时
+  `QT_QPA_PLATFORM=offscreen`）、`_create_window()` 的四件套装配、
+  `_probe_renderer()` 的 `loadFinished` + `String(!!(window.deva && window.deva.chat))`
+  探针、以及 OK/FAILED 的打印与 0/1 退出码。这四段逐个字符迁入 `main.py`。
+- Web 桥能力（`window.deva` 通道、回合宿主、模型网关、工具运行时）不在入口里，
+  分布在 `mvvm/webui/{assembly,bridge,host}.py` 与 `mvvm/views/web_shell_window.py`，
+  本次一行未改，仍由新的 `main.py` 装配并启动。
+- 模板参考应用 `application.py`（`run_application()` / `run_gui()` / `AiUpperApplication`）
+  仍独立存在，`test_app.py`、`test_mvvm_example.py` 继续引用它；它只是不再是发布入口。
+
+#### 1.16.1 改前清单（真实命令）
+
+```text
+$ grep -rn -e 'deva_web' -e 'DevaWebWindow' app/src app/tests tools .github docs README.md | sort
+```
+
+47 行，逐条留档：`out/entry-refactor/grep-before-entry.txt`。改后同命令（去掉已删文件）
+42 行：`out/entry-refactor/grep-after-entry.txt`。剩下的 `deva_web` 字样全部是**历史记录**
+（§1.14、§1.15、第六阶段收尾报告、审计文档）或旧产物里的 `strings` 记录，不再有代码引用；
+`DevaWebWindow` 仍是真实类名，保留。
+
+#### 1.16.2 入口解析（用 build.py 自己的函数，不靠肉眼）
+
+```text
+$ PYTHONPATH=tools .venv/bin/python -c "from ai_upper import config; print(config.entry_path()); print(config.entry_module()); print(config.entry_source())"
+/home/agent/shared_workspace/py_upper/app/src/main.py
+main
+from main import main
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+`tools/ai_upper/config.py:267-295` 的 `entry_path()` 校验了「必须在 `app/src` 下、后缀
+`.py`、文件存在」，所以这一行输出同时证明了入口可解析且指向真实文件。
+
+#### 1.16.3 源码树启动（headless/offscreen，真实输出）
+
+```text
+$ AI_UPPER_HEADLESS=1 AI_UPPER_NO_DIALOG=1 PYTHONPATH=app/src .venv/bin/python app/src/main.py
+QRhiGles2: Failed to create temporary context
+QRhiGles2: Failed to create context
+Failed to create RHI for backend: OpenGL
+[...] Failed to connect to the bus: ... /run/dbus/system_bus_socket
+GPUInfo not initialized on GpuInfoUpdate
+DEVA WEB OK platform=offscreen title='ai_upper' url=…/app/assets/renderer/index.html bridge=True
+EXIT=0
+```
+
+#### 1.16.4 打包与产物启动（真实构建）
+
+```text
+$ PATH=/tmp/ninja-bin:/tmp/buildtools/patchelf/bin:$PATH AI_UPPER_PYTHON=…/.venv/bin/python-real \
+    .venv/bin/python tools/build.py build --target linux-arm64
+…
+PASS entry module Cythonized: main
+PASS native binaries checked=114
+SMOKE PASS launcher
+READY: …/dist/ai_upper
+BUILD_EXIT=0
+
+$ strings dist/ai_upper/ai_upper | grep -c "from main import main"
+1
+$ strings dist/ai_upper/ai_upper | grep -c "from deva_web import main"
+0
+
+$ AI_UPPER_HOME=/tmp/pack-smoke-entry AI_UPPER_HEADLESS=1 AI_UPPER_NO_DIALOG=1 \
+    QT_QPA_PLATFORM=offscreen timeout 180 ./dist/ai_upper/ai_upper
+…
+DEVA WEB OK platform=offscreen title='ai_upper' url=…/dist/ai_upper/assets/renderer/index.html bridge=True
+EXIT=0
+```
+
+完整日志：`out/entry-refactor/build.log`、`out/entry-refactor/packaged-launch.log`。
+
+#### 1.16.5 测试与 CI 契约
+
+- 全量：`cd app && ../.venv/bin/python -m pytest tests -q` → `989 passed, 5 skipped in 24.35s`
+  （与改前基线 989/5 一致；没有删用例，`test_web_shell_modules.py` 里两条 `deva_web`
+  断言改为 `import main as entry`，断言内容不变）。
+- CI 的 readiness 标记未变：`DEVA WEB OK` + `bridge=True`（`.github/workflows/validate.yml:442`），
+  只更新了 :427 那段注释里的入口文件名。
 
 ## 2 档二：已实现未验证
 
@@ -997,7 +1095,7 @@ EXIT=0
 | Web 承载窗口在真桌面（真显卡、HiDPI、Wayland）下的观感 | 已在 Xvfb 软渲染下实拍七页并与原版逐像素比对（§1.11） | 容器只有 Xvfb。真显卡/缩放的合成差异无法在容器验证；截图结论只对 `1400x900x24 + 软渲染` 这一配置成立 |
 | `titleBarOverlay` 的窗口控制（最小化/最大化/关闭真实生效） | 叠加层画得与原版一致，按钮几何有测试 | 截图对比只能证明**画对**，证明不了**点了有效**；Xvfb 无窗口管理器，最小化/最大化行为需要真桌面验 |
 | 深色主题下的七页对比 | 叠加层深色切换有单测（`OVERLAY_BG_DARK`） | 只实拍了浅色七页；深色需要原版切主题再拍一轮，本轮时间不够 |
-| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`；入口已于 2026-11-15 收敛到 `app/src/main.py` 并重新构建/启动验过（§1.16.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
 | Windows / macOS 打包产物 | 同一套 `package()` / `qt_prune` 代码路径，有单测覆盖两平台的目录布局 | **未构建、未启动**。`qt_prune` 保留了 `QtWebEngineProcess.exe` 与 `qtwebengine_locales` 的 Windows 布局，但没有真产物证据；不许拿 linux 结果冒充 |
 | 流式刷新在真窗口里的观感（40ms 节流） | 逻辑与假控件都有测试 | 需要长回复 + 真人观察；Xvfb 能跑但看不出手感 |
 | 技能目录里**自定义**技能的排序 | 按 `casefold()` 排，ASCII 名与原版 `localeCompare` 等价 | 非 ASCII 名（中文）在 `localeCompare` 默认 ICU 排序下与 `casefold()` 可能不同，未实拍对比 |
