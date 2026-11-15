@@ -41,24 +41,39 @@ def main(argv: list) -> None:
     if with_model:
         base = os.environ.get("ANTHROPIC_BASE_URL", "").strip()
         model = os.environ.get("ANTHROPIC_MODEL", "").strip() or "deepseek-v4.1-flash"
-        providers = (config.get("models") or {}).get("providers") or []
-        for provider in providers:
-            if provider.get("id") != "anthropic":
-                continue
-            provider["enabled"] = True
-            provider["apiHost"] = base or "https://api.anthropic.com"
-            provider["models"] = [
+        # 只改已有 service 是不够的：全新 home 的 config 里 providers 是空的，原版据此判定
+        # 「没有可用模型」(hasUsableModel) 而渲染 Connect an AI model 引导卡，正文被挡。
+        # 所以这里显式写出 anthropic 这一条（enabled + 至少一个 enabled 的模型）。
+        anthropic = {
+            "id": "anthropic",
+            "name": "Anthropic",
+            "kind": "official",
+            "purpose": "llm",
+            "accent": "#d97757",
+            "adapter": "anthropic",
+            "apiHost": base or "https://api.anthropic.com",
+            "enabled": True,
+            "models": [
                 {
                     "id": model,
                     "name": model,
                     "enabled": True,
-                    "purpose": "llm",
                     "contextWindow": 200000,
                 }
-            ]
-            break
-        config.setdefault("models", {})["providers"] = providers
-        config.setdefault("models", {})["activeModelId"] = "anthropic:" + model
+            ],
+        }
+        models_cfg = config.setdefault("models", {})
+        providers = models_cfg.get("providers") or []
+        replaced = False
+        for idx, provider in enumerate(providers):
+            if provider.get("id") == "anthropic":
+                providers[idx] = anthropic
+                replaced = True
+                break
+        if not replaced:
+            providers.append(anthropic)
+        models_cfg["providers"] = providers
+        models_cfg["activeModelId"] = "anthropic:" + model
 
     config_path.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
     print("config ok theme=%s locale=%s model=%s at %s" % (theme, locale, with_model, config_path))

@@ -13,13 +13,17 @@
 - `DEVA_APP_WORKSPACE`：启动时登记为受信根的工作区（不设则没有受信根，工具一律拒绝）；
 - `AI_UPPER_HEADLESS=1`：offscreen 装配、等渲染层 `loadFinished`、打印结果后退出
   （旧 `DEVA_APP_HEADLESS` 仍被接受）；
-- `AI_UPPER_UI=qml`：改用 QML 三栏壳（`qml/Main.qml`），不装配 WebEngine 窗口；
+- `AI_UPPER_UI`：界面路线。**缺省走 QML 三栏壳**（`qml/Main.qml`，正文由
+  `QTextDocument` 承载）；`AI_UPPER_UI=web` 才装配原 WebEngine 窗口（兜底开关）；
   与 `AI_UPPER_HEADLESS=1` 同时给出时，等首帧画出来后 `grabWindow()` 存 PNG 到
   `out/qml-shell/shot.png`，成功打印 `QML OK`，失败打印具体原因。
 
 `AI_UPPER_HEADLESS` 是打包后的冒烟路径：失败时返回非零并打印原因，绝不假装启动成功。
-CI 的 `build.py --run` 用的就是它。QML 路径是同一语义的第二条冒烟路径，缺省不启用，
-所以现有 WebEngine 探针的判定与退出码不因它改变。
+CI 的 `build.py --run` 用的就是它，因此打包产物默认验证的是 QML 壳。
+
+**默认路线是 QML**（用户已定死「QML 壳 + QTextDocument 正文」）。`AI_UPPER_UI=web`
+是保留的兜底开关：只有当 QML 路线在本机起不来（Quick 插件缺失、显卡驱动直接把
+`QQuickWindow` 打崩）时才用，日常不启用。
 """
 from __future__ import annotations
 
@@ -33,6 +37,8 @@ HEADLESS_ENV = "AI_UPPER_HEADLESS"
 LEGACY_HEADLESS_ENV = "DEVA_APP_HEADLESS"
 UI_ENV = "AI_UPPER_UI"
 QML_UI = "qml"
+WEB_UI = "web"
+WEBENGINE_UI = "webengine"
 HEADLESS_TIMEOUT_S = 90.0
 
 
@@ -45,7 +51,9 @@ def _headless_requested() -> bool:
 
 
 def _qml_requested() -> bool:
-    return os.environ.get(UI_ENV, "").strip().lower() == QML_UI
+    """默认 QML；只有显式 `AI_UPPER_UI=web`（或 `webengine`）才回退 WebEngine 窗口。"""
+    value = os.environ.get(UI_ENV, "").strip().lower()
+    return value not in (WEB_UI, WEBENGINE_UI)
 
 
 def _prepare_environment(headless: bool) -> None:

@@ -74,12 +74,20 @@ DEVA_HOME="$HOME_DIR" "$DEVA_ROOT/node_modules/electron/dist/electron" \
 EPID=$!
 sleep 10
 
-WID=$(xdotool search --name '^Deva$' 2>/dev/null | head -1)
-[ -z "${WID:-}" ] && WID=$(xdotool search --class electron 2>/dev/null | head -1)
+# 窗口出现要等（Electron 首帧 5–15s 波动很大）。轮询到 30s，别在窗口还没 map 时
+# 就断言「找不到窗口」——那会把整个页面判成失败。
+WID=""
+for _ in $(seq 1 60); do
+  WID=$(xdotool search --name '^Deva$' 2>/dev/null | head -1)
+  [ -z "${WID:-}" ] && WID=$(xdotool search --class electron 2>/dev/null | head -1)
+  [ -n "${WID:-}" ] && break
+  sleep 0.5
+done
 if [ -n "${WID:-}" ]; then
   xdotool windowmove "$WID" 0 0 windowsize "$WID" 1280 820
   xdotool windowactivate "$WID" 2>/dev/null
-  sleep 2
+  # 内容（会话列表 / 正文）比窗口晚到，多给 3s 让首屏数据落定。
+  sleep 3
 else
   echo "未找到 Deva 窗口，见 /tmp/deva-page.log" >&2
   exit 3

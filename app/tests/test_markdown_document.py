@@ -522,10 +522,29 @@ def test_no_rendered_frame_has_a_border(qapp):
 
     offenders = []
     for frame in walk(document.rootFrame()):
+        if isinstance(frame, QTextTable):
+            # 表格走另一条绘制路径，不会段错误，而且**必须**带 1px 表格级边框：
+            # QQuickTextEdit 不画单元格级边框，只画表格级边框（见下一条用例）。
+            continue
         border = frame.frameFormat().border()
         if border and border > 0:
             offenders.append((type(frame).__name__, border))
     assert offenders == []
+
+
+def test_table_carries_a_one_pixel_table_border_for_qml(qapp):
+    """表格级 1px 边框是 QML 侧能画出网格的唯一途径。
+
+    实测（QQuickTextEdit + grabWindow）：单元格级边框不绘制，表格级 ``setBorder(1)``
+    + ``setBorderCollapse(True)`` 会画出完整 1px 网格，且合并模式下与单元格级 1px
+    合并、不会叠成 2px。
+    """
+    document = render("| a | b |\n| --- | --- |\n| 1 | 2 |\n")
+    table = tables(document)[0]
+    fmt = table.format()
+    assert fmt.border() == 1.0
+    assert fmt.borderCollapse() is True
+    assert fmt.borderBrush().color().name() == LIGHT.border
 
 
 def test_a_document_with_every_construct_renders(qapp):

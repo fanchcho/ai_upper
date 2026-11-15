@@ -28,31 +28,60 @@ PY
 run() {  # run <page> [config] [seed-chats]
   # 第三个参数允许显式传空串 = 不预置会话；用 ${3-...} 而不是 ${3:-...}，否则空串会被替换成默认值。
   local page="$1" cfg="${2:-$CONFIG}" seed="${3-$FIXTURE}"
-  bash scripts/parity/deva_page_shot.sh "$page" "$OUT/$page-deva.png" "/tmp/pg-home-$page" "$seed" "$cfg" >/dev/null 2>&1
-  if [ -f "$OUT/$page-deva.png" ]; then
-    echo "ok   $page $(identify -format '%wx%h %b' "$OUT/$page-deva.png")"
-  else
-    echo "FAIL $page"
+  # 空图重试一次：Xvfb/Electron 偶尔没画出首帧就截到全黑或全白（<5KB），
+  # 这种图若留在证据里会让「像素差异」变成假数据。
+  local attempt bytes
+  for attempt in 1 2; do
+    rm -f "$OUT/$page-deva.png"
+    bash scripts/parity/deva_page_shot.sh "$page" "$OUT/$page-deva.png" "/tmp/pg-home-$page" "$seed" "$cfg" >/dev/null 2>&1
+    if [ -f "$OUT/$page-deva.png" ]; then
+      bytes=$(stat -c %s "$OUT/$page-deva.png")
+      if [ "$bytes" -ge 5000 ]; then
+        echo "ok   $page $(identify -format '%wx%h %b' "$OUT/$page-deva.png")"
+        return 0
+      fi
+    fi
+    echo "retry $page (attempt $attempt)"
+  done
+  echo "FAIL $page"
+  return 1
+}
+
+# 只跑指定页：`deva_pages_all.sh out/... chat empty`（不给页名 = 全跑）。
+# 分块跑是因为 19 页一次性跑约 7 分钟，跑挂了要整批重来；分块能把失败限制在一小段里。
+ONLY="$*"
+want() {
+  [ -z "$ONLY" ] && return 0
+  case " $ONLY " in
+    *" $1 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+run_if() {
+  local page="$1"
+  shift
+  if want "$page"; then
+    run "$page" "$@"
   fi
 }
 
 # 空态：没有任何会话、但有可用模型的正常启动 → 中列 QuickStart。
-run empty "$CONFIG" ""
-# 首启：全新 DEVA_HOME，连 config.json 都没有 → 原版的首次启动引导。
-run first-run "$CONFIG" ""
-run chat
-run search-open
-run search-results
-run search-none
-run ctx-menu
-run delete-confirm
-run model-picker
-run hover-thread
-run focus-composer
-run long-mid
-run long-bottom
-run settings-general
-run settings-models
-run settings-extensions
-run settings-about
-run dark-chat "$DARK_CONFIG"
+run_if empty "$CONFIG" ""
+run_if first-run "$CONFIG" ""
+run_if chat
+run_if search-open
+run_if search-results
+run_if search-none
+run_if ctx-menu
+run_if delete-confirm
+run_if model-picker
+run_if hover-thread
+run_if focus-composer
+run_if long-mid
+run_if long-bottom
+run_if settings-general
+run_if settings-models
+run_if settings-extensions
+run_if settings-about
+run_if dark-chat "$DARK_CONFIG"

@@ -161,11 +161,36 @@ def test_time_label_relative_buckets(delta, expected):
     assert time_label(now - delta, now=now) == expected
 
 
-def test_time_label_older_than_a_day_is_local_date_and_garbage_is_empty():
+@pytest.mark.parametrize(
+    "delta,expected",
+    [
+        (0, "just now"),
+        (59_999, "just now"),
+        (60_000, "1 min ago"),
+        (3_599_000, "59 min ago"),
+        (3_600_000, "1 hr ago"),
+        (86_399_000, "23 hr ago"),
+    ],
+)
+def test_time_label_english_buckets_match_use_relative_time(delta, expected):
+    # 原版 useRelativeTime（ChatFirstShell.tsx:338）的英文词表，逐字相同。
     now = 1_700_000_000_000
-    old = now - 3 * 86_400_000
-    label = time_label(old, now=now)
-    assert len(label) == len("11-15 10:30") and label[2] == "-"
+    assert time_label(now - delta, now=now, lang="en") == expected
+
+
+@pytest.mark.parametrize(
+    "days,zh,en",
+    [(1, "昨天", "yesterday"), (3, "3 天前", "3 days ago")],
+)
+def test_time_label_day_buckets_count_days(days, zh, en):
+    # 原版超过 24 小时按天数写（正好 1 天是 yesterday），没有「绝对日期」这一档。
+    now = 1_700_000_000_000
+    ms = now - days * 86_400_000
+    assert time_label(ms, now=now) == zh
+    assert time_label(ms, now=now, lang="en") == en
+
+
+def test_time_label_garbage_is_empty():
     assert time_label(None) == ""
     assert time_label("not-a-number") == ""
 
@@ -173,6 +198,7 @@ def test_time_label_older_than_a_day_is_local_date_and_garbage_is_empty():
 def test_time_label_future_timestamp_clamps_to_just_now():
     now = 1_700_000_000_000
     assert time_label(now + 10_000, now=now) == "刚刚"
+    assert time_label(now + 10_000, now=now, lang="en") == "just now"
 
 
 def test_session_row_uses_meta_title_preview_and_time(tmp_path):
@@ -187,6 +213,12 @@ def test_session_row_uses_meta_title_preview_and_time(tmp_path):
     meta = store.visible_sessions()[0]
     row = session_row(meta, store.load_session("s-1"), now=1_700_000_000_000 + 300_000)
     assert row == {"id": "s-1", "title": "标题", "preview": "预览正文", "time": "5 分钟前"}
+
+    # 英文界面（parity 夹具用 en）走英文词表。
+    row_en = session_row(
+        meta, store.load_session("s-1"), now=1_700_000_000_000 + 300_000, lang="en"
+    )
+    assert row_en["time"] == "5 min ago"
 
 
 def test_session_row_falls_back_to_preview_when_title_is_blank(tmp_path):

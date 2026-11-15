@@ -19,6 +19,7 @@ frame，但段错误无法在进程内捕获，所以这里保留 ``AI_UPPER_QML
 """
 from __future__ import annotations
 
+import base64
 import json
 import os
 import queue
@@ -110,6 +111,39 @@ def _send_text() -> str:
     return os.environ.get(SEND_ENV, "")
 
 
+def _load_image(src: str) -> Any:
+    """正文图片解码：`data:` URI（base64/百分号编码）与本地文件都解成 QImage。
+
+    QTextDocument 自己不认 `data:` URI（`QTextDocument.addResource` 只吃 QUrl + 图片对象），
+    所以图片由这里解码后交给渲染器注册成文档资源；解不出来返回 None，渲染器画 alt 占位，
+    图片不会被静默吞掉（这条口径有测试锁住）。
+    """
+    text = (src or "").strip()
+    if not text:
+        return None
+    image = QtGui.QImage()
+    if text.startswith("data:"):
+        head, _, payload = text.partition(",")
+        try:
+            if ";base64" in head:
+                raw = base64.b64decode(payload, validate=False)
+            else:
+                from urllib.parse import unquote_to_bytes
+
+                raw = unquote_to_bytes(payload)
+        except (ValueError, TypeError, base64.binascii.Error):
+            return None
+        return image if image.loadFromData(raw) else None
+    if text.startswith("file://"):
+        text = text[len("file://"):]
+    path = Path(text)
+    if not path.is_absolute():
+        path = app_home() / path
+    if not path.is_file():
+        return None
+    return image if image.load(str(path)) else None
+
+
 def new_session_id() -> str:
     """新会话 id：渲染层用 `chat-<时间36><随机>` 的同一形状（复用 `base36`）。"""
     from mvvm.services.chat_session_store import base36
@@ -119,6 +153,16 @@ def new_session_id() -> str:
 
 class ShellBridge(QtCore.QObject):
     """QML 调过来的入口，以及回合事件回写 QML 属性的唯一出口。"""
+
+    # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
+    # 为什么不写 Theme 单例的 property：`QQmlApplicationEngine.singletonInstance()`
+    # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
+    # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
+    darkModeChanged = QtCore.Signal()
+
+    @QtCore.Property(bool, notify=darkModeChanged)
+    def darkMode(self) -> bool:
+        return self._dark
 
     def __init__(
         self,
@@ -137,6 +181,7 @@ class ShellBridge(QtCore.QObject):
         self._settings = settings
         self._vault = vault
         self._skills = skills
+        self._dark = False
         self._document: Any = None
         self._window: Any = None
         self._engine: Any = None
@@ -152,6 +197,9 @@ class ShellBridge(QtCore.QObject):
         from markdown.body import BodyDocument
 
         self._body = BodyDocument(content_width=BODY_WIDTH)
+        self._body.set_image_resolver(_load_image)
+        # 首帧之前就把深浅算好：QML 的 Theme.dark 绑在 darkMode 上，晚一拍会闪白。
+        self._dark = self._resolve_dark()
         self._sync_body_style()
 
     # ── 装配 ──────────────────────────────────────────────────────────────
@@ -259,10 +307,17 @@ class ShellBridge(QtCore.QObject):
             return None
 
     def _sync_theme_singleton(self) -> None:
-        """把解析后的深/浅写进 Theme 单例，QML 侧所有颜色随之切换。"""
-        singleton = self._theme_singleton()
-        if singleton is not None:
-            singleton.setProperty("dark", self._resolve_dark())
+        """把解析后的深/浅推给 QML：更新 `darkMode` 并通知，Theme 单例由 QML 的 Binding 写。
+
+        为什么不直接 `singletonInstance().setProperty("dark", ...)`：QML 文件单例在
+        PySide6 里拿到的是 QJSValue，`setProperty` 不落到 QObject 上（实测值不变），
+        主题切了个寂寞。走 context property + QML Binding 才可靠。
+        """
+        dark = self._resolve_dark()
+        if dark == self._dark:
+            return
+        self._dark = dark
+        self.darkModeChanged.emit()
 
     def _apply_theme(self) -> None:
         self._sync_theme_singleton()
@@ -520,6 +575,11 @@ class ShellBridge(QtCore.QObject):
         except (TypeError, ValueError):
             return
 
+    @QtCore.Slot()
+    def scrollBottom(self) -> None:
+        """贴到底（首帧之后 contentHeight 才准，渲染时那次可能还是 0）。"""
+        self._scroll_to_bottom()
+
     def rerender(self) -> None:
         """窗口尺寸稳定/画面首帧之后重排一次（代码块宽度取容器宽）。"""
         self._render()
@@ -528,7 +588,7 @@ class ShellBridge(QtCore.QObject):
         window = self._window
         if window is None:
             return
-        rows = session_rows(self._store)
+        rows = session_rows(self._store, lang=self.language())
         active = self._active if any(row["id"] == self._active for row in rows) else ""
         window.setProperty("sessions", rows)
         window.setProperty("activeId", active)
@@ -542,7 +602,7 @@ class ShellBridge(QtCore.QObject):
 
     def initial(self) -> None:
         """首帧之前：没有选中会话就选第一条（空数据时保持空状态）。"""
-        rows = session_rows(self._store)
+        rows = session_rows(self._store, lang=self.language())
         if rows:
             self._active = rows[0]["id"]
             self._render()
@@ -658,6 +718,8 @@ def run(headless: bool) -> int:
     )
     _pump(app, lambda: False, 0.3)
     bridge.rerender()
+    _pump(app, lambda: False, 0.2)
+    bridge.scrollBottom()
     _pump(app, lambda: False, 0.2)
 
     send_text = _send_text()

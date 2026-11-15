@@ -511,7 +511,12 @@ class _Renderer:
         if self._has_content:
             cursor.insertBlock()
         table_fmt = QTextTableFormat()
-        table_fmt.setBorder(0.0)
+        # 表格级 1px 边框必须设：QML 的 `TextEdit`（QQuickTextEdit 的文本节点）**不画**
+        # 单元格级边框，只画表格级边框（实测 out/qml-shell/probe 见 docs 审计 §正文）。
+        # 合并模式下（BorderCollapse=True）表格级 1px 与单元格级 1px 会合并成 1px，
+        # 不会叠成 2px，所以在 QTextEdit 控件路径上仍然是 1px 网格。
+        table_fmt.setBorder(1.0)
+        table_fmt.setBorderBrush(QtGui.QBrush(self.color(self.palette.border)))
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)

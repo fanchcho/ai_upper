@@ -19,12 +19,15 @@ Rectangle {
 
     HoverHandler { id: hover }
 
-    Avatar {
+    // 头像位（38×38，x=12/y=8）保留但不画内容：原版 `.cf-ava` 在这份数据里是空的
+    // div（DOM 实测无子节点、背景透明），只有外框占位。这里如实留空，别画自造的头像。
+    Item {
         id: face
-        persona: row.persona
-        size: 38
+        objectName: "threadFace"
         x: 12
         y: 8
+        width: 38
+        height: 38
     }
 
     Text {

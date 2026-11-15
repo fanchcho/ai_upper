@@ -180,10 +180,11 @@ Item {
         property var options: []
         property int current: 0
         property var keys: []
+        property int rowHeight: 55
         signal picked(int index)
 
         width: parent ? parent.width : 508
-        height: 55
+        height: rowHeight
         Rectangle {
             anchors.top: parent.top
             visible: row.parent && row.parent.children[0] !== row
@@ -248,8 +249,9 @@ Item {
         id: generalPane
         Item {
             Rectangle {
+                // 原版 cf-set 实测：pane 内 (20, 54.5)，510×169（标题 h2 22.5 + 间距 16）。
                 x: 20
-                y: 16
+                y: 55
                 width: parent.width - 40
                 height: 169
                 radius: Theme.radiusLg
@@ -267,11 +269,13 @@ Item {
                 font.weight: 700
             }
             Column {
+                // 行：首行 57、其余 55（原版 cf-set__row 实测），整体贴着卡片内缘。
                 x: 21
-                y: 55
+                y: 56
                 width: parent.width - 42
                 SetRow {
                     width: parent.width
+                    rowHeight: 57
                     label: "Language"
                     options: ["简体中文", "English"]
                     current: shellBridge ? shellBridge.language() === "zh" ? 0 : 1 : 1

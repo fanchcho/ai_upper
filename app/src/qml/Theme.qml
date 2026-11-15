@@ -80,10 +80,15 @@ QtObject {
 
     // ── 字体 ─────────────────────────────────────────────────────
     // 原版 `--font-sans` 首选 -apple-system/Segoe UI/Microsoft YaHei/Roboto/Helvetica/Arial；
-    // 这台机器上 Chromium 把 Latin 落到了 Nimbus Sans（Helvetica 的度量兼容替身），CJK 落到
-    // Noto Sans CJK。QML 的 Font 只有一个 family 名，不能给「按字符集分家族」的栈，故显式
-    // 选 Nimbus Sans + 由 fontconfig 回退到 Noto Sans CJK（实测中文与数字都出得来）。
-    readonly property string sansFamily: "Nimbus Sans"
+    // 这台机器上 Chromium 把 Arial/Segoe UI/Roboto 都回退到 DejaVu Sans（fc-match 实测），
+    // CJK 落到 Noto Sans CJK。QML 的 Font 只有一个 family 名，不能给「按字符集分家族」的栈，
+    // 故显式选 DejaVu Sans + 由 fontconfig 回退到 Noto Sans CJK。
+    //
+    // 为什么不选 Nimbus Sans：它没有 500/600 两个字重，Qt 会把 Medium→Italic、DemiBold→
+    // Bold Italic（`QFontInfo.styleName()` 实测），设置页整页文字会变斜体；且正文度量比原版
+    // 窄 4–21px（"list_dir" 39.28 vs 60.22）。DejaVu Sans 对同一批判定宽度与原版 CSS 相差
+    // ≤0.15px（"DeepSeek V4.1 Flash" 127.19 vs 127.33、"Send" 36.72 vs 36.75）。
+    readonly property string sansFamily: "DejaVu Sans"
     readonly property string monoFamily: "DejaVu Sans Mono"
     readonly property real bodyPx: 14 * chatScale
     readonly property real chatScale: 1.0

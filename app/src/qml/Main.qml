@@ -43,6 +43,10 @@ ApplicationWindow {
                                : page === "search-none" ? "zzz" : ""
     property bool modelPickerOpen: page === "model-picker"
 
+    // 深浅主题：Python 侧把 config.json 的 theme 解析成 bool，QML 用 Binding 写进
+    // Theme 单例（单例的 property 不能从 Python 直接 setProperty，实测落不下去）。
+    Binding { target: Theme; property: "dark"; value: shellBridge ? shellBridge.darkMode : false }
+
     // 输入区：true 时占位文案与模型名同步原版（原版就是这个形状）。
     property string modelLabel: "DeepSeek V4.1 Flash"
     property string effortLabel: "Default"

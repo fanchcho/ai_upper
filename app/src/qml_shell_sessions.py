@@ -39,10 +39,25 @@ def preview_text(session: Any) -> str:
     return ""
 
 
-def time_label(ms: Any, now: Optional[int] = None) -> str:
-    """毫秒时间戳 → 列表里的时间文案（绝对日期，不做时区换算之外的花样）。"""
+# 相对时间词表：逐字对齐原版 i18n/messages.ts 的 chat.time（zh 见 :269，en 见 :1733）。
+# 原版拼法是 `${n} ${word}`（数字与词之间一个空格），中文也不例外。
+_TIME_WORDS = {
+    "zh": ("刚刚", "分钟前", "小时前", "昨天", "天前"),
+    "en": ("just now", "min ago", "hr ago", "yesterday", "days ago"),
+}
+
+
+def time_label(ms: Any, now: Optional[int] = None, lang: str = "zh") -> str:
+    """毫秒时间戳 → 列表里的相对时间文案。
+
+    口径逐字对齐原版 `useRelativeTime`（redesign/ChatFirstShell.tsx:338）：<1 分钟
+    "just now / 刚刚"、<60 分钟 "N min ago / N 分钟前"、<24 小时 "N hr ago / N 小时前"、
+    正好 1 天 "yesterday / 昨天"、更早 "N days ago / N 天前"。原版没有「绝对日期」这一档，
+    跨月也只写天数。
+    """
     from mvvm.models.chat_models import now_ms
 
+    words = _TIME_WORDS.get(lang, _TIME_WORDS["zh"])
     try:
         value = int(ms)
     except (TypeError, ValueError):
@@ -51,19 +66,23 @@ def time_label(ms: Any, now: Optional[int] = None) -> str:
     delta = current - value
     if delta < 0:
         delta = 0
-    if delta < 60_000:
-        return "刚刚"
-    if delta < 3_600_000:
-        return "%d 分钟前" % (delta // 60_000)
-    if delta < 86_400_000:
-        return "%d 小时前" % (delta // 3_600_000)
-    # 更早的按本地日期显示（毫秒 → 本地时区）。
-    import time as _time
+    minutes = delta // 60_000
+    if minutes < 1:
+        return words[0]
+    if minutes < 60:
+        return "%d %s" % (minutes, words[1])
+    hours = minutes // 60
+    if hours < 24:
+        return "%d %s" % (hours, words[2])
+    days = hours // 24
+    if days == 1:
+        return words[3]
+    return "%d %s" % (days, words[4])
 
-    return _time.strftime("%m-%d %H:%M", _time.localtime(value / 1000.0))
 
-
-def session_row(meta: Any, session: Any, now: Optional[int] = None) -> Dict[str, Any]:
+def session_row(
+    meta: Any, session: Any, now: Optional[int] = None, lang: str = "zh"
+) -> Dict[str, Any]:
     """列表一行：id / 标题 / 预览 / 时间文案。标题为空时退回预览的首行。"""
     title = str(getattr(meta, "title", "") or "").strip()
     preview = preview_text(session) if session is not None else ""
@@ -73,15 +92,15 @@ def session_row(meta: Any, session: Any, now: Optional[int] = None) -> Dict[str,
         "id": str(getattr(meta, "id", "")),
         "title": title,
         "preview": preview,
-        "time": time_label(getattr(meta, "updatedAt", None), now),
+        "time": time_label(getattr(meta, "updatedAt", None), now, lang),
     }
 
 
-def session_rows(store: Any, now: Optional[int] = None) -> List[Dict[str, Any]]:
+def session_rows(store: Any, now: Optional[int] = None, lang: str = "zh") -> List[Dict[str, Any]]:
     """真实会话 → 列表行（顺序沿用服务层：updatedAt 倒序）。"""
     rows: List[Dict[str, Any]] = []
     for meta in store.visible_sessions():
-        rows.append(session_row(meta, store.load_session(meta.id), now))
+        rows.append(session_row(meta, store.load_session(meta.id), now, lang))
     return rows
 
 

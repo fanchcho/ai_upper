@@ -9,10 +9,14 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime, timezone
+import time
 from pathlib import Path
 
-BASE = int(datetime(2026, 11, 14, 9, 30, tzinfo=timezone.utc).timestamp() * 1000)
+# 会话时间必须相对「生成时刻」，不能写死绝对时间：原版与 QML 两侧显示的都是相对时间
+# （useRelativeTime / time_label），写死 2026-11-14 那种绝对基准后，隔一天再截图，
+# 原版说「21 hr ago」而 QML 说「yesterday」——两边数据一样，差别只是跑图的时间过去了。
+# 这里把首条会话钉在「21 小时前」（离 24 小时边界还有 2 小时余量），其余按秒递减。
+BASE = int(time.time() * 1000) - 22 * 3600 * 1000
 
 LONG_LINE = "const value = [" + ", ".join('"item-%02d"' % i for i in range(24)) + "];"
 
