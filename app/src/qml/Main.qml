@@ -512,9 +512,9 @@ ApplicationWindow {
                     height: 28
                     y: 2
                     radius: Theme.radius
+                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
                     color: "transparent"
-                    border.width: 1
-                    border.color: Theme.border
+                    border.width: 0
                     Icon {
                         x: 5
                         anchors.verticalCenter: parent.verticalCenter
@@ -553,9 +553,9 @@ ApplicationWindow {
                     height: 28
                     y: 2
                     radius: Theme.radius
+                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
                     color: "transparent"
-                    border.width: 1
-                    border.color: Theme.border
+                    border.width: 0
                     // 状态点 7px #d97757
                     Rectangle {
                         x: 9

@@ -70,7 +70,12 @@ def _prepare_environment(headless: bool) -> None:
     else:
         os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
     if headless:
-        os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+        # macOS 不强制 offscreen：`offscreen` 平台插件在 macOS 上不给 Quick 场景做
+        # 栅格化，`QQuickWindow.grabWindow()` 拿回空图（CI 的 macos-arm64 job 就是
+        # 因此判失败）。macOS 跑测的机器有 WindowServer，走默认 cocoa 能正常出窗口与
+        # 首帧；Linux/Windows 继续用 offscreen。
+        if sys.platform != "darwin":
+            os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 
 def _data_home() -> Path:
