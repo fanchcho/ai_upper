@@ -965,6 +965,12 @@ def copy_python_tree(site: Path) -> None:
     ``package.py::_copy_supporting_trees``): the QML engine loads them from
     disk, and the encrypted egg is an archive the engine cannot read. Keeping
     them out of the stage also keeps them out of the egg.
+
+    Only the application's own tree is cleaned. The stage also holds the Qt
+    payload (``PySide6/Qt/qml/**``), which uses the same ``qml`` directory name
+    and whose ``qmldir``/``.qml`` files are exactly what the engine reads at
+    runtime — matching on the name anywhere under ``site`` deleted the whole
+    QML runtime and left a bundle that failed with "module is not installed".
     """
     copy_tree_contents(APP / "src", site, replace=False)
     for cache in list(site.rglob("__pycache__")):
@@ -972,15 +978,12 @@ def copy_python_tree(site: Path) -> None:
             shutil.rmtree(cache)
     for path in list(site.rglob("*.pyc")) + list(site.rglob("*.pyo")) + list(site.rglob("*.c")) + list(site.rglob("*.cpp")):
         path.unlink(missing_ok=True)
-    for path in sorted(site.rglob("*")):
-        if not path.is_file():
-            continue
-        if QML_DIRECTORY_NAME not in path.relative_to(site).parts[:-1]:
-            continue
-        if path.suffix == QML_SUFFIX or path.name == "qmldir":
-            path.unlink(missing_ok=True)
     qml_dir = site / QML_DIRECTORY_NAME
     if qml_dir.is_dir():
+        if (APP / "src" / QML_DIRECTORY_NAME).is_dir():
+            for path in sorted(qml_dir.rglob("*")):
+                if path.is_file() and (path.suffix == QML_SUFFIX or path.name == "qmldir"):
+                    path.unlink(missing_ok=True)
         for directory in sorted(
             (path for path in qml_dir.rglob("*") if path.is_dir()),
             key=lambda path: len(path.parts),

@@ -1,0 +1,74 @@
+++ dirname out/qml-shell/packaged/mutate.sh
++ cd out/qml-shell/packaged/../../..
++ QT=tools/ai_upper/qt_prune.py
++ cp tools/ai_upper/qt_prune.py /tmp/qt_prune.py.keep
++ trap 'cp /tmp/qt_prune.py.keep "$QT"' EXIT
++ .venv/bin/python - tools/ai_upper/qt_prune.py
+MUTATION applied
++ echo '=== (1) 用例：新用例必须变红 ==='
+=== (1) 用例：新用例必须变红 ===
++ .venv/bin/python -m pytest app/tests/test_qml_packaging.py app/tests/test_qt_prune.py -q
++ tail -20
+        source = _qml_source(tmp_path, MAIN_QML)
+    
+        prune(site, TARGETS["windows-x86_64"], {"QtCore"}, source_root=source)
+    
+        controls = pyside / "Qt" / "qml" / "QtQuick" / "Controls"
+>       assert (controls / "Windows").is_dir()
+E       AssertionError: assert False
+E        +  where False = is_dir()
+E        +    where is_dir = (PosixPath('/tmp/pytest-of-root/pytest-265/test_the_windows_default_style0/site-packages/PySide6/Qt/qml/QtQuick/Controls') / 'Windows').is_dir
+
+app/tests/test_qt_prune.py:1319: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_packaging.py::test_prune_leaves_the_qml_tree_and_its_plugin_libraries
+FAILED app/tests/test_qml_packaging.py::test_a_style_the_app_imports_survives_pruning
+FAILED app/tests/test_qt_prune.py::test_qml_sources_are_scanned_from_the_application_tree
+FAILED app/tests/test_qt_prune.py::test_prune_keeps_the_qml_runtime_for_a_resource_only_qml_app
+FAILED app/tests/test_qt_prune.py::test_qml_optional_imports_are_only_kept_when_used
+FAILED app/tests/test_qt_prune.py::test_the_platform_default_controls_style_is_not_optional
+FAILED app/tests/test_qt_prune.py::test_the_windows_default_style_follows_the_target
+7 failed, 52 passed in 1.19s
++ echo 'PYTEST_EXIT 1'
+PYTEST_EXIT 1
++ echo '=== (2) 真实 wheel 上按旧判定裁剪：QML 模块树应当整棵消失 ==='
+=== (2) 真实 wheel 上按旧判定裁剪：QML 模块树应当整棵消失 ===
++ .venv/bin/python out/qml-shell/packaged/probe_qml_prune.py
++ tail -25
+  KEPT QtWebEngine/ControlsDelegates/ToolTip.qml 249
+  KEPT QtWebEngine/ControlsDelegates/TouchHandle.qml 171
+  KEPT QtWebEngine/ControlsDelegates/TouchSelectionMenu.qml 3618
+  KEPT QtWebEngine/ControlsDelegates/WebEngineQuickDelegatesQml.qmltypes 215
+  KEPT QtWebEngine/ControlsDelegates/libqtwebenginequickdelegatesplugin.so 67904
+  KEPT QtWebEngine/ControlsDelegates/qmldir 1257
+  KEPT QtWebEngine/libqtwebenginequickplugin.so 67896
+  KEPT QtWebEngine/plugins.qmltypes 143559
+  KEPT QtWebEngine/qmldir 278
+  KEPT QtWebSockets/libqmlwebsocketsplugin.so 68904
+  KEPT QtWebSockets/plugins.qmltypes 8015
+  KEPT QtWebSockets/qmldir 199
+  KEPT QtWebView/libqtwebviewquickplugin.so 67896
+  KEPT QtWebView/plugins.qmltypes 9598
+  KEPT QtWebView/qmldir 237
+  KEPT builtins.qmltypes 162757
+  KEPT jsroot.qmltypes 166380
+PROBE rc= 1
+ROOTS 0
+QQmlApplicationEngine failed to load component
+file:///home/agent/shared_workspace/py_upper/app/src/qml/Main.qml:12:1: module "QtQuick.Controls" version 6.11 cannot be imported because:
+Cannot load library /home/agent/shared_workspace/py_upper/out/qml-shell/packaged/prune-site/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so: libQt6QuickControls2Fusion.so.6: cannot open shared object file: No such file or directory
+file:///home/agent/shared_workspace/py_upper/app/src/qml/Main.qml: Cannot load library /home/agent/shared_workspace/py_upper/out/qml-shell/packaged/prune-site/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so: libQt6QuickControls2Fusion.so.6: cannot open shared object file: No such file or directory
+file:///home/agent/shared_workspace/py_upper/app/src/qml/Main.qml: Failed to load dependent import "QtQuick.Controls.Fusion" version 6.11
+file:///home/agent/shared_workspace/py_upper/app/src/qml/Main.qml: Failed to load dependencies for module "QtQuick.Controls" version 6.11
++ echo 'PROBE_EXIT 1'
+PROBE_EXIT 1
++ cp /tmp/qt_prune.py.keep tools/ai_upper/qt_prune.py
++ echo '=== (3) 恢复后必须重新变绿 ==='
+=== (3) 恢复后必须重新变绿 ===
++ .venv/bin/python -m pytest app/tests/test_qml_packaging.py app/tests/test_qt_prune.py -q
++ tail -5
+...........................................................              [100%]
+59 passed in 1.09s
++ echo 'RESTORED_EXIT 0'
+RESTORED_EXIT 0
++ cp /tmp/qt_prune.py.keep tools/ai_upper/qt_prune.py

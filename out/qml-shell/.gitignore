@@ -1,3 +1,9 @@
 # 证据跑用的临时 home：里面的 secrets.enc / .secrets.key 与 provider 配置含本机令牌，
 # 不入库；由 seed_home.py 每次重新生成（run2.sh 开头会删掉旧目录）。
 home-*/
+
+# 打包实测的中间树（真 wheel 解包的 site、打包产物 home）：体积大且可再生，
+# 只提交 run.log / REPORT.md / shot.png 与脚本本身。
+packaged/prune-site/
+packaged/home/
+packaged/build.log

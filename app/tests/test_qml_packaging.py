@@ -79,6 +79,32 @@ def test_the_stage_keeps_qml_out_of_the_encrypted_egg(tmp_path, monkeypatch):
     assert egg_module.application_files(site, set()) == ["main.py"]
 
 
+def test_staging_never_touches_the_qt_qml_runtime(tmp_path, monkeypatch):
+    """Qt 的 ``Qt/qml/**`` 也叫 ``qml``，但它不是应用源码，一个文件都不能删。
+
+    按目录名在整棵 site 里匹配 ``qml`` 曾经把 Qt 的 ``qmldir`` 与样式 ``.qml``
+    一起删掉：模块目录还在、插件库也在，引擎却报 "module is not installed"。
+    """
+    from ai_upper import python_build
+
+    app = _qml_source(tmp_path / "app")
+    monkeypatch.setattr(python_build, "APP", app)
+
+    site = tmp_path / "site"
+    runtime = site / "PySide6" / "Qt" / "qml" / "QtQuick" / "Controls"
+    _write(runtime / "qmldir", "module QtQuick.Controls\nplugin qtquickcontrols2plugin\n")
+    _write(runtime / "ApplicationWindow.qml", "import QtQuick\n")
+    _write(site / "PySide6" / "Qt" / "qml" / "QtQuick" / "qmldir", "module QtQuick\n")
+
+    python_build.copy_python_tree(site)
+
+    assert (runtime / "qmldir").is_file()
+    assert (runtime / "ApplicationWindow.qml").is_file()
+    assert (site / "PySide6" / "Qt" / "qml" / "QtQuick" / "qmldir").is_file()
+    # 应用自己的 QML 照旧清掉。
+    assert not (site / "qml").exists()
+
+
 # ── 裁剪：树与插件库 ──────────────────────────────────────────────────────
 def _module(root: Path, name: str, plugin: str, extra: str = "") -> Path:
     directory = root.joinpath(*name.split("."))
