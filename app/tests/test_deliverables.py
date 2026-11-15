@@ -31,6 +31,7 @@ from mvvm.services.deliverables import (
     delivered_paths,
     inspect,
     is_openable,
+    open_command,
     open_item,
     reveal,
     reveal_command,
@@ -279,7 +280,7 @@ def test_thumbnail_of_a_missing_file_is_none(workspace):
 
 def test_open_only_allows_the_openable_whitelist(workspace, monkeypatch):
     opened = []
-    monkeypatch.setattr(deliverables_service, "_open_with_desktop", lambda p: opened.append(p) or True)
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: opened.append(p) or True)
     session = _session_with(
         workspace,
         [str(workspace / "report.md"), str(workspace / "build.sh"), str(workspace / "tool.py")],
@@ -291,7 +292,7 @@ def test_open_only_allows_the_openable_whitelist(workspace, monkeypatch):
 
 
 def test_open_rejects_missing_files_and_bad_indices(workspace, monkeypatch):
-    monkeypatch.setattr(deliverables_service, "_open_with_desktop", lambda p: True)
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: True)
     session = _session_with(workspace, [str(workspace / "gone.md")])
     assert open_item(session, "tu", 0) == {"ok": False}
     assert open_item(session, "tu", 1) == {"ok": False}
@@ -325,6 +326,34 @@ def test_reveal_command_is_per_platform_and_keeps_metacharacters_literal(monkeyp
     monkeypatch.setattr(deliverables_service.sys, "platform", "win32")
     assert reveal_command(weird)[0] == "explorer"
     assert reveal_command(weird)[1].startswith("/select,")
+
+
+def test_open_command_is_per_platform_and_never_joins_arguments(monkeypatch):
+    """QDesktopServices 不可用时的回落：同样是列表参数，路径整个作为一个 argv。"""
+    weird = '/tmp/a b"c;rm -rf ~/x.md'
+    monkeypatch.setattr(deliverables_service.sys, "platform", "linux")
+    assert open_command(weird) == ["xdg-open", weird]
+    monkeypatch.setattr(deliverables_service.sys, "platform", "darwin")
+    assert open_command(weird) == ["open", weird]
+    monkeypatch.setattr(deliverables_service.sys, "platform", "win32")
+    assert open_command(weird) == ["cmd", "/c", "start", "", weird]
+
+
+def test_open_falls_back_when_desktop_services_refuse(workspace, monkeypatch):
+    """offscreen 平台插件不支持 openDocument 时，回落平台打开器（否则按钮点了没反应）。"""
+    spawned = []
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: False)
+    monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
+    result = open_item(_session_with(workspace, [str(workspace / "report.md")]), "tu", 0)
+    assert result == {"ok": True}
+    assert spawned == [["xdg-open", str(workspace / "report.md")]]
+
+
+def test_open_reports_failure_when_both_paths_fail(workspace, monkeypatch):
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: False)
+    monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: False)
+    result = open_item(_session_with(workspace, [str(workspace / "report.md")]), "tu", 0)
+    assert result == {"ok": False}
 
 
 # ── 3. 路径安全：只能来自边车 ─────────────────────────────────────────────
@@ -497,7 +526,7 @@ def test_bridge_thumbnail_and_open_and_reveal(qapp, bridges, monkeypatch):
     spawned = []
     monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
     opened = []
-    monkeypatch.setattr(deliverables_service, "_open_with_desktop", lambda p: opened.append(p) or True)
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: opened.append(p) or True)
 
     assert bridges.call("deliverables:open", "dl", "tu1", 0) == {"ok": True}
     assert bridges.call("deliverables:open", "dl", "tu1", 1) == {"ok": False}  # .sh 不在白名单
@@ -513,7 +542,7 @@ def test_bridge_deliverables_do_not_accept_paths(bridges, monkeypatch):
     spawned = []
     monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
     opened = []
-    monkeypatch.setattr(deliverables_service, "_open_with_desktop", lambda p: opened.append(p) or True)
+    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: opened.append(p) or True)
 
     # toolUseId 位置塞路径 → 查不到边车 → 一律 false
     assert bridges.call("deliverables:open", "dl", str(workspace / "report.md"), 0) == {"ok": False}

@@ -233,14 +233,43 @@ def _pixmap_data_url(pixmap: Any) -> Optional[str]:
     return "data:image/png;base64," + encoded
 
 
-def _open_with_desktop(path: str) -> bool:
-    """用系统默认应用打开（原版 `shell.openPath` 成功返回空串）。"""
+def open_command(path: str) -> List[str]:
+    """「用默认应用打开」的命令行（QDesktopServices 不可用时的回落）。
+
+    原版走 `shell.openPath`——Electron 内部就是拉起平台打开器。Qt 的
+    `QDesktopServices.openUrl` 在部分平台插件上没有实现（offscreen 实测返回 false 并打印
+    `does not support QPlatformServices::openDocument()`），所以失败时按平台起进程，
+    效果等价、且路径仍以列表参数传入。
+    """
+    if sys.platform == "darwin":
+        return ["open", path]
+    if sys.platform == "win32":
+        # start 是 cmd 内建命令；空标题引号是必需的，否则带引号的路径会被当成标题。
+        return ["cmd", "/c", "start", "", path]
+    return ["xdg-open", path]
+
+
+def _desktop_open(path: str) -> bool:
+    """Qt 的桌面服务（等价原版 `shell.openPath`）；不支持或失败返回 False。"""
     try:
         from utils.qt_compat import QtCore, QtGui
 
         return bool(QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(path)))
-    except Exception:  # noqa: BLE001 - 没有桌面环境时打开失败，显式返回 false
+    except Exception:  # noqa: BLE001 - 没有桌面环境 / 没有 QtGui：交给平台打开器
         return False
+
+
+def _open_with_desktop(path: str) -> bool:
+    """用系统默认应用打开。
+
+    原版走 `shell.openPath`——Electron 内部就是拉起平台打开器。Qt 的
+    `QDesktopServices.openUrl` 在部分平台插件上没有实现（offscreen 实测返回 false 并打印
+    `does not support QPlatformServices::openDocument()`），所以它失败时按平台起进程：
+    效果等价，路径仍以列表参数传入，不经 shell。
+    """
+    if _desktop_open(path):
+        return True
+    return bool(_spawn(open_command(path)))
 
 
 def reveal_command(path: str) -> List[str]:
@@ -285,6 +314,7 @@ __all__ = [
     "delivered_paths",
     "inspect",
     "is_openable",
+    "open_command",
     "open_item",
     "reveal",
     "reveal_command",
