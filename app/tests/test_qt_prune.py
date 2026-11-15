@@ -1140,6 +1140,9 @@ def _fake_qml_tree(pyside: Path) -> None:
     # optional import: only a QML file that names it may pull it in.
     _write_qml_module(root, "QtQuick.Controls.Material", "qtquickcontrols2materialstyleplugin")
     _write_qml_module(root, "QtQuick.Controls.Fusion", "qtquickcontrols2fusionstyleplugin")
+    # Windows only: the platform default style there. Present in the tree on
+    # every platform so the "kept only where the platform picks it" case is real.
+    _write_qml_module(root, "QtQuick.Controls.Windows", "qtquickcontrols2windowsstyleplugin")
     # tooling: never loaded by a running application.
     _write_qml_module(root, "QtQuick.Shapes", "qmlshapesplugin")
     _touch(root / "QtQuick" / "tooling" / "libquicktoolingplugin.so")
@@ -1274,3 +1277,57 @@ def test_qml_optional_imports_are_only_kept_when_used(tmp_path, monkeypatch):
 
     assert (pyside / "Qt" / "qml" / "QtQuick" / "Controls" / "Material").is_dir()
     assert not (pyside / "Qt" / "qml" / "QtQuick" / "Controls" / "Fusion").exists()
+
+
+def test_the_platform_default_controls_style_is_not_optional(tmp_path, monkeypatch):
+    """引擎自己挑的样式模块必须保留——它不在任何 ``.qml`` 的 import 里。
+
+    Qt 6 的 Controls 按平台挑样式（Qt 文档：Linux → Fusion、Windows →
+    Windows），应用只写 ``import QtQuick.Controls``。只跟 ``.qml`` 的 import
+    走，Linux 产物加载根组件时就会因 ``module "QtQuick.Controls.Fusion" is
+    not installed`` 得到空窗口；这是真实 wheel 上实测到的失败。
+    """
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    source = _qml_source(tmp_path, MAIN_QML)
+
+    prune(site, TARGETS["linux-arm64"], {"QtCore"}, source_root=source)
+
+    controls = pyside / "Qt" / "qml" / "QtQuick" / "Controls"
+    assert (controls / "Fusion").is_dir()
+    assert (controls / "Fusion" / "libqtquickcontrols2fusionstyleplugin.so").is_file()
+    # Windows 的默认样式不因 Linux 构建而保留，其余 optional 样式照旧裁掉。
+    assert not (controls / "Windows").exists()
+    assert not (controls / "Material").exists()
+
+
+def test_the_windows_default_style_follows_the_target(tmp_path, monkeypatch):
+    """同一份源码按 Windows 打包时，保留的是 Windows 样式而不是 Fusion。"""
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    source = _qml_source(tmp_path, MAIN_QML)
+
+    prune(site, TARGETS["windows-x86_64"], {"QtCore"}, source_root=source)
+
+    controls = pyside / "Qt" / "qml" / "QtQuick" / "Controls"
+    assert (controls / "Windows").is_dir()
+    assert not (controls / "Fusion").exists()
+
+
+def test_an_app_without_controls_keeps_no_style(tmp_path):
+    """只 ``import QtQuick`` 的应用不会实例化样式：不能顺手牵一个进来。"""
+    from ai_upper import qt_prune
+
+    assert qt_prune.qml_implicit_modules(set(), TARGETS["linux-arm64"]) == set()
+    assert qt_prune.qml_implicit_modules({"QtQuick"}, TARGETS["linux-arm64"]) == set()
+    assert qt_prune.qml_implicit_modules({"QtQuick.Controls"}, TARGETS["linux-arm64"]) == {
+        "QtQuick.Controls.Fusion"
+    }
+    # macOS 的默认样式编在 Controls 插件里，没有模块目录可留。
+    assert qt_prune.qml_implicit_modules({"QtQuick.Controls"}, TARGETS["macos-arm64"]) == set()

@@ -954,13 +954,42 @@ def _compile_windows_extensions_msvc(
     return list(outputs.values())
 
 
+QML_SUFFIX = ".qml"
+QML_DIRECTORY_NAME = "qml"
+
+
 def copy_python_tree(site: Path) -> None:
+    """Copy ``app/src`` into the stage and drop build residue.
+
+    ``.qml``/``qmldir`` files go to the bundle's ``assets/qml`` instead (see
+    ``package.py::_copy_supporting_trees``): the QML engine loads them from
+    disk, and the encrypted egg is an archive the engine cannot read. Keeping
+    them out of the stage also keeps them out of the egg.
+    """
     copy_tree_contents(APP / "src", site, replace=False)
     for cache in list(site.rglob("__pycache__")):
         if cache.is_dir():
             shutil.rmtree(cache)
     for path in list(site.rglob("*.pyc")) + list(site.rglob("*.pyo")) + list(site.rglob("*.c")) + list(site.rglob("*.cpp")):
         path.unlink(missing_ok=True)
+    for path in sorted(site.rglob("*")):
+        if not path.is_file():
+            continue
+        if QML_DIRECTORY_NAME not in path.relative_to(site).parts[:-1]:
+            continue
+        if path.suffix == QML_SUFFIX or path.name == "qmldir":
+            path.unlink(missing_ok=True)
+    qml_dir = site / QML_DIRECTORY_NAME
+    if qml_dir.is_dir():
+        for directory in sorted(
+            (path for path in qml_dir.rglob("*") if path.is_dir()),
+            key=lambda path: len(path.parts),
+            reverse=True,
+        ):
+            if not any(directory.iterdir()):
+                directory.rmdir()
+        if not any(qml_dir.iterdir()):
+            qml_dir.rmdir()
 
 
 def remove_compiled_source_py(site: Path, sources: list[Path]) -> None:

@@ -165,10 +165,16 @@ QML_MODULE_LIBRARIES: dict[str, tuple[str, ...]] = {
     "QtQuick.Layouts": ("QtQuickLayouts", "QtQuick", "QtQml"),
     "QtQuick.Templates": ("QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Controls": ("QtQuickControls2", "QtQuickTemplates2", "QtQuickControls2Impl", "QtQuick", "QtQml"),
-    "QtQuick.Controls.Basic": ("QtQuickControls2Basic", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
-    "QtQuick.Controls.Fusion": ("QtQuickControls2Fusion", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
-    "QtQuick.Controls.Material": ("QtQuickControls2Material", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
-    "QtQuick.Controls.Universal": ("QtQuickControls2Universal", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.Basic": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    # 样式模块自己只有 QML 与一个插件；它们加载的 Qt 库由插件二进制的
+    # 依赖闭包决定，所以这里与 Controls 本体同一个集合，而不是猜库名
+    # （`QtQuickControls2Fusion` 这类库名不是 PySide 包装模块）。
+    "QtQuick.Controls.Fusion": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.Windows": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.Imagine": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.Material": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.Universal": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.FluentWinUI3": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Dialogs": ("QtQuickDialogs2", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Shapes": ("QtQuickShapes", "QtQuick", "QtQml"),
     "QtQuick.Effects": ("QtQuickEffects", "QtQuick", "QtQml"),
@@ -226,17 +232,48 @@ def qml_imports(source_root: Path | None = None) -> set[str]:
     return modules
 
 
-def qml_required_modules(source_root: Path | None = None) -> set[str]:
+def qml_required_modules(
+    source_root: Path | None = None, imported: set[str] | None = None
+) -> set[str]:
     """Qt library modules the application's QML imports need at runtime.
 
     An import the mapping does not know keeps its own top-level name: a QML
     module ``QtQuick3D`` is served by ``QtQuick3D``, and guessing a rename for
     it would drop the library it actually links.
+
+    ``imported`` overrides the scanned set when the caller has already folded in
+    modules the scan cannot see (see ``qml_implicit_modules``).
     """
     required: set[str] = set()
-    for name in qml_imports(source_root):
+    for name in qml_imports(source_root) if imported is None else imported:
         required.update(QML_MODULE_LIBRARIES.get(name, (name.split(".")[0],)))
     return required
+
+
+# Qt 6 的 Controls 样式不是应用写的 ``import``：引擎在运行时按平台挑一个
+# （Qt 文档：Linux → Fusion、Windows → Windows、macOS → macOS），应用源码里
+# 只写 ``import QtQuick.Controls``。静态扫描因此看不到样式模块，裁完的产物加载
+# ``Main.qml`` 时报 ``module "QtQuick.Controls.Fusion" is not installed``——
+# 本机真实 wheel 上复现过。macOS 的样式编在 Controls 插件里，没有模块目录，
+# 所以这里没有 macOS 条目：多留一个不存在的目录名只是空想。
+QML_CONTROLS_MODULE = "QtQuick.Controls"
+QML_DEFAULT_CONTROLS_STYLES = {
+    "linux": "QtQuick.Controls.Fusion",
+    "windows": "QtQuick.Controls.Windows",
+}
+
+
+def qml_implicit_modules(imported: set[str], target: Target | None = None) -> set[str]:
+    """QML modules the engine loads without the application naming them.
+
+    Only the platform default Controls style qualifies today. It is added when
+    the application imports ``QtQuick.Controls`` at all, because that import is
+    exactly what makes the engine instantiate a style.
+    """
+    if QML_CONTROLS_MODULE not in imported:
+        return set()
+    style = QML_DEFAULT_CONTROLS_STYLES.get((target or host_target()).os)
+    return {style} if style else set()
 
 
 # QML 运行时是按 import 名 **动态** 加载模块的：`.qml` 里写的是模块名，真正
@@ -278,16 +315,37 @@ def qml_module_directories(layout: "_QtLayout") -> dict[str, Path]:
     return index
 
 
+def _nested_module(directory: Path, path: Path) -> bool:
+    """Whether ``path`` lives inside a QML module nested under ``directory``.
+
+    Real Qt trees nest modules (``QtQuick/Controls/Basic``, ``QtQuick/Window``)
+    and their ``.qml`` files import their own dependencies. Scanning them as if
+    they were part of the parent module made one ``import QtQuick`` keep every
+    Controls style, the virtual keyboard and the PDF module; each nested module
+    is reached through the parent's ``qmldir`` instead, one level at a time.
+    """
+    for parent in path.relative_to(directory).parents:
+        if parent == Path("."):
+            continue
+        if (directory / parent / "qmldir").is_file():
+            return True
+    return False
+
+
 def _qml_imports_in(directory: Path) -> set[str]:
-    """Qt module names the ``.qml`` files under ``directory`` import.
+    """Qt module names the ``.qml`` files directly in ``directory`` import.
 
     Tooling subtrees (``designer``/``tooling``) are skipped: they import modules
     only the Designer previewer loads, and following them would keep the whole
-    Controls designer alongside the runtime styles.
+    Controls designer alongside the runtime styles. Nested modules are skipped
+    for the same reason and are reached through ``qmldir`` dependencies.
     """
     names: set[str] = set()
     for path in sorted(directory.rglob(f"*{QML_SUFFIX}")):
-        if QML_TOOLING_DIRECTORIES & set(path.relative_to(directory).parts[:-1]):
+        relative = path.relative_to(directory)
+        if QML_TOOLING_DIRECTORIES & set(relative.parts[:-1]):
+            continue
+        if _nested_module(directory, path):
             continue
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
@@ -326,7 +384,9 @@ def qml_shipped_modules(layout: "_QtLayout", imported: set[str]) -> dict[str, Pa
             if keyword != "optional"
         }
         needed |= _qml_imports_in(directory)
-        queue.extend(sorted(needed - set(keep)))
+        # ``QML`` is a built-in module with no directory of its own; a
+        # dependency the tree does not ship is not a directory to keep.
+        queue.extend(sorted(name for name in needed if name in tree and name not in keep))
     return keep
 
 
@@ -369,13 +429,18 @@ def prune_qml_tree(layout: "_QtLayout", imported: set[str], drop) -> set[Path]:
 
 
 def qml_plugin_binaries(directories) -> list[Path]:
-    """Native QML plugin libraries inside the kept module directories."""
-    found: list[Path] = []
-    for directory in sorted(directories):
+    """Native QML plugin libraries inside the kept module directories.
+
+    Module directories nest (``QtQuick`` holds ``QtQuick/Controls``), so the
+    same plugin shows up under more than one root; the result is deduplicated
+    and each library is a reachability root exactly once.
+    """
+    found: set[Path] = set()
+    for directory in sorted(set(directories)):
         for path in sorted(directory.rglob("*")):
             if path.is_file() and (path.suffix in QML_BINARY_SUFFIXES or ".so." in path.name):
-                found.append(path)
-    return found
+                found.add(path)
+    return sorted(found)
 
 
 # Plugin categories every Qt application needs at runtime.
@@ -1007,6 +1072,10 @@ def prune(
     # "module is not installed" on stderr.
     qml_present = qml_sources_present(source_root)
     qml_imported = qml_imports(source_root) if qml_present else set()
+    if qml_present:
+        # 引擎自己挑的样式模块不在任何 ``.qml`` 的 import 里；不折进来，
+        # 产物启动时 QML 引擎会因缺样式模块拒绝加载根组件。
+        qml_imported |= qml_implicit_modules(qml_imported, target)
     qml_modules = prune_qml_tree(layout, qml_imported, drop) if qml_present else set()
     qml_plugins = qml_plugin_binaries(qml_modules)
     if qml_present:
@@ -1015,7 +1084,7 @@ def prune(
         # which are chosen by module name when the plugin categories are
         # pruned. Without folding them in, a QML-only application keeps
         # QtQuick's libraries and loses the renderer it drives.
-        modules = modules | qml_required_modules(source_root)
+        modules = modules | qml_required_modules(source_root, qml_imported)
 
     # PySide ships each non-importable tool twice: once bare and once under a
     # binding-prefixed name. PySide2 comes with ``lupdate.exe`` beside

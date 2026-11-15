@@ -289,18 +289,24 @@ def _publish(assembly: Path, source: Path, destination: Path) -> Path:
 
 
 def _copy_supporting_trees(bundle_root: Path) -> None:
-    """Copy `app/resources` and `app/assets` into the bundle's payload root.
+    """Copy `app/resources`, `app/assets` and `app/src/qml` into the payload root.
 
-    Both trees are optional: a project without one simply ships none. The
+    All trees are optional: a project without one simply ships none. The
     launcher exports the payload root as ``AI_UPPER_HOME`` and the application
     resolves ``utils.paths.resource_root()`` / ``assets_root()`` from it, so
-    these two names are a contract rather than a layout accident.
+    these names are a contract rather than a layout accident.
+
+    ``app/src/qml`` is separate from the Python tree on purpose: application
+    source is compiled and packed into the encrypted egg, while the QML engine
+    loads ``.qml``/``qmldir`` from disk. It lands at ``<bundle>/assets/qml``,
+    which is what ``qml_shell.qml_main()`` reads through ``assets_root()``.
     """
     copy_optional_tree(APP / "resources", bundle_root / "resources")
     # The renderer bundle and the seed personas. Without this the web window
     # loads a missing index.html: a blank window that only shows up after the
     # package is finished.
     copy_optional_tree(APP / "assets", bundle_root / "assets")
+    copy_optional_tree(APP / "src" / "qml", bundle_root / "assets" / "qml")
 
 
 def package(target: Target, launcher: Path, trim=None) -> Path:

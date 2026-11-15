@@ -36,9 +36,13 @@ from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.webui.assembly import build_chat_host, trusted_workspace_from_env
 from qml_shell_sessions import session_rows, transcript_markdown
 from utils.app_home import app_home
+from utils.paths import assets_root
 from utils.qt_compat import QtCore, QtGui, QtQml, QtQuick
 
-QML_MAIN = Path(__file__).resolve().parent / "qml" / "Main.qml"
+# 源码树里 QML 就在本模块旁边；打包后应用代码进了 egg/合并扩展，没有源码路径，
+# QML 由 `package.py::_copy_supporting_trees` 放到 `<bundle>/assets/qml`——
+# 与 `assets_root()` 同一口径（launcher 导出的 `AI_UPPER_HOME`）。
+PACKAGED_QML = Path("qml") / "Main.qml"
 SHOT_PATH = Path(__file__).resolve().parents[2] / "out" / "qml-shell" / "shot.png"
 PLAIN_ENV = "AI_UPPER_QML_PLAIN"
 SHOT_ENV = "AI_UPPER_QML_SHOT"
@@ -55,6 +59,19 @@ def _plain_mode() -> bool:
 def _shot_path() -> Path:
     override = os.environ.get(SHOT_ENV, "").strip()
     return Path(override) if override else SHOT_PATH
+
+
+def qml_main() -> Path:
+    """QML 入口：源码树 `<src>/qml/Main.qml`，否则 `<assets>/qml/Main.qml`。
+
+    `__file__` 在打包产物里可能指向 egg 解包目录或不存在（合并扩展是 built-in
+    module），所以用「文件在不在」判定，而不是靠路径形态猜。只认这两个位置：
+    回落到别处会让缺 QML 的产物「碰巧」从开发树加载界面，冒烟测试也就失去意义。
+    """
+    source = Path(__file__).resolve().parent / "qml" / "Main.qml"
+    if source.is_file():
+        return source
+    return assets_root() / PACKAGED_QML
 
 
 def _send_text() -> str:
@@ -300,8 +317,9 @@ def run(headless: bool) -> int:
     """启动 QML 壳；headless 时截图并按结果返回 0/1。"""
     from main import HEADLESS_TIMEOUT_S  # 与 WebEngine 路径共用同一超时
 
-    if not QML_MAIN.is_file():
-        print("QML FAILED", f"missing={QML_MAIN}", file=sys.stderr, flush=True)
+    qml_main_path = qml_main()
+    if not qml_main_path.is_file():
+        print("QML FAILED", f"missing={qml_main_path}", file=sys.stderr, flush=True)
         return 1
 
     home = app_home()
@@ -337,7 +355,7 @@ def run(headless: bool) -> int:
 
     engine = QtQml.QQmlApplicationEngine()
     engine.rootContext().setContextProperty("shellBridge", bridge)
-    engine.load(QtCore.QUrl.fromLocalFile(str(QML_MAIN)))
+    engine.load(QtCore.QUrl.fromLocalFile(str(qml_main_path)))
     roots = engine.rootObjects()
     if not roots:
         print("QML FAILED", "reason=engine loaded no root object", file=sys.stderr, flush=True)
