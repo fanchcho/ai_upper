@@ -92,3 +92,23 @@ def test_launcher_cache_paths_preserve_unicode(launcher_probe, tmp_path, overrid
         text=True, encoding="utf-8", check=True, timeout=10,
     )
     assert Path(result.stdout.splitlines()[1]) == expected
+
+
+def test_launcher_falls_back_when_the_cache_root_is_not_writable(tmp_path):
+    """An unwritable cache must not stop the application from starting.
+
+    The per-user cache directory can exist and still be unwritable: a read-only
+    home, a roaming profile, a container without a writable $HOME. The launcher
+    used to report "Could not create the bundle cache staging directory" and
+    exit before Py_Initialize, which turns a cache problem into an application
+    that will not run at all.
+    """
+    source = Path(__file__).parents[2] / "launcher" / "src" / "PyUpper.cpp"
+    text = source.read_text(encoding="utf-8")
+    assert "cache_root_usable" in text
+    assert "usable_cache_root" in text
+    # The probe writes and removes a file, so a directory that merely exists is
+    # not mistaken for a usable one.
+    assert ".probe-" in text
+    # Both the bundle cache publish path and the plaintext cache go through it.
+    assert "const fs::path base = usable_cache_root();" in text

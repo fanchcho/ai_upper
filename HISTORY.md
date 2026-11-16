@@ -16,8 +16,15 @@ egg 缓存目录名取自认证 TAG，所以每次发布都是一个新目录，
 出现，cocoa 下没有，不是真实用户成本；cocoa 的 `QApplication()` 本身占 144–167 ms，
 是启动的最大头，属 Qt 固有开销。
 
+顺带修掉一个会把缓存问题放大成"应用打不开"的缺陷：缓存目录存在但不可写时（只读 home、
+漫游配置、无写权限容器），launcher 会直接报 `Could not create the bundle cache staging
+directory: Permission denied` 并在 `Py_Initialize` 前退出。Python 侧的 `_cache_root()`
+本来就会回退到临时目录，C++ 侧没有这个规则。现在两边一致：先探测可写性，不可写就用系统
+临时目录下的按进程目录。
+
 连续 4 次发布实测缓存条目稳定在 2 个；`--verify` 169 项全 PASS；启动 267–273 ms
-（此前 287–304 ms）；全量单测 389 passed / 6 skipped。
+（此前 287–304 ms）；只读缓存环境下启动由失败变为 `SMOKE PASS`；全量单测
+390 passed / 6 skipped。
 
 ## v0.17.34
 

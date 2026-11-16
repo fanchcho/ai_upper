@@ -593,6 +593,47 @@ fs::path bundle_cache_root() {
     return fallback / "py_upper" / "eggs";
 }
 
+// Whether a cache root can actually be written to.
+//
+// The per-user cache directory can be unusable without being absent: a read-only
+// home, a roaming profile on a network share, a container with no writable
+// $HOME. Returning such a path made the launcher fail before Py_Initialize with
+// "Could not create the bundle cache staging directory: Permission denied",
+// which turns an unwritable cache into an application that will not start at
+// all. The Python loader already falls back to a temporary directory in that
+// case; this is the same rule on the C++ side.
+bool cache_root_usable(const fs::path& root) {
+    std::error_code ec;
+    if (root.empty()) return false;
+    fs::create_directories(root, ec);
+    if (ec) return false;
+    const fs::path probe = root / (".probe-" + std::to_string(process_id()));
+    {
+        std::ofstream stream(probe, std::ios::binary | std::ios::trunc);
+        if (!stream) return false;
+        stream << "probe";
+        if (!stream) {
+            fs::remove(probe, ec);
+            return false;
+        }
+    }
+    fs::remove(probe, ec);
+    return true;
+}
+
+// The cache root that will actually be used: the preferred one when writable,
+// otherwise a per-process directory under the system temp dir.
+fs::path usable_cache_root() {
+    const fs::path preferred = bundle_cache_root();
+    if (cache_root_usable(preferred)) return preferred;
+    std::error_code ec;
+    fs::path temp = fs::temp_directory_path(ec);
+    if (ec) temp = fs::path(".");
+    const fs::path fallback = temp / ("py_upper-" + std::to_string(process_id()));
+    if (cache_root_usable(fallback)) return fallback;
+    return preferred;
+}
+
 // Drops merged-bundle caches from earlier builds.
 //
 // The directory name is the authentication tag, so a rebuilt application never
@@ -625,7 +666,7 @@ void prune_bundle_cache(const fs::path& base, const std::string& keep) {
 std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& files,
                                  const std::string& cache_key, fs::path& root) {
     std::error_code ec;
-    const fs::path base = bundle_cache_root();
+    const fs::path base = usable_cache_root();
     fs::create_directories(base, ec);
     if (ec) {
         return "Could not create the bundle cache at " + path_to_utf8(base) + ": " + ec.message();

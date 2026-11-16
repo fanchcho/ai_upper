@@ -11,6 +11,7 @@
 - `PyUpper.cpp`：新增 `prune_bundle_cache()`，`merged-<tag>` 缓存保留当前 + 最新一个旧条目，在三条发布成功路径上调用。
 - `egg_bundles.h`：把"读取+解密"拆成 `read_egg()`，与 `read_bundles_from_payload()` 分开；`read_egg_bundles()` 保留为一次性包装。**没有**把明文交给 Python 侧复用——实测只省约 3 ms（~1%），却要在磁盘上留一份解密后的 zip，与加密的目的相悖。
 - `verify.py`：`_egg_payload()` 增加进程内缓存，按（路径、mtime、size、key）判定；manifest 读取改走同一份已解密归档。
+- `PyUpper.cpp`：新增 `cache_root_usable()` / `usable_cache_root()`。缓存目录**存在但不可写**时（只读 home、漫游配置、无写权限的容器）此前会直接报 `Could not create the bundle cache staging directory: Permission denied` 并在 `Py_Initialize` 前退出，现在改为回退到系统临时目录下的按进程目录。Python 侧 `_cache_root()` 本来就有这个回退，C++ 侧缺失。
 
 ### Verification
 - 连续 4 次发布实测：缓存条目数 1 → 2 → 2 → 2，不再线性增长。
@@ -22,6 +23,7 @@
 - 磁盘占用不再随发布次数增长；升级后旧缓存会在首次启动时被清到 2 个。
 - 回滚到上一版本仍命中缓存，不会因清理而变慢。
 - 启动耗时的小幅改善来自 verify 缓存与代码整理；**加密强度与防篡改行为不变**。
+- 只读缓存环境从"无法启动"变为"可启动，缓存落在临时目录"；临时目录每次进程独立，因此这类环境没有热启动缓存复用。
 
 ## 0.17.34
 
