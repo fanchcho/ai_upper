@@ -975,6 +975,31 @@ def copy_native_outputs(outputs: list[Path], site: Path, target: Target) -> None
         copy_file_contents(artifact, site / artifact.relative_to(root))
 
 
+def strip_packed_extensions(site: Path, files, target: Target) -> None:
+    """Strip the extensions this build produced before they are packed.
+
+    Only files that are about to go into the egg are touched, and only when
+    ``strip_native`` is on. On macOS the strip invalidates the ad-hoc signature
+    that Cython's link step produced, so the image is re-signed in place; dyld
+    refuses to load a Mach-O whose signature no longer matches.
+    """
+    from .config import optimize_config
+
+    if not bool(optimize_config().get("strip_native", False)):
+        return
+    from .native.bundle import _strip_native, ad_hoc_sign
+
+    for name in files:
+        if Path(str(name)).suffix.lower() not in {".so", ".pyd", ".dylib"}:
+            continue
+        path = site / Path(str(name))
+        if not path.is_file():
+            continue
+        _strip_native(path, target)
+        if target.os == "macos":
+            ad_hoc_sign(path)
+
+
 def build_python_package(target: Target, trim=None, egg=None) -> Path:
     stage = staging_dir(target)
     if stage.exists():
@@ -1014,6 +1039,13 @@ def build_python_package(target: Target, trim=None, egg=None) -> Path:
             for artifact in outputs
         }
         files = application_files(site, compiled)
+        # Strip before packing, not after. bundle_native_dependencies runs in a
+        # later step and only sees files that are still loose; anything already
+        # sealed inside the egg never reached _strip_native, so strip_native had
+        # no effect on the application's own extensions. Doing it here also keeps
+        # the archive's authentication tag correct, because the bytes are final
+        # before the tag is computed.
+        strip_packed_extensions(site, files, target)
         pack_egg(site, stage / EGG_DIR / EGG_NAME, files, egg)
         remove_packed_files(site, files)
         write_egg_meta(stage, egg)

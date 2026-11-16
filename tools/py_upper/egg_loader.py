@@ -211,9 +211,13 @@ def _cache_verify_enabled():
 # never fails a start; another process may be using an entry, and a leftover
 # directory only costs disk space.
 def _prune_cache(cache_root, keep_name):
+    # Only entries this loader owns. `merged-*` belongs to the launcher, which
+    # extracts the extension bundles before Py_Initialize and is using that
+    # directory right now: pruning it here deleted a live cache and forced the
+    # launcher to rebuild it on the next start. Each side prunes its own prefix.
     try:
         entries = [name for name in os.listdir(cache_root)
-                   if name.startswith((CACHE_PREFIX, 'merged-')) and name != keep_name]
+                   if name.startswith(CACHE_PREFIX) and name != keep_name]
     except OSError:
         return
     if len(entries) <= CACHE_KEEP - 1:

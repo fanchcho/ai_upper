@@ -1,3 +1,30 @@
+## 0.17.36
+
+### Problem
+- `strip_native = true` 对**应用自己的扩展完全无效**。`bundle_native_dependencies` 在 `[4/6]` 才运行，而应用扩展在 `[2/6]` 就被打进 `bundle/py_upper.dat` 了——已经封进归档的文件它永远看不到。开启后 `dist/Upper.app` 只从 75 MB 降到 68 MB，而 egg 里那 977 KB 的 bundle 一个字节都没变。
+- egg 缓存的淘汰职责串了：`_prune_cache()` 把 `merged-*` 也纳入清理范围，但 `merged-*` 是 launcher 在 `Py_Initialize` 之前写入并正在使用的目录。多版本共存时会删掉活着的缓存，下次启动被迫重新解压。
+
+### Root cause
+- 打包顺序：`pack_egg()` → `remove_packed_files()` → 后续步骤做 strip/签名。strip 的实现（`_strip_native`）只遍历仍在 `site-packages` 的原生镜像。
+- `_prune_cache()` 的前缀过滤写成了 `(CACHE_PREFIX, 'merged-')`，把 launcher 的命名空间也算进自己的淘汰范围。
+
+### Changes
+- `python_build.py`：新增 `strip_packed_extensions()`，在 `pack_egg()` 之前对即将入包的 `.so/.pyd/.dylib` 执行 strip；macOS 随即 `ad_hoc_sign()`（strip 会让 Cython 链接时的 ad-hoc 签名失效，dyld 会拒绝加载）。
+- `egg_loader.py`：`_prune_cache()` 只清理 `egg-*`，`merged-*` 交给 launcher 自己的 `prune_bundle_cache()`。
+- 文档补上 `strip_native` 的真实收益表与启动 A/B 结果。
+
+### Verification
+- `strip_native = true`：`dist/Upper.app` 75 MB → **68 MB（−9.3%）**；`bundle/py_upper.dat` 981 KB → **832 KB（−15.2%）**。
+- 启动不受影响：交错 A/B 各 12 次，未 strip 301–326 ms，strip 300–314 ms。
+- 签名：`codesign -v --deep --strict` 通过；`--verify` 169 项 PASS，含 3 个 bundle 的 arm64 架构校验。
+- 缓存命名空间：新增回归测试确认 loader 不再删 `merged-*`。
+- `python -m pytest app/tests -q`：393 passed, 6 skipped。
+
+### Impact
+- 想让产物更小，把 `strip_native` 打开即可（默认仍是 `false`，保持保守）。
+- 已发布产物需要重新构建才能拿到这两项收益。
+- 加密与防篡改行为不变；strip 在 tag 计算之前完成，归档仍然可认证。
+
 ## 0.17.35
 
 ### Problem

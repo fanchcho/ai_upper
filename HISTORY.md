@@ -1,3 +1,25 @@
+## v0.17.36
+
+`strip_native` 对应用自己的扩展一直是空操作。原因在打包顺序：应用扩展在 `[2/6]` 就被
+`pack_egg()` 封进 `bundle/py_upper.dat`，而 strip 发生在 `[4/6]` 的
+`bundle_native_dependencies`，那一步只遍历仍散落在 `site-packages` 的原生镜像。开启
+`strip_native` 后 `dist/Upper.app` 从 75 MB 降到 68 MB，但 egg 里那 977 KB 的 bundle
+一个字节都没动。
+
+修复是把 strip 提到入包之前：新增 `strip_packed_extensions()`，对即将进归档的
+`.so/.pyd/.dylib` 先 strip，macOS 随即重新 ad-hoc 签名（strip 会让 Cython 链接时的签名
+失效，dyld 会拒绝加载）。放在 pack 之前还有第二个好处：认证 tag 在字节定稿之后才计算，
+不会出现"签完名又改字节"。收益是 egg 981 KB → 832 KB（−15.2%），整体 75 MB → 68 MB
+（−9.3%）。启动做交错 A/B 各 12 次确认无影响（未 strip 301–326 ms，strip 300–314 ms）。
+
+同时修掉一个缓存职责串位：`_prune_cache()` 的前缀过滤把 `merged-*` 也算进来了，可那是
+launcher 在 `Py_Initialize` 之前写入、正在使用的目录。单版本时看不出来，多版本共存时
+会删掉活着的缓存，下次启动被迫重新解压。现在 loader 只清理 `egg-*`，`merged-*` 由
+launcher 的 `prune_bundle_cache()` 自己管。
+
+全量单测 393 passed / 6 skipped；`--verify` 169 项 PASS，含 3 个 bundle 的 arm64 校验；
+`codesign -v --deep --strict` 通过。
+
 ## v0.17.35
 
 egg 缓存目录名取自认证 TAG，所以每次发布都是一个新目录，而 loader 和 launcher

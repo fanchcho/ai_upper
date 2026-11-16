@@ -452,7 +452,21 @@ qt = "imports"
 3. 删除未用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken QML 辅助库、Qt 工具二进制、工具翻译；
 4. 插件按**依赖的 Qt 模块**判定：需要额外 Qt 模块的插件（如虚拟键盘输入法插件拉 QtQml/QtQuick、`libqpdf` 拉 QtPdf）会被删除；**平台插件类别永不裁剪**（删了应用起不来）；SVG 图标插件走例外保留。
 
-实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/Upper.app` 100 MB、其中 PySide6 58 MB；再开 `strip_native = true` 原生库还能更小。
+实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/Upper.app` 100 MB、其中 PySide6 58 MB。
+
+`strip_native = true` 的实测收益（同一产物，macOS arm64）：
+
+| | `dist/Upper.app` | `bundle/py_upper.dat` |
+| --- | --- | --- |
+| `strip_native = false`（默认） | 75 MB | 981 KB |
+| `strip_native = true` | **68 MB（−9.3%）** | **832 KB（−15.2%）** |
+
+启动耗时不受影响（交错 A/B 各 12 次：未 strip 301–326 ms，strip 300–314 ms，落在噪声内）。
+`strip_native` 同时覆盖 runtime 的 `libpython`、第三方扩展，以及**本次构建产出的应用扩展**——
+最后一项需要 `strip_packed_extensions()` 在 `pack_egg()` 之前执行：`bundle_native_dependencies`
+在更晚的步骤才跑，只能看到仍散落在 `site-packages` 的文件，已经封进 egg 的扩展它永远看不到。
+在 egg 之前 strip 也让认证 tag 计算在字节定稿之后，不会出现"签名后改字节"的问题。
+macOS 上 strip 会使 Cython 链接时产生的 ad-hoc 签名失效，因此随即重新 ad-hoc 签名。
 
 限制：动态加载（`importlib`、QML 内 import）静态看不到，这类应用请显式写模块列表；交叉目标无法执行目标解释器，会保留完整 Qt。
 

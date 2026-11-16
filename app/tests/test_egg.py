@@ -668,3 +668,80 @@ def test_cache_pruning_never_fails_a_start(tmp_path, monkeypatch):
     # must still publish and return.
     second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
     assert second.extract_root == first.extract_root
+
+
+def test_loader_pruning_leaves_the_launchers_bundle_cache_alone(tmp_path):
+    """Each side owns its own cache prefix.
+
+    `merged-*` is written and used by the launcher before Py_Initialize. When
+    the loader pruned it too, a multi-version cache lost the directory the
+    launcher was using, and the next start had to extract the bundles again.
+    """
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    for name in ("merged-current", "merged-old", "merged-older"):
+        (cache / name).mkdir()
+        (cache / name / ".complete").write_text("x\n", encoding="utf-8")
+
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+
+    survivors = {path.name for path in cache.iterdir() if path.is_dir()}
+    # The loader published its own entry and pruned only egg-* entries.
+    assert {name for name in survivors if name.startswith("merged-")} == {
+        "merged-current", "merged-old", "merged-older"}
+    assert any(name.startswith("egg-") for name in survivors)
+
+
+def test_packed_extensions_are_stripped_before_the_egg_is_sealed(tmp_path, monkeypatch):
+    """strip_native has to run before packing, not after.
+
+    bundle_native_dependencies runs in a later build step and only sees files
+    that are still loose in site-packages. An extension sealed inside the egg
+    never reached it, so strip_native silently had no effect on the
+    application's own bundles.
+    """
+    from py_upper import python_build
+
+    calls = []
+    monkeypatch.setattr(python_build, "optimize_config", lambda: {"strip_native": True},
+                        raising=False)
+    import py_upper.config as config_module
+    monkeypatch.setattr(config_module, "optimize_config", lambda: {"strip_native": True})
+
+    import py_upper.native.bundle as bundle_module
+    monkeypatch.setattr(bundle_module, "_strip_native", lambda path, target: calls.append(("strip", path.name)))
+    monkeypatch.setattr(bundle_module, "ad_hoc_sign", lambda path: calls.append(("sign", path.name)))
+
+    site = tmp_path / "site"
+    (site / "pkg").mkdir(parents=True)
+    (site / "pkg" / "mod.py").write_text("VALUE = 1\n", encoding="utf-8")
+    (site / "py_upper_bundles").mkdir()
+    (site / "py_upper_bundles" / "bundle.so").write_bytes(b"\x7fELF")
+
+    from py_upper.config import TARGETS
+    python_build.strip_packed_extensions(
+        site, ["pkg/mod.py", "py_upper_bundles/bundle.so"], TARGETS["macos-arm64"])
+
+    assert ("strip", "bundle.so") in calls
+    # macOS: stripping invalidates the ad-hoc signature, so it is re-signed.
+    assert ("sign", "bundle.so") in calls
+    # A source file is not a native image and must not be touched.
+    assert all(name != "mod.py" for _, name in calls)
+
+
+def test_strip_is_a_no_op_when_disabled(tmp_path, monkeypatch):
+    from py_upper import python_build
+    import py_upper.config as config_module
+
+    monkeypatch.setattr(config_module, "optimize_config", lambda: {"strip_native": False})
+    calls = []
+    import py_upper.native.bundle as bundle_module
+    monkeypatch.setattr(bundle_module, "_strip_native", lambda path, target: calls.append(path))
+
+    site = tmp_path / "site"
+    (site / "py_upper_bundles").mkdir(parents=True)
+    (site / "py_upper_bundles" / "bundle.so").write_bytes(b"\x7fELF")
+    from py_upper.config import TARGETS
+    python_build.strip_packed_extensions(site, ["py_upper_bundles/bundle.so"], TARGETS["macos-arm64"])
+    assert calls == []
