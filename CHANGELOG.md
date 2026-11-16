@@ -1,4 +1,4 @@
-## 0.17.33
+## 0.17.34
 
 ### Problem
 - `bundle/py_upper.dat` 只做了 XOR 混淆，没有任何完整性校验：用自己的 zip 顶替它、改一个字节、或换掉 extract 缓存里的明文文件，应用都会照常加载。密钥还以明文十六进制字符串编进 launcher，`strings` 一秒就能拿到。用户明确要求加固，但**不能降低打包后的启动速度**。
@@ -28,6 +28,30 @@
 - 构建期工具仍可用 `require_auth=False` 读取旧归档做诊断。
 - 启动性能不回退；`PY_UPPER_EGG_CACHE_VERIFY=0` 是留给极端性能敏感场景的开关，默认关闭篡改检测不是默认行为。
 - 边界不变：这是提高逆向成本，不是现代密码学。密钥必须在本地可解密，调试器仍可取回。
+
+## 0.17.33
+
+### Problem
+- The 0.17.31 `metadata-full` fallback uses the same `.tar.zst` full build as both runtime and SDK. `ensure_pbs_runtime` still unpacked it with `tarfile.open(..., "r:gz")`, so pinning Python 3.8.10 on Linux/macOS failed at `[1/6] Runtime + SDK` with `ReadError: not a gzip file`. The Windows 3.8 compatibility job did not see this because its runtime comes from python.org's embeddable ZIP.
+
+### Root cause
+- `safe_extract` only reads gzip, while PBS full builds from releases before 20210724 are zstd-compressed. The 0.17.31 regression test built a `.tar.gz` fixture, so it never exercised the real archive format.
+
+### Changes
+- When the resolved source is `metadata-full`, `ensure_pbs_runtime` now reuses the `install/` tree of the SDK that `ensure_pbs_sdk` already unpacked through the zstd-capable tar path. This also avoids downloading and extracting the same archive twice.
+- `app/tests/test_pbs.py` now uses a real `.tar.zst` metadata-full asset and asserts the runtime path never calls `download`.
+- `app/tests/test_launcher_deployment.py` skips its compiler fixture when MSVC `cl.exe` is unavailable instead of producing three errors, matching the other native-compiler tests.
+- Version moves to 0.17.33; README and the configuration template follow.
+
+### Verification
+- `python -m pytest app/tests -q`: 367 passed, 15 skipped, 0 errors; the former three errors are now skips.
+- `python tools/build.py --target windows-x86_64 --egg`: `[1/6]`-`[6/6]` pass, 55 native binaries checked, `READY: dist/Upper`.
+- Packaged headless launch exits 0 with `GUI OK offscreen`; interactive launch creates the `Upper` window.
+- A real zstd `.tar.zst` fixture reproduces the former `ReadError`, while the new path copies the SDK `install/` tree.
+
+### Impact
+- Old PBS releases now work as both runtime and SDK on POSIX as well as Windows. Current releases keep the install-only runtime path unchanged.
+
 
 ## 0.17.32
 

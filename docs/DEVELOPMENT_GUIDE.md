@@ -584,7 +584,7 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 `TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]`。launcher 在导入入口前
 安装 loader。
 
-**认证（0.17.33 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
+**认证（0.17.34 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
 或用自己的 zip 顶替 `bundle/py_upper.dat`，都会在导入任何模块之前失败
 （`egg authentication failed` / `egg is not authenticated`）。打包后的 launcher
 一律要求认证，v1 归档（只有 `MAGIC`）与手搓普通 zip 都被拒绝；构建期工具仍可用
@@ -597,7 +597,7 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 | 版本 | egg 读取 | 启动总耗时 |
 | --- | --- | --- |
 | 0.17.32（v1，无认证） | 13.1 ms | 308–328 ms |
-| 0.17.33（v2，带认证） | 10.1 ms | 286–294 ms |
+| 0.17.34（v2，带认证） | 10.1 ms | 286–294 ms |
 
 **密钥**：`key_hex` 仍编译进 launcher（否则 loader 无法解密），但不再以可读的
 十六进制字符串存在——生成器写成 `key ^ mask` 与 `mask` 两个字节数组，launcher 在
