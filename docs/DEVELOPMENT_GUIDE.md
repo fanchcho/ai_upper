@@ -635,6 +635,10 @@ compression = "deflated"  # deflated | stored | lzma
   `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），
   `PY_UPPER_EGG_CACHE` 可覆盖；目录不可写时回退到 `py_upper_egg_*` 临时目录。
+  缓存目录名就是认证 TAG，因此每次发布都会产生新目录；loader 发布新条目后会删掉
+  更早的条目，只保留当前和上一版（`CACHE_KEEP = 2`），上一版留着是为了回滚时仍能
+  热启动。launcher 的 `merged-<tag>` 缓存同理（保留当前 + 最新一个旧条目）。删除是
+  尽力而为：另一个实例可能正在用旧条目，残留目录只占磁盘，不影响启动。
   Linux 没有稳定的内存 dlopen 接口；macOS 的 hardened runtime 还要求缓存
   目录里的 `.so` 通过签名校验，否则需要
   `com.apple.security.cs.disable-library-validation`。

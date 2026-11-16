@@ -220,28 +220,45 @@ inline bool open_egg(const std::vector<std::uint8_t>& raw,
     return true;
 }
 
-inline bool read_egg_bundles(const std::filesystem::path& egg_path,
-                             const std::string& key_hex,
-                             const std::string& prefix,
-                             std::vector<EggBundleFile>& files,
-                             std::string& cache_key,
-                             std::string& error,
-                             bool require_auth = true) {
-    namespace detail = egg_detail;
+// Reads and authenticates an egg once, keeping the plaintext zip around.
+//
+// Split from bundle parsing so a caller that wants both the payload and the
+// members (diagnostics, tests) does not decrypt twice. The launcher still reads
+// and decrypts here before Py_Initialize and lets the Python loader decrypt for
+// itself afterwards: handing the plaintext over would save ~3 ms but leave a
+// decrypted copy on disk, which works against the reason the archive is
+// encrypted at all.
+struct EggContents {
+    std::vector<std::uint8_t> payload;   // Decrypted zip bytes.
+    std::string cache_key;               // Authentication tag (v2) or plaintext digest (v1).
+    std::string error;
+    bool ok = false;
+};
 
-    files.clear();
-    cache_key.clear();
-    error.clear();
-
+inline EggContents read_egg(const std::filesystem::path& egg_path,
+                            const std::string& key_hex,
+                            bool require_auth = true) {
+    EggContents result;
     std::ifstream stream(egg_path, std::ios::binary);
     if (!stream) {
-        error = "cannot read egg: " + egg_path.string();
-        return false;
+        result.error = "cannot read egg: " + egg_path.string();
+        return result;
     }
     const std::vector<std::uint8_t> raw((std::istreambuf_iterator<char>(stream)),
                                         std::istreambuf_iterator<char>());
-    std::vector<std::uint8_t> payload;
-    if (!open_egg(raw, key_hex, require_auth, payload, cache_key, error)) return false;
+    result.ok = open_egg(raw, key_hex, require_auth, result.payload, result.cache_key, result.error);
+    return result;
+}
+
+// Parses bundle members out of an already-decrypted payload.
+inline bool read_bundles_from_payload(const std::vector<std::uint8_t>& payload,
+                                      const std::string& prefix,
+                                      std::vector<EggBundleFile>& files,
+                                      std::string& error) {
+    namespace detail = egg_detail;
+
+    files.clear();
+    error.clear();
 
     std::size_t end = std::string::npos;
     if (payload.size() >= 22) {
@@ -363,6 +380,27 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
         files.push_back(std::move(file));
     }
     return true;
+}
+
+// Convenience wrapper: read the archive, then parse its bundles. Kept because
+// tests and the launcher's own diagnostics want the one-shot form.
+inline bool read_egg_bundles(const std::filesystem::path& egg_path,
+                             const std::string& key_hex,
+                             const std::string& prefix,
+                             std::vector<EggBundleFile>& files,
+                             std::string& cache_key,
+                             std::string& error,
+                             bool require_auth = true) {
+    files.clear();
+    cache_key.clear();
+    error.clear();
+    EggContents contents = read_egg(egg_path, key_hex, require_auth);
+    if (!contents.ok) {
+        error = contents.error;
+        return false;
+    }
+    cache_key = contents.cache_key;
+    return read_bundles_from_payload(contents.payload, prefix, files, error);
 }
 
 }  // namespace pyupper

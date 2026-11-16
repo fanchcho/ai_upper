@@ -593,6 +593,35 @@ fs::path bundle_cache_root() {
     return fallback / "py_upper" / "eggs";
 }
 
+// Drops merged-bundle caches from earlier builds.
+//
+// The directory name is the authentication tag, so a rebuilt application never
+// reuses one and a new directory appears per release. Without pruning they
+// accumulate forever, each holding the extracted extension bundles (~1 MB).
+// Best effort: another running instance may still be using an older entry, and
+// a leftover directory only costs disk space.
+void prune_bundle_cache(const fs::path& base, const std::string& keep) {
+    std::error_code ec;
+    std::vector<std::pair<fs::file_time_type, fs::path>> entries;
+    for (const auto& entry : fs::directory_iterator(base, ec)) {
+        if (ec) return;
+        const std::string name = path_to_utf8(entry.path().filename());
+        if (name.rfind("merged-", 0) != 0 || name == keep) continue;
+        std::error_code stamp_ec;
+        const auto stamp = fs::last_write_time(entry.path(), stamp_ec);
+        entries.emplace_back(stamp_ec ? fs::file_time_type() : stamp, entry.path());
+    }
+    // Keep the newest entry besides the one just published, so rolling back to
+    // the previous build still starts warm.
+    constexpr std::size_t kKeep = 1;
+    if (entries.size() <= kKeep) return;
+    std::sort(entries.begin(), entries.end(),
+              [](const auto& left, const auto& right) { return left.first > right.first; });
+    for (std::size_t i = kKeep; i < entries.size(); ++i) {
+        fs::remove_all(entries[i].second, ec);
+    }
+}
+
 std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& files,
                                  const std::string& cache_key, fs::path& root) {
     std::error_code ec;
@@ -606,6 +635,7 @@ std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& file
     const fs::path marker = final / ".complete";
     if (fs::is_regular_file(marker, ec)) {
         root = final;
+        prune_bundle_cache(base, "merged-" + cache_key);
         return std::string();
     }
 
@@ -661,6 +691,7 @@ std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& file
         if (fs::is_regular_file(marker, ignored)) {
             fs::remove_all(staging, ignored);
             root = final;
+            prune_bundle_cache(base, "merged-" + cache_key);
             return std::string();
         }
         fs::remove_all(final, ignored);
@@ -674,6 +705,7 @@ std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& file
         }
     }
     root = final;
+    prune_bundle_cache(base, "merged-" + cache_key);
     return std::string();
 }
 

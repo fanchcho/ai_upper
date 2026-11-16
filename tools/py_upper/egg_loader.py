@@ -68,6 +68,11 @@ CACHE_PREFIX = 'egg-'
 BUNDLE_PREFIX = 'py_upper_bundles/'
 CACHE_MARKER = '.complete'
 CACHE_ATTEMPTS = 3
+# Cache entries for other builds are removed once this one is published. A new
+# release changes the tag, so without this every version ever installed left its
+# own ~1 MB directory behind forever. The previous entry is kept so a rollback
+# to the previous build still starts warm.
+CACHE_KEEP = 2
 # Chunk size for hashing cached files: large enough to stay in the fast path of
 # hashlib, small enough that a bundle-sized file is never held twice in memory.
 HASH_CHUNK = 1 << 20
@@ -197,6 +202,30 @@ def _hash_file(path):
 
 def _cache_verify_enabled():
     return os.environ.get('PY_UPPER_EGG_CACHE_VERIFY', '1') != '0'
+
+
+# Drops cache entries from earlier builds.
+#
+# Entries are named after the authentication tag, so a rebuilt application never
+# reuses one: they would accumulate one per release. Deletion is best effort and
+# never fails a start; another process may be using an entry, and a leftover
+# directory only costs disk space.
+def _prune_cache(cache_root, keep_name):
+    try:
+        entries = [name for name in os.listdir(cache_root)
+                   if name.startswith((CACHE_PREFIX, 'merged-')) and name != keep_name]
+    except OSError:
+        return
+    if len(entries) <= CACHE_KEEP - 1:
+        return
+    def age(name):
+        try:
+            return os.path.getmtime(os.path.join(cache_root, name))
+        except OSError:
+            return 0.0
+    entries.sort(key=age, reverse=True)
+    for name in entries[CACHE_KEEP - 1:]:
+        shutil.rmtree(os.path.join(cache_root, name), ignore_errors=True)
 
 
 def _memimporter_module():
@@ -391,6 +420,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
             shutil.rmtree(staging, ignore_errors=True)
             raise
         self.extract_root = final
+        _prune_cache(cache_root, CACHE_PREFIX + self.digest)
 
     def read_data(self, name):
         with self.lock:

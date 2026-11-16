@@ -1,3 +1,28 @@
+## 0.17.35
+
+### Problem
+- egg 缓存按认证 TAG 命名，因此**每次发布都会留下一个新目录**，且从不清理。实测两次构建后 `~/Library/Caches/py_upper/eggs` 里已有两套 `egg-*` + `merged-*`（约 2 MB），随发布次数线性增长。`--verify` 还会为每个 merged bundle 重复解密整个归档（3 个 bundle = 3 次，每次约 3.6 ms）。
+
+### Root cause
+- 缓存目录名来自内容哈希/TAG，设计上就是"新版本 = 新目录"，但没有任何淘汰路径：loader 的 `_extract()` 与 launcher 的 `publish_bundle_cache()` 都只在缺失时创建，从不删除旧条目。`verify._egg_payload()` 每次调用都重新读文件并解密，而 `_verify_egg_bundle()` 按 bundle 逐个调用它。
+
+### Changes
+- `egg_loader.py`：新增 `_prune_cache()`，发布新条目后只保留当前与上一版（`CACHE_KEEP = 2`）。上一版留着，回滚到前一版本仍能热启动。删除尽力而为，失败不影响启动。
+- `PyUpper.cpp`：新增 `prune_bundle_cache()`，`merged-<tag>` 缓存保留当前 + 最新一个旧条目，在三条发布成功路径上调用。
+- `egg_bundles.h`：把"读取+解密"拆成 `read_egg()`，与 `read_bundles_from_payload()` 分开；`read_egg_bundles()` 保留为一次性包装。**没有**把明文交给 Python 侧复用——实测只省约 3 ms（~1%），却要在磁盘上留一份解密后的 zip，与加密的目的相悖。
+- `verify.py`：`_egg_payload()` 增加进程内缓存，按（路径、mtime、size、key）判定；manifest 读取改走同一份已解密归档。
+
+### Verification
+- 连续 4 次发布实测：缓存条目数 1 → 2 → 2 → 2，不再线性增长。
+- `--verify`：169 项 PASS，无 FAIL。
+- 启动（macOS arm64，cocoa，warm，8 次）：267–273 ms，此前 287–304 ms。
+- `python -m pytest app/tests -q`：389 passed, 6 skipped。
+
+### Impact
+- 磁盘占用不再随发布次数增长；升级后旧缓存会在首次启动时被清到 2 个。
+- 回滚到上一版本仍命中缓存，不会因清理而变慢。
+- 启动耗时的小幅改善来自 verify 缓存与代码整理；**加密强度与防篡改行为不变**。
+
 ## 0.17.34
 
 ### Problem

@@ -19,7 +19,7 @@ from .egg import (
     EGG_DIR, EGG_NAME, egg_authenticated, egg_config, egg_loader_source,
     read_egg_manifest, read_egg_members, read_egg_meta,
 )
-from .egg_loader import MAGIC, MAGIC2, _safe_member, keystream_xor
+from .egg_loader import MAGIC, MAGIC2, MANIFEST_NAME, _safe_member, keystream_xor
 from .manifest import read_manifest, validate_manifest
 from .native.deps import _system_dependency, dependency_names
 from .native.inspect import (
@@ -56,6 +56,14 @@ def _stage_egg_config(stage) -> "EggConfig":
     return egg_config(enabled=(stage / EGG_DIR / EGG_NAME).is_file())
 
 
+# Verification reads the same archive many times: once for the member list,
+# once per merged bundle, and once more for the packaged copy. Decrypting a
+# 1 MB egg costs ~3.6 ms, so the naive path paid that cost per lookup. The cache
+# is keyed on the file's identity (path, mtime, size) so an archive rewritten
+# mid-run is never served stale bytes.
+_EGG_CACHE: dict = {}
+
+
 def _egg_payload(egg_path: Path, key_hex: str) -> bytes:
     """The decrypted zip bytes of an egg, through the same opener as the loader.
 
@@ -65,13 +73,26 @@ def _egg_payload(egg_path: Path, key_hex: str) -> bytes:
     """
     from .egg_loader import open_egg
 
-    payload, _digest = open_egg(
-        Path(egg_path).read_bytes(), bytes.fromhex(str(key_hex).strip()))
+    path = Path(egg_path)
+    stat = path.stat()
+    cache_key = (str(path.resolve()), stat.st_mtime_ns, stat.st_size, str(key_hex).lower())
+    cached = _EGG_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+    payload, _digest = open_egg(path.read_bytes(), bytes.fromhex(str(key_hex).strip()))
+    # One entry is enough: verification walks one stage and then one package.
+    _EGG_CACHE.clear()
+    _EGG_CACHE[cache_key] = payload
     return payload
 
 
+def _egg_archive(egg_path: Path, key_hex: str) -> zipfile.ZipFile:
+    """A ZipFile over the decrypted payload, reused across member lookups."""
+    return zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex)))
+
+
 def _egg_member(egg_path: Path, key_hex: str, name: str) -> tuple[int, bytes]:
-    with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
+    with _egg_archive(egg_path, key_hex) as archive:
         info = archive.getinfo(name)
         return info.compress_type, archive.read(name)
 
@@ -84,7 +105,16 @@ def _egg_manifest_checks(egg_path: Path, key_hex: str, members) -> list[tuple[bo
     not the files a previous run unpacked from it.
     """
     try:
-        manifest = read_egg_manifest(egg_path, key_hex)
+        # Read from the already-decrypted archive instead of read_egg_manifest:
+        # that helper decrypts again, and verification would pay the cost twice
+        # for the same file.
+        with _egg_archive(egg_path, key_hex) as archive:
+            if MANIFEST_NAME not in archive.namelist():
+                manifest = {}
+            else:
+                data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
+                files = data.get("files") if isinstance(data, dict) else None
+                manifest = dict(files) if isinstance(files, dict) else {}
     except Exception as exc:
         return [(False, f"egg manifest: {exc}")]
     if not manifest:

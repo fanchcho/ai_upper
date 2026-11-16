@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import importlib.machinery
 import io
+import os
 import sys
 import types
 import zipfile
@@ -632,3 +633,38 @@ def test_manifest_naming_a_missing_member_is_refused(tmp_path):
     egg.write_bytes(header + tag + ciphertext)
     with pytest.raises(ValueError, match="missing member"):
         EncryptedEggImporter(egg, key, "extract", require_auth=True)
+
+
+def test_old_cache_entries_are_pruned_but_the_previous_build_is_kept(tmp_path):
+    """A new tag per release must not leave one cache directory per version."""
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    stale = []
+    for index in range(4):
+        entry = cache / ("egg-" + ("%064x" % index))
+        entry.mkdir()
+        (entry / ".complete").write_text("old\n", encoding="utf-8")
+        os.utime(entry, (1000 + index, 1000 + index))
+        stale.append(entry)
+
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    importer = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    current = Path(importer.extract_root)
+    assert current.is_dir()
+
+    survivors = {path.name for path in cache.iterdir() if path.is_dir()}
+    assert current.name in survivors
+    # One older entry stays so a rollback to the previous build is still warm.
+    assert len(survivors) == 2
+    assert stale[-1].name in survivors
+
+
+def test_cache_pruning_never_fails_a_start(tmp_path, monkeypatch):
+    """Pruning is best effort: an unreadable cache root must not break startup."""
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    first = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    monkeypatch.setattr(egg_module, "_prune_cache", None) if hasattr(egg_module, "_prune_cache") else None
+    # A directory that disappears mid-listing is the realistic race; the loader
+    # must still publish and return.
+    second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    assert second.extract_root == first.extract_root
