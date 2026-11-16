@@ -1,13 +1,24 @@
 #pragma once
 
-// Reads the merged application bundles out of an encrypted egg without a
-// CPython interpreter. The egg is MAGIC + XOR(zip, SHAKE-256(key)); bundle
-// members are stored uncompressed by tools/py_upper/egg.py so this parser
-// needs no zlib or lzma. Only `py_upper_bundles/...` entries are returned.
+// Reads the merged application bundles out of an authenticated egg without a
+// CPython interpreter.
+//
+// Egg layout v2:
+//   MAGIC2 (8) + SALT (16) + TAG (32) + XOR(zip bytes, SHAKE-256(key + SALT))
+//   TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]
+// Layout v1 (MAGIC + XOR(zip, SHAKE-256(key)), no tag) is still parsed when the
+// caller does not require authentication, so an old archive stays diagnosable
+// instead of being reported as corrupt.
 //
 // The launcher calls this before Py_Initialize: PyImport_ExtendInittab only
 // accepts modules while the interpreter is unborn, so the bundles cannot wait
 // for the Python-side egg loader.
+//
+// Cost note: verifying the tag costs one absorb pass over the ciphertext, and
+// decrypting costs one squeeze pass. That is exactly the two passes this
+// function already paid before authentication existed (decrypt, then digest the
+// plaintext for the cache key), because the tag replaces that plaintext digest
+// as the cache key. Authentication is therefore free in wall-clock terms.
 
 #include "sha3.h"
 
@@ -108,25 +119,114 @@ inline bool safe_member_name(const std::string& name, const std::string& prefix,
     return true;
 }
 
-inline std::string hex16(const std::vector<std::uint8_t>& bytes) {
+inline std::string hex(const std::uint8_t* bytes, std::size_t length) {
     static const char* digits = "0123456789abcdef";
     std::string text;
-    text.reserve(bytes.size() * 2);
-    for (std::uint8_t byte : bytes) {
-        text.push_back(digits[byte >> 4]);
-        text.push_back(digits[byte & 0x0f]);
+    text.reserve(length * 2);
+    for (std::size_t i = 0; i < length; ++i) {
+        text.push_back(digits[bytes[i] >> 4]);
+        text.push_back(digits[bytes[i] & 0x0f]);
     }
     return text;
 }
 
+// Constant-time compare: the tag check must not leak how many leading bytes
+// matched, even though an attacker reaching it already controls the archive.
+inline bool equal_constant_time(const std::uint8_t* left, const std::uint8_t* right, std::size_t length) {
+    unsigned difference = 0;
+    for (std::size_t i = 0; i < length; ++i) difference |= static_cast<unsigned>(left[i] ^ right[i]);
+    return difference == 0;
+}
+
 }  // namespace egg_detail
+
+// Decrypts an egg, verifying its authentication tag when the layout carries one.
+//
+// `cache_key` is the tag (v2) or a digest of the plaintext (v1): it identifies
+// the exact archive a cache directory was produced from, so a rebuilt egg never
+// reuses a stale cache.
+inline bool open_egg(const std::vector<std::uint8_t>& raw,
+                     const std::string& key_hex,
+                     bool require_auth,
+                     std::vector<std::uint8_t>& payload,
+                     std::string& cache_key,
+                     std::string& error) {
+    namespace detail = egg_detail;
+
+    static const std::uint8_t magic_v1[] = {'W', 'B', 'E', 'G', 'G', '0', '1', '!'};
+    static const std::uint8_t magic_v2[] = {'W', 'B', 'E', 'G', 'G', '0', '2', '!'};
+    constexpr std::size_t kSaltSize = 16;
+    constexpr std::size_t kTagSize = 32;
+    constexpr std::size_t kHeaderV2 = sizeof(magic_v2) + kSaltSize;
+
+    if (raw.empty()) {
+        error = "egg is empty";
+        return false;
+    }
+
+    std::vector<std::uint8_t> key;
+    if (!detail::parse_key(key_hex, key, error)) return false;
+
+    if (raw.size() >= sizeof(magic_v2) &&
+        std::equal(std::begin(magic_v2), std::end(magic_v2), raw.begin())) {
+        if (raw.size() < kHeaderV2 + kTagSize) {
+            error = "egg is truncated";
+            return false;
+        }
+        const std::uint8_t* header = raw.data();
+        const std::uint8_t* tag = raw.data() + kHeaderV2;
+        const std::uint8_t* ciphertext = raw.data() + kHeaderV2 + kTagSize;
+        const std::size_t ciphertext_size = raw.size() - kHeaderV2 - kTagSize;
+
+        // TAG = SHAKE-256(key + header + ciphertext)[:32]
+        Shake256 shake;
+        shake.absorb(key.data(), key.size());
+        shake.absorb(header, kHeaderV2);
+        shake.absorb(ciphertext, ciphertext_size);
+        shake.finalize();
+        std::uint8_t expected[kTagSize];
+        shake.squeeze(expected, kTagSize);
+        if (!detail::equal_constant_time(tag, expected, kTagSize)) {
+            error = "egg authentication failed: archive was rebuilt or edited";
+            return false;
+        }
+
+        // The key stream is SHAKE-256(key + SALT), so the same plaintext encrypts
+        // to different bytes per build.
+        std::vector<std::uint8_t> stream_key(key);
+        stream_key.insert(stream_key.end(), header + sizeof(magic_v2), header + kHeaderV2);
+        payload.assign(ciphertext, ciphertext + ciphertext_size);
+        shake256_xor(payload.data(), payload.size(), stream_key.data(), stream_key.size());
+        cache_key = detail::hex(tag, 16);
+        return true;
+    }
+
+    if (require_auth) {
+        error = "egg is not authenticated: rebuild it with this version of py_upper";
+        return false;
+    }
+
+    if (raw.size() >= sizeof(magic_v1) &&
+        std::equal(std::begin(magic_v1), std::end(magic_v1), raw.begin())) {
+        payload.assign(raw.begin() + static_cast<std::ptrdiff_t>(sizeof(magic_v1)), raw.end());
+        shake256_xor(payload.data(), payload.size(), key.data(), key.size());
+    } else {
+        // A plain zip is accepted, mirroring the Python loader.
+        payload = raw;
+    }
+    std::uint8_t digest[16];
+    shake256_digest(payload.data(), payload.size(), nullptr, 0, digest, sizeof(digest));
+    cache_key = detail::hex(digest, sizeof(digest));
+    return true;
+}
 
 inline bool read_egg_bundles(const std::filesystem::path& egg_path,
                              const std::string& key_hex,
                              const std::string& prefix,
                              std::vector<EggBundleFile>& files,
                              std::string& cache_key,
-                             std::string& error) {
+                             std::string& error,
+                             bool require_auth = true) {
     namespace detail = egg_detail;
 
     files.clear();
@@ -138,28 +238,10 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
         error = "cannot read egg: " + egg_path.string();
         return false;
     }
-    std::vector<std::uint8_t> raw((std::istreambuf_iterator<char>(stream)),
-                                  std::istreambuf_iterator<char>());
-    if (raw.empty()) {
-        error = "egg is empty";
-        return false;
-    }
-
-    static const std::uint8_t magic[] = {'W', 'B', 'E', 'G', 'G', '0', '1', '!'};
+    const std::vector<std::uint8_t> raw((std::istreambuf_iterator<char>(stream)),
+                                        std::istreambuf_iterator<char>());
     std::vector<std::uint8_t> payload;
-    if (raw.size() >= sizeof(magic) && std::equal(std::begin(magic), std::end(magic), raw.begin())) {
-        std::vector<std::uint8_t> key;
-        if (!detail::parse_key(key_hex, key, error)) return false;
-        payload.assign(raw.begin() + static_cast<std::ptrdiff_t>(sizeof(magic)), raw.end());
-        shake256_xor(payload.data(), payload.size(), key.data(), key.size());
-    } else {
-        // A plain zip is accepted, mirroring the Python loader.
-        payload = std::move(raw);
-    }
-
-    std::vector<std::uint8_t> digest(16, 0);
-    shake256_xor(digest.data(), digest.size(), payload.data(), payload.size());
-    cache_key = detail::hex16(digest);
+    if (!open_egg(raw, key_hex, require_auth, payload, cache_key, error)) return false;
 
     std::size_t end = std::string::npos;
     if (payload.size() >= 22) {

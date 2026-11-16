@@ -681,10 +681,60 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "PY_UPPER_HAS_EMBEDDED_SOURCE" in text
     assert "py_upper_embedded::kEntry" in text
     assert "py_upper_embedded::kSmoke" in text
+    # The egg key is rebuilt at run time from a masked pair, so the shipped
+    # binary has no readable hexadecimal key for `strings` to find.
+    assert "kEggKeyMasked" in text
+    assert "kEggKeyMask" in text
+    assert "kEggKeyLength" in text
+    # A packaged launcher refuses an archive with no authentication tag.
+    assert "embedded_egg_requires_auth()" in text
+    assert "EGG_REQUIRE_AUTH" in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "PY_UPPER_APP_NAME" in cmake
     assert "PY_UPPER_EMBEDDED_SOURCE" in cmake
     assert "PY_UPPER_HAS_EMBEDDED_SOURCE" in cmake
+
+
+def test_launcher_egg_reader_verifies_the_authentication_tag():
+    """The C++ reader and the Python loader must agree on the v2 format.
+
+    If the launcher trusted an untagged archive, replacing bundle/py_upper.dat
+    with any zip of the attacker's own would run their code; the tag is what
+    makes that fail before a single module is imported.
+    """
+    headers = Path(__file__).parents[2] / "launcher" / "src"
+    egg_bundles = (headers / "egg_bundles.h").read_text(encoding="utf-8")
+    # The magic is spelled byte by byte so the reader never depends on the
+    # host's string encoding for a binary header.
+    assert "'W', 'B', 'E', 'G', 'G', '0', '2', '!'" in egg_bundles
+    assert "egg authentication failed" in egg_bundles
+    assert "egg is not authenticated" in egg_bundles
+    # Constant-time compare: the tag check must not leak a matching prefix.
+    assert "equal_constant_time" in egg_bundles
+    # The tag doubles as the cache key, which is what keeps authentication from
+    # costing an extra pass over the payload.
+    assert "cache_key = detail::hex(tag, 16)" in egg_bundles
+    sha3 = (headers / "sha3.h").read_text(encoding="utf-8")
+    # Lane-wise absorb/squeeze instead of the byte loop: the byte version ran at
+    # ~150 MB/s and made the authenticated format measurably slower than the
+    # unauthenticated one.
+    assert "load_le64" in sha3
+    assert "store_le64" in sha3
+
+
+def test_masked_key_arrays_round_trip_and_hide_the_plain_key():
+    from py_upper.package import masked_key_arrays
+
+    key_hex = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
+    masked, mask = masked_key_arrays(key_hex)
+    key = bytes.fromhex(key_hex)
+    assert bytes(left ^ right for left, right in zip(masked, mask)) == key
+    # Neither array may contain the key, or the masking is decorative.
+    assert bytes(masked) != key
+    assert bytes(mask) != key
+    assert key_hex.encode("ascii") not in bytes(masked) + bytes(mask)
+    # Derived from the key, so a rebuild reproduces the same binary.
+    assert masked_key_arrays(key_hex) == (masked, mask)
 
 
 def test_launcher_compiles_against_python38_snprintf_alias():

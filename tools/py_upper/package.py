@@ -1,6 +1,7 @@
 """Packaging: build the launcher, assemble the bundle and record the release manifest."""
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import platform
@@ -156,6 +157,28 @@ def _embedded_literal(source: str, what: str) -> str:
     return f'R"{RAW_STRING_DELIMITER}({source}){RAW_STRING_DELIMITER}"'
 
 
+def masked_key_arrays(key_hex: str) -> tuple:
+    """Split an egg key into a masked byte array and its mask.
+
+    The key has to be in the binary for the loader to decrypt anything, so it
+    cannot be hidden. What it must not be is *readable*: a plain hexadecimal
+    string is found by ``strings launcher | grep``, which turns "the code is
+    encrypted" into a two-second exercise for anyone who tries. Storing
+    ``key ^ mask`` and the mask as numeric arrays removes that shortcut.
+
+    The mask is derived from the key itself, so a rebuild of the same key
+    produces the same binary and release manifests stay reproducible.
+    """
+    key = bytes.fromhex(str(key_hex).strip())
+    mask = hashlib.shake_256(key + b"py_upper-key-mask").digest(len(key))
+    masked = bytes(left ^ right for left, right in zip(key, mask))
+    return masked, mask
+
+
+def _byte_array(values: bytes) -> str:
+    return "{" + ", ".join(f"0x{value:02x}" for value in values) + "}"
+
+
 def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
     """Write the translation unit that carries the entry programs.
 
@@ -168,18 +191,29 @@ def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
 
     When the encrypted egg is enabled, the loader and the key are compiled in
     the same way. The key is obfuscation material, not a secret: it has to be
-    present in the binary for the loader to decrypt anything at all.
+    present in the binary for the loader to decrypt anything at all. It is
+    therefore stored masked (see masked_key_arrays) so the shipped binary does
+    not contain the key as a readable hexadecimal string.
     """
     entry = _embedded_literal(entry_source(), "the application entry")
     smoke = _embedded_literal(smoke_source(target), "the launcher smoke program")
     if egg is not None and egg.enabled:
         loader = _embedded_literal(egg_loader_source(), "the egg loader")
         loader_definition = f"const char* const kEggLoader = {loader};\n"
-        key_definition = f"const char* const kEggKey = {_rc_literal(egg.key_hex)};\n"
+        masked, mask = masked_key_arrays(egg.key_hex)
+        key_definition = (
+            f"const unsigned char kEggKeyMasked[] = {_byte_array(masked)};\n"
+            f"const unsigned char kEggKeyMask[] = {_byte_array(mask)};\n"
+            f"const unsigned int kEggKeyLength = {len(masked)}u;\n"
+        )
         backend_definition = f"const char* const kEggBackend = {_rc_literal(egg.backend)};\n"
     else:
         loader_definition = "const char* const kEggLoader = nullptr;\n"
-        key_definition = 'const char* const kEggKey = "";\n'
+        key_definition = (
+            "const unsigned char kEggKeyMasked[] = {0};\n"
+            "const unsigned char kEggKeyMask[] = {0};\n"
+            "const unsigned int kEggKeyLength = 0u;\n"
+        )
         backend_definition = 'const char* const kEggBackend = "auto";\n'
     path = directory / EMBEDDED_SOURCE_FILE
     path.write_text(
@@ -193,7 +227,9 @@ def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
         f"const char* const kSmoke = {smoke};\n"
         "extern const char* const kEggLoader;\n"
         + loader_definition +
-        "extern const char* const kEggKey;\n"
+        "extern const unsigned char kEggKeyMasked[];\n"
+        "extern const unsigned char kEggKeyMask[];\n"
+        "extern const unsigned int kEggKeyLength;\n"
         + key_definition +
         "extern const char* const kEggBackend;\n"
         + backend_definition +

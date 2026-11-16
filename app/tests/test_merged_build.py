@@ -187,7 +187,7 @@ def test_merge_mode_cythonizes_only_leaves(tmp_path, monkeypatch):
 
 @pytest.mark.skipif(shutil.which("c++") is None, reason="no C++ compiler")
 def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
-    from py_upper.egg_loader import decrypt_if_needed
+    from py_upper.egg_loader import open_egg
 
     config = EggConfig()
     relative = "py_upper_bundles/py_upper_pkg.so"
@@ -227,15 +227,16 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
     )
 
     result = subprocess.run([str(binary), str(egg), config.key_hex], check=True, capture_output=True, text=True)
-    plaintext = decrypt_if_needed(egg.read_bytes(), bytes.fromhex(config.key_hex))
-    expected_key = hashlib.shake_256(plaintext).hexdigest(16)
-    assert f"KEY {expected_key}" in result.stdout
+    # The launcher's cache key is the authentication tag, so a rebuilt archive
+    # gets a fresh cache directory instead of reusing a stale one.
+    _payload, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
+    assert f"KEY {digest[:32]}" in result.stdout
     assert f"FILE {relative} {len(payload)}" in result.stdout
     assert "pkg/mod.py" not in result.stdout
 
     bad = subprocess.run([str(binary), str(egg), "00" * 16], capture_output=True, text=True)
     assert bad.returncode == 1
-    assert "not a zip archive" in bad.stdout
+    assert "authentication failed" in bad.stdout
 
 
 def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkeypatch):

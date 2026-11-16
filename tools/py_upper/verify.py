@@ -16,9 +16,10 @@ from .config import (
     staging_dir, target_extension_suffix, target_runtime_dir,
 )
 from .egg import (
-    EGG_DIR, EGG_NAME, egg_config, egg_loader_source, read_egg_members, read_egg_meta,
+    EGG_DIR, EGG_NAME, egg_authenticated, egg_config, egg_loader_source,
+    read_egg_manifest, read_egg_members, read_egg_meta,
 )
-from .egg_loader import MAGIC, _safe_member, keystream_xor
+from .egg_loader import MAGIC, MAGIC2, _safe_member, keystream_xor
 from .manifest import read_manifest, validate_manifest
 from .native.deps import _system_dependency, dependency_names
 from .native.inspect import (
@@ -56,17 +57,44 @@ def _stage_egg_config(stage) -> "EggConfig":
 
 
 def _egg_payload(egg_path: Path, key_hex: str) -> bytes:
-    """The decrypted zip bytes of an egg, MAGIC-aware like the runtime loader."""
-    raw = Path(egg_path).read_bytes()
-    if raw[:len(MAGIC)] != MAGIC:
-        return raw
-    return keystream_xor(raw[len(MAGIC):], bytes.fromhex(str(key_hex).strip()))
+    """The decrypted zip bytes of an egg, through the same opener as the loader.
+
+    Going through open_egg instead of a local reimplementation is what keeps
+    --verify honest: it verifies the tag, so a build that produced an archive
+    the runtime would refuse fails verification instead of passing it.
+    """
+    from .egg_loader import open_egg
+
+    payload, _digest = open_egg(
+        Path(egg_path).read_bytes(), bytes.fromhex(str(key_hex).strip()))
+    return payload
 
 
 def _egg_member(egg_path: Path, key_hex: str, name: str) -> tuple[int, bytes]:
     with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
         info = archive.getinfo(name)
         return info.compress_type, archive.read(name)
+
+
+def _egg_manifest_checks(egg_path: Path, key_hex: str, members) -> list[tuple[bool, str]]:
+    """The archive records a digest per member, so a cache can be validated.
+
+    Without it the plaintext extract cache has no way to tell an untouched
+    directory from an edited one; the authentication tag covers the archive but
+    not the files a previous run unpacked from it.
+    """
+    try:
+        manifest = read_egg_manifest(egg_path, key_hex)
+    except Exception as exc:
+        return [(False, f"egg manifest: {exc}")]
+    if not manifest:
+        return [(False, "egg manifest records per-member digests")]
+    covered = {name for name in members if not name.endswith("/") and name != "py_upper_manifest.json"}
+    missing = sorted(covered - set(manifest))
+    checks = [(not missing, "egg manifest covers every member" + (f": missing {missing[0]}" if missing else ""))]
+    malformed = sorted(name for name, digest in manifest.items() if len(str(digest)) != 64)
+    checks.append((not malformed, "egg manifest digests are SHA-256"))
+    return checks
 
 
 def _verify_egg_bundle(
@@ -240,9 +268,11 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
         checks.append((egg_path.is_file(), f"encrypted egg {EGG_NAME}"))
         if egg_path.is_file():
             try:
-                checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, "encrypted egg magic"))
-                egg_members = set(read_egg_members(egg_path, egg.key_hex))
+                checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "encrypted egg magic v2"))
+                checks.append((egg_authenticated(egg_path, egg.key_hex), "encrypted egg authenticated"))
+                egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
                 checks.append((bool(egg_members), f"encrypted egg members={len(egg_members)}"))
+                checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
             except Exception as exc:
                 checks.append((False, f"encrypted egg members: {exc}"))
         if target.os == "windows" and egg.backend == "memory":
@@ -341,16 +371,22 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     egg_members = None
     if egg_path.is_file():
         try:
-            checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, "packaged egg magic"))
-            egg_members = set(read_egg_members(egg_path, egg.key_hex))
+            checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "packaged egg magic v2"))
+            checks.append((egg_authenticated(egg_path, egg.key_hex), "packaged egg authenticated"))
+            egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
             checks.append((bool(egg_members), f"packaged egg members={len(egg_members)}"))
+            checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
         except Exception as exc:
             checks.append((False, f"packaged egg members: {exc}"))
         if executable.is_file():
             # The archive is useless without the loader, and the loader is only
             # reachable when it was compiled into this launcher.
             loader = egg_loader_source().encode("utf-8")
-            checks.append((loader in executable.read_bytes(), "embedded egg loader"))
+            binary = executable.read_bytes()
+            checks.append((loader in binary, "embedded egg loader"))
+            # The key has to be in the binary, but it must not be readable: a
+            # plain hexadecimal string is what `strings` finds in two seconds.
+            checks.append((egg.key_hex.encode("ascii") not in binary, "egg key not stored as plain hex"))
     runtime_root = resources / "runtime" if target.os == "macos" else root / "runtime"
     if egg_members is not None:
         checks.extend(_verify_egg_native_dependencies(egg_path, egg.key_hex, target, runtime_root))

@@ -1,3 +1,23 @@
+## v0.17.33
+
+打包产物的 `bundle/py_upper.dat` 一直是纯 XOR 混淆：没有 MAC，没有成员摘要，
+loader 甚至把不带 MAGIC 的普通 zip 当合法归档。于是用自己的 zip 顶替它、改一个字节、
+或改掉 extract 缓存里的明文 `.py`，应用都照常加载。密钥同时以明文十六进制存在于
+`egg_loader.py` 的 `DEFAULT_KEY_HEX` 和生成的翻译单元里，而 loader 源码会被整体嵌入
+launcher，所以只改生成端也挡不住泄漏。加固的硬约束是**不能降低启动速度**。
+
+格式升级为 `MAGIC2 + SALT + TAG + ciphertext`，`TAG` 覆盖 header 与密文，比较用常数
+时间；归档内新增逐成员 SHA-256 清单。打包后的 launcher 在 `Py_Initialize` 之前验签，
+认证失败或未认证直接退出；extract 缓存复用前按清单核对，被改过就删除重建。
+
+性能靠两点守住：TAG 直接充当缓存键，取代了原本"解密后再对整个明文哈希一遍"的遍历，
+所以认证净开销为零；`sha3.h` 的 absorb/squeeze 从逐字节改为按 64 位 lane 批量处理。
+同一 1.4 MB 产物实测，egg 读取 13.1 ms → 10.2 ms，启动总耗时 308–328 ms → 277–312 ms。
+密钥改为 `key ^ mask` 两个字节数组编入、运行时重组，`strings` 命中数为 0。
+
+本机全量单测 387 passed / 6 skipped，真实 `macos-arm64` 构建的 `--verify` 与两段冒烟
+通过。
+
 ## v0.17.32
 
 0.17.31 修复 PBS 资产清单 404 后，`py38-compat-windows-x86_64` 推进到

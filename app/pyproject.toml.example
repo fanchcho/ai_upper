@@ -16,7 +16,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py_upper"
-version = "0.17.32"
+version = "0.17.33"
 description = "py_upper standalone Python application"
 requires-python = ">=3.8,<3.14"
 # Runtime dependencies of your application, as requirement strings, e.g.
@@ -115,10 +115,18 @@ exclude = [
 # shipped code; it is obfuscation, not strong cryptography, and it barely
 # changes the bundle size. Use [tool.py_upper.trim] and Qt pruning for size.
 # Encryption is the default; pass --no-egg for a loose-file build.
+#
+# The archive is authenticated: MAGIC + salt + SHAKE-256 tag + ciphertext,
+# plus a per-member digest manifest. A packaged launcher refuses an archive
+# whose tag does not match, so replacing bundle/py_upper.dat with a rebuilt
+# zip fails before any module is imported. The tag also keys the extract
+# cache, so authentication costs no extra pass over the payload.
 enabled = true
 # SHAKE-256 key stream key: at least 16 bytes of hexadecimal. It is compiled
-# into the launcher, so it is obfuscation material, not a secret. Changing it
-# requires rebuilding everything that reads the archive.
+# into the launcher, so it is obfuscation material, not a secret. It is
+# stored XORed with a derived mask rather than as a readable hexadecimal
+# string, which stops `strings` from finding it; a debugger still can.
+# Changing it requires rebuilding everything that reads the archive.
 key_hex = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
 # auto: map extensions from memory on Windows when _memimporter is available,
 #       otherwise decrypt into a private temporary directory.

@@ -1,3 +1,34 @@
+## 0.17.33
+
+### Problem
+- `bundle/py_upper.dat` 只做了 XOR 混淆，没有任何完整性校验：用自己的 zip 顶替它、改一个字节、或换掉 extract 缓存里的明文文件，应用都会照常加载。密钥还以明文十六进制字符串编进 launcher，`strings` 一秒就能拿到。用户明确要求加固，但**不能降低打包后的启动速度**。
+
+### Root cause
+- v1 格式是 `MAGIC + XOR(zip, SHAKE-256(key))`，没有 MAC，也没有成员摘要；loader 甚至把不带 MAGIC 的普通 zip 当作合法归档接受。缓存目录名来自明文哈希，`.complete` 标记一旦存在就直接复用，从不核对内容。
+- 密钥同时存在于 `egg_loader.py` 的 `DEFAULT_KEY_HEX` 与生成的翻译单元里，而 loader 源码会被整体嵌入 launcher，所以即使把生成端改成掩码也仍会泄漏。
+
+### Changes
+- egg 升级为 v2：`MAGIC2 + SALT + TAG + ciphertext`，`TAG = SHAKE-256(key + header + ciphertext)[:32]`，比较使用常数时间。salt 由 payload 派生，重建同样输入仍得到同样字节，release manifest 保持可复现。
+- 归档内新增 `py_upper_manifest.json`（逐成员 SHA-256），打包时用刚读入的字节计算，不做第二遍 I/O。
+- `egg_loader.py`：`open_egg()` 统一解密+验签；`require_auth=True` 拒绝 v1 与普通 zip；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 增加 `require_auth`。
+- `egg_bundles.h`：launcher 在 `Py_Initialize` 之前验签，认证失败/未认证归档直接报错退出；TAG 直接作为 bundle 缓存键。
+- `sha3.h`：absorb/squeeze 从逐字节改为按 64 位 lane 批量处理（memcpy 读入）。
+- `DEFAULT_KEY_HEX` 移出 loader，只留在构建工具里；生成器写入 `key ^ mask` 与 `mask` 两个数组，launcher 运行时重组成十六进制字符串。
+- `--verify` 新增：MAGIC2、认证 TAG、成员清单覆盖与摘要长度、`egg key not stored as plain hex`。
+
+### Verification
+- 实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`，各 5 次）：egg 读取 13.1 ms → 10.1 ms；启动总耗时 308–328 ms → 286–294 ms。认证没有带来净开销，因为 TAG 取代了原本“解密后再对明文做一遍哈希”的遍历。
+- 缓存校验开销落在噪声内：开启 277–294 ms，`PY_UPPER_EGG_CACHE_VERIFY=0` 时 280–306 ms。
+- 端到端：改一个字节 → `egg authentication failed`；换成攻击者自己的 zip → `egg is not authenticated`；篡改 extract 缓存里的 `.py` → 目录被重建，注入内容消失。
+- `strings` 检查编译后的 launcher：明文密钥命中数 0。
+- `python -m pytest app/tests -q`：387 passed, 6 skipped。
+
+### Impact
+- 发布产物需要重新构建才会带认证（旧 v1 归档会被打包后的 launcher 拒绝，报错信息指明要重新构建）。
+- 构建期工具仍可用 `require_auth=False` 读取旧归档做诊断。
+- 启动性能不回退；`PY_UPPER_EGG_CACHE_VERIFY=0` 是留给极端性能敏感场景的开关，默认关闭篡改检测不是默认行为。
+- 边界不变：这是提高逆向成本，不是现代密码学。密钥必须在本地可解密，调试器仍可取回。
+
 ## 0.17.32
 
 ### Problem

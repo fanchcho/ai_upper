@@ -580,8 +580,29 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 
 `[tool.py_upper.egg]` 把应用自己的 Python 模块与本次构建产出的扩展收进一个
 `bundle/py_upper.dat`，不再以散文件留在 `site-packages`。格式是
-`MAGIC (8 字节) + XOR(zip, SHAKE-256 key stream)`，launcher 在导入入口前安装
-loader。
+`MAGIC2 (8 字节) + SALT (16) + TAG (32) + XOR(zip, SHAKE-256(key + SALT))`，
+`TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]`。launcher 在导入入口前
+安装 loader。
+
+**认证（0.17.33 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
+或用自己的 zip 顶替 `bundle/py_upper.dat`，都会在导入任何模块之前失败
+（`egg authentication failed` / `egg is not authenticated`）。打包后的 launcher
+一律要求认证，v1 归档（只有 `MAGIC`）与手搓普通 zip 都被拒绝；构建期工具仍可用
+`require_auth=False` 读取旧归档做诊断。
+
+**性能**：认证不会拖慢启动。TAG 直接充当 extract 缓存键，取代了原本“解密后再
+对整个明文做一遍哈希”的那次遍历，所以净开销为零；`sha3.h` 的 absorb/squeeze 也从
+逐字节改为按 64 位 lane 批量处理。实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`）：
+
+| 版本 | egg 读取 | 启动总耗时 |
+| --- | --- | --- |
+| 0.17.32（v1，无认证） | 13.1 ms | 308–328 ms |
+| 0.17.33（v2，带认证） | 10.1 ms | 286–294 ms |
+
+**密钥**：`key_hex` 仍编译进 launcher（否则 loader 无法解密），但不再以可读的
+十六进制字符串存在——生成器写成 `key ^ mask` 与 `mask` 两个字节数组，launcher 在
+运行时重组成字符串。这让 `strings launcher | grep` 找不到密钥；挡不住调试器，
+这是本地解密器的固有边界。
 
 加密默认开启：配置里没有 `[tool.py_upper.egg]` 段时也按 `enabled = true`
 处理；`--no-egg` 只对本次构建关闭，配置里写 `enabled = false` 才会长期关闭。
@@ -604,8 +625,12 @@ compression = "deflated"  # deflated | stored | lzma
 - `memory`：仅 Windows。扩展用 vendored `_memimporter` 从内存映射，需要 PATH
   里能找到 Zig，`build/cache/memimporter/<target>/_memimporter.pyd` 会缓存。
 - `extract`：所有平台。启动时解密到按内容寻址的缓存目录并插入 `sys.path`。
-  目录名是解密后归档的 SHA-256：首次启动解压一次并写入 `.complete` 标记，
-  后续启动直接复用；egg 内容变化时目录名随之变化，不存在的缓存会重新解压。
+  目录名是认证 TAG：首次启动解压一次并写入 `.complete` 标记，后续启动直接复用；
+  egg 内容变化时目录名随之变化，不存在的缓存会重新解压。
+  缓存是**明文**，所以复用前会按归档内的成员清单逐个核对 SHA-256——被改过的
+  缓存目录会被删除重建，而不是带着改动继续运行（`PY_UPPER_EGG_CACHE_VERIFY=0`
+  可关闭这项检查，换取一点启动时间）。实测开启校验与关闭校验的启动耗时落在
+  测量噪声内（277–294 ms vs 280–306 ms），默认保持开启。
   缓存根默认是 `~/Library/Caches/py_upper/eggs`（macOS）、
   `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），
@@ -643,9 +668,11 @@ python tools/build.py --no-egg
 python tools/build.py --egg --egg-key <HEX> --egg-backend extract --egg-compression lzma
 ```
 
-验证点：`--verify` 检查 `bundle/py_upper.dat` 存在、MAGIC 正确、成员可解，并确认已打包的
-应用文件不再以散文件出现；`backend = memory` 的 stage 还必须带
-`_memimporter.pyd`。冒烟脚本内嵌同一份 loader，先 `install()` 再导入入口。
+验证点：`--verify` 检查 `bundle/py_upper.dat` 存在、MAGIC2 正确、**认证 TAG 通过**、
+成员可解、成员清单覆盖每个成员且摘要为 SHA-256，并确认已打包的应用文件不再以散文件
+出现；它还断言 launcher 二进制里不含明文十六进制密钥（`egg key not stored as plain
+hex`）。`backend = memory` 的 stage 还必须带 `_memimporter.pyd`。冒烟脚本内嵌同一份
+loader，先 `install()` 再导入入口。
 
 边界：这是混淆而不是现代密码学——key 编在 launcher 里，有决心的逆向者仍能
 取回；它也不会显著缩小产物，runtime/第三方 wheel/Qt 才是体积大头，裁剪仍用

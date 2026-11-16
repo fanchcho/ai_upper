@@ -480,7 +480,10 @@ def test_egg_leaves_native_inputs_visible_to_the_closure(closure_workspace, monk
     config = egg.EggConfig()
     archive = egg.pack_egg(site, root / "bundle" / egg.EGG_NAME, files, config)
     egg.remove_packed_files(site, files)
-    assert egg.read_egg_members(archive, config.key_hex) == tuple(files)
+    # The archive carries a manifest of per-member digests in addition to the
+    # application files themselves.
+    from py_upper.egg_loader import MANIFEST_NAME
+    assert set(egg.read_egg_members(archive, config.key_hex)) == set(files) | {MANIFEST_NAME}
     assert (site / native.relative_to(source)).is_file()
     assert not compiled.exists()
     monkeypatch.setattr(bundle, "dependency_names", lambda path, env: ["libmissing.so.1"])

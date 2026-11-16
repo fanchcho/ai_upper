@@ -46,7 +46,9 @@ namespace py_upper_embedded {
 extern const char* const kEntry;
 extern const char* const kSmoke;
 extern const char* const kEggLoader;
-extern const char* const kEggKey;
+extern const unsigned char kEggKeyMasked[];
+extern const unsigned char kEggKeyMask[];
+extern const unsigned int kEggKeyLength;
 extern const char* const kEggBackend;
 }  // namespace py_upper_embedded
 #endif
@@ -315,11 +317,45 @@ const char* embedded_egg_loader() {
 #endif
 }
 
-const char* embedded_egg_key() {
+// The egg key, assembled at run time.
+//
+// The key cannot be absent from the binary: the loader needs it to decrypt the
+// archive. Storing it as a plain hexadecimal string made it readable with
+// `strings launcher`, which is the cheapest possible crack of a shipped bundle.
+// The generator instead emits the key XORed with a mask plus the mask itself,
+// and this rebuilds it into a caller-owned string for the duration of a call.
+//
+// A copy of the key exists in memory while the archive is being read; that is
+// unavoidable for any local decryptor. The point is to stop the two-second
+// static read, not to defeat a debugger.
+std::string embedded_egg_key() {
 #ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEggKey;
+    const unsigned int length = py_upper_embedded::kEggKeyLength;
+    if (length == 0) return std::string();
+    std::string key(length * 2, '\0');
+    static const char* digits = "0123456789abcdef";
+    for (unsigned int i = 0; i < length; ++i) {
+        const unsigned char byte = static_cast<unsigned char>(
+            py_upper_embedded::kEggKeyMasked[i] ^ py_upper_embedded::kEggKeyMask[i]);
+        key[i * 2] = digits[byte >> 4];
+        key[i * 2 + 1] = digits[byte & 0x0f];
+    }
+    return key;
 #else
-    return "";
+    return std::string();
+#endif
+}
+
+// Whether a shipped launcher must refuse an archive that carries no
+// authentication tag. A packaged launcher always does: an egg without a tag is
+// either a pre-2 format build or an archive someone rebuilt, and neither should
+// be executed from a release. A launcher built by hand has no embedded loader
+// and never reaches this path.
+bool embedded_egg_requires_auth() {
+#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
+    return py_upper_embedded::kEggKeyLength != 0;
+#else
+    return false;
 #endif
 }
 
@@ -442,7 +478,8 @@ def _py_upper_install_egg():
         return
     namespace = {"__name__": "py_upper_eggloader", "__file__": EGG_PATH}
     exec(compile(EGG_LOADER_SOURCE, "<py_upper_eggloader>", "exec"), namespace)
-    namespace["install"](EGG_PATH, key_hex=EGG_KEY_HEX, backend=EGG_BACKEND)
+    namespace["install"](EGG_PATH, key_hex=EGG_KEY_HEX, backend=EGG_BACKEND,
+                         require_auth=EGG_REQUIRE_AUTH)
 
 
 _py_upper_streams()
@@ -467,8 +504,8 @@ except BaseException:
 // the binary, or as a file next to it. The bootstrap below carries whichever
 // applies as a literal, so the Python side stays one program with one branch.
 std::string bootstrap(const fs::path& script, const fs::path& entry_file, const char* source,
-                      const fs::path& egg_path, const char* egg_loader, const char* egg_key,
-                      const char* egg_backend, const fs::path& crash_report,
+                      const fs::path& egg_path, const char* egg_loader, const std::string& egg_key,
+                      const char* egg_backend, bool require_auth, const fs::path& crash_report,
                       const std::string& launcher_env) {
     std::string text = launcher_env;
     text += "ENTRY_FILE = " + py_quote(path_to_utf8(entry_file)) + "\n"
@@ -476,8 +513,9 @@ std::string bootstrap(const fs::path& script, const fs::path& entry_file, const 
         "ENTRY_SCRIPT = None\n"
         "CRASH_REPORT = " + py_quote(path_to_utf8(crash_report)) + "\n"
         "EGG_PATH = " + py_quote(path_to_utf8(egg_path)) + "\n"
-        "EGG_KEY_HEX = " + py_quote(egg_key ? egg_key : "") + "\n"
+        "EGG_KEY_HEX = " + py_quote(egg_key) + "\n"
         "EGG_BACKEND = " + py_quote(egg_backend ? egg_backend : "auto") + "\n"
+        "EGG_REQUIRE_AUTH = " + (require_auth ? "True" : "False") + "\n"
         "EGG_LOADER_SOURCE = None\n";
     if (egg_loader != nullptr && *egg_loader != '\0') {
         // Same carrier as the entry: a raw literal whose payload the generator
@@ -649,7 +687,8 @@ std::string load_module_bundles(const fs::path& site, const fs::path& egg, Runti
         std::vector<pyupper::EggBundleFile> packed;
         std::string cache_key;
         std::string error;
-        if (!pyupper::read_egg_bundles(egg, embedded_egg_key(), kBundlesPrefix, packed, cache_key, error)) {
+        if (!pyupper::read_egg_bundles(egg, embedded_egg_key(), kBundlesPrefix, packed, cache_key,
+                                       error, embedded_egg_requires_auth())) {
             return "Could not read merged bundles from " + path_to_utf8(egg) + ": " + error;
         }
         if (!packed.empty()) {
@@ -997,7 +1036,7 @@ int PyUpper::run(const std::vector<std::string>& argv) {
         const fs::path entry_file = script.empty() ? path_from_utf8(exe) : script;
         const std::string source = bootstrap(
             script, entry_file, embedded, egg, embedded_egg_loader(), embedded_egg_key(),
-            embedded_egg_backend(), crash_report, launcher_env);
+            embedded_egg_backend(), embedded_egg_requires_auth(), crash_report, launcher_env);
         int rc = run_simple(source.c_str());
         int frc = finalize();
         finalize = nullptr;
