@@ -44,11 +44,17 @@ def bundle_home() -> Path | None:
     return Path(value).resolve() if value else None
 
 
-def _module_file() -> Path | None:
-    # A merged Cython bundle is registered as a built-in module. CPython gives
-    # it the spec origin "built-in" as __file__, which is not a path and has no
-    # parent directories to count.
-    value = globals().get("__file__")
+def module_file(scope: dict) -> Path | None:
+    """The real file behind ``scope["__file__"]``, or ``None`` in a package.
+
+    A merged Cython bundle is registered as a built-in module, so CPython gives
+    it the spec origin "built-in" as ``__file__``: not a path, and with no
+    parent directories to count. Callers pass their own ``globals()``; counting
+    parents from such a value is what failed the Windows 3.8 packaged run
+    (``Path("built-in").resolve()`` stays relative there, see
+    ``qml_shell._shot_path``).
+    """
+    value = scope.get("__file__")
     if not value:
         return None
     try:
@@ -56,6 +62,10 @@ def _module_file() -> Path | None:
     except (OSError, RuntimeError, ValueError):
         return None
     return path if path.is_file() else None
+
+
+def _module_file() -> Path | None:
+    return module_file(globals())
 
 
 def _project_root() -> Path | None:

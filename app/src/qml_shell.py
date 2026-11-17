@@ -24,6 +24,7 @@ import json
 import os
 import queue
 import sys
+import tempfile
 import time
 import uuid
 from pathlib import Path
@@ -45,14 +46,14 @@ from qml_shell_sessions import (
     transcript_markdown,
 )
 from utils.app_home import app_home
-from utils.paths import assets_root
+from utils.paths import assets_root, module_file
 from utils.qt_compat import QtCore, QtGui, QtQml, QtQuick
 
 # 源码树里 QML 就在本模块旁边；打包后应用代码进了 egg/合并扩展，没有源码路径，
 # QML 由 `package.py::_copy_supporting_trees` 放到 `<bundle>/assets/qml`——
 # 与 `assets_root()` 同一口径（launcher 导出的 `AI_UPPER_HOME`）。
 PACKAGED_QML = Path("qml") / "Main.qml"
-SHOT_PATH = Path(__file__).resolve().parents[2] / "out" / "qml-shell" / "shot.png"
+SHOT_RELATIVE = Path("out") / "qml-shell" / "shot.png"
 PLAIN_ENV = "AI_UPPER_QML_PLAIN"
 SHOT_ENV = "AI_UPPER_QML_SHOT"
 SEND_ENV = "AI_UPPER_QML_SEND"
@@ -97,8 +98,22 @@ def _plain_mode() -> bool:
 
 
 def _shot_path() -> Path:
+    """headless 截图的落盘位置：`AI_UPPER_QML_SHOT` 优先，否则给一个可写的缺省值。
+
+    缺省值不能从 `__file__` 数父目录：打包产物里的应用代码是合并扩展（built-in
+    module），`__file__` 是 spec origin `"built-in"`——一个单段相对路径。CPython 3.8
+    的 Windows `resolve()` 对不存在的相对路径原样返回（`Lib/pathlib.py:211`），于是
+    `parents[2]` 在 `_PathParents.__getitem__` 里抛 IndexError，整个 qml_shell 在
+    import 阶段就死了（CI run 44033731069 的 windows-py38 job 正是这样）。只有源码树
+    里 `__file__` 才是真文件，那里才数父目录。
+    """
     override = os.environ.get(SHOT_ENV, "").strip()
-    return Path(override) if override else SHOT_PATH
+    if override:
+        return Path(override)
+    source_path = module_file(globals())
+    if source_path is not None:
+        return source_path.parents[2] / SHOT_RELATIVE
+    return Path(tempfile.gettempdir()) / "ai_upper-qml-shell" / SHOT_RELATIVE.name
 
 
 def qml_main() -> Path:
@@ -108,8 +123,9 @@ def qml_main() -> Path:
     module），所以用「文件在不在」判定，而不是靠路径形态猜。只认这两个位置：
     回落到别处会让缺 QML 的产物「碰巧」从开发树加载界面，冒烟测试也就失去意义。
     """
-    source = Path(__file__).resolve().parent / "qml" / "Main.qml"
-    if source.is_file():
+    source_path = module_file(globals())
+    source = source_path.parent / "qml" / "Main.qml" if source_path is not None else None
+    if source is not None and source.is_file():
         return source
     return assets_root() / PACKAGED_QML
 

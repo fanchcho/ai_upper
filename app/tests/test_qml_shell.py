@@ -16,6 +16,7 @@ import asyncio
 import os
 import threading
 import time
+from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -255,6 +256,43 @@ def test_session_rows_follow_store_order_and_read_saved_messages(tmp_path):
     rows = session_rows(store, now=2_000)
     assert [row["id"] for row in rows] == ["b", "a"]
     assert rows[0]["preview"] == "新的的正文"
+
+
+def test_shot_path_survives_the_builtin_file_a_merged_bundle_reports(monkeypatch, tmp_path):
+    """A packaged module's ``__file__`` is "built-in", not a path with parents.
+
+    CI run 44033731069's windows-py38 job died at import time with
+    ``File "qml_shell.py", line 55`` / ``File "pathlib.py", line 621, in
+    __getitem__``: the shot path was computed at module scope from
+    ``Path(__file__).resolve().parents[2]``, and CPython 3.8's Windows
+    ``resolve()`` returns a relative path unchanged when it does not exist
+    (``Lib/pathlib.py:211``), so ``Path("built-in")`` has one parent and
+    ``parents[2]`` raised IndexError. Nothing may be counted from a value that
+    is not a file -- the override is the only path a packaged run relies on.
+    """
+    import qml_shell
+
+    monkeypatch.setattr(qml_shell, "__file__", "built-in")
+    monkeypatch.delenv(qml_shell.SHOT_ENV, raising=False)
+
+    shot = qml_shell._shot_path()
+    # A writable absolute path outside the source tree, never a relative
+    # "built-in/..." that would land beside the process's working directory.
+    assert shot.is_absolute()
+    assert "built-in" not in shot.parts
+
+    monkeypatch.setenv(qml_shell.SHOT_ENV, str(tmp_path / "shot.png"))
+    assert qml_shell._shot_path() == tmp_path / "shot.png"
+
+
+def test_shot_path_lives_under_the_source_tree_in_a_development_checkout(monkeypatch):
+    """Only a real module file has parents worth counting."""
+    import qml_shell
+
+    monkeypatch.delenv(qml_shell.SHOT_ENV, raising=False)
+    shot = qml_shell._shot_path()
+    # <repo>/out/qml-shell/shot.png: app/src/qml_shell.py counted two parents up.
+    assert shot == Path(qml_shell.__file__).resolve().parents[2] / "out" / "qml-shell" / "shot.png"
 
 
 # ── 正文拼接 ────────────────────────────────────────────────────────────
