@@ -1,0 +1,19 @@
+190606336	dist/ai_upper/site-packages/PySide6/Qt/lib/libQt6WebEngineCore.so.6
+11698477	dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_devtools_resources.pak
+2452411	dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources.pak
+702456	dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+203488	dist/ai_upper/site-packages/PySide6/QtWebEngineWidgets.abi3.so
+199336	dist/ai_upper/site-packages/PySide6/Qt/lib/libQt6WebEngineWidgets.so.6
+197297	dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources_200p.pak
+151476	dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources_100p.pak
+132945	dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+136680	dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+264976	dist/ai_upper/site-packages/PySide6/Qt/lib/libQt6WebChannel.so.6
+16054	dist/ai_upper/assets/renderer/qwebchannel.js
+locales: 44977323 B, files=53
+renderer: 3309588 B, files=10
+assets(repo): 3341293 B
+dist/assets: 3522215 B
+personas
+qml
+renderer

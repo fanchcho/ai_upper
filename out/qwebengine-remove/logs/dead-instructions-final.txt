@@ -1,0 +1,7 @@
+# §5.2 死指令扫描：是否还有「按 AI_UPPER_UI=web 启动第二条界面」这类可执行指令
+# 命令：grep -rn "UI=web\|ui=web\|DEVA_UI" --exclude-dir=out --exclude-dir=.git .
+
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+
+# 再看 README 里对「第二条界面」的表述
+492:应用入口是 `app/src/main.py`（源码树与打包产物共用这一条启动路径），启动后打开 QML 三栏壳（`app/src/qml/Main.qml`，正文是 `QTextDocument`）；仓库里没有第二条界面路线。CI 与 smoke 通过 `AI_UPPER_HEADLESS=1` 用 offscreen 平台构建同一个窗口后立即退出，因此既证明 Qt 可用，又不会卡住无显示环境。

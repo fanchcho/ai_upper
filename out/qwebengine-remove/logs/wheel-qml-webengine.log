@@ -1,0 +1,162 @@
+== pyside6_essentials-6.11.2-cp310-abi3-macosx_13_0_universal2.whl bytes=110,800,753 entries=2828
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.dylib
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.dylib
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.dylib
+    QtQuick lib        YES  PySide6/Qt/lib/QtQuick.framework/Versions/A/QtQuick
+    QtQml lib          YES  PySide6/Qt/lib/QtQml.framework/Versions/A/QtQml
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_34_x86_64.whl bytes=80,108,947 entries=2456
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+    QtQuick lib        YES  PySide6/Qt/lib/libQt6Quick.so.6
+    QtQml lib          YES  PySide6/Qt/lib/libQt6Qml.so.6
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl bytes=79,575,497 entries=2453
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+    QtQuick lib        YES  PySide6/Qt/lib/libQt6Quick.so.6
+    QtQml lib          YES  PySide6/Qt/lib/libQt6Qml.so.6
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== pyside6_essentials-6.11.2-cp310-abi3-win_amd64.whl bytes=76,913,043 entries=2471
+    QtQuick qmldir     YES  PySide6/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/qml/QtQuick/Controls/qtquickcontrols2plugin.dll
+    QtQuick/Layouts    YES  PySide6/qml/QtQuick/Layouts/qquicklayoutsplugin.dll
+    QtQuick/Shapes     YES  PySide6/qml/QtQuick/Shapes/qmlshapesplugin.dll
+    QtQuick lib        YES  PySide6/Qt6Quick.dll
+    QtQml lib          YES  PySide6/Qt6Qml.dll
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== pyside6_essentials-6.11.2-cp310-abi3-win_arm64.whl bytes=58,125,520 entries=2459
+    QtQuick qmldir     YES  PySide6/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/qml/QtQuick/Controls/qtquickcontrols2plugin.dll
+    QtQuick/Layouts    YES  PySide6/qml/QtQuick/Layouts/qquicklayoutsplugin.dll
+    QtQuick/Shapes     YES  PySide6/qml/QtQuick/Shapes/qmlshapesplugin.dll
+    QtQuick lib        YES  PySide6/Qt6Quick.dll
+    QtQml lib          YES  PySide6/Qt6Qml.dll
+    WebEngineCore      no   
+    QtWebEngineProcess no   
+== PySide6_Essentials-6.6.3-cp38-abi3-macosx_11_0_universal2.whl bytes=142,993,901 entries=1534
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.dylib
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.dylib
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.dylib
+    QtQuick lib        YES  PySide6/Qt/lib/QtQuick.framework/Versions/A/QtQuick
+    QtQml lib          YES  PySide6/Qt/lib/QtQml.framework/Versions/A/QtQml
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== PySide6_Essentials-6.6.3-cp38-abi3-manylinux_2_28_x86_64.whl bytes=80,165,416 entries=1438
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+    QtQuick lib        YES  PySide6/Qt/lib/libQt6Quick.so.6
+    QtQml lib          YES  PySide6/Qt/lib/libQt6Qml.so.6
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== PySide6_Essentials-6.6.3-cp38-abi3-manylinux_2_31_aarch64.whl bytes=64,572,995 entries=1438
+    QtQuick qmldir     YES  PySide6/Qt/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+    QtQuick/Layouts    YES  PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+    QtQuick/Shapes     YES  PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+    QtQuick lib        YES  PySide6/Qt/lib/libQt6Quick.so.6
+    QtQml lib          YES  PySide6/Qt/lib/libQt6Qml.so.6
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== PySide6_Essentials-6.6.3-cp38-abi3-win_amd64.whl bytes=75,031,889 entries=1386
+    QtQuick qmldir     YES  PySide6/qml/QtQuick/qmldir
+    QtQuick/Controls   YES  PySide6/qml/QtQuick/Controls/qtquickcontrols2plugin.dll
+    QtQuick/Layouts    YES  PySide6/qml/QtQuick/Layouts/qquicklayoutsplugin.dll
+    QtQuick/Shapes     YES  PySide6/qml/QtQuick/Shapes/qmlshapesplugin.dll
+    QtQuick lib        YES  PySide6/Qt6Quick.dll
+    QtQml lib          YES  PySide6/Qt6Qml.dll
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyi
+    QtWebEngineProcess no   
+== pyside6_addons-6.11.2-cp310-abi3-macosx_13_0_universal2.whl bytes=332,047,075 entries=1648
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/lib/QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
+== pyside6_addons-6.11.2-cp310-abi3-manylinux_2_34_x86_64.whl bytes=175,062,576 entries=1299
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/libexec/QtWebEngineProcess
+== pyside6_addons-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl bytes=170,827,254 entries=1301
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/libexec/QtWebEngineProcess
+== pyside6_addons-6.11.2-cp310-abi3-win_amd64.whl bytes=168,208,836 entries=1313
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyd
+    QtWebEngineProcess YES  PySide6/QtWebEngineProcess.exe
+== pyside6_addons-6.11.2-cp310-abi3-win_arm64.whl bytes=35,807,245 entries=1201
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      no   
+    QtWebEngineProcess no   
+== PySide6_Addons-6.6.3-cp38-abi3-macosx_11_0_universal2.whl bytes=250,159,651 entries=1332
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/lib/QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
+== PySide6_Addons-6.6.3-cp38-abi3-manylinux_2_28_x86_64.whl bytes=125,913,842 entries=1139
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/libexec/QtWebEngineProcess
+== PySide6_Addons-6.6.3-cp38-abi3-manylinux_2_31_aarch64.whl bytes=111,711,144 entries=1139
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.abi3.so
+    QtWebEngineProcess YES  PySide6/Qt/libexec/QtWebEngineProcess
+== PySide6_Addons-6.6.3-cp38-abi3-win_amd64.whl bytes=104,068,645 entries=1161
+    QtQuick qmldir     no   
+    QtQuick/Controls   no   
+    QtQuick/Layouts    no   
+    QtQuick/Shapes     no   
+    QtQuick lib        no   
+    QtQml lib          no   
+    WebEngineCore      YES  PySide6/QtWebEngineCore.pyd
+    QtWebEngineProcess YES  PySide6/QtWebEngineProcess.exe

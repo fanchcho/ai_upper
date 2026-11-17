@@ -1,0 +1,7 @@
+# HEAD=0433783 源码树 offscreen 启动（本轮补测后再拍）
+$ AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/qwe-final3-home AI_UPPER_QML_SHOT=/tmp/qwe-final3-src.png .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='Deva' sessions=0 active='' plain=False turn_stop='' deltas=0 home=/tmp/qwe-final3-home png=/tmp/qwe-final3-src.png size=1280x820
+EXIT=0
+23873 /tmp/qwe-final3-src.png
+
+md5: dbdddec9793656631b9041db4d2b3030

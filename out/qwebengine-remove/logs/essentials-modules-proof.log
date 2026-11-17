@@ -1,0 +1,9 @@
+PySide6 6.11.2 from /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/__init__.py
+ok  PySide6.QtCore /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ok  PySide6.QtGui /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ok  PySide6.QtWidgets /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ok  PySide6.QtQml /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ok  PySide6.QtQuick /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+ok  PySide6.QtSvg /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtSvg.abi3.so
+ok  PySide6.QtNetwork /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtNetwork.abi3.so
+distributions: ['PySide6_Essentials', 'Pygments', 'SecretStorage', 'annotated-types', 'anyio', 'certifi', 'cffi', 'cryptography', 'h11', 'httpcore', 'httpx', 'idna', 'iniconfig', 'jaraco.classes', 'jaraco.context', 'jaraco.functools', 'jeepney', 'keyring', 'more-itertools', 'packaging', 'pip', 'pluggy', 'pycparser', 'pydantic', 'pydantic_core', 'pytest', 'shiboken6', 'typing-inspection', 'typing_extensions']

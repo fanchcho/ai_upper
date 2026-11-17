@@ -1,0 +1,155 @@
+[其它配置] app/requirements.txt:6: # 元包 PySide6 会连带装 PySide6-Addons（含 QtWebEngine 等整套 Chromium，约 240 MiB），
+[其它配置] app/pyproject.toml:29:     # 拉进 PySide6-Addons（QtWebEngine 等整套 Chromium，约 240 MiB），本工程不用。
+[其它配置] app/pyproject.toml:171: # "all" ships every Qt module, including the ~450 MB QtWebEngine.
+[Python 注释/文档字符串（不执行）] app/src/main.py:8: 装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+[Python 注释/文档字符串（不执行）] app/src/mvvm/services/attachments.py:14: 八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+[Python 注释/文档字符串（不执行）] app/src/mvvm/webui/bridge.py:3: 本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:44:     for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:46:     for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:52:     _touch(pyside / "Qt" / "libexec" / "QtWebEngineProcess")
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:71:     for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:73:     for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore", "QtPdf", "QtSql", "QtMultimedia"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:86:     _touch(pyside / "QtWebEngineProcess.exe")
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:222:         if name == "QtWebEngineCore.framework":
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:239:     assert not (pyside / "QtWebEngineCore.abi3.so").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:241:     assert not (pyside / "Qt" / "lib" / "QtWebEngineCore.framework").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:294:     assert not (pyside / "QtWebEngineCore.pyd").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:311:     assert not (pyside / "QtWebEngineProcess.exe").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:462:     assert (pyside / "QtWebEngineCore.abi3.so").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:505:     tree are build payload, ``resources`` belongs to QtWebEngineCore, and
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:543:     prune(site, TARGETS["windows-x86_64"], {"QtCore", "QtWebEngineCore"})
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:681:     _touch(pyside / "QtWebEngineCore.pyi")
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:697:     assert not (pyside / "QtWebEngineCore.pyi").exists()
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:838:     """A kept QtWebEngineCore without its helper process renders nothing.
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:840:     ``QtWebEngineProcess`` is spawned by QtWebEngineCore when a view attaches,
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:857:         if name.startswith("QtWebEngineCore"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:865:     prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:867:     helper = pyside / "Qt" / "libexec" / "QtWebEngineProcess"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:868:     assert helper.exists(), "QtWebEngineCore ships without the process it spawns"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:876:     """The helper is dead weight once QtWebEngineCore itself is gone."""
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:890:     """Chromium's locale packs belong to QtWebEngineCore, not to Qt translations.
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:908:     prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:933:     prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:946:     """No QtWebEngineCore, no Chromium locale packs."""
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:965:     PySide6's win_arm64 wheels ship no QtWebEngineCore at all. When the web
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:966:     fallback still existed, ``web_shell_window`` imported it behind
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:978:         f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:980:         "    QtWebEngineCore = None\n"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:981:         "    QtWebEngineWidgets = None\n"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:989:     assert optional == {"QtWebEngineCore", "QtWebEngineWidgets"}
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1042:     guarded. ``QtWebChannel`` must not be required either: it was pulled in by
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1051:     webengine = {"QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick"}
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1054:     assert "QtWebChannel" not in required
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1073:     (pyside / "QtWebChannel.py").write_text("", encoding="utf-8")
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1080:         {"QtWebChannel", "QtWebEngineCore"},
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1083:     assert closure == {"QtWidgets", "QtCore", "QtWebChannel"}
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1085:     assert "QtWebEngineCore" in out, "an optional module missing from the wheel must be reported"
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1086:     assert "QtWebChannel" not in out.split("has no", 1)[1].split(";", 1)[0]
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1099:     with pytest.raises(RuntimeError, match="QtWebEngineCore"):
+[测试：断言/契约字符串] app/tests/test_qt_prune.py:1100:         qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
+[测试：断言/契约字符串] app/tests/test_mvvm.py:197:     was evaluated** are gone with the web entry: ``title_bar_overlay`` (the
+[测试：断言/契约字符串] app/tests/test_mvvm.py:198:     frameless WebEngine window's own title bar), ``web_shell_window`` (the
+[测试：断言/契约字符串] app/tests/test_mvvm.py:199:     QWebEngineView host) and the ``DevaBridge`` QObject inside
+[测试：断言/契约字符串] app/tests/test_mvvm.py:216:     for gone in ("views.web_shell_window", "views.title_bar_overlay"):
+[测试：断言/契约字符串] app/tests/test_settings_write.py:3: **为什么存在**：原 `app/tests/test_web_settings_write.py` 经已删除的 `DevaBridge`
+[测试：断言/契约字符串] app/tests/test_settings_write.py:4: （QtWebChannel）调用同一批服务方法。桥删掉后那批用例消失，但
+[测试：断言/契约字符串] app/tests/test_third_party.py:405:     PySide6 marks ``Qt/libexec/QtWebEngineProcess`` 0o100755 in the archive;
+[测试：断言/契约字符串] app/tests/test_third_party.py:414:         helper = zipfile.ZipInfo("demo_pkg/Qt/libexec/QtWebEngineProcess")
+[测试：断言/契约字符串] app/tests/test_third_party.py:424:     helper_path = site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess"
+[测试：断言/契约字符串] app/tests/test_deliverables.py:15: 删除的 `DevaBridge` 通道层不再是产品代码。
+[测试：断言/契约字符串] app/tests/test_host_write.py:3: **为什么存在**：原 `app/tests/test_web_chat_write.py` 经已删除的 `DevaBridge`
+[测试：断言/契约字符串] app/tests/test_host_write.py:4: （QtWebChannel）调用同一套宿主方法；桥删掉后，那批用例跟着消失，但宿主本身
+[其它配置] app/pyproject.toml.example:154: # "all" ships every Qt module, including the ~450 MB QtWebEngine.
+[Python 注释/文档字符串（不执行）] tools/ai_upper/third_party.py:316:     (``Qt/libexec/QtWebEngineProcess``); the rule stays generic because any
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:3: A PySide6 install ships every Qt module, and QtWebEngineCore alone is roughly
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:88:     win_arm64 wheels ship no QtWebEngineCore at all (and PySide6-Essentials
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:464:     "QtWebEngineCore": {"webview"},
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:489: # every bundle that shipped QtWebEngineCore. It belongs to that module the same
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:583: # therefore has to ship beside it. ``QtWebEngineProcess`` is dlopen'd by
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:584: # QtWebEngineCore when the view attaches: a bundle that keeps the module but
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:588: MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:647:         helpers=(pyside / "QtWebEngineProcess.exe",),
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:841:     QtWebEngineCore for win_arm64), it is reported and skipped instead of
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:1108:     # whole directory took `QtWebEngineProcess` with it, so a bundle that kept
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:1109:     # QtWebEngineCore shipped without the process it spawns to render a page:
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:1145:     # QtWebEngineCore alone, so they go whenever that module is not imported.
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:1149:     if "QtWebEngineCore" not in modules:
+[Python 注释/文档字符串（不执行）] tools/ai_upper/qt_prune.py:1245:                 if "QtWebEngineCore" not in modules:
+[CI 配置注释] .github/workflows/validate.yml:218:           # imported QtWebEngine, and that is the only thing that needed them.
+[文档] README.md:242: 界面只需要 `QtCore` / `QtGui` / `QtWidgets` / `QtQml` / `QtQuick`，都在 `PySide6-Essentials` 里；元包 `PySide6` 会连带装 `PySide6-Addons`（包含 QtWebEngine 整套 Chromium，约 240 MiB），本工程不使用。
+[文档] README.md:306: PySide6 的 wheel 会带上整个 Qt（`PySide6-Addons` 一档就含 QtWebEngine，其 `QtWebEngineCore` 约 450 MB）。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:11: > QtWebEngine 移除而删除，那些命令无法再重放；当前截图入口是
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:18: ### 1. 界面载体：QtWebEngine 承载原版渲染层
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:24: | 窗口几何与原版一致：1280×820，最小 940×600，无边框 | `app/src/mvvm/views/web_shell_window.py` |
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:25: | 自绘 `titleBarOverlay`：右上角 96×40 实色，三个 32×40 按钮 | `app/src/mvvm/views/title_bar_overlay.py` |
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:87: - 原版 `:95`（Electron 33.4.11）、移植版 `:96`（PySide6 6.11.2 + QtWebEngine），**点击坐标完全相同**。
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:232: | 打包产物起 Web 承载窗口 | 裁剪已保留 `QtWebEngineCore`/`QtWebChannel` | 入口尚未切到 Web 窗口，产物起的仍是原生窗口 |
+[文档] docs/STAGE5-CLOSEOUT-REPORT.md:255: f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+[文档] docs/BUILD-PROGRESS.md:9: > `app/tests/test_web_*.py` 已随 QtWebEngine 移除一并删除（见
+[文档] docs/BUILD-PROGRESS.md:30: ?? app/src/mvvm/views/title_bar_overlay.py  ?? app/src/mvvm/views/web_shell_window.py
+[文档] docs/BUILD-PROGRESS.md:36: **结论：复用原版渲染层资产 + QtWebEngine 承载 + Python 桥接。**
+[文档] docs/BUILD-PROGRESS.md:45: - `app/src/mvvm/views/web_shell_window.py`：QtWebEngine 承载，窗口几何与原版一致；
+[文档] docs/BUILD-PROGRESS.md:46: - `app/src/mvvm/views/title_bar_overlay.py`：自绘窗口控件，复刻 Electron Linux 的
+[文档] docs/BUILD-PROGRESS.md:88: f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+[文档] docs/BUILD-PROGRESS.md:118: f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+[文档] docs/BUILD-PROGRESS.md:164: | 写路径未接通 | 成立。`app/src/mvvm/webui/bridge.py` 只注册约 30 条只读通道；`chat:send`/`abort`/`create-session` 等 31 条 chat 通道**一条都没注册**；`web_shell_window.py` 没有 store/gateway/tools/VM 装配 | `bridge.py:136-172`（`_register_defaults`）、`web_shell_window.py:68-129`（构造里只建 bridge） |
+[文档] docs/BUILD-PROGRESS.md:338: 故端口不再自绘，改为 **QtWebEngine 承载 deva 构建产物（`app/assets/renderer`，只读拷贝）+
+[文档] docs/BUILD-PROGRESS.md:576: | `app/src/mvvm/views/web_shell_window.py`（改） | 构造里建 `WorkspaceGuard`、按 `DEVA_APP_WORKSPACE` 登记受信根、装配宿主与网关、注入桥；`DRAIN_INTERVAL_MS=50` 定时调 `host.drain` | `:97-127`、`:157-162` |
+[文档] docs/BUILD-PROGRESS.md:648: 1. **真页面 + 真 provider**（`tests/test_web_e2e_stream.py`）：真的 QtWebEngine 载入
+[文档] docs/BUILD-PROGRESS.md:851: 结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+[文档] docs/BUILD-PROGRESS.md:859: | 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改**（该薄入口已于 §1.16 并入 `main.py` 并删除） |
+[文档] docs/BUILD-PROGRESS.md:863: | 调用点 | `web_shell_window.py`、`persona_store.py` | `ASSETS_DIR = assets_root() / "renderer"`；角色资产走 `assets_root() / "personas"` |
+[文档] docs/BUILD-PROGRESS.md:892: $ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+[文档] docs/BUILD-PROGRESS.md:893: dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+[文档] docs/BUILD-PROGRESS.md:894: dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+[文档] docs/BUILD-PROGRESS.md:895: dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+[文档] docs/BUILD-PROGRESS.md:941: 2. **`QtWebEngineProcess` 丢失 execute 位**：`third_party._extract_wheel()` 用
+[文档] docs/BUILD-PROGRESS.md:943:    产物启动日志 `LaunchProcess: failed to execvp: …/QtWebEngineProcess`，窗口空白。
+[文档] docs/BUILD-PROGRESS.md:950:    修：该目录按 `QtWebEngineCore` 归属判定，并单独走 `qt_locales` 允许清单
+[文档] docs/BUILD-PROGRESS.md:977:   且被 `views/web_shell_window.py:139` 与端口启动器共用。
+[文档] docs/BUILD-PROGRESS.md:979:   `web_shell_window.py:135-138` 与 `assembly.py:87-92` 里已有实现，未随目录丢失。
+[文档] docs/BUILD-PROGRESS.md:1006: 窗口、桥、宿主、渲染层资产一律未动（`DevaWebWindow` 仍在
+[文档] docs/BUILD-PROGRESS.md:1007: `app/src/mvvm/views/web_shell_window.py:120`）。
+[文档] docs/BUILD-PROGRESS.md:1017:   分布在 `mvvm/webui/{assembly,bridge,host}.py` 与 `mvvm/views/web_shell_window.py`，
+[文档] docs/BUILD-PROGRESS.md:1025: $ grep -rn -e 'deva_web' -e 'DevaWebWindow' app/src app/tests tools .github docs README.md | sort
+[文档] docs/BUILD-PROGRESS.md:1031: `DevaWebWindow` 仍是真实类名，保留。
+[文档] docs/BUILD-PROGRESS.md:1104: | 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`；入口已于 2026-11-15 收敛到 `app/src/main.py` 并重新构建/启动验过（§1.16.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+[文档] docs/BUILD-PROGRESS.md:1105: | Windows / macOS 打包产物 | 同一套 `package()` / `qt_prune` 代码路径，有单测覆盖两平台的目录布局 | **未构建、未启动**。`qt_prune` 保留了 `QtWebEngineProcess.exe` 与 `qtwebengine_locales` 的 Windows 布局，但没有真产物证据；不许拿 linux 结果冒充 |
+[文档] docs/BUILD-PROGRESS.md:1180: | `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
+[文档] docs/BUILD-PROGRESS.md:1183: | `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
+[文档] docs/DEVELOPMENT_GUIDE.md:441: PySide6 的元包装上整个 Qt（Addons 一档里的 `QtWebEngineCore` 就约 450 MB）。本应用只声明 `PySide6-Essentials`，Addons 根本不会被下载；`qt = "imports"` 再按 import 裁掉 Essentials 里没用到的那部分。开启：
+[文档] docs/DEVELOPMENT_GUIDE.md:576: `examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`（两者只有 Addons 才带，本应用不再声明它），以及
+[文档] docs/audit/qml-shell-audit.md:14: > 2026-11-17 更新：QtWebEngine 承载窗口、`DevaBridge` 通道层、React 渲染层资产
+[文档] docs/audit/qml-shell-audit.md:22: - 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+[文档] docs/audit/qml-shell-audit.md:24:   （`:195`），`QWebChannel` 注册 `DevaBridge`（`:184`），无边框 + `TitleBarOverlay`（`:200–207`）；
+[文档] docs/audit/qml-shell-audit.md:25: - 数据/事件：`app/src/mvvm/webui/bridge.py:62 class DevaBridge(QObject)`（789 行），
+[文档] docs/audit/qml-shell-audit.md:36: `docs/BUILD-PROGRESS.md` §0.2 记录的选型是“复用原版渲染层 + QtWebEngine”。
+[文档] docs/audit/qml-shell-audit.md:90: | 标题栏 | `app/src/mvvm/views/title_bar_overlay.py:38` `TitleBarOverlay(QWidget)` | `:27 TITLEBAR_HEIGHT = 40`、`:28 BUTTON_WIDTH = 32`；`:61` 三个按钮的矩形；`:98 paintEvent` 自绘最小化/最大化/关闭 |
+[文档] docs/audit/qml-shell-audit.md:98:   `web_shell_window.py:207 self.bridge.set_overlay_callback(self.overlay.set_dark)`，
+[文档] docs/audit/qml-shell-audit.md:234: - `windows-arm64` 已知红：PySide6 无 win_arm64 wheel（更无 QtWebEngineCore），
+[文档] docs/audit/qml-shell-audit.md:242: | `app/tests/test_mvvm.py:199–228` | 遍历 `mvvm` 全部模块可导入；**已无豁免项**，另断言 `views.web_shell_window` / `views.title_bar_overlay` 两个文件不得回潮 |
+[文档] docs/audit/qml-shell-audit.md:356: 4. **QtWebEngine 移除（已完成，2026-11-17）**：路线 B 的硬要求是不引入 QtWebEngine。
+[文档] docs/audit/qml-shell-audit.md:357:    `web_shell_window.py`、`title_bar_overlay.py`、`DevaBridge`、`app/assets/renderer`、
+[文档] docs/audit/IPC-158-LEDGER.md:5: > QtWebEngine 移除一并删除——它们统计的正是 `DevaBridge` 的 IPC 通道，而该桥对象
+[文档] docs/audit/IPC-158-LEDGER.md:52: | 16 | `browser:live-start` | `tab: string` | `boolean`（`pageById(tab)` 不存在时同步 false，否则为 `startLive` 的 Promise 结果） | main/services/browser/host.ts:579（handle） | — | 无（未实现，不计入通过数） | 未实现 —— 实时帧推流走 Electron capturePage 定时器，QtWebEngine 无对位接口 |
+[文档] docs/audit/IPC-158-LEDGER.md:59: | 23 | `browser:thumbnail` | `tab: string` | `string \| null`（`capturePage()` 后 `resize({ width: 480 })` 的 data URL） | main/services/browser/host.ts:639（handle） | — | 无（未实现，不计入通过数） | 未实现 —— 标签缩略图来自 capturePage，QtWebEngine 无对位接口 |
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:15: | 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web`（入口已于 2026-11-15 收敛到 `app/src/main.py`：同一命令现在为 `from main import main` → `1`、`PASS entry module Cythonized: main`，见 `docs/BUILD-PROGRESS.md` §1.16） |
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:16: | 2 | 产物含 QtWebEngine 运行载荷 | `find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \)` → 3 条；helper 权限 `-rwxr-xr-x` |
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:55:   `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:90: $ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:91: dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:92: dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:93: dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:127: | 2 | `QtWebEngineProcess` 丢 execute 位 | `LaunchProcess: failed to execvp: …/QtWebEngineProcess`，窗口空白 | `third_party._apply_wheel_mode()` 按 wheel `external_attr` 补 execute 位；测试 `test_wheel_execute_bits_survive_extraction` |
+[文档] docs/STAGE6-CLOSEOUT-REPORT.md:128: | 3 | Chromium locale pak 被当 Qt 翻译删掉 | 每次启动 `could not find the translation file for the current locale: en-US.pak` | `qt_prune` 把 `qtwebengine_locales` 按 `QtWebEngineCore` 归属判定，单独走允许清单（`zh_CN`↔`zh-CN` 归一，`en-US` 恒留）；3 条回归测试 |
+[文档] docs/ROADMAP-NEXT.md:85:   与 `webui.bridge` 的通道表为前提，随 QtWebEngine 一并移除，不再有可执行的验收对象；
+[文档] docs/ROADMAP-NEXT.md:134: - **已解除（2026-11-17）**：原先的 arm64 阻塞是 PySide6 从未发布含 `QtWebEngineCore`
+[文档] docs/ROADMAP-NEXT.md:147: （`app/tests/test_web_e2e_stream.py`）随 QtWebEngine 承载窗口一并删除，
+[文档] docs/ROADMAP-NEXT.md:414: 本工程已彻底移除 QtWebEngine（依赖面只有 `PySide6-Essentials`），**没有** `QWebEngineView`
+
+### 合计 148
+  文档: 70
+  测试：断言/契约字符串: 55
+  Python 注释/文档字符串（不执行）: 18
+  其它配置: 4
+  CI 配置注释: 1

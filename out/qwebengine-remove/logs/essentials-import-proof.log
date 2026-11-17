@@ -1,0 +1,10 @@
+=== 2026-11-17T08:13:38+08:00 纯 Essentials venv: 6.11.2 ===
+--- 五个界面模块导入 ---
+ok PySide6.QtCore /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ok PySide6.QtGui /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ok PySide6.QtWidgets /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ok PySide6.QtQml /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ok PySide6.QtQuick /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+sys.path ok
+--- WebEngine 模块在纯 Essentials 下不存在 ---
+ImportError: No module named 'PySide6.QtWebEngineWidgets'

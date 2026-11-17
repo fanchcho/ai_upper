@@ -1,0 +1,36 @@
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   empty  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   first-run  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   chat  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   search-open  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   search-results  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   search-none  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   ctx-menu  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   delete-confirm  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   model-picker  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   hover-thread  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   focus-composer  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   long-mid  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   long-bottom  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   settings-general  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   settings-models  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   settings-extensions  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   settings-about  rc=0
+scripts/parity/qml_pages_all.sh: line 29: identify: command not found
+ok   dark-chat  rc=0

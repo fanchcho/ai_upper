@@ -1,0 +1,8 @@
+# 复核：当前 dist 体积（应等于 du-after.txt 的 256453777）
+256485484	dist/ai_upper
+256M	dist/ai_upper
+# 当前 dist 的 WebEngine 命中数
+0
+# dist/assets 目录
+personas
+qml

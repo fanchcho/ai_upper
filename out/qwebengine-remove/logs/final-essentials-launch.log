@@ -1,0 +1,15 @@
+### 命令
+cd app/src && AI_UPPER_HOME=/tmp/qwe-ess-home-final AI_UPPER_HEADLESS=1 AI_UPPER_QML_SHOT=/tmp/qwe-ess-final.png /tmp/qwe-ess-venv/bin/python main.py
+
+### 解释器与依赖
+3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]
+PySide6 6.11.2 /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/__init__.py
+PySide6_Essentials 6.11.2
+shiboken6          6.11.2
+
+### 实跑
+QML OK platform=offscreen title='Deva' sessions=0 active='' plain=False turn_stop='' deltas=0 home=/tmp/qwe-ess-home-final png=/tmp/qwe-ess-final.png size=1280x820
+EXIT=0
+
+### 产物
+-rw-r--r-- 1 root root 23873 Nov 17 08:30 /tmp/qwe-ess-final.png

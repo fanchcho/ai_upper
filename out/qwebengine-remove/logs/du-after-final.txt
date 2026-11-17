@@ -1,0 +1,4 @@
+# 权威重建（HEAD=4bea1ba，命令：PATH=.venv/bin:$PATH .venv/bin/python tools/build.py --target linux-arm64）
+# 日志：build-final3.log，EXIT=0
+256453593	dist/ai_upper
+256M	dist/ai_upper

@@ -1,0 +1,9 @@
+# 重建产物（build-final3.log, HEAD=4bea1ba）headless 实跑
+$ AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/qwe-final-pkg-home AI_UPPER_QML_SHOT=/tmp/qwe-final-pkg2.png dist/ai_upper/ai_upper
+Detected locale "C" with character encoding "ANSI_X3.4-1968", which is not UTF-8.
+Qt depends on a UTF-8 locale, and has switched to "C.UTF-8" instead.
+If this causes problems, reconfigure your locale. See the locale(1) manual
+for more information.
+QML OK platform=offscreen title='Deva' sessions=0 active='' plain=False turn_stop='' deltas=0 home=/home/agent/shared_workspace/ai_upper/dist/ai_upper png=/tmp/qwe-final-pkg2.png size=1280x820
+EXIT=0
+-rw-r--r-- 1 root root 23873 Nov 17 09:31 /tmp/qwe-final-pkg2.png

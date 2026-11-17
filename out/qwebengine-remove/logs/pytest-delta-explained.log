@@ -1,0 +1,31 @@
+# 逐文件用例数：基线 1d53e4a（/tmp/qwe-baseline 工作树）vs HEAD
+
+### 差异（只有这些文件变了）
+15c15
+<      29 tests/test_deliverables.py
+---
+>      26 tests/test_deliverables.py
+19a20
+>      26 tests/test_host_write.py
+48a50
+>      30 tests/test_settings_write.py
+56,60d57
+<      26 tests/test_web_attachments.py
+<      23 tests/test_web_chat_write.py
+<       1 tests/test_web_e2e_stream.py
+<      30 tests/test_web_settings_write.py
+<      20 tests/test_web_shell_modules.py
+
+### 合计
+基线 collected: 1256
+HEAD  collected: 1209
+
+### 换算
+删除：test_web_attachments 26 + test_web_chat_write 23 + test_web_e2e_stream 1 + test_web_settings_write 30 + test_web_shell_modules 20 = 100
+新增：test_host_write 26 + test_settings_write 30 = 56
+test_deliverables：29 -> 26（-3，删掉 5 个 bridge 用例，补 2 个 store 往返用例）
+净计：1256 - 100 + 56 - 3 = 1209
+
+### 通过/跳过折算（1250P/6S -> 1204P/5S）
+删掉的 100 条里只有 test_web_e2e_stream 那 1 条是 skip（需真 provider），其余 99 条原先 passed
+passed = 1250 - 99 + 56 - 3 = 1204 ；skipped = 6 - 1 = 5 ；新增失败 = 0

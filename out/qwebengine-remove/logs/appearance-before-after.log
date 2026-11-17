@@ -1,0 +1,38 @@
+# 复核：删除前后同一页面实拍逐像素一致（证明 QML 壳外观未变）
+# 用法与 scripts/parity/qml_page_shot.sh 一致：config 换页时先复制成独立 home 的 config.json
+
+== chat (config=config.json)
+   baseline exit=0 stderr=0B
+   head     exit=0 stderr=0B
+   IDENTICAL md5=16efd3b52fef50c19700500525eed888
+   baseline stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-base-chat png=/tmp/shots-baseline/chat.png size=1280x820
+   head     stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-head-chat png=/tmp/shots-head/chat.png size=1280x820
+
+== settings-general (config=config.json)
+   baseline exit=0 stderr=0B
+   head     exit=0 stderr=0B
+   IDENTICAL md5=12a7243019c97c9a1038ded91ca4e034
+   baseline stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-base-settings-general png=/tmp/shots-baseline/settings-general.png size=1280x820
+   head     stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-head-settings-general png=/tmp/shots-head/settings-general.png size=1280x820
+
+== dark-chat (config=config-dark.json)
+   baseline exit=0 stderr=0B
+   head     exit=0 stderr=0B
+   IDENTICAL md5=fc62b2eca19a90bd67af184d08e4fd8e
+   baseline stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-base-dark-chat png=/tmp/shots-baseline/dark-chat.png size=1280x820
+   head     stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-head-dark-chat png=/tmp/shots-head/dark-chat.png size=1280x820
+
+== model-picker (config=config.json)
+   baseline exit=0 stderr=0B
+   head     exit=0 stderr=0B
+   IDENTICAL md5=e408e4c39934ca1a49efd82cead63538
+   baseline stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-base-model-picker png=/tmp/shots-baseline/model-picker.png size=1280x820
+   head     stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-head-model-picker png=/tmp/shots-head/model-picker.png size=1280x820
+
+== ctx-menu (config=config.json)
+   baseline exit=0 stderr=0B
+   head     exit=0 stderr=0B
+   IDENTICAL md5=ae1e527719f2246ca9e74a5b2eed1daa
+   baseline stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-base-ctx-menu png=/tmp/shots-baseline/ctx-menu.png size=1280x820
+   head     stdout: QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/home-head-ctx-menu png=/tmp/shots-head/ctx-menu.png size=1280x820
+

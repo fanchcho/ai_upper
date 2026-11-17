@@ -1,0 +1,27 @@
+# 三轮 HEAD 截图的差异：全部只落在 x=289..295、y=70..779 这一条 6-7px 竖带内。
+# 该列是会话列表里的相对时间标签（"21 hr ago" / "22 hr ago" / "23 hr ago"），
+# 每轮拍摄时间不同，相对小时数跨过整点，只有这几个字形像素变化。
+# 判定：不是渲染差异。基线 vs HEAD 的对比用 appearance-before-after.log（同一轮、同一时刻）。
+
+# final2 (09:31) vs final3 (10:07)
+page                    diff-px  bbox
+chat                        477  (289, 70, 295, 779)
+ctx-menu                    409  (289, 70, 295, 779)
+dark-chat                   490  (289, 70, 295, 779)
+delete-confirm              408  (289, 70, 295, 779)
+empty                         0  -
+first-run                     0  -
+focus-composer              477  (289, 70, 295, 779)
+hover-thread                477  (289, 70, 295, 779)
+long-bottom                 477  (289, 70, 295, 779)
+long-mid                    477  (289, 70, 295, 779)
+model-picker                477  (289, 70, 295, 779)
+search-none                 477  (289, 70, 295, 779)
+search-open                 477  (289, 70, 295, 779)
+search-results              477  (289, 70, 295, 779)
+settings-about              129  (289, 70, 295, 779)
+settings-extensions         129  (289, 70, 295, 779)
+settings-general            129  (289, 70, 295, 779)
+settings-models             129  (289, 70, 295, 779)
+
+# 合计差异像素 6116；所有 bbox 的 x 都落在 289..295，无一处越出该列。

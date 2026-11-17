@@ -1,0 +1,62 @@
+### 1) 源码/测试/工具里对 WebEngine 模块的真实 import（应为空）
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+tools/ai_upper/qt_prune.py:3:A PySide6 install ships every Qt module, and QtWebEngineCore alone is roughly
+tools/ai_upper/qt_prune.py:88:    win_arm64 wheels ship no QtWebEngineCore at all (and PySide6-Essentials
+tools/ai_upper/qt_prune.py:464:    "QtWebEngineCore": {"webview"},
+tools/ai_upper/qt_prune.py:489:# every bundle that shipped QtWebEngineCore. It belongs to that module the same
+tools/ai_upper/qt_prune.py:584:# QtWebEngineCore when the view attaches: a bundle that keeps the module but
+tools/ai_upper/qt_prune.py:588:MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+tools/ai_upper/qt_prune.py:841:    QtWebEngineCore for win_arm64), it is reported and skipped instead of
+tools/ai_upper/qt_prune.py:1109:    # QtWebEngineCore shipped without the process it spawns to render a page:
+tools/ai_upper/qt_prune.py:1145:    # QtWebEngineCore alone, so they go whenever that module is not imported.
+tools/ai_upper/qt_prune.py:1149:    if "QtWebEngineCore" not in modules:
+tools/ai_upper/qt_prune.py:1245:                if "QtWebEngineCore" not in modules:
+app/tests/test_qt_prune.py:44:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:46:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:71:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:73:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore", "QtPdf", "QtSql", "QtMultimedia"):
+app/tests/test_qt_prune.py:222:        if name == "QtWebEngineCore.framework":
+app/tests/test_qt_prune.py:239:    assert not (pyside / "QtWebEngineCore.abi3.so").exists()
+app/tests/test_qt_prune.py:241:    assert not (pyside / "Qt" / "lib" / "QtWebEngineCore.framework").exists()
+app/tests/test_qt_prune.py:294:    assert not (pyside / "QtWebEngineCore.pyd").exists()
+app/tests/test_qt_prune.py:462:    assert (pyside / "QtWebEngineCore.abi3.so").exists()
+app/tests/test_qt_prune.py:505:    tree are build payload, ``resources`` belongs to QtWebEngineCore, and
+app/tests/test_qt_prune.py:543:    prune(site, TARGETS["windows-x86_64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:681:    _touch(pyside / "QtWebEngineCore.pyi")
+app/tests/test_qt_prune.py:697:    assert not (pyside / "QtWebEngineCore.pyi").exists()
+app/tests/test_qt_prune.py:838:    """A kept QtWebEngineCore without its helper process renders nothing.
+app/tests/test_qt_prune.py:840:    ``QtWebEngineProcess`` is spawned by QtWebEngineCore when a view attaches,
+app/tests/test_qt_prune.py:857:        if name.startswith("QtWebEngineCore"):
+app/tests/test_qt_prune.py:865:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:868:    assert helper.exists(), "QtWebEngineCore ships without the process it spawns"
+app/tests/test_qt_prune.py:876:    """The helper is dead weight once QtWebEngineCore itself is gone."""
+app/tests/test_qt_prune.py:890:    """Chromium's locale packs belong to QtWebEngineCore, not to Qt translations.
+app/tests/test_qt_prune.py:908:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:933:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:946:    """No QtWebEngineCore, no Chromium locale packs."""
+app/tests/test_qt_prune.py:965:    PySide6's win_arm64 wheels ship no QtWebEngineCore at all. When the web
+app/tests/test_qt_prune.py:978:        f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+app/tests/test_qt_prune.py:980:        "    QtWebEngineCore = None\n"
+app/tests/test_qt_prune.py:981:        "    QtWebEngineWidgets = None\n"
+app/tests/test_qt_prune.py:989:    assert optional == {"QtWebEngineCore", "QtWebEngineWidgets"}
+app/tests/test_qt_prune.py:1042:    guarded. ``QtWebChannel`` must not be required either: it was pulled in by
+app/tests/test_qt_prune.py:1051:    webengine = {"QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick"}
+app/tests/test_qt_prune.py:1054:    assert "QtWebChannel" not in required
+app/tests/test_qt_prune.py:1073:    (pyside / "QtWebChannel.py").write_text("", encoding="utf-8")
+app/tests/test_qt_prune.py:1080:        {"QtWebChannel", "QtWebEngineCore"},
+app/tests/test_qt_prune.py:1083:    assert closure == {"QtWidgets", "QtCore", "QtWebChannel"}
+app/tests/test_qt_prune.py:1085:    assert "QtWebEngineCore" in out, "an optional module missing from the wheel must be reported"
+app/tests/test_qt_prune.py:1086:    assert "QtWebChannel" not in out.split("has no", 1)[1].split(";", 1)[0]
+app/tests/test_qt_prune.py:1099:    with pytest.raises(RuntimeError, match="QtWebEngineCore"):
+app/tests/test_qt_prune.py:1100:        qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
+app/src/mvvm/services/attachments.py:14:八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+app/tests/test_settings_write.py:4:（QtWebChannel）调用同一批服务方法。桥删掉后那批用例消失，但
+app/tests/test_mvvm.py:199:    QWebEngineView host) and the ``DevaBridge`` QObject inside
+app/tests/test_host_write.py:4:（QtWebChannel）调用同一套宿主方法；桥删掉后，那批用例跟着消失，但宿主本身
+
+### 2) 产物里 WebEngine 文件（应为空）
+（命中数：0）
+
+### 3) 产物里的 renderer 资产（应为空）
+personas
+qml

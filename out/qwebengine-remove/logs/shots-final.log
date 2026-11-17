@@ -1,0 +1,45 @@
+### 夹具重建（此前 /tmp/fx-qml-home 已被清掉，直接跑 qml_pages_all.sh 会拍出空态）
+$ .venv/bin/python scripts/parity/make_pages_fixture.py /tmp/fx-pages
+$ .venv/bin/python scripts/parity/make_pages_config.py /tmp/fx-page-home --model
+$ .venv/bin/python scripts/parity/make_pages_config.py /tmp/fx-dark-home --theme dark --model && cp /tmp/fx-dark-home/config.json /tmp/fx-page-home/config-dark.json
+$ .venv/bin/python scripts/parity/make_qml_home.py /tmp/fx-qml-home /tmp/fx-pages/data/chats /tmp/fx-page-home
+
+### 逐页实拍
+ok   empty  rc=0
+ok   first-run  rc=0
+ok   chat  rc=0
+ok   search-open  rc=0
+ok   search-results  rc=0
+ok   search-none  rc=0
+ok   ctx-menu  rc=0
+ok   delete-confirm  rc=0
+ok   model-picker  rc=0
+ok   hover-thread  rc=0
+ok   focus-composer  rc=0
+ok   long-mid  rc=0
+ok   long-bottom  rc=0
+ok   settings-general  rc=0
+ok   settings-models  rc=0
+ok   settings-extensions  rc=0
+ok   settings-about  rc=0
+ok   dark-chat  rc=0
+
+### 尺寸（identify 未安装，改用 python 读 PNG 头）
+chat.png                   1280x820 94809 B
+ctx-menu.png               1280x820 98459 B
+dark-chat.png              1280x820 94266 B
+delete-confirm.png         1280x820 103410 B
+empty.png                  1280x820 23873 B
+first-run.png              1280x820 23873 B
+focus-composer.png         1280x820 94809 B
+hover-thread.png           1280x820 95063 B
+long-bottom.png            1280x820 94809 B
+long-mid.png               1280x820 94809 B
+model-picker.png           1280x820 99503 B
+search-none.png            1280x820 94406 B
+search-open.png            1280x820 95137 B
+search-results.png         1280x820 94431 B
+settings-about.png         1280x820 73862 B
+settings-extensions.png    1280x820 70582 B
+settings-general.png       1280x820 81413 B
+settings-models.png        1280x820 72377 B

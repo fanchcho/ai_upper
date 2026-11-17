@@ -1,0 +1,5 @@
+# 源码树启动（app/src/main.py，HEAD 工作树，非打包）
+$ AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/qwe-final-home AI_UPPER_QML_SHOT=/tmp/qwe-final-source2.png .venv/bin/python app/src/main.py
+QML OK platform=offscreen title='Deva' sessions=0 active='' plain=False turn_stop='' deltas=0 home=/tmp/qwe-final-home png=/tmp/qwe-final-source2.png size=1280x820
+EXIT=0
+-rw-r--r-- 1 root root 23873 Nov 17 09:31 /tmp/qwe-final-source2.png

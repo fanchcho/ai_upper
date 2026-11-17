@@ -1,0 +1,11 @@
+qml root: /tmp/qwe-ess-venv/lib/python3.13/site-packages/PySide6/Qt/qml exists: True
+ok   QtQuick
+ok   QtQuick/Controls
+ok   QtQuick/Layouts
+ok   QtQuick/Shapes
+ok   QtQuick/Templates
+ok   QtQuick/Window
+MISS QtQuick/Window/2
+QtWebEngine QML 目录: 无
+Qt/resources 目录: 不存在
+libexec: ['qmlcachegen', 'qmlimportscanner', 'qmltyperegistrar', 'rcc', 'uic']

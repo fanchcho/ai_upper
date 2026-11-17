@@ -1,0 +1,568 @@
+README.md:304:PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+HISTORY.md:280:模板默认带上一组安全规则：`**/*.pyi` 与 PySide2/PySide6 的 `examples`、`include`，runtime 的 `idlelib`、`tkinter`、`tcl`、`tests`、`test`；`opengl32sw.dll` 和 `qoffscreen` 仍由 Qt 裁剪的保留逻辑兜底。Qt 自动裁剪同时补上 `examples`/`include`、未使用 `QtWebEngineCore` 时的 `resources`，以及 `qwebgl` 插件（保留 `qoffscreen` 给 headless 冒烟）。
+.github/workflows/validate.yml:218:          # imported QtWebEngine, and that is the only thing that needed them.
+.github/workflows/validate.yml:436:          # 只有 AI_UPPER_UI=web 才装配 WebEngine 窗口（打印 `DEVA WEB OK … bridge=True`）。
+.github/workflows/validate.yml:439:              'DEVA WEB OK' in text and 'bridge=True' in text)
+audit-tools/ipc_status_table.py:91:    "browser:live-start": "未实现 —— 实时帧推流走 Electron capturePage 定时器，QtWebEngine 无对位接口",
+audit-tools/ipc_status_table.py:98:    "browser:thumbnail": "未实现 —— 标签缩略图来自 capturePage，QtWebEngine 无对位接口",
+CHANGELOG.md:475:- Qt pruning also left `PySide*/examples`, `PySide*/include`, the WebEngine `resources` directory when `QtWebEngineCore` was unused, and the `qwebgl` platform plugin, which drags QtQuick/QtQml and their libraries into the bundle.
+CHANGELOG.md:488:- `qt_prune.prune()` drops `examples` and `include` beside the binding/Qt root, drops `resources` when `QtWebEngineCore` is not kept, and drops `qwebgl` while retaining `qoffscreen` and the rest of the platform category.
+CHANGELOG.md:805:- A packaged PySide6 application shipped the entire Qt payload: 1.2 GB, of which `QtWebEngineCore` alone is about 450 MB of Chromium. Applications packaged by other tools are far smaller because they only bundle the Qt modules the application imports.
+CHANGELOG.md:833:- Nested macOS code such as `QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app` could not be ad-hoc signed inside-out, and a relative launcher invocation resolved the bundle root incorrectly.
+audit-tools/make_ipc_ledger.py:8:- 「是否真的注册在桥里」：真实构造 `DevaBridge`（Qt offscreen）后读 `channels()`，与判定表
+audit-tools/make_ipc_ledger.py:98:from mvvm.webui.bridge import DevaBridge
+audit-tools/make_ipc_ledger.py:100:b = DevaBridge(settings=SettingsService(home), personas=PersonaStore(home),
+tools/ai_upper/third_party.py:313:    imported: PySide6's ``Qt/libexec/QtWebEngineProcess`` is spawned by
+tools/ai_upper/third_party.py:314:    QtWebEngineCore. Without the bit the packaged application printed
+tools/ai_upper/third_party.py:315:    ``LaunchProcess: failed to execvp: …/QtWebEngineProcess`` and rendered a
+docs/STAGE5-CLOSEOUT-REPORT.md:13:### 1. 界面载体：QtWebEngine 承载原版渲染层
+docs/STAGE5-CLOSEOUT-REPORT.md:19:| 窗口几何与原版一致：1280×820，最小 940×600，无边框 | `app/src/mvvm/views/web_shell_window.py` |
+docs/STAGE5-CLOSEOUT-REPORT.md:20:| 自绘 `titleBarOverlay`：右上角 96×40 实色，三个 32×40 按钮 | `app/src/mvvm/views/title_bar_overlay.py` |
+docs/STAGE5-CLOSEOUT-REPORT.md:82:- 原版 `:95`（Electron 33.4.11）、移植版 `:96`（PySide6 6.11.2 + QtWebEngine），**点击坐标完全相同**。
+docs/STAGE5-CLOSEOUT-REPORT.md:177:bash scripts/parity/port_shots.sh /tmp/py-shots      /tmp/py-home
+docs/STAGE5-CLOSEOUT-REPORT.md:178:bash scripts/parity/port_shots.sh /tmp/py-shots-chat /tmp/py-home-chat /tmp/parity-fixture
+docs/STAGE5-CLOSEOUT-REPORT.md:187:DISPLAY=:96 DEVA_HOME=/tmp/py-home QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --disable-gpu" \
+docs/STAGE5-CLOSEOUT-REPORT.md:188:  .venv/bin/python scripts/parity/port_run.py
+docs/STAGE5-CLOSEOUT-REPORT.md:227:| 打包产物起 Web 承载窗口 | 裁剪已保留 `QtWebEngineCore`/`QtWebChannel` | 入口尚未切到 Web 窗口，产物起的仍是原生窗口 |
+docs/STAGE5-CLOSEOUT-REPORT.md:250:f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+docs/DEVELOPMENT_GUIDE.md:441:PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个约 450 MB。开启：
+docs/DEVELOPMENT_GUIDE.md:576:`examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`，以及
+docs/BUILD-PROGRESS.md:24:?? app/src/mvvm/views/title_bar_overlay.py  ?? app/src/mvvm/views/web_shell_window.py
+docs/BUILD-PROGRESS.md:30:**结论：复用原版渲染层资产 + QtWebEngine 承载 + Python 桥接。**
+docs/BUILD-PROGRESS.md:39:- `app/src/mvvm/views/web_shell_window.py`：QtWebEngine 承载，窗口几何与原版一致；
+docs/BUILD-PROGRESS.md:40:- `app/src/mvvm/views/title_bar_overlay.py`：自绘窗口控件，复刻 Electron Linux 的
+docs/BUILD-PROGRESS.md:82:f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+docs/BUILD-PROGRESS.md:112:f5e987b feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线
+docs/BUILD-PROGRESS.md:158:| 写路径未接通 | 成立。`app/src/mvvm/webui/bridge.py` 只注册约 30 条只读通道；`chat:send`/`abort`/`create-session` 等 31 条 chat 通道**一条都没注册**；`web_shell_window.py` 没有 store/gateway/tools/VM 装配 | `bridge.py:136-172`（`_register_defaults`）、`web_shell_window.py:68-129`（构造里只建 bridge） |
+docs/BUILD-PROGRESS.md:332:故端口不再自绘，改为 **QtWebEngine 承载 deva 构建产物（`app/assets/renderer`，只读拷贝）+
+docs/BUILD-PROGRESS.md:471:bash scripts/parity/port_shots.sh /tmp/py-shots /tmp/py-home
+docs/BUILD-PROGRESS.md:472:bash scripts/parity/port_shots.sh /tmp/py-shots-chat /tmp/py-home-chat /tmp/parity-fixture
+docs/BUILD-PROGRESS.md:481:DISPLAY=:96 DEVA_HOME=/tmp/py-home QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --disable-gpu" \
+docs/BUILD-PROGRESS.md:482:  .venv/bin/python scripts/parity/port_run.py
+docs/BUILD-PROGRESS.md:570:| `app/src/mvvm/views/web_shell_window.py`（改） | 构造里建 `WorkspaceGuard`、按 `DEVA_APP_WORKSPACE` 登记受信根、装配宿主与网关、注入桥；`DRAIN_INTERVAL_MS=50` 定时调 `host.drain` | `:97-127`、`:157-162` |
+docs/BUILD-PROGRESS.md:642:1. **真页面 + 真 provider**（`tests/test_web_e2e_stream.py`）：真的 QtWebEngine 载入
+docs/BUILD-PROGRESS.md:680:中断、重载会话）由 `scripts/parity/live_scenarios.py` 一次性补上。这个脚本刻意不写成
+docs/BUILD-PROGRESS.md:690:>     .venv/bin/python scripts/parity/live_scenarios.py \
+docs/BUILD-PROGRESS.md:712:`SecretsVault(backend="file")`（`live_scenarios.py::_open_window`），
+docs/BUILD-PROGRESS.md:845:结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+docs/BUILD-PROGRESS.md:846:`EXIT=0`，产物 headless 启动打印 `DEVA WEB OK … bridge=True`、`EXIT=0`。
+docs/BUILD-PROGRESS.md:853:| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改**（该薄入口已于 §1.16 并入 `main.py` 并删除） |
+docs/BUILD-PROGRESS.md:857:| 调用点 | `web_shell_window.py`、`persona_store.py` | `ASSETS_DIR = assets_root() / "renderer"`；角色资产走 `assets_root() / "personas"` |
+docs/BUILD-PROGRESS.md:886:$ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+docs/BUILD-PROGRESS.md:887:dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+docs/BUILD-PROGRESS.md:888:dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+docs/BUILD-PROGRESS.md:889:dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+docs/BUILD-PROGRESS.md:916:DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/ai_upper/assets/renderer/index.html bridge=True
+docs/BUILD-PROGRESS.md:935:2. **`QtWebEngineProcess` 丢失 execute 位**：`third_party._extract_wheel()` 用
+docs/BUILD-PROGRESS.md:937:   产物启动日志 `LaunchProcess: failed to execvp: …/QtWebEngineProcess`，窗口空白。
+docs/BUILD-PROGRESS.md:944:   修：该目录按 `QtWebEngineCore` 归属判定，并单独走 `qt_locales` 允许清单
+docs/BUILD-PROGRESS.md:971:  且被 `views/web_shell_window.py:139` 与端口启动器共用。
+docs/BUILD-PROGRESS.md:973:  `web_shell_window.py:135-138` 与 `assembly.py:87-92` 里已有实现，未随目录丢失。
+docs/BUILD-PROGRESS.md:988:`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`
+docs/BUILD-PROGRESS.md:1000:窗口、桥、宿主、渲染层资产一律未动（`DevaWebWindow` 仍在
+docs/BUILD-PROGRESS.md:1001:`app/src/mvvm/views/web_shell_window.py:120`）。
+docs/BUILD-PROGRESS.md:1006:  `QTWEBENGINE_CHROMIUM_FLAGS` 默认 `--no-sandbox --disable-gpu`、headless 时
+docs/BUILD-PROGRESS.md:1011:  分布在 `mvvm/webui/{assembly,bridge,host}.py` 与 `mvvm/views/web_shell_window.py`，
+docs/BUILD-PROGRESS.md:1019:$ grep -rn -e 'deva_web' -e 'DevaWebWindow' app/src app/tests tools .github docs README.md | sort
+docs/BUILD-PROGRESS.md:1025:`DevaWebWindow` 仍是真实类名，保留。
+docs/BUILD-PROGRESS.md:1051:DEVA WEB OK platform=offscreen title='ai_upper' url=…/app/assets/renderer/index.html bridge=True
+docs/BUILD-PROGRESS.md:1075:DEVA WEB OK platform=offscreen title='ai_upper' url=…/dist/ai_upper/assets/renderer/index.html bridge=True
+docs/BUILD-PROGRESS.md:1086:- CI 的 readiness 标记未变：`DEVA WEB OK` + `bridge=True`（`.github/workflows/validate.yml:442`），
+docs/BUILD-PROGRESS.md:1098:| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`；入口已于 2026-11-15 收敛到 `app/src/main.py` 并重新构建/启动验过（§1.16.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+docs/BUILD-PROGRESS.md:1099:| Windows / macOS 打包产物 | 同一套 `package()` / `qt_prune` 代码路径，有单测覆盖两平台的目录布局 | **未构建、未启动**。`qt_prune` 保留了 `QtWebEngineProcess.exe` 与 `qtwebengine_locales` 的 Windows 布局，但没有真产物证据；不许拿 linux 结果冒充 |
+docs/BUILD-PROGRESS.md:1174:| `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
+docs/BUILD-PROGRESS.md:1177:| `f5e987b` | feat(ui): QtWebEngine 承载原版渲染层 + Python 桥接 + 逐页截图流水线 |
+docs/audit/qml-shell-audit.md:12:**当前真正发布的界面不是 Qt 控件，而是 QtWebEngine 承载的原版 React 产物。**
+docs/audit/qml-shell-audit.md:15:- 入口模块：`app/src/main.py:58 _create_window()` → `DevaWebWindow`（原 `deva_web.py`
+docs/audit/qml-shell-audit.md:17:- 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+docs/audit/qml-shell-audit.md:18:  1280x820（`:140`），`QWebEngineView`（`:143`），加载 `assets_root()/renderer/index.html`
+docs/audit/qml-shell-audit.md:19:  （`:195`），`QWebChannel` 注册 `DevaBridge`（`:184`），无边框 + `TitleBarOverlay`（`:200–207`）；
+docs/audit/qml-shell-audit.md:20:- 数据/事件：`app/src/mvvm/webui/bridge.py:62 class DevaBridge(QObject)`（789 行），
+docs/audit/qml-shell-audit.md:22:- 渲染层资产：`app/assets/renderer/`（`index.html`、`shim.js`、`qwebchannel.js`、
+docs/audit/qml-shell-audit.md:31:`docs/BUILD-PROGRESS.md` §0.2 记录的选型是“复用原版渲染层 + QtWebEngine”。
+docs/audit/qml-shell-audit.md:85:| 标题栏 | `app/src/mvvm/views/title_bar_overlay.py:38` `TitleBarOverlay(QWidget)` | `:27 TITLEBAR_HEIGHT = 40`、`:28 BUTTON_WIDTH = 32`；`:61` 三个按钮的矩形；`:98 paintEvent` 自绘最小化/最大化/关闭 |
+docs/audit/qml-shell-audit.md:93:  `web_shell_window.py:207 self.bridge.set_overlay_callback(self.overlay.set_dark)`，
+docs/audit/qml-shell-audit.md:226:| `:440` 附近 | 断言 `'DEVA WEB OK' in text and 'bridge=True' in text` |
+docs/audit/qml-shell-audit.md:229:- `windows-arm64` 已知红：PySide6 无 win_arm64 wheel（更无 QtWebEngineCore），
+docs/audit/qml-shell-audit.md:237:| `app/tests/test_mvvm.py:199–228` | 遍历 `mvvm` 全部模块可导入；3 个需真实 Qt 的模块豁免（`title_bar_overlay`、`web_shell_window`、`webui.bridge`），豁免项必须真实存在 |
+docs/audit/qml-shell-audit.md:242:| 截图脚本 | `scripts/parity/{deva_original_shots.sh,port_shots.sh,port_run.py,compare.sh}`，Xvfb 1400x900、窗口 1280x820、`compare` 的 AE/fuzz3%/maxd≤10 |
+docs/audit/qml-shell-audit.md:351:4. **QtWebEngine 移除**：路线 B 的硬要求是不引入 QtWebEngine。现有 `web_shell_window.py`
+app/requirements.txt:6:# 元包 PySide6 会连带装 PySide6-Addons（含 QtWebEngine 等整套 Chromium，约 240 MiB），
+app/src/mvvm/services/attachments.py:245:        `data` 在本工程里经 JSON 传输，是 0..255 的整数数组（QtWebChannel 没有二进制通道）。
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+app/tests/test_package.py:10:    The packaged window loads `<bundle>/assets/renderer/index.html`; a bundle
+app/tests/test_third_party.py:405:    PySide6 marks ``Qt/libexec/QtWebEngineProcess`` 0o100755 in the archive;
+app/tests/test_third_party.py:414:        helper = zipfile.ZipInfo("demo_pkg/Qt/libexec/QtWebEngineProcess")
+app/tests/test_third_party.py:424:    helper_path = site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess"
+out/qml-shell/run2.sh:19:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 AI_UPPER_HOME=out/qml-shell/home-real \
+out/qml-shell/run2.sh:23:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 AI_UPPER_HOME=out/qml-shell/home-empty \
+out/qml-shell/run2.sh:27:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 AI_UPPER_HOME=out/qml-shell/home-empty \
+out/qml-shell/run.sh:9:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 .venv/bin/python app/src/main.py
+out/qml-shell/run.sh:12:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 AI_UPPER_QML_PLAIN=1 \
+out/qml-shell/PARITY-CLOSEOUT.md:63:| `scripts/parity/port_shots.sh:10` | **已改**为 `ROOT="$(cd "$(dirname "$0")/../.." && pwd)"` | 写死路径；改成从脚本位置推导，以后再改名也不用动 |
+out/qml-shell/PARITY-CLOSEOUT.md:129:旧版本这条命令打印的是 `DEVA WEB OK`，可据此确认默认路线已切换。）
+out/qml-shell/PARITY-CLOSEOUT.md:131:默认路线开关：`app/src/main.py:_qml_requested()` —— 默认 True；`AI_UPPER_UI=web|webengine`
+out/qml-shell/PARITY-CLOSEOUT.md:137:`AI_UPPER_UI=qml` 仍可强制；桌面 macOS 与 Linux/Windows 继续默认 QML。
+out/qml-shell/PARITY-CLOSEOUT.md:293:   `.github/workflows/validate.yml` 仍只认 `'DEVA WEB OK' and 'bridge=True'` → linux-x86_64 与
+out/qml-shell/PARITY-CLOSEOUT.md:298:   WebEngine（显式 `AI_UPPER_UI=qml` 可强制），此后 macos-arm64 在 `43719027496` 与
+out/qml-shell/PARITY-CLOSEOUT.md:306:4. `AI_UPPER_UI=web` 兜底分支未在本轮单独实跑（只改动了默认分支的选择逻辑）。
+tools/ai_upper/qt_prune.py:3:A PySide6 install ships every Qt module, and QtWebEngineCore alone is roughly
+tools/ai_upper/qt_prune.py:88:    win_arm64 wheels ship no QtWebEngineCore at all, and ``web_shell_window``
+tools/ai_upper/qt_prune.py:462:    "QtWebEngineCore": {"webview"},
+tools/ai_upper/qt_prune.py:487:# every bundle that shipped QtWebEngineCore. It belongs to that module the same
+tools/ai_upper/qt_prune.py:581:# therefore has to ship beside it. ``QtWebEngineProcess`` is dlopen'd by
+tools/ai_upper/qt_prune.py:582:# QtWebEngineCore when the view attaches: a bundle that keeps the module but
+tools/ai_upper/qt_prune.py:586:MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+tools/ai_upper/qt_prune.py:645:        helpers=(pyside / "QtWebEngineProcess.exe",),
+tools/ai_upper/qt_prune.py:839:    QtWebEngineCore for win_arm64), it is reported and skipped instead of
+tools/ai_upper/qt_prune.py:1106:    # whole directory took `QtWebEngineProcess` with it, so a bundle that kept
+tools/ai_upper/qt_prune.py:1107:    # QtWebEngineCore shipped without the process it spawns to render a page:
+tools/ai_upper/qt_prune.py:1143:    # QtWebEngineCore alone, so they go whenever that module is not imported.
+tools/ai_upper/qt_prune.py:1147:    if "QtWebEngineCore" not in modules:
+tools/ai_upper/qt_prune.py:1243:                if "QtWebEngineCore" not in modules:
+tools/ai_upper/native/bundle.py:287:        # QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app is rejected
+docs/STAGE6-CLOSEOUT-REPORT.md:15:| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web`（入口已于 2026-11-15 收敛到 `app/src/main.py`：同一命令现在为 `from main import main` → `1`、`PASS entry module Cythonized: main`，见 `docs/BUILD-PROGRESS.md` §1.16） |
+docs/STAGE6-CLOSEOUT-REPORT.md:16:| 2 | 产物含 QtWebEngine 运行载荷 | `find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \)` → 3 条；helper 权限 `-rwxr-xr-x` |
+docs/STAGE6-CLOSEOUT-REPORT.md:19:| 5 | 产物 headless 真起界面、桥对象在位 | `DEVA_HOME=/tmp/pack-smoke DEVA_APP_HEADLESS=1 QT_QPA_PLATFORM=offscreen ./dist/ai_upper/ai_upper` → `DEVA WEB OK platform=offscreen title='Deva' url=…/assets/renderer/index.html bridge=True`，`EXIT=0` |
+docs/STAGE6-CLOSEOUT-REPORT.md:55:  `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
+docs/STAGE6-CLOSEOUT-REPORT.md:90:$ find dist/ai_upper \( -name '*QtWebEngineCore*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \) | sort
+docs/STAGE6-CLOSEOUT-REPORT.md:91:dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+docs/STAGE6-CLOSEOUT-REPORT.md:92:dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+docs/STAGE6-CLOSEOUT-REPORT.md:93:dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+docs/STAGE6-CLOSEOUT-REPORT.md:114:DEVA WEB OK platform=offscreen title='Deva' url=/home/agent/shared_workspace/py_upper/dist/ai_upper/assets/renderer/index.html bridge=True
+docs/STAGE6-CLOSEOUT-REPORT.md:127:| 2 | `QtWebEngineProcess` 丢 execute 位 | `LaunchProcess: failed to execvp: …/QtWebEngineProcess`，窗口空白 | `third_party._apply_wheel_mode()` 按 wheel `external_attr` 补 execute 位；测试 `test_wheel_execute_bits_survive_extraction` |
+docs/STAGE6-CLOSEOUT-REPORT.md:128:| 3 | Chromium locale pak 被当 Qt 翻译删掉 | 每次启动 `could not find the translation file for the current locale: en-US.pak` | `qt_prune` 把 `qtwebengine_locales` 按 `QtWebEngineCore` 归属判定，单独走允许清单（`zh_CN`↔`zh-CN` 归一，`en-US` 恒留）；3 条回归测试 |
+docs/audit/IPC-158-LEDGER.md:47:| 16 | `browser:live-start` | `tab: string` | `boolean`（`pageById(tab)` 不存在时同步 false，否则为 `startLive` 的 Promise 结果） | main/services/browser/host.ts:579（handle） | — | 无（未实现，不计入通过数） | 未实现 —— 实时帧推流走 Electron capturePage 定时器，QtWebEngine 无对位接口 |
+docs/audit/IPC-158-LEDGER.md:54:| 23 | `browser:thumbnail` | `tab: string` | `string \| null`（`capturePage()` 后 `resize({ width: 480 })` 的 data URL） | main/services/browser/host.ts:639（handle） | — | 无（未实现，不计入通过数） | 未实现 —— 标签缩略图来自 capturePage，QtWebEngine 无对位接口 |
+out/qml-shell/packaged/run-packaged.sh:23:AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 AI_UPPER_QML_SHOT=$SHOT "$EXE"
+out/qml-shell/packaged/REPORT.md:6:4. 产物实跑：`AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 dist/ai_upper/ai_upper` → `QML OK ... size=1280x820`、`EXIT 0`（run.log:633/635）。
+app/tests/test_qt_prune.py:44:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:46:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:52:    _touch(pyside / "Qt" / "libexec" / "QtWebEngineProcess")
+app/tests/test_qt_prune.py:71:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+app/tests/test_qt_prune.py:73:    for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore", "QtPdf", "QtSql", "QtMultimedia"):
+app/tests/test_qt_prune.py:86:    _touch(pyside / "QtWebEngineProcess.exe")
+app/tests/test_qt_prune.py:222:        if name == "QtWebEngineCore.framework":
+app/tests/test_qt_prune.py:239:    assert not (pyside / "QtWebEngineCore.abi3.so").exists()
+app/tests/test_qt_prune.py:241:    assert not (pyside / "Qt" / "lib" / "QtWebEngineCore.framework").exists()
+app/tests/test_qt_prune.py:294:    assert not (pyside / "QtWebEngineCore.pyd").exists()
+app/tests/test_qt_prune.py:311:    assert not (pyside / "QtWebEngineProcess.exe").exists()
+app/tests/test_qt_prune.py:462:    assert (pyside / "QtWebEngineCore.abi3.so").exists()
+app/tests/test_qt_prune.py:505:    tree are build payload, ``resources`` belongs to QtWebEngineCore, and
+app/tests/test_qt_prune.py:543:    prune(site, TARGETS["windows-x86_64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:681:    _touch(pyside / "QtWebEngineCore.pyi")
+app/tests/test_qt_prune.py:697:    assert not (pyside / "QtWebEngineCore.pyi").exists()
+app/tests/test_qt_prune.py:838:    """A kept QtWebEngineCore without its helper process renders nothing.
+app/tests/test_qt_prune.py:840:    ``QtWebEngineProcess`` is spawned by QtWebEngineCore when a view attaches,
+app/tests/test_qt_prune.py:857:        if name.startswith("QtWebEngineCore"):
+app/tests/test_qt_prune.py:865:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:867:    helper = pyside / "Qt" / "libexec" / "QtWebEngineProcess"
+app/tests/test_qt_prune.py:868:    assert helper.exists(), "QtWebEngineCore ships without the process it spawns"
+app/tests/test_qt_prune.py:876:    """The helper is dead weight once QtWebEngineCore itself is gone."""
+app/tests/test_qt_prune.py:890:    """Chromium's locale packs belong to QtWebEngineCore, not to Qt translations.
+app/tests/test_qt_prune.py:908:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:933:    prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+app/tests/test_qt_prune.py:946:    """No QtWebEngineCore, no Chromium locale packs."""
+app/tests/test_qt_prune.py:965:    PySide6's win_arm64 wheels ship no QtWebEngineCore at all. When the web
+app/tests/test_qt_prune.py:966:    fallback still existed, ``web_shell_window`` imported it behind
+app/tests/test_qt_prune.py:978:        f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+app/tests/test_qt_prune.py:980:        "    QtWebEngineCore = None\n"
+app/tests/test_qt_prune.py:981:        "    QtWebEngineWidgets = None\n"
+app/tests/test_qt_prune.py:989:    assert optional == {"QtWebEngineCore", "QtWebEngineWidgets"}
+app/tests/test_qt_prune.py:1042:    guarded. ``QtWebChannel`` must not be required either: it was pulled in by
+app/tests/test_qt_prune.py:1051:    webengine = {"QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick"}
+app/tests/test_qt_prune.py:1054:    assert "QtWebChannel" not in required
+app/tests/test_qt_prune.py:1073:    (pyside / "QtWebChannel.py").write_text("", encoding="utf-8")
+app/tests/test_qt_prune.py:1080:        {"QtWebChannel", "QtWebEngineCore"},
+app/tests/test_qt_prune.py:1083:    assert closure == {"QtWidgets", "QtCore", "QtWebChannel"}
+app/tests/test_qt_prune.py:1085:    assert "QtWebEngineCore" in out, "an optional module missing from the wheel must be reported"
+app/tests/test_qt_prune.py:1086:    assert "QtWebChannel" not in out.split("has no", 1)[1].split(";", 1)[0]
+app/tests/test_qt_prune.py:1099:    with pytest.raises(RuntimeError, match="QtWebEngineCore"):
+app/tests/test_qt_prune.py:1100:        qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
+app/tests/test_mvvm.py:197:    was evaluated** are gone with the web entry: ``title_bar_overlay`` (the
+app/tests/test_mvvm.py:198:    frameless WebEngine window's own title bar), ``web_shell_window`` (the
+app/tests/test_mvvm.py:199:    QWebEngineView host) and the ``DevaBridge`` QObject inside
+app/tests/test_mvvm.py:216:    for gone in ("views.web_shell_window", "views.title_bar_overlay"):
+out/qml-shell/packaged/probe_qml_prune.py:30:           "QtWebEngineCore", "QtWebEngineWidgets", "QtWebChannel"}
+app/tests/test_deliverables.py:15:删除的 `DevaBridge` 通道层不再是产品代码。
+docs/ROADMAP-NEXT.md:119:  macOS 同法，输出包含 `DEVA WEB OK ... bridge=True`，退出码 0；
+docs/ROADMAP-NEXT.md:135:  `QtWebEngineCore` 的 win_arm64 wheel，产品契约（`ff89c4c`）要求缺件时明确报错，
+docs/ROADMAP-NEXT.md:408:**预估规模**：XL（原版依赖 Electron `BrowserView` 与 `capturePage`，QtWebEngine 无对位接口，
+docs/ROADMAP-NEXT.md:410:**风险**：`browser:live-start` 走 Electron 定时器推流，QtWebEngine 无等价接口；
+docs/ROADMAP-NEXT.md:569:   `live-stop` / `thumbnail` 三条若 QtWebEngine 无法给出可用帧源，
+out/qml-shell/packaged/prune-site/PySide6/__init__.py:8:__pre_all__ = ["QtCore", "QtGui", "QtWidgets", "QtPrintSupport", "QtSql", "QtNetwork", "QtTest", "QtConcurrent", "QtDBus", "QtDesigner", "QtXml", "QtHelp", "QtMultimedia", "QtMultimediaWidgets", "QtOpenGL", "QtOpenGLWidgets", "QtPdf", "QtPdfWidgets", "QtPositioning", "QtLocation", "QtNetworkAuth", "QtNfc", "QtQml", "QtQuick", "QtQuick3D", "QtQuickControls2", "QtCanvasPainter", "QtQuickTest", "QtQuickWidgets", "QtRemoteObjects", "QtScxml", "QtSensors", "QtSerialPort", "QtSerialBus", "QtStateMachine", "QtTextToSpeech", "QtCharts", "QtSpatialAudio", "QtSvg", "QtSvgWidgets", "QtDataVisualization", "QtGraphs", "QtGraphsWidgets", "QtBluetooth", "QtUiTools", "QtWebChannel", "QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick", "QtWebSockets", "QtHttpServer", "QtWebView", "Qt3DCore", "Qt3DRender", "Qt3DInput", "Qt3DLogic", "Qt3DAnimation", "Qt3DExtras"]
+out/qml-shell/REPORT.md:2:改动：新增 `app/src/qml/{Main,Theme}.qml`+`qmldir`（RowLayout 三栏：264px 侧栏 / 300px 会话 ListView / 正文 TextEdit，3 条假会话）、`app/src/qml_shell.py`（markdown 渲染进 `QQuickTextDocument`，headless 等首帧后 `grabWindow()`）；`main.py` 加 `AI_UPPER_UI=qml` 分支，未设置时 WebEngine 路径不变（实跑 `DEVA WEB OK ... bridge=True`，EXIT 0）。
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+out/ci-fix/REPORT.md:126:DEVA WEB OK platform=offscreen title='ai_upper' url=.../assets/renderer/index.html bridge=True
+out/ci-fix/REPORT.md:131:CI 的 `Full integration run` 断言正是 `'DEVA WEB OK' in text and 'bridge=True' in text`。
+out/ci-fix/REPORT.md:186:| native-integration (windows-arm64) | failure | step 10：3 个用例因 `QtWebEngineCore` 缺失在导入期崩溃 |
+out/ci-fix/REPORT.md:194:### 5.2 windows-arm64：PySide6 的 arm64 wheel 不含 QtWebEngine
+out/ci-fix/REPORT.md:205:这个组件**。原代码在类体阶段就求值 `QtWebEngineCore.QWebEngineScript`，导致
+out/ci-fix/REPORT.md:206:`import mvvm.views.web_shell_window` 直接抛
+out/ci-fix/REPORT.md:207:`ImportError: PySide6 has no submodule 'QtWebEngineCore'`，同时破坏了
+out/ci-fix/REPORT.md:211:`DevaWebWindow.__init__`，原样带出底层 ImportError。新增
+out/ci-fix/REPORT.md:220:E  ImportError: PySide6 has no submodule 'QtWebEngineCore':
+out/ci-fix/REPORT.md:221:E      No module named 'PySide6.QtWebEngineCore'
+out/ci-fix/REPORT.md:256:ff89c4c fix(ui): QtWebEngine 缺失不再让整个 mvvm.views 导入崩溃
+out/ci-fix/REPORT.md:308:`test_web_shell_modules.py:314` 因「该安装没有 QtWebEngineWidgets」被 skip——这与
+out/ci-fix/REPORT.md:387:  四个 job 的 Full integration run（`DEVA WEB OK ... bridge=True` 判据）全部通过。
+out/ci-fix/REPORT.md:390:  `test_web_shell_modules.py:314`「该安装没有 QtWebEngineWidgets」，与 ff89c4c
+out/ci-fix/REPORT.md:557:  说明 arm64 另有更早的失败点（PySide6 win_arm64 无 QtWebEngineCore，见 8.3）。
+out/ci-fix/REPORT.md:559:### 8.3 已知会命中但尚未到红点的风险：win_arm64 没有 QtWebEngineCore
+out/ci-fix/REPORT.md:561:PySide6 的 win_arm64 wheel **完全不打包 QtWebEngineCore**（6.9.3–6.12.0 实测，
+out/ci-fix/REPORT.md:579:`build.py --run` 返回 0 但没打印 `DEVA WEB OK` / `bridge=True` 也是失败，
+out/ci-fix/REPORT.md:596:ERROR: RuntimeError: Qt pruning: C:\a\ai_upper\ai_upper\.cache\pbs-sdk\windows-arm64\3.13.5\install\python.exe cannot import QtCore, QtGui, QtWebChannel, QtWebEngineCore, QtWebEngineWidgets, QtWidgets:
+out/ci-fix/REPORT.md:601:ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'
+out/ci-fix/REPORT.md:639:`try/except ImportError` 保护。而 `app/src/mvvm/views/web_shell_window.py:27-34`
+out/ci-fix/REPORT.md:640:正是把 `QtWebEngineCore` / `QtWebEngineWidgets` 放在 `try` 里（ff89c4c 的产品契约：
+out/ci-fix/REPORT.md:645:3. `ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'` → `RuntimeError`。
+out/ci-fix/REPORT.md:670:required ['QtCore', 'QtGui', 'QtWebChannel', 'QtWidgets']
+out/ci-fix/REPORT.md:671:optional ['QtWebEngineCore', 'QtWebEngineWidgets']
+out/ci-fix/REPORT.md:825:File "web_shell_window.py", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+out/ci-fix/REPORT.md:829:建窗口时。`web_shell_window.py:112` 是 `_WEBENGINE_ERROR is not None` 时
+out/ci-fix/REPORT.md:830:主动 `raise ImportError` 的那一行——即 arm64 上没有 QtWebEngine，产品按
+out/ci-fix/REPORT.md:837:  `windows-11-arm` 这一腿在 `run: true` 下要求打包产物能起 QtWebEngine 界面，
+out/ci-fix/REPORT.md:838:  而 PySide6 从未发布含 QtWebEngineCore 的 win_arm64 wheel（6.9.3–6.12.0 实测
+out/ci-fix/REPORT.md:841:  1. 给 `windows-arm64` 提供渲染层替代（QtWebEngine 以外的承载方式）；
+out/ci-fix/REPORT.md:880:arm64 的最后一步是产品代码主动拒绝：PySide6 从未发布含 QtWebEngineCore 的
+out/ci-fix/REPORT.md:881:win_arm64 wheel，`web_shell_window.py:109-114` 因此 `raise ImportError` 并带上
+out/ci-fix/REPORT.md:884:1. 为 arm64 提供 QtWebEngine 之外的渲染层承载（产品能力变更）；或
+out/ci-fix/REPORT.md:894:`app/src/deva_web.py` 固定装配 `DevaWebWindow`。也就是说 arm64 缺的不是
+out/ci-fix/REPORT.md:895:「任何界面」，而是「QtWebEngine 承载的原版渲染层」。
+out/ci-fix/REPORT.md:987:File "web_shell_window.py", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+out/ci-fix/REPORT.md:996:- 事实：**PySide6 从未发布 win_arm64 的 `QtWebEngineCore`**（实测 6.9.3 / 6.10.x /
+out/ci-fix/REPORT.md:999:- 产品契约：`ff89c4c` 之后 `app/src/mvvm/views/web_shell_window.py:27-34` 把
+out/ci-fix/REPORT.md:1000:  WebEngine 的导入放在 `except ImportError` 后，`DevaWebWindow.__init__`
+out/ci-fix/REPORT.md:1008:- 解除条件：Qt 在 win_arm64 上发布含 QtWebEngineCore 的 wheel 后，本 job 应自然转绿；
+out/ci-fix/REPORT.md:1050:| 窗口标题 | 运行日志实测 `DEVA WEB OK ... title='ai_upper'`（`out/packaging/launch11.log:18`） |
+out/ci-fix/REPORT.md:1071:   QtWebEngineCore；按你的决定保持红，不改矩阵、不 `run:false`、不加 skip。
+out/ci-fix/run-43600186928/annotations-3.8.10.json:47:    "message": "File \"web_shell_window.py\", line 42, in init mvvm.views.web_shell_window",
+out/ci-fix/run-43586127170-annotations/ann-132420865992.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/ci-fix/closeout/py38-closeout-report.md:78:DEVA WEB OK platform=offscreen title='ai_upper' url=.../dist/ai_upper/assets/renderer/index.html bridge=True
+out/ci-fix/run-43599360678/annotations-arm64.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/ci-fix/run-43581355558-annotations/ann-132406559566.json.txt:3:"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\HostX64\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\a\ai_upper\ai_upper\.cache\pbs-sdk\windows-x86_64\3.8.10\install\include -ID:\a\ai_upper\ai_upper\.cache\pbs-sdk\windows-x86_64\3.8.10\install\include "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include" "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8.1\include\um" /TcD:\a\ai_upper\ai_upper\build\merged\windows-x86_64\mvvm\0058_mvvm_views_web_shell_window.c /Fobuild\temp.win-amd64-cpython-313\Release\a\ai_upper\ai_upper\build\merged\windows-x86_64\mvvm\0058_mvvm_views_web_shell_window.obj
+out/ci-fix/run-43581355558-annotations/ann-132406559566.json.txt:4:0058_mvvm_views_web_shell_window.c
+out/chat-files/REPORT.md:299:cd app/src && AI_UPPER_HOME=/tmp/chat-files-home AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 \
+out/entry-refactor/grep-before-entry.txt:2:app/src/deva_web.py:1:"""本工程的真实入口：承载原版渲染层的 `DevaWebWindow`。
+out/entry-refactor/grep-before-entry.txt:3:app/src/deva_web.py:66:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before-entry.txt:4:app/src/deva_web.py:72:    return DevaWebWindow(
+out/entry-refactor/grep-before-entry.txt:5:app/src/mvvm/views/deva_main_window.py:4:Web 承载窗口 `web_shell_window.DevaWebWindow`）。它不直接读写
+out/entry-refactor/grep-before-entry.txt:6:app/src/mvvm/views/web_shell_window.py:120:class DevaWebWindow(QMainWindow):
+out/entry-refactor/grep-before-entry.txt:7:app/src/mvvm/views/web_shell_window.py:26:# 模块本身在任何 binding 上都能导入，缺件由 DevaWebWindow 用原文报出来。
+out/entry-refactor/grep-before-entry.txt:8:app/src/mvvm/views/web_shell_window.py:284:__all__ = ["ASSETS_DIR", "DevaWebWindow", "TITLEBAR_HEIGHT", "assets_dir"]
+out/entry-refactor/grep-before-entry.txt:10:app/tests/test_web_e2e_stream.py:106:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before-entry.txt:11:app/tests/test_web_e2e_stream.py:115:    win = DevaWebWindow(
+out/entry-refactor/grep-before-entry.txt:16:app/tests/test_web_shell_modules.py:408:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before-entry.txt:17:app/tests/test_web_shell_modules.py:411:    window = DevaWebWindow(
+out/entry-refactor/grep-before-entry.txt:18:app/tests/test_web_shell_modules.py:433:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before-entry.txt:19:app/tests/test_web_shell_modules.py:436:    source = DevaWebWindow._shim_source({"theme": "light"})
+out/entry-refactor/grep-before-entry.txt:20:app/tests/test_web_shell_modules.py:474:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before-entry.txt:21:app/tests/test_web_shell_modules.py:481:    assert f"'{current}'" in DevaWebWindow._shim_source({})
+out/entry-refactor/grep-before-entry.txt:22:app/tests/test_web_shell_modules.py:4:而这三个模块在**类体求值**时就要 Qt：`TitleBarOverlay(QWidget)`、`DevaWebWindow(QMainWindow)`、
+out/entry-refactor/grep-before-entry.txt:23:app/tests/test_web_shell_modules.py:74:    shell.DevaWebWindow(settings=None, personas=None, store=None)
+out/entry-refactor/grep-before-entry.txt:24:app/tests/test_web_shell_modules.py:78:    raise SystemExit("缺 QtWebEngine 的 binding 上，DevaWebWindow 竟然构造成功")
+out/entry-refactor/grep-before-entry.txt:25:docs/BUILD-PROGRESS.md:1000:| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+out/entry-refactor/grep-before-entry.txt:27:docs/BUILD-PROGRESS.md:845:结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+out/entry-refactor/grep-before-entry.txt:28:docs/BUILD-PROGRESS.md:853:| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+out/entry-refactor/grep-before-entry.txt:35:docs/BUILD-PROGRESS.md:987:`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
+out/entry-refactor/grep-before-entry.txt:37:docs/STAGE6-CLOSEOUT-REPORT.md:15:| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+out/entry-refactor/grep-before-entry.txt:40:docs/STAGE6-CLOSEOUT-REPORT.md:55:  `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
+out/entry-refactor/grep-before-entry.txt:43:docs/audit/qml-shell-audit.md:15:- 入口模块：`app/src/deva_web.py:60 _create_window()` → `DevaWebWindow`；
+out/entry-refactor/grep-before-entry.txt:44:docs/audit/qml-shell-audit.md:16:- 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+out/ci-fix/closeout/py38-closeout-report-round2.md:29:仍有一项**不在本目标范围内**的已知阻塞：`windows-arm64`（上游不发含 QtWebEngine 的
+out/ci-fix/closeout/py38-closeout-report-round2.md:54:`web_shell_window.py` 类体直接写死 `QtWebEngineCore.QWebEngineScript`：
+out/ci-fix/closeout/py38-closeout-report-round2.md:56:- Qt6（PySide6）：`QWebEngineScript` / `QWebEngineSettings` 在 `QtWebEngineCore`，
+out/ci-fix/closeout/py38-closeout-report-round2.md:57:  `QWebEngineView` 在 `QtWebEngineWidgets`；
+out/ci-fix/closeout/py38-closeout-report-round2.md:58:- Qt5（PySide2）：这三个类**全部**在 `QtWebEngineWidgets`，`QtWebEngineCore` 只有
+out/ci-fix/closeout/py38-closeout-report-round2.md:61:于是只要那条 leg 用 PySide2，`import mvvm.views.web_shell_window` 就在类体求值阶段抛
+out/ci-fix/closeout/py38-closeout-report-round2.md:188:- 产物 headless 启动：`DEVA WEB OK platform=offscreen title='ai_upper'
+out/ci-fix/closeout/py38-closeout-report-round2.md:189:  url=.../dist/ai_upper/assets/renderer/index.html bridge=True`，`LAUNCH_EXIT=0`。
+out/ci-fix/closeout/py38-closeout-report-round2.md:230:| `158a36c` | fix(py38) | `app/src/deva_web.py`、`app/src/mvvm/views/web_shell_window.py` |
+out/ci-fix/closeout/py38-closeout-report-round2.md:246:没有删除任何既有注释；`web_shell_window.py` 顶部那段原本写着「PySide2 也没有」
+out/ci-fix/closeout/py38-closeout-report-round2.md:283:`app/src/mvvm/views/web_shell_window.py` 构造窗口时就要这个类。矩阵条目保留、
+out/ci-fix/closeout/py38-closeout-report-round2.md:297:`app/src/mvvm/views/title_bar_overlay.py:78,89` 用 `event.position().toPoint()`，
+out/entry-refactor/grep-before-round3.txt:14:docs/BUILD-PROGRESS.md:853:| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+out/entry-refactor/grep-before-round3.txt:22:docs/BUILD-PROGRESS.md:987:`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
+out/entry-refactor/grep-before-round3.txt:24:docs/STAGE6-CLOSEOUT-REPORT.md:15:| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+out/entry-refactor/grep-before-round3.txt:29:docs/audit/qml-shell-audit.md:15:- 入口模块：`app/src/deva_web.py:60 _create_window()` → `DevaWebWindow`；
+out/ci-fix/closeout/py38-compat-audit.md:67:| `app/src/mvvm/views/web_shell_window.py` | 类体按名探测 `QWebEngineScript`/`QWebEngineSettings`/`QWebEngineView`，替代写死 `QtWebEngineCore.*` | 第 21 条（binding 类布局差异） | Qt6 把 Script/Settings 放 `QtWebEngineCore`，Qt5 的 PySide2 全放 `QtWebEngineWidgets`；写死一边必炸 |
+out/startup-opt-v2/scripts/probe_maps.py:1:"""Re-verify: does the DEFAULT entry load QtWebEngine/Chromium? Kernel view only.
+out/ci-fix/closeout/py38-authoritative-run-failure.md:9:L685 | run.log (build.py --run exit 1) | File "web_shell_window.py", line 42, in init mvvm.views.web_shell_window
+app/tests/test_ci_tail.py:168:    log.write_text("building\nerror text in a message body is fine\nDEVA WEB OK bridge=True\n", encoding="utf-8")
+out/ci-fix/run-43605493485/annotations-arm64.json:35:    "message": "File \"web_shell_window.py\", line 136, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/ci-fix/run-43599360678/annotations-3.8.10.json:47:    "message": "File \"web_shell_window.py\", line 42, in init mvvm.views.web_shell_window",
+out/ci-fix/run-43581355558-annotations/ann-132406559660.json:35:    "message": "\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.obj\n0057_mvvm_views_transcript_render.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.obj\n0058_mvvm_views_web_shell_window.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.obj\n0059_mvvm_webui_assembly.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.13.5\\install\\include \"-IC:\\Program Files\\Microsoft Visual",
+out/ci-fix/run-43581355558-annotations/ann-132406559566.json:35:    "message": "\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0057_mvvm_views_transcript_render.obj\n0057_mvvm_views_transcript_render.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0058_mvvm_views_web_shell_window.obj\n0058_mvvm_views_web_shell_window.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\ATLMFC\\include\" \"-IC:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Auxiliary\\VS\\include\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt\" \"-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8.1\\include\\um\" /TcD:\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.c /Fobuild\\temp.win-amd64-cpython-313\\Release\\a\\ai_upper\\ai_upper\\build\\merged\\windows-x86_64\\mvvm\\0059_mvvm_webui_assembly.obj\n0059_mvvm_webui_assembly.c\n\"C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\cl.exe\" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include -ID:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-x86_64\\3.8.10\\install\\include \"-IC:\\Program Files\\Microsoft Visual",
+out/ci-fix/run-43581355558-annotations/ann-132406559660.json.txt:3:"C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\HostX64\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -ID:\a\ai_upper\ai_upper\.cache\pbs-sdk\windows-x86_64\3.13.5\install\include -ID:\a\ai_upper\ai_upper\.cache\pbs-sdk\windows-x86_64\3.13.5\install\include "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\include" "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\ATLMFC\include" "-IC:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8.1\include\um" /TcD:\a\ai_upper\ai_upper\build\merged\windows-x86_64\mvvm\0058_mvvm_views_web_shell_window.c /Fobuild\temp.win-amd64-cpython-313\Release\a\ai_upper\ai_upper\build\merged\windows-x86_64\mvvm\0058_mvvm_views_web_shell_window.obj
+out/ci-fix/run-43581355558-annotations/ann-132406559660.json.txt:4:0058_mvvm_views_web_shell_window.c
+out/qwebengine-remove/logs/grep-residue-before.txt:1:README.md:304:PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+out/qwebengine-remove/logs/grep-residue-before.txt:2:HISTORY.md:280:模板默认带上一组安全规则：`**/*.pyi` 与 PySide2/PySide6 的 `examples`、`include`，runtime 的 `idlelib`、`tkinter`、`tcl`、`tests`、`test`；`opengl32sw.dll` 和 `qoffscreen` 仍由 Qt 裁剪的保留逻辑兜底。Qt 自动裁剪同时补上 `examples`/`include`、未使用 `QtWebEngineCore` 时的 `resources`，以及 `qwebgl` 插件（保留 `qoffscreen` 给 headless 冒烟）。
+out/qwebengine-remove/logs/grep-residue-before.txt:3:.github/workflows/validate.yml:218:          # imported QtWebEngine, and that is the only thing that needed them.
+out/qwebengine-remove/logs/grep-residue-before.txt:4:.github/workflows/validate.yml:436:          # 只有 AI_UPPER_UI=web 才装配 WebEngine 窗口（打印 `DEVA WEB OK … bridge=True`）。
+out/qwebengine-remove/logs/grep-residue-before.txt:5:.github/workflows/validate.yml:439:              'DEVA WEB OK' in text and 'bridge=True' in text)
+out/qwebengine-remove/logs/grep-residue-before.txt:6:audit-tools/ipc_status_table.py:91:    "browser:live-start": "未实现 —— 实时帧推流走 Electron capturePage 定时器，QtWebEngine 无对位接口",
+out/qwebengine-remove/logs/grep-residue-before.txt:7:audit-tools/ipc_status_table.py:98:    "browser:thumbnail": "未实现 —— 标签缩略图来自 capturePage，QtWebEngine 无对位接口",
+out/qwebengine-remove/logs/grep-residue-before.txt:8:CHANGELOG.md:475:- Qt pruning also left `PySide*/examples`, `PySide*/include`, the WebEngine `resources` directory when `QtWebEngineCore` was unused, and the `qwebgl` platform plugin, which drags QtQuick/QtQml and their libraries into the bundle.
+out/qwebengine-remove/logs/grep-residue-before.txt:9:CHANGELOG.md:488:- `qt_prune.prune()` drops `examples` and `include` beside the binding/Qt root, drops `resources` when `QtWebEngineCore` is not kept, and drops `qwebgl` while retaining `qoffscreen` and the rest of the platform category.
+out/qwebengine-remove/logs/grep-residue-before.txt:10:CHANGELOG.md:805:- A packaged PySide6 application shipped the entire Qt payload: 1.2 GB, of which `QtWebEngineCore` alone is about 450 MB of Chromium. Applications packaged by other tools are far smaller because they only bundle the Qt modules the application imports.
+out/qwebengine-remove/logs/grep-residue-before.txt:11:CHANGELOG.md:833:- Nested macOS code such as `QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app` could not be ad-hoc signed inside-out, and a relative launcher invocation resolved the bundle root incorrectly.
+out/qwebengine-remove/logs/grep-residue-before.txt:12:audit-tools/make_ipc_ledger.py:8:- 「是否真的注册在桥里」：真实构造 `DevaBridge`（Qt offscreen）后读 `channels()`，与判定表
+out/qwebengine-remove/logs/grep-residue-before.txt:13:audit-tools/make_ipc_ledger.py:98:from mvvm.webui.bridge import DevaBridge
+out/qwebengine-remove/logs/grep-residue-before.txt:14:audit-tools/make_ipc_ledger.py:100:b = DevaBridge(settings=SettingsService(home), personas=PersonaStore(home),
+out/qwebengine-remove/logs/grep-residue-before.txt:15:tools/ai_upper/third_party.py:313:    imported: PySide6's ``Qt/libexec/QtWebEngineProcess`` is spawned by
+out/ci-fix/run-43583891708-annotations/ann-132414181052.json:35:    "message": "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'",
+out/ci-fix/run-43583891708-annotations/ann-132414181052.json:119:    "message": "ERROR: RuntimeError: Qt pruning: C:\\a\\ai_upper\\ai_upper\\.cache\\pbs-sdk\\windows-arm64\\3.13.5\\install\\python.exe cannot import QtCore, QtGui, QtWebChannel, QtWebEngineCore, QtWebEngineWidgets, QtWidgets:",
+out/startup-opt/logs/probe-raw-extract.txt:114:AI_UPPER_HOME=/tmp/fx-qml-home AI_UPPER_HEADLESS=1 AI_UPPER_UI=qml AI_UPPER_QML_PAGE=chat AI_UPPER_QML_SHOT=/tmp/qw/fx-chat2.png QT_QPA_PLATFORM=offscreen timeout 180 .venv/bin/python /tmp/qw/probe_segments.py 2>&1 | grep -E "SEGMENTS|QML " 
+out/startup-opt/logs/probe-raw-extract.txt:117:cd /home/agent/shared_workspace/ai_upper && AI_UPPER_HOME=/tmp/fx-qml-home AI_UPPER_HEADLESS=1 AI_UPPER_UI=qml AI_UPPER_QML_PAGE=chat AI_UPPER_QML_SHOT=/tmp/qw/fx-chat2.png QT_QPA_PLATFORM=offscreen timeout 180 .venv/bin/python /tmp/qw/probe_segments.py 2>&1 | grep -E "SEGMENTS|QML " 
+out/startup-opt/logs/probe-raw-extract.txt:549:# QtWebEngine 去留 + 6.2.4 复验 —— 摘要（2026-11-16 收口版）
+out/startup-opt/logs/probe-raw-extract.txt:553:② **默认入口今天不加载 QtWebEngine**：真实 `app/src/main.py` 进程 `/proc/<pid>/maps` 共 123 条路径，WebEngine / Chromium 命中 **0**；线程 2、子进程 **0**。`-X importtime` 同样 0 命中（但 QtCore/QtGui 走 `qt_compat` 懒加载，importtime 看不到，故以 /proc 为准）。
+out/startup-opt/logs/probe-raw-extract.txt:557:④ **结论：不删，维持现状**。三档：A 全删（-240 MiB，代价砍 web 兜底 + 渲染资产 + 5 个用例）；B 删依赖留代码（pin 改 `PySide6-Essentials`，同样约 -240 MiB，但必须先给 `web_shell_window.py:19` 的 `QtWebChannel` 加守卫，否则 import 即炸）；C 维持现状（**推荐**）。推荐 C 的依据：默认路径零加载、删了零收益，A/B 都动到兜底路径与测试。
+out/startup-opt/logs/probe-raw-extract.txt:565:# QtWebEngine 去留 + 6.2.4 复验 —— 摘要（2026-11-16 收口版）
+out/startup-opt/logs/probe-raw-extract.txt:569:② **默认入口今天不加载 QtWebEngine**：真实 `app/src/main.py` 进程 `/proc/<pid>/maps` 共 123 条路径，WebEngine / Chromium 命中 **0**；线程 2、子进程 **0**。`-X importtime` 同样 0 命中（但 QtCore/QtGui 走 `qt_compat` 懒加载，importtime 看不到，故以 /proc 为准）。
+out/startup-opt/logs/probe-raw-extract.txt:573:④ **结论：不删，维持现状**。三档：A 全删（-240 MiB，代价砍 web 兜底 + 渲染资产 + 5 个用例）；B 删依赖留代码（pin 改 `PySide6-Essentials`，同样约 -240 MiB，但必须先给 `web_shell_window.py:19` 的 `QtWebChannel` 加守卫，否则 import 即炸）；C 维持现状（**推荐**）。推荐 C 的依据：默认路径零加载、删了零收益，A/B 都动到兜底路径与测试。
+out/startup-opt/logs/probe-raw-extract.txt:599:- UA 实测 `QtWebEngine/6.2.4 Chrome/90.0.4430.228`（`js624.log`）。
+out/startup-opt/logs/probe-raw-extract.txt:600:- 装配面触点（确实存在，但不是根因）：`app/src/mvvm/views/web_shell_window.py:195` `QUrl.fromLocalFile(...)`；`app/assets/renderer/index.html:11-12` `<script type="module">` + `<link rel="modulepreload">`；bundle 里 `Object.hasOwn` 5 处（4 行，25910/25953/44187/44203）、`.findLast(` 1 处（11572）无守卫，`structuredClone` 7 处有 `typeof` 守卫（23822）。
+out/startup-opt/logs/probe-raw-extract.txt:625:- UA 实测 `QtWebEngine/6.2.4 Chrome/90.0.4430.228`（`js624.log`）。
+out/startup-opt/logs/probe-raw-extract.txt:626:- 装配面触点（确实存在，但不是根因）：`app/src/mvvm/views/web_shell_window.py:195` `QUrl.fromLocalFile(...)`；`app/assets/renderer/index.html:11-12` `<script type="module">` + `<link rel="modulepreload">`；bundle 里 `Object.hasOwn` 5 处（4 行，25910/25953/44187/44203）、`.findLast(` 1 处（11572）无守卫，`structuredClone` 7 处有 `typeof` 守卫（23822）。
+out/startup-opt/logs/probe-raw-extract.txt:634:## ③ 默认入口是否加载 QtWebEngine —— 实测：**不加载**
+out/startup-opt/logs/probe-raw-extract.txt:637:探针 `scripts/probe_real_entry_loads.py` 直接跑 `app/src/main.py`（无 `AI_UPPER_UI` 覆盖，走默认 QML 路由），4 秒后读内核视图：
+out/startup-opt/logs/probe-raw-extract.txt:652:- 没有任何 `QtWebEngineProcess`、没有 Chromium 子进程、没有 `libQt6WebEngine*.so`。
+out/startup-opt/logs/probe-raw-extract.txt:667:`AI_UPPER_UI=web` 时同一进程的 maps 出现
+out/startup-opt/logs/probe-raw-extract.txt:668:`libQt6WebEngineCore.so.6`、`libQt6WebEngineWidgets.so.6`、`QtWebEngineCore.abi3.so`、`QtWebEngineWidgets.abi3.so`，线程 20、RSS 214 MB、`t_loaded 1.008 s`。
+out/startup-opt/logs/probe-raw-extract.txt:669:⇒ 两组对照成立：**加不加 `AI_UPPER_UI=web` 决定是否加载，而不是默认就会加载。**
+out/startup-opt/logs/probe-raw-extract.txt:676:## ③ 默认入口是否加载 QtWebEngine —— 实测：**不加载**
+out/startup-opt/logs/probe-raw-extract.txt:679:探针 `scripts/probe_real_entry_loads.py` 直接跑 `app/src/main.py`（无 `AI_UPPER_UI` 覆盖，走默认 QML 路由），4 秒后读内核视图：
+out/startup-opt/logs/probe-raw-extract.txt:694:- 没有任何 `QtWebEngineProcess`、没有 Chromium 子进程、没有 `libQt6WebEngine*.so`。
+out/startup-opt/logs/probe-raw-extract.txt:709:`AI_UPPER_UI=web` 时同一进程的 maps 出现
+out/startup-opt/logs/probe-raw-extract.txt:710:`libQt6WebEngineCore.so.6`、`libQt6WebEngineWidgets.so.6`、`QtWebEngineCore.abi3.so`、`QtWebEngineWidgets.abi3.so`，线程 20、RSS 214 MB、`t_loaded 1.008 s`。
+out/startup-opt/logs/probe-raw-extract.txt:711:⇒ 两组对照成立：**加不加 `AI_UPPER_UI=web` 决定是否加载，而不是默认就会加载。**
+out/startup-opt/logs/probe-raw-extract.txt:724:**产品源码改动：无。** `git status --short app/ tools/ .github/` 为空；QtWebEngine 删除**未实施**（原因见 ⑥）。
+out/startup-opt/logs/probe-raw-extract.txt:759:**产品源码改动：无。** `git status --short app/ tools/ .github/` 为空；QtWebEngine 删除**未实施**（原因见 ⑥）。
+out/audit-model-path/verify_files_live.py:98:    from mvvm.webui.bridge import DevaBridge
+out/audit-model-path/verify_files_live.py:100:    bridge = DevaBridge(
+out/audit-model-path/verify_files_live.py:121:    from mvvm.webui.bridge import DevaBridge, attachment_image, display_messages, _image_ref
+out/ci-fix/run-43581355558-annotations/ann-132406559544.json:59:    "message": "........................................................................ [  7%]\n....s................................................................... [ 14%]\n........................................................................ [ 22%]\n.....................................................ss................. [ 29%]\n......................................s................................. [ 37%]\n...........................s...............ss..s........................ [ 44%]\n........................................................................ [ 52%]\n........................................................................ [ 59%]\n........................................................................ [ 67%]\n........................................................................ [ 74%]\n..................................................................ssssss [ 82%]\n........................................................................ [ 89%]\n........................................................................ [ 97%]\n......................s.....                                             [100%]\n=========================== short test summary info ===========================\nSKIPPED [1] tests\\\\test_web_e2e_stream.py:30: \\u8be5\\u5b89\\u88c5\\u6ca1\\u6709 QtWebEngineWidgets\nSKIPPED [1] tests\\test_build_tool_compat.py:630: Windows has no POSIX execute bits\nSKIPPED [1] tests\\test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E\nSKIPPED [1] tests\\test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E\nSKIPPED [1] tests\\test_launcher_deployment.py:61: POSIX PATH lookup and symlink entry\nSKIPPED [1] tests\\test_native_deployment.py:171: requires native ELF tools\nSKIPPED [1] tests\\test_native_deployment.py:314: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\test_native_deployment.py:325: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\test_native_deployment.py:370: symlink creation needs Windows developer mode\nSKIPPED [1] tests\\\\test_tools_full.py:358: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:367: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:374: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:381: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:389: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_tools_full.py:396: \\u8fd9\\u4e9b\\u7528\\u4f8b\\u4f9d\\u8d56 POSIX shell \\u4e0e\\u8fdb\\u7a0b\\u7ec4\nSKIPPED [1] tests\\\\test_web_shell_modules.py:314: \\u8be5\\u5b89\\u88c5\\u6ca1\\u6709 QtWebEngineWidgets\n949 passed, 16 skipped in 65.12s (0:01:05)",
+out/audit-model-path/REPORT-CHAT-FILES.md:268:3. `app/src/mvvm/views/web_shell_window.py`：把「保存对话框」并入现有注入点 `host.attachments.set_file_dialogs(...)`，新增 `save_file` 回调 = `QFileDialog.getSaveFileName(self, "导出对话", "<标题>.md", "Markdown (*.md);;JSON (*.json)")`。
+out/audit-model-path/REPORT-CHAT-FILES.md:319:cd app/src && AI_UPPER_HOME=/tmp/audit-files-home AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 \
+out/rename/pre-status.txt:21:?? scripts/parity/live_scenarios.py
+out/chat-files/probe_web_deliverables.py:4:一个 md），再用真 QtWebEngine 打开 web 入口，点进那条会话，从 DOM 里读：
+out/chat-files/probe_web_deliverables.py:26:os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+out/chat-files/probe_web_deliverables.py:132:    from mvvm.views.web_shell_window import DevaWebWindow
+out/chat-files/probe_web_deliverables.py:138:    window = DevaWebWindow(
+out/qwebengine-drop/REPORT.md:1:# 6.2.4 结论复验 + QtWebEngine 去留实测报告
+out/qwebengine-drop/REPORT.md:27:- 第 5 处是 `main.py` 的 WebEngine 初始化（`AA_ShareOpenGLContexts` + 先 import `web_shell_window`），只在 web 兜底路径需要，与 QML 主路径无关。
+out/qwebengine-drop/REPORT.md:71:- UA 实测 `QtWebEngine/6.2.4 Chrome/90.0.4430.228`（`js624.log`）。
+out/qwebengine-drop/REPORT.md:72:- 装配面触点（确实存在，但不是根因）：`app/src/mvvm/views/web_shell_window.py:195` `QUrl.fromLocalFile(...)`；`app/assets/renderer/index.html:11-12` `<script type="module">` + `<link rel="modulepreload">`；bundle 里 `Object.hasOwn` 5 处（4 行，25910/25953/44187/44203）、`.findLast(` 1 处（11572）无守卫，`structuredClone` 7 处有 `typeof` 守卫（23822）。
+out/qwebengine-drop/REPORT.md:75:## ② QtWebEngine / QtWebChannel 使用点清单（file:line）
+out/qwebengine-drop/REPORT.md:77:用 `grep -rn "QtWebEngine\|QWebEngine\|QtWebChannel\|QWebChannel\|webengine"` 扫 `app/ tools/ .github/`，产品代码里的落点如下。
+out/qwebengine-drop/REPORT.md:81:| 1 | `app/src/mvvm/views/web_shell_window.py:19` | `from utils.qt_compat import QtCore, QtWebChannel, QtWidgets` —— **无条件** | 整个 web 承载窗口（284 行）；同时这条硬导入把 `QtWebChannel` 顶进 qt_prune 的 required 集 |
+out/qwebengine-drop/REPORT.md:82:| 2 | `web_shell_window.py:28-34` | `QtWebEngineCore/QtWebEngineWidgets` 的 `try/except ImportError` 守卫 | 已经是可选导入，删了只是少两个名字 |
+out/qwebengine-drop/REPORT.md:83:| 3 | `web_shell_window.py:65` | `QWebChannel = QtWebChannel.QWebChannel` | 桥接通道本体 |
+out/qwebengine-drop/REPORT.md:84:| 4 | `web_shell_window.py:66-68` | `QWebEngineScript / QWebEngineSettings / QWebEngineView` | 承载视图 |
+out/qwebengine-drop/REPORT.md:85:| 5 | `web_shell_window.py:101-103` | `QFile(":/qtwebchannel/qwebchannel.js")`，失败抛 `RuntimeError` | 注入页面的 channel 脚本 |
+out/qwebengine-drop/REPORT.md:86:| 6 | `web_shell_window.py:120,133-138` | `class DevaWebWindow` + 缺 WebEngine 时抛 `ImportError` | web 入口整体 |
+out/qwebengine-drop/REPORT.md:87:| 7 | `web_shell_window.py:143,146-148,195` | `QWebEngineView`、三个 `WebAttribute`、`load(QUrl.fromLocalFile(...))` | 页面装载 |
+out/qwebengine-drop/REPORT.md:88:| 8 | `app/src/main.py:100,106` | `from mvvm.views.web_shell_window import DevaWebWindow`（只在 web 分支） | web 入口装配 |
+out/qwebengine-drop/REPORT.md:89:| 9 | `app/src/main.py:39-41,53-68` | `AI_UPPER_UI` 的 `qml` / `web` / `webengine` 三档路由 | web 档失效，需删枚举 |
+out/qwebengine-drop/REPORT.md:90:| 10 | `app/src/main.py:72-83` | `QTWEBENGINE_CHROMIUM_FLAGS="--no-sandbox --disable-gpu"`，**只在 web 分支设** | 注释原话：「QML 路径根本不加载 QtWebEngine」 |
+out/qwebengine-drop/REPORT.md:91:| 11 | `app/src/mvvm/webui/bridge.py`（`DevaBridge`，740 行） | QtWebChannel 的 Python 侧；但 `display_messages` 被 `webui/host.py:46` 使用 | **不能整文件删**：QML 壳经 `qml_shell.py:40` → `webui.assembly` → `host` 依赖它 |
+out/qwebengine-drop/REPORT.md:92:| 12 | `app/assets/renderer/`（3.2 MB：index.html / shim.js / qwebchannel.js / assets） | Electron 原版构建产物，只被 web 窗口用 | 3.2 MB 资产 + 原版像素一致性能力 |
+out/qwebengine-drop/REPORT.md:93:| 13 | `app/pyproject.toml:169-170` | `qt = "imports"`（注释：「all」会带上约 450 MB QtWebEngine） | 见第 ⑤ 节的档位讨论 |
+out/qwebengine-drop/REPORT.md:94:| 14 | `.github/workflows/validate.yml:213-236` | 为 `import PySide6.QtWebEngineWidgets` 在 CI 装 40+ Chromium 运行库 | 采集阶段会 ImportError 而不是 skip |
+out/qwebengine-drop/REPORT.md:95:| 15 | `.github/workflows/validate.yml:443-447` | smoke 同时接受 `QML OK` 与 `DEVA WEB OK` | 少一条门禁 |
+out/qwebengine-drop/REPORT.md:96:| 16 | `tools/ai_upper/qt_prune.py:462,484-491,581-586,645,1106-1147,1242-1247` | `MODULE_PLUGIN_CATEGORIES["QtWebEngineCore"]`、`WEBENGINE_LOCALES_DIR`、`MODULE_HELPERS["QtWebEngineProcess"]`、locales 白名单 | 打包裁剪规则里的 WebEngine 分支（约 19 处引用） |
+out/qwebengine-drop/REPORT.md:97:| 17 | `tools/ai_upper/third_party.py:313-315`、`native/bundle.py:287`、`native/deps.py:392` | `QtWebEngineProcess` 的可执行位 / macOS helper / Windows BluetoothApis 依赖 | 打包修复分支 |
+out/qwebengine-drop/REPORT.md:99:**关键发现**：`QtWebChannel` 在源码里是**无条件导入**，所以 qt_prune 把它算作 required。
+out/qwebengine-drop/REPORT.md:102:required: ['QtCore','QtGui','QtQml','QtQuick','QtWebChannel','QtWidgets']
+out/qwebengine-drop/REPORT.md:103:optional: ['QtWebEngineCore','QtWebEngineWidgets']
+out/qwebengine-drop/REPORT.md:104:closure : [… 'QtWebChannel','QtWebEngineCore','QtWebEngineWidgets' …]
+out/qwebengine-drop/REPORT.md:105:QtWebEngineCore kept: True    QtWebChannel kept: True
+out/qwebengine-drop/REPORT.md:107:⇒ 只要 `web_shell_window.py:19` 还硬导入 `QtWebChannel`，`qt = "imports"` 就会**连带把 190 MB 的 libQt6WebEngineCore 和 43 MB locales 留在包里**——这是档位 B 必须同时改代码的原因，不是单纯改依赖名。
+out/qwebengine-drop/REPORT.md:109:## ③ 默认入口是否加载 QtWebEngine —— 实测：**不加载**
+out/qwebengine-drop/REPORT.md:112:探针 `scripts/probe_real_entry_loads.py` 直接跑 `app/src/main.py`（无 `AI_UPPER_UI` 覆盖，走默认 QML 路由），4 秒后读内核视图：
+out/qwebengine-drop/REPORT.md:127:- 没有任何 `QtWebEngineProcess`、没有 Chromium 子进程、没有 `libQt6WebEngine*.so`。
+out/qwebengine-drop/REPORT.md:142:`AI_UPPER_UI=web` 时同一进程的 maps 出现
+out/qwebengine-drop/REPORT.md:143:`libQt6WebEngineCore.so.6`、`libQt6WebEngineWidgets.so.6`、`QtWebEngineCore.abi3.so`、`QtWebEngineWidgets.abi3.so`，线程 20、RSS 214 MB、`t_loaded 1.008 s`。
+out/qwebengine-drop/REPORT.md:144:⇒ 两组对照成立：**加不加 `AI_UPPER_UI=web` 决定是否加载，而不是默认就会加载。**
+out/qwebengine-drop/REPORT.md:150:- **noweb** = `/tmp/qw/shadow`（PySide6 里所有 WebEngine 文件物理缺失，`QtWebChannel` 仍在）
+out/qwebengine-drop/REPORT.md:151:- **ess** = `/tmp/qw/shadow-essentials`（只有 `PySide6-Essentials` + meta + shiboken6 的 RECORD，`QtWebChannel`/`QtWebEngine*` 全无）
+out/qwebengine-drop/REPORT.md:155:baseline : pyside6=<.venv>/…  QtWebChannel OK  QtWebEngineCore OK  QtWebEngineWidgets OK
+out/qwebengine-drop/REPORT.md:156:noweb    : pyside6=/tmp/qw/shadow/…            QtWebEngineCore ModuleNotFoundError  QtWebEngineWidgets ModuleNotFoundError
+out/qwebengine-drop/REPORT.md:157:ess      : pyside6=/tmp/qw/shadow-essentials/… QtWebChannel ModuleNotFoundError  QtWebEngineCore ModuleNotFoundError
+out/qwebengine-drop/REPORT.md:186:`DEVA WEB OK … bridge=True` at 1.145 / 1.140 / 1.147 s，进程 wall 1.294 / 1.293 / 1.295 s，峰值 RSS 215,804 / 213,980 / 216,036 kB（≈211 MB，比 QML 档多约 77 MB），线程 20。**只有显式 `AI_UPPER_UI=web` 才付这个代价。**
+out/qwebengine-drop/REPORT.md:224:**结论：用户感知的「慢」不在 QtWebEngine**——默认路径根本没加载它；耗时集中在 Python 导入链和首屏会话解析。
+out/qwebengine-drop/REPORT.md:230:| **A 全删** | 删 `web_shell_window.py`、`main.py` 的 web 路由、`mvvm/webui/bridge.py` 的 channel 部分、`app/assets/renderer/`（3.2 MB）、CI 里 40+ Chromium 依赖与 `DEVA WEB OK` 门禁；pin 改 `PySide6-Essentials` | −240 MiB（46%） | 0 | 失去与原版 Electron 页面像素一致的能力；`display_messages` 仍被 `webui/host.py` 用（QML 壳依赖），**不能整文件删**；动 5 个 web 用例 + smoke 口径 |
+out/qwebengine-drop/REPORT.md:231:| **B 删依赖留代码** | 只把 `PySide6==6.11.2` 换成 `PySide6-Essentials==6.11.2`（或让 qt_prune 排除 Addons），保留全部代码 | −约 240 MiB | 0 | **必须先修 `web_shell_window.py:19`**：`QtWebChannel` 是无条件导入。实测 Essentials 档下 `import mvvm.views.web_shell_window` 直接 `ImportError: PySide6 has no submodule 'QtWebChannel'`，`AI_UPPER_UI=web` 退出码 1，`test_web_shell_modules.py` **5 failed / 14 passed / 1 skipped**（`ess-web-fallback.log`、`ess-test-web-shell.log`）。默认 QML 档在 Essentials 下已实测可跑（3×offscreen + 3×xcb 全 `QML OK`，rc=0）。 |
+out/qwebengine-drop/REPORT.md:236:2. A/B 的收益**只有体积**，而体积问题靠打包裁剪就能拿到大部分；真正卡住的是 `QtWebChannel` 那条硬导入，属「要改代码才有收益」的档位，不该在「用户觉得慢」的诉求下顺带做。
+out/qwebengine-drop/REPORT.md:239:若后续确有体积诉求，建议先做 **B 的最小前置**：把 `web_shell_window.py:19` 的 `QtWebChannel` 改为可选导入，并让缺件时报原文而不是 ImportError 栈。这一步单独可做、可验证、不影响 QML 路径。
+out/qwebengine-drop/REPORT.md:247:**产品源码改动：无。** `git status --short app/ tools/ .github/` 为空；QtWebEngine 删除**未实施**（原因见 ⑥）。
+out/deva-app-audit/02-references.txt:84:355:          ok = 'DEVA WEB OK' in text and 'bridge=True' in text
+out/audit-model-path/probe_web_ui.py:17:os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+out/audit-model-path/probe_web_ui.py:27:from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
+out/audit-model-path/probe_web_ui.py:52:    window = DevaWebWindow(
+out/qwebengine-drop/evidence/logs/tier-binding-proof.txt:2:TIER {'pyside6': '/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': 'OK', 'QtWebEngineWidgets': 'OK'}
+out/qwebengine-drop/evidence/logs/tier-binding-proof.txt:4:TIER {'pyside6': '/tmp/qw/shadow/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/qwebengine-drop/evidence/logs/tier-binding-proof.txt:6:TIER {'pyside6': '/tmp/qw/shadow-essentials/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': "ModuleNotFoundError: No module named 'PySide6.QtWebChannel'", 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/entry-refactor/grep-after-entry.txt:2:app/src/main.py:1:"""本工程的唯一入口：装配原版渲染层 `DevaWebWindow` 并启动。
+out/entry-refactor/grep-after-entry.txt:3:app/src/main.py:64:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-after-entry.txt:4:app/src/main.py:70:    return DevaWebWindow(
+out/entry-refactor/grep-after-entry.txt:5:app/src/mvvm/views/deva_main_window.py:4:Web 承载窗口 `web_shell_window.DevaWebWindow`）。它不直接读写
+out/entry-refactor/grep-after-entry.txt:6:app/src/mvvm/views/web_shell_window.py:120:class DevaWebWindow(QMainWindow):
+out/entry-refactor/grep-after-entry.txt:7:app/src/mvvm/views/web_shell_window.py:26:# 模块本身在任何 binding 上都能导入，缺件由 DevaWebWindow 用原文报出来。
+out/entry-refactor/grep-after-entry.txt:8:app/src/mvvm/views/web_shell_window.py:284:__all__ = ["ASSETS_DIR", "DevaWebWindow", "TITLEBAR_HEIGHT", "assets_dir"]
+out/entry-refactor/grep-after-entry.txt:9:app/tests/test_web_e2e_stream.py:106:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-after-entry.txt:10:app/tests/test_web_e2e_stream.py:115:    win = DevaWebWindow(
+out/entry-refactor/grep-after-entry.txt:11:app/tests/test_web_shell_modules.py:408:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-after-entry.txt:12:app/tests/test_web_shell_modules.py:411:    window = DevaWebWindow(
+out/entry-refactor/grep-after-entry.txt:13:app/tests/test_web_shell_modules.py:433:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-after-entry.txt:14:app/tests/test_web_shell_modules.py:436:    source = DevaWebWindow._shim_source({"theme": "light"})
+out/entry-refactor/grep-after-entry.txt:15:app/tests/test_web_shell_modules.py:474:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-after-entry.txt:16:app/tests/test_web_shell_modules.py:481:    assert f"'{current}'" in DevaWebWindow._shim_source({})
+out/entry-refactor/grep-after-entry.txt:17:app/tests/test_web_shell_modules.py:4:而这三个模块在**类体求值**时就要 Qt：`TitleBarOverlay(QWidget)`、`DevaWebWindow(QMainWindow)`、
+out/entry-refactor/grep-after-entry.txt:18:app/tests/test_web_shell_modules.py:74:    shell.DevaWebWindow(settings=None, personas=None, store=None)
+out/entry-refactor/grep-after-entry.txt:19:app/tests/test_web_shell_modules.py:78:    raise SystemExit("缺 QtWebEngine 的 binding 上，DevaWebWindow 竟然构造成功")
+out/entry-refactor/grep-after-entry.txt:20:docs/BUILD-PROGRESS.md:1000:| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+out/entry-refactor/grep-after-entry.txt:22:docs/BUILD-PROGRESS.md:845:结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+out/entry-refactor/grep-after-entry.txt:23:docs/BUILD-PROGRESS.md:853:| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+out/entry-refactor/grep-after-entry.txt:30:docs/BUILD-PROGRESS.md:987:`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
+out/entry-refactor/grep-after-entry.txt:32:docs/STAGE6-CLOSEOUT-REPORT.md:15:| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+out/entry-refactor/grep-after-entry.txt:35:docs/STAGE6-CLOSEOUT-REPORT.md:55:  `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
+out/entry-refactor/grep-after-entry.txt:38:docs/audit/qml-shell-audit.md:15:- 入口模块：`app/src/deva_web.py:60 _create_window()` → `DevaWebWindow`；
+out/entry-refactor/grep-after-entry.txt:39:docs/audit/qml-shell-audit.md:16:- 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+out/qwebengine-drop/evidence/scripts/probe_tier_binding.py:3:Prints the resolved PySide6 package path and whether QtWebEngine/WebChannel are
+out/qwebengine-drop/evidence/scripts/probe_tier_binding.py:17:for name in ("QtWebChannel", "QtWebEngineCore", "QtWebEngineWidgets"):
+out/qwebengine-drop/evidence/scripts/probe_default_loads.py:83:    # Any QtWebEngineProcess child anywhere in the tree?
+out/qwebengine-drop/evidence/scripts/probe_default_loads.py:87:            row for row in out.splitlines() if "QtWebEngineProcess" in row
+out/audit-model-path/probe_web_model_validate.py:21:os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+out/audit-model-path/probe_web_model_validate.py:31:from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
+out/audit-model-path/probe_web_model_validate.py:64:    window = DevaWebWindow(
+out/qwebengine-drop/evidence/scripts/run_probe_web_hold.py:11:    "AI_UPPER_UI": "web",
+out/qwebengine-drop/SUMMARY.md:1:# QtWebEngine 去留 + 6.2.4 复验 —— 摘要（2026-11-16 收口版）
+out/qwebengine-drop/SUMMARY.md:5:② **默认入口今天不加载 QtWebEngine**：真实 `app/src/main.py` 进程 `/proc/<pid>/maps` 共 123 条路径，WebEngine / Chromium 命中 **0**；线程 2、子进程 **0**。`-X importtime` 同样 0 命中（但 QtCore/QtGui 走 `qt_compat` 懒加载，importtime 看不到，故以 /proc 为准）。
+out/qwebengine-drop/SUMMARY.md:9:④ **结论：不删，维持现状**。三档：A 全删（-240 MiB，代价砍 web 兜底 + 渲染资产 + 5 个用例）；B 删依赖留代码（pin 改 `PySide6-Essentials`，同样约 -240 MiB，但必须先给 `web_shell_window.py:19` 的 `QtWebChannel` 加守卫，否则 import 即炸）；C 维持现状（**推荐**）。推荐 C 的依据：默认路径零加载、删了零收益，A/B 都动到兜底路径与测试。
+out/entry-refactor/collect-before.sh:6:grep -rn -e 'deva_web' -e 'DevaWebWindow' app/src app/tests tools .github docs README.md 2>/dev/null | sort > out/entry-refactor/grep-before-entry.txt
+out/qwebengine-drop/evidence/logs/qt-prune-closure.txt:1:required: ['QtCore', 'QtGui', 'QtQml', 'QtQuick', 'QtWebChannel', 'QtWidgets']
+out/qwebengine-drop/evidence/logs/qt-prune-closure.txt:2:optional: ['QtWebEngineCore', 'QtWebEngineWidgets']
+out/qwebengine-drop/evidence/logs/qt-prune-closure.txt:4:closure: ['QtCore', 'QtGui', 'QtNetwork', 'QtOpenGL', 'QtPrintSupport', 'QtQml', 'QtQuick', 'QtWebChannel', 'QtWebEngineCore', 'QtWebEngineWidgets', 'QtWidgets', 'support']
+out/qwebengine-drop/evidence/logs/qt-prune-closure.txt:5:QtWebEngineCore kept: True
+out/qwebengine-drop/evidence/logs/qt-prune-closure.txt:6:QtWebChannel kept: True
+out/qwebengine-drop/evidence/scripts/probe_real_entry_loads.py:6:AI_UPPER_UI override, lets the event loop run, samples /proc/<pid>/maps,
+out/qwebengine-drop/evidence/scripts/probe_real_entry_loads.py:21:env.pop("AI_UPPER_UI", None)          # default route: QML shell
+out/entry-refactor/REPORT.md:10:| `app/src/main.py` | 完整承接 `deva_web.py` 的 `run()`/`main()`：`_prepare_environment`（`QTWEBENGINE_CHROMIUM_FLAGS` 默认 `--no-sandbox --disable-gpu`、headless → `QT_QPA_PLATFORM=offscreen`）、`_create_window`、`_pump`、`_probe_renderer`、OK/FAILED 打印与 0/1 退出码。签名 `main(argv=None) -> int`，顶层只有 `if __name__ == "__main__": raise SystemExit(main())`。 |
+out/entry-refactor/REPORT.md:15:| `README.md` / `docs/BUILD-PROGRESS.md` / `docs/STAGE6-CLOSEOUT-REPORT.md` / `docs/audit/qml-shell-audit.md` / `.github/workflows/validate.yml:427` | 入口名与说明同步；`BUILD-PROGRESS` 新增 §1.16 记录改前改后清单与全部实测输出；CI 断言的 `DEVA WEB OK` / `bridge=True` 标记未改。 |
+out/entry-refactor/REPORT.md:21:- (c) 源码树 `AI_UPPER_HEADLESS=1 PYTHONPATH=app/src .venv/bin/python app/src/main.py` → `DEVA WEB OK platform=offscreen title='ai_upper' url=…/app/assets/renderer/index.html bridge=True`，`EXIT=0`。
+out/entry-refactor/REPORT.md:22:- (d) `tools/build.py build --target linux-arm64` → `EXIT=0`，`PASS entry module Cythonized: main`，`SMOKE PASS launcher`；`strings dist/ai_upper/ai_upper | grep -c "from main import main"` → `1`，`"from deva_web import main"` → `0`；`dist/ai_upper/ai_upper` headless 启动 → `DEVA WEB OK … bridge=True`，`EXIT=0`。
+out/qwebengine-drop/evidence/scripts/make_shadow.py:1:"""Build a symlink-only PySide6 tree with QtWebEngine payload removed.
+out/qwebengine-drop/evidence/scripts/make_shadow.py:7:`PySide6.QtWebEngineCore` fails exactly as it would on a pruned bundle.
+out/qwebengine-drop/evidence/scripts/make_shadow.py:19:    "QtWebEngineCore.abi3.so", "QtWebEngineWidgets.abi3.so", "QtWebEngineQuick.abi3.so",
+out/qwebengine-drop/evidence/scripts/make_shadow.py:20:    "QtWebEngineCore.pyi", "QtWebEngineWidgets.pyi", "QtWebEngineQuick.pyi",
+out/qwebengine-drop/evidence/scripts/make_shadow.py:21:    "QtWebEngineCore.pyd", "QtWebEngineWidgets.pyd", "QtWebEngineQuick.pyd",
+out/qwebengine-drop/evidence/scripts/make_shadow.py:22:    "QtWebEngineProcess", "QtWebEngineProcess.exe",
+out/qwebengine-drop/evidence/scripts/make_shadow.py:27:    "QtWebEngineCore.framework", "QtWebEngineWidgets.framework", "QtWebEngineQuick.framework",
+out/qwebengine-drop/evidence/scripts/make_shadow.py:30:SKIP_PREFIXES = ("libQt6WebEngine", "QtWebEngine")
+out/pyside624-compat/REPORT.md:62:- `app/assets/renderer/index.html:11` 是 `<script type="module" crossorigin src="./assets/index-feRGkUOb.js">`；`app/src/mvvm/views/web_shell_window.py:195` 用 `QUrl.fromLocalFile(...)` 加载。
+out/pyside624-compat/REPORT.md:63:- 6.2.4 的 UA 实测 `QtWebEngine/6.2.4 Chrome/90.0.4430.228`（`evidence/logs/js624.log`）。Chromium 90 下 `file://` 的 module script 被拒：`Failed to load module script: ... non-JavaScript MIME type of ""`（`evidence/logs/webapp624.log`）⇒ 页面 DOM 只有空壳（`bodyLen 31`），截图 `evidence/shots/web624-renderer.png` 为纯白。同一页面用 `http://127.0.0.1` 提供时能渲染（`evidence/logs/http624b.log`：`No conversations / Start a conversation / …`）。6.6.3 同样 `file://` 能跑 module（`modtest663.log` → `RESULT 'module-ran'`，`modtest624.log` → `RESULT 'pending'`）。
+out/pyside624-compat/REPORT.md:64:- 另需 `AA_ShareOpenGLContexts` 且 `QtWebEngineWidgets` 必须在 `QApplication` 之前导入（`evidence/logs/r2-web624.log` 的 `WebEngineContext used before QtWebEngineCore::initialize()`；补丁见 `main-webengine-init.py.diff`）。
+out/pyside624-compat/REPORT.md:76:- Windows：**扁平**——`PySide6/{plugins,qml,resources,translations}`、`PySide6/Qt6Core.dll`、`PySide6/QtWebEngineProcess.exe`、`PySide6/qt.conf`，**没有 `PySide6/Qt/`**，**没有 `pyside6qml.abi3.dll`**（6.5+ 才有）。
+out/qwebengine-drop/evidence/scripts/apply_patches.py:102:# 6. main.py: AA_ShareOpenGLContexts + import QtWebEngineWidgets before QApplication
+out/qwebengine-drop/evidence/scripts/apply_patches.py:110:    from mvvm.views import web_shell_window as _wsw  # noqa: F401
+out/pyside624-compat/evidence/metadata/layout-624-linux.txt:42:QtWebEngineProcess
+out/pyside624-compat/evidence/metadata/layout-624-linux.txt:95:QtWebChannel
+out/pyside624-compat/evidence/metadata/layout-624-linux.txt:96:QtWebEngine
+out/rename/content-rename.txt:55:  scripts/parity/port_run.py
+out/rename/content-rename.txt:56:  scripts/parity/port_shots.sh
+out/ci-fix/run-43588462742-annotations/ann-132427904347.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/qwebengine-remove/logs/dist-webengine-before.txt:4:702456	dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+out/qwebengine-remove/logs/dist-webengine-before.txt:5:203488	dist/ai_upper/site-packages/PySide6/QtWebEngineWidgets.abi3.so
+out/qwebengine-remove/logs/dist-webengine-before.txt:9:132945	dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+out/qwebengine-remove/logs/dist-webengine-before.txt:10:136680	dist/ai_upper/site-packages/PySide6/QtWebChannel.abi3.so
+out/qwebengine-remove/logs/dist-webengine-before.txt:12:16054	dist/ai_upper/assets/renderer/qwebchannel.js
+out/audit-model-path/probe_web_model.py:16:os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+out/audit-model-path/probe_web_model.py:26:from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
+out/audit-model-path/probe_web_model.py:51:    window = DevaWebWindow(
+out/audit-model-path/probe_web_files.py:13:os.environ.setdefault("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox --disable-gpu")
+out/audit-model-path/probe_web_files.py:23:from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
+out/audit-model-path/probe_web_files.py:48:    window = DevaWebWindow(
+out/entry-refactor/evidence.txt:7:     1	"""本工程的唯一入口：装配原版渲染层 `DevaWebWindow` 并启动。
+out/entry-refactor/evidence.txt:62:      （QTWEBENGINE_CHROMIUM_FLAGS 默认值、headless → QT_QPA_PLATFORM=offscreen）、
+out/entry-refactor/evidence.txt:73:      .github/workflows/validate.yml:427 注释（readiness 标记 DEVA WEB OK /
+out/entry-refactor/evidence.txt:77:    AI_UPPER_HEADLESS=1 → DEVA WEB OK … bridge=True，EXIT=0；
+out/qwebengine-drop/evidence/logs/probe-web-maps.txt:4:EVIDENCE {"webengine_libs_in_maps": ["/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WebEngineCore.so.6", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WebEngineWidgets.so.6", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWebEngineCore.abi3.so", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWebEngineWidgets.abi3.so"], "pyside6_libs_count": 30, "threads": "20", "vmrss": "214112 kB", "children": [], "fd_count": 0, "fd_webengine": []}
+out/qwebengine-drop/evidence/logs/probe-web-maps.txt:5:SAMPLES {"max_children": 0, "child_names": [], "child_cmds": [], "peak_rss_kb": 217584, "threads": [1, 2, 13, 18, 20], "maps_webengine": ["/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WebEngineCore.so.6", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWebEngineCore.abi3.so", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WebEngineWidgets.so.6", "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWebEngineWidgets.abi3.so"]}
+out/entry-refactor/grep-before.txt:3:#   grep -rn 'deva_web\|DevaWebWindow\|deva_main_window\|DevaMainWindow' --include=*.py --include=*.toml --include=*.yml ... . | grep -v '^./out/'
+out/entry-refactor/grep-before.txt:9:app/src/deva_web.py:1:"""本工程的真实入口：承载原版渲染层的 `DevaWebWindow`。
+out/entry-refactor/grep-before.txt:10:app/src/deva_web.py:66:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:11:app/src/deva_web.py:72:    return DevaWebWindow(
+out/entry-refactor/grep-before.txt:15:app/src/mvvm/views/deva_main_window.py:4:Web 承载窗口 `web_shell_window.DevaWebWindow`）。它不直接读写
+out/entry-refactor/grep-before.txt:16:app/src/mvvm/views/web_shell_window.py:120:class DevaWebWindow(QMainWindow):
+out/entry-refactor/grep-before.txt:17:app/src/mvvm/views/web_shell_window.py:26:# 模块本身在任何 binding 上都能导入，缺件由 DevaWebWindow 用原文报出来。
+out/entry-refactor/grep-before.txt:18:app/src/mvvm/views/web_shell_window.py:284:__all__ = ["ASSETS_DIR", "DevaWebWindow", "TITLEBAR_HEIGHT", "assets_dir"]
+out/entry-refactor/grep-before.txt:23:app/tests/test_web_e2e_stream.py:106:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:24:app/tests/test_web_e2e_stream.py:115:    win = DevaWebWindow(
+out/entry-refactor/grep-before.txt:29:app/tests/test_web_shell_modules.py:408:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:30:app/tests/test_web_shell_modules.py:411:    window = DevaWebWindow(
+out/entry-refactor/grep-before.txt:31:app/tests/test_web_shell_modules.py:433:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:32:app/tests/test_web_shell_modules.py:436:    source = DevaWebWindow._shim_source({"theme": "light"})
+out/entry-refactor/grep-before.txt:33:app/tests/test_web_shell_modules.py:474:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:34:app/tests/test_web_shell_modules.py:481:    assert f"'{current}'" in DevaWebWindow._shim_source({})
+out/entry-refactor/grep-before.txt:35:app/tests/test_web_shell_modules.py:4:而这三个模块在**类体求值**时就要 Qt：`TitleBarOverlay(QWidget)`、`DevaWebWindow(QMainWindow)`、
+out/entry-refactor/grep-before.txt:36:app/tests/test_web_shell_modules.py:74:    shell.DevaWebWindow(settings=None, personas=None, store=None)
+out/entry-refactor/grep-before.txt:37:app/tests/test_web_shell_modules.py:78:    raise SystemExit("缺 QtWebEngine 的 binding 上，DevaWebWindow 竟然构造成功")
+out/entry-refactor/grep-before.txt:38:docs/BUILD-PROGRESS.md:1000:| 打包后产物能起 Web 承载窗口（**仅 linux-arm64**） | **已验证**：`dist/ai_upper` 起的就是 `DevaWebWindow`，headless 打印 `DEVA WEB OK … bridge=True`（§1.14.4） | Windows / macOS 目标本轮未构建：容器只有 linux-arm64 运行时可跑通；两个目标需要各自真机构建后再验 |
+out/entry-refactor/grep-before.txt:41:docs/BUILD-PROGRESS.md:845:结论先说：**打包产物起的是 `DevaWebWindow`，不是模板窗口**；linux-arm64 构建
+out/entry-refactor/grep-before.txt:42:docs/BUILD-PROGRESS.md:853:| 薄入口 | `app/src/deva_web.py`（新增） | 只做装配（`DEVA_HOME` → `SettingsService` / `PersonaStore` / `ChatSessionStore` / `SecretsVault`）并起 `DevaWebWindow`；`main.py` / `application.py` 的模板语义**未改** |
+out/entry-refactor/grep-before.txt:50:docs/BUILD-PROGRESS.md:987:`AI_UPPER_HEADLESS=1 python app/src/deva_web.py` → `DEVA WEB OK … bridge=True`。
+out/entry-refactor/grep-before.txt:52:docs/STAGE6-CLOSEOUT-REPORT.md:15:| 1 | 打包产物起的是 `DevaWebWindow`，不是模板窗口 | `tools/build.py build --target linux-arm64` → `EXIT=0`；`strings dist/ai_upper/ai_upper \| grep -c "from deva_web import main"` → `1`；构建日志 `PASS entry module Cythonized: deva_web` |
+out/entry-refactor/grep-before.txt:55:docs/STAGE6-CLOSEOUT-REPORT.md:55:  `ChatSessionStore` / `SecretsVault` 后起 `DevaWebWindow`。`main.py` / `application.py`
+out/entry-refactor/grep-before.txt:58:docs/audit/qml-shell-audit.md:15:- 入口模块：`app/src/deva_web.py:60 _create_window()` → `DevaWebWindow`；
+out/entry-refactor/grep-before.txt:59:docs/audit/qml-shell-audit.md:16:- 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+out/entry-refactor/grep-before.txt:64:out/ci-fix/REPORT.md:1000:  WebEngine 的导入放在 `except ImportError` 后，`DevaWebWindow.__init__`
+out/entry-refactor/grep-before.txt:66:out/ci-fix/REPORT.md:211:`DevaWebWindow.__init__`，原样带出底层 ImportError。新增
+out/entry-refactor/grep-before.txt:72:out/ci-fix/REPORT.md:825:File "web_shell_window.py", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+out/entry-refactor/grep-before.txt:74:out/ci-fix/REPORT.md:894:`app/src/deva_web.py` 固定装配 `DevaWebWindow`。也就是说 arm64 缺的不是
+out/entry-refactor/grep-before.txt:82:out/ci-fix/REPORT.md:987:File "web_shell_window.py", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+out/entry-refactor/grep-before.txt:86:out/ci-fix/closeout/py38-closeout-report-round2.md:230:| `158a36c` | fix(py38) | `app/src/deva_web.py`、`app/src/mvvm/views/web_shell_window.py` |
+out/entry-refactor/grep-before.txt:88:out/ci-fix/run-43586127170-annotations/ann-132420865992.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/entry-refactor/grep-before.txt:92:out/ci-fix/run-43588462742-annotations/ann-132427904347.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/entry-refactor/grep-before.txt:102:out/ci-fix/run-43599360678/annotations-arm64.json:35:    "message": "File \"web_shell_window.py\", line 112, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/entry-refactor/grep-before.txt:109:out/ci-fix/run-43605493485/annotations-arm64.json:35:    "message": "File \"web_shell_window.py\", line 136, in mvvm.views.web_shell_window.DevaWebWindow.__init__",
+out/entry-refactor/grep-before.txt:115:scripts/parity/live_scenarios.py:272:    from mvvm.views.web_shell_window import DevaWebWindow
+out/entry-refactor/grep-before.txt:116:scripts/parity/live_scenarios.py:280:    win = DevaWebWindow(
+out/entry-refactor/grep-before.txt:117:scripts/parity/port_run.py:26:from mvvm.views.web_shell_window import DevaWebWindow  # noqa: E402
+out/entry-refactor/grep-before.txt:118:scripts/parity/port_run.py:41:    win = DevaWebWindow(settings=settings, personas=personas, store=store, vault=vault)
+out/qwebengine-drop/evidence/logs/qt-prune-modules.txt:1:required: ['QtCore', 'QtGui', 'QtQml', 'QtQuick', 'QtWebChannel', 'QtWidgets']
+out/qwebengine-drop/evidence/logs/qt-prune-modules.txt:2:optional: ['QtWebEngineCore', 'QtWebEngineWidgets']
+out/qwebengine-drop/evidence/logs/qt-prune-modules.txt:3:QtWebChannel in required: True
+out/qwebengine-drop/evidence/logs/qt-prune-modules.txt:4:QtWebEngine* in required: []
+out/rename/old-name-files.txt:62:scripts/parity/port_run.py
+out/rename/old-name-files.txt:63:scripts/parity/port_shots.sh
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:2:TIER {'pyside6': '/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': 'OK', 'QtWebEngineWidgets': 'OK'}
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:7:TIER {'pyside6': '/tmp/qw/shadow/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:12:TIER {'pyside6': '/tmp/qw/shadow-essentials/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': "ModuleNotFoundError: No module named 'PySide6.QtWebChannel'", 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:17:TIER {'pyside6': '/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': 'OK', 'QtWebEngineWidgets': 'OK'}
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:22:TIER {'pyside6': '/tmp/qw/shadow/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': 'OK', 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/qwebengine-drop/evidence/logs/tier-timing-summary.txt:27:TIER {'pyside6': '/tmp/qw/shadow-essentials/PySide6/__init__.py', 'qt': '6.11.2', 'QtWebChannel': "ModuleNotFoundError: No module named 'PySide6.QtWebChannel'", 'QtWebEngineCore': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineCore'", 'QtWebEngineWidgets': "ModuleNotFoundError: No module named 'PySide6.QtWebEngineWidgets'"}
+out/qwebengine-drop/evidence/scripts/measure_web.py:1:"""Measure the AI_UPPER_UI=web entry: wall clock, RSS, Chromium children.
+out/qwebengine-drop/evidence/scripts/measure_web.py:3:Streams stdout/stderr with timestamps so the `DEVA WEB OK/FAILED` line can be
+out/qwebengine-drop/evidence/scripts/measure_web.py:5:QtWebEngineProcess child appears and how much RSS the process holds.
+out/qwebengine-drop/evidence/scripts/measure_web.py:25:    "AI_UPPER_UI": "web",
+out/audit-model-path/REPORT.md:14:前提：本工程有**两个界面入口**（`app/src/main.py:53-68`）——默认是 QML 三栏壳，`AI_UPPER_UI=web` 才是 WebEngine + 原版 React 渲染层。
+out/audit-model-path/REPORT.md:16:| 功能项 | 默认 QML 入口 | `AI_UPPER_UI=web` 兜底入口 | 后端服务层 |
+out/audit-model-path/REPORT.md:111:$ AI_UPPER_HOME=/tmp/audit-empty-home AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 \
+out/audit-model-path/REPORT.md:137:web 入口加载原版 React 渲染层（`app/assets/renderer/index.html` + `assets/index-feRGkUOb.js`），设置页字段与原版逐项一致，经 `shim.js` → `DevaBridge` → Python 服务：
+out/audit-model-path/REPORT.md:300:cd app/src && AI_UPPER_HOME=/tmp/audit-model-home AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 \
+out/audit-model-path/REPORT.md:303:AI_UPPER_HOME=/tmp/audit-empty-home AI_UPPER_UI=qml AI_UPPER_HEADLESS=1 \
+out/qwebengine-drop/evidence/scripts/make_shadow_essentials.py:3:Purpose: measure the "drop QtWebEngine at the dependency level" tier without a
+out/qwebengine-drop/evidence/scripts/make_shadow_essentials.py:6:`import PySide6.QtWebChannel` / `QtWebEngineCore` fails exactly as it would on an
+out/qwebengine-drop/evidence/scripts/probe_prune_closure.py:5:site-packages with the host target, which is what decides whether QtWebEngine
+out/qwebengine-drop/evidence/scripts/probe_prune_closure.py:23:print("QtWebEngineCore kept:", bool(closure and "QtWebEngineCore" in closure))
+out/qwebengine-drop/evidence/scripts/probe_prune_closure.py:24:print("QtWebChannel kept:", bool(closure and "QtWebChannel" in closure))
+out/pyside624-compat/evidence/metadata/win624-layout.txt:137:  PySide6/QtWebChannel.pyi
+out/pyside624-compat/evidence/metadata/win624-layout.txt:138:  PySide6/QtWebEngineCore.pyi
+out/pyside624-compat/evidence/metadata/win624-layout.txt:139:  PySide6/QtWebEngineProcess.exe
+out/pyside624-compat/evidence/metadata/win624-layout.txt:140:  PySide6/QtWebEngineQuick.pyi
+out/pyside624-compat/evidence/metadata/win624-layout.txt:141:  PySide6/QtWebEngineWidgets.pyi
+out/pyside624-compat/evidence/metadata/win624-layout.txt:177:  PySide6/QtWebEngineProcess.exe: True
+out/ci-fix/closeout/run-43610671432-authoritative.txt:87:File "web_shell_window.py", line 136, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+out/ci-fix/closeout/run-43610671432-authoritative.txt:96:该异常在 `web_shell_window.py:136` 被重新包装成
+out/ci-fix/closeout/run-43610671432-authoritative.txt:97:「该 binding 没有 QtWebEngine，无法承载渲染层：…」后继续上抛，最终

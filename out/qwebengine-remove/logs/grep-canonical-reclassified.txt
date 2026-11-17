@@ -1,0 +1,203 @@
+grep 命中行数（去重前）: 148   去重后: 148
+
+=== 文档 (docs/ README): 70
+   README.md:242
+   README.md:306
+   docs/STAGE6-CLOSEOUT-REPORT.md:15
+   docs/STAGE6-CLOSEOUT-REPORT.md:16
+   docs/STAGE6-CLOSEOUT-REPORT.md:55
+   docs/STAGE6-CLOSEOUT-REPORT.md:90
+   docs/STAGE6-CLOSEOUT-REPORT.md:91
+   docs/STAGE6-CLOSEOUT-REPORT.md:92
+   docs/STAGE6-CLOSEOUT-REPORT.md:93
+   docs/STAGE6-CLOSEOUT-REPORT.md:127
+   docs/STAGE6-CLOSEOUT-REPORT.md:128
+   docs/STAGE5-CLOSEOUT-REPORT.md:11
+   docs/STAGE5-CLOSEOUT-REPORT.md:18
+   docs/STAGE5-CLOSEOUT-REPORT.md:24
+   docs/STAGE5-CLOSEOUT-REPORT.md:25
+   docs/STAGE5-CLOSEOUT-REPORT.md:87
+   docs/STAGE5-CLOSEOUT-REPORT.md:232
+   docs/STAGE5-CLOSEOUT-REPORT.md:255
+   docs/audit/qml-shell-audit.md:14
+   docs/audit/qml-shell-audit.md:22
+   docs/audit/qml-shell-audit.md:24
+   docs/audit/qml-shell-audit.md:25
+   docs/audit/qml-shell-audit.md:36
+   docs/audit/qml-shell-audit.md:90
+   docs/audit/qml-shell-audit.md:98
+   docs/audit/qml-shell-audit.md:234
+   docs/audit/qml-shell-audit.md:242
+   docs/audit/qml-shell-audit.md:356
+   docs/audit/qml-shell-audit.md:357
+   docs/BUILD-PROGRESS.md:9
+   docs/BUILD-PROGRESS.md:30
+   docs/BUILD-PROGRESS.md:36
+   docs/BUILD-PROGRESS.md:45
+   docs/BUILD-PROGRESS.md:46
+   docs/BUILD-PROGRESS.md:88
+   docs/BUILD-PROGRESS.md:118
+   docs/BUILD-PROGRESS.md:164
+   docs/BUILD-PROGRESS.md:338
+   docs/BUILD-PROGRESS.md:576
+   docs/BUILD-PROGRESS.md:648
+   docs/BUILD-PROGRESS.md:851
+   docs/BUILD-PROGRESS.md:859
+   docs/BUILD-PROGRESS.md:863
+   docs/BUILD-PROGRESS.md:892
+   docs/BUILD-PROGRESS.md:893
+   docs/BUILD-PROGRESS.md:894
+   docs/BUILD-PROGRESS.md:895
+   docs/BUILD-PROGRESS.md:941
+   docs/BUILD-PROGRESS.md:943
+   docs/BUILD-PROGRESS.md:950
+   docs/BUILD-PROGRESS.md:977
+   docs/BUILD-PROGRESS.md:979
+   docs/BUILD-PROGRESS.md:1006
+   docs/BUILD-PROGRESS.md:1007
+   docs/BUILD-PROGRESS.md:1017
+   docs/BUILD-PROGRESS.md:1025
+   docs/BUILD-PROGRESS.md:1031
+   docs/BUILD-PROGRESS.md:1104
+   docs/BUILD-PROGRESS.md:1105
+   docs/BUILD-PROGRESS.md:1180
+   docs/BUILD-PROGRESS.md:1183
+   docs/DEVELOPMENT_GUIDE.md:441
+   docs/DEVELOPMENT_GUIDE.md:576
+   docs/ROADMAP-NEXT.md:85
+   docs/ROADMAP-NEXT.md:134
+   docs/ROADMAP-NEXT.md:147
+   docs/ROADMAP-NEXT.md:414
+   docs/audit/IPC-158-LEDGER.md:5
+   docs/audit/IPC-158-LEDGER.md:52
+   docs/audit/IPC-158-LEDGER.md:59
+
+=== 配置/脚本注释: 5
+   app/pyproject.toml.example:154
+   app/pyproject.toml:29
+   app/pyproject.toml:171
+   app/requirements.txt:6
+   .github/workflows/validate.yml:218
+
+=== Python 注释 (#): 6
+   tools/ai_upper/qt_prune.py:489
+   tools/ai_upper/qt_prune.py:583
+   tools/ai_upper/qt_prune.py:584
+   tools/ai_upper/qt_prune.py:1108
+   tools/ai_upper/qt_prune.py:1109
+   tools/ai_upper/qt_prune.py:1145
+
+=== Python 文档字符串: 25
+   app/src/main.py:8
+   app/src/mvvm/services/attachments.py:14
+   app/src/mvvm/webui/bridge.py:3
+   app/tests/test_qt_prune.py:505
+   app/tests/test_qt_prune.py:838
+   app/tests/test_qt_prune.py:840
+   app/tests/test_qt_prune.py:876
+   app/tests/test_qt_prune.py:890
+   app/tests/test_qt_prune.py:946
+   app/tests/test_qt_prune.py:965
+   app/tests/test_qt_prune.py:966
+   app/tests/test_qt_prune.py:1042
+   app/tests/test_mvvm.py:197
+   app/tests/test_mvvm.py:198
+   app/tests/test_mvvm.py:199
+   app/tests/test_deliverables.py:15
+   app/tests/test_third_party.py:405
+   app/tests/test_host_write.py:3
+   app/tests/test_host_write.py:4
+   tools/ai_upper/third_party.py:316
+   tools/ai_upper/qt_prune.py:3
+   tools/ai_upper/qt_prune.py:88
+   tools/ai_upper/qt_prune.py:841
+   app/tests/test_settings_write.py:3
+   app/tests/test_settings_write.py:4
+
+=== 可执行代码行: 42
+   app/tests/test_qt_prune.py:44
+   app/tests/test_qt_prune.py:46
+   app/tests/test_qt_prune.py:52
+   app/tests/test_qt_prune.py:71
+   app/tests/test_qt_prune.py:73
+   app/tests/test_qt_prune.py:86
+   app/tests/test_qt_prune.py:222
+   app/tests/test_qt_prune.py:239
+   app/tests/test_qt_prune.py:241
+   app/tests/test_qt_prune.py:294
+   app/tests/test_qt_prune.py:311
+   app/tests/test_qt_prune.py:462
+   app/tests/test_qt_prune.py:543
+   app/tests/test_qt_prune.py:681
+   app/tests/test_qt_prune.py:697
+   app/tests/test_qt_prune.py:857
+   app/tests/test_qt_prune.py:865
+   app/tests/test_qt_prune.py:867
+   app/tests/test_qt_prune.py:868
+   app/tests/test_qt_prune.py:908
+   app/tests/test_qt_prune.py:933
+   app/tests/test_qt_prune.py:978
+   app/tests/test_qt_prune.py:980
+   app/tests/test_qt_prune.py:981
+   app/tests/test_qt_prune.py:989
+   app/tests/test_qt_prune.py:1051
+   app/tests/test_qt_prune.py:1054
+   app/tests/test_qt_prune.py:1073
+   app/tests/test_qt_prune.py:1080
+   app/tests/test_qt_prune.py:1083
+   app/tests/test_qt_prune.py:1085
+   app/tests/test_qt_prune.py:1086
+   app/tests/test_qt_prune.py:1099
+   app/tests/test_qt_prune.py:1100
+   app/tests/test_mvvm.py:216
+   app/tests/test_third_party.py:414
+   app/tests/test_third_party.py:424
+   tools/ai_upper/qt_prune.py:464
+   tools/ai_upper/qt_prune.py:588
+   tools/ai_upper/qt_prune.py:647
+   tools/ai_upper/qt_prune.py:1149
+   tools/ai_upper/qt_prune.py:1245
+
+=== 可执行代码行逐条用途 ===
+  app/tests/test_qt_prune.py:44: for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+  app/tests/test_qt_prune.py:46: for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+  app/tests/test_qt_prune.py:52: _touch(pyside / "Qt" / "libexec" / "QtWebEngineProcess")
+  app/tests/test_qt_prune.py:71: for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore"):
+  app/tests/test_qt_prune.py:73: for module in ("QtCore", "QtGui", "QtWidgets", "QtQml", "QtWebEngineCore", "QtPdf", "QtSql", "QtMultimedia"):
+  app/tests/test_qt_prune.py:86: _touch(pyside / "QtWebEngineProcess.exe")
+  app/tests/test_qt_prune.py:222: if name == "QtWebEngineCore.framework":
+  app/tests/test_qt_prune.py:239: assert not (pyside / "QtWebEngineCore.abi3.so").exists()
+  app/tests/test_qt_prune.py:241: assert not (pyside / "Qt" / "lib" / "QtWebEngineCore.framework").exists()
+  app/tests/test_qt_prune.py:294: assert not (pyside / "QtWebEngineCore.pyd").exists()
+  app/tests/test_qt_prune.py:311: assert not (pyside / "QtWebEngineProcess.exe").exists()
+  app/tests/test_qt_prune.py:462: assert (pyside / "QtWebEngineCore.abi3.so").exists()
+  app/tests/test_qt_prune.py:543: prune(site, TARGETS["windows-x86_64"], {"QtCore", "QtWebEngineCore"})
+  app/tests/test_qt_prune.py:681: _touch(pyside / "QtWebEngineCore.pyi")
+  app/tests/test_qt_prune.py:697: assert not (pyside / "QtWebEngineCore.pyi").exists()
+  app/tests/test_qt_prune.py:857: if name.startswith("QtWebEngineCore"):
+  app/tests/test_qt_prune.py:865: prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+  app/tests/test_qt_prune.py:867: helper = pyside / "Qt" / "libexec" / "QtWebEngineProcess"
+  app/tests/test_qt_prune.py:868: assert helper.exists(), "QtWebEngineCore ships without the process it spawns"
+  app/tests/test_qt_prune.py:908: prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+  app/tests/test_qt_prune.py:933: prune(site, TARGETS["macos-arm64"], {"QtCore", "QtWebEngineCore"})
+  app/tests/test_qt_prune.py:978: f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+  app/tests/test_qt_prune.py:980: "    QtWebEngineCore = None\n"
+  app/tests/test_qt_prune.py:981: "    QtWebEngineWidgets = None\n"
+  app/tests/test_qt_prune.py:989: assert optional == {"QtWebEngineCore", "QtWebEngineWidgets"}
+  app/tests/test_qt_prune.py:1051: webengine = {"QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick"}
+  app/tests/test_qt_prune.py:1054: assert "QtWebChannel" not in required
+  app/tests/test_qt_prune.py:1073: (pyside / "QtWebChannel.py").write_text("", encoding="utf-8")
+  app/tests/test_qt_prune.py:1080: {"QtWebChannel", "QtWebEngineCore"},
+  app/tests/test_qt_prune.py:1083: assert closure == {"QtWidgets", "QtCore", "QtWebChannel"}
+  app/tests/test_qt_prune.py:1085: assert "QtWebEngineCore" in out, "an optional module missing from the wheel must be reported"
+  app/tests/test_qt_prune.py:1086: assert "QtWebChannel" not in out.split("has no", 1)[1].split(";", 1)[0]
+  app/tests/test_qt_prune.py:1099: with pytest.raises(RuntimeError, match="QtWebEngineCore"):
+  app/tests/test_qt_prune.py:1100: qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWebEngineCore"})
+  app/tests/test_mvvm.py:216: for gone in ("views.web_shell_window", "views.title_bar_overlay"):
+  app/tests/test_third_party.py:414: helper = zipfile.ZipInfo("demo_pkg/Qt/libexec/QtWebEngineProcess")
+  app/tests/test_third_party.py:424: helper_path = site / "demo_pkg" / "Qt" / "libexec" / "QtWebEngineProcess"
+  tools/ai_upper/qt_prune.py:464: "QtWebEngineCore": {"webview"},
+  tools/ai_upper/qt_prune.py:588: MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+  tools/ai_upper/qt_prune.py:647: helpers=(pyside / "QtWebEngineProcess.exe",),
+  tools/ai_upper/qt_prune.py:1149: if "QtWebEngineCore" not in modules:
+  tools/ai_upper/qt_prune.py:1245: if "QtWebEngineCore" not in modules:

@@ -1,0 +1,33 @@
+== PySide6 6.11.2: 5 wheels
+    pyside6-6.11.2-cp310-abi3-macosx_13_0_universal2.whl
+    pyside6-6.11.2-cp310-abi3-manylinux_2_34_x86_64.whl
+    pyside6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+    pyside6-6.11.2-cp310-abi3-win_amd64.whl
+    pyside6-6.11.2-cp310-abi3-win_arm64.whl
+== PySide6-Addons 6.11.2: 5 wheels
+    pyside6_addons-6.11.2-cp310-abi3-macosx_13_0_universal2.whl
+    pyside6_addons-6.11.2-cp310-abi3-manylinux_2_34_x86_64.whl
+    pyside6_addons-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+    pyside6_addons-6.11.2-cp310-abi3-win_amd64.whl
+    pyside6_addons-6.11.2-cp310-abi3-win_arm64.whl
+== PySide6-Essentials 6.11.2: 5 wheels
+    pyside6_essentials-6.11.2-cp310-abi3-macosx_13_0_universal2.whl
+    pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_34_x86_64.whl
+    pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+    pyside6_essentials-6.11.2-cp310-abi3-win_amd64.whl
+    pyside6_essentials-6.11.2-cp310-abi3-win_arm64.whl
+== PySide6 6.6.3: 4 wheels
+    PySide6-6.6.3-cp38-abi3-macosx_11_0_universal2.whl
+    PySide6-6.6.3-cp38-abi3-manylinux_2_28_x86_64.whl
+    PySide6-6.6.3-cp38-abi3-manylinux_2_31_aarch64.whl
+    PySide6-6.6.3-cp38-abi3-win_amd64.whl
+== PySide6-Addons 6.6.3: 4 wheels
+    PySide6_Addons-6.6.3-cp38-abi3-macosx_11_0_universal2.whl
+    PySide6_Addons-6.6.3-cp38-abi3-manylinux_2_28_x86_64.whl
+    PySide6_Addons-6.6.3-cp38-abi3-manylinux_2_31_aarch64.whl
+    PySide6_Addons-6.6.3-cp38-abi3-win_amd64.whl
+== PySide6-Essentials 6.6.3: 4 wheels
+    PySide6_Essentials-6.6.3-cp38-abi3-macosx_11_0_universal2.whl
+    PySide6_Essentials-6.6.3-cp38-abi3-manylinux_2_28_x86_64.whl
+    PySide6_Essentials-6.6.3-cp38-abi3-manylinux_2_31_aarch64.whl
+    PySide6_Essentials-6.6.3-cp38-abi3-win_amd64.whl

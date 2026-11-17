@@ -1,0 +1,147 @@
+[1/6] Runtime + SDK
+[2/6] Third-party dependencies
++ /home/agent/shared_workspace/ai_upper/runtimes/linux-arm64/3.13.5/bin/python3.13 -m pip download --disable-pip-version-check --only-binary=:all: --prefer-binary --cache-dir /home/agent/shared_workspace/ai_upper/.cache/pip --dest /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64 --timeout 120 --retries 10 PySide6-Essentials==6.11.2 pydantic==2.14.3 httpx==0.28.1 cryptography==46.0.3 keyring==25.7.0 typing_extensions==4.13.2; python_version < '3.9'
+Ignoring typing_extensions: markers 'python_version < "3.9"' don't match your environment
+Collecting PySide6-Essentials==6.11.2
+  Using cached pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (3.6 kB)
+Collecting pydantic==2.14.3
+  Using cached pydantic-2.14.3-py3-none-any.whl.metadata (141 kB)
+Collecting httpx==0.28.1
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting cryptography==46.0.3
+  Using cached cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl.metadata (5.7 kB)
+Collecting keyring==25.7.0
+  Using cached keyring-25.7.0-py3-none-any.whl.metadata (21 kB)
+Collecting shiboken6==6.11.2 (from PySide6-Essentials==6.11.2)
+  Using cached shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl.metadata (2.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic==2.14.3)
+  Using cached annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.4 (from pydantic==2.14.3)
+  Using cached pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.16.0 (from pydantic==2.14.3)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic==2.14.3)
+  Using cached typing_inspection-0.4.5-py3-none-any.whl.metadata (2.6 kB)
+Collecting anyio (from httpx==0.28.1)
+  Using cached anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+Collecting certifi (from httpx==0.28.1)
+  Using cached certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx==0.28.1)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx==0.28.1)
+  Using cached idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting cffi>=2.0.0 (from cryptography==46.0.3)
+  Using cached cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (2.5 kB)
+Collecting SecretStorage>=3.2 (from keyring==25.7.0)
+  Using cached secretstorage-3.5.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting jeepney>=0.4.2 (from keyring==25.7.0)
+  Using cached jeepney-0.9.0-py3-none-any.whl.metadata (1.2 kB)
+Collecting jaraco.classes (from keyring==25.7.0)
+  Using cached jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting jaraco.functools (from keyring==25.7.0)
+  Using cached jaraco_functools-4.6.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting jaraco.context (from keyring==25.7.0)
+  Using cached jaraco_context-6.1.2-py3-none-any.whl.metadata (4.2 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx==0.28.1)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography==46.0.3)
+  Using cached pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting more-itertools (from jaraco.classes->keyring==25.7.0)
+  Using cached more_itertools-11.2.1-py3-none-any.whl.metadata (42 kB)
+Using cached pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (79.6 MB)
+Using cached pydantic-2.14.3-py3-none-any.whl (494 kB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl (4.3 MB)
+Using cached keyring-25.7.0-py3-none-any.whl (39 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (2.1 MB)
+Using cached shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl (270 kB)
+Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Using cached cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (222 kB)
+Using cached jeepney-0.9.0-py3-none-any.whl (49 kB)
+Using cached secretstorage-3.5.0-py3-none-any.whl (15 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Using cached typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+Using cached anyio-4.16.0-py3-none-any.whl (134 kB)
+Using cached idna-3.20-py3-none-any.whl (69 kB)
+Using cached certifi-2026.10.23-py3-none-any.whl (135 kB)
+Using cached jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Using cached jaraco_context-6.1.2-py3-none-any.whl (7.9 kB)
+Using cached jaraco_functools-4.6.0-py3-none-any.whl (11 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached more_itertools-11.2.1-py3-none-any.whl (74 kB)
+Using cached pycparser-3.12-py3-none-any.whl (62 kB)
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/pyside6_essentials-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/pydantic-2.14.3-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/httpx-0.28.1-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/cryptography-46.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/keyring-25.7.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/httpcore-1.0.9-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/pydantic_core-2.50.4-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/shiboken6-6.11.2-cp310-abi3-manylinux_2_39_aarch64.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/annotated_types-0.8.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/cffi-2.1.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/jeepney-0.9.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/secretstorage-3.5.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/typing_extensions-4.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/typing_inspection-0.4.5-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/anyio-4.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/idna-3.20-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/certifi-2026.10.23-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/jaraco.classes-3.4.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/jaraco_context-6.1.2-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/jaraco_functools-4.6.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/h11-0.16.0-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/more_itertools-11.2.1-py3-none-any.whl
+Saved /home/agent/shared_workspace/ai_upper/build/wheels/linux-arm64/pycparser-3.12-py3-none-any.whl
+Successfully downloaded PySide6-Essentials pydantic httpx cryptography keyring httpcore pydantic-core shiboken6 annotated-types cffi jeepney SecretStorage typing-extensions typing-inspection anyio idna certifi jaraco.classes jaraco.context jaraco.functools h11 more-itertools pycparser
+Qt pruning: removed 232 file(s) and 87 director(ies), freed 100 MB
+Trim (site-packages): removed 80 file(s) and 0 director(ies), freed 4.8 MB
+Third-party optimization: removed 314 files and 88 directories
+Cython: 2 of 74 module(s) changed
++ /usr/bin/python3.13 -m cython --force -3 -o ../../../../build/cache/cython/mvvm/services/attachments.c attachments.py
++ /usr/bin/python3.13 -m cython --force -3 -o ../../build/cache/cython/qml_shell.c qml_shell.py
+Compile: 2 of 4 merged bundle(s) changed
++ merged _root (5 module(s)) -> ai_upper_bundles/ai_upper__root.cpython-313-aarch64-linux-gnu.so
++ merged mvvm (62 module(s)) -> ai_upper_bundles/ai_upper_mvvm.cpython-313-aarch64-linux-gnu.so
+Encrypted egg: 16 application file(s), backend=auto
+Python stage ready: /home/agent/shared_workspace/ai_upper/build/staging/linux-arm64/site-packages
+[3/6] Target launcher
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/agent/shared_workspace/ai_upper/build/launcher/linux-arm64
+[1/4] Building CXX object CMakeFiles/AiUpper.dir/ai_upper_embedded.cpp.o
+[2/4] Building CXX object CMakeFiles/AiUpper.dir/src/main.cpp.o
+[3/4] Building CXX object CMakeFiles/AiUpper.dir/src/AiUpper.cpp.o
+[4/4] Linking CXX executable AiUpper
+[4/6] Package + native dependency closure
+Trim (runtime): removed 358 file(s) and 9 director(ies), freed 3.0 MB
+Native dependency: bundled /lib/aarch64-linux-gnu/libglib-2.0.so.0 as site-packages/PySide6/Qt/lib/libglib-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libz.so.1 as site-packages/PySide6/Qt/lib/libz.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libzstd.so.1 as site-packages/PySide6/Qt/lib/libzstd.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libdbus-1.so.3 as site-packages/PySide6/Qt/lib/libdbus-1.so.3
+Native dependency: bundled /lib/aarch64-linux-gnu/libfontconfig.so.1 as site-packages/PySide6/Qt/lib/libfontconfig.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libbrotlidec.so.1 as site-packages/PySide6/Qt/lib/libbrotlidec.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libgobject-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgobject-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libgio-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgio-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libatomic.so.1 as site-packages/PySide6/Qt/lib/libatomic.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libpcre2-8.so.0 as site-packages/PySide6/Qt/lib/libpcre2-8.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libsystemd.so.0 as site-packages/PySide6/Qt/lib/libsystemd.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libexpat.so.1 as site-packages/PySide6/Qt/lib/libexpat.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libbrotlicommon.so.1 as site-packages/PySide6/Qt/lib/libbrotlicommon.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libffi.so.8 as site-packages/PySide6/Qt/plugins/networkinformation/libffi.so.8
+Native dependency: bundled /lib/aarch64-linux-gnu/libgmodule-2.0.so.0 as site-packages/PySide6/Qt/plugins/networkinformation/libgmodule-2.0.so.0
+Native dependency: bundled /lib/aarch64-linux-gnu/libmount.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libmount.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libselinux.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libselinux.so.1
+Native dependency: bundled /lib/aarch64-linux-gnu/libcap.so.2 as site-packages/PySide6/Qt/lib/libcap.so.2
+Native dependency: bundled /lib/aarch64-linux-gnu/libblkid.so.1 as site-packages/PySide6/Qt/plugins/networkinformation/libblkid.so.1
+ERROR: RuntimeError: Unresolved native dependencies:
+  site-packages/PySide6/Qt/lib/libQt6XcbQpa.so.6: libICE.so.6
+  site-packages/PySide6/Qt/lib/libQt6XcbQpa.so.6: libSM.so.6
+Optional native payloads can be dropped with [tool.ai_upper.native].exclude in app/pyproject.toml.

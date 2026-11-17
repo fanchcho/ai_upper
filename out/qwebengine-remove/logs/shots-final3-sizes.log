@@ -1,0 +1,22 @@
+# HEAD=0433783 重拍（scripts/parity/qml_pages_all.sh /tmp/qml-pages-final3 /tmp/fx-qml-home）
+# rc 全 0（shots-final3.log），共 18 页，合计 1511782 B
+
+page                         size    bytes  md5
+chat                     1280x820    95744  0185e2f93fc2fcad56b1effa8d197708
+ctx-menu                 1280x820    99264  ca1fe0c28faf8dbe17608cbb93f0a5c7
+dark-chat                1280x820    95245  048db80e9906716a8a495a31774a0145
+delete-confirm           1280x820   104144  7dbe9a3e685e8a5134f3fa70d8700ab1
+empty                    1280x820    23873  dbdddec9793656631b9041db4d2b3030
+first-run                1280x820    23873  dbdddec9793656631b9041db4d2b3030
+focus-composer           1280x820    95744  0185e2f93fc2fcad56b1effa8d197708
+hover-thread             1280x820    95991  7c4f861bbcf468aaaf285f40194dcc59
+long-bottom              1280x820    95744  0185e2f93fc2fcad56b1effa8d197708
+long-mid                 1280x820    95744  0185e2f93fc2fcad56b1effa8d197708
+model-picker             1280x820   100457  4daea06367fe2d28f72a1393833b344e
+search-none              1280x820    95344  871afd72e01b5be2ff388cbe9b9d825f
+search-open              1280x820    96079  2fb1b36b33864e91f9fd8e0d06b69729
+search-results           1280x820    95373  0fe07f96d2d64dc3a0acc5c029a5b6a8
+settings-about           1280x820    74106  03cb6e53b05101ca29fad16cad66c784
+settings-extensions      1280x820    70804  e6541e090cf3953c78e18ce38b9488d3
+settings-general         1280x820    81640  3c994e38296e1626a5adeb8f1e1c2421
+settings-models          1280x820    72613  df5d8d3c163abdfd8a6dcd6b711ddd9d

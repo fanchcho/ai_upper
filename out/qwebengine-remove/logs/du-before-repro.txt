@@ -1,0 +1,8 @@
+# 基线产物（commit 1d53e4a）独立重建后的体积 —— 用于交叉验证 du-before.txt
+# 工作树：/tmp/qwe-baseline（git rev-parse HEAD = 1d53e4a2357cf101f1e0502f0b10f839b1bd380e）
+# 命令：cd /tmp/qwe-baseline && PATH="$PWD/.venv/bin:/home/agent/shared_workspace/ai_upper/.venv/bin:$PATH" .venv/bin/python tools/build.py --target linux-arm64
+# 日志：build-baseline-repro.log，末尾 EXIT=0 / SMOKE PASS launcher / READY
+# 记录值 du-before.txt: 534630463 / 522M，重建值如下（差 242581 B = 0.045%）
+
+534873044	/tmp/qwe-baseline/dist/ai_upper
+522M	/tmp/qwe-baseline/dist/ai_upper

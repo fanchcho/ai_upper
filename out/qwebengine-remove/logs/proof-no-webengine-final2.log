@@ -1,0 +1,21 @@
+### 1) AST 层面的 import / from-import 是否引用 WebEngine/WebChannel 系模块
+  扫描 py 文件 189 个，命中 0 条
+
+### 2) 字符串级扫描：import 语句里出现 WebEngine 的行（grep，含测试夹具字符串）
+  （可执行 import 行：无命中）
+  ——唯一字符串命中（测试夹具源码文本，不是模块 import）：
+app/tests/test_qt_prune.py:978:        f"    from {QT_COMPAT_MODULE} import QtWebEngineCore, QtWebEngineWidgets\n"
+
+### 3) 产物里的 WebEngine / WebChannel / Chromium 载荷文件
+  find 命中数: 0
+
+### 4) 产物 site-packages/PySide6 顶层模块（应只有 Essentials 那批）
+  QtCore.abi3.so
+  QtGui.abi3.so
+  QtNetwork.abi3.so
+  QtOpenGL.abi3.so
+  QtQml.abi3.so
+  QtQuick.abi3.so
+  QtQuickControls2.abi3.so
+  QtWidgets.abi3.so
+  dist-info: PySide6 pyside6_essentials-6.11.2.dist-info shiboken6 shiboken6-6.11.2.dist-info 
