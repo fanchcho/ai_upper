@@ -233,7 +233,16 @@ def main(argv=None):
     # in front of it when there is one: the tail may start mid-command line.
     message = tail_message(lines)
     if stage:
-        message = escape_command_message(stage) + "\n" + message
+        # The join is inside a workflow *command value*: a raw newline ends the
+        # command there, so the runner keeps the stage and silently drops the
+        # tail. That is how the macOS jobs in run 44023896272 reported 26 bytes
+        # ("[6/6] Target runtime smoke") while run.log held the real failure.
+        stage_text = escape_command_message(stage) + "%0A"
+        # Both halves share the annotation budget GitHub keeps; a tail sized as
+        # if it had the whole budget would push the stage's detail out.
+        if len(stage_text) + len(message) > MESSAGE_BUDGET:
+            message = tail_message(lines, budget=max(1, MESSAGE_BUDGET - len(stage_text)))
+        message = stage_text + message
     emit(level, args.title, message)
     return 0
 

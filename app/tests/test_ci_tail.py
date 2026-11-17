@@ -282,6 +282,66 @@ def test_a_diagnostic_keeps_the_detail_indented_under_it(capsys, tmp_path):
     assert "::error title=build.py (exit 1)::ERROR: RuntimeError" in out
 
 
+def test_the_stage_line_does_not_swallow_the_tail(capsys, tmp_path):
+    """A raw newline inside a workflow command ends the command there.
+
+    Run 44023896272's two macOS jobs failed the packaged smoke and reported
+    exactly 26 bytes -- ``[6/6] Target runtime smoke`` -- while ``run.log`` also
+    held the shell's ``QML FAILED …`` line. The stage was escaped, the tail was
+    escaped, and the two were joined with a literal ``\\n``: GitHub stopped
+    reading the annotation at that byte and dropped everything after it. So a
+    regression here is invisible in CI itself, which is why it is pinned.
+    """
+    log = tmp_path / "run.log"
+    log.write_text(
+        "[6/6] Target runtime smoke\n"
+        "QML FAILED platform=offscreen exposed=False frames=0 rendered=0\n",
+        encoding="utf-8",
+    )
+
+    code = ci_tail.main(
+        [
+            "--log",
+            str(log),
+            "--title",
+            "run.log (build.py --run exit 1)",
+            "--label",
+            "run.log",
+        ]
+    )
+
+    out = capsys.readouterr().out
+    assert code == 0
+    # One annotation, one line: the emitted command must carry no raw newline,
+    # or the runner drops everything after it.
+    assert out.count("\n") == 1
+    assert "[6/6] Target runtime smoke" in out
+    assert "QML FAILED platform=offscreen" in out
+    assert out.index("[6/6]") < out.index("QML FAILED")
+
+
+def test_the_stage_line_does_not_push_the_tail_past_the_budget(capsys, tmp_path):
+    """Stage + tail are one annotation, so they share one budget."""
+    log = tmp_path / "run.log"
+    log.write_text(
+        "[6/6] Target runtime smoke\n"
+        + "\n".join("noise %04d" % i for i in range(2000))
+        + "\nthe actual last word\n",
+        encoding="utf-8",
+    )
+
+    ci_tail.main(
+        ["--log", str(log), "--title", "run.log (build.py --run exit 1)", "--label", "run.log"]
+    )
+
+    out = capsys.readouterr().out
+    message = out.split("::", 2)[2].rstrip("\n")
+    assert len(message) <= ci_tail.MESSAGE_BUDGET
+    assert "[6/6] Target runtime smoke" in message
+    # The tail still ends with the failure, not with the noise.
+    assert "the actual last word" in message
+
+
 def test_an_unindented_line_ends_the_detail_block():
     """Detail collection must stop before swallowing the next statement."""
     lines = [
