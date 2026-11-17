@@ -247,7 +247,9 @@ def test_pick_attachments_goes_through_the_real_file_dialog(qapp, tmp_path, monk
     assert str(picked) in result
     out = capsys.readouterr()
     assert "QML PICK" in out.out
-    assert str(picked) in out.out
+    # 日志里是 `json.dumps(paths)`，Windows 路径的反斜杠会被转义成 `\\`；
+    # 直接比对原始路径在 Windows 上必然不命中，所以按同一序列化口径断言。
+    assert json.dumps([str(picked)], ensure_ascii=False) in out.out
 
 
 def test_pick_attachments_cancelled_returns_empty_and_logs_nothing(qapp, tmp_path, monkeypatch, capsys):

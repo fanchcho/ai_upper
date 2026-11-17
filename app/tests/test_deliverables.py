@@ -302,12 +302,24 @@ def test_open_rejects_missing_files_and_bad_indices(workspace, monkeypatch):
     assert open_item(session, "tu", "0") == {"ok": False}
 
 
+def _expected_reveal(path: str) -> list:
+    """各平台「在文件夹中显示」的期望 argv（Linux / macOS / Windows 各写死一条）。"""
+    if sys.platform == "darwin":
+        return ["open", "-R", path]
+    if sys.platform == "win32":
+        return ["explorer", "/select," + os.path.normpath(path)]
+    return ["xdg-open", os.path.dirname(path) or "."]
+
+
 def test_reveal_spawns_the_platform_command_without_a_shell(workspace, monkeypatch):
     spawned = []
     monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
-    result = reveal(_session_with(workspace, [str(workspace / "report.md")]), "tu", 0)
+    target = str(workspace / "report.md")
+    result = reveal(_session_with(workspace, [target]), "tu", 0)
     assert result == {"ok": True}
-    assert spawned == [["xdg-open", str(workspace)]]
+    # 三个平台各有一条写死的期望，而不是把 Linux 的 `xdg-open` 当成共同答案：
+    # macOS 走 `open -R <文件>`、Windows 走 `explorer /select,<文件>`。
+    assert spawned == [_expected_reveal(target)]
 
 
 def test_reveal_refuses_missing_files(workspace, monkeypatch):
@@ -340,14 +352,24 @@ def test_open_command_is_per_platform_and_never_joins_arguments(monkeypatch):
     assert open_command(weird) == ["cmd", "/c", "start", "", weird]
 
 
+def _expected_open(path: str) -> list:
+    """各平台「用默认应用打开」回落时的期望 argv（同样三平台各写死一条）。"""
+    if sys.platform == "darwin":
+        return ["open", path]
+    if sys.platform == "win32":
+        return ["cmd", "/c", "start", "", path]
+    return ["xdg-open", path]
+
+
 def test_open_falls_back_when_desktop_services_refuse(workspace, monkeypatch):
     """offscreen 平台插件不支持 openDocument 时，回落平台打开器（否则按钮点了没反应）。"""
     spawned = []
     monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: False)
     monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
-    result = open_item(_session_with(workspace, [str(workspace / "report.md")]), "tu", 0)
+    target = str(workspace / "report.md")
+    result = open_item(_session_with(workspace, [target]), "tu", 0)
     assert result == {"ok": True}
-    assert spawned == [["xdg-open", str(workspace / "report.md")]]
+    assert spawned == [_expected_open(target)]
 
 
 def test_open_reports_failure_when_both_paths_fail(workspace, monkeypatch):
@@ -359,10 +381,20 @@ def test_open_reports_failure_when_both_paths_fail(workspace, monkeypatch):
 
 # ── 3. 路径安全：只能来自边车 ─────────────────────────────────────────────
 def test_relative_and_non_string_entries_are_dropped():
-    class Session:
-        delivered = {"tu": ["relative/path.md", 123, None, "/abs/ok.md"]}
+    """相对路径与非字符串丢弃；绝对路径按 POSIX 与 Windows 两套写法都认。
 
-    assert delivered_paths(Session(), "tu") == ["/abs/ok.md"]
+    边车里的路径来自 `present_files`，在 Windows 上是 `C:\\…`、在 Linux/macOS 上是
+    `/…`。`os.path.isabs` 只认宿主那一套，同一条边车在不同平台上会被丢掉不同的条目
+    （Windows 宿主丢 `/abs/ok.md`，Linux 宿主丢 `C:\\work\\ok.md`），交付卡内容随平台
+    漂移。这里同时断言两种写法都被保留。
+    """
+
+    class Session:
+        delivered = {
+            "tu": ["relative/path.md", 123, None, "/abs/ok.md", r"C:\work\ok.md"],
+        }
+
+    assert delivered_paths(Session(), "tu") == ["/abs/ok.md", r"C:\work\ok.md"]
 
 
 def test_no_sidecar_means_no_paths_even_if_messages_mention_files(workspace):

@@ -28,6 +28,8 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+from mvvm.services.tool_policy import is_absolute_anywhere
+
 # 允许「用默认应用打开」的扩展名：成品类文件。可执行 / 脚本类（exe、bat、ps1、js、py、lnk …）
 # 用默认应用打开就等于运行，一律不放行，只能在文件夹中显示。逐项照抄原版
 # `deva/apps/desktop/src/main/services/deliverables.ts:17-34`。
@@ -61,6 +63,11 @@ def delivered_paths(session: Any, tool_use_id: Any) -> List[str]:
 
     只认边车：`session.delivered[toolUseId]`。非绝对路径的条目丢弃（边车理应全是绝对路径，
     真出现相对路径说明被外部改过，不能拿它去打开文件）。
+
+    「绝对」按 POSIX 与 Windows 两套写法都认（`is_absolute_anywhere`），与仓库里
+    `present_files` 解析落点时用的是同一条判据。此前这里用 `os.path.isabs`，它只认宿主
+    那一套：同一份边车在 Windows 宿主上会把 POSIX 写法的绝对路径（`/abs/ok.md`）判成相对
+    而丢弃，在 Linux 宿主上又会把 `C:\\work\\x.md` 判成相对——交付卡内容因此随平台变化。
     """
     if not isinstance(tool_use_id, str) or not tool_use_id:
         return []
@@ -73,7 +80,7 @@ def delivered_paths(session: Any, tool_use_id: Any) -> List[str]:
     return [
         str(item)
         for item in recorded
-        if isinstance(item, str) and item and os.path.isabs(item)
+        if isinstance(item, str) and item and is_absolute_anywhere(item)
     ]
 
 
