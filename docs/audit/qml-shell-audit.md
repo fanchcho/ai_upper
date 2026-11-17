@@ -9,11 +9,16 @@
 
 ## 0. 一句话现状
 
-**当前真正发布的界面不是 Qt 控件，而是 QtWebEngine 承载的原版 React 产物。**
+**当前发布的界面是 QML 三栏壳 + `QTextDocument` 正文（原生路线）。**
 
-- 打包入口：`app/pyproject.toml:53` → `entry = "main.py"`；
-- 入口模块：`app/src/main.py:58 _create_window()` → `DevaWebWindow`（原 `deva_web.py`
-  已于 2026-11-15 整段并入 `main.py` 并删除，见 `docs/BUILD-PROGRESS.md` §1.16）；
+> 2026-11-17 更新：QtWebEngine 承载窗口、`DevaBridge` 通道层、React 渲染层资产
+> （`app/assets/renderer`）与 `scripts/parity/port_*` 已按「方案 1」整体删除，
+> 依赖收口到 `PySide6-Essentials`。下文 §0 的若干条目是审计当时（HEAD `e2b9392`）
+> 的现状描述，保留作历史对照；以本节与 §7 第 4 条为准。
+
+- 打包入口：`app/pyproject.toml` → `entry = "main.py"`；
+- 入口模块：`app/src/main.py` → `qml_shell.run()`（原 `deva_web.py` 与 Web 承载窗口
+  已于 2026-11-15 / 2026-11-17 两次收敛后删除）；
 - 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
   1280x820（`:140`），`QWebEngineView`（`:143`），加载 `assets_root()/renderer/index.html`
   （`:195`），`QWebChannel` 注册 `DevaBridge`（`:184`），无边框 + `TitleBarOverlay`（`:200–207`）；
@@ -234,12 +239,12 @@ QML 适配层应复用这些纯函数，不要再写第二份。
 | 文件 | 覆盖 |
 | --- | --- |
 | `app/tests/test_deva_panes.py` | 控件三栏：会话列表/设置页/主窗口的“用户动作 → VM → 控件”链（假 Qt 控件） |
-| `app/tests/test_mvvm.py:199–228` | 遍历 `mvvm` 全部模块可导入；3 个需真实 Qt 的模块豁免（`title_bar_overlay`、`web_shell_window`、`webui.bridge`），豁免项必须真实存在 |
-| `app/tests/test_web_shell_modules.py` | 豁免项的替代覆盖：真实 binding 下可导入/可构造、缺 WebEngine 时显式报错、shim 组装 |
+| `app/tests/test_mvvm.py:199–228` | 遍历 `mvvm` 全部模块可导入；**已无豁免项**，另断言 `views.web_shell_window` / `views.title_bar_overlay` 两个文件不得回潮 |
 | `app/tests/test_transcript_render.py` | `transcript_html` / 纯文本投影 |
+| `app/tests/test_qml_chat_files.py`、`test_qml_chat_files_ui.py` | QML 壳的附件/交付链路（原 `test_web_*` 五份用例的等价覆盖） |
 | `app/tests/test_chat_vm*.py`、`test_settings_vm.py`、`test_chat_sessions_vm.py` | ViewModel 行为 |
 | `app/tests/test_qt_prune.py` | 裁剪策略（含 QML 目录删除条件） |
-| 截图脚本 | `scripts/parity/{deva_original_shots.sh,port_shots.sh,port_run.py,compare.sh}`，Xvfb 1400x900、窗口 1280x820、`compare` 的 AE/fuzz3%/maxd≤10 |
+| 截图脚本 | `scripts/parity/{deva_original_shots.sh,qml_page_shot.sh,qml_pages_all.sh,compare.sh}`，Xvfb 1400x900、窗口 1280x820、`compare` 的 AE/fuzz3%/maxd≤10 |
 
 ## 5. 原版视觉基线（取自只读 deva 工程）
 
@@ -348,8 +353,10 @@ QML 适配层应复用这些纯函数，不要再写第二份。
    要么随包捆绑预算好的头像。选型在 §二 实施时定，原则是不改 deva 工程。
 3. **富文本输入**：原版输入框是 Lexical（contentEditable），支持 @ 提及、附件贴片、
    `/` 指令。QML 侧用 `TextArea`，第一版只做纯文本 + 发送键策略，其余按“未实现”显式列出。
-4. **QtWebEngine 移除**：路线 B 的硬要求是不引入 QtWebEngine。现有 `web_shell_window.py`
-   与 `main.py` 仍在仓库且被测试引用；QML 入口切走后，是否删除旧 Web 路径由后续轮次决定
-   （不删测试、不删被覆盖代码）。
+4. **QtWebEngine 移除（已完成，2026-11-17）**：路线 B 的硬要求是不引入 QtWebEngine。
+   `web_shell_window.py`、`title_bar_overlay.py`、`DevaBridge`、`app/assets/renderer`、
+   `scripts/parity/{port_run.py,port_shots.sh,live_scenarios.py}` 与 5 个 web 用例已删除；
+   依赖 pin 改为 `PySide6-Essentials`，CI 的 Chromium 运行库与 `DEVA WEB OK` 就绪标记一并清理。
+   证据见 `out/qwebengine-remove/REPORT.md`。
 5. **`qt = "imports"` 裁剪**：见 §4.3，必须用真实 import 保住 QML 运行时，并在
    `qt_prune.py` 里补判据。这是“源码能跑、产物起不来”最可能的来源。

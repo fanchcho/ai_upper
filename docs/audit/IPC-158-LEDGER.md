@@ -1,9 +1,14 @@
 # IPC 158 条通道逐条结论表（移植版）
 
-> 本文件由 `audit-tools/make_ipc_ledger.py` 生成，**不要手改**；改判定请改
-> `audit-tools/ipc_status_table.py` 后重新生成。通道全集来自对 deva 源码
-> `ipcMain.handle` / `ipcMain.on` 的 grep 产物（deva 工程只读，未改动），
-> 入参/出参抄自 `docs/audit/contracts-*.md`（超 240 字截断，全文见同名小节）。
+> **历史文档（2026-11-17 起冻结）**：生成这份表的两支脚本
+> `audit-tools/make_ipc_ledger.py` / `audit-tools/ipc_status_table.py` 已随
+> QtWebEngine 移除一并删除——它们统计的正是 `DevaBridge` 的 IPC 通道，而该桥对象
+> 已不存在，重新生成没有对象可对。本表保留作迁移期的历史对照，**不要手改**。
+> 当前界面（QML 壳）的通道集合见 `app/src/qml_shell.py` 的 `@QtCore.Slot`。
+>
+> 原始口径（当时）：通道全集来自对 deva 源码 `ipcMain.handle` / `ipcMain.on` 的 grep
+> 产物（deva 工程只读，未改动），入参/出参抄自 `docs/audit/contracts-*.md`
+> （超 240 字截断，全文见同名小节）。
 
 **总数校验：158 条 = 154 条 `ipcMain.handle` + 4 条 `ipcMain.on`**
 （4 条 `on` 为 `config:get-sync`、`terminal:input`、`terminal:resize`、`terminal:dispose`）。

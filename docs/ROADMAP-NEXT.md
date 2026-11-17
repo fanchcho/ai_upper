@@ -30,7 +30,7 @@
 
 | 编号 | 任务 | 优先级 | 规模 | 前置依赖 |
 |---|---|---|---|---|
-| R1 | CI 补 Web 层覆盖、lint 与类型检查 | P0 | M | — |
+| R1 | CI 补 QML 页面覆盖、lint 与类型检查 | P0 | M | — |
 | R2 | Windows / macOS 真产物 | P0 | M | R1 |
 | R3 | 真实网络、真实 provider 与 `web_fetch` | P0 | S | 外部密钥与出网 |
 | R4 | 真桌面观感、窗口控制与人工验收 | P1 | M | 真机 / GPU / 窗口管理器 |
@@ -55,16 +55,17 @@
 
 ## P0
 
-### R1　CI 补 Web 层覆盖、lint 与类型检查
+### R1　CI 补 QML 页面覆盖、lint 与类型检查
 
 **目标**
 让 CI 能拦住「源码态测试全绿、产物一启动就崩」这一类缺陷，并提供统一的静态检查入口。
 
 现状缺口（均为实测结论）：
 
-1. 渲染层是入库的 Vite 构建产物（`app/assets/renderer/assets/*.js`，约 3.2 MB），
-   CI 没有 Node 侧构建或测试步骤；渲染层与原版的偏差只能靠 `scripts/parity/*.sh`
-   在本地跑 Xvfb 比对，CI 完全不覆盖。
+1. ~~渲染层是入库的 Vite 构建产物~~（2026-11-17 已作废：界面已改为 QML 壳 +
+   `QTextDocument`，`app/assets/renderer` 与 `scripts/parity/port_*` 一并删除，
+   不再有 Node 侧构建对象）。QML 页面与原版的偏差仍只在本地用
+   `scripts/parity/qml_page_shot.sh` / `qml_pages_all.sh` 在 offscreen 下比对，CI 覆盖这一项仍未做。
 2. 仓库里没有任何 lint / 格式化配置：不存在 `ruff`、`mypy`、`pyright`、`flake8`、
    `pre-commit` 配置文件，`.github/workflows/` 下只有一个 `validate.yml`，
    其中也没有静态检查步骤。
@@ -80,25 +81,24 @@
 
 - 新增 `pyproject.toml`（或 `ruff.toml`）配置 `ruff check` 与目标规则集，
   CI 增加一步 `ruff check app/src tools`，且该步在 `develop` 上为绿；
-- CI 增加 `web-layer` job：对 `app/assets/renderer` 执行一次 Node 构建
-  （`npm ci && npm run build`）并断言产物与入库文件一致（`git diff --exit-code`），
-  不一致即说明入库产物不是从当前源码构建的；
-- 至少一条 pytest 用例会在 `window.deva` 缺失某个契约方法时失败
-  （把 `shim.js` 的通道表与 `bridge.py` 的注册表做集合比对，断言缺一条即报错）；
+- ~~CI 增加 `web-layer` job~~、~~`window.deva` 契约集合比对~~：两条都以 React 渲染层
+  与 `webui.bridge` 的通道表为前提，随 QtWebEngine 一并移除，不再有可执行的验收对象；
+- 替代项：CI 增加一步跑 `scripts/parity/qml_pages_all.sh` 的离线冒烟（各页面能出 PNG、
+  无 QML 警告），把原先只在本地的 QML 视觉覆盖搬进 CI；
 - 类型检查以「只减不增」的方式接入：先记录当前 `mypy --ignore-missing-imports` 的错误数
   作为基线文件，CI 断言不高于基线；连续三轮下降后再改为硬门禁；
 - `validate.yml` 的 `matrix.run == false` 条目在文档里写明「只构建不启动」的原因，
   并在 R2 完成后把 `linux-arm64` 改为 `run: true`。
 
-**预估规模**：M（lint 配置半天，类型基线 2–3 天，渲染层构建校验 2–3 天）。
+**预估规模**：M（lint 配置半天，类型基线 2–3 天，QML 页面冒烟半天）。
 
 **风险**
 
 - 直接上 `mypy` 硬门禁会一次爆出数百条错误，逼出大面积 `# type: ignore`，
   反而把类型检查变成装饰。必须先做基线，只允许下降；
-- 渲染层源码若不在本仓库，Node 构建校验无法完成——需先确认 Vite 工程是否可入库，
-  不可入库时退化为「shim 契约集合比对 + 产物哈希记录」；
-- 新增 CI job 会拉长流水线时长，需要对渲染层 job 加缓存，否则每个 PR 多几分钟。
+- QML 页面冒烟需要 offscreen 平台插件与字体；runner 缺字体时会出图但排版不符，
+  必须同时断言「无 QML 警告」，否则截图绿而界面坏；
+- 新增 CI job 会拉长流水线时长，页面冒烟要复用构建产物，避免每个 PR 重复打包。
 
 ### R2　Windows / macOS 真产物
 
@@ -116,7 +116,7 @@
   执行 `python tools/build.py --target <target>`，产物名为
   `dist/ai_upper/ai_upper.exe` 与 `dist/ai_upper.app/Contents/MacOS/ai_upper`；
 - headless 启动：Windows 用 `AI_UPPER_HEADLESS=1 AI_UPPER_NO_DIALOG=1`，
-  macOS 同法，输出包含 `DEVA WEB OK ... bridge=True`，退出码 0；
+  macOS 同法，输出包含 `QML OK ... size=1280x820`，退出码 0；
 - `--verify` 在两平台均通过，且 `bundle/ai_upper.dat`（macOS 为
   `Contents/Resources/bundle/ai_upper.dat`）存在、成员列表与源码一致；
 - macOS 额外要求 `codesign --verify --deep --strict` 通过；
@@ -131,28 +131,30 @@
 - macOS 签名需要开发者证书，没有证书时只能 ad-hoc 签名，
   此时「签名通过」的结论不适用于发布；
 - 交叉构建的静态通过不代表运行通过，必须原生启动，不能用 `--target` 交叉冒充。
-- **已知阻塞（arm64 WebEngine 待上游，2026-11-14 记录）**：PySide6 从未发布含
-  `QtWebEngineCore` 的 win_arm64 wheel，产品契约（`ff89c4c`）要求缺件时明确报错，
-  因此 `windows-11-arm` 上「构建 + 启动」这一步必然红；该矩阵项保持
-  `run: true` 原样，不降级、不加 skip。验收口径＝Qt 发布 arm64 WebEngine 之后，
-  `windows-11-arm` 的 `run: true` 条目在 CI 上转绿，届时删除本条。
+- **已解除（2026-11-17）**：原先的 arm64 阻塞是 PySide6 从未发布含 `QtWebEngineCore`
+  的 win_arm64 wheel。产品已改走「QML 壳 + `QTextDocument`」并只声明
+  `PySide6-Essentials`，不再需要 WebEngine，该阻塞条件消失；`windows-11-arm` 的
+  `run: true` 保持不变，是否转绿以真实 CI 结果为准（本轮未在 arm64 Windows 实跑）。
 
 ### R3　真实网络、真实 provider 与 `web_fetch`
 
 **目标**
 用真密钥跑通 Anthropic / OpenAI / Responses 三条链路，并让 `web_fetch` 真抓网页。
 
-现状：无可用密钥、环境不保证出网；离线测试只覆盖事件流解析与工具结果形状。
-`app/tests/test_web_e2e_stream.py` 因缺 `DEVA_E2E_PROVIDER` 等变量而 skip，
-这条 skip 必须保留到真跑通为止。
+现状：无可用密钥、环境不保证出网；离线测试只覆盖事件流解析与工具结果形状
+（`test_chat_streaming.py` 用脚本化 provider 验增量与停止，`test_provider_adapters.py`
+验协议适配）。原先那条「缺 `DEVA_E2E_PROVIDER` 就 skip」的端到端用例
+（`app/tests/test_web_e2e_stream.py`）随 QtWebEngine 承载窗口一并删除，
+因此**当前没有任何真实 provider 的自动化入口**——真跑脚本要在本项里重新建，
+按 QML 壳的装配路径（`mvvm.webui.assembly.build_chat_host`）驱动，不再经过已删除的桥。
 
 **前置依赖**：外部密钥与出网能力（非工程内可解决）。
 
 **可核查验收标准**
 
-- 设 `DEVA_E2E_PROVIDER=1` 与 `ANTHROPIC_BASE_URL` / `ANTHROPIC_API_KEY` /
-  `ANTHROPIC_MODEL` 后，`test_web_e2e_stream.py` 由 skip 变为 pass，并把
-  `-rs` 输出中该条 SKIPPED 消失作为证据落盘；
+- 新建的 `app/tests/test_e2e_provider.py`（名字按实际落地的文件写进证据）在设
+  `AI_UPPER_E2E_PROVIDER=1` 与 `ANTHROPIC_BASE_URL` / `ANTHROPIC_API_KEY` /
+  `ANTHROPIC_MODEL` 后由 skip 变为 pass，并把 `-rs` 输出里该条 SKIPPED 消失落盘；
 - 三种协议各跑通一轮真实对话：请求体、流式增量、`stopReason`、用量统计与实际返回一致，
   原始日志落盘 `out/e2e-provider/<protocol>.log`；
 - `web_fetch` 对真实公网页面返回正文字数 > 0 且不含 HTML 标签；对 404、
@@ -404,11 +406,13 @@
 ### R12　`browser:` 域 13 条
 
 **目标**：内置浏览器面板（独立视图、标签注册表、导航、缩略图）。
-**前置依赖**：R4（需要真显示环境验证）、R1（渲染层契约比对）。
-**预估规模**：XL（原版依赖 Electron `BrowserView` 与 `capturePage`，QtWebEngine 无对位接口，
+**前置依赖**：R4（需要真显示环境验证）。
+**预估规模**：XL（原版依赖 Electron `BrowserView` 与 `capturePage`；本工程的界面已不含任何
+WebEngine/浏览器控件，没有可复用的帧源，
 `live-start` / `live-stop` / `thumbnail` 三条需要另找帧源方案）。
-**风险**：`browser:live-start` 走 Electron 定时器推流，QtWebEngine 无等价接口；
-若改用 `QWebEngineView.grab()` 会带来明显 CPU 开销，需要先测；
+**风险**：`browser:live-start` 走 Electron 定时器推流，Qt/QML 侧无等价接口；
+本工程已彻底移除 QtWebEngine（依赖面只有 `PySide6-Essentials`），**没有** `QWebEngineView`
+可退，帧源只能来自外开浏览器或另接协议，需先做可行性验证再排期；
 `browser:handoff` 要求双向通道，语义复杂。
 
 | 通道 | 要做的事 | 可核查验收 |
@@ -566,6 +570,6 @@
 3. **R6 → R7 → R10** 是一条依赖链，做完才算「对话域完整」。
 4. **R11 / R13 / R17 / R20** 互相独立、规模可控，可并行插空做。
 5. **R12（浏览器）规模最大且依赖真显示环境，放最后**；`live-start` /
-   `live-stop` / `thumbnail` 三条若 QtWebEngine 无法给出可用帧源，
+   `live-stop` / `thumbnail` 三条若 Qt/QML 无法给出可用帧源，
    以「已记录差异」结案，不做假实现。
 6. **R19 保持未实现**，直到有跨平台发布产物与签名方案。

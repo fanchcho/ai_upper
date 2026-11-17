@@ -9,7 +9,7 @@
 # 说明: deva 工程只读——本脚本只启动它、不写它；数据全部落在 DEVA_HOME。
 #
 # 坐标约定：窗口固定在 (0,0) 的 1280x820；点击坐标即客户端坐标。
-# 这些坐标同时被 scripts/parity/port_shots.sh 使用，两边取同一组页面才可逐像素对比。
+# 这组页面与 scripts/parity/qml_pages_all.sh 取的是同一组，才可逐像素对比。
 set -u
 OUT="${1:?用法: deva_original_shots.sh <输出目录> [DEVA_HOME]}"
 HOME_DIR="${2:-/tmp/deva-home-parity}"

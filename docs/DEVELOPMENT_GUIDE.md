@@ -113,7 +113,7 @@ app/src/
 
 # 2. 声明依赖与目标
 #    app/pyproject.toml（本地副本，改了不进 Git）
-#    [project] dependencies = ["PySide6==6.11.0"]
+#    [project] dependencies = ["PySide6-Essentials==6.11.0"]
 #    [tool.ai_upper.runtime] provider = "pbs"  python = "3.13.5"
 
 # 3. 构建 + 运行
@@ -175,7 +175,7 @@ ai_upper/
 name = "ai_upper"
 version = "0.17.9"
 requires-python = ">=3.8,<3.14"
-dependencies = ["PySide6==6.11.0", "pyserial==3.5"]
+dependencies = ["PySide6-Essentials==6.11.0", "pyserial==3.5"]
 
 [tool.ai_upper]
 entry = "main.py"                 # app/src 下的入口文件
@@ -438,7 +438,7 @@ def main() -> int:
 
 ### 9.3 按 import 裁剪（体积关键）
 
-PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个约 450 MB。开启：
+PySide6 的元包装上整个 Qt（Addons 一档里的 `QtWebEngineCore` 就约 450 MB）。本应用只声明 `PySide6-Essentials`，Addons 根本不会被下载；`qt = "imports"` 再按 import 裁掉 Essentials 里没用到的那部分。开启：
 
 ```toml
 [tool.ai_upper.optimize]
@@ -573,7 +573,7 @@ site-packages 与 runtime 释放的文件数、目录数和字节数。自定义
 和 `qoffscreen` 平台插件都有独立的保留逻辑，不要用删除规则覆盖它们。
 
 Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` 下的
-`examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`，以及
+`examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`（两者只有 Addons 才带，本应用不再声明它），以及
 `qwebgl` 平台插件（它会牵连 QtQuick/QtQml；`qoffscreen` 保留给 headless 冒烟）。
 
 ### 9.6 加密 egg（默认开启）

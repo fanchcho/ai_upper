@@ -62,7 +62,7 @@ ai_upper/
 │   ├── pyproject.toml.example  # 配置模板（入库）
 │   ├── pyproject.toml          # 本地配置（Git ignored，从模板复制而来）
 │   ├── src/
-│   │   ├── main.py           # 唯一入口：装配并启动主窗口
+│   │   ├── main.py           # 唯一入口：装配并启动 QML 壳
 │   │   └── ...
 │   ├── tests/
 │   └── resources/            # 可选：随包资源，没有该目录就不打包
@@ -234,10 +234,12 @@ Windows 新机器可直接运行 `python tools/build.py`。若旧版本在下载
 ```toml
 [project]
 dependencies = [
-    "PySide6==6.11.2",
+    "PySide6-Essentials==6.11.2",
     "requests==...",
 ]
 ```
+
+界面只需要 `QtCore` / `QtGui` / `QtWidgets` / `QtQml` / `QtQuick`，都在 `PySide6-Essentials` 里；元包 `PySide6` 会连带装 `PySide6-Addons`（包含 QtWebEngine 整套 Chromium，约 240 MiB），本工程不使用。
 
 ai_upper 为目标 Python/平台下载兼容 wheel，并把完整 wheel 内容安装到最终 `site-packages`。第三方包不会进入 Cython 编译流程。
 
@@ -301,7 +303,7 @@ app/src/
 
 ## Qt 裁剪
 
-PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+PySide6 的 wheel 会带上整个 Qt（`PySide6-Addons` 一档就含 QtWebEngine，其 `QtWebEngineCore` 约 450 MB）。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
 
 ```toml
 [tool.ai_upper.optimize]
@@ -487,7 +489,7 @@ Windows 默认是 GUI 子系统（双击不弹控制台），从 cmd/CI 启动�
 
 ## 验证
 
-应用入口是 `app/src/main.py`（源码树与打包产物共用这一条启动路径），启动后打开承载原版渲染层的 Qt 主窗口。CI 与 smoke 通过 `AI_UPPER_HEADLESS=1` 用 offscreen 平台构建同一个窗口后立即退出，因此既证明 Qt 可用，又不会卡住无显示环境。
+应用入口是 `app/src/main.py`（源码树与打包产物共用这一条启动路径），启动后打开 QML 三栏壳（`app/src/qml/Main.qml`，正文是 `QTextDocument`）；仓库里没有第二条界面路线。CI 与 smoke 通过 `AI_UPPER_HEADLESS=1` 用 offscreen 平台构建同一个窗口后立即退出，因此既证明 Qt 可用，又不会卡住无显示环境。
 
 `--verify` 是静态检查，`--run` 之前的最后一道门是**用目标 Python 真 import**：先由 bundled runtime 导入入口模块和所有直接声明的第三方依赖，再由打包好的 launcher 导入一次。这一步能抓住静态检查看不到的问题（扩展链接方式、stdlib 扩展目录、第三方依赖缺失、Qt 裁剪过度）。
 

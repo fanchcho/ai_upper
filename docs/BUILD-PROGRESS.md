@@ -3,6 +3,12 @@
 > 规则：只写**实际跑出来的**结果。命令与输出都是真的；没跑过的一律归入「已实现未验证」或
 > 「未实现」，不许把没跑通的说成跑通。
 > 最近更新：2026-11-15（入口收敛：`app/src/main.py` 成为唯一入口，`deva_web.py` 退场，§1.16）
+>
+> 2026-11-17 注：本文件是**历史台账**，记录当时的真实输出，不改写。其中引用的
+> `scripts/parity/port_shots.sh`、`port_run.py`、`live_scenarios.py` 与
+> `app/tests/test_web_*.py` 已随 QtWebEngine 移除一并删除（见
+> `out/qwebengine-remove/REPORT.md`），对应命令现在无法重放；当前的截图与冒烟入口是
+> `scripts/parity/qml_pages_all.sh` 与 `AI_UPPER_HEADLESS=1 python tools/build.py --run`。
 
 ## 0. 本轮起点（续跑对账）
 

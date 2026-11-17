@@ -28,7 +28,6 @@ fi
 
 cd "$ROOT" || exit 1
 timeout 120 env \
-  AI_UPPER_UI=qml \
   AI_UPPER_HEADLESS=1 \
   AI_UPPER_HOME="$HOME_DIR" \
   AI_UPPER_QML_PAGE="$PAGE" \
