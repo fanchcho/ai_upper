@@ -302,9 +302,9 @@ def _copy_supporting_trees(bundle_root: Path) -> None:
     which is what ``qml_shell.qml_main()`` reads through ``assets_root()``.
     """
     copy_optional_tree(APP / "resources", bundle_root / "resources")
-    # The renderer bundle and the seed personas. Without this the web window
-    # loads a missing index.html: a blank window that only shows up after the
-    # package is finished.
+    # The seed personas (and any other optional assets). Without this the shell
+    # starts with an empty persona list: a blank sidebar that only shows up
+    # after the package is finished.
     copy_optional_tree(APP / "assets", bundle_root / "assets")
     copy_optional_tree(APP / "src" / "qml", bundle_root / "assets" / "qml")
 

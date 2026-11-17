@@ -139,12 +139,17 @@ def test_every_third_party_import_is_a_declared_runtime_dependency():
     first window with ``ModuleNotFoundError: No module named 'httpx'``. Only a
     real build starting a real bundle found it.
 
-    The comparison is import-name based: distribution names and import names
-    differ (``PySide6`` installs ``PySide6``, ``cryptography`` installs
-    ``cryptography``), and this project pins the two to the same spelling.
+    The comparison is import-name based, and distribution and import names can
+    differ: ``PySide6-Essentials`` is the distribution that installs the
+    ``PySide6`` package, ``cryptography`` installs ``cryptography``. The map
+    below spells out the pairs this project uses; anything not in it has to
+    match its import name.
     """
     import ast
     import sys
+
+    # distribution name (lowercase, as written in requirements.txt) -> import name
+    distribution_import_names = {"pyside6-essentials": "pyside6"}
 
     project = Path(__file__).resolve().parents[1]
     source_root = project / "src"
@@ -169,7 +174,8 @@ def test_every_third_party_import_is_a_declared_runtime_dependency():
         for line in (project / "requirements.txt").read_text(encoding="utf-8").splitlines()
         if line.strip() and not line.lstrip().startswith("#") and not line.lstrip().startswith("-")
     }
-    missing = {name for name in third_party if name.lower() not in declared}
+    provided = declared | {distribution_import_names[name] for name in declared if name in distribution_import_names}
+    missing = {name for name in third_party if name.lower() not in provided}
     assert not missing, (
         f"imported but not in app/requirements.txt (so not in the bundle): {sorted(missing)}"
     )

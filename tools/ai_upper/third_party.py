@@ -310,11 +310,11 @@ def _apply_wheel_mode(info: zipfile.ZipInfo, destination: Path) -> None:
     ``write_bytes`` takes the process umask, so every wheel file landed 0o644.
     A wheel marks its executables in ``external_attr`` (the high 16 bits carry
     the POSIX mode), and some of them are *only* ever started as processes, not
-    imported: PySide6's ``Qt/libexec/QtWebEngineProcess`` is spawned by
-    QtWebEngineCore. Without the bit the packaged application printed
-    ``LaunchProcess: failed to execvp: …/QtWebEngineProcess`` and rendered a
-    blank window, while the same code worked from site-packages (pip applies
-    the mode) and in every source-mode test.
+    imported. Without the bit such a helper fails to start (``failed to execvp``)
+    while the same code worked from site-packages (pip applies the mode) and in
+    every source-mode test. PySide6 used to ship one such helper
+    (``Qt/libexec/QtWebEngineProcess``); the rule stays generic because any
+    future runtime dependency may ship a helper it spawns.
     """
     mode = (info.external_attr >> 16) & 0o777
     if mode & 0o111:

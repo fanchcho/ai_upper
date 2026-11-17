@@ -165,7 +165,7 @@ def test_missing_log_says_so_and_does_not_invent_an_exit_code(capsys, tmp_path):
 
 def test_successful_step_emits_a_notice_without_diagnostics(capsys, tmp_path):
     log = tmp_path / "run.log"
-    log.write_text("building\nerror text in a message body is fine\nDEVA WEB OK bridge=True\n", encoding="utf-8")
+    log.write_text("building\nerror text in a message body is fine\nQML OK size=1280x820\n", encoding="utf-8")
     rc = tmp_path / "run.exitcode"
     rc.write_text("0\n", encoding="utf-8")
 

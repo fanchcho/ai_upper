@@ -283,12 +283,13 @@ def bundle_native_dependencies(root: Path, target, env: dict[str, str] | None = 
             subprocess.run(["install_name_tool", "-change", dep.name, new_name, str(owner)], check=True)
         for binary in native_images:
             _strip_native(binary, target)
-        # Ad-hoc signing must run inside-out. Nested code such as
-        # QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app is rejected
-        # ("code object is not signed at all") unless the code it contains is
-        # signed first, and signing the launcher seals the whole .app bundle,
-        # so it has to happen last. Deepest path first satisfies both, and
-        # matches the order build.py's release path uses.
+        # Ad-hoc signing must run inside-out: a nested .app or .framework is
+        # rejected ("code object is not signed at all") unless the code it
+        # contains is signed first, and signing the launcher seals the whole
+        # .app bundle, so it has to happen last. Deepest path first satisfies
+        # both, and matches the order build.py's release path uses. (The rule
+        # is generic; it was first hit by a nested Qt helper app bundle, which
+        # this project no longer ships.)
         for binary in sorted(native_images, key=lambda path: (-len(path.parts), path == launcher)):
             ad_hoc_sign(binary)
     else:

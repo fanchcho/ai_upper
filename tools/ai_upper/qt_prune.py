@@ -85,9 +85,11 @@ def _imported_paths(path: Path) -> tuple[set[str], set[str]]:
 
     An import inside a ``try`` whose handlers catch ``ImportError`` is
     *optional*: the application is written to run without it. PySide6's
-    win_arm64 wheels ship no QtWebEngineCore at all, and ``web_shell_window``
-    imports it exactly that way, so treating every import as mandatory made the
-    packaging layer reject a payload the application itself accepts.
+    win_arm64 wheels ship no QtWebEngineCore at all (and PySide6-Essentials
+    ships no WebEngine module on any target), so an application that guards
+    such an import runs on bindings a mandatory-import scan would reject. This
+    project no longer imports WebEngine, but the scanner contract stays: any
+    future optional import depends on it.
     """
     try:
         tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"), filename=str(path))

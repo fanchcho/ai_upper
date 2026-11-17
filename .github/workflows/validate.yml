@@ -76,13 +76,15 @@ jobs:
             runtime-python: '3.8.10'
             run: true
             # PySide6 6.11 has no cp38 wheel. This job needs a GUI payload, and
-            # 6.6.3 is the last PySide6 release that ships one for cp38
-            # (cp38-abi3-win_amd64; 6.7 moved its floor to >=3.9). It must be
-            # PySide6 rather than PySide2: PySide2 5.15 bundles Chromium 83,
-            # and the renderer bundle uses Object.hasOwn unguarded (ES2022,
-            # Chromium 93+) in its URL-sanitize path -- the packaged app would
-            # start and then throw while rendering a link, while the readiness
-            # marker (which only needs shim.js) still printed OK.
+            # 6.6.3 is the last release that ships one for cp38
+            # (PySide6_Essentials 6.6.3 cp38-abi3-win_amd64; 6.7 moved its floor
+            # to >=3.9). Essentials rather than the PySide6 meta-package, for the
+            # same reason as the default pin: the QML shell imports only
+            # QtCore/QtGui/QtWidgets/QtQml/QtQuick, and the meta-package drags in
+            # PySide6-Addons with its WebEngine payload.
+            #
+            # It stays on Qt 6 rather than dropping to PySide2: the QML sources
+            # are Qt 6 QML.
             #
             # The rest of the pin set has to be spelled out here for the same
             # reason: the application's own pins in app/requirements.txt
@@ -97,7 +99,7 @@ jobs:
             # dependency of pydantic here -- the file imports the name directly
             # -- so the requirement is spelled out. 4.13.2 is the last release
             # that supports 3.8 (4.14.0+ requires >=3.9).
-            dependencies: '["PySide6==6.6.3", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
+            dependencies: '["PySide6-Essentials==6.6.3", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
             # Keep this compatibility build out of the seven-target release
             # manifest: it duplicates windows-x86_64 and is not a release artifact.
             artifact: py38-compat-windows-x86_64
@@ -210,27 +212,17 @@ jobs:
           # image does not carry (libGL.so.1 and libxkbcommon.so.0 it does).
           # Both the Qt pruning probe and the packaged smoke run load it.
           sudo apt-get install -y libegl1
-          # Qt's own libQt6WebEngineCore.so.6 and QtWebEngineProcess link the
-          # Chromium runtime dependencies. The x86_64 image happens to carry
-          # most of them; ubuntu-24.04-arm carries far fewer, and each missing
-          # one surfaces the same way: importing PySide6.QtWebEngineWidgets
-          # dies on "libX.so.N: cannot open shared object file", which pytest 9
-          # reports as a collection error (it deliberately does not turn a
-          # found-but-unloadable module into a skip). Guessing one library per
-          # run cost two runs already (libopus.so.0, then libminizip.so.1), so
-          # this installs the non-Qt leaves of Ubuntu's own
-          # libqt6webenginecore6 dependency list -- Qt's own libraries are
-          # deliberately excluded, because the bundle ships its own copy and a
-          # system Qt in the loader path could shadow it.
+          # Font discovery and the X11/XCB glue the Qt platform plugins link,
+          # kept explicit because ubuntu-24.04-arm carries fewer of them than
+          # x86_64. No Chromium runtime libraries: the application never
+          # imported QtWebEngine, and that is the only thing that needed them.
           sudo apt-get install -y \
-            libdbus-1-3 libevent-2.1-7t64 libexpat1 libfontconfig1 \
-            libfreetype6 libharfbuzz-subset0 libharfbuzz0b libicu74 \
-            libjpeg8 liblcms2-2 libminizip1t64 libnspr4 libnss3 \
-            libopenjp2-7 libopus0 libpng16-16t64 libsnappy1v5 libvpx9 \
-            libwebp7 libwebpdemux2 libwebpmux3 libx11-6 libxcb1 \
-            libxcomposite1 libxdamage1 libxext6 libxfixes3 libxkbcommon0 \
-            libxkbfile1 libxml2 libxrandr2 libxslt1.1 libxtst6 zlib1g \
-            libgbm1 libasound2t64 libcups2t64 libegl1 libxi6 libxcursor1
+            libfontconfig1 libfreetype6 libx11-6 libxcb1 libxkbcommon0 \
+            libxkbcommon-x11-0 libxfixes3 libxext6 libxi6 libxcursor1 \
+            libxrandr2 libxrender1 libxcb-cursor0 libxcb-icccm4 \
+            libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+            libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 \
+            libxcb-xkb1
 
       - name: Install macOS build tools
         if: runner.os == 'macOS'
@@ -426,7 +418,7 @@ jobs:
           cat run.log
           # The entry point is app/src/main.py (the single launch path for the
           # source tree and the packaged launcher), so the readiness marker is
-          # the one it prints once the renderer loaded and the JS bridge is up.
+          # the one it prints once the QML shell has rendered its first frame.
           # Asserting on the template app's "GUI OK" passed only when this step
           # silently ran a different entry.
           #
@@ -440,11 +432,9 @@ jobs:
 
           text = pathlib.Path('run.log').read_text(encoding='utf-8', errors='replace')
           print(text[-3000:])
-          # 默认路线已切到 QML 壳：主入口先试 QML（打印 `QML OK … size=1280x820`），
-          # 只有 AI_UPPER_UI=web 才装配 WebEngine 窗口（打印 `DEVA WEB OK … bridge=True`）。
-          # 两条都是「渲染层真的起来了」的证据，断言取并集；缺任何一个才算失败。
-          ok = ('QML OK' in text and 'size=1280x820' in text) or (
-              'DEVA WEB OK' in text and 'bridge=True' in text)
+          # `QML OK … size=1280x820` is the shell's own first-frame marker. There
+          # is no second UI route any more, so there is no union to check.
+          ok = 'QML OK' in text and 'size=1280x820' in text
           if not ok:
               print('MISSING MARKER in run.log:', repr(text[-400:]), file=sys.stderr)
           sys.exit(0 if ok else 1)

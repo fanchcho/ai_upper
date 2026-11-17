@@ -962,10 +962,12 @@ def test_prune_drops_the_webengine_locale_packs_with_its_module(tmp_path, monkey
 def test_an_import_guarded_by_importerror_is_optional(tmp_path):
     """The application runs without it, so the packaging layer must not demand it.
 
-    PySide6's win_arm64 wheels ship no QtWebEngineCore at all, and
-    ``web_shell_window`` imports it behind ``except ImportError`` precisely so
-    the application starts on such a binding. Scanning every import as
-    mandatory made the build fail on a payload the product code accepts.
+    PySide6's win_arm64 wheels ship no QtWebEngineCore at all. When the web
+    fallback still existed, ``web_shell_window`` imported it behind
+    ``except ImportError`` precisely so the application started on such a
+    binding; scanning every import as mandatory made the build fail on a payload
+    the product code accepted. The guard is gone with the web entry, but the
+    scanner contract it forced is what keeps any future optional import usable.
     """
     from ai_upper import qt_prune
 
@@ -1032,20 +1034,25 @@ def test_a_bare_except_hides_a_failed_import_just_as_well(tmp_path):
     assert optional == {"QtGui"}
 
 
-def test_the_application_imports_qt_webengine_optionally():
+def test_the_application_no_longer_names_qt_webengine():
     """Pin the product contract this scanner has to agree with.
 
-    ``app/src/mvvm/views/web_shell_window.py`` guards WebEngine behind
-    ImportError; if that ever becomes unconditional the arm64 wheel genuinely
-    cannot run, and the build should say so rather than quietly prune.
+    The only UI is the QML shell + ``QTextDocument``, so nothing under
+    ``app/src`` may import a WebEngine module any more — neither hard nor
+    guarded. ``QtWebChannel`` must not be required either: it was pulled in by
+    the deleted QWebChannel bridge, ``PySide6-Essentials`` does not ship it, and
+    the pinned dependency is Essentials. The QML modules the shell really uses
+    stay pinned in the same assertion, so this cannot quietly become vacuous.
     """
     from ai_upper import qt_prune
 
     required, optional = qt_prune.qt_module_usage()
 
-    assert "QtWidgets" in required
-    assert {"QtWebEngineCore", "QtWebEngineWidgets"} <= optional
-    assert not ({"QtWebEngineCore", "QtWebEngineWidgets"} & required)
+    webengine = {"QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick"}
+    assert not (webengine & required)
+    assert not (webengine & optional)
+    assert "QtWebChannel" not in required
+    assert {"QtCore", "QtGui", "QtQml", "QtQuick"} <= required
 
 
 def test_runtime_closure_skips_only_the_optional_module_the_wheel_lacks(tmp_path, monkeypatch, capsys):
