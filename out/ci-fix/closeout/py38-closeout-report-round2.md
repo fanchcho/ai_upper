@@ -11,10 +11,15 @@
 
 ## 一句话结论
 
-**是——`windows-x86_64 3.8.10` 真绿了。** 权威 run `43608380890`（commit `91d934e`）
-的该 job（`132487823907`，2026-11-14T15:06:42Z → 15:17:16Z）**success**，25 个步骤里 23 个 success、
-2 个按平台 skip（`Install Linux build tools` / `Install macOS build tools`），零失败，公开 check-run 注解给出
-`Application exit code: 0`。
+**是——`windows-x86_64 3.8.10` 真绿了。** 在**两次**连续的权威 run 上都是 success：
+
+- run `43608380890`（commit `91d934e`，job `132487823907`，15:06:42Z → 15:17:16Z）；
+- run `43610671432`（commit `e2b9392`，**当前 develop 远端 HEAD**，job
+  `132494820496`，15:31:56Z → 15:42:40Z）。
+
+两次都是 25 个步骤里 23 success、2 个按平台 skip（`Install Linux build tools` /
+`Install macOS build tools`）、零失败，`[6/6]` 与 `Full integration run` 均在其中；
+公开 check-run 注解给出 `Application exit code: 0`。
 
 走到这一步修了三处真实缺陷：上一轮漏掉的两处运行期问题（2.1 Qt binding 类布局、
 2.2 `runJavaScript` 布尔转换，先让 job 从 `[6/6]` 失败推进到 `[4/6]`），以及本轮
@@ -243,9 +248,11 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 
 ## 9. CI 逐 job 结论
 
-**权威 run：`43608380890`（commit `91d934e`，`completed`，2026-11-14T15:27:19Z）。**
-完整快照 `out/ci-fix/run-43608380890/{run,jobs,artifacts}.json` + 该 job 的公开注解，
-逐 job 表 `out/ci-fix/closeout/job-table-py38-round2.txt`。
+**逐 job 表取自 run `43610671432`（commit `e2b9392` = 当前 `origin/develop` 的 HEAD，
+`completed`，2026-11-14T15:53:06Z）。** 完整快照
+`out/ci-fix/run-43610671432/{run,jobs,annotations-py38}.json`，逐 job 表
+`out/ci-fix/closeout/job-table-py38-round2.txt`。此前同一结论在 run `43608380890`
+（commit `91d934e`）上已经成立，两次 job 结果逐条一致。
 
 | job | 结论 | 说明 |
 |---|---|---|
@@ -256,7 +263,7 @@ pydantic 2.10.6 / typing_extensions 4.13.2）。
 | native-integration (macos-15-intel, macos-x86_64) | ✅ success | |
 | native-integration (windows-2025, windows-x86) | ✅ success | 仅 `pyserial==3.5` 的 32 位链路 |
 | native-integration (windows-2025, windows-x86_64) | ✅ success | 3.13 + 应用完整依赖 |
-| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ✅ **success** | job `132487823907`，23 success + 2 平台 skip，零失败；`Application exit code: 0` |
+| **native-integration (windows-2025, windows-x86_64, 3.8.10)** | ✅ **success** | job `132494820496`，23 success + 2 平台 skip，零失败；`Application exit code: 0` |
 | native-integration (windows-11-arm, windows-arm64) | ❌ failure | 已知平台阻塞，见下 |
 | aggregate-artifacts | — skipped | 上游有 job 失败时不汇总 |
 
@@ -265,10 +272,10 @@ setup-python → 写本地配置 → 缓存 → 装 Python 构建工具 →（Li
 按平台 skip）→ 装应用依赖 → Unit tests → Publish/Upload 测试日志 → Local end-to-end
 build → Doctor → **Full integration build（`[1/6]`…`[5/6]`）** → Publish/Upload 构建日志
 → **Full integration run（`[6/6]` + 启动产物）** → Upload 运行日志 → 校验发布清单 →
-Upload 打包产物 → Post 三步 → Complete job。全部 `success`。
+Upload 打包产物 → Post 三步 → Complete job。23 步全部 `success`。
 
 先前的 run `43605493485`（commit `617427a`）在 step 15 `[4/6]` 因
-`Qt6WebEngineCore.dll: BluetoothApis.dll` 失败；`91d934e` 补上宿主库登记后通过。
+`Qt6WebEngineCore.dll: BluetoothApis.dll` 失败；`ba55d4e`（`91d934e` 起生效）补上宿主库登记后通过。
 
 **`windows-arm64` 保持已知平台阻塞**：PySide6 的 win_arm64 wheel **里没有
 `Qt6WebEngineCore.dll`**（6.11.2 与 6.6.3 都一样，已核 wheel 内容：arm64 addons
@@ -280,9 +287,10 @@ wheel 里 `Qt6WebEngine*` 条目数为 0，只有 `qtwebengine_*.qm` 翻译）�
 
 **副作用（须知）**：`.github/workflows/validate.yml` 没有 `concurrency:` 组，因此
 每推一次都会新起一整轮 14 个 job。本轮先后产生了 `43605158930`、`43605423736`、
-`43605493485`（`[4/6]` 失败）、`43608380890`（3.8.10 转绿）四轮重叠。以
-`43608380890` 为权威。最后那次 `chore(evidence)` 提交（变异记录重跑与表头修正）
-只改 `out/` 下的证据文件，不触碰任何构建输入。
+`43605493485`（`[4/6]` 失败）、`43608380890`（3.8.10 转绿）、`43610584920`、
+`43610671432`（HEAD `e2b9392`，3.8.10 仍绿）六轮。最后几次提交只改 `out/` 下的
+证据文件，不触碰任何构建输入，所以它们仍会重跑整轮；这是工作流现状，本轮不为
+本目标改动它（加 `concurrency:` 会影响所有分支的 CI 语义，属于未被要求的变更）。
 
 ## 10. 一处未处理但已判定不影响本目标的差异
 

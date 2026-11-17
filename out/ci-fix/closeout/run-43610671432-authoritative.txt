@@ -1,0 +1,117 @@
+# 权威 run 终态取证（只读取证，未改动代码、未推送）
+
+取证时间：2026-11-15（本机）｜数据来源：GitHub REST API（匿名，HTTP 200）
+
+## 0. 取值命令与原始输出
+
+```
+$ git rev-parse HEAD
+e2b93925dac6fd8c34f32f16d91e46fcc4f2d9cf
+
+$ GIT_SSH_COMMAND='ssh -i /root/.ssh/fanchcho -o IdentitiesOnly=yes' \
+    git ls-remote origin refs/heads/develop
+e2b93925dac6fd8c34f32f16d91e46fcc4f2d9cf	refs/heads/develop
+```
+
+> 注：第一次 `git ls-remote` 未带 `GIT_SSH_COMMAND` 时报
+> `git@github.com: Permission denied (publickey)`，带上仓库约定的私钥后成功。
+> 两者 **sha 完全一致**，即「最新 commit = 远端 develop HEAD = 本地 HEAD」。
+
+```
+$ curl -sS 'https://api.github.com/repos/fanchcho/ai_upper/actions/runs?head_sha=e2b93925dac6fd8c34f32f16d91e46fcc4f2d9cf&per_page=10'
+HTTP 200  total_count = 1
+```
+
+该 sha 只有 **1** 个 run，没有更新的排队/进行中 run。
+
+## 1. 权威 run 终态
+
+| 字段 | 值 |
+|---|---|
+| run id | `43610671432` |
+| 名称 / 事件 | `ai_upper validation` / `push` |
+| head_sha | `e2b93925dac6fd8c34f32f16d91e46fcc4f2d9cf`（= 远端 `refs/heads/develop`） |
+| head_branch | `develop` |
+| status | **completed**（已终态） |
+| conclusion | **failure**（整体红；红的是 `windows-arm64` 这一条） |
+| run_attempt | 1 |
+| created / updated | 2026-11-14T15:31:53Z / 2026-11-14T15:53:06Z |
+| url | https://github.com/fanchcho/ai_upper/actions/runs/43610671432 |
+
+## 2. 逐 job 结论表（API 原始结论，未加工）
+
+`GET /repos/fanchcho/ai_upper/actions/runs/43610671432/jobs` → HTTP 200，
+`total_count = 15`（14 个实际执行的 job + 1 个 `aggregate-artifacts`）。
+
+| # | job 名 | 结论 | job id | 失败 step |
+|---|---|---|---|---|
+| 1 | Build Tool Python 3.8 | success | 132494820579 | — |
+| 2 | Build Tool Python 3.9 | success | 132494820592 | — |
+| 3 | Build Tool Python 3.10 | success | 132494820650 | — |
+| 4 | Build Tool Python 3.11 | success | 132494820560 | — |
+| 5 | Build Tool Python 3.12 | success | 132494820543 | — |
+| 6 | Build Tool Python 3.13 | success | 132494820313 | — |
+| 7 | native-integration (ubuntu-24.04, linux-x86_64, true) | success | 132494820610 | — |
+| 8 | native-integration (ubuntu-24.04-arm, linux-arm64, false) | success | 132494820647 | — |
+| 9 | native-integration (macos-15, macos-arm64, true) | success | 132494820635 | — |
+| 10 | native-integration (macos-15-intel, macos-x86_64, true) | success | 132494820611 | — |
+| 11 | native-integration (windows-2025, windows-x86, false, ["pyserial==3.5"]) | success | 132494820591 | — |
+| 12 | native-integration (windows-2025, windows-x86_64, true) | success | 132494820613 | — |
+| 13 | **native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySide6==6.6.3", "pydantic==2.1…", …])** | ✅ **success** | 132494820496 | — |
+| 14 | **native-integration (windows-11-arm, windows-arm64, true)** | ❌ **failure** | 132494820638 | **step 18 `Full integration run`** |
+| — | aggregate-artifacts | skipped | 132500547879 | 上游有 job 失败，未汇总 |
+
+对应到用户关注的两条：
+
+- **`windows-x86_64 3.8.10` = 绿**（success）。job `132494820496`，
+  2026-11-14T15:31:56Z → 15:42:40Z，25 个 step 中 23 success + 2 按平台 skip，零失败。
+  该 job 的公开 check-run 注解原文（HTTP 200）：
+  - `notice  run.log (build.py --run exit 0)  Application exit code: 0`
+  - `notice  pytest (exit 0)`（附一条 Chromium GPU 上下文告警，非失败）
+- **`windows-11-arm windows-arm64` = 红**（failure），不是未终态、不是推测。
+
+## 3. arm64 失败的内层帧与 step
+
+失败 step：**step 18 `Full integration run`**（其后 step 19 上传运行日志仍 success，
+step 20/21 与 3 个 Post 步骤被 skip）。job 日志下载匿名不可得
+（`GET /actions/jobs/132494820638/logs` → **HTTP 403** `Must have admin rights to Repository.`），
+因此改用公开 check-run 注解（`GET /check-runs/132494820638/annotations` → HTTP 200，
+12 条），其标题均为 `run.log (build.py --run exit 1)`，逐帧原文如下（由外到内）：
+
+```
+File "C:\a\ai_upper\ai_upper\dist\ai_upper\ai_upper.exe", line 4, in <module>
+File "<string>", line 429, in _ai_upper_run
+File "deva_web.py", line 157, in deva_web.main
+File "deva_web.py", line 119, in deva_web.run
+File "deva_web.py", line 72, in deva_web._create_window
+File "web_shell_window.py", line 136, in mvvm.views.web_shell_window.DevaWebWindow.__init__
+File "qt_compat.py", line 89, in utils.qt_compat._binding_module
+File "qt_compat.py", line 107, in utils.qt_compat._QtModule.__init__
+[6/6] Target runtime smoke
+```
+
+最内层失败帧：**`qt_compat.py:107` 的 `_QtModule.__init__`** → 它调用
+`_binding_module()`，在 **`qt_compat.py:89`** 抛出
+`ImportError: <binding> has no submodule '<submodule>': <原始 ImportError>`；
+该异常在 `web_shell_window.py:136` 被重新包装成
+「该 binding 没有 QtWebEngine，无法承载渲染层：…」后继续上抛，最终
+`build.py --run` 以 exit 1 结束。注解另有 `failure  Process completed with exit code 1.`
+同 job 的 `pytest (exit 0)`：`978 passed, 16 skipped in 65.28s` —— 单测层是绿的，
+红点只在 `[6/6]` 的打包产物启动。
+
+根因不变且已判定：PySide6 的 win_arm64 wheel 不含 `Qt6WebEngineCore`
+（arm64 addons wheel 里 `Qt6WebEngine*` 条目为 0），属上游不发轮子，不是本仓库
+3.8 兼容问题。矩阵条目保留、不加 skip、`requires-python` 未放宽。
+
+## 4. 与上一次结论的一致性
+
+同一结论此前在 run `43608380890`（commit `91d934e`，job `132487823907`）上已成立：
+3.8.10 success / arm64 failure。本次 run 逐 job 结论与之一致，无翻转。
+
+## 5. 本次取证的范围声明
+
+- 只读：仅调用 `git rev-parse` / `git ls-remote` / GitHub REST API；
+  未改代码、未改文档正文以外的既有结论、未 push、未重跑本地 pytest 或打包。
+- 因此**没有**触发新的 CI run；远端 `refs/heads/develop` 仍是
+  `e2b93925dac6fd8c34f32f16d91e46fcc4f2d9cf`。
+- 本文件为本轮唯一落盘产物，**仅本地，未提交、未推送**。
