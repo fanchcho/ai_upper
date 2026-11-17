@@ -87,7 +87,7 @@ _ASSETS_MODULE_DIR = "assets"
 
 
 def assets_root() -> Path:
-    """Where the renderer bundle and seed personas live.
+    """Where the seed personas (and any other bundled asset tree) live.
 
     Development keeps ``app/assets`` next to ``app/src``. A package has no
     source tree at all (the application code ships as one merged extension or

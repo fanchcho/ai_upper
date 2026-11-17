@@ -5,7 +5,7 @@
 - **数据**：列表行来自 `ChatSessionStore.visible_sessions()`，正文来自该会话落盘的消息
   （`qml_shell_sessions.transcript_markdown` 拼成 Markdown，再交给 `markdown.body` 渲染）。
   壳里没有假数据，也不再内嵌一份 SESSIONS；
-- **发送**：输入区走 `ChatHost.send`（与 WebEngine 渲染层同一条回合宿主），流式增量
+- **发送**：输入区走 `ChatHost.send`（源码树与打包产物共用的同一条回合宿主），流式增量
   从宿主推回的事件里取，实时重渲染正文；用户消息与回复都由 ViewModel 落盘；
 - **截图**：headless 时等窗口真的画出第一帧再 ``grabWindow()`` 存 PNG，并按退出码报结果。
 
@@ -27,7 +27,7 @@ import sys
 import time
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from mvvm.services.attachments import AttachmentService
 from mvvm.services.chat_session_store import ChatSessionStore
@@ -221,17 +221,16 @@ class ShellBridge(QtCore.QObject):
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
-        # 附件白名单与 web 入口同一套服务；对话框由这里的 QFileDialog 提供。
+        # 附件白名单只此一套服务；对话框由这里的 QFileDialog 提供。
         # **必须优先用宿主那一份**：`send()` 交给 `ChatHost.send` 读附件，宿主只认自己
         # `self.attachments` 的白名单。各 new 一份的话，回形针选中的文件在发送时会被判
-        # 「已忽略未授权文件」——web 入口曾经就是这个故障（见 test_web_attachments 的
-        # `test_bridge_and_host_share_one_attachment_service`），这里沿用同一条规则。
+        # 「已忽略未授权文件」——当初的分屏入口就是这个故障（旧用例
+        # `test_bridge_and_host_share_one_attachment_service`，已随 web 入口删除；
+        # 等价断言在 `app/tests/test_qml_chat_files.py` 里），这里沿用同一条规则。
         self._attachments = getattr(host, "attachments", None) or AttachmentService(
             store.home, WorkspaceGuard()
         )
-        self._attachments.set_file_dialogs(
-            open_folder=self._pick_directory, pick_files=self._pick_files
-        )
+        self._attachments.set_file_dialogs(pick_files=self._pick_files)
         self.rendered = 0
         self.deltas: List[str] = []
         self.stop = ""
@@ -487,7 +486,7 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(str, "QVariantList", result=bool)
     def sendWithAttachments(self, text: str, attachments: Any) -> bool:
-        """输入区发送（带附件）：附件路径交给 `ChatHost.send`，与 web 入口同一条链路。"""
+        """输入区发送（带附件）：附件路径交给 `ChatHost.send`，与 `/send` 同一条链路。"""
         return self.send(text, attachments)
 
     @QtCore.Slot(str, result=bool)
@@ -499,7 +498,7 @@ class ShellBridge(QtCore.QObject):
 
         `attachments` 是用户亲手选中的绝对路径列表（QML 回形针 → `pickAttachments` 的
         返回值，也已登记进 `AttachmentService` 白名单）；透传给宿主后由它读成内容块，
-        与 web 入口 `chat:send` 完全相同，不存在第二条附件链路。
+        与宿主侧的发送路径完全相同，不存在第二条附件链路。
         """
         body = (text or "").strip()
         paths = _coerce_attachment_paths(attachments)
@@ -538,12 +537,12 @@ class ShellBridge(QtCore.QObject):
         self._publish()
         return True
 
-    # ── 附件与交付卡（与 web 入口同一套服务）──────────────────────────────
+    # ── 附件与交付卡（宿主与服务共用同一套判定）────────────────────────────
     @QtCore.Slot(result="QVariantList")
     def pickAttachments(self) -> List[str]:
         """回形针：真弹 `QFileDialog`，选中的路径登记白名单后回给 QML 待发列表。
 
-        与 web 入口 `fs:pick-attachments` 走同一套 `AttachmentService.inspect`：类型 / 体积
+        与宿主侧的附件白名单走同一套 `AttachmentService.inspect`：类型 / 体积
         不合规的文件会被判 `supported=false`，这里只把能进的交给消息，其余打印原因
         （界面不静默吞掉用户的选择）。对话框取消返回空列表。
         """
@@ -635,7 +634,7 @@ class ShellBridge(QtCore.QObject):
         return self._window if isinstance(self._window, QtWidgets.QWidget) else None
 
     def _pick_files(self) -> List[str]:
-        """`QFileDialog.getOpenFileNames`：过滤条件与 web 入口同一份（原版 showOpenDialog）。"""
+        """`QFileDialog.getOpenFileNames`：过滤条件沿用原版 `showOpenDialog` 那一份。"""
         from utils.qt_compat import QtWidgets
 
         paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
@@ -651,14 +650,6 @@ class ShellBridge(QtCore.QObject):
             "所有文件 (*)",
         )
         return [str(path) for path in paths]
-
-    def _pick_directory(self) -> Optional[str]:
-        from utils.qt_compat import QtWidgets
-
-        directory = QtWidgets.QFileDialog.getExistingDirectory(
-            self._dialog_parent(), "打开项目文件夹"
-        )
-        return directory or None
 
     # ── 事件回写（GUI 线程）───────────────────────────────────────────────
     def tick(self) -> bool:
@@ -774,10 +765,14 @@ class ShellBridge(QtCore.QObject):
         return self._persona_names.get(persona_id or "", "") or "Deva"
 
     def _rows(self) -> List[Dict[str, Any]]:
-        """列表行：会话行 + 角色 id/名（副标题）。角色名只影响显示，不参与排序。"""
-        rows = session_rows(self._store, lang=self.language())
+        """列表行：会话行 + 角色 id/名（副标题）。角色名只影响显示，不参与排序。
+
+        可见会话元信息只取一次：行投影与副标题取 personaId 用的是同一份，没必要列两遍索引。
+        """
+        metas = self._store.visible_sessions()
+        rows = session_rows(self._store, lang=self.language(), metas=metas)
         owner = {str(getattr(m, "id", "")): str(getattr(m, "personaId", "") or "general")
-                 for m in self._store.visible_sessions()}
+                 for m in metas}
         for row in rows:
             persona = owner.get(row["id"], "general")
             row["persona"] = persona
@@ -848,7 +843,7 @@ def _start_ticker(bridge: ShellBridge) -> Any:
 
 def run(headless: bool) -> int:
     """启动 QML 壳；headless 时截图并按结果返回 0/1。"""
-    from main import HEADLESS_TIMEOUT_S  # 与 WebEngine 路径共用同一超时
+    from main import HEADLESS_TIMEOUT_S  # 超时只在这里定义一次（main 是唯一入口）
 
     qml_main_path = qml_main()
     if not qml_main_path.is_file():

@@ -193,35 +193,26 @@ def test_every_mvvm_module_imports(monkeypatch):
     referenced it, so the only symptom was Cython compiling dead source into the
     bundle. mvvm_bootstrap is the one module that needs Qt, hence the fake.
 
-    Three modules are exempt because they need Qt **while the class body is
-    evaluated** — they subclass QWidget/QObject and declare Signal() there, which
-    no lazy import can defer: the overlay paints its own title bar (title_bar_overlay),
-    the shell hosts the renderer in a QWebEngineView (web_shell_window), and the
-    bridge is a QObject carrying a Signal. The fake below has empty submodules, so
-    those class bodies cannot be built under it. They keep the same guarantee —
-    importable and constructible — in tests/test_web_shell_modules.py, which uses
-    the real binding; that file is the replacement coverage for this exemption.
+    No module is exempt any more. The three that needed Qt **while the class body
+    was evaluated** are gone with the web entry: ``title_bar_overlay`` (the
+    frameless WebEngine window's own title bar), ``web_shell_window`` (the
+    QWebEngineView host) and the ``DevaBridge`` QObject inside
+    ``mvvm.webui.bridge``. What remains there is a pure function, so the fake
+    binding below is enough for every module in the tree.
     """
     import importlib
 
     install_fake_binding(monkeypatch, {"PySide6": {"QtCore": {}, "QtGui": {}, "QtWidgets": {}}})
 
-    qt_bound = {
-        "mvvm.views.title_bar_overlay",
-        "mvvm.views.web_shell_window",
-        "mvvm.webui.bridge",
-    }
     imported = []
     for path in sorted((SRC / "mvvm").rglob("*.py")):
         parts = list(path.relative_to(SRC).with_suffix("").parts)
         if parts[-1] == "__init__":
             parts.pop()
-        dotted = ".".join(parts)
-        if dotted in qt_bound:
-            continue
-        imported.append(importlib.import_module(dotted))
+        imported.append(importlib.import_module(".".join(parts)))
     assert len(imported) >= 8
-    # 豁免项必须真的存在，否则豁免名单会随重命名悄悄失效。
-    for dotted in qt_bound:
-        module_path = SRC.joinpath(*dotted.split(".")).with_suffix(".py")
-        assert module_path.is_file(), f"豁免名单里的模块不存在：{dotted}"
+    # WebEngine 承载层不许悄悄回来：这两个模块随「唯一界面 = QML 壳」删除，
+    # 谁把同功能文件加回来，这条会立刻失败，而不是多出一条没人测的界面路线。
+    for gone in ("views.web_shell_window", "views.title_bar_overlay"):
+        module_path = SRC.joinpath("mvvm", *gone.split(".")).with_suffix(".py")
+        assert not module_path.exists(), f"WebEngine 承载层又出现了：{module_path}"

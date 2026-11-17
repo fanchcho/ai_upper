@@ -151,12 +151,24 @@ def session_row(
     }
 
 
-def session_rows(store: Any, now: Optional[int] = None, lang: str = "zh") -> List[Dict[str, Any]]:
-    """真实会话 → 列表行（顺序沿用服务层：updatedAt 倒序）。"""
-    rows: List[Dict[str, Any]] = []
-    for meta in store.visible_sessions():
-        rows.append(session_row(meta, store.load_session(meta.id), now, lang))
-    return rows
+def session_rows(
+    store: Any,
+    now: Optional[int] = None,
+    lang: str = "zh",
+    metas: Optional[List[Any]] = None,
+) -> List[Dict[str, Any]]:
+    """真实会话 → 列表行（顺序沿用服务层：updatedAt 倒序）。
+
+    `metas` 可由调用方传入已取到的 `visible_sessions()` 结果，省掉再列一次索引。
+    会话记录走 `load_sessions()` 批量载入：目录只扫一遍，行内容与逐条载入逐字相同。
+    """
+    if metas is None:
+        metas = store.visible_sessions()
+    sessions = store.load_sessions([meta.id for meta in metas])
+    return [
+        session_row(meta, session, now, lang)
+        for meta, session in zip(metas, sessions)
+    ]
 
 
 def _role_heading(role: str) -> str:

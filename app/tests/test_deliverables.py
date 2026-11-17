@@ -1,13 +1,18 @@
-"""交付卡（`present_files`）：边车写入 + `deliverables:*` 四条通道 + 路径白名单。
+"""交付卡（`present_files`）：边车写入 + 四个操作 + 路径白名单。
 
 三条主线：
 
 1. **写边车**：工具结果里的 `delivered` 必须按 `toolUseId` 落进 `StoredSession.delivered`
    并写盘（重启后仍在）。此前 `ToolResult.delivered` 有值但没人消费，会话里也没有这个键。
-2. **四条通道**：`inspect` / `thumbnail` / `open` / `reveal` 的返回结构照原版
+2. **四个操作**：`inspect` / `thumbnail` / `open` / `reveal` 的返回结构照原版
    `shared/deliverables.ts` 契约（`{path,name,dir,size,openable}`、`{ok}`、data URI / null）。
 3. **路径安全**：路径只能来自边车。调用方给任意路径 / 伪造 toolUseId / 越界序号都必须拿不到
    文件；`open` 只放行 `OPENABLE` 白名单（`.py` / `.sh` 一律拒绝）。
+
+这里只测服务层。界面侧真正调这四个操作的是 QML 壳的四个槽
+（`openDeliverable` / `revealDeliverable` / `copyDeliverablePath` / `deliveryItems`），
+它们「只认边车路径」的断言在 `app/tests/test_qml_chat_files.py`；随 WebEngine 承载窗口
+删除的 `DevaBridge` 通道层不再是产品代码。
 """
 from __future__ import annotations
 
@@ -37,15 +42,11 @@ from mvvm.services.deliverables import (
     reveal_command,
     thumbnail,
 )
-from mvvm.services.persona_store import PersonaStore
 from mvvm.services.provider_gateway import Done, GenerateRequest, TextDelta, ToolCall
-from mvvm.services.secrets_vault import SecretsVault
-from mvvm.services.settings_service import SettingsService
 from mvvm.services.tool_results import record_delivered
 from mvvm.services.tool_runtime import ToolResult, ToolRuntime
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.view_models.chat_vm import ChatViewModel
-from mvvm.webui.bridge import DevaBridge
 
 # 4×4 红色 PNG（有真实像素，缩略图不会解成空图）。
 PNG_4X4 = base64.b64decode(
@@ -268,7 +269,7 @@ def test_thumbnail_of_a_non_image_is_none_without_a_widget_app(workspace):
 
 
 def test_thumbnail_falls_back_to_a_file_icon_under_a_real_qapplication(workspace):
-    """真 `QApplication` 下非图片回落文件类型图标（web 入口就是 QApplication）。"""
+    """真 `QApplication` 下非图片回落文件类型图标（QML 壳建的就是 QApplication）。"""
     assert _thumbnail_in_subprocess("QtWidgets.QApplication", workspace / "report.md").startswith(
         "data:image/"
     )
@@ -427,38 +428,7 @@ def test_openable_whitelist_matches_the_original_set():
         assert is_openable(blocked) is False
 
 
-# ── 4. 桥通道（渲染层真实走的那条）────────────────────────────────────────
-@pytest.fixture()
-def qapp():
-    from PySide6.QtGui import QGuiApplication
-
-    application = QGuiApplication.instance() or QGuiApplication([])
-    yield application
-
-
-@pytest.fixture()
-def bridges(tmp_path, workspace):
-    home = tmp_path / "home"
-    settings = SettingsService(home)
-    vault = SecretsVault(home)
-    store = ChatSessionStore(home)
-    guard = WorkspaceGuard([workspace])
-
-    class Rig:
-        pass
-
-    r = Rig()
-    r.home, r.store, r.workspace = home, store, workspace
-    r.bridge = DevaBridge(
-        settings=settings, personas=PersonaStore(home), store=store, home=home
-    )
-    r.bridge.vault = vault
-    r.settings = settings
-    r.guard = guard
-    r.call = lambda channel, *args: r.bridge._handlers[channel](*args)
-    return r
-
-
+# ── 4. 会话落盘 → 服务取数（无会话、无 toolUseId 的边界）─────────────────────
 def _seed_session(store: ChatSessionStore, workspace, delivered):
     """落一条带交付边车的会话（含 tool_use，删轮修剪也能对上）。"""
     from mvvm.models.chat_models import ToolUsePart
@@ -478,73 +448,24 @@ def _seed_session(store: ChatSessionStore, workspace, delivered):
     return session
 
 
-def test_bridge_registers_all_four_deliverables_channels(bridges):
-    for channel in (
-        "deliverables:inspect",
-        "deliverables:thumbnail",
-        "deliverables:open",
-        "deliverables:reveal",
-    ):
-        assert bridges.bridge.handles(channel), channel
+def test_seeded_session_round_trips_through_the_store(tmp_path, workspace):
+    """`_seed_session` 的落盘能原样读回：边车与 `present_files` 调用都在。"""
+    store = ChatSessionStore(tmp_path / "home")
+    session = _seed_session(store, workspace, {"tu1": [str(workspace / "report.md")]})
+    reloaded = store.load_session("dl")
+    assert reloaded.delivered == {"tu1": [str(workspace / "report.md")]}
+    assert delivered_paths(reloaded, "tu1") == [str(workspace / "report.md")]
+    assert inspect(reloaded, "tu1")[0]["size"] == (workspace / "report.md").stat().st_size
 
 
-def test_bridge_inspect_returns_real_sizes(bridges):
-    workspace = bridges.workspace
-    _seed_session(bridges.store, workspace, {"tu1": [str(workspace / "report.md")]})
-    rows = bridges.call("deliverables:inspect", "dl", "tu1")
-    assert rows == [
-        {
-            "path": str(workspace / "report.md"),
-            "name": "report.md",
-            "dir": str(workspace),
-            "size": (workspace / "report.md").stat().st_size,
-            "openable": True,
-        }
-    ]
-    assert rows[0]["size"] != 0  # 界面上曾经显示「0 B」的那个值
-
-
-def test_bridge_inspect_unknown_session_or_tool_use_is_empty(bridges):
-    workspace = bridges.workspace
-    _seed_session(bridges.store, workspace, {"tu1": [str(workspace / "report.md")]})
-    assert bridges.call("deliverables:inspect", "nope", "tu1") == []
-    assert bridges.call("deliverables:inspect", "dl", "tu9") == []
-    assert bridges.call("deliverables:inspect", None, None) == []
-
-
-def test_bridge_thumbnail_and_open_and_reveal(qapp, bridges, monkeypatch):
-    workspace = bridges.workspace
-    _seed_session(
-        bridges.store,
-        workspace,
-        {"tu1": [str(workspace / "chart.png"), str(workspace / "build.sh")]},
-    )
-    url = bridges.call("deliverables:thumbnail", "dl", "tu1", 0)
-    assert isinstance(url, str) and url.startswith("data:image/png;base64,")
-    assert bridges.call("deliverables:thumbnail", "dl", "tu1", 5) is None
-
-    spawned = []
-    monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
-    opened = []
-    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: opened.append(p) or True)
-
-    assert bridges.call("deliverables:open", "dl", "tu1", 0) == {"ok": True}
-    assert bridges.call("deliverables:open", "dl", "tu1", 1) == {"ok": False}  # .sh 不在白名单
-    assert bridges.call("deliverables:reveal", "dl", "tu1", 1) == {"ok": True}
-    assert opened == [str(workspace / "chart.png")]
-    assert spawned == [["xdg-open", str(workspace)]]
-
-
-def test_bridge_deliverables_do_not_accept_paths(bridges, monkeypatch):
-    """通道签名只有 (sessionId, toolUseId[, index])：多传的路径参数不被当成路径。"""
-    workspace = bridges.workspace
-    _seed_session(bridges.store, workspace, {"tu1": [str(workspace / "report.md")]})
-    spawned = []
-    monkeypatch.setattr(deliverables_service, "_spawn", lambda argv: spawned.append(argv) or True)
-    opened = []
-    monkeypatch.setattr(deliverables_service, "_desktop_open", lambda p: opened.append(p) or True)
-
-    # toolUseId 位置塞路径 → 查不到边车 → 一律 false
-    assert bridges.call("deliverables:open", "dl", str(workspace / "report.md"), 0) == {"ok": False}
-    assert bridges.call("deliverables:reveal", "dl", str(workspace / "report.md"), 0) == {"ok": False}
-    assert opened == [] and spawned == []
+def test_operations_on_a_session_without_a_sidecar_return_nothing(tmp_path, workspace):
+    """没有边车 / 边车里没有这条 toolUseId：四个操作一律给空结果，不抛错。"""
+    store = ChatSessionStore(tmp_path / "home")
+    store.ensure_session("empty")
+    session = store.load_session("empty")
+    assert getattr(session, "delivered", None) in (None, {})
+    assert inspect(session, "tu1") == []
+    assert delivered_paths(session, "tu1") == []
+    assert thumbnail(session, "tu1", 0) is None
+    assert open_item(session, "tu1", 0) == {"ok": False}
+    assert reveal(session, "tu1", 0) == {"ok": False}
