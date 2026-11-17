@@ -28,6 +28,7 @@ from mvvm.models.chat_models import (
     ToolResultPart,
     ToolUsePart,
 )
+from mvvm.services.attachments import MAX_IMAGE, MAX_PDF, MAX_TEXT, AttachmentService
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.deliverables import delivered_paths
 from mvvm.services.secrets_vault import SecretsVault
@@ -423,3 +424,154 @@ def test_send_rejects_unpicked_attachment_but_still_sends_text(qapp, tmp_path, m
     text = "".join(getattr(part, "text", "") for part in user.content)
     assert "只有正文" in text
     assert "已忽略未授权文件" in text or "passwd" not in text
+
+
+# ── 限额与原因文案：原 test_web_attachments.py 删掉后必须仍然有人守 ──────────────
+# `inspect()` 是选择框与发送共用的唯一判定点（QML 壳也走它）。下面五条把「类型 / 体积」
+# 的四种拒绝原因钉死，避免以后有人改限额或改文案却没人发现。
+
+
+@pytest.mark.parametrize(
+    "name,size,kind,reason",
+    [
+        ("bundle.zip", 0, "unsupported", "暂不支持的文件类型"),
+        ("photo.png", MAX_IMAGE + 1, "image", "图片过大（>5MB）"),
+        ("manual.pdf", MAX_PDF + 1, "document", "PDF 过大（>20MB）"),
+        ("dump.txt", MAX_TEXT + 1, "text", "文本过大（>512KB）"),
+    ],
+)
+def test_inspect_rejects_with_the_reason_the_shell_shows(tmp_path, name, size, kind, reason):
+    """不合规的文件必须带原版的拒绝原因，而不是静默变成「只给位置」。"""
+    service = AttachmentService(tmp_path)
+    verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+    assert verdict["supported"] is False
+    assert verdict["kind"] == kind
+    assert verdict["reason"] == reason
+    # 拒绝时不能进入可读白名单，否则发送侧还会去读它。
+    assert str(tmp_path / name) not in service.allowed
+
+
+@pytest.mark.parametrize(
+    "name,size,kind",
+    [
+        ("notes.md", 1024, "text"),
+        ("photo.png", MAX_IMAGE, "image"),
+        ("manual.pdf", MAX_PDF, "document"),
+    ],
+)
+def test_inspect_accepts_exactly_at_the_limit(tmp_path, name, size, kind):
+    """边界值是「允许」，不是「超限」——上限语义不能靠 > 和 >= 的偶然一致。"""
+    service = AttachmentService(tmp_path)
+    verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+    assert verdict["supported"] is True
+    assert verdict["kind"] == kind
+    assert "reason" not in verdict
+    assert str(tmp_path / name) in service.allowed
+
+
+def test_oversized_file_selected_by_path_is_attached_as_a_location_only(tmp_path):
+    """选择框路径（by_path=True）超限时不拒绝，而是降级为「只给位置」的 file 条目。"""
+    service = AttachmentService(tmp_path)
+    oversized = tmp_path / "huge.png"
+    verdict = service.inspect(str(oversized), MAX_IMAGE + 1)
+    assert verdict["supported"] is True
+    assert verdict["kind"] == "file"
+    assert str(oversized) in service.allowed_files
+    assert str(oversized) not in service.allowed
+
+
+def test_build_attachment_part_notes_when_the_location_only_file_vanished(tmp_path):
+    """登记成「只给位置」的文件消失后：给「文件已不存在」，不是抛异常也不是假装成功。
+
+    注意两种白名单的语义不同：可读白名单（`allowed`）里的文件消失走的是
+    「读取失败已忽略」，只有位置白名单（`allowed_files`）才走「文件已不存在」。
+    """
+    service = AttachmentService(tmp_path)
+    gone = tmp_path / "gone.bin"
+    gone.write_bytes(b"x")
+    service.inspect(str(gone), gone.stat().st_size)  # unsupported → 只给位置
+    assert str(gone) in service.allowed_files
+    gone.unlink()
+    result = service.build_attachment_part(str(gone))
+    assert result.part is None
+    assert result.note == "文件已不存在：gone.bin"
+
+
+def test_build_attachment_part_reports_a_vanished_readable_file_as_a_read_failure(tmp_path):
+    """可读白名单里的文件消失：报「读取失败已忽略」（与上面那条区分开）。"""
+    service = AttachmentService(tmp_path)
+    gone = tmp_path / "gone.txt"
+    gone.write_text("x", encoding="utf-8")
+    service.inspect(str(gone), gone.stat().st_size)
+    assert str(gone) in service.allowed
+    gone.unlink()
+    result = service.build_attachment_part(str(gone))
+    assert result.part is None
+    assert result.note == "读取失败已忽略：gone.txt"
+
+
+def test_build_attachment_part_notes_a_path_only_attachment_without_the_body(tmp_path):
+    """只给位置的附件：正文只放路径与提示，不把内容塞进消息。"""
+    service = AttachmentService(tmp_path)
+    target = tmp_path / "spec.docx"
+    target.write_bytes(b"PK\x03\x04payload")
+    service.inspect(str(target), target.stat().st_size)  # unsupported → 走 by_path 分支
+    result = service.build_attachment_part(str(target))
+    assert result.note is None
+    text = result.part.text
+    assert str(target) in text
+    assert "内容没有直接放进消息" in text
+    assert "payload" not in text
+
+
+def test_build_attachment_part_notes_an_oversized_selected_text_file(tmp_path):
+    """发送时二次判体积：即使选择时没超限，读进来超限也要给「文本过大已忽略」。"""
+    service = AttachmentService(tmp_path)
+    big = tmp_path / "big.log"
+    big.write_bytes(b"a" * (MAX_TEXT + 1))
+    service.inspect(str(big), 10)  # 选择时报的体积没超限
+    result = service.build_attachment_part(str(big))
+    assert result.part is None
+    assert result.note == "文本过大已忽略：big.log"
+
+
+def test_build_attachment_part_notes_an_unreadable_authorised_file(tmp_path, monkeypatch):
+    """已授权但读取失败：给「读取失败已忽略」，不能把 OSError 抛给界面。
+
+    用 monkeypatch 让 `read_bytes` 抛 `OSError`，而不是靠 chmod：chmod 在 root 下无效，
+    在 Windows 上也没有 0o000 的语义，这样三个平台跑的是同一条断言。
+    """
+    service = AttachmentService(tmp_path)
+    victim = tmp_path / "locked.txt"
+    victim.write_text("x", encoding="utf-8")
+    service.allowed.add(str(victim))
+
+    def boom(self):
+        raise OSError(13, "Permission denied")
+
+    monkeypatch.setattr(type(victim), "read_bytes", boom, raising=True)
+    result = service.build_attachment_part(str(victim))
+    assert result.part is None
+    assert result.note == "读取失败已忽略：locked.txt"
+
+
+def test_build_attachment_part_notes_an_image_whose_bytes_exceed_the_limit(tmp_path):
+    """图片类型判定为 image，但读到的字节超限：给「图片过大已忽略」。"""
+    service = AttachmentService(tmp_path)
+    image = tmp_path / "huge.png"
+    image.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * MAX_IMAGE)
+    service.allowed.add(str(image))
+    result = service.build_attachment_part(str(image))
+    assert result.part is None
+    assert result.note == "图片过大已忽略：huge.png"
+
+
+def test_build_attachment_part_notes_a_pdf_that_openai_protocol_cannot_read(tmp_path):
+    """OpenAI 协议下 PDF 直接跳过，并说明原因（原版同样语义）。"""
+    service = AttachmentService(tmp_path)
+    pdf = tmp_path / "manual.pdf"
+    pdf.write_bytes(b"%PDF-1.4")
+    service.inspect(str(pdf), pdf.stat().st_size)
+    result = service.build_attachment_part(str(pdf), adapter="openai")
+    assert result.part is None
+    assert "需使用 Anthropic 或 OpenAI Responses 协议" in result.note
