@@ -127,9 +127,16 @@ def test_build_output_stays_in_print_order_under_redirection(tmp_path):
     import sys
     from pathlib import Path
 
-    child = tmp_path / "child"
-    child.write_text("#!/bin/sh\necho 'SMOKE PASS launcher'\n", encoding="utf-8")
-    child.chmod(0o755)
+    # A script with a shebang is not executable on Windows, so the child is a
+    # generated .bat there and a shell script elsewhere. Either way all the
+    # helper does is run the path and let it inherit our streams.
+    if os.name == "nt":
+        child = tmp_path / "child.bat"
+        child.write_text("@echo SMOKE PASS launcher\r\n", encoding="utf-8")
+    else:
+        child = tmp_path / "child"
+        child.write_text("#!/bin/sh\necho 'SMOKE PASS launcher'\n", encoding="utf-8")
+        child.chmod(0o755)
 
     probe = tmp_path / "probe.py"
     # The real entry point, so this fails if build.main stops installing the
