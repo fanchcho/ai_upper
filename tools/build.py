@@ -4,6 +4,7 @@ import argparse
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 from ai_upper.config import (
@@ -78,7 +79,41 @@ def _doctor(target) -> int:
     return 0
 
 
+def _line_buffered() -> None:
+    """Make this process's output reach the log in the order it was printed.
+
+    Every tool this builds with is a child that inherits our ``stdout`` and
+    ``stderr``, so it writes straight into whatever file the caller redirected
+    us to (CI runs ``build.py --run > run.log 2>&1``). Our own prints do not:
+    redirected to a file, Python buffers them by blocks. A child that writes
+    while our last fifty lines are still in memory puts its output *before*
+    them in the file, and the rest of our log is flushed on top at exit.
+
+    That is what made run 44033731069's two macOS jobs unreadable: the
+    annotation keeps the last 3000 characters of run.log, which showed
+    ``[6/6]``, ``+ <launcher> [launcher smoke]`` and ``Application exit code:
+    1`` but not one line from either child -- their ``SMOKE PASS`` and the
+    application's own ``QML FAILED reason=...`` had been written earlier in the
+    file, behind the buffered stage-5 output. Line buffering costs nothing
+    measurable on a build log and keeps every child's words where they belong.
+
+    ``PYTHONUNBUFFERED`` does this for the interpreter globally; this is for
+    the case where it is unset, which is how CI runs.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(line_buffering=True)
+        except (ValueError, OSError):
+            # Detached or replaced stream: ordering is then decided elsewhere
+            # and a build must not fail over it.
+            pass
+
+
 def main(argv=None) -> int:
+    _line_buffered()
     validate_build_python_version()
     parser = argparse.ArgumentParser(description="ai_upper - standalone Python application builder")
     parser.add_argument("command", nargs="?", choices=["doctor", "build", "run", "verify", "lock", "release", "clean"])

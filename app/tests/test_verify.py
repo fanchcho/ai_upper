@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 
 import pytest
 
@@ -103,3 +104,65 @@ def test_egg_windows_runtime_dependency_must_be_bundled(tmp_path, monkeypatch):
     assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(egg, config.key_hex, target, runtime))
     _pe(runtime / "python313.dll", ["vcruntime140.dll"])
     assert all(ok for ok, _ in verify._verify_egg_native_dependencies(egg, config.key_hex, target, runtime))
+
+
+def test_build_output_stays_in_print_order_under_redirection(tmp_path):
+    """A child writes into our fd at once; our buffered prints catch up at exit.
+
+    Run 44033731069's two macOS jobs failed `Full integration run` with an
+    annotation holding only build.py's own ``[6/6]``, ``+ <launcher>
+    [launcher smoke]`` and ``Application exit code: 1`` -- not one line from
+    either child, neither the smoke program's ``SMOKE PASS`` nor the
+    application's ``QML FAILED reason=...``. Both children had printed them.
+    ``build.py --run > run.log 2>&1`` leaves stdout block-buffered, so the
+    stage output still in memory reached the file only at exit, *after* what
+    the children wrote. The annotation keeps the last 3000 characters of the
+    log, and that window held none of the child's words.
+
+    The probe is a fresh interpreter whose stdout is the file, so the buffering
+    under test is Python's default rather than pytest's capture, and
+    ``PYTHONUNBUFFERED`` is removed because CI does not set it.
+    """
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    child = tmp_path / "child"
+    child.write_text("#!/bin/sh\necho 'SMOKE PASS launcher'\n", encoding="utf-8")
+    child.chmod(0o755)
+
+    probe = tmp_path / "probe.py"
+    # The real entry point, so this fails if build.main stops installing the
+    # buffering: --help exits immediately and its output does not matter, but
+    # the stream settings main applied to this process do.
+    probe.write_text(
+        "import subprocess, sys\n"
+        "sys.path.insert(0, {tools!r})\n"
+        "import build\n"
+        "try:\n"
+        "    build.main(['--help'])\n"
+        "except SystemExit:\n"
+        "    pass\n"
+        "for i in range(60):\n"
+        "    print('PASS packaged check %d' % i)\n"
+        "subprocess.run([{child!r}], check=True)\n"
+        "print('[6/6] Target runtime smoke')\n".format(
+            tools=str(Path(__file__).parents[2] / "tools"),
+            child=str(child),
+        ),
+        encoding="utf-8",
+    )
+
+    log = tmp_path / "run.log"
+    env = {k: v for k, v in os.environ.items() if k != "PYTHONUNBUFFERED"}
+    with log.open("w", encoding="utf-8") as handle:
+        subprocess.run([sys.executable, str(probe)], stdout=handle, stderr=subprocess.STDOUT, check=True, env=env)
+
+    content = log.read_text(encoding="utf-8")
+    lines = content.splitlines()
+    # --help printed its usage first, so compare positions rather than indices.
+    last_parent = lines.index("PASS packaged check 59")
+    assert lines.index("SMOKE PASS launcher") == last_parent + 1, lines[last_parent - 2 : last_parent + 4]
+    assert lines[-1] == "[6/6] Target runtime smoke", lines[-4:]
+    # The window the CI annotation keeps.
+    assert "SMOKE PASS launcher" in content[-3000:]
