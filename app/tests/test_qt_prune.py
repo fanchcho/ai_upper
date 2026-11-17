@@ -1147,9 +1147,10 @@ def _fake_qml_tree(pyside: Path) -> None:
     # optional import: only a QML file that names it may pull it in.
     _write_qml_module(root, "QtQuick.Controls.Material", "qtquickcontrols2materialstyleplugin")
     _write_qml_module(root, "QtQuick.Controls.Fusion", "qtquickcontrols2fusionstyleplugin")
-    # Windows only: the platform default style there. Present in the tree on
-    # every platform so the "kept only where the platform picks it" case is real.
+    # The platform default style of each OS. Present in the tree on every
+    # platform so the "kept only where the platform picks it" case is real.
     _write_qml_module(root, "QtQuick.Controls.Windows", "qtquickcontrols2windowsstyleplugin")
+    _write_qml_module(root, "QtQuick.Controls.macOS", "qtquickcontrols2macosstyleplugin")
     # tooling: never loaded by a running application.
     _write_qml_module(root, "QtQuick.Shapes", "qmlshapesplugin")
     _touch(root / "QtQuick" / "tooling" / "libquicktoolingplugin.so")
@@ -1327,6 +1328,31 @@ def test_the_windows_default_style_follows_the_target(tmp_path, monkeypatch):
     assert not (controls / "Fusion").exists()
 
 
+
+def test_the_macos_default_style_follows_the_target(tmp_path, monkeypatch):
+    """macOS 的默认样式是独立模块目录，不能按「编进插件里」裁掉。
+
+    Run 44048097846 的两个 macOS job 都在打包冒烟里退出 1：
+    ``module "QtQuick.Controls.macOS" is not installed``。轮子里它确实是
+    ``qml/QtQuick/Controls/macOS/``，代码却假设它编在 Controls 插件里，
+    于是按 macOS 打包时被当作未使用的 optional 样式删掉。
+    """
+    from ai_upper import qt_prune
+
+    site, pyside = _qml_wheel(tmp_path)
+    _fake_qml_tree(pyside)
+    monkeypatch.setattr(qt_prune, "dependency_names", _qml_dependencies)
+    source = _qml_source(tmp_path, MAIN_QML)
+
+    prune(site, TARGETS["macos-arm64"], {"QtCore"}, source_root=source)
+
+    controls = pyside / "Qt" / "qml" / "QtQuick" / "Controls"
+    assert (controls / "macOS").is_dir()
+    assert (controls / "macOS" / "libqtquickcontrols2macosstyleplugin.so").is_file()
+    assert not (controls / "Fusion").exists()
+    assert not (controls / "Windows").exists()
+
+
 def test_an_app_without_controls_keeps_no_style(tmp_path):
     """只 ``import QtQuick`` 的应用不会实例化样式：不能顺手牵一个进来。"""
     from ai_upper import qt_prune
@@ -1336,5 +1362,7 @@ def test_an_app_without_controls_keeps_no_style(tmp_path):
     assert qt_prune.qml_implicit_modules({"QtQuick.Controls"}, TARGETS["linux-arm64"]) == {
         "QtQuick.Controls.Fusion"
     }
-    # macOS 的默认样式编在 Controls 插件里，没有模块目录可留。
-    assert qt_prune.qml_implicit_modules({"QtQuick.Controls"}, TARGETS["macos-arm64"]) == set()
+    # macOS 的默认样式同样是独立模块目录（qml/QtQuick/Controls/macOS）。
+    assert qt_prune.qml_implicit_modules({"QtQuick.Controls"}, TARGETS["macos-arm64"]) == {
+        "QtQuick.Controls.macOS"
+    }

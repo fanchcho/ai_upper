@@ -176,6 +176,14 @@ QML_MODULE_LIBRARIES: dict[str, tuple[str, ...]] = {
     "QtQuick.Controls.Imagine": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Controls.Material": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Controls.Universal": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    # macOS 的 Controls 样式是一个真实模块目录（qml/QtQuick/Controls/macOS/），
+    # 不是编进 Controls 插件里的。注释曾断言它不存在，于是 macOS 产物被裁掉
+    # 这个目录，打包冒烟报 `module "QtQuick.Controls.macOS" is not installed`
+    # （run 44048097846 的两个 macOS job）。轮子实测：
+    # pyside6_essentials-6.11.2-cp310-abi3-macosx_13_0_universal2.whl 里
+    # PySide6/Qt/qml/QtQuick/Controls/macOS/{qmldir,libqtquickcontrols2macosstyleplugin.dylib}。
+    "QtQuick.Controls.macOS": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
+    "QtQuick.Controls.iOS": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Controls.FluentWinUI3": ("QtQuickControls2", "QtQuickControls2Impl", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Dialogs": ("QtQuickDialogs2", "QtQuickTemplates2", "QtQuick", "QtQml"),
     "QtQuick.Shapes": ("QtQuickShapes", "QtQuick", "QtQml"),
@@ -256,12 +264,14 @@ def qml_required_modules(
 # （Qt 文档：Linux → Fusion、Windows → Windows、macOS → macOS），应用源码里
 # 只写 ``import QtQuick.Controls``。静态扫描因此看不到样式模块，裁完的产物加载
 # ``Main.qml`` 时报 ``module "QtQuick.Controls.Fusion" is not installed``——
-# 本机真实 wheel 上复现过。macOS 的样式编在 Controls 插件里，没有模块目录，
-# 所以这里没有 macOS 条目：多留一个不存在的目录名只是空想。
+# 本机真实 wheel 上复现过，macOS 同理（run 44048097846：
+# ``module "QtQuick.Controls.macOS" is not installed``）。三个平台的样式在
+# 轮子里都是独立模块目录 ``qml/QtQuick/Controls/<Style>/``。
 QML_CONTROLS_MODULE = "QtQuick.Controls"
 QML_DEFAULT_CONTROLS_STYLES = {
     "linux": "QtQuick.Controls.Fusion",
     "windows": "QtQuick.Controls.Windows",
+    "macos": "QtQuick.Controls.macOS",
 }
 
 
