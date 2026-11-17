@@ -162,8 +162,15 @@ class ChatSessionStore:
             pass
 
     # ── 读 ────────────────────────────────────────────────────────────────
-    def load_session(self, session_id: str) -> Optional[StoredSession]:
-        """载入一条对话（缓存优先）。拆分存盘的会话在内存里拼回完整记录。"""
+    def load_session(
+        self, session_id: str, *, compacted: Optional[dict[str, list[str]]] = None
+    ) -> Optional[StoredSession]:
+        """载入一条对话（缓存优先）。拆分存盘的会话在内存里拼回完整记录。
+
+        `compacted` 是 `compacted_files_by_session()` 的现成清单：批量载入时由调用方扫一次
+        目录给出，逐条载入就省掉「每次载入都把整个 chats 目录列一遍」。不传则照旧现扫——
+        单条载入的语义与清理时机**完全不变**。
+        """
         session_id = safe_id(session_id)
         cached = self._cache.get(session_id)
         if cached is not None:
@@ -177,8 +184,47 @@ class ChatSessionStore:
         self._cache[session.id] = session
         if tidy != "keep":
             # 主文件不引用的拆分文件（换文件后没删掉的旧文件、写到一半崩溃的新文件）顺手清掉。
-            self._remove_compacted_files(session.id, keep=tidy)
+            if compacted is None:
+                self._remove_compacted_files(session.id, keep=tidy)
+            else:
+                self._remove_listed_compacted(session.id, compacted, keep=tidy)
         return session
+
+    def load_sessions(self, session_ids: list[str]) -> list[Optional[StoredSession]]:
+        """批量载入：目录只列一遍，其余判据与 `load_session` 逐条相同。
+
+        列表首屏要读的是一整批会话，逐条 `load_session` 会让每条都扫一次目录（N 条会话 =
+        N 次全目录扫描）。这里先扫一次拿到「哪些会话有残留拆分文件」，再逐条载入。
+        """
+        listing = self.compacted_files_by_session()
+        return [self.load_session(sid, compacted=listing) for sid in session_ids]
+
+    def compacted_files_by_session(self) -> dict[str, list[str]]:
+        """一次目录扫描 → `{会话 id: [该会话的拆分文件名, …]}`（只收 `.compacted-*.jsonl`）。"""
+        out: dict[str, list[str]] = {}
+        try:
+            with os.scandir(self.chats_dir) as entries:
+                for entry in entries:
+                    name = entry.name
+                    marker = name.find(".compacted-")
+                    if marker <= 0 or not name.endswith(".jsonl"):
+                        continue
+                    out.setdefault(name[:marker], []).append(name)
+        except OSError:
+            return {}
+        return out
+
+    def _remove_listed_compacted(
+        self, session_id: str, listing: dict[str, list[str]], keep: Optional[str] = None
+    ) -> None:
+        """`_remove_compacted_files` 的清单版：不再扫目录，只按已列出的候选删。"""
+        for name in listing.get(safe_id(session_id), ()):
+            if name == keep:
+                continue
+            try:
+                (self.chats_dir / name).unlink(missing_ok=True)
+            except OSError:
+                pass  # 清理失败无害：下次载入再清（与逐条版同一口径）
 
     def _restore_compacted(self, session: StoredSession) -> Optional[str]:
         """把 `.jsonl` 里的早期消息段拼回 messages 前面。
@@ -334,9 +380,15 @@ class ChatSessionStore:
         """删掉该对话除 keep 以外的拆分文件（换文件后的旧文件、崩溃留下的半截新文件）。"""
         prefix = f"{safe_id(session_id)}.compacted-"
         try:
-            for path in self.chats_dir.iterdir():
-                if path.name.startswith(prefix) and path.name != keep:
-                    path.unlink(missing_ok=True)
+            # `os.scandir` 而不是 `Path.iterdir()`：后者会为目录里每个条目造一个 Path 对象
+            # （只为了看 `.name`），大目录下这一层就占掉一次载入的大半开销。
+            with os.scandir(self.chats_dir) as entries:
+                for entry in entries:
+                    if entry.name.startswith(prefix) and entry.name != keep:
+                        try:
+                            os.unlink(entry.path)
+                        except OSError:
+                            pass
         except OSError:
             pass  # 清理失败无害：下次载入再清
 
