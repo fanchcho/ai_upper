@@ -316,16 +316,21 @@ def test_ci_builds_the_oldest_supported_windows_runtime():
             run: true""" in text
     assert "AI_UPPER_CI_RUNTIME_PYTHON: ${{ matrix.runtime-python || '3.13.5' }}" in text
     # PySide6 6.11 has no cp38 wheel, so this entry must override the pin.
-    # 6.6.3 is the last release with a cp38 wheel (PySide6_Essentials
+    # 6.6.3.1 is the last release with a cp38 wheel (PySide6_Essentials
     # cp38-abi3-win_amd64), and it has to stay on Qt 6: the QML sources are Qt 6
     # QML. Essentials, not the meta-package, matching the default pin -- the
     # meta-package adds PySide6-Addons and its WebEngine payload, which this
     # application no longer imports.
+    #
+    # The patch revision matters: 6.6.3 ships the QtQuick Controls style
+    # plugins without the four style libraries they load, which fails the [4/6]
+    # native closure. Pinning plain 6.6.3 puts that defect back in CI.
     # What it must NOT do is keep a private copy of the whole dependency set
     # that drifts away from the application: the default comes from
     # app/requirements.txt (see the test below), and this entry only overrides
     # the pins that have no cp38-compatible release.
-    assert 'dependencies: \'["PySide6-Essentials==6.6.3"' in text
+    assert 'dependencies: \'["PySide6-Essentials==6.6.3.1"' in text
+    assert '"PySide6-Essentials==6.6.3"' not in text
     assert "PySide2==" not in text
     assert "artifact: py38-compat-windows-x86_64" in text
 

@@ -390,10 +390,11 @@ WINDOWS_HOST_LIBRARIES = frozenset({
     "bcrypt.dll", "bcryptprimitives.dll", "ncrypt.dll", "cfgmgr32.dll", "setupapi.dll",
     "winusb.dll", "hid.dll", "winscard.dll",
     # Web Bluetooth. Keep this entry: the py38 matrix row pins
-    # PySide6-Essentials 6.6.3, whose Qt 6.6 generation imports
+    # PySide6-Essentials 6.6.3.1, whose Qt 6.6 generation imports
     # BluetoothApis.dll from System32 directly (a load-time import, not
     # delay-loaded) as the OS implementation of the Web Bluetooth API. Qt 6.11
-    # dropped that import, so only the cp38-compatible 6.6.3 exposes it.
+    # dropped that import, so only the cp38-compatible 6.6 generation exposes
+    # it.
     # Same class as hid.dll and winusb.dll above -- the OS keeps it updated,
     # so bundling a copy would ship a stale one.
     "bluetoothapis.dll",

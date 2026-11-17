@@ -76,12 +76,22 @@ jobs:
             runtime-python: '3.8.10'
             run: true
             # PySide6 6.11 has no cp38 wheel. This job needs a GUI payload, and
-            # 6.6.3 is the last release that ships one for cp38
-            # (PySide6_Essentials 6.6.3 cp38-abi3-win_amd64; 6.7 moved its floor
-            # to >=3.9). Essentials rather than the PySide6 meta-package, for the
-            # same reason as the default pin: the QML shell imports only
-            # QtCore/QtGui/QtWidgets/QtQml/QtQuick, and the meta-package drags in
-            # PySide6-Addons with its WebEngine payload.
+            # 6.6.3.1 is the last release that ships one for cp38
+            # (PySide6_Essentials 6.6.3.1 cp38-abi3-win_amd64; 6.7 moved its
+            # floor to >=3.9). Essentials rather than the PySide6 meta-package,
+            # for the same reason as the default pin: the QML shell imports
+            # only QtCore/QtGui/QtWidgets/QtQml/QtQuick, and the meta-package
+            # drags in PySide6-Addons with its WebEngine payload.
+            #
+            # It must be 6.6.3.1, not 6.6.3: the 6.6.3 wheel ships the
+            # QtQuick Controls style *plugins* without the four style libraries
+            # they import (Qt6QuickControls2Basic[StyleImpl].dll and
+            # Qt6QuickControls2Fusion[StyleImpl].dll), so the [4/6] native
+            # closure step fails with "Unresolved native dependencies". 6.6.3.1
+            # is the same cp38-abi3 win_amd64 build with those four DLLs added;
+            # its other unresolved imports (Qt3D, PDF, VirtualKeyboard, ...)
+            # belong to plugins this application never loads and are pruned --
+            # the 6.6.3 wheel reports the same set plus the four shipped styles.
             #
             # It stays on Qt 6 rather than dropping to PySide2: the QML sources
             # are Qt 6 QML.
@@ -99,7 +109,7 @@ jobs:
             # dependency of pydantic here -- the file imports the name directly
             # -- so the requirement is spelled out. 4.13.2 is the last release
             # that supports 3.8 (4.14.0+ requires >=3.9).
-            dependencies: '["PySide6-Essentials==6.6.3", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
+            dependencies: '["PySide6-Essentials==6.6.3.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
             # Keep this compatibility build out of the seven-target release
             # manifest: it duplicates windows-x86_64 and is not a release artifact.
             artifact: py38-compat-windows-x86_64
