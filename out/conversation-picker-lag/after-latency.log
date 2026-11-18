@@ -1,0 +1,1 @@
+PERF {"label": "AFTER-MARGIN", "sessions": 120, "turns": 400, "rounds": 4, "openSession_sync_ms": {"median": 2805.6, "max": 5652.9}, "first_frame_ms": {"median": 411.2, "max": 738.1}}
