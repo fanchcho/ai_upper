@@ -1,0 +1,7 @@
+heavy-000 blocks=3200 chars=164578 density=0.307 plan=50
+  gwhole   2394.8 ms  +260.9% vs fastest  html_eq=True
+  g16      670.1 ms    +1.0% vs fastest  html_eq=True
+  g24      667.9 ms    +0.7% vs fastest  html_eq=True
+  g32      663.6 ms    +0.0% vs fastest  html_eq=True
+  g50      669.2 ms    +0.9% vs fastest  html_eq=True
+REALGROUP {"blocks": 3200, "chars": 164578, "density": 0.307, "plan": 50, "ms": {"0": 2394.8, "16": 670.1, "24": 667.9, "32": 663.6, "50": 669.2}, "html_eq": {"0": true, "16": true, "24": true, "32": true, "50": true}}

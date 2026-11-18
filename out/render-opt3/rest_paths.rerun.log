@@ -1,0 +1,15 @@
+measure_cache  base=556.1    variant=566.6    delta=-10.6   html_eq=True height_eq=True
+code_metrics   base=556.1    variant=570.4    delta=-14.4   html_eq=True height_eq=True
+no_replace     base=556.1    variant=598.7    delta=-42.6   html_eq=True height_eq=True
+RESTPATHS {"blocks": 2800, "group": 32, "base_ms": 556.1, "variants": {"measure_cache": {"ms": 566.6, "base_ms": 556.1, "delta_ms": -10.6, "html_eq": true, "blocks_eq": true, "height_eq": true}, "code_metrics": {"ms": 570.4, "base_ms": 556.1, "delta_ms": -14.4, "html_eq": true, "blocks_eq": true, "height_eq": true}, "no_replace": {"ms": 598.7, "base_ms": 556.1, "delta_ms": -42.6, "html_eq": true, "blocks_eq": true, "height_eq": true}}}
+--- run 1 done ---
+measure_cache  base=564.7    variant=575.5    delta=-10.7   html_eq=True height_eq=True
+code_metrics   base=564.7    variant=578.7    delta=-14.0   html_eq=True height_eq=True
+no_replace     base=564.7    variant=600.9    delta=-36.2   html_eq=True height_eq=True
+RESTPATHS {"blocks": 2800, "group": 32, "base_ms": 564.7, "variants": {"measure_cache": {"ms": 575.5, "base_ms": 564.7, "delta_ms": -10.7, "html_eq": true, "blocks_eq": true, "height_eq": true}, "code_metrics": {"ms": 578.7, "base_ms": 564.7, "delta_ms": -14.0, "html_eq": true, "blocks_eq": true, "height_eq": true}, "no_replace": {"ms": 600.9, "base_ms": 564.7, "delta_ms": -36.2, "html_eq": true, "blocks_eq": true, "height_eq": true}}}
+--- run 2 done ---
+measure_cache  base=566.5    variant=575.7    delta=-9.2    html_eq=True height_eq=True
+code_metrics   base=566.5    variant=577.5    delta=-11.0   html_eq=True height_eq=True
+no_replace     base=566.5    variant=602.5    delta=-36.0   html_eq=True height_eq=True
+RESTPATHS {"blocks": 2800, "group": 32, "base_ms": 566.5, "variants": {"measure_cache": {"ms": 575.7, "base_ms": 566.5, "delta_ms": -9.2, "html_eq": true, "blocks_eq": true, "height_eq": true}, "code_metrics": {"ms": 577.5, "base_ms": 566.5, "delta_ms": -11.0, "html_eq": true, "blocks_eq": true, "height_eq": true}, "no_replace": {"ms": 602.5, "base_ms": 566.5, "delta_ms": -36.0, "html_eq": true, "blocks_eq": true, "height_eq": true}}}
+--- run 3 done ---

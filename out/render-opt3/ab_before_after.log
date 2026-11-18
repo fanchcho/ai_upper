@@ -1,0 +1,7 @@
+mixed_t12    blocks=84    plan=0    before=26.9      after=13.2      ×2.04  html_eq=True
+mixed_t30    blocks=210   plan=0    before=67.2      after=41.4      ×1.63  html_eq=True
+mixed_t120   blocks=840   plan=32   before=281.8     after=168.1     ×1.68  html_eq=True
+mixed_t400   blocks=2800  plan=32   before=951.3     after=567.5     ×1.68  html_eq=True
+para_t400    blocks=800   plan=0    before=54.8      after=27.7      ×1.98  html_eq=True
+struct_t400  blocks=1200  plan=32   before=766.5     after=432.9     ×1.77  html_eq=True
+AB {"mixed_t12": {"blocks": 84, "planned_group": 0, "before_ms": 26.9, "after_ms": 13.2, "speedup": 2.04, "html_eq": true, "blocks_eq": true, "height_eq": true}, "mixed_t30": {"blocks": 210, "planned_group": 0, "before_ms": 67.2, "after_ms": 41.4, "speedup": 1.63, "html_eq": true, "blocks_eq": true, "height_eq": true}, "mixed_t120": {"blocks": 840, "planned_group": 32, "before_ms": 281.8, "after_ms": 168.1, "speedup": 1.68, "html_eq": true, "blocks_eq": true, "height_eq": true}, "mixed_t400": {"blocks": 2800, "planned_group": 32, "before_ms": 951.3, "after_ms": 567.5, "speedup": 1.68, "html_eq": true, "blocks_eq": true, "height_eq": true}, "para_t400": {"blocks": 800, "planned_group": 0, "before_ms": 54.8, "after_ms": 27.7, "speedup": 1.98, "html_eq": true, "blocks_eq": true, "height_eq": true}, "struct_t400": {"blocks": 1200, "planned_group": 32, "before_ms": 766.5, "after_ms": 432.9, "speedup": 1.77, "html_eq": true, "blocks_eq": true, "height_eq": true}}

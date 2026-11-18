@@ -1,0 +1,31 @@
+{
+ "blocks": 2800,
+ "whole_ms": [
+  3029.9,
+  2775.8
+ ],
+ "g16_ms": [
+  899.3,
+  639.3
+ ],
+ "speedup": {
+  "whole": 1.092,
+  "g16": 1.407
+ },
+ "fidelity": {
+  "whole_sig_eq": true,
+  "whole_html_eq": true,
+  "g16_sig_eq": true,
+  "g16_html_eq": true
+ },
+ "cache_calls": {
+  "color": 88800,
+  "color_hit": 88793,
+  "font": 43204,
+  "font_hit": 43196,
+  "lh": 45600,
+  "lh_hit": 45596
+ },
+ "color_copy_us": null
+}
+{"qcolor_copy_us": 1.8348}

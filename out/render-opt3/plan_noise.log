@@ -1,0 +1,5 @@
+d43_t30      N=51    plan=whole min=6.3     med=6.3     max=17.4    spread=11.07 ms
+mixed_t30    N=210   plan=whole min=43.8    med=44.0    max=45.6    spread=1.74 ms
+struct_t30   N=90    plan=whole min=29.2    med=29.2    max=29.5    spread=0.31 ms
+mixed_t120   N=840   plan=16  min=178.4   med=179.3   max=183.4   spread=5.00 ms
+NOISE {"d43_t30": {"blocks": 51, "plan": 0, "min": 6.3, "median": 6.3, "max": 17.4, "spread": 11.07, "all": [17.4, 6.3, 6.3, 6.4, 6.4, 6.3]}, "mixed_t30": {"blocks": 210, "plan": 0, "min": 43.8, "median": 44.0, "max": 45.6, "spread": 1.74, "all": [45.6, 44.6, 44.1, 43.9, 43.8, 43.8]}, "struct_t30": {"blocks": 90, "plan": 0, "min": 29.2, "median": 29.2, "max": 29.5, "spread": 0.31, "all": [29.2, 29.3, 29.2, 29.3, 29.2, 29.5]}, "mixed_t120": {"blocks": 840, "plan": 16, "min": 178.4, "median": 179.3, "max": 183.4, "spread": 5.0, "all": [183.4, 179.2, 178.4, 179.4, 179.4, 178.9]}}

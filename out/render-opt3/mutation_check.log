@@ -1,0 +1,26 @@
+MUTANT density_floor=0 => FAILED app/tests/test_markdown_chunked.py::test_plan_keeps_sparse_structure_on_the_whole_path
+1 failed, 77 passed in 2.25s
+MUTANT pressure=0 => FAILED app/tests/test_markdown_chunked.py::test_plan_keeps_small_documents_on_the_whole_path
+1 failed, 77 passed in 2.31s
+MUTANT dense_group=50 => FAILED app/tests/test_markdown_chunked.py::test_adaptive_groups_render_identically_to_the_whole_path[32-markdown_text0]
+3 failed, 75 passed in 1.78s
+MUTANT dense_density=0.30 => FAILED app/tests/test_markdown_chunked.py::test_plan_keeps_moderately_dense_documents_on_the_large_group
+2 failed, 76 passed in 2.35s
+MUTANT no_recursive_quote => FAILED app/tests/test_markdown_chunked.py::test_structural_load_weights_nested_quotes_and_ignores_other_headings
+1 failed, 77 passed in 2.39s
+MUTANT no_h2_weight => FAILED app/tests/test_markdown_chunked.py::test_adaptive_groups_render_identically_to_the_whole_path[50-markdown_text1]
+2 failed, 76 passed in 2.14s
+MUTANT color_cache_wrong => FAILED app/tests/test_markdown_document.py::test_every_cell_gets_its_own_border_brush_and_style
+16 failed, 62 passed in 2.54s
+MUTANT font_key_drops_bold => FAILED app/tests/test_markdown_document.py::test_font_and_line_height_caches_are_keyed_on_their_inputs
+10 failed, 68 passed in 2.40s
+MUTANT line_height_key_drops_px => FAILED app/tests/test_markdown_document.py::test_font_and_line_height_caches_are_keyed_on_their_inputs
+1 failed, 77 passed in 2.29s
+MUTANT ignore_group_arg => FAILED app/tests/test_markdown_chunked.py::test_the_planned_group_actually_reaches_the_chunked_renderer
+1 failed, 77 passed in 2.31s
+MUTANT cell_key_drops_parity => FAILED app/tests/test_markdown_document.py::test_every_cell_gets_its_own_border_brush_and_style
+2 failed, 76 passed in 2.32s
+MUTANT cell_block_key_drops_alignment => FAILED app/tests/test_markdown_document.py::test_alignment_marker_is_applied_per_cell
+1 failed, 77 passed in 2.35s
+MUTANT cell_char_key_drops_bold => FAILED app/tests/test_markdown_document.py::test_table_body_text_is_not_bold_while_the_header_is
+1 failed, 77 passed in 2.29s

@@ -1,0 +1,15 @@
+para   turns=12    blocks=24     whole=0.9       g16=1.3       g50=1.1       g16×0.67 g50×0.78
+para   turns=30    blocks=60     whole=2.1       g16=2.9       g50=2.7       g16×0.71 g50×0.77
+para   turns=120   blocks=240    whole=8.1       g16=11.5      g50=10.4      g16×0.70 g50×0.78
+para   turns=400   blocks=800    whole=27.2      g16=38.6      g50=35.0      g16×0.70 g50×0.78
+para   turns=1200  blocks=2400   whole=84.0      g16=117.2     g50=106.2     g16×0.72 g50×0.79
+para   turns=2400  blocks=4800   whole=171.0     g16=237.3     g50=217.5     g16×0.72 g50×0.79
+para whole-path exponent = 0.999
+table  turns=12    blocks=24     whole=3.7       g16=5.4       g50=5.2       g16×0.70 g50×0.72
+table  turns=30    blocks=60     whole=9.6       g16=13.3      g50=13.1      g16×0.73 g50×0.74
+table  turns=120   blocks=240    whole=51.2      g16=54.1      g50=53.0      g16×0.95 g50×0.97
+table  turns=400   blocks=800    whole=297.9     g16=183.4     g50=181.3     g16×1.62 g50×1.64
+table  turns=1200  blocks=2400   whole=1919.0    g16=562.7     g50=562.5     g16×3.41 g50×3.41
+table  turns=2400  blocks=4800   whole=7064.9    g16=1144.7    g50=1136.5    g16×6.17 g50×6.22
+table whole-path exponent = 1.421
+QUADRATIC {"para": {"rows": {"t12": {"blocks": 24, "whole_ms": 0.9, "g16_ms": 1.3, "g50_ms": 1.1, "g16_speedup": 0.67, "g50_speedup": 0.78}, "t30": {"blocks": 60, "whole_ms": 2.1, "g16_ms": 2.9, "g50_ms": 2.7, "g16_speedup": 0.71, "g50_speedup": 0.77}, "t120": {"blocks": 240, "whole_ms": 8.1, "g16_ms": 11.5, "g50_ms": 10.4, "g16_speedup": 0.7, "g50_speedup": 0.78}, "t400": {"blocks": 800, "whole_ms": 27.2, "g16_ms": 38.6, "g50_ms": 35.0, "g16_speedup": 0.7, "g50_speedup": 0.78}, "t1200": {"blocks": 2400, "whole_ms": 84.0, "g16_ms": 117.2, "g50_ms": 106.2, "g16_speedup": 0.72, "g50_speedup": 0.79}, "t2400": {"blocks": 4800, "whole_ms": 171.0, "g16_ms": 237.3, "g50_ms": 217.5, "g16_speedup": 0.72, "g50_speedup": 0.79}}, "whole_exponent": 0.999, "ms_per_block": {"t12": 0.0375, "t30": 0.035, "t120": 0.0337, "t400": 0.034, "t1200": 0.035, "t2400": 0.0356}}, "table": {"rows": {"t12": {"blocks": 24, "whole_ms": 3.7, "g16_ms": 5.4, "g50_ms": 5.2, "g16_speedup": 0.7, "g50_speedup": 0.72}, "t30": {"blocks": 60, "whole_ms": 9.6, "g16_ms": 13.3, "g50_ms": 13.1, "g16_speedup": 0.73, "g50_speedup": 0.74}, "t120": {"blocks": 240, "whole_ms": 51.2, "g16_ms": 54.1, "g50_ms": 53.0, "g16_speedup": 0.95, "g50_speedup": 0.97}, "t400": {"blocks": 800, "whole_ms": 297.9, "g16_ms": 183.4, "g50_ms": 181.3, "g16_speedup": 1.62, "g50_speedup": 1.64}, "t1200": {"blocks": 2400, "whole_ms": 1919.0, "g16_ms": 562.7, "g50_ms": 562.5, "g16_speedup": 3.41, "g50_speedup": 3.41}, "t2400": {"blocks": 4800, "whole_ms": 7064.9, "g16_ms": 1144.7, "g50_ms": 1136.5, "g16_speedup": 6.17, "g50_speedup": 6.22}}, "whole_exponent": 1.421, "ms_per_block": {"t12": 0.1542, "t30": 0.16, "t120": 0.2133, "t400": 0.3724, "t1200": 0.7996, "t2400": 1.4719}}}

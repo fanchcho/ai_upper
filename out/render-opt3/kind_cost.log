@@ -1,0 +1,7 @@
+para   N=600   S=0     whole=27.0      g32=34.2      gain=-7.2    
+table  N=750   S=150   whole=188.7     g32=184.9     gain=3.8     
+code   N=750   S=150   whole=94.2      g32=93.3      gain=0.9     
+quote  N=750   S=150   whole=71.9      g32=71.6      gain=0.3     
+hr     N=750   S=150   whole=45.5      g32=47.7      gain=-2.2    
+h2     N=750   S=150   whole=55.6      g32=56.3      gain=-0.7    
+KIND {"para": {"N": 600, "S": 0, "whole": 27.0, "g32": 34.2, "gain": -7.2, "overhead_per_chunk_ms": 0.4}, "table": {"N": 750, "S": 150, "whole": 188.7, "g32": 184.9, "gain": 3.8, "coefficient_ms": 0.000204, "weight_vs_table": 1.0}, "code": {"N": 750, "S": 150, "whole": 94.2, "g32": 93.3, "gain": 0.9, "coefficient_ms": 0.00015, "weight_vs_table": 0.74}, "quote": {"N": 750, "S": 150, "whole": 71.9, "g32": 71.6, "gain": 0.3, "coefficient_ms": 0.000139, "weight_vs_table": 0.68}, "hr": {"N": 750, "S": 150, "whole": 45.5, "g32": 47.7, "gain": -2.2, "coefficient_ms": 9.3e-05, "weight_vs_table": 0.46}, "h2": {"N": 750, "S": 150, "whole": 55.6, "g32": 56.3, "gain": -0.7, "coefficient_ms": 0.000121, "weight_vs_table": 0.59}}

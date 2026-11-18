@@ -1,0 +1,45 @@
+{
+ "blocks": 3200,
+ "render_ms_min": 3673.5,
+ "counts_per_pass": {
+  "font": 20400,
+  "QFontMetricsF": 12400,
+  "line_height": 9600,
+  "css_color": 19600,
+  "kind:_inline": 8000,
+  "kind:_hairline": 800,
+  "kind:_heading": 800,
+  "kind:_paragraph": 1200,
+  "kind:_quote": 400,
+  "kind:_list": 800,
+  "kind:_cell_edges": 800,
+  "kind:_code_head": 400,
+  "kind:_code": 400,
+  "kind:_table": 400
+ },
+ "calls": {
+  "css_color": 19600,
+  "QFontMetricsF": 12400,
+  "font": 20400,
+  "line_height": 9600
+ }
+}
+{
+ "total_ms": 3686.7,
+ "times_ms": {
+  "css_color": 93.2,
+  "font": 143.6,
+  "kind:_cell_edges": 16.3,
+  "kind:_code": 698.1,
+  "kind:_code_head": 52.3,
+  "kind:_hairline": 1143.8,
+  "kind:_heading": 1200.8,
+  "kind:_inline": 135.9,
+  "kind:_list": 161.2,
+  "kind:_paragraph": 143.9,
+  "kind:_quote": 588.6,
+  "kind:_table": 995.2,
+  "line_height": 186.1
+ },
+ "sum_instrumented": 422.8
+}

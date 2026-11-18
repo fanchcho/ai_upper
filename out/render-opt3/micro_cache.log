@@ -1,0 +1,13 @@
+{
+ "css_color_us": 2.413,
+ "dict_lookup_us": 0.0731,
+ "font_build_us": 5.001,
+ "font_copy_us": 1.5,
+ "font_metrics_us": 1.302,
+ "line_spacing": 16.281,
+ "per_400_turn_doc_ms": {
+  "css_color_19600": 47.3,
+  "font_20400": 102.0,
+  "metrics_12400": 16.1
+ }
+}
