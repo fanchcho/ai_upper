@@ -18,8 +18,9 @@
 同一份正文写进活动文档比写进普通文档慢 8~12 倍（实测 400 轮：1.8 s → 14 s，见
 ``out/conversation-picker-lag/REPORT.md``）。改成整篇 ``insertFragment`` 后只有一次
 内容变更：格式与表格结构随片段走，代码着色由挂在目标文档上的高亮器在
-``contentsChange`` 里补齐（见下）；只有文档级的图片资源不随片段走，需要在搬运后
-按名字补注册（``_copy_images``）。
+``contentsChange`` 里补齐（见下）；只有文档级的属性不随片段走——图片资源要在搬运后
+按名字补注册（``_copy_images``），``documentMargin`` 要显式对齐（渲染器用 0，QML
+文档默认 4，差 4px 内边距）。
 
 **高亮器挂在「当前在显示的那份文档」上。** 它是 ``QSyntaxHighlighter``，只对
 ``document()`` 指向的文档着色：
@@ -176,11 +177,17 @@ class BodyDocument:
         搬运后也**不**再显式 ``rehighlight()``——同一份正文是白跑一遍
         （400 轮实测 0.9~1.7 s）。
 
-        ``insertFragment`` 不搬文档级图片资源，搬运后按名字补注册（``_copy_images``）。
+        ``insertFragment`` 不搬文档级图片资源，搬运后按名字补注册（``_copy_images``）；
+        也不搬 ``documentMargin``，而 QML 文档的默认值是 4，渲染器用 0——不显式对齐
+        的话正文四边会多出内边距、整体偏移，排版与直接渲染对不上。
         ``QTextLayout`` 里的着色不能跨文档搬（会把块高打成 0），只能由目标文档自己的
         高亮器重算，见模块文档。
         """
         target = quick_document.textDocument()
+        # 渲染器把自有文档的页边距设成 0（正文块自己控制留白）。片段不搬运文档级的
+        # ``documentMargin``，不显式对齐的话接管后四边会多出 4px 默认内边距，正文
+        # 整体偏移、文档高度多 8px。
+        target.setDocumentMargin(self.document.documentMargin())
         if self._highlighter is not None and self._highlighter.document() is not target:
             self._highlighter.setDocument(target)
         cursor = QtGui.QTextCursor(target)

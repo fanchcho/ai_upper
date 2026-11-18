@@ -26,10 +26,17 @@ def qapp():
 
 
 from markdown.body import WIDTH_EPSILON, BodyDocument, palettes  # noqa: E402
-from markdown.document import DARK, LIGHT, BodyStyle  # noqa: E402
+from markdown.document import DARK, LIGHT, BodyStyle, render_markdown  # noqa: E402
 from markdown.highlight import DARK_TOKENS, LIGHT_TOKENS  # noqa: E402
 
 QTextDocument = QtGui.QTextDocument
+
+
+def _blocks(document):
+    block = document.begin()
+    while block.isValid():
+        yield block
+        block = block.next()
 
 
 class QuickDocumentStub:
@@ -282,6 +289,32 @@ def test_attach_copies_image_resources_by_name(qapp):
     )
     assert resource is not None and not resource.isNull()
     assert (resource.width(), resource.height()) == (4, 3)
+
+
+def test_attach_matches_the_rendered_document_geometry(qapp):
+    """接管后的排版必须与直接渲染一致（含页边距）。
+
+    历史回归：渲染器把自有文档的 ``documentMargin`` 设成 0，而 ``insertFragment``
+    不搬这个文档级属性。QML 的 ``QTextDocument`` 默认是 4，于是接管后正文四边多
+    4px 内边距、文档高度多 8px，与直接渲染的排版对不上。
+    """
+    markdown = "# 标题\n\n段落 **粗体**\n\n```python\ndef f(x):\n    return x\n```\n"
+    reference = QtGui.QTextDocument()
+    render_markdown(reference, markdown, BodyStyle(), content_width=676.0)
+
+    body = BodyDocument(content_width=676.0)
+    body.set_markdown(markdown)
+    quick = QuickDocumentStub()
+    target = body.attach(quick)
+    target.setTextWidth(696.0)
+    reference.setTextWidth(696.0)
+    target.documentLayout()
+    reference.documentLayout()
+
+    assert target.documentMargin() == reference.documentMargin() == 0.0
+    assert target.size().height() == reference.size().height()
+    assert [target.documentLayout().blockBoundingRect(b).height() for b in _blocks(target)] == \
+           [reference.documentLayout().blockBoundingRect(b).height() for b in _blocks(reference)]
 
 
 def test_attach_keeps_block_heights(qapp):
