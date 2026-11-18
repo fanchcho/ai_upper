@@ -33,6 +33,9 @@ from markdown.document import (  # noqa: E402
     BodyStyle,
     DARK,
     LIGHT,
+    _Renderer,
+    _font_for,
+    _line_spacing,
     css_color,
     render_markdown,
     render_plain_text,
@@ -324,6 +327,18 @@ def test_table_header_is_panel_coloured_and_bold(qapp):
     assert first_fragment(table.cellAt(0, 0).firstCursorPosition().block()).charFormat().font().bold() is True
 
 
+def test_table_body_text_is_not_bold_while_the_header_is(qapp):
+    """表头与正文共用一份缓存的字符格式时，键必须区分表头：正文不能继承粗体。"""
+    document = render("| 头 | b |\n| - | - |\n| 正文 | 2 |")
+    table = tables(document)[0]
+    header_font = first_fragment(
+        table.cellAt(0, 0).firstCursorPosition().block()).charFormat().font()
+    body_font = first_fragment(
+        table.cellAt(1, 0).firstCursorPosition().block()).charFormat().font()
+    assert header_font.bold() is True
+    assert body_font.bold() is False
+
+
 def test_table_cells_have_10_by_6_padding(qapp):
     document = render("| a |\n| - |\n| 1 |")
     cell = cell_format(tables(document)[0].cellAt(1, 0))
@@ -470,6 +485,62 @@ def test_css_colours_parse_hex_rgba_and_fall_back_to_black():
     assert css_color("rgba(0, 0, 255, 0.5)").getRgb() == (0, 0, 255, 128)
     assert css_color("not-a-colour").name() == "#000000"
     assert css_color("").name() == "#000000"
+
+
+def test_css_colour_cache_does_not_change_what_callers_get(qapp):
+    """``css_color`` 带缓存：同一输入两次必须给出等价颜色，且不串色。"""
+    first = css_color("#123456")
+    second = css_color("#123456")
+    assert first == second
+    assert second.getRgb() == (0x12, 0x34, 0x56, 255)
+    assert css_color("#654321").getRgb() == (0x65, 0x43, 0x21, 255)
+    assert css_color("#123456").getRgb() == (0x12, 0x34, 0x56, 255)
+
+
+def test_css_colour_is_memoised_per_source_string(qapp):
+    """缓存键是原字符串：重复取命中、不同取不命中（命中就是这份优化的全部收益）。"""
+    css_color.cache_clear()
+    css_color("#abcdef")
+    css_color("#abcdef")
+    info = css_color.cache_info()
+    assert info.misses == 1 and info.hits == 1
+    css_color("#fedcba")
+    assert css_color.cache_info().misses == 2
+
+
+def test_renderer_font_and_line_height_are_stable_across_calls(qapp):
+    """字体与行高按「族 + 像素 + 粗 + 等宽 + 斜」/「族 + 像素」缓存，值必须不变。"""
+    renderer = _Renderer(QtGui.QTextDocument(), BodyStyle(), 676.0, None)
+    font = renderer.font(14.0, bold=True, mono=True, italic=True)
+    assert renderer.font(14.0, bold=True, mono=True, italic=True) == font
+    assert font.pixelSize() == 14 and font.bold() and font.italic()
+    assert font.families() == list(BodyStyle().mono)
+    # 不同键不能撞到同一个值
+    assert renderer.font(14.0).pixelSize() == 14
+    assert renderer.font(14.0).bold() is False
+    assert renderer.font(28.0).pixelSize() == 28
+    assert renderer.line_height(14.0, 1.65) == renderer.line_height(14.0, 1.65)
+    assert renderer.line_height(28.0, 1.65) != renderer.line_height(14.0, 1.65)
+
+
+def test_font_and_line_height_caches_are_keyed_on_their_inputs(qapp):
+    """缓存键必须包含决定结果的每一项：键不全会把不同字号/字重串成同一个值。"""
+    renderer = _Renderer(QtGui.QTextDocument(), BodyStyle(), 676.0, None)
+    _font_for.cache_clear()
+    renderer.font(14.0, bold=True)
+    renderer.font(14.0, bold=True)
+    renderer.font(14.0, bold=False)   # 只有粗体不同：必须是新键
+    renderer.font(14.0, mono=True)    # 只有等宽不同：必须是新键
+    renderer.font(28.0, bold=True)    # 只有字号不同：必须是新键
+    info = _font_for.cache_info()
+    assert info.hits == 1 and info.misses == 4
+
+    _line_spacing.cache_clear()
+    renderer.line_height(14.0, 1.65)
+    renderer.line_height(14.0, 1.65)
+    renderer.line_height(28.0, 1.65)  # 只有字号不同：必须是新键
+    info = _line_spacing.cache_info()
+    assert info.hits == 1 and info.misses == 2
 
 
 # ── 段错误守卫 ───────────────────────────────────────────────────────────

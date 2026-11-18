@@ -129,6 +129,16 @@ def laid_out(document):
 CHUNK = document_module._CHUNK_BLOCKS
 
 
+def force_group(monkeypatch, group):
+    """让 ``_chunk_plan`` 固定返回 ``group``，从而按指定分组驱动分块路径。
+
+    分块大小现在由 ``_chunk_plan`` 按结构密度算（见 ``test_chunk_plan_*``），
+    所以这里直接替换计划函数，而不是改 ``_CHUNK_BLOCKS``——后者现在是
+    「整篇/分块」的规模门槛，不再决定分组大小。
+    """
+    monkeypatch.setattr(document_module, "_chunk_plan", lambda blocks: group)
+
+
 @pytest.mark.parametrize("turns", [12, 30])
 @pytest.mark.parametrize("group", [5, 25, CHUNK])
 def test_chunked_render_matches_the_whole_document_block_by_block(qapp, monkeypatch, turns, group):
@@ -137,7 +147,7 @@ def test_chunked_render_matches_the_whole_document_block_by_block(qapp, monkeypa
 
     whole = laid_out(render_whole(markdown_text, monkeypatch))
     monkeypatch.undo()
-    monkeypatch.setattr(document_module, "_CHUNK_BLOCKS", group)
+    force_group(monkeypatch, group)
     chunked = laid_out(render(markdown_text))
 
     assert chunked.blockCount() == whole.blockCount()
@@ -215,19 +225,161 @@ def test_the_threshold_itself_takes_the_whole_document_path(qapp, monkeypatch):
     render(exactly)
     assert calls == []
 
-    over = "\n\n".join("段落 %d" % n for n in range(group + 1))
-    render(over)
+    # 阈值以上、但结构密度不足的文档仍走整篇：纯段落的整篇路径本来就是线性的，
+    # 分块只会多付拼接钱（2400 块实测整篇 111.8 ms、分块 148.2 ms）。
+    prose = "\n\n".join("段落 %d" % n for n in range(group + 1))
+    render(prose)
+    assert calls == []
+
+    # 同样的正文比例、规模够大时（结构量 × 块数过门槛）才切到分块。
+    dense = "\n\n".join(("段落 %d" % n) + ("\n\n| a | b |\n| --- | --- |\n| 1 | 2 |"
+                                           if n % 2 else "")
+                       for n in range(400))
+    assert len(parse_markdown(dense)) > group
+    render(dense)
     assert len(calls) == 1
 
 
 def test_one_block_past_the_threshold_renders_the_same_as_whole(qapp, monkeypatch):
+    """整篇/分块两条路径在同一份正文上逐字节一致（用结构密集正文逼出分块）。"""
     group = document_module._CHUNK_BLOCKS
-    markdown_text = "\n\n".join("段落 %d" % n for n in range(group + 1))
+    markdown_text = "\n\n".join(
+        "段落 %d\n\n| a | b |\n| --- | --- |\n| 1 | 2 |" % n for n in range(group + 1))
+    assert len(parse_markdown(markdown_text)) > group
     whole = render_whole(markdown_text, monkeypatch)
     monkeypatch.undo()
-    monkeypatch.setattr(document_module, "_CHUNK_BLOCKS", group)
     chunked = render(markdown_text)
     assert chunked.blockCount() == whole.blockCount()
+    assert chunked.toHtml() == whole.toHtml()
+
+
+# ── 自适应分组 ───────────────────────────────────────────────────────────
+def plan(markdown_text):
+    blocks = parse_markdown(markdown_text)
+    return document_module._chunk_plan(blocks), len(blocks), document_module._structural_load(blocks)
+
+
+def prose(n):
+    return "\n\n".join("段落 %d：先读 README，再看依赖。" % i for i in range(n))
+
+
+def tabulated(n, every=2):
+    return "\n\n".join(
+        ("段落 %d" % i) + ("\n\n| a | b |\n| --- | --- |\n| 1 | 2 |" if i % every == 0 else "")
+        for i in range(n))
+
+
+def test_plan_keeps_pure_paragraph_documents_on_the_whole_path():
+    """纯段落文档没有结构性插入，整篇就是线性的，分块只会多付拼接开销。"""
+    group, count, load = plan(prose(2000))
+    assert count > document_module._CHUNK_BLOCKS
+    assert load == 0
+    assert group == 0
+
+
+def test_plan_keeps_sparse_structure_on_the_whole_path():
+    """每 16 段一张表（密度 < 0.15）：1275 块实测整篇 129.0 ms、分块 140.4 ms。"""
+    group, count, load = plan("\n\n".join(
+        ("段落 %d" % i) + ("\n\n| a | b |\n| --- | --- |\n| 1 | 2 |" if i % 15 == 0 else "")
+        for i in range(1200)))
+    assert count > document_module._CHUNK_BLOCKS
+    assert 0 < load / count < document_module._CHUNK_DENSITY_FLOOR
+    assert group == 0
+
+
+def test_plan_keeps_small_documents_on_the_whole_path():
+    """密度够、但规模太小：二次成本还不够付拼接（90 块全结构整篇 48.6、分块 52.3）。"""
+    dense = "\n\n".join("| a | b |\n| --- | --- |\n| %d | 2 |" % i for i in range(60))
+    group, count, load = plan(dense)
+    assert load / count >= document_module._CHUNK_DENSITY_FLOOR
+    assert load * count < document_module._CHUNK_PRESSURE
+    assert group == 0
+
+
+def test_plan_uses_a_small_group_for_structure_dense_documents():
+    """密度 >= 0.40 才切小分组：0.52~0.73 上 g32 与 g24/g16 互有胜负但差值 <= 1%，
+    而 0.31 上小组明显吃亏（g16 113.9 vs g50 108.6），交界因此放在 0.40。
+
+    写死 32 与阈值，避免常量被顺手改大后测试跟着变绿。
+    """
+    group, count, load = plan(tabulated(400, every=1))
+    assert count > document_module._CHUNK_BLOCKS
+    assert load / count >= document_module._CHUNK_DENSE_DENSITY
+    assert document_module._CHUNK_DENSE_GROUP == 32
+    assert document_module._CHUNK_DENSE_DENSITY == 0.40
+    assert group == 32
+    assert group < document_module._CHUNK_BLOCKS
+
+
+def test_plan_keeps_moderately_dense_documents_on_the_large_group():
+    """密度 0.31 属于「分块划算、但小组更慢」：700 块 g16 113.9 / g32 109.5 / g50 108.6。"""
+    group, count, load = plan(tabulated(400))
+    density = load / count
+    assert document_module._CHUNK_DENSITY_FLOOR <= density < document_module._CHUNK_DENSE_DENSITY
+    assert group == document_module._CHUNK_BLOCKS
+
+
+def test_the_planned_group_actually_reaches_the_chunked_renderer(qapp, monkeypatch):
+    """计划算出来的分组必须真的传进 ``_render_chunked``，且每块不超过它。"""
+    captured = []
+    original = document_module._render_chunked
+
+    def spy(*args, **kwargs):
+        captured.append(args[5])
+        return original(*args, **kwargs)
+
+    sizes = []
+    real_render_blocks = document_module._Renderer.render_blocks
+
+    def counting(self, blocks, cursor, indent=0.0):
+        sizes.append(len(blocks))
+        return real_render_blocks(self, blocks, cursor, indent)
+
+    monkeypatch.setattr(document_module, "_render_chunked", spy)
+    monkeypatch.setattr(document_module._Renderer, "render_blocks", counting)
+    markdown_text = tabulated(400, every=1)
+    render(markdown_text)
+    assert captured == [32]
+    # 每组恰好 32 个顶层块（末组可以更少）：分组真的被用了，而不是被忽略成 50。
+    assert sizes and max(sizes) == 32
+    assert sum(sizes) == len(parse_markdown(markdown_text))
+
+
+def test_plan_uses_the_full_group_between_the_two_density_thresholds():
+    """密度 0.15~0.40：分块划算但小组会多付拼接钱（密度 0.16 的 1500 块文档
+    g16 283.2 ms、g50 274.5 ms），取 50。"""
+    group, count, load = plan("\n\n".join(
+        ("段落 %d" % i) + ("\n\n> 引用" if i % 2 == 0 else "") for i in range(1200)))
+    density = load / count
+    assert document_module._CHUNK_DENSITY_FLOOR <= density < document_module._CHUNK_DENSE_DENSITY
+    assert load * count >= document_module._CHUNK_PRESSURE
+    assert group == document_module._CHUNK_BLOCKS
+
+
+def test_structural_load_weights_nested_quotes_and_ignores_other_headings():
+    """引用本身是表格、内部嵌套引用再插一张，都要计数；只有 h2 带横线 frame。"""
+    nested = parse_markdown("> 一层\n>\n> > 二层\n\n## 标题二\n\n### 标题三\n\n---")
+    load = document_module._structural_load(nested)
+    weights = document_module._STRUCTURAL_WEIGHTS
+    assert load == weights["quote"] * 2 + weights["heading2"] + weights["hr"]
+
+
+@pytest.mark.parametrize("expected_group,markdown_text", [
+    (32, tabulated(400, every=1)),
+    (document_module._CHUNK_BLOCKS, "\n\n".join(
+        ("段落 %d" % i) + ("\n\n> 引用 **粗**\n\n- 项\n\n## 标题" if i % 2 == 0 else "")
+        for i in range(200))),
+])
+def test_adaptive_groups_render_identically_to_the_whole_path(
+        qapp, monkeypatch, expected_group, markdown_text):
+    """任何分组都必须与整篇逐块一致：这里让判据自己选，并断言选中的正是被测档位。"""
+    assert document_module._chunk_plan(parse_markdown(markdown_text)) == expected_group
+    whole = laid_out(render_whole(markdown_text, monkeypatch))
+    monkeypatch.undo()
+    chunked = laid_out(render(markdown_text))
+    assert chunked.blockCount() == whole.blockCount()
+    assert signatures(chunked) == signatures(whole)
+    assert table_shapes(chunked) == table_shapes(whole)
     assert chunked.toHtml() == whole.toHtml()
 
 
@@ -239,7 +391,7 @@ def test_image_resources_survive_chunking(qapp, monkeypatch):
     resolver = lambda src: image if src.startswith("my://") else None  # noqa: E731
     markdown_text = "\n\n".join("段落 %d\n\n![图](my://pic%d)" % (n, n) for n in range(80))
 
-    monkeypatch.setattr(document_module, "_CHUNK_BLOCKS", 10)
+    force_group(monkeypatch, 10)
     document = render(markdown_text, resolver)
 
     names = [
