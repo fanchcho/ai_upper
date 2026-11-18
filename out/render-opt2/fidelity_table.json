@@ -1,0 +1,195 @@
+{
+ "before_rev": "HEAD",
+ "turns_5": {
+  "blocks": [
+   260,
+   260
+  ],
+  "chars": [
+   1885,
+   1885
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 25,
+  "n_cells": [
+   110,
+   110
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   4639.0781,
+   696.0,
+   4639.0781
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   119811,
+   119811
+  ]
+ },
+ "turns_12": {
+  "blocks": [
+   624,
+   624
+  ],
+  "chars": [
+   4528,
+   4528
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 60,
+  "n_cells": [
+   264,
+   264
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   11156.1875,
+   696.0,
+   11156.1875
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   286898,
+   286898
+  ]
+ },
+ "turns_30": {
+  "blocks": [
+   1560,
+   1560
+  ],
+  "chars": [
+   11350,
+   11350
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 150,
+  "n_cells": [
+   660,
+   660
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   27914.4688,
+   696.0,
+   27914.4688
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   716576,
+   716576
+  ]
+ },
+ "turns_60": {
+  "blocks": [
+   3120,
+   3120
+  ],
+  "chars": [
+   22720,
+   22720
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 300,
+  "n_cells": [
+   1320,
+   1320
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   55844.9375,
+   696.0,
+   55844.9375
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   1432706,
+   1432706
+  ]
+ },
+ "turns_120": {
+  "blocks": [
+   6240,
+   6240
+  ],
+  "chars": [
+   45500,
+   45500
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 600,
+  "n_cells": [
+   2640,
+   2640
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   111705.875,
+   696.0,
+   111705.875
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   2865006,
+   2865006
+  ]
+ },
+ "turns_400": {
+  "blocks": [
+   20800,
+   20800
+  ],
+  "chars": [
+   152180,
+   152180
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "diff_indexes": [],
+  "tables_eq": true,
+  "n_tables": 2000,
+  "n_cells": [
+   8800,
+   8800
+  ],
+  "cells_eq": true,
+  "size": [
+   696.0,
+   372390.25,
+   696.0,
+   372390.25
+  ],
+  "height_eq": true,
+  "html_eq": true,
+  "html_len": [
+   9549446,
+   9549446
+  ]
+ }
+}

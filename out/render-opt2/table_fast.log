@@ -1,0 +1,72 @@
+{
+ "t12": {
+  "ms": {
+   "before": 43.2,
+   "once_insert": 29.2,
+   "table_level_border_only": 26.3,
+   "landed": 32.6
+  },
+  "blocks": [
+   396,
+   396,
+   396,
+   396
+  ],
+  "chars": [
+   2272,
+   2272,
+   2272,
+   2272
+  ],
+  "sig_diffs_once": 0,
+  "sig_diffs_table_level": 0,
+  "sig_diffs_landed": 0,
+  "cells_eq_once": true,
+  "cells_eq_table_level": false,
+  "cells_eq_landed": true,
+  "html_eq_once": true,
+  "html_eq_table_level": false,
+  "html_eq_landed": true,
+  "n_cells": [
+   240,
+   240,
+   240,
+   240
+  ]
+ },
+ "t60": {
+  "ms": {
+   "before": 251.7,
+   "once_insert": 190.4,
+   "table_level_border_only": 169.0,
+   "landed": 189.0
+  },
+  "blocks": [
+   1980,
+   1980,
+   1980,
+   1980
+  ],
+  "chars": [
+   11440,
+   11440,
+   11440,
+   11440
+  ],
+  "sig_diffs_once": 0,
+  "sig_diffs_table_level": 0,
+  "sig_diffs_landed": 0,
+  "cells_eq_once": true,
+  "cells_eq_table_level": false,
+  "cells_eq_landed": true,
+  "html_eq_once": true,
+  "html_eq_table_level": false,
+  "html_eq_landed": true,
+  "n_cells": [
+   1200,
+   1200,
+   1200,
+   1200
+  ]
+ }
+}

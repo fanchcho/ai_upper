@@ -1,0 +1,341 @@
+{
+ "before_rev": "HEAD",
+ "cells": {
+  "t12_g5": {
+   "blocks": [
+    624,
+    624
+   ],
+   "chars": [
+    4528,
+    4528
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 60,
+   "cells_eq": true,
+   "n_cells": [
+    264,
+    264
+   ],
+   "height_eq": true,
+   "height": [
+    11156.188,
+    11156.188
+   ],
+   "html_eq": true,
+   "images_kept": [
+    12,
+    12
+   ]
+  },
+  "t12_g25": {
+   "blocks": [
+    624,
+    624
+   ],
+   "chars": [
+    4528,
+    4528
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 60,
+   "cells_eq": true,
+   "n_cells": [
+    264,
+    264
+   ],
+   "height_eq": true,
+   "height": [
+    11156.188,
+    11156.188
+   ],
+   "html_eq": true,
+   "images_kept": [
+    12,
+    12
+   ]
+  },
+  "t12_g50": {
+   "blocks": [
+    624,
+    624
+   ],
+   "chars": [
+    4528,
+    4528
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 60,
+   "cells_eq": true,
+   "n_cells": [
+    264,
+    264
+   ],
+   "height_eq": true,
+   "height": [
+    11156.188,
+    11156.188
+   ],
+   "html_eq": true,
+   "images_kept": [
+    12,
+    12
+   ]
+  },
+  "t12_g100": {
+   "blocks": [
+    624,
+    624
+   ],
+   "chars": [
+    4528,
+    4528
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 60,
+   "cells_eq": true,
+   "n_cells": [
+    264,
+    264
+   ],
+   "height_eq": true,
+   "height": [
+    11156.188,
+    11156.188
+   ],
+   "html_eq": true,
+   "images_kept": [
+    12,
+    12
+   ]
+  },
+  "t60_g5": {
+   "blocks": [
+    3120,
+    3120
+   ],
+   "chars": [
+    22720,
+    22720
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 300,
+   "cells_eq": true,
+   "n_cells": [
+    1320,
+    1320
+   ],
+   "height_eq": true,
+   "height": [
+    55844.938,
+    55844.938
+   ],
+   "html_eq": true,
+   "images_kept": [
+    60,
+    60
+   ]
+  },
+  "t60_g25": {
+   "blocks": [
+    3120,
+    3120
+   ],
+   "chars": [
+    22720,
+    22720
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 300,
+   "cells_eq": true,
+   "n_cells": [
+    1320,
+    1320
+   ],
+   "height_eq": true,
+   "height": [
+    55844.938,
+    55844.938
+   ],
+   "html_eq": true,
+   "images_kept": [
+    60,
+    60
+   ]
+  },
+  "t60_g50": {
+   "blocks": [
+    3120,
+    3120
+   ],
+   "chars": [
+    22720,
+    22720
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 300,
+   "cells_eq": true,
+   "n_cells": [
+    1320,
+    1320
+   ],
+   "height_eq": true,
+   "height": [
+    55844.938,
+    55844.938
+   ],
+   "html_eq": true,
+   "images_kept": [
+    60,
+    60
+   ]
+  },
+  "t60_g100": {
+   "blocks": [
+    3120,
+    3120
+   ],
+   "chars": [
+    22720,
+    22720
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 300,
+   "cells_eq": true,
+   "n_cells": [
+    1320,
+    1320
+   ],
+   "height_eq": true,
+   "height": [
+    55844.938,
+    55844.938
+   ],
+   "html_eq": true,
+   "images_kept": [
+    60,
+    60
+   ]
+  },
+  "t120_g5": {
+   "blocks": [
+    6240,
+    6240
+   ],
+   "chars": [
+    45500,
+    45500
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 600,
+   "cells_eq": true,
+   "n_cells": [
+    2640,
+    2640
+   ],
+   "height_eq": true,
+   "height": [
+    111705.875,
+    111705.875
+   ],
+   "html_eq": true,
+   "images_kept": [
+    120,
+    120
+   ]
+  },
+  "t120_g25": {
+   "blocks": [
+    6240,
+    6240
+   ],
+   "chars": [
+    45500,
+    45500
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 600,
+   "cells_eq": true,
+   "n_cells": [
+    2640,
+    2640
+   ],
+   "height_eq": true,
+   "height": [
+    111705.875,
+    111705.875
+   ],
+   "html_eq": true,
+   "images_kept": [
+    120,
+    120
+   ]
+  },
+  "t120_g50": {
+   "blocks": [
+    6240,
+    6240
+   ],
+   "chars": [
+    45500,
+    45500
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 600,
+   "cells_eq": true,
+   "n_cells": [
+    2640,
+    2640
+   ],
+   "height_eq": true,
+   "height": [
+    111705.875,
+    111705.875
+   ],
+   "html_eq": true,
+   "images_kept": [
+    120,
+    120
+   ]
+  },
+  "t120_g100": {
+   "blocks": [
+    6240,
+    6240
+   ],
+   "chars": [
+    45500,
+    45500
+   ],
+   "n_diffs": 0,
+   "tables_eq": true,
+   "n_tables": 600,
+   "cells_eq": true,
+   "n_cells": [
+    2640,
+    2640
+   ],
+   "height_eq": true,
+   "height": [
+    111705.875,
+    111705.875
+   ],
+   "html_eq": true,
+   "images_kept": [
+    120,
+    120
+   ]
+  }
+ }
+}

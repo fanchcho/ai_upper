@@ -61,6 +61,13 @@ def main():
         # 只动这个进程里的模块常量，不改源码、不影响其它测量。
         from markdown import document as mdoc
         mdoc._CHUNK_BLOCKS = 10 ** 9
+    old_table_rev = os.environ.get("AI_UPPER_PROBE_OLD_TABLE", "")
+    if old_table_rev:
+        # 同机同口径的「表格改动前」：进程内换回旧 _table（源码不动）。
+        sys.path.insert(0, str(ROOT / "out" / "render-opt2"))
+        from markdown import document as mdoc
+        import probe_old_table
+        probe_old_table.apply(mdoc, old_table_rev)
 
     app = QApplication.instance() or QApplication([])
     settings, vault, store = SettingsService(home), SecretsVault(home), ChatSessionStore(home)

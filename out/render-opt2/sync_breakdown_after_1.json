@@ -1,0 +1,33 @@
+{
+ "n_long_rounds": 2,
+ "long_total_ms": [
+  2198.8,
+  2221.5
+ ],
+ "long_phase_avg_ms": {
+  "_copy_images": 41.0,
+  "_image_names": 0.0,
+  "_markdown": 1.3,
+  "_publish": 17.2,
+  "_render_total": 2192.8,
+  "_scroll": 0.2,
+  "attach": 899.9,
+  "body_render": 1291.5,
+  "collapse_margins": 0.1,
+  "insertFragment": 120.0,
+  "kind_code": 217.8,
+  "kind_code_head": 40.1,
+  "kind_hairline": 65.5,
+  "kind_heading": 121.4,
+  "kind_inline": 107.7,
+  "kind_list": 108.7,
+  "kind_paragraph": 90.7,
+  "kind_table": 530.9,
+  "parse_markdown": 44.2,
+  "render_blocks_total": 1073.4
+ },
+ "short_total_ms": [
+  66.8,
+  69.8
+ ]
+}

@@ -1,0 +1,1 @@
+LINES {"total": [963.1, 960.2, 951.1], "per": {"setDocumentMargin": 0.0, "highlighter_rebind": 0.0, "cursor": 0.0, "beginEditBlock": 0.0, "select": 0.0, "remove": 31.7, "fragment_ctor": 69.8, "insertFragment": 63.5, "endEditBlock": 751.6, "copy_images": 41.4}, "sum": 958.0}
