@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any, Optional, Tuple
 
 from markdown.parser import parse_inline, parse_markdown
@@ -154,8 +155,16 @@ class BodyStyle:
         return 1.65
 
 
+@lru_cache(maxsize=256)
 def css_color(value: str) -> Any:
-    """CSS 颜色 → QColor；无法识别时回落黑色（坏色不应中断整篇渲染）。"""
+    """CSS 颜色 → QColor；无法识别时回落黑色（坏色不应中断整篇渲染）。
+
+    **结果按原字符串缓存并直接返回同一个实例。** 渲染器对每个字符片都调一次，
+    400 轮正文实测 19600 次，而实际取值只有主题里的十几项（单次解析 2.413 µs、
+    查表 0.073 µs，见 out/render-opt3/micro_cache.log）。所以这里不做防御性拷贝：
+    拷贝一次要 1.835 µs，几乎抵掉全部收益。调用方只把它交给 ``setForeground`` /
+    ``setBackground`` / ``QBrush(...)``，三者都是值拷贝，不会改到缓存里的实例。
+    """
     text = (value or "").strip()
     match = re.match(r"^rgba?\((.*)\)$", text)
     if match:
@@ -170,6 +179,31 @@ def css_color(value: str) -> Any:
     if not color.isValid():
         color = QColor("#000000")
     return color
+
+
+@lru_cache(maxsize=512)
+def _font_for(families: tuple, pixel_size: int, bold: bool, italic: bool) -> Any:
+    """按「字体族 + 像素 + 粗 + 斜」缓存 QFont。
+
+    QFont 是隐式共享的值类型，``setFont``/``QTextCharFormat(fmt)`` 都只做浅拷贝，
+    所以同一个实例可以安全地交给多处使用。400 轮正文实测 20400 次构造、单次
+    5.001 µs（out/render-opt3/micro_cache.log）；拷贝已有实例只要 1.5 µs。
+    """
+    font = QFont()
+    font.setFamilies(list(families))
+    font.setPixelSize(pixel_size)
+    font.setBold(bold)
+    font.setItalic(italic)
+    return font
+
+
+@lru_cache(maxsize=64)
+def _line_spacing(families: tuple, pixel_size: int) -> float:
+    """字体行距（``QFontMetricsF.lineSpacing()``），只取决于字体族与像素大小。"""
+    font = QFont()
+    font.setFamilies(list(families))
+    font.setPixelSize(pixel_size)
+    return QFontMetricsF(font).lineSpacing()
 
 
 ALIGN_LEFT = Qt.AlignmentFlag.AlignLeft if QT_AVAILABLE else 1
@@ -199,12 +233,82 @@ def _plain(nodes: list) -> str:
     return "".join(parts)
 
 
-# ── 入口 ──────────────────────────────────────────────────────────────────
-# 顶层块数超过阈值就改走分块渲染（见 ``_render_chunked``）。分组大小取 50：
-# 400 轮、20800 块的文档实测分组 5/25/50/100 分别 1951/1825/1879/1973 ms，
-# 25~50 最省，再大结构性插入的二次成本回来，再小拼接与游标开销占比上升。
-# 阈值等于分组大小：不足一组的文档仍走原来的整篇路径，输出与改动前逐字节相同。
+# ── 分块计划 ──────────────────────────────────────────────────────────────
+# 顶层块数不超过 ``_CHUNK_BLOCKS`` 时走整篇路径：这个规模下二次成本可以忽略，
+# 而分块要付每块的新文档与拼接开销（纯段落 2400 块实测整篇 111.8 ms、分块
+# 148.2 ms，分块反而慢 36.4 ms）。
 _CHUNK_BLOCKS = 50
+
+# 会触发结构性插入的块种类及其相对成本（以表格为 1.0）。系数来自同一份正文
+# 在两个规模（1500 / 3000 块）下整篇耗时的二次项拟合：表格 2.42e-4、代码
+# 1.44e-4、引用 1.42e-4、分隔线 0.93e-4、h2 横线 1.05e-4 ms/(块·规模)。
+_STRUCTURAL_WEIGHTS = {
+    "table": 1.0,
+    "code": 0.6,
+    "quote": 0.59,
+    "hr": 0.38,
+    "heading2": 0.43,
+}
+
+# 走分块的两个门槛 + 分组大小，全部来自实测（out/render-opt3/ 下的
+# group_calib.log / group_sweep.log / dense_groups.log / group_boundary.log）：
+# - 结构密度（加权结构块 / 顶层块）低于 ``_CHUNK_DENSITY_FLOOR`` 时整篇更快：
+#   每 16 段一张表的文档（密度 0.06）在 1275 块上整篇 129.0 ms、分块 140.4 ms；
+# - 加权结构量 × 块数低于 ``_CHUNK_PRESSURE`` 时二次成本还不够付拼接开销：
+#   90 块的全结构文档（密度 0.73）整篇 48.6 ms、分块 52.3 ms；
+# - 分组大小随密度变化：密度 >= 0.40 用 32，0.15~0.40 用 50。交界放在 0.40 这段
+#   平台上：密度 0.31 的 700 块文档小组都吃亏（g16 115.3 / g32 111.4 / g50
+#   110.2 ms），密度 0.44 的 1200 块文档反过来 32 组最好（g16 234.5 / g32 228.6 /
+#   g50 231.0 ms），而 0.365 与 0.40 两点上 24/32/50 只差 0.2~0.8%（落在抖动内），
+#   所以交界落在这两者之间任意位置都行，取整到 0.40。
+#   高密度用 32 而不是 16：0.44 上 g16 每档多花 1.5~2.6%，0.52 与 0.73 上
+#   16/24/32 互有胜负但差值 <= 1.0%。
+#   48 份实测正文里，这套判据选中的档与逐档最优相差不超过 1.4%（plan_check.log，
+#   容差 2%）。
+_CHUNK_DENSITY_FLOOR = 0.15
+_CHUNK_PRESSURE = 45000
+_CHUNK_DENSE_GROUP = 32
+_CHUNK_DENSE_DENSITY = 0.40
+
+
+def _structural_load(blocks: list) -> float:
+    """加权结构量：只数会走结构性插入的块（引用内部递归计数）。
+
+    ``quote`` 本身是表格，内部的嵌套引用又会再插一张，所以递归；``heading`` 只有
+    level 2 会加 1px 横线 frame，其余级别是纯块格式。
+    """
+    total = 0.0
+    for block in blocks:
+        kind = block.get("type")
+        if kind == "quote":
+            total += _STRUCTURAL_WEIGHTS["quote"]
+            total += _structural_load(block.get("children") or [])
+        elif kind == "heading":
+            if int(block.get("level") or 1) == 2:
+                total += _STRUCTURAL_WEIGHTS["heading2"]
+        elif kind in _STRUCTURAL_WEIGHTS:
+            total += _STRUCTURAL_WEIGHTS[kind]
+    return total
+
+
+def _chunk_plan(blocks: list) -> int:
+    """返回每组的顶层块数；0 表示整篇渲染。
+
+    判据只看「会不会亏」：结构性插入的二次成本随规模线性增长，纯段落与稀疏结构
+    文档的整篇路径本来就是线性的，分块只会多付拼接钱。
+    """
+    count = len(blocks)
+    if count <= _CHUNK_BLOCKS:
+        return 0
+    load = _structural_load(blocks)
+    if load <= 0:
+        return 0
+    density = load / count
+    if density < _CHUNK_DENSITY_FLOOR or load * count < _CHUNK_PRESSURE:
+        return 0
+    if density >= _CHUNK_DENSE_DENSITY:
+        return min(_CHUNK_DENSE_GROUP, _CHUNK_BLOCKS)
+    return _CHUNK_BLOCKS
 
 
 def render_markdown(
@@ -223,24 +327,26 @@ def render_markdown(
     document.clear()
     document.setDocumentMargin(0)
     blocks = parse_markdown(markdown_text)
-    if len(blocks) <= _CHUNK_BLOCKS:
+    group = _chunk_plan(blocks)
+    if group <= 0:
         renderer = _Renderer(document, body, content_width, image_resolver)
         renderer.render_blocks(blocks, QTextCursor(document))
     else:
-        _render_chunked(document, blocks, body, content_width, image_resolver)
+        _render_chunked(document, blocks, body, content_width, image_resolver, group)
     _collapse_edge_margins(document)
     return document
 
 
 def _render_chunked(document: Any, blocks: list, body: Any, content_width: float,
-                    image_resolver: Optional[Any]) -> None:
+                    image_resolver: Optional[Any], group: int = 0) -> None:
     """分块渲染再拼装：把「结构性插入」的二次成本摊平成线性。
 
     Qt 里 ``insertTable``/``appendRows``/``insertFrame`` 的单价**只跟插入那一刻
     文档已有规模有关**（实测 500 块时 0.24 ms、16000 块时 1.36 ms，插在开头还是
-    结尾一样），所以整篇渲染是 O(块数²)。这里每 ``_CHUNK_BLOCKS`` 个顶层块渲染进
-    一份全新的 scratch 文档（各自都从零开始，单价恒定），再按顺序用一次
-    ``insertFragment`` 拼进目标文档。
+    结尾一样），所以整篇渲染是 O(块数²)。这里每 ``group`` 个顶层块渲染进一份全新
+    的 scratch 文档（各自都从零开始，单价恒定），再按顺序用一次 ``insertFragment``
+    拼进目标文档。``group`` 由 ``_chunk_plan`` 按结构密度给出；显式传入时才用 0 以外
+    的值，0 表示沿用 ``_CHUNK_BLOCKS``（测试与探针按分组大小驱动这条路径用）。
 
     两条继承链必须显式搬运，否则分块边界会掉格式：
 
@@ -253,19 +359,20 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
     图片资源是文档级的，不随片段走：每块渲染完按名字从 scratch 搬到目标文档。
     """
     cursor = QTextCursor(document)
+    size = group or _CHUNK_BLOCKS
     cursor.beginEditBlock()
     try:
         pending_top = 0.0
         carry = None
         first = True
-        for index in range(0, len(blocks), _CHUNK_BLOCKS):
+        for index in range(0, len(blocks), size):
             scratch = QTextDocument()
             scratch_cursor = QTextCursor(scratch)
             if carry is not None:
                 scratch_cursor.setBlockFormat(carry)
             renderer = _Renderer(scratch, body, content_width, image_resolver)
             renderer._pending_top = pending_top
-            renderer.render_blocks(blocks[index:index + _CHUNK_BLOCKS], scratch_cursor)
+            renderer.render_blocks(blocks[index:index + size], scratch_cursor)
             pending_top = renderer._pending_top
             carry = scratch.lastBlock().blockFormat()
             if not first:
@@ -355,6 +462,11 @@ class _Renderer:
         self._has_content = False
         self._quote_text = False
         self._pending_top = 0.0
+        # 表格逐格格式只跟「表头/斑马行」「对齐」有关，一份正文里取值极少：
+        # 按行型缓存后每格只做一次浅拷贝式 ``setFormat``（见 ``_table_row``）。
+        self._cell_formats = {}
+        self._cell_block_formats = {}
+        self._cell_char_formats = {}
 
     # ── 基础 ──────────────────────────────────────────────────────────────
     def color(self, value: str) -> Any:
@@ -362,12 +474,8 @@ class _Renderer:
 
     def font(self, px: float, bold: bool = False, mono: bool = False,
              italic: bool = False) -> Any:
-        font = QFont()
-        font.setFamilies(list(self.style.mono if mono else self.style.sans))
-        font.setPixelSize(max(1, int(round(px))))
-        font.setBold(bold)
-        font.setItalic(italic)
-        return font
+        return _font_for(tuple(self.style.mono if mono else self.style.sans),
+                         max(1, int(round(px))), bool(bold), bool(italic))
 
     def line_height(self, px: float, factor: float) -> float:
         """把 CSS 行高（``px * factor``）换算成 ``ProportionalHeight`` 的百分比。
@@ -375,10 +483,17 @@ class _Renderer:
         Qt 的比例行高是相对**字体行距**（``QFontMetricsF.lineSpacing()``），不是字号：
         Noto Sans 14px 的行距约 16.9px，直接写 165 会得到 27.8px 而不是 CSS 的 23.1px。
         目标像素值除以字体行距再乘 100 才能与浏览器一致。
+
+        字体行距只取决于「字体族 + 字号」，按这两个键缓存（倍率是纯算术，不必入键）：
+        未缓存时每次都要新建 ``QFont`` 再构造 ``QFontMetricsF``，而度量本身单次
+        1.302 µs（out/render-opt3/micro_cache.log），400 轮正文调用 9600 次；
+        ``line_height`` 在插桩下整条路径占 186.1 ms（含缓存命中后的查表与算术），
+        见 out/render-opt3/hot_paths.log——缓存省掉的是其中「新建 QFont + 度量」
+        那一段，不是整条 186.1 ms。
         """
         if QGuiApplication.instance() is None:
             return factor * 100.0
-        spacing = QFontMetricsF(self.font(px)).lineSpacing()
+        spacing = _line_spacing(tuple(self.style.sans), max(1, int(round(px))))
         if spacing <= 0:
             return factor * 100.0
         return (px * factor) / spacing * 100.0
@@ -627,11 +742,23 @@ class _Renderer:
 
     def _table_row(self, table: Any, row_index: int, cells: list, align: list[str], *,
                    header_row: bool) -> None:
+        """写一行单元格。三种格式按「决定它们的输入」缓存后复用。
+
+        一份正文里表格的单元格格式只有两种（表头 / 偶数行 / 奇数行，共三种组合）、
+        块格式只有对齐方式那么几种、字符格式只有表头与否两种，但 400 轮文档有 8800
+        个单元格。原先每格都新建并写 ~20 个属性，现在每类只构造一次，其余走
+        ``QTextFormat`` 的隐式共享浅拷贝。400 轮正文、分组 32、五轮交替取最小：
+        逐格新建格式要 660.3 ms，复用后 568.2 ms（``toHtml()`` / 高度全等，
+        out/render-opt3/cell_levels.log）；A/B 复核 701.8 → 596.0 ms
+        （out/render-opt3/cell_reuse.log）。
+        """
         border = self.color(self.palette.border)
         solid = QTextFrameFormat.BorderStyle_Solid
-        for column, cell_nodes in enumerate(cells):
-            cell = table.cellAt(row_index, column)
-            cell_fmt = QTextTableCellFormat(cell.format())
+        line_height = self.line_height(13.0 * self.style.scale, self.style.line_height)
+        cell_key = (header_row, row_index % 2 == 0)
+        cell_fmt = self._cell_formats.get(cell_key)
+        if cell_fmt is None:
+            cell_fmt = QTextTableCellFormat()
             cell_fmt.setLeftPadding(10.0 * self.style.scale)
             cell_fmt.setRightPadding(10.0 * self.style.scale)
             cell_fmt.setTopPadding(6.0 * self.style.scale)
@@ -654,16 +781,26 @@ class _Renderer:
             for setter in (cell_fmt.setLeftBorderStyle, cell_fmt.setRightBorderStyle,
                            cell_fmt.setTopBorderStyle, cell_fmt.setBottomBorderStyle):
                 setter(solid)
-            cell.setFormat(cell_fmt)
-            cell_cursor = cell.firstCursorPosition()
-            block_fmt = QTextBlockFormat()
-            block_fmt.setAlignment(_alignment(align[column] if column < len(align) else "left"))
-            block_fmt.setLineHeight(self.line_height(13.0 * self.style.scale, self.style.line_height),
-                                    QTextBlockFormat.LineHeightTypes.ProportionalHeight.value)
-            cell_cursor.setBlockFormat(block_fmt)
+            self._cell_formats[cell_key] = cell_fmt
+        char_fmt = self._cell_char_formats.get(header_row)
+        if char_fmt is None:
             char_fmt = QTextCharFormat()
             char_fmt.setFont(self.font(13.0 * self.style.scale, bold=header_row))
             char_fmt.setForeground(self.color(self.palette.fg))
+            self._cell_char_formats[header_row] = char_fmt
+        for column, cell_nodes in enumerate(cells):
+            cell = table.cellAt(row_index, column)
+            cell.setFormat(cell_fmt)
+            cell_cursor = cell.firstCursorPosition()
+            alignment = align[column] if column < len(align) else "left"
+            block_fmt = self._cell_block_formats.get(alignment)
+            if block_fmt is None:
+                block_fmt = QTextBlockFormat()
+                block_fmt.setAlignment(_alignment(alignment))
+                block_fmt.setLineHeight(
+                    line_height, QTextBlockFormat.LineHeightTypes.ProportionalHeight.value)
+                self._cell_block_formats[alignment] = block_fmt
+            cell_cursor.setBlockFormat(block_fmt)
             self._inline(cell_cursor, cell_nodes or [], char_fmt)
 
     # ── 代码块 ────────────────────────────────────────────────────────────
