@@ -21,7 +21,8 @@
 3. **表格边框逐单元格逐边画**。``QTextTableFormat`` 的整表边框在合并模式下会把
    相邻单元格的 1px 叠成 2px；``QTextTableCellFormat`` 才有逐边
    ``setLeftBorder``/``setPadding`` 接口，逐边设好再合并，网格才是均匀 1px。
-   ``cellSpacing`` 恒为 0，相邻单元格共用一条边。
+   ``cellSpacing`` 恒为 0，相邻单元格共用一条边。边框与内边距/底色在
+   ``_table_row`` 的同一次 ``setFormat`` 里写完，不再整表补第二遍。
 4. **主题切换只换色与字**：每次渲染都重建颜色；字体族/字号来自 ``BodyStyle``，
    切主题或改字号时按原文重新渲染即可（见 ``markdown.body``）。
 5. **代码块的语言标签写在块属性里**（``CODE_LANGUAGE_PROPERTY``），
@@ -614,16 +615,20 @@ class _Renderer:
         table_fmt.setBorderCollapse(True)
         table_fmt.setMargin(12.0)
         table_fmt.setAlignment(ALIGN_LEFT)
-        table = cursor.insertTable(1, len(header), table_fmt)
+        # 一次插满所有行。``insertTable(1, n)`` + 逐行 ``appendRows(1)`` 是每行一次
+        # 结构性插入，每次都要按「插入时文档规模」重排；400 轮文档整篇渲染实测
+        # 5101.1 → 2773.2 ms（交替 A/B 七次中位数，out/render-opt2/）。
+        # 形状不变：``parser`` 已把每行补齐到表头列数，所以直接按行数一次建表。
+        table = cursor.insertTable(1 + len(rows), len(header), table_fmt)
         self._table_row(table, 0, header, align, header_row=True)
         for row_index, row in enumerate(rows, start=1):
-            table.appendRows(1)
             self._table_row(table, row_index, row, align, header_row=False)
-        self._apply_cell_borders(table)
         self._after_frame(cursor, table.lastPosition() + 1)
 
     def _table_row(self, table: Any, row_index: int, cells: list, align: list[str], *,
                    header_row: bool) -> None:
+        border = self.color(self.palette.border)
+        solid = QTextFrameFormat.BorderStyle_Solid
         for column, cell_nodes in enumerate(cells):
             cell = table.cellAt(row_index, column)
             cell_fmt = QTextTableCellFormat(cell.format())
@@ -635,6 +640,20 @@ class _Renderer:
                 cell_fmt.setBackground(self.color(self.palette.bg_panel))
             elif row_index % 2 == 0:
                 cell_fmt.setBackground(self.color(self.palette.bg_hover))
+            # 逐单元格逐边 1px：整表 1px 在合并模式下会叠成 2px。与内边距/底色写在
+            # 同一次 ``setFormat`` 里，省掉原先「整表再遍历一遍、逐格读-改-写」的
+            # 第二趟（400 轮文档 8800 格，交替 A/B 七次中位数实测再省 38.3 ms，
+            # 逐格单元格格式与 toHtml() 全等，out/render-opt2/）。
+            cell_fmt.setBorder(0.0)
+            for setter in (cell_fmt.setLeftBorder, cell_fmt.setRightBorder,
+                           cell_fmt.setTopBorder, cell_fmt.setBottomBorder):
+                setter(1.0)
+            for setter in (cell_fmt.setLeftBorderBrush, cell_fmt.setRightBorderBrush,
+                           cell_fmt.setTopBorderBrush, cell_fmt.setBottomBorderBrush):
+                setter(border)
+            for setter in (cell_fmt.setLeftBorderStyle, cell_fmt.setRightBorderStyle,
+                           cell_fmt.setTopBorderStyle, cell_fmt.setBottomBorderStyle):
+                setter(solid)
             cell.setFormat(cell_fmt)
             cell_cursor = cell.firstCursorPosition()
             block_fmt = QTextBlockFormat()
@@ -646,27 +665,6 @@ class _Renderer:
             char_fmt.setFont(self.font(13.0 * self.style.scale, bold=header_row))
             char_fmt.setForeground(self.color(self.palette.fg))
             self._inline(cell_cursor, cell_nodes or [], char_fmt)
-
-    def _apply_cell_borders(self, table: Any) -> None:
-        """逐单元格逐边 1px：整表 1px 在合并模式下会叠成 2px。"""
-        border = self.color(self.palette.border)
-        rows, columns = table.rows(), table.columns()
-        solid = QTextFrameFormat.BorderStyle_Solid
-        for row in range(rows):
-            for column in range(columns):
-                cell = table.cellAt(row, column)
-                fmt = QTextTableCellFormat(cell.format())
-                fmt.setBorder(0.0)
-                for setter in (fmt.setLeftBorder, fmt.setRightBorder,
-                               fmt.setTopBorder, fmt.setBottomBorder):
-                    setter(1.0)
-                for setter in (fmt.setLeftBorderBrush, fmt.setRightBorderBrush,
-                               fmt.setTopBorderBrush, fmt.setBottomBorderBrush):
-                    setter(border)
-                for setter in (fmt.setLeftBorderStyle, fmt.setRightBorderStyle,
-                               fmt.setTopBorderStyle, fmt.setBottomBorderStyle):
-                    setter(solid)
-                cell.setFormat(fmt)
 
     # ── 代码块 ────────────────────────────────────────────────────────────
     def _code(self, cursor: Any, block: dict) -> None:

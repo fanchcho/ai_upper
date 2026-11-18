@@ -174,9 +174,15 @@ class BodyDocument:
         高亮器跟着内容走：接管后它挂在目标文档上。**换文档要先于搬运**——
         ``QSyntaxHighlighter.setDocument`` 本身不重高亮，换完之后 ``insertFragment``
         引起的内容变更才会驱动它逐块着色；反过来做，首帧的代码是单色的。
-        搬运后也**不**再显式 ``rehighlight()``——同一份正文是白跑一遍
-        （400 轮实测 0.7~0.9 s，`profile_sync_breakdown.py` 里 attach 的 882 ms
-        减去 insertFragment 120 ms 与图片搬运 41 ms 就是它）。
+        搬运后也**不**再显式 ``rehighlight()``——同一份正文是白跑一遍（400 轮实测
+        8.9 s，见 ``out/render-opt2/probe_reorder_highlight.py``）。
+
+        注意 attach 的大头**不是**高亮：400 轮正文实测约 960 ms，其中
+        ``endEditBlock`` 提交占约 750 ms（``QQuickTextEdit`` 在编辑块提交时整篇重排；
+        同一片段搬进普通 ``QTextDocument`` 只要 2.7 ms），
+        ``QTextDocumentFragment`` 构造约 70 ms、``insertFragment`` 约 64 ms、
+        图片搬运约 41 ms、删除旧内容约 32 ms。高亮器本体只占约 112 ms，且是在提交
+        过程中被 ``contentsChange`` 驱动的。拆解见 ``out/render-opt2/REPORT.md`` §4。
 
         ``insertFragment`` 不搬文档级图片资源，搬运后按名字补注册（``_copy_images``）；
         也不搬 ``documentMargin``，而 QML 文档的默认值是 4，渲染器用 0——不显式对齐
