@@ -1,0 +1,36 @@
+{
+ "n_long_rounds": 3,
+ "long_total_ms": [
+  5522.0,
+  5636.5,
+  5717.5
+ ],
+ "long_phase_avg_ms": {
+  "_copy_images": 41.7,
+  "_image_names": 0.0,
+  "_markdown": 1.4,
+  "_publish": 17.2,
+  "_render_total": 5608.1,
+  "_scroll": 0.2,
+  "attach": 881.8,
+  "body_render": 4724.7,
+  "collapse_margins": 0.0,
+  "insertFragment": 59.3,
+  "kind_apply_cell_borders": 94.4,
+  "kind_code": 708.9,
+  "kind_code_head": 52.7,
+  "kind_hairline": 1124.3,
+  "kind_heading": 1186.0,
+  "kind_inline": 126.1,
+  "kind_list": 111.5,
+  "kind_paragraph": 116.7,
+  "kind_table": 2550.2,
+  "parse_markdown": 44.2,
+  "render_blocks_total": 4678.5
+ },
+ "short_total_ms": [
+  78.0,
+  82.9,
+  83.2
+ ]
+}

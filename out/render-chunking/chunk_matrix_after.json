@@ -1,0 +1,306 @@
+{
+ "t12_g5": {
+  "whole_ms": 64.4,
+  "chunked_ms": 56.8,
+  "speedup": 1.13,
+  "blocks": [
+   624,
+   624
+  ],
+  "chars": [
+   4528,
+   4528
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t12_g25": {
+  "whole_ms": 64.4,
+  "chunked_ms": 52.6,
+  "speedup": 1.22,
+  "blocks": [
+   624,
+   624
+  ],
+  "chars": [
+   4528,
+   4528
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t12_g50": {
+  "whole_ms": 64.4,
+  "chunked_ms": 53.5,
+  "speedup": 1.2,
+  "blocks": [
+   624,
+   624
+  ],
+  "chars": [
+   4528,
+   4528
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t12_g100": {
+  "whole_ms": 64.4,
+  "chunked_ms": 54.0,
+  "speedup": 1.19,
+  "blocks": [
+   624,
+   624
+  ],
+  "chars": [
+   4528,
+   4528
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t30_g5": {
+  "whole_ms": 164.4,
+  "chunked_ms": 142.0,
+  "speedup": 1.16,
+  "blocks": [
+   1560,
+   1560
+  ],
+  "chars": [
+   11350,
+   11350
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t30_g25": {
+  "whole_ms": 164.4,
+  "chunked_ms": 131.4,
+  "speedup": 1.25,
+  "blocks": [
+   1560,
+   1560
+  ],
+  "chars": [
+   11350,
+   11350
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t30_g50": {
+  "whole_ms": 164.4,
+  "chunked_ms": 134.9,
+  "speedup": 1.22,
+  "blocks": [
+   1560,
+   1560
+  ],
+  "chars": [
+   11350,
+   11350
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t30_g100": {
+  "whole_ms": 164.4,
+  "chunked_ms": 139.6,
+  "speedup": 1.18,
+  "blocks": [
+   1560,
+   1560
+  ],
+  "chars": [
+   11350,
+   11350
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t120_g5": {
+  "whole_ms": 1258.8,
+  "chunked_ms": 578.2,
+  "speedup": 2.18,
+  "blocks": [
+   6240,
+   6240
+  ],
+  "chars": [
+   45500,
+   45500
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t120_g25": {
+  "whole_ms": 1258.8,
+  "chunked_ms": 538.0,
+  "speedup": 2.34,
+  "blocks": [
+   6240,
+   6240
+  ],
+  "chars": [
+   45500,
+   45500
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t120_g50": {
+  "whole_ms": 1258.8,
+  "chunked_ms": 548.5,
+  "speedup": 2.29,
+  "blocks": [
+   6240,
+   6240
+  ],
+  "chars": [
+   45500,
+   45500
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t120_g100": {
+  "whole_ms": 1258.8,
+  "chunked_ms": 572.4,
+  "speedup": 2.2,
+  "blocks": [
+   6240,
+   6240
+  ],
+  "chars": [
+   45500,
+   45500
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t400_g5": {
+  "whole_ms": 10084.5,
+  "chunked_ms": 1951.2,
+  "speedup": 5.17,
+  "blocks": [
+   20800,
+   20800
+  ],
+  "chars": [
+   152180,
+   152180
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t400_g25": {
+  "whole_ms": 10084.5,
+  "chunked_ms": 1825.3,
+  "speedup": 5.52,
+  "blocks": [
+   20800,
+   20800
+  ],
+  "chars": [
+   152180,
+   152180
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t400_g50": {
+  "whole_ms": 10084.5,
+  "chunked_ms": 1879.3,
+  "speedup": 5.37,
+  "blocks": [
+   20800,
+   20800
+  ],
+  "chars": [
+   152180,
+   152180
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ },
+ "t400_g100": {
+  "whole_ms": 10084.5,
+  "chunked_ms": 1972.6,
+  "speedup": 5.11,
+  "blocks": [
+   20800,
+   20800
+  ],
+  "chars": [
+   152180,
+   152180
+  ],
+  "text_eq": true,
+  "n_diffs": 0,
+  "first_diffs": [],
+  "tables_eq": true,
+  "height_eq": true,
+  "html_eq": true
+ }
+}

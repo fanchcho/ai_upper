@@ -1,0 +1,1 @@
+PERF {"label": "run", "sessions": 120, "turns": 400, "rounds": 4, "openSession_sync_ms": {"median": 1105.3, "max": 2174.9}, "first_frame_ms": {"median": 403.7, "max": 729.4}}
