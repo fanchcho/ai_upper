@@ -554,3 +554,69 @@ def test_a_document_with_every_construct_renders(qapp):
     for needle in ("标题", "引用", "嵌套", "def f():", "任务", "［图片：图］"):
         assert needle in text
     assert len(tables(document)) >= 3  # 引用 + 嵌套引用 + 表格 + 代码块
+
+
+# ── 表格：一次插满所有行 + 边框与内边距同一次写入 ────────────────────────
+# 这两条锁的是 `_table`/`_table_row` 的实现约束，不是排版渐变：
+#
+# 1. `insertTable(1, n)` + 逐行 `appendRows(1)` 的每次结构性插入都按「当前文档
+#    规模」重排，400 轮正文实测 5101.1 → 2773.2 ms（交替 A/B 七次中位数，
+#    `out/render-opt2/ab_alternating.log`）；换成一次插满行后必须逐行内容
+#    与逐格边框都在位，否则「快」只是少写了东西。
+# 2. 边框必须逐格写。实测把边框只写在表格格式上、指望单元格继承，`toHtml()`
+#    与逐格写不等价（单元格格式里没有边框），QML 侧会退回无线框的表格。
+
+TABLE_MANY_ROWS = (
+    "| 列一 | 列二 |\n| --- | --- |\n"
+    + "\n".join("| r%d-a | r%d-b |" % (index, index) for index in range(1, 9))
+)
+
+
+def test_a_table_with_many_rows_fills_every_row_and_column(qapp):
+    document = render(TABLE_MANY_ROWS)
+    table = tables(document)[0]
+    assert (table.rows(), table.columns()) == (9, 2)
+    for row in range(table.rows()):
+        for column in range(table.columns()):
+            expected = ("列一", "列二")[column] if row == 0 else "r%d-%s" % (row, "ab"[column])
+            assert table.cellAt(row, column).firstCursorPosition().block().text() == expected
+
+
+def test_every_cell_gets_its_own_border_brush_and_style(qapp):
+    """逐格逐边写必须落实到每一格：边框宽度、画刷、样式、内边距、底色都要在。"""
+    document = render(TABLE_MANY_ROWS)
+    table = tables(document)[0]
+    solid = QtGui.QTextFrameFormat.BorderStyle_Solid
+    for row in range(table.rows()):
+        for column in range(table.columns()):
+            cell = cell_format(table.cellAt(row, column))
+            # `QTextTableCellFormat` 没有 `border()` 读接口（它继承字符格式而非框架
+            # 格式），只能逐边读；四条边都是 1px 就说明没写成「整表统一 1」——
+            # 那种写法在合并模式下会让相邻边叠成 2px。
+            for edge in (cell.leftBorder(), cell.rightBorder(),
+                         cell.topBorder(), cell.bottomBorder()):
+                assert edge == 1.0
+            for brush in (cell.leftBorderBrush(), cell.rightBorderBrush(),
+                          cell.topBorderBrush(), cell.bottomBorderBrush()):
+                assert brush.color().name() == LIGHT.border
+            for style in (cell.leftBorderStyle(), cell.rightBorderStyle(),
+                          cell.topBorderStyle(), cell.bottomBorderStyle()):
+                assert style == solid
+            assert (cell.leftPadding(), cell.rightPadding()) == (10.0, 10.0)
+            assert (cell.topPadding(), cell.bottomPadding()) == (6.0, 6.0)
+            expected_bg = (
+                LIGHT.bg_panel if row == 0
+                else LIGHT.bg_hover if row % 2 == 0
+                else None
+            )
+            if expected_bg:
+                # `bg_hover` 是半透明 rgba，`QColor.name()` 丢掉 alpha 只留 #000000；
+                # 而且渲染器是把 QColor 直接交给 `setBackground(QBrush)`，QTextDocument
+                # 在单元格格式里存的是预乘过的 RGB（实测 alpha 0.045 会变成 11/255
+                # 的灰度）。所以这里只断言「底色确实设了、且不是另一种主题色」，
+                # 逐值比对交给保真矩阵（`out/render-opt2/probe_table_before_after.py`）。
+                assert cell.background().style() != QtGui.Qt.BrushStyle.NoBrush
+                if row == 0:
+                    assert cell.background().color().name() == LIGHT.bg_panel
+            else:
+                assert cell.background().style() == QtGui.Qt.BrushStyle.NoBrush
