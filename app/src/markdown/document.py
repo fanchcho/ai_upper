@@ -27,6 +27,10 @@
 5. **代码块的语言标签写在块属性里**（``CODE_LANGUAGE_PROPERTY``），
    ``markdown.highlight`` 的高亮器据此逐行着色；渲染器本身不关心语法。
 6. **首块上边距、末块下边距归零**，对应原版 ``.md > :first-child / :last-child``。
+7. **长文档分块渲染再拼装**。结构性插入（``insertTable``/``appendRows``/
+   ``insertFrame``）的单价随插入时文档规模线性增长，整篇渲染是 O(块数²)；
+   超过 ``_CHUNK_BLOCKS`` 个顶层块时改成分块进 scratch 文档、再 ``insertFragment``
+   拼装，输出与整篇渲染逐块一致（见 ``_render_chunked``）。
 
 不支持的部分（显式记录，不用假效果糊过去）：行内代码/图片的圆角（QTextCharFormat
 没有圆角接口）、代码块圆角（QTextFrameFormat 同样没有）、字号 650（Qt 只有
@@ -195,6 +199,13 @@ def _plain(nodes: list) -> str:
 
 
 # ── 入口 ──────────────────────────────────────────────────────────────────
+# 顶层块数超过阈值就改走分块渲染（见 ``_render_chunked``）。分组大小取 50：
+# 400 轮、20800 块的文档实测分组 5/25/50/100 分别 1951/1825/1879/1973 ms，
+# 25~50 最省，再大结构性插入的二次成本回来，再小拼接与游标开销占比上升。
+# 阈值等于分组大小：不足一组的文档仍走原来的整篇路径，输出与改动前逐字节相同。
+_CHUNK_BLOCKS = 50
+
+
 def render_markdown(
     document: Any,
     markdown_text: str,
@@ -210,10 +221,88 @@ def render_markdown(
     body = style or BodyStyle()
     document.clear()
     document.setDocumentMargin(0)
-    renderer = _Renderer(document, body, content_width, image_resolver)
-    renderer.render_blocks(parse_markdown(markdown_text), QTextCursor(document))
+    blocks = parse_markdown(markdown_text)
+    if len(blocks) <= _CHUNK_BLOCKS:
+        renderer = _Renderer(document, body, content_width, image_resolver)
+        renderer.render_blocks(blocks, QTextCursor(document))
+    else:
+        _render_chunked(document, blocks, body, content_width, image_resolver)
     _collapse_edge_margins(document)
     return document
+
+
+def _render_chunked(document: Any, blocks: list, body: Any, content_width: float,
+                    image_resolver: Optional[Any]) -> None:
+    """分块渲染再拼装：把「结构性插入」的二次成本摊平成线性。
+
+    Qt 里 ``insertTable``/``appendRows``/``insertFrame`` 的单价**只跟插入那一刻
+    文档已有规模有关**（实测 500 块时 0.24 ms、16000 块时 1.36 ms，插在开头还是
+    结尾一样），所以整篇渲染是 O(块数²)。这里每 ``_CHUNK_BLOCKS`` 个顶层块渲染进
+    一份全新的 scratch 文档（各自都从零开始，单价恒定），再按顺序用一次
+    ``insertFragment`` 拼进目标文档。
+
+    两条继承链必须显式搬运，否则分块边界会掉格式：
+
+    1. **末块格式**：``_table``/``_quote`` 等结构性块前面的空块是靠 ``insertBlock()``
+       不带格式、继承光标当前格式得来的。新分块的光标是新的，所以先把上一分块的
+       末块格式 ``setBlockFormat`` 到 scratch 的初始块上，渲染器才能拿到同一条链。
+    2. **首块格式**：``insertFragment`` 会让片段首块继承目标文档当前的块格式。
+       拼完把源首块格式回填到目标的首块上。
+
+    图片资源是文档级的，不随片段走：每块渲染完按名字从 scratch 搬到目标文档。
+    """
+    cursor = QTextCursor(document)
+    cursor.beginEditBlock()
+    try:
+        pending_top = 0.0
+        carry = None
+        first = True
+        for index in range(0, len(blocks), _CHUNK_BLOCKS):
+            scratch = QTextDocument()
+            scratch_cursor = QTextCursor(scratch)
+            if carry is not None:
+                scratch_cursor.setBlockFormat(carry)
+            renderer = _Renderer(scratch, body, content_width, image_resolver)
+            renderer._pending_top = pending_top
+            renderer.render_blocks(blocks[index:index + _CHUNK_BLOCKS], scratch_cursor)
+            pending_top = renderer._pending_top
+            carry = scratch.lastBlock().blockFormat()
+            if not first:
+                # 干净的空块：不先断块的话，片段首块会和上一分块的末块合成一块。
+                # 判据必须是「第几块」而不是光标位置——上一分块的回填会把光标留在
+                # 该分块首块上，位置判据从第二块起就失效，每组静默少一块。
+                cursor.movePosition(QTextCursor.MoveOperation.End)
+                cursor.insertBlock(QTextBlockFormat())
+            start = cursor.position()
+            cursor.movePosition(QTextCursor.MoveOperation.End)
+            cursor.insertFragment(QtGui.QTextDocumentFragment(scratch))
+            source_first = scratch.begin().blockFormat()
+            cursor.setPosition(start)
+            QTextCursor(cursor.block()).setBlockFormat(source_first)
+            _copy_resources(scratch, document)
+            first = False
+    finally:
+        cursor.endEditBlock()
+
+
+def _copy_resources(source: Any, target: Any) -> None:
+    """把 ``source`` 里被引用到的图片资源搬到 ``target``（文档级资源不随片段走）。"""
+    kind = QTextDocument.ResourceType.ImageResource
+    seen = set()
+    block = source.begin()
+    while block.isValid():
+        for spec in block.textFormats():
+            fmt = spec.format
+            if not fmt.isImageFormat():
+                continue
+            name = fmt.toImageFormat().name()
+            if not name or name in seen:
+                continue
+            seen.add(name)
+            image = source.resource(kind.value, QUrl(name))
+            if image is not None:
+                target.addResource(kind.value, QUrl(name), image)
+        block = block.next()
 
 
 def render_plain_text(document: Any, text: str, style: Optional[BodyStyle] = None,

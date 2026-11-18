@@ -168,14 +168,15 @@ class BodyDocument:
 
         ``TextEdit`` 的文档实例由 QML 持有，不能替换，只能往里写。这里用
         ``insertFragment`` 整篇替换：内容只变更一次，不会像「逐块插入」那样
-        每插一块就触发一次文档级重排（实测 400 轮正文：20.5 s → 2.8 s）。
+        每插一块就触发一次文档级重排（实测 400 轮正文：20.5 s → 5.6 s）。
         返回目标文档。
 
         高亮器跟着内容走：接管后它挂在目标文档上。**换文档要先于搬运**——
         ``QSyntaxHighlighter.setDocument`` 本身不重高亮，换完之后 ``insertFragment``
         引起的内容变更才会驱动它逐块着色；反过来做，首帧的代码是单色的。
         搬运后也**不**再显式 ``rehighlight()``——同一份正文是白跑一遍
-        （400 轮实测 0.9~1.7 s）。
+        （400 轮实测 0.7~0.9 s，`profile_sync_breakdown.py` 里 attach 的 882 ms
+        减去 insertFragment 120 ms 与图片搬运 41 ms 就是它）。
 
         ``insertFragment`` 不搬文档级图片资源，搬运后按名字补注册（``_copy_images``）；
         也不搬 ``documentMargin``，而 QML 文档的默认值是 4，渲染器用 0——不显式对齐
