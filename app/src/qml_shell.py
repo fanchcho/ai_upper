@@ -738,6 +738,8 @@ class ShellBridge(QtCore.QObject):
     def _render(self) -> None:
         if self._document is None:
             return
+        # 只渲染一遍：`attach` 会把自有文档的内容整篇搬进 QML 文档，
+        # 不需要（也不应该）在那里再重渲染一次。
         if self._plain:
             self._body.set_plain_text(self._markdown())
         else:
