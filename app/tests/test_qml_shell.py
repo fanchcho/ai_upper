@@ -484,3 +484,66 @@ def test_shell_send_rejects_blank_and_busy(qapp, tmp_path, monkeypatch, capsys):
     assert bridge.send("第二句") is False, "同一会话已有回合在跑时必须拒绝"
     gate.set()
     assert _tick_until(bridge, bridge.turn_finished)
+
+
+# ── 渲染路径：一次点击只渲染一遍 ──────────────────────────────────────────
+def test_open_session_renders_once_and_replaces_the_body(qapp, tmp_path, monkeypatch):
+    """点会话行只该渲染一遍正文；旧会话的内容必须整篇被换掉。
+
+    历史回归：``_render`` 曾先在自有文档渲染、又在 ``attach`` 里把同一份正文
+    重渲染进 QML 文档，同一份内容付出两倍排版代价（长正文上就是秒级卡顿）。
+    """
+    bridge, _store, _host = _bridge(
+        tmp_path, monkeypatch, text_stream(), sessions=[("s-1", "甲会话的问题"), ("s-2", "乙会话的问题")]
+    )
+    renders = []
+    original = bridge._body.render
+
+    def counted(document=None):
+        renders.append(document)
+        return original(document)
+
+    bridge._body.render = counted
+    assert bridge.openSession("s-1") is True
+    assert len(renders) == 1, "attach 不该再重渲染一次"
+
+    target = bridge._document.textDocument()
+    assert "甲会话的问题" in target.toPlainText()
+
+    assert bridge.openSession("s-2") is True
+    text = target.toPlainText()
+    assert "乙会话的问题" in text
+    assert "甲会话的问题" not in text, "切会话是整篇替换，不是追加"
+
+
+def test_open_session_carries_highlight_formats_into_the_qml_document(qapp, tmp_path, monkeypatch):
+    """切换会话后，代码块的着色由挂在展示文档上的高亮器重算。
+
+    着色写在 ``QTextLayout`` 上，不能跨文档搬（会把块高打成 0），所以这里同时锁住
+    「有颜色」与「行高不为 0」两件事。
+
+    ``_bridge`` 默认 ``plain=True``（无 QML 环境下的纯文本回退），这里要看 Markdown 渲染。
+    """
+    from markdown.highlight import LIGHT_TOKENS
+
+    bridge, store, _host = _bridge(tmp_path, monkeypatch, text_stream(), sessions=[("s-1", "占位")])
+    bridge._plain = False
+    bridge._body = type(bridge._body)()
+    bridge._body.set_image_resolver(lambda src: None)
+    session = store.load_session("s-1")
+    session.messages.clear()
+    session.messages.append(Message(role="assistant", content="```python\nif x: pass\n```"))
+    store.save("s-1")
+
+    assert bridge.openSession("s-1") is True
+    target = bridge._document.textDocument()
+    block = target.begin()
+    while block.isValid() and block.text() != "if x: pass":
+        block = block.next()
+    assert block.isValid(), "代码行必须在目标文档里"
+    target.setTextWidth(696.0)
+    target.documentLayout()
+    colours = {block.text()[f.start:f.start + f.length]: f.format.foreground().color().name()
+               for f in block.layout().formats()}
+    assert colours["if"] == LIGHT_TOKENS["keyword"]
+    assert target.documentLayout().blockBoundingRect(block).height() > 0, "代码行不能塌成 0 高"
