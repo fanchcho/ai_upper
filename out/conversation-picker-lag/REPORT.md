@@ -157,7 +157,7 @@ PERF {"label":"BEFORE","sessions":120,"turns":400,"rounds":6,
 {"turns":400,"current_ms":21972.9,"v1_hl_stays_on_scratch_ms":2468.2}
 ```
 
-## 4.2 修复后实测（同机同口径，`probe_click_visible.py 120 400 4`）
+### 4.2 修复后实测（同机同口径，`probe_click_visible.py 120 400 4`）
 
 | 指标 | 修复前 | 修复后 |
 |---|---|---|
@@ -174,10 +174,40 @@ PERF {"label":"BEFORE","sessions":120,"turns":400,"rounds":6,
 ## 5. 复现脚本
 
 ```bash
+# 修复前基线（需先切到 b513d7c~1）
 LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/probe_baseline.py 120 400 6 BEFORE
+LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/probe_click_visible.py 120 400 4 AFTER
+# 分阶段计时 / 高亮器 / 保真度
 LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/profile_attach.py 60 400
 LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/profile_rehighlight.py 30 200
 LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/profile_variants.py
+LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/probe_fidelity_geometry.py
+LD_LIBRARY_PATH=/tmp/qtlibs .venv/bin/python out/conversation-picker-lag/probe_margin.py
 ```
 
 （全部自带 `AI_UPPER_HOME=/tmp/ai-upper-*` 临时 home，不碰真实 `~/.ai_upper`。）
+
+## 6. 回归与验证
+
+- 全量 pytest：**1233 passed, 5 skipped**（`LD_LIBRARY_PATH=/tmp/qtlibs QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q`，27.7s）。
+- 新增/改写的用例：
+  - `test_markdown_body.py::test_attach_moves_the_highlighter_to_the_shown_document`
+  - `test_markdown_body.py::test_rendering_does_not_rehighlight_a_document_that_is_not_shown`
+  - `test_markdown_body.py::test_attach_keeps_block_heights`
+  - `test_markdown_body.py::test_attach_matches_the_rendered_document_geometry`
+  - `test_markdown_body.py::test_detach_returns_the_highlighter_to_the_owned_document`
+  - `test_qml_shell.py::test_open_session_renders_once_and_replaces_the_body`
+  - `test_qml_shell.py::test_open_session_carries_highlight_formats_into_the_qml_document`
+
+## 7. 未解决 / 已知残留
+
+1. **同步段仍是 2.8 s（400 轮超大会话）**。这次只消除了「渲染两遍 + 对旧大文档白跑高亮
+   2.5 s」，渲染器本身仍然贵：`cProfile` 显示表格 `insertTable/appendRows` 占 400 轮正文
+   2.1 s 里的近一半（§3.5）。要再往下压得改渲染器（或把渲染挪到工作线程、只把
+   `QTextDocumentFragment` 交回 GUI 线程），属于另一件事。
+2. **`setDocumentMargin` 之外的文档级属性**目前只对齐了两个（margin、图片资源）。
+   如果以后渲染器开始用 `documentLayout` 的默认字体或 `defaultStyleSheet`，需要在
+   `attach()` 里一并同步——用例 `test_attach_matches_the_rendered_document_geometry`
+   会直接抓住几何层面的偏差，但不覆盖纯样式属性。
+3. `toHtml()` 仍差一个 `-qt-user-state:0`（不参与排版，仓内无代码读取）。
+
