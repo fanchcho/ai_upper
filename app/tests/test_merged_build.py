@@ -205,12 +205,14 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
         '#include <iostream>\n'
         'int main(int argc, char** argv) {\n'
         '    std::vector<pyupper::EggBundleFile> files;\n'
+        '    std::vector<std::uint8_t> payload;\n'
         '    std::string key, error;\n'
-        '    if (!pyupper::read_egg_bundles(argv[1], argv[2], "py_upper_bundles/", files, key, error)) {\n'
+        '    if (!pyupper::read_egg_bundles(argv[1], argv[2], "py_upper_bundles/", files, key, error, &payload)) {\n'
         '        std::cout << "ERROR " << error << "\\n";\n'
         '        return 1;\n'
         '    }\n'
         '    std::cout << "KEY " << key << "\\n";\n'
+        '    std::cout << "PAYLOAD " << payload.size() << "\\n";\n'
         '    for (const auto& file : files) {\n'
         '        std::cout << "FILE " << file.name << " " << file.data.size() << "\\n";\n'
         '    }\n'
@@ -229,8 +231,9 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
     result = subprocess.run([str(binary), str(egg), config.key_hex], check=True, capture_output=True, text=True)
     # The launcher's cache key is the authentication tag, so a rebuilt archive
     # gets a fresh cache directory instead of reusing a stale one.
-    _payload, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
+    plaintext, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
     assert f"KEY {digest[:32]}" in result.stdout
+    assert f"PAYLOAD {len(plaintext)}" in result.stdout
     assert f"FILE {relative} {len(payload)}" in result.stdout
     assert "pkg/mod.py" not in result.stdout
 
@@ -283,4 +286,4 @@ def test_launcher_registers_bundles_before_interpreter_initialization():
     text = launcher.read_text(encoding="utf-8")
     assert "py_upper_bundles" in text
     assert "py_upper_register_modules" in text
-    assert text.index("load_module_bundles(site, egg, runtime)") < text.index("PyStatus status = init(&config)")
+    assert text.index("load_module_bundles(site, egg, runtime, egg_payload)") < text.index("PyStatus status = init(&config)")

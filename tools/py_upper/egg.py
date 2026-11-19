@@ -45,8 +45,7 @@ from .config import (
     APP, BUILD, BUNDLE_DIR, Target, py_upper_config, resolve_target_python,
 )
 from .egg_loader import (
-    BACKENDS, MAGIC, MAGIC2, MANIFEST_NAME, SALT_SIZE, TAG_SIZE, egg_tag,
-    keystream_xor,
+    BACKENDS, MAGIC2, MANIFEST_NAME, SALT_SIZE, TAG_SIZE, egg_tag, keystream_xor,
 )
 
 # The default SHAKE-256 key stream key. It lives here, in the build tool, and
@@ -255,41 +254,41 @@ def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
     return destination
 
 
-def read_egg_members(egg_path: Path, key_hex: str, require_auth: bool = False) -> tuple:
+def read_egg_members(egg_path: Path, key_hex: str) -> tuple:
     """Decrypt an egg in the build process and return its member names."""
     from .egg_loader import open_egg
 
     key = bytes.fromhex(str(key_hex).strip())
-    payload, _digest = open_egg(Path(egg_path).read_bytes(), key, require_auth=require_auth)
+    payload, _digest = open_egg(Path(egg_path).read_bytes(), key)
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         return tuple(sorted(archive.namelist()))
 
 
 def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
-    """The member digests recorded in an egg, or an empty mapping for a v1 egg."""
+    """The member digests recorded in an egg. Every v2 egg carries them."""
     from .egg_loader import open_egg
 
     key = bytes.fromhex(str(key_hex).strip())
     payload, _digest = open_egg(Path(egg_path).read_bytes(), key)
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         if MANIFEST_NAME not in archive.namelist():
-            return {}
+            raise ValueError("egg manifest is missing")
         data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
     files = data.get("files") if isinstance(data, dict) else None
     return dict(files) if isinstance(files, dict) else {}
 
 
 def egg_authenticated(egg_path: Path, key_hex: str) -> bool:
-    """Whether an egg carries a tag that matches its own ciphertext.
+    """Whether an egg is an authenticated v2 archive with a matching tag.
 
-    This is the check ``--verify`` uses: a v1 archive still opens with its key
-    but has no tag at all, and a shipped bundle must not be one of those.
+    This is the check ``--verify`` uses: anything that is not MAGIC2, or whose
+    tag does not match its own ciphertext, is not a shippable egg.
     """
     raw = Path(egg_path).read_bytes()
     if raw[:len(MAGIC2)] != MAGIC2:
         return False
     try:
-        read_egg_members(egg_path, key_hex, require_auth=True)
+        read_egg_members(egg_path, key_hex)
     except Exception:
         return False
     return True

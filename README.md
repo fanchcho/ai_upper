@@ -341,8 +341,15 @@ runtime_keep = []
 
 `[tool.py_upper.egg]` 把应用自己的 Python 模块和本次构建产出的扩展收进一个
 `bundle/py_upper.dat`，不再以散文件留在 `site-packages`。归档格式是
-`MAGIC (8 字节) + XOR(zip, SHAKE-256 key stream)`；launcher 在导入应用入口前
+`MAGIC2 (8 字节) + SALT (16) + TAG (32) + XOR(zip, SHAKE-256(key + SALT))`，
+`TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]`；launcher 在导入应用入口前
 安装内存导入器，所以产物里不会再有 `main.py` / `main.pyd`。
+
+`TAG` 让归档具备完整性校验：重打包、改一个字节、或用自己的 zip 顶替归档，都会在
+导入任何模块之前失败（`egg authentication failed` / `egg is not authenticated`）。
+归档内还带 `py_upper_manifest.json`（逐成员 SHA-256），供 extract 缓存复用前核对。
+当前只接受 MAGIC2 归档：v1（只有 `MAGIC`）与普通 zip 在 launcher 和构建期工具里
+都会被拒绝，没有关闭认证的开关。
 
 加密默认开启：即使项目没有写 `[tool.py_upper.egg]` 段，普通构建也会生成
 `py_upper.dat`。要临时发一个散文件版本，用 `--no-egg`；要长期关闭，在配置里
@@ -365,9 +372,11 @@ compression = "deflated"  # deflated / stored / lzma
 
 - `memory`：仅 Windows。扩展模块通过 vendored `_memimporter` 直接从内存映射，
   需要 Zig 工具链；编译产物缓存在 `build/cache/memimporter/<target>/`。
-- `extract`：所有平台。启动时解密到按内容寻址的缓存目录（目录名是解密后
-  归档的 SHA-256）并插入 `sys.path`；首次启动解压一次，之后直接复用，重新
-  构建的 egg 会自然切换到新目录。缓存根默认是
+- `extract`：所有平台。启动时解密到按内容寻址的缓存目录（目录名由认证 TAG
+  派生）并插入 `sys.path`；首次启动解压一次，之后直接复用，重新构建的 egg 会
+  自然切换到新目录。缓存是明文，所以复用前会按归档清单逐个核对 SHA-256，被改
+  过的目录会被删除重建（`PY_UPPER_EGG_CACHE_VERIFY=0` 可关闭这项检查；实测
+  对热启动的影响在测量噪声内，不建议为性能关闭）。缓存根默认是
   `~/Library/Caches/py_upper/eggs`（macOS）、
   `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），可用
@@ -391,11 +400,13 @@ Windows/Linux 下归档位于可执行文件旁的 `bundle/`，macOS 下位于
 `Contents/Resources/bundle/`，文件名固定为 `py_upper.dat`，不再暴露 egg/zip
 字样。stage 下的 `egg.json` 记录本次构建实际使用的 key/backend/compression，
 `--verify` 和冒烟脚本以它为准，不会拿项目默认值去解一个被 CLI 覆盖过的 egg。
-`--verify` 会检查 `bundle/py_upper.dat` 的 MAGIC、成员列表，并确认已打包的应用文件不再以
-散文件出现；`memory` 后端还必须带 `_memimporter.pyd`。
+`--verify` 会检查 `bundle/py_upper.dat` 的 MAGIC2、认证 TAG、成员清单与成员列表，
+并确认已打包的应用文件不再以散文件出现、launcher 二进制里没有明文十六进制密钥；
+`memory` 后端还必须带 `_memimporter.pyd`。
 
-**加密不等于变小**：SHAKE-256 密钥流只提高直接读源码/反编译的成本，key 本身
-编在 launcher 里，不是秘密存储格式；压缩后的 egg 与普通 zip 体积相当。产物
+**加密不等于变小**：SHAKE-256 密钥流只提高直接读源码/反编译的成本；key 必须
+编在 launcher 里才能解密（以 `key ^ mask` 的字节数组形式存放，`strings` 拿不到
+明文十六进制），不是秘密存储格式；压缩后的 egg 与普通 zip 体积相当。产物
 大小仍由 runtime、第三方 wheel 和 Qt 决定，减小体积请用上面的 trim、Qt 裁剪
 和 `strip_native`。
 

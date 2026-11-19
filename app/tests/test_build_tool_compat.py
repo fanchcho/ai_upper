@@ -686,9 +686,10 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "kEggKeyMasked" in text
     assert "kEggKeyMask" in text
     assert "kEggKeyLength" in text
-    # A packaged launcher refuses an archive with no authentication tag.
-    assert "embedded_egg_requires_auth()" in text
-    assert "EGG_REQUIRE_AUTH" in text
+    # Authentication is mandatory: the bootstrap carries no switch that could
+    # turn the tag check off.
+    assert "embedded_egg_requires_auth()" not in text
+    assert "EGG_REQUIRE_AUTH" not in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "PY_UPPER_APP_NAME" in cmake
     assert "PY_UPPER_EMBEDDED_SOURCE" in cmake
@@ -709,6 +710,9 @@ def test_launcher_egg_reader_verifies_the_authentication_tag():
     assert "'W', 'B', 'E', 'G', 'G', '0', '2', '!'" in egg_bundles
     assert "egg authentication failed" in egg_bundles
     assert "egg is not authenticated" in egg_bundles
+    # There is no v1 parser and no switch that skips the tag check.
+    assert "magic_v1" not in egg_bundles
+    assert "require_auth" not in egg_bundles
     # Constant-time compare: the tag check must not leak a matching prefix.
     assert "equal_constant_time" in egg_bundles
     # The tag doubles as the cache key, which is what keeps authentication from

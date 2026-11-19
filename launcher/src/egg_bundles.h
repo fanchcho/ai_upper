@@ -3,12 +3,11 @@
 // Reads the merged application bundles out of an authenticated egg without a
 // CPython interpreter.
 //
-// Egg layout v2:
+// Egg layout:
 //   MAGIC2 (8) + SALT (16) + TAG (32) + XOR(zip bytes, SHAKE-256(key + SALT))
 //   TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]
-// Layout v1 (MAGIC + XOR(zip, SHAKE-256(key)), no tag) is still parsed when the
-// caller does not require authentication, so an old archive stays diagnosable
-// instead of being reported as corrupt.
+// This is the only accepted layout. A v1 archive (MAGIC only, no tag) and a
+// plain zip are refused: neither proves that this build produced it.
 //
 // The launcher calls this before Py_Initialize: PyImport_ExtendInittab only
 // accepts modules while the interpreter is unborn, so the bundles cannot wait
@@ -140,20 +139,17 @@ inline bool equal_constant_time(const std::uint8_t* left, const std::uint8_t* ri
 
 }  // namespace egg_detail
 
-// Decrypts an egg, verifying its authentication tag when the layout carries one.
+// Decrypts an egg, verifying its authentication tag.
 //
-// `cache_key` is the tag (v2) or a digest of the plaintext (v1): it identifies
-// the exact archive a cache directory was produced from, so a rebuilt egg never
-// reuses a stale cache.
+// `cache_key` is the tag: it identifies the exact archive a cache directory was
+// produced from, so a rebuilt egg never reuses a stale cache.
 inline bool open_egg(const std::vector<std::uint8_t>& raw,
                      const std::string& key_hex,
-                     bool require_auth,
                      std::vector<std::uint8_t>& payload,
                      std::string& cache_key,
                      std::string& error) {
     namespace detail = egg_detail;
 
-    static const std::uint8_t magic_v1[] = {'W', 'B', 'E', 'G', 'G', '0', '1', '!'};
     static const std::uint8_t magic_v2[] = {'W', 'B', 'E', 'G', 'G', '0', '2', '!'};
     constexpr std::size_t kSaltSize = 16;
     constexpr std::size_t kTagSize = 32;
@@ -201,23 +197,8 @@ inline bool open_egg(const std::vector<std::uint8_t>& raw,
         return true;
     }
 
-    if (require_auth) {
-        error = "egg is not authenticated: rebuild it with this version of py_upper";
-        return false;
-    }
-
-    if (raw.size() >= sizeof(magic_v1) &&
-        std::equal(std::begin(magic_v1), std::end(magic_v1), raw.begin())) {
-        payload.assign(raw.begin() + static_cast<std::ptrdiff_t>(sizeof(magic_v1)), raw.end());
-        shake256_xor(payload.data(), payload.size(), key.data(), key.size());
-    } else {
-        // A plain zip is accepted, mirroring the Python loader.
-        payload = raw;
-    }
-    std::uint8_t digest[16];
-    shake256_digest(payload.data(), payload.size(), nullptr, 0, digest, sizeof(digest));
-    cache_key = detail::hex(digest, sizeof(digest));
-    return true;
+    error = "egg is not authenticated: rebuild it with this version of py_upper";
+    return false;
 }
 
 inline bool read_egg_bundles(const std::filesystem::path& egg_path,
@@ -226,12 +207,13 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
                              std::vector<EggBundleFile>& files,
                              std::string& cache_key,
                              std::string& error,
-                             bool require_auth = true) {
+                             std::vector<std::uint8_t>* payload_out = nullptr) {
     namespace detail = egg_detail;
 
     files.clear();
     cache_key.clear();
     error.clear();
+    if (payload_out) payload_out->clear();
 
     std::ifstream stream(egg_path, std::ios::binary);
     if (!stream) {
@@ -241,7 +223,7 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
     const std::vector<std::uint8_t> raw((std::istreambuf_iterator<char>(stream)),
                                         std::istreambuf_iterator<char>());
     std::vector<std::uint8_t> payload;
-    if (!open_egg(raw, key_hex, require_auth, payload, cache_key, error)) return false;
+    if (!open_egg(raw, key_hex, payload, cache_key, error)) return false;
 
     std::size_t end = std::string::npos;
     if (payload.size() >= 22) {
@@ -362,6 +344,11 @@ inline bool read_egg_bundles(const std::filesystem::path& egg_path,
                          payload.begin() + static_cast<std::ptrdiff_t>(data_offset + compressed_size));
         files.push_back(std::move(file));
     }
+    // The launcher can hand this already-authenticated plaintext to the Python
+    // loader, so a normal start does not have to decrypt the same egg a second
+    // time. Standalone callers leave payload_out null and retain the old
+    // behavior.
+    if (payload_out) *payload_out = std::move(payload);
     return true;
 }
 

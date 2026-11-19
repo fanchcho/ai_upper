@@ -5,7 +5,7 @@
 # string literal, and the bootstrap wraps that text in a Python triple quoted
 # literal. A triple quote or a non-ASCII character would break that handoff.
 #
-# Egg layout, current format (v2):
+# Egg layout:
 #   MAGIC2 (8 bytes) + SALT (16 bytes) + TAG (32 bytes) + ciphertext
 #   ciphertext = XOR(zip bytes, SHAKE-256(key + SALT) key stream)
 #   TAG        = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]
@@ -15,10 +15,9 @@
 # extra hash pass over the ciphertext (~1.3 ms/MB), while the XOR pass it sits
 # next to already costs ~6.7 ms/MB, so startup time is unchanged in practice.
 #
-# Layout v1 (MAGIC only, no tag) is still readable when require_auth is false,
-# which is what keeps hand-made archives and the test fixtures working. A
-# packaged launcher passes require_auth=True, so a v1 archive in a shipped
-# bundle is refused instead of being silently trusted.
+# This is the only accepted layout. A v1 archive (MAGIC only, no tag) and a
+# plain zip are refused, in the packaged launcher and in the build tools alike:
+# neither carries proof that this build produced it.
 #
 # Backends:
 #   memory  - extension modules are mapped from memory through _memimporter.
@@ -53,11 +52,9 @@ import json
 import os
 import shutil
 import sys
-import tempfile
 import threading
 import zipfile
 
-MAGIC = b'WBEGG01!'
 MAGIC2 = b'WBEGG02!'
 SALT_SIZE = 16
 TAG_SIZE = 32
@@ -90,16 +87,6 @@ def egg_tag(header, ciphertext, key):
     return shake.digest(TAG_SIZE)
 
 
-def decrypt_if_needed(raw, key):
-    if raw[:len(MAGIC2)] == MAGIC2:
-        header, _tag, ciphertext = split_v2(raw)
-        salt = header[len(MAGIC2):]
-        return keystream_xor(ciphertext, key + salt)
-    if raw[:len(MAGIC)] == MAGIC:
-        return keystream_xor(raw[len(MAGIC):], key)
-    return raw
-
-
 def split_v2(raw):
     header_size = len(MAGIC2) + SALT_SIZE
     if len(raw) < header_size + TAG_SIZE:
@@ -110,25 +97,17 @@ def split_v2(raw):
     return header, tag, ciphertext
 
 
-def open_egg(raw, key, require_auth=False):
+def open_egg(raw, key):
     if not raw:
         raise ValueError('egg is empty')
-    if raw[:len(MAGIC2)] == MAGIC2:
-        header, tag, ciphertext = split_v2(raw)
-        expected = egg_tag(header, ciphertext, key)
-        if not hmac.compare_digest(tag, expected):
-            raise ValueError('egg authentication failed: archive was rebuilt or edited')
-        salt = header[len(MAGIC2):]
-        return keystream_xor(ciphertext, key + salt), tag.hex()
-    if require_auth:
+    if raw[:len(MAGIC2)] != MAGIC2:
         raise ValueError('egg is not authenticated: rebuild it with this version of py_upper')
-    if raw[:len(MAGIC)] == MAGIC:
-        payload = keystream_xor(raw[len(MAGIC):], key)
-    else:
-        # A plain zip is accepted, mirroring the launcher, so a hand-made
-        # archive stays usable for debugging.
-        payload = raw
-    return payload, hashlib.sha256(payload).hexdigest()[:32]
+    header, tag, ciphertext = split_v2(raw)
+    expected = egg_tag(header, ciphertext, key)
+    if not hmac.compare_digest(tag, expected):
+        raise ValueError('egg authentication failed: archive was rebuilt or edited')
+    salt = header[len(MAGIC2):]
+    return keystream_xor(ciphertext, key + salt), tag.hex()
 
 
 def _key_bytes(key_hex):
@@ -242,7 +221,7 @@ def _install_builtin_submodule_finder():
 
 
 class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
-    def __init__(self, egg_path, key, backend='auto', require_auth=False):
+    def __init__(self, egg_path, key, backend='auto', payload=None):
         backend = str(backend or 'auto').strip().lower()
         if backend not in BACKENDS:
             raise ValueError('egg backend must be one of: ' + ', '.join(BACKENDS))
@@ -250,12 +229,22 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         self.key = key
         self.requested_backend = backend
         self.lock = threading.Lock()
-        with open(self.egg_path, 'rb') as handle:
-            raw = handle.read()
-        if not raw:
-            raise ValueError('egg is empty: ' + self.egg_path)
         try:
-            payload, self.digest = open_egg(raw, key, require_auth=require_auth)
+            if payload is None:
+                with open(self.egg_path, 'rb') as handle:
+                    raw = handle.read()
+                if not raw:
+                    raise ValueError('egg is empty: ' + self.egg_path)
+                payload, self.digest = open_egg(raw, key)
+            else:
+                # The launcher already authenticated and decrypted this payload
+                # before CPython existed; reusing it avoids a second SHAKE pass
+                # over the whole archive on every start. A standalone caller
+                # still uses the file path above.
+                if not isinstance(payload, (bytes, bytearray)):
+                    raise ValueError('egg payload must be bytes')
+                payload = bytes(payload)
+                self.digest = ''
             self.archive = zipfile.ZipFile(io.BytesIO(payload))
             self.names = frozenset(self.archive.namelist())
             self.payload = payload
@@ -278,14 +267,13 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         else:
             self.backend = 'memory'
 
-    # Per-member digests recorded at pack time, or None for a legacy egg.
-    #
-    # A manifest that disagrees with the archive is a build bug, not a
+    # Per-member digests recorded at pack time. Every archive carries a
+    # manifest; one that disagrees with the archive is a build bug, not a
     # tampering signal (the tag already covers the bytes), so it is refused
     # here instead of being used to validate a cache.
     def _read_manifest(self):
         if MANIFEST_NAME not in self.names:
-            return None
+            raise ValueError('egg manifest is missing')
         try:
             data = json.loads(self.archive.read(MANIFEST_NAME).decode('utf-8'))
         except Exception as exc:
@@ -324,6 +312,8 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
     # archive changing. Checking the recorded digests is what makes a warm
     # start trustworthy; the cost is one read of the extracted sources.
     def _cache_valid(self, root):
+        if not self.digest:
+            self.digest = hashlib.sha256(self.payload).hexdigest()
         marker = os.path.join(root, CACHE_MARKER)
         try:
             with open(marker, 'r', encoding='ascii') as handle:
@@ -332,7 +322,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
             return False
         if recorded != self.digest:
             return False
-        if self.manifest is None or not _cache_verify_enabled():
+        if not _cache_verify_enabled():
             return True
         for name, expected in self.manifest.items():
             if name.startswith(BUNDLE_PREFIX):
@@ -362,6 +352,9 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         raise RuntimeError('cannot publish egg cache: ' + final)
 
     def _extract(self):
+        import tempfile
+        if not self.digest:
+            self.digest = hashlib.sha256(self.payload).hexdigest()
         cache_root = _cache_root()
         if cache_root is None:
             root = tempfile.mkdtemp(prefix='py_upper_egg_')
@@ -479,9 +472,9 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         exec(code, module.__dict__)
 
 
-def install(egg_path, key_hex=None, backend='auto', require_auth=False):
+def install(egg_path, key_hex=None, backend='auto', payload=None):
     key = _key_bytes(key_hex)
-    importer = EncryptedEggImporter(egg_path, key, backend, require_auth=require_auth)
+    importer = EncryptedEggImporter(egg_path, key, backend, payload=payload)
     _install_builtin_submodule_finder()
     if importer.backend == 'extract':
         root = importer.extract_root

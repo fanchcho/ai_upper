@@ -586,9 +586,9 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 
 **认证（0.17.34 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
 或用自己的 zip 顶替 `bundle/py_upper.dat`，都会在导入任何模块之前失败
-（`egg authentication failed` / `egg is not authenticated`）。打包后的 launcher
-一律要求认证，v1 归档（只有 `MAGIC`）与手搓普通 zip 都被拒绝；构建期工具仍可用
-`require_auth=False` 读取旧归档做诊断。
+（`egg authentication failed` / `egg is not authenticated`）。认证是强制的：
+launcher 与构建期工具都只接受 MAGIC2，v1 归档（只有 `MAGIC`）与手搓普通 zip
+一律被拒绝。
 
 **性能**：认证不会拖慢启动。TAG 直接充当 extract 缓存键，取代了原本“解密后再
 对整个明文做一遍哈希”的那次遍历，所以净开销为零；`sha3.h` 的 absorb/squeeze 也从
@@ -598,6 +598,12 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 | --- | --- | --- |
 | 0.17.32（v1，无认证） | 13.1 ms | 308–328 ms |
 | 0.17.34（v2，带认证） | 10.1 ms | 286–294 ms |
+
+Windows x86_64、1.4 MB 产物上，launcher 验签解密后把明文直接交给 Python loader，
+Python 侧 `install()`（不含解释器启动）从 20.4 ms 降到 2.9 ms；这避免了同一次启动
+对 egg 做第二遍 SHAKE-256，实测 bootstrap 阶段约减少 12–15 ms。剩余热启动成本
+主要在 CPython 初始化、loader/`zipfile` 导入和 PySide2 导入；首次启动还要写
+bundle 缓存。
 
 **密钥**：`key_hex` 仍编译进 launcher（否则 loader 无法解密），但不再以可读的
 十六进制字符串存在——生成器写成 `key ^ mask` 与 `mask` 两个字节数组，launcher 在

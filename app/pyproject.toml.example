@@ -116,8 +116,8 @@ exclude = [
 # changes the bundle size. Use [tool.py_upper.trim] and Qt pruning for size.
 # Encryption is the default; pass --no-egg for a loose-file build.
 #
-# The archive is authenticated: MAGIC + salt + SHAKE-256 tag + ciphertext,
-# plus a per-member digest manifest. A packaged launcher refuses an archive
+# The archive is authenticated: MAGIC2 + salt + SHAKE-256 tag + ciphertext,
+# plus a per-member digest manifest. A launcher or build tool refuses an archive
 # whose tag does not match, so replacing bundle/py_upper.dat with a rebuilt
 # zip fails before any module is imported. The tag also keys the extract
 # cache, so authentication costs no extra pass over the payload.

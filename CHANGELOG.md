@@ -10,22 +10,24 @@
 ### Changes
 - egg 升级为 v2：`MAGIC2 + SALT + TAG + ciphertext`，`TAG = SHAKE-256(key + header + ciphertext)[:32]`，比较使用常数时间。salt 由 payload 派生，重建同样输入仍得到同样字节，release manifest 保持可复现。
 - 归档内新增 `py_upper_manifest.json`（逐成员 SHA-256），打包时用刚读入的字节计算，不做第二遍 I/O。
-- `egg_loader.py`：`open_egg()` 统一解密+验签；`require_auth=True` 拒绝 v1 与普通 zip；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 增加 `require_auth`。
+- `egg_loader.py`：`open_egg()` 统一解密+验签；v1 与普通 zip 一律拒绝，认证没有关闭开关；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 只接受 MAGIC2。
 - `egg_bundles.h`：launcher 在 `Py_Initialize` 之前验签，认证失败/未认证归档直接报错退出；TAG 直接作为 bundle 缓存键。
 - `sha3.h`：absorb/squeeze 从逐字节改为按 64 位 lane 批量处理（memcpy 读入）。
 - `DEFAULT_KEY_HEX` 移出 loader，只留在构建工具里；生成器写入 `key ^ mask` 与 `mask` 两个数组，launcher 运行时重组成十六进制字符串。
 - `--verify` 新增：MAGIC2、认证 TAG、成员清单覆盖与摘要长度、`egg key not stored as plain hex`。
+- launcher 把已验签解密的 egg 明文直接交给 Python loader，避免启动时第二次 SHAKE-256；Windows 1.4 MB 产物上 Python 侧 `install()` 从 20.4 ms 降到 2.9 ms。
 
 ### Verification
 - 实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`，各 5 次）：egg 读取 13.1 ms → 10.1 ms；启动总耗时 308–328 ms → 286–294 ms。认证没有带来净开销，因为 TAG 取代了原本“解密后再对明文做一遍哈希”的遍历。
 - 缓存校验开销落在噪声内：开启 277–294 ms，`PY_UPPER_EGG_CACHE_VERIFY=0` 时 280–306 ms。
 - 端到端：改一个字节 → `egg authentication failed`；换成攻击者自己的 zip → `egg is not authenticated`；篡改 extract 缓存里的 `.py` → 目录被重建，注入内容消失。
 - `strings` 检查编译后的 launcher：明文密钥命中数 0。
-- `python -m pytest app/tests -q`：387 passed, 6 skipped。
+- `python -m pytest app/tests -q`：381 passed, 15 skipped（Python 3.8 与 3.11）。
+- 启动（Windows x86_64，1.4 MB 产物）：Python 侧 `install()` 20.4 ms → 2.9 ms；完整 smoke 热启动约 150–190 ms，受磁盘/杀软影响会有波动。
 
 ### Impact
-- 发布产物需要重新构建才会带认证（旧 v1 归档会被打包后的 launcher 拒绝，报错信息指明要重新构建）。
-- 构建期工具仍可用 `require_auth=False` 读取旧归档做诊断。
+- 发布产物需要重新构建才会带认证（旧 v1 归档会被 launcher 与构建工具拒绝，报错信息指明要重新构建）。
+- 构建期工具也只接受 MAGIC2；v1 与普通 zip 一律拒绝，没有 `require_auth=False` 之类的诊断入口。
 - 启动性能不回退；`PY_UPPER_EGG_CACHE_VERIFY=0` 是留给极端性能敏感场景的开关，默认关闭篡改检测不是默认行为。
 - 边界不变：这是提高逆向成本，不是现代密码学。密钥必须在本地可解密，调试器仍可取回。
 

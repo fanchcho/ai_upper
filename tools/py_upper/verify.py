@@ -19,7 +19,7 @@ from .egg import (
     EGG_DIR, EGG_NAME, egg_authenticated, egg_config, egg_loader_source,
     read_egg_manifest, read_egg_members, read_egg_meta,
 )
-from .egg_loader import MAGIC, MAGIC2, _safe_member, keystream_xor
+from .egg_loader import MAGIC2, _safe_member
 from .manifest import read_manifest, validate_manifest
 from .native.deps import _system_dependency, dependency_names
 from .native.inspect import (
@@ -270,7 +270,7 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
             try:
                 checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "encrypted egg magic v2"))
                 checks.append((egg_authenticated(egg_path, egg.key_hex), "encrypted egg authenticated"))
-                egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
+                egg_members = set(read_egg_members(egg_path, egg.key_hex))
                 checks.append((bool(egg_members), f"encrypted egg members={len(egg_members)}"))
                 checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
             except Exception as exc:
@@ -373,7 +373,7 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         try:
             checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "packaged egg magic v2"))
             checks.append((egg_authenticated(egg_path, egg.key_hex), "packaged egg authenticated"))
-            egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
+            egg_members = set(read_egg_members(egg_path, egg.key_hex))
             checks.append((bool(egg_members), f"packaged egg members={len(egg_members)}"))
             checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
         except Exception as exc:
