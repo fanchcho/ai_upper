@@ -941,7 +941,7 @@ OK 点击命中第一张卡片 -> 建会话(绑定该角色) -> 切走空态
 ```
 $ AI_UPPER_HOME=/tmp/aiu-qs-home HOME=/tmp/aiu-qs-home .venv/bin/python -m pytest -q app/tests/test_qml_shell.py
 ..............................................                           [100%]
-46 passed in 0.76s
+46 passed in 0.57s
 ```
 
 新增 3 条（`app/tests/test_qml_shell.py`），覆盖本轮新加的两个桥接口：
@@ -953,12 +953,19 @@ $ AI_UPPER_HOME=/tmp/aiu-qs-home HOME=/tmp/aiu-qs-home .venv/bin/python -m pytes
    `store.load_session(id).personaId == "xiaomajiang"`；未知 id 返回 `""` 且不建不切。
 3. `test_quick_start_labels_follow_the_shell_language` —— 中英文案随语言切。
 
-全量（隔离 `HOME`，这是既有约定，见 8.2）：
+全量（只隔离 `HOME`、**去掉**外部 `AI_UPPER_HOME`，这是 8.2 记录的正确跑法）：
 
 ```
-$ AI_UPPER_HOME=/tmp/aiu-pytest-home HOME=/tmp/aiu-pytest-home .venv/bin/python -m pytest -q app/tests
-1267 passed, 5 skipped in 28.72s
+$ env -u AI_UPPER_HOME HOME=/tmp/aiu-final-home2 .venv/bin/python -m pytest -q app/tests
+1267 passed, 5 skipped in 28.61s
 ```
+
+若把 `AI_UPPER_HOME` 也一起指到 `/tmp` 而不只是 `HOME`，`test_default_home_uses_deva_home_env`
+那 2 条例用（`test_secrets_vault` / `test_settings_service`）会红：
+`2 failed, 1265 passed, 5 skipped`。原因与 8.2 记的完全一致（用例只
+`monkeypatch.setenv("DEVA_HOME")`，而 home 解析顺序是
+`AI_UPPER_HOME` → `~/.ai_upper` → `DEVA_HOME`），属既有用例对宿主环境的隐式依赖，
+不是本轮引入的。
 
 ### 9.10 是否达标：达标，但有一项要写明边界
 
