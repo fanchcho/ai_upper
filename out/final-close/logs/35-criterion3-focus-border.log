@@ -1,0 +1,21 @@
+== 判据 3：focus-composer 输入区有可见焦点边框（对比 chat 同点）
+-- out/final-close/deva-rerun/focus-composer-deva.png
+   (428,700)=#5B5BD6
+   (700,662)=#FFFFFF
+   (700,704)=#FFFFFF
+   (428,760)=#5B5BD6
+-- /tmp/qml-pages-final/focus-composer.png
+   (428,700)=#5B5BD6
+   (700,662)=#FFFFFF
+   (700,704)=#FFFFFF
+   (428,760)=#5B5BD6
+-- out/final-close/deva-rerun/chat-deva.png
+   (428,700)=#D5D5DB
+   (700,662)=#FFFFFF
+   (700,704)=#FFFFFF
+   (428,760)=#D5D5DB
+-- /tmp/qml-pages-final/chat.png
+   (428,700)=#D5D5DB
+   (700,662)=#FFFFFF
+   (700,704)=#FFFFFF
+   (428,760)=#D5D5DB

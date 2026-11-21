@@ -1,0 +1,12 @@
+== 设置页扩展面板：修复前后的可测数字（同一台机、同一夹具、同一 shots 方法）
+-- 卡片区域 520x140+465+236 的 AE（分母 72800）
+  修复前（无 layer、行高 44）: 8385
+  修复后（layer + 行高 45）: 5557
+-- 卡片横线 y 坐标（原版 / 修复前 / 修复后）
+  settings-extensions-deva.png: 374 329 183 284 239 130 
+  se-pretweak.png: 183 284 372 239 130 328 
+  settings-extensions.png: 374 329 183 284 239 130 
+-- 禁用开关滑块像素（行 y=261 的 x=944..960）
+  settings-extensions-deva.png: #FBFBFB
+  se-pretweak.png: #D5D5F4
+  settings-extensions.png: #FBFBFC

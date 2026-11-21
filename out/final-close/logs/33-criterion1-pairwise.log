@@ -1,0 +1,7 @@
+== 判据 1：chat / long-mid / long-bottom 互不相同，两两差异 > 0
+3faa637133a4df7cc07bf08d183faf5c  /tmp/qml-pages-final/chat.png
+4fa257f13c6c7ec9032af8c1f95f52b0  /tmp/qml-pages-final/long-mid.png
+0a5c20816b8155d16599bd1812669461  /tmp/qml-pages-final/long-bottom.png
+chat vs long-mid         AE=73058
+chat vs long-bottom      AE=16205
+long-mid vs long-bottom  AE=62052
