@@ -138,9 +138,14 @@ case "$PAGE" in
     ;;
   delete-confirm)
     rclick 160 90
-    # 右键菜单最后一项是 Delete（danger）——按文本定位不可行，改用坐标：菜单在 (160,90) 向下展开，
-    # 顶边距 5px + 每条 ~31px；四项时 Delete 中心约 (225, 205)。先截图核对再点。
-    click 225 205 1.4
+    # 菜单项数与几何由 CDP 在渲染进程里实测（scripts/parity/verify_menu_geometry.mjs，
+    # 输出 out/final-close/logs/22-menu-geometry.json）：
+    #   role=menu 面板 rect=(160,90,148,157)；5 个 role=menuitem，高 29px、从 y=96 起，
+    #   New chat 96 / Rename 125 / Select 154 / Archive 183 / Delete 212，
+    #   Delete 中心 = (234, 227)。
+    # 旧坐标 (225, 205) 落在 Archive 项（183..212）上，截到的是「Archived … Undo」toast
+    # 而不是删除确认框——这就是旧基线错的地方。
+    click 234 227 1.4
     shot
     ;;
   model-picker)

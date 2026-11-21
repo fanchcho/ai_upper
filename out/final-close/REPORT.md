@@ -84,60 +84,34 @@ A 用 `git show HEAD:scripts/parity/deva_pages_all.sh` 取 HEAD 版本执行，B
 
 产物目录：`out/final-close/deva-rerun/`
 
-| 页 | 文件 | 字节 |
-|---|---|---:|
-| chat | chat-deva.png | 155397 |
-| ctx-menu | ctx-menu-deva.png | 155525 |
-| dark-chat | dark-chat-deva.png | 155397 |
-| delete-confirm | delete-confirm-deva.png | 140176 |
-| empty | empty-deva.png | 40733 |
-| first-run | first-run-deva.png | 40733 |
-| focus-composer | focus-composer-deva.png | 155698 |
-| hover-thread | hover-thread-deva.png | 155046 |
-| long-bottom | long-bottom-deva.png | 154577 |
-| long-mid | long-mid-deva.png | 140254 |
-| model-picker | model-picker-deva.png | 161178 |
-| search-none | search-none-deva.png | 64532 |
-| search-open | search-open-deva.png | 155630 |
-| search-results | search-results-deva.png | 128199 |
-| settings-about | settings-about-deva.png | 134899 |
-| settings-extensions | settings-extensions-deva.png | 138577 |
-| settings-general | settings-general-deva.png | 141705 |
-| settings-models | settings-models-deva.png | 131480 |
+> 本节数字由脚本从落盘文件重新生成（`stat -c %s` + `md5sum`），不再手抄：
+> 早先手抄的字节数/md5 有若干行与文件不符（dark-chat、settings-*）。以下为当前磁盘实况。
 
-> 更正（本轮实测）：settings-about / settings-extensions / settings-models 三页首轮记录的是重试前的旧字节数（39718 / 132893 / 132820），与落盘文件不符；上表与下面的 md5 已按 `stat -c %s` + `md5sum` 实测值更正。
+| 页 | 文件 | 字节 | md5 |
+|---|---|---:|---|
+| chat | chat-deva.png | 155397 | `06a81f02a1ef8b789329f2808268dbb6` |
+| ctx-menu | ctx-menu-deva.png | 155525 | `872dc19994a37d9a5cefe2e5aa56bf36` |
+| dark-chat | dark-chat-deva.png | 156605 | `dd174cfe874cca285df5cfd2b6ef3038` |
+| delete-confirm | delete-confirm-deva.png | 161499 | `115b84c3c896b33ce07e59f8a2d2b751` |
+| empty | empty-deva.png | 40733 | `e07548ba4a6511b62e5e45ab07c27121` |
+| first-run | first-run-deva.png | 40733 | `26a05a5435320d03600e00b40fc06d0a` |
+| focus-composer | focus-composer-deva.png | 155698 | `a5273989e6eb741908af9273352ad1af` |
+| hover-thread | hover-thread-deva.png | 155046 | `358efb1a6e05413687487207ae7a3541` |
+| long-bottom | long-bottom-deva.png | 154577 | `8f6fded19b63b3f90a9213c7ec55c960` |
+| long-mid | long-mid-deva.png | 140254 | `6e1673c62c6b0a59feb449f065ec20fb` |
+| model-picker | model-picker-deva.png | 161178 | `b3857b3344c4c8e42c8d4cfe3ebb9c0f` |
+| search-none | search-none-deva.png | 64532 | `72036a2dabc6e64dc4626e38be891a33` |
+| search-open | search-open-deva.png | 155630 | `9c8a62e33f55f2be59b65ee96870c839` |
+| search-results | search-results-deva.png | 128199 | `0523e1a443a3a1fb91b23b84c0a769b9` |
+| settings-about | settings-about-deva.png | 134899 | `50b2ee8135ee7c4cc4f5568d36cac0ab` |
+| settings-extensions | settings-extensions-deva.png | 138577 | `59ce447e9abfe50f32d9b39e65701b5b` |
+| settings-general | settings-general-deva.png | 141705 | `98dd6a130c4f340f8393a6272f299990` |
+| settings-models | settings-models-deva.png | 131480 | `6ecf7e64c87db41f8204cb2166da9338` |
 
-合计 **18/18**，尺寸均为 1280×820。md5（用于后续逐页差异比对）：
+合计 **18/18**，尺寸均为 1280×820（`identify` 实检）。
 
-```
-06a81f02a1ef8b789329f2808268dbb6  chat-deva.png
-872dc19994a37d9a5cefe2e5aa56bf36  ctx-menu-deva.png
-3add2028e3274c381ac2d2dc4fd668c2  dark-chat-deva.png
-1a0f5cde4837dbb88cf41c7930e5b192  delete-confirm-deva.png
-e07548ba4a6511b62e5e45ab07c27121  empty-deva.png
-26a05a5435320d03600e00b40fc06d0a  first-run-deva.png
-a5273989e6eb741908af9273352ad1af  focus-composer-deva.png
-358efb1a6e05413687487207ae7a3541  hover-thread-deva.png
-8f6fded19b63b3f90a9213c7ec55c960  long-bottom-deva.png
-6e1673c62c6b0a59feb449f065ec20fb  long-mid-deva.png
-b3857b3344c4c8e42c8d4cfe3ebb9c0f  model-picker-deva.png
-72036a2dabc6e64dc4626e38be891a33  search-none-deva.png
-9c8a62e33f55f2be59b65ee96870c839  search-open-deva.png
-0523e1a443a3a1fb91b23b84c0a769b9  search-results-deva.png
-f6ee3a483a41a4242ddd44161aebf02a  settings-about-deva.png   ← 过期，见下
-c749714ea6218fee142d9162100acbd1  settings-extensions-deva.png  ← 过期，见下
-56494c049359dc3f616c1b5e4b98bc25  settings-general-deva.png
-33b79f24d742678884bac9c8271164cf  settings-models-deva.png
-```
-
-> 更正：上面两行 md5 对应的是重试前的旧图。本轮 `md5sum` 实测：
-
-```
-50b2ee8135ee7c4cc4f5568d36cac0ab 134899 settings-about-deva.png
-59ce447e9abfe50f32d9b39e65701b5b 138577 settings-extensions-deva.png
-98dd6a130c4f340f8393a6272f299990 141705 settings-general-deva.png
-6ecf7e64c87db41f8204cb2166da9338 131480 settings-models-deva.png
-```
+`delete-confirm` 为缺口 3 修正坐标后重拍的值；旧值（140176 B / `1a0f5cde…`）是在
+Archive 项上截到的错误画面，已废弃。
 
 ### 1.5 缺页与重试
 
@@ -276,3 +250,116 @@ passed 恰好 +1、failed 归零，与「只修一条断言」的改动范围一
 
 缺口 2 **已修复**：根因是断言把「百分比」当「像素」，属测试缺陷；实现 `document.py` 一字未改
 （`git diff` 为空）。全量 pytest 为 `1260 passed, 5 skipped`。
+
+---
+
+## 缺口 3：delete-confirm 基线点错菜单项 —— 已修正并重拍
+
+### 3.1 旧基线错在哪
+
+`scripts/parity/deva_page_shot.sh` 的 `delete-confirm` 用固定坐标点右键菜单：
+
+```bash
+rclick 160 90
+click 225 205 1.4     # ← 旧值
+```
+
+注释当时按「4 项菜单 × 每项 ~31px」估算 Delete 在 y≈205。但**实际是 5 项**
+（New chat / Rename / Select / Archive / Delete），Delete 根本不在 205。
+
+旧的 `out/final-close/deva/delete-confirm-deva.png`（140125 B）拍到的就是这一错：
+右侧正文被 Archive 动作替换、右上角挂着 `Archived "对比用会話：一条完整回合"  Undo`
+的 toast，**完全没有删除确认框**。以此当基线，QML 侧无论怎么画都会得到 ~93% 的
+「差异」，属于假差异。
+
+### 3.2 菜单几何：改由渲染进程实测，不再估算
+
+新增只读探针 `scripts/parity/verify_menu_geometry.mjs`：起原版 Deva（带
+`--remote-debugging-port`），用 CDP `Input.dispatchMouseEvent` 发真实右键，再用
+`Runtime.evaluate` 读 `[role="menu"]` / `[role="menuitem"]` 的 `getBoundingClientRect()`。
+
+```bash
+node scripts/parity/verify_menu_geometry.mjs out/final-close/logs/22-menu-geometry.json
+```
+
+实测（`out/final-close/logs/22-menu-geometry.json`，视口 1280×820、dpr 1）：
+
+```
+menu role=menu  rect = (160, 90, 148, 157)
+count = 5
+New chat  rect (166, 96, 136, 29)  center (234, 111)
+Rename    rect (166, 125, 136, 29) center (234, 140)
+Select    rect (166, 154, 136, 29) center (234, 169)
+Archive   rect (166, 183, 136, 29) center (234, 198)   ← 旧坐标 y=205 落在这里
+Delete    rect (166, 212, 136, 29) center (234, 227)   ← color rgb(229,72,77)
+```
+
+y=205 落在 Archive 的 183..212 区间内，与旧图里出现的 Archive toast 完全吻合——
+这既解释了旧基线，也证明坐标就是根因。
+
+### 3.3 修复
+
+`scripts/parity/deva_page_shot.sh`：
+
+```diff
+   delete-confirm)
+     rclick 160 90
+-    click 225 205 1.4
++    # 实测：5 个 menuitem，高 29px、从 y=96 起，Delete 中心 (234, 227)
++    click 234 227 1.4
+     shot
+```
+
+同时修掉 `scripts/parity/deva_dom.mjs:140` 里同一个过期坐标（该文件用与截图脚本
+一一对应的点击序列取 DOM 几何，坐标不同步会让 DOM 侧也取到 Archive 状态）。
+
+### 3.4 重拍
+
+```bash
+bash scripts/parity/deva_pages_all.sh out/final-close/deva-rerun delete-confirm
+# ok   delete-confirm 1280x820 161499B
+# done: 1 页 -> out/final-close/deva-rerun
+# EXIT=0
+```
+
+日志：`out/final-close/logs/23-deva-delete-confirm-fixed.log`
+
+| | 旧基线 `out/final-close/deva/` | 新基线 `out/final-close/deva-rerun/` |
+|---|---|---|
+| 字节 | 140125 | **161499** |
+| md5 | 6642766e98f55915fb938e2736c8a447 | **115b84c3c896b33ce07e59f8a2d2b751** |
+| 尺寸 | 1280×820 | 1280×820 |
+| 内容 | Archive toast，无确认框 | 删除确认框 |
+
+### 3.5 新图为何可信（点到了什么 / 图里应出现什么）
+
+- **点到了什么**：CDP 实测的 Delete 项中心 (234, 227)，该项 `color: rgb(229,72,77)`
+  （danger 色）且 `text: "Delete"`，五个 menuitem 里唯一位于 y 212..241 的一项。
+- **图里应出现什么**：居中模态框，标题 `Delete conversation "对比用会话：一条完整回合"?`，
+  正文 `This conversation and all its messages will be permanently removed. This
+  cannot be undone.`，右下 `Cancel`（次按钮）+ `Delete`（红底危险按钮），背景被压暗。
+
+数值核验（`out/final-close/logs/24-delete-confirm-visual-check.log`）：
+
+```
+区域 400x160+440+330 的 mean / stddev
+  新图: mean=0.941702 stddev=0.184556   ← 有内容
+  旧图: mean=1        stddev=0         ← 纯白
+
+对话框区域命中 danger 色 #E5484D（fuzz 12%）的绿色占比
+  新图: 0.924408   ← 红色 Delete 按钮存在
+  旧图: 1          ← 一个像素都不命中
+
+新图 Delete 按钮中心像素 (795,468) = #EB7377
+compare -metric AE 新旧两图 = 976916 / 1049600 = 93.07% 不同
+```
+
+再配合上面直接看过的新图渲染结果（禁用/正常两态一致：标题、正文、Cancel、红色 Delete
+四要素齐全），可以确认新基线是真正的删除确认框，而不是又一次点偏。
+
+### 3.6 结论
+
+缺口 3 **已修复并验证**。坐标来自 CDP 实测而非估算，探针脚本保留在
+`scripts/parity/verify_menu_geometry.mjs`，以后菜单项再变可以直接复跑核对。
+`out/final-close/deva-rerun/delete-confirm-deva.png` 已更新为 161499 B /
+`115b84c3c896b33ce07e59f8a2d2b751`，缺口 1 表格中的字节数与 md5 已同步更正。

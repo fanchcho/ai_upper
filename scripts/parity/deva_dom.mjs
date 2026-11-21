@@ -137,7 +137,10 @@ async function act(ws, page) {
       await mouse(ws, 'mousePressed', 160, 90, 'right')
       await mouse(ws, 'mouseReleased', 160, 90, 'right')
       await sleep(800)
-      await click(ws, 225, 205, 1200)
+      // 菜单实测 5 项（New chat/Rename/Select/Archive/Delete），每项 29px、从 y=96 起。
+      // Delete 中心 (234, 227)。原先的 (225, 205) 落在 Archive 上——见
+      // out/final-close/logs/22-menu-geometry.json 与 scripts/parity/verify_menu_geometry.mjs。
+      await click(ws, 234, 227, 1200)
       break
     case 'model-picker':
       await click(ws, 160, 90, 2000)

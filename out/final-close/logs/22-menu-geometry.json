@@ -1,0 +1,105 @@
+{
+  "page": "delete-confirm",
+  "viewport": {
+    "w": 1280,
+    "h": 820,
+    "dpr": 1
+  },
+  "menu": {
+    "menuRole": "menu",
+    "menuRect": {
+      "x": 160,
+      "y": 90,
+      "w": 148,
+      "h": 157
+    },
+    "count": 5,
+    "items": [
+      {
+        "text": "New chat",
+        "role": "menuitem",
+        "rect": {
+          "x": 166,
+          "y": 96,
+          "w": 136,
+          "h": 29
+        },
+        "center": {
+          "x": 234,
+          "y": 111
+        },
+        "padTop": "7px",
+        "color": "rgb(31, 31, 36)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "text": "Rename",
+        "role": "menuitem",
+        "rect": {
+          "x": 166,
+          "y": 125,
+          "w": 136,
+          "h": 29
+        },
+        "center": {
+          "x": 234,
+          "y": 140
+        },
+        "padTop": "7px",
+        "color": "rgb(31, 31, 36)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "text": "Select",
+        "role": "menuitem",
+        "rect": {
+          "x": 166,
+          "y": 154,
+          "w": 136,
+          "h": 29
+        },
+        "center": {
+          "x": 234,
+          "y": 169
+        },
+        "padTop": "7px",
+        "color": "rgb(31, 31, 36)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "text": "Archive",
+        "role": "menuitem",
+        "rect": {
+          "x": 166,
+          "y": 183,
+          "w": 136,
+          "h": 29
+        },
+        "center": {
+          "x": 234,
+          "y": 198
+        },
+        "padTop": "7px",
+        "color": "rgb(31, 31, 36)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "text": "Delete",
+        "role": "menuitem",
+        "rect": {
+          "x": 166,
+          "y": 212,
+          "w": 136,
+          "h": 29
+        },
+        "center": {
+          "x": 234,
+          "y": 227
+        },
+        "padTop": "7px",
+        "color": "rgb(229, 72, 77)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ]
+  }
+}

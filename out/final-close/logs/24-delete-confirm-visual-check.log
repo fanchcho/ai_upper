@@ -1,0 +1,23 @@
+# delete-confirm 基线修正的「图里到底有什么」实测（ImageMagick，两图同为 1280x820）
+# 旧基线: out/final-close/deva/delete-confirm-deva.png       140125 B  6642766e98f55915fb938e2736c8a447
+# 新基线: out/final-close/deva-rerun/delete-confirm-deva.png 161499 B  115b84c3c896b33ce07e59f8a2d2b751
+
+== 1. 对话框标题区（弹窗覆盖正文的地方）是否有内容 ==
+区域 400x160+440+330 的 mean / stddev：
+  新图: mean=0.941702 stddev=0.184556   ← 有文字与按钮，非均匀
+  旧图: mean=1        stddev=0         ← 纯白，什么也没画
+
+== 2. Delete 按钮（原版 danger 色 #E5484D）在对话框区域里的占比 ==
+命令: convert <img> -crop 400x200+440+320 +repage -fuzz 12% -fill '#00FF00' -opaque '#E5484D' -format '%[fx:mean.g]' info:
+  新图: 0.924408   ← 存在红色按钮区域（约 7.6% 像素被染成纯绿 = 命中 danger 色）
+  旧图: 1          ← 一个像素都不命中，没有确认框
+
+新图 Delete 按钮中心像素 (795,468) = (235,115,119) #EB7377 —— 按钮底色。
+
+== 3. 两图整体差异 ==
+compare -metric AE <new> <old> null:
+  976916   （1280*820 = 1049600 像素，即 93.07% 不同）
+
+== 结论 ==
+新图在标题/正文/按钮三处都有内容，并且命中 danger 色；旧图对应区域是**纯白**。
+旧基线拍的确实是「Archive 之后右侧正文被切走 + 右上 toast」那一屏，而不是确认框。
