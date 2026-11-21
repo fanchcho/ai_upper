@@ -55,6 +55,10 @@ QtObject {
     readonly property color accentFg: dark ? "#14141a" : "#ffffff"
     readonly property color chatUserBubble: dark ? _bubbleDark : _bubbleLight
     readonly property color danger: dark ? "#ff6b6b" : "#e5484d"
+    // 状态色：tokens.css `--success` / `--warning`（浅色 64–65 行，深色 132–133 行）。
+    // 设置页服务商启用点用 success，缺密钥警告三角用 warning。
+    readonly property color success: dark ? "#51cf66" : "#2f9e44"
+    readonly property color warning: dark ? "#fcc419" : "#d9860b"
     readonly property color scrollbar: dark ? Qt.rgba(1, 1, 1, 0.16) : Qt.rgba(0, 0, 0, 0.18)
     readonly property color shadow: Qt.rgba(0, 0, 0, dark ? 0.50 : 0.12)
     readonly property color backdrop: Qt.rgba(0, 0, 0, 0.42)

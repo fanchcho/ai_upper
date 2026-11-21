@@ -55,6 +55,18 @@ QtObject {
     readonly property string archive: "M3 3H21A1 1 0 0 1 22 4V7A1 1 0 0 1 21 8H3A1 1 0 0 1 2 7V4A1 1 0 0 1 3 3Z|M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8|M10 12h4"
     // external-link
     readonly property string externalLink: "M15 3h6v6|M10 14 21 3|M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+    // list-filter
+    readonly property string listFilter: "M3 6h18|M7 12h10|M10 18h4"
+    // folder-minus
+    readonly property string folderMinus: "M9 13h6|M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+    // lightbulb
+    readonly property string lightbulb: "M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5|M9 18h6|M10 22h4"
+    // chevron-right
+    readonly property string chevronRight: "m9 18 6-6-6-6"
+    // chevron-left
+    readonly property string chevronLeft: "m15 18-6-6 6-6"
+    // alert-triangle
+    readonly property string alertTriangle: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3|M12 9v4|M12 17h.01"
 
     function get(key) {
         if (key === "messageCircle") return messageCircle
@@ -82,6 +94,12 @@ QtObject {
         if (key === "pencil") return pencil
         if (key === "archive") return archive
         if (key === "externalLink") return externalLink
+        if (key === "listFilter") return listFilter
+        if (key === "folderMinus") return folderMinus
+        if (key === "lightbulb") return lightbulb
+        if (key === "chevronRight") return chevronRight
+        if (key === "chevronLeft") return chevronLeft
+        if (key === "alertTriangle") return alertTriangle
         return ""
     }
 }
