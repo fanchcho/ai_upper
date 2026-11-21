@@ -6,6 +6,49 @@
 
 > 本文件按 1–7 逐项落盘，每完成一项先追加片段，再继续下一项。
 
+## 0. 本段开工前的盘面核对（真实命令 + 输出）
+
+```
+$ git rev-parse HEAD
+17a8d2f2cb76f92fb811d8d044e9ecebd6021578
+$ git rev-parse --abbrev-ref HEAD
+develop
+$ git log --oneline -8
+17a8d2f fix(parity): delete-confirm 点错菜单项（Archive→Delete），坐标改由 CDP 实测
+bafa9db fix(markdown): 行高断言锁错量纲 —— 改为按定义反算像素
+38bdf10 feat(qml): 页面状态注入后重应用 + 输入区/列表桥接槽
+c7a7faf feat(qml): 补齐图标与状态色 token
+c1d4f8c fix(parity): deva_pages_all 参数 bug 静默产出 0 图，补齐图标生成
+4bdd884 chore(evidence): 在 HEAD b98d59e 上复验 QtWebEngine 移除的 6 条结项
+b98d59e docs(render-opt4): attach 两个方向逐条证伪，代码未改
+3f01757 docs(render-opt3): 报告、全部探针与逐条日志证据
+$ git rev-list --count origin/develop..HEAD
+20
+```
+
+工作树（`git status --porcelain`，只列本任务相关）：
+
+```
+ M app/src/qml/SettingsModal.qml
+ M app/src/qml_shell.py
+ M app/tests/test_qml_shell.py
+?? out/final-close/deva-rerun/*.png        （18 页原版基线，未入库）
+?? out/final-close/qml-rerun/*.png        （QML 实拍，未入库）
+?? out/final-close/logs/*.log
+?? scripts/parity/page_diff_table.sh       （新建）
+```
+
+**缺口 1/2/3 的提交状态：全部已单独提交，工作树里没有它们的残留改动。**
+
+| 缺口 | 提交 | 提交内含 |
+|---|---|---|
+| 1 `deva_pages_all.sh` 参数 bug | `c1d4f8c` | `scripts/parity/deva_pages_all.sh`、`gen_icons.mjs`、`parity_run.sh`、`rebuild_parity.sh` |
+| 2 markdown 行高断言 | `bafa9db` | `app/tests/test_markdown_document.py` + REPORT 与 3 份日志 |
+| 3 delete-confirm 基线 | `17a8d2f` | `deva_page_shot.sh`、`deva_dom.mjs`、`verify_menu_geometry.mjs`、新基线图、REPORT |
+
+核对依据：对三个缺口的源文件跑 `git status --porcelain <files>` 输出为空，且 `git show --name-only`
+逐个确认改动已在提交里。缺口 1–3 的基线图与日志当时按同一原则逐项提交，没有攒批。
+
 ---
 
 ## 缺口 1：`deva_pages_all.sh` 参数 bug —— 已修复并重拍 18 页基线
