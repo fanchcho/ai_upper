@@ -1,0 +1,31 @@
+# 改写后的断言是否仍能锁住行为：对实现做两处变异，看用例是否变红
+# 全程 env -u AI_UPPER_HOME HOME=/tmp/final-pytest-home
+
+== 基线（未变异）==
+$ ../.venv/bin/python -m pytest tests/test_markdown_document.py -q
+58 passed in 0.32s
+
+== 变异 1：line_height 返回 factor*100，忽略字体行距 ==
+  return (px * factor) / spacing * 100.0
+→ return factor * 100.0  # MUTATION
+结果:
+E  AssertionError: (14.0, 33.43828125)
+E  assert 33.43828125 == 23.099999999999998
+FAILED tests/test_markdown_document.py::test_renderer_font_and_line_height_are_stable_across_calls
+1 failed, 57 passed
+
+== 变异 2：_line_spacing 忽略 pixel_size（固定 14）==
+  font.setPixelSize(pixel_size)
+→ font.setPixelSize(14)  # MUTATION
+结果:
+E  assert 92.4 == 46.199999999999996
+FAILED tests/test_markdown_document.py::test_renderer_font_and_line_height_are_stable_across_calls
+1 failed, 57 passed
+
+== 恢复后 ==
+$ git diff --stat app/src/markdown/document.py   （空输出 = 与 HEAD 一致）
+58 passed in 0.32s
+
+结论：改写后的断言没有放松。旧断言锁的是「不同字号必须给不同百分比」（量纲错误），
+新断言锁的是「反算像素 == px*factor」——任何真的把行高算错的实现变异都会被抓住，
+而纯字体度量线性差异（113.9861…）不再误报。

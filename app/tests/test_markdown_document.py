@@ -520,7 +520,31 @@ def test_renderer_font_and_line_height_are_stable_across_calls(qapp):
     assert renderer.font(14.0).bold() is False
     assert renderer.font(28.0).pixelSize() == 28
     assert renderer.line_height(14.0, 1.65) == renderer.line_height(14.0, 1.65)
-    assert renderer.line_height(28.0, 1.65) != renderer.line_height(14.0, 1.65)
+
+    # ``line_height`` 返回的是**百分比**（``ProportionalHeight`` 相对字体行距），
+    # 不是像素。契约是 ``spacing * pct / 100 == px * factor``；而字体行距与字号
+    # 成正比，所以 14px 与 28px 的百分比本来就该几乎相同（实测都是 113.986…，
+    # 见 out/final-close/logs/19-line-height-rootcause.log）。旧断言用
+    # ``pct(28) != pct(14)`` 当「不同键不撞值」的锁，锁错了量纲——它在字体行距
+    # 严格线性的机器上必然红，是断言缺陷而非渲染回归。缓存键的真正覆盖由下面的
+    # ``test_font_and_line_height_caches_are_keyed_on_their_inputs`` 用 cache_info 锁住。
+    # 这里改锁值本身：百分比必须满足 ``spacing * pct / 100 == px * factor``，
+    # 且必须随字号单调（同一倍率下 28px 的目标像素就是 14px 的两倍）。
+    pixels = {}
+    for px in (14.0, 28.0, 56.0):
+        pct = renderer.line_height(px, 1.65)
+        font = QtGui.QFont()
+        font.setFamilies(list(BodyStyle().sans))
+        font.setPixelSize(int(px))
+        spacing = QtGui.QFontMetricsF(font).lineSpacing()
+        assert spacing > 0
+        got = spacing * pct / 100.0
+        assert got == pytest.approx(px * 1.65, rel=1e-9), (px, got)
+        pixels[px] = got
+    assert pixels[28.0] == pytest.approx(2 * pixels[14.0], rel=1e-9)
+    assert pixels[56.0] == pytest.approx(4 * pixels[14.0], rel=1e-9)
+    # 倍率是公式里的真实因子：不同倍率不能给出同一个百分比。
+    assert renderer.line_height(14.0, 1.65) != renderer.line_height(14.0, 2.0)
 
 
 def test_font_and_line_height_caches_are_keyed_on_their_inputs(qapp):

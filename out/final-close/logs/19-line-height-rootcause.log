@@ -1,0 +1,26 @@
+== 旧实现 vs 新实现在同一台机器上的结果（逐字号）==
+px= 12 old=114.05940594059405 new=114.05940594059405 equal=True
+px= 14 old=113.98612181958366 new=113.98612181958366 equal=True
+px= 16 old=114.08507765023631 new=114.08507765023631 equal=True
+px= 20 old=114.03887688984882 new=114.03887688984882 equal=True
+px= 24 old=114.0080971659919 new=114.0080971659919 equal=True
+px= 28 old=113.98612181958366 new=113.98612181958366 equal=True
+px= 32 old=114.0080971659919 new=114.0080971659919 equal=True
+px= 56 old=113.96415494314896 new=113.96415494314896 equal=True
+px= 96 old=113.95683453237409 new=113.95683453237409 equal=True
+
+== lineSpacing 与 px 的比例（1/64px 网格取整造成的非严格线性）==
+px= 12 spacing=17.359375 spacing/px=1.446614583 exact_ratio_to_14=11.992289900
+px= 14 spacing=20.265625 spacing/px=1.447544643 exact_ratio_to_14=14.000000000
+px= 28 spacing=40.531250 spacing/px=1.447544643 exact_ratio_to_14=28.000000000
+px= 56 spacing=81.078125 spacing/px=1.447823661 exact_ratio_to_14=56.010794140
+px= 96 spacing=139.000000 spacing/px=1.447916667 exact_ratio_to_14=96.024672321
+
+== 断言 renderer.line_height(28,1.65) != renderer.line_height(14,1.65) ==
+line_height(28,1.65)=113.98612181958366
+line_height(14,1.65)=113.98612181958366
+diff=0.0  assertion_holds=False
+
+== 该百分比按定义反算回像素（ProportionalHeight 是相对 lineSpacing）==
+px= 14 pct=113.986121820  spacing*pct/100=23.100000000  期望 px*1.65=23.100000000
+px= 28 pct=113.986121820  spacing*pct/100=46.200000000  期望 px*1.65=46.200000000
