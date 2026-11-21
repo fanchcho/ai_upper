@@ -353,9 +353,25 @@ Item {
         }
     }
 
+    // ── Extensions：真实技能行（内置三条 + 磁盘技能），几何取自原版实测 ────
+    // 原版 SettingsPane.tsx:195-260 + redesign.css `.cf-rows/.cf-setrow/.cf-badge/.cf-switch`：
+    //   卡片 pane 内 x=20、宽 510、1px 边框（实测左缘 469 / 右缘 978）；
+    //   行 padding 11/14，行间 1px 分隔（实测 y=239/284/329/374，即 45px 行距）；
+    //   名字 13/600、徽标 10.5/500 底 inset 全圆角、注记 11/400 subtle、行尾开关 38×22。
+    // 旧的 `shellBridge.extensionsSummary()` 在桥里根本不存在（grep 全仓 0 处定义），
+    // 运行时抛 TypeError 且整页空白；这里换成真实数据源 `extensionRows()`。
     Component {
         id: extensionsPane
         Item {
+            id: extPane
+            property var rows: []
+
+            Component.onCompleted: refresh()
+
+            function refresh() {
+                rows = shellBridge ? shellBridge.extensionRows() : []
+            }
+
             Text {
                 x: 20
                 y: 16
@@ -365,15 +381,146 @@ Item {
                 font.pixelSize: 15
                 font.weight: 700
             }
+
+            // 空态：原版 `.cf-empty`（padding 20、居中、12px subtle）。
             Text {
+                visible: extPane.rows.length === 0
                 x: 20
                 y: 55
                 width: parent.width - 40
-                text: shellBridge ? shellBridge.extensionsSummary() : ""
-                color: Theme.fgMuted
+                horizontalAlignment: Text.AlignHCenter
+                text: shellBridge ? shellBridge.labels().extEmpty : ""
+                color: Theme.fgSubtle
                 font.family: Theme.sansFamily
-                font.pixelSize: 13
-                wrapMode: Text.WordWrap
+                font.pixelSize: 12
+            }
+
+            // 行列表：卡片自带 1px 外框，行间用 1px 分隔线（原版 .cf-rows + .cf-setrow）。
+            Rectangle {
+                visible: extPane.rows.length > 0
+                x: 20
+                y: 55
+                width: parent.width - 40
+                height: extColumn.height + 2
+                radius: Theme.radiusLg
+                color: "transparent"
+                border.width: 1
+                border.color: Theme.border
+
+                Column {
+                    id: extColumn
+                    x: 1
+                    y: 1
+                    width: parent.width - 2
+
+                    Repeater {
+                        model: extPane.rows
+                        delegate: Item {
+                            id: extRow
+                            required property var modelData
+                            required property int index
+
+                            width: extColumn.width
+                            // 原版 `.cf-setrow` 内容盒高 44px，而 `.cf-setrow + .cf-setrow`
+                            // 的 border-top 画在盒外，第 2/3 行各多占 1px。实测原版分隔线在
+                            // y=284 / 329、末行底边 374；若把分隔线画进 44px 行内，
+                            // 每行净内容只剩 43px，第三行底边落到 372、分隔线落到 328（差 2px）。
+                            height: 44 + (extRow.index > 0 ? 1 : 0)
+
+                            // 行间分隔线：首行没有（原版 `.cf-setrow + .cf-setrow`）。
+                            Rectangle {
+                                visible: extRow.index > 0
+                                anchors.top: parent.top
+                                width: parent.width
+                                height: 1
+                                color: Theme.border
+                            }
+
+                            Row {
+                                x: 13
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: 8
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: extRow.modelData.name
+                                    color: Theme.fg
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 13
+                                    font.weight: 600
+                                }
+                                // 类型徽标：底 inset、1px 边框、全圆角、上下 1px / 左右 7px
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: badgeText.implicitWidth + 14
+                                    height: badgeText.implicitHeight + 2
+                                    radius: Theme.radiusFull
+                                    color: Theme.bgInset
+                                    border.width: 1
+                                    border.color: Theme.border
+                                    Text {
+                                        id: badgeText
+                                        anchors.centerIn: parent
+                                        text: extRow.modelData.badge
+                                        color: Theme.fgMuted
+                                        font.family: Theme.sansFamily
+                                        // 原版 10.5px；QML 的 pixelSize 只收 int，四舍五入到 11。
+                                        font.pixelSize: 11
+                                        font.weight: 500
+                                    }
+                                }
+                                Text {
+                                    visible: extRow.modelData.note !== ""
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: extRow.modelData.note
+                                    color: Theme.fgSubtle
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 11
+                                }
+                            }
+
+                            // 开关：38×22 胶囊，开启=accent、滑块白 18 圆 16px 位移；
+                            // 内置技能 locked → 整组 0.55 不透明、不可点（原版 `.cf-switch:disabled`）。
+                            // 注意：CSS 的 opacity 作用在元素整体（先合成再调透明度），
+                            // 所以必须开 layer 把轨道+滑块先画进一张纹理再整体 0.55，
+                            // 否则 QML 会逐图元各乘 0.55，白色滑块叠在 accent 轨道上时
+                            // 得到 (213,213,244) 而不是原版的 (251,251,251)。
+                            Item {
+                                id: sw
+                                anchors.right: parent.right
+                                anchors.rightMargin: 14
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 38
+                                height: 22
+                                opacity: extRow.modelData.builtin ? 0.55 : 1.0
+                                layer.enabled: extRow.modelData.builtin
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: Theme.radiusFull
+                                    color: extRow.modelData.enabled ? Theme.accent : Theme.bgActive
+                                }
+                                Rectangle {
+                                    x: extRow.modelData.enabled ? 18 : 2
+                                    y: 2
+                                    width: 18
+                                    height: 18
+                                    radius: Theme.radiusFull
+                                    color: "#ffffff"
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    enabled: !extRow.modelData.builtin
+                                    onClicked: {
+                                        // 无条件重读：写失败时行数据保持原样，开关不会假装翻面。
+                                        if (shellBridge) shellBridge.setSkillEnabled(extRow.modelData.id)
+                                        extPane.refresh()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

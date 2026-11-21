@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import threading
 import time
@@ -26,6 +27,7 @@ from mvvm.models.chat_models import Message, StoredSession
 from mvvm.services.chat_session_store import ChatSessionStore
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services.settings_service import SettingsService
+from mvvm.services.skill_store import SkillStore
 from mvvm.services.workspace_guard import WorkspaceGuard
 from mvvm.webui.assembly import build_chat_host
 
@@ -400,7 +402,7 @@ def _bridge(tmp_path, monkeypatch, transport, *, sessions=()):
         emit_sessions_changed=lambda: None,
         transport=transport,
     )
-    bridge = ShellBridge(host=host, store=store, plain=True)
+    bridge = ShellBridge(host=host, store=store, plain=True, settings=settings, skills=SkillStore(home))
     host._emit = bridge.emit  # 事件改成推到壳的队列（GUI 线程的 tick 再消费）
     # 正文目标：`_render()` 只有拿到文档才重绘；这里给一个只暴露 `textDocument()`
     # 的替身（与 `test_markdown_body` 同口径），不把 QML 环境拖进单测。
@@ -547,3 +549,73 @@ def test_open_session_carries_highlight_formats_into_the_qml_document(qapp, tmp_
                for f in block.layout().formats()}
     assert colours["if"] == LIGHT_TOKENS["keyword"]
     assert target.documentLayout().blockBoundingRect(block).height() > 0, "代码行不能塌成 0 高"
+
+
+# ── 扩展页（settings-extensions）：行投影与开关写路径 ────────────────────
+def test_extension_rows_project_builtin_skills_with_badge_and_note(qapp, tmp_path, monkeypatch):
+    """扩展页行形状对齐原版 `SettingsPane.tsx:195-260`。
+
+    QML 的 `extensionsPane` 直接吃这些字段（`badge` 画徽标、`note` 画注记、`builtin`
+    决定开关禁用），字段名或语义变了界面就是空白/错画——所以判据锁在数据投影上。
+    """
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    rows = bridge.extensionRows()
+    assert [row["id"] for row in rows] == ["create-skill", "create-agent", "create-mcp"]
+    for row in rows:
+        assert row["enabled"] is True
+        assert row["builtin"] is True
+        assert row["badge"] == "Skill"
+        assert row["note"] == "Built-in"
+
+
+def test_extension_rows_honor_disk_skill_and_config_enabled(qapp, tmp_path, monkeypatch):
+    """磁盘技能排在三条内置之后；`enabled` 取 config 的 `skills.enabled[id]`，不写等于开。"""
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    folder = tmp_path / "home" / "skills" / "demo"
+    folder.mkdir(parents=True)
+    (folder / "SKILL.md").write_text("---\nname: Demo\n---\nbody\n", encoding="utf-8")
+
+    rows = {row["id"]: row for row in bridge.extensionRows()}
+    assert rows["demo"]["enabled"] is True
+    assert rows["demo"]["builtin"] is False
+    assert rows["demo"]["badge"] == "Skill"
+    assert rows["demo"]["note"] == ""
+
+    assert bridge.setSkillEnabled("demo") is False  # 返回落盘后的启用态：关掉了
+    assert bridge.extensionRows()[-1]["enabled"] is False
+    assert json.loads((tmp_path / "home" / "config.json").read_text())["skills"]["enabled"]["demo"] is False
+
+    assert bridge.setSkillEnabled("demo") is True
+    assert bridge.extensionRows()[-1]["enabled"] is True
+
+
+def test_set_skill_enabled_leaves_builtin_rows_untouched(qapp, tmp_path, monkeypatch):
+    """内置技能恒启用：写入口 no-op，不落 `skills.enabled` 键（原版 RESERVED_IDS 语义）。"""
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    assert bridge.setSkillEnabled("create-skill") is True  # 值仍是「启用」
+    assert bridge.extensionRows()[0]["enabled"] is True
+    config = tmp_path / "home" / "config.json"
+    section = json.loads(config.read_text()).get("skills") or {}
+    assert "create-skill" not in (section.get("enabled") or {})
+
+
+def test_skill_toggle_survives_a_later_settings_write(qapp, tmp_path, monkeypatch):
+    """开关落盘后，设置页的其它写入不能把它覆盖掉。
+
+    `SkillStore.set_enabled` 自己读写 `config.json`，而设置页（主题/语言/字号/模型）
+    走 `SettingsService` 的内存副本 + 整文件回写。两条写路径并存时，内存副本若还在
+    开关之前的状态，下一次设置写入就会把 `skills.enabled` 抹回旧值——这条用例锁住
+    开关入口在写完之后让设置服务重新读盘（`reload()`）。
+    """
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    folder = tmp_path / "home" / "skills" / "demo"
+    folder.mkdir(parents=True)
+    (folder / "SKILL.md").write_text("---\nname: Demo\n---\nbody\n", encoding="utf-8")
+
+    assert bridge.setSkillEnabled("demo") is False  # 关掉
+    bridge.setTheme("dark")  # 设置页的另一次写入（走 SettingsService 整文件回写）
+
+    config = json.loads((tmp_path / "home" / "config.json").read_text())
+    assert config["theme"] == "dark"
+    assert config["skills"]["enabled"]["demo"] is False, "设置写入不能覆盖技能开关"
+    assert {row["id"]: row for row in bridge.extensionRows()}["demo"]["enabled"] is False

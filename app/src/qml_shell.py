@@ -86,6 +86,7 @@ SETTINGS_LABELS = {
         "fontSm": "小", "fontMd": "标准", "fontLg": "大", "fontXl": "特大",
         "providers": "模型服务商", "noProviders": "还没有可用的服务商，点右上角 + 添加",
         "modelCount": "{count} 个模型", "extensions": "扩展", "builtIn": "内置",
+        "kindSkill": "技能", "extEmpty": "暂无扩展",
     },
     "en": {
         "language": "Language", "theme": "Theme", "textSize": "Text size",
@@ -93,6 +94,7 @@ SETTINGS_LABELS = {
         "fontSm": "Small", "fontMd": "Default", "fontLg": "Large", "fontXl": "Extra large",
         "providers": "Providers", "noProviders": "No providers yet — click + to add one",
         "modelCount": "{count} models", "extensions": "Extensions", "builtIn": "Built-in",
+        "kindSkill": "Skill", "extEmpty": "No extensions",
     },
 }
 
@@ -692,40 +694,60 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(result=list)
     def extensionRows(self) -> List[Dict[str, Any]]:
-        """扩展页：真实技能列表（内置三条 + 磁盘技能），启用态来自 config.json。"""
+        """扩展页：真实技能列表（内置三条 + 磁盘技能），启用态来自 config.json。
+
+        行形状对齐原版 `SettingsPane.tsx:195-260`：徽标恒为扩展类型（技能 = `cf.kindSkill`），
+        `note` 只在 source == "builtin" 时给 `cf.builtin`，内置行 `locked`（开关禁用、不可点开详情）。
+        """
         if self._skills is None:
             return []
         labels = SETTINGS_LABELS[self.language()]
         rows: List[Dict[str, Any]] = []
         for skill in self._skills.list_skills():
+            builtin = skill.get("source") == "builtin"
             rows.append(
                 {
                     "id": str(skill.get("id") or ""),
                     "name": str(skill.get("name") or skill.get("id") or ""),
-                    "description": str(skill.get("description") or ""),
                     "enabled": skill.get("enabled") is not False,
-                    "builtin": skill.get("source") == "builtin",
-                    "sourceLabel": labels["builtIn"] if skill.get("source") == "builtin" else "Skill",
+                    "builtin": builtin,
+                    "badge": labels["kindSkill"],
+                    "note": labels["builtIn"] if builtin else "",
                 }
             )
         return rows
 
     @QtCore.Slot(str, result=bool)
     def setSkillEnabled(self, skill_id: str) -> bool:
-        """扩展页开关：写 `skills.enabled[id]`（原版 set-enabled 语义）。"""
+        """扩展页开关：写 `skills.enabled[id]`（原版 SkillsService.setEnabled 同一条语义链）。
+
+        落盘走 `SkillStore.set_enabled`：内置技能恒启用（`RESERVED_IDS` → no-op）、非法 id
+        不落盘，这两条规则由服务层单点定义并被 `app/tests/test_settings_write.py` 锁住；
+        壳里不另写一份 config 合并逻辑。
+
+        返回「落盘后可读到的启用态」而不是「有没有调过」：调用方拿它刷新行数据，
+        写失败时返回值不会翻面，界面就不会假装切换成功。
+        """
         if self._skills is None or not skill_id:
             return False
+        # 开关是「取反」语义，服务层只收绝对值：先用当前启用位算目标值。
+        current = next(
+            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id), None
+        )
+        if current is None:
+            return False
         try:
-            current = self._config().get("skills")
-            section = dict(current) if isinstance(current, dict) else {}
-            enabled = section.get("enabled")
-            enabled_map = dict(enabled) if isinstance(enabled, dict) else {}
-            enabled_map[skill_id] = not bool(enabled_map.get(skill_id, True))
-            section["enabled"] = enabled_map
-            return self._write_config({"skills": section})
-        except OSError as exc:  # noqa: BLE001 - 保持与 SkillStore 的异常口径一致
+            self._skills.set_enabled(skill_id, not current)
+        except OSError as exc:  # noqa: BLE001 - 与 _write_config 的异常口径一致
             print("QML CONFIG FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
             return False
+        # SkillStore 直接写盘，绕过了 SettingsService 的内存副本；不失效缓存的话，
+        # 后续任何一次设置页写入都会用旧副本覆盖掉刚写下的 `skills.enabled`。
+        if self._settings is not None:
+            self._settings.reload()
+        return next(
+            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id), False
+        )
 
     @QtCore.Slot(str, "QVariantList", result=bool)
     def sendWithAttachments(self, text: str, attachments: Any) -> bool:
