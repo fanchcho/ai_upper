@@ -999,7 +999,10 @@ $ env -u AI_UPPER_HOME HOME=/tmp/aiu-final-home2 .venv/bin/python -m pytest -q a
 | `db6885e` | 本报告 §9 与 §10（实测数值、逐块拆解、CI 一致性核对） |
 | `610dcbd` | 订正 §9.9 的 pytest 跑法（只隔离 `HOME`），并把红项现象写清 |
 
-本报告写完后的 HEAD 就是 `610dcbd`。这三条与之前缺口 1/2/3/7 的提交一起，
+下面的哈希与计数是在 `610dcbd` 上实测的。此后只追加过本报告的文字订正提交
+（`fc4a6e4`），不再动代码——这类文档提交会让「领先 origin/develop」的条数各 +1，
+所以**数值以 `git rev-parse HEAD` / `git rev-list --count` 的当时输出为准**，
+本节记录的是测量时点。这三条与之前缺口 1/2/3/7 的提交一起，
 **全部只在本地 `develop`**，未新建分支、未 force push、未 push。
 
 ```
