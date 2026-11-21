@@ -618,10 +618,10 @@ qml   (428,760)  #5B5BD6               #D5D5DB
    侧栏从 226014 掉到 40179。属于通道取整，不是布局错位。
 2. **会话页 12% 量级是字体光栅**。chat 侧栏 `300x820` AE 43888、正文区 `980x760` AE 66181；
    横向互相关最优位移为 0（没有整体偏移），fuzz 分级 chat 5%→6.87%、10%→4.94%、20%→3.87%。
-3. **empty / first-run 的 4.44% 是真实功能差**：原版中列有 2 张 QuickStart 卡片
-   （`Rail.tsx` `QuickStart`：48px 头像 + 名称 + 描述），QML `Main.qml:452-470` 只有标题
-   和一行提示，没有卡片。区域 `300x180+540+390` AE 21703（40.19%）。这一项**本段未补**，
-   见 7.6。
+3. **empty / first-run 原先是真实功能差，本轮已补**：原版中列有 2 张 QuickStart 卡片
+   （`Rail.tsx` `QuickStart`：48px 头像 + 名称 + 描述），改前 QML 只有标题和一行提示，
+   没有卡片（区域 `300x180+540+390` AE 21703 / 40.19%、整页 46610 / 4.44%）。
+   补完后整页 AE **10325（0.98%）**、卡片区 **2697（4.99%）**，详细拆解见 §9。
 4. **基线时效**：`deva-rerun/` 是 15:47 拍的，QML 是本段 18:3x 拍的，夹具时间戳钉在
    「生成时刻 − 22h」，跨过 24h 边界后侧栏相对时间从「22 hr ago」变「yesterday」
    —— 这是上一轮残余 12% 的主因。本段额外重拍了一份原版 `out/final-close/deva-final/`
@@ -702,12 +702,9 @@ $ AI_UPPER_HOME=/tmp/aiu-pytest-b pytest -q <两条用例>
 
 ### 8.4 没做的及原因
 
-1. **empty / first-run 页的 QuickStart 卡片未补**（两页各 4.44%）。
-   原版 `redesign/Rail.tsx` 的 `QuickStart` 渲染 `.cf-quick__grid` + `.cf-qcard`（48px 头像、
-   名称、描述），QML `app/src/qml/Main.qml:452-470` 只有标题和一行提示。
-   未做原因：它需要把 persona 列表（头像、名称、描述、点击进会话）接进 QML 空态，
-   属于新功能接线，不是本轮「逐页对照 + 扩展面板」的任务范围；本段只把它定位并量化
-   （区域 `300x180+540+390` AE 21703 / 40.19%），没有顺手扩范围。
+1. ~~**empty / first-run 页的 QuickStart 卡片未补**（两页各 4.44%）。~~ **已补齐，见 §9**
+   （整页 4.44% → **0.98%**，卡片区 40.19% → **4.99%**，commit `5a53be0`）。
+   这条保留原文是为了对照；当前状态以 §9 为准。
 
 2. **`qt_prune.py:895` 的「QML 保留修复」**：核对后该项前提不成立。
    `tools/ai_upper/qt_prune.py:895` 是导入闭包探针的 `if probe.returncode != 0:` 分支，
@@ -737,7 +734,11 @@ $ AI_UPPER_HOME=/tmp/aiu-pytest-b pytest -q <两条用例>
 
    5 个文件全部被 git 跟踪，工作树无改动。
 
-4. **18 页残余差异没有压到 0**：会话页 12% 量级为字体光栅、设置页 31–33% 量级
+4. **CI 未闭合**：本轮 24 个提交全部只在本地 `develop`，`git branch -r --contains HEAD`
+   为空，远端 CI 从未跑过它们；本机 `git fetch` 失败（缺 `/root/.ssh/fanchcho`、
+   `Host key verification failed`）、无 `gh` CLI，读不到远端 CI 记录。详见 §10.2–10.3。
+
+5. **18 页残余差异没有压到 0**：会话页 12% 量级为字体光栅、设置页 31–33% 量级
    以遮罩下的整片侧栏为主（0.4% 容差下侧栏 AE 从 226014 降到 40179）。这不是漏做，
    是本段判定「不属于结构缺口」后如实报数，具体分解见 7.5。
 
@@ -747,3 +748,316 @@ $ AI_UPPER_HOME=/tmp/aiu-pytest-b pytest -q <两条用例>
 - `AI_UPPER_HOME` 一律指 `/tmp`（`/tmp/fx-qml-home`、`/tmp/aiu-pytest-*`），未触碰真实 `~/.ai_upper`。
 - 只在本地 `develop` 提交，未新建分支、未 force push、未 push。
 - 每条结论都附了真实命令与输出；没做到的部分在 8.4 逐条写明原因。
+
+---
+
+## 9. 缺口 8：empty / first-run 的 QuickStart 卡片 —— 本轮补齐
+
+### 9.1 提交
+
+`git rev-parse HEAD` 在本次收尾开工时的基线是 `9c09128`。本轮改动**只在本地 `develop`
+提交**，未新建分支、未 force push、未 push。提交 hash：`5a53be0`（明细见 10.1）。
+
+### 9.2 原版依据（deva 全程只读）
+
+`deva/apps/desktop/src/renderer/src/redesign/Rail.tsx:1296-1326` 的 `QuickStart`：
+`.cf-quick__grid`（:1311）里 `personas.map()` 出 `.cf-qcard`（:1315），每张卡 =
+`<Avatar persona={p} size={48} />` + `p.name`（:1320）+ `p.desc`（:1321，为空时不渲染），
+`onClick` 走 `onStart(p.id)`。样式在 `redesign.css:3081-3131`：网格
+`display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:var(--space-6)`；
+卡片 `width:130px; display:flex; flex-direction:column; align-items:center; gap:8px;
+padding:var(--space-4) var(--space-3); border:1px solid; border-radius:var(--radius-lg)`；
+名称 13px/650 单行省略（`white-space:nowrap`），描述 11px/`line-height:1.5` +
+`-webkit-line-clamp:2`（两行后省略）。
+
+QML 侧原来只有标题和一行提示，一张卡都没有 —— 这是 8.4 里唯一还标「未做」的
+**真实功能差**（不是像素差）。
+
+### 9.3 改了什么
+
+**桥（`app/src/qml_shell.py`）**
+
+- `quickStartPersonas()`：从 `PersonaStore(app_home()).list_personas()` 投影成
+  `{id, name, desc, avatarImage}`，每次 `_publish()` 重读（花名册可热改）。
+  名字/描述取的就是花名册里的那一份，不是占位文本。
+- `startQuickStart(persona_id)`：`PersonaStore.get()` 校验 → `new_session_id()` →
+  `_host.create_session({..., "personaId", "modelRef"})` → 切 `_active`、清 turn →
+  重绘并回 id。未知 id 返回 `""`，不建会话、不切页。
+- `QUICK_TEXT`（中英各一份）：`quickStartTitle` / `quickStartHint`。
+
+**QML（`app/src/qml/Main.qml`）**
+
+- 空态换成 `Item{objectName:"quickStart"}`：`.cf-quick__inner` 居中列 + `Grid`
+  （gap 16、卡片宽 130、`topPadding:24`）+ `Repeater`；卡片 `Rectangle` 宽 130、
+  `radius-lg`、1px 边框、内容列 `x:13 y:17`、间距 8、48px `Avatar`、名称 13/600、
+  描述 11/subtle 两行省略。
+- 卡片点击 `MouseArea.onClicked → window.quickStart(modelData.id) →
+  shellBridge.startQuickStart()`。
+- `Grid` 的 `columns` 收紧到实际卡片数，否则 `anchors.horizontalCenter` 摆不中
+  （先前实测偏左 219px）；行高由 `cellHeight` 显式取同行最高（QML `Grid` 不做
+  CSS 的 `align-items: stretch`）。
+
+**头像构图（`app/src/qml/Avatar.qml` + `scripts/parity/gen_avatars.mjs`）**
+
+原来 `Avatar.qml` 只有一个手写的 `pop` 开关，默认框内构图。核对原版
+`shell-common.tsx` 的 `Avatar` 是 `compact ?? (size <= 20)`，而 `humation.tsx`
+里 `pop = !compact && !!parts.head` —— 也就是 **>20px 的头像默认都是「探出」构图**。
+所以 34（导航）/ 38（会话行）/ 48（卡片）都该用 `-pop.svg`。改成
+`property bool compact: size <= 20` + `readonly property bool pop: !compact`，
+并由 `gen_avatars.mjs` 按 `POP_BOX = {x:4, y:12, s:72}` 生成
+`user-pop.svg` / `general-pop.svg` / `xiaomajiang-pop.svg`。这一条不只修 QuickStart：
+侧栏与所有会话行头像一并修正（侧栏 AE 3114 → 2974，会话族各页同步降 2–3k px）。
+
+### 9.4 几何：与 deva 逐像素对齐（实测）
+
+量法：两张图各自裁同一块再比（`compare -crop` 不裁图，必须 `convert -crop +repage`
+先落盘），辅助脚本 `/tmp/cropae.sh`。
+
+卡片边框（`y=470` 横扫、`x=700` 纵扫，灰度 < 246 的连续段）：
+
+```
+deva: x 680..680 / 809..809 / 826..826 / 955..955    y 395..395 / 544..544
+qml : x 680..680 / 809..809 / 826..826 / 955..955    y 395..395 / 544..544
+```
+
+两卡 x `680..809` / `826..955`、y `395..544`，宽 130 高 150、卡间距 16、整行居中 ——
+**四条边逐个像素相同**。头像紫色圆（`48x48+721+412` 内按色相筛）两侧都是 800 px。
+描述两行、名称一行的墨迹 bbox 在 1px 内重合（见 9.6 的行级 AE）。
+
+### 9.5 前后实测：两页都是同一组数字
+
+先确认两页可互换：QML 侧 `empty` / `first-run` 出图 **md5 相同**
+（`3b1ddb91be99f2154a9a4a04e55507ce`），deva 基线两页
+（`e07548ba…` / `26a05a54…`）在卡片区与整页的 AE 也完全相同，所以下表对两页同时成立。
+
+| 指标 | 改前 | 改后 | 分母 |
+|---|---|---|---|
+| 整页 AE（`1280x820+0+0`） | **46610 / 4.44%** | **10325 / 0.98%** | 1049600 |
+| 卡片区 AE（`300x180+540+390`） | **21703 / 40.19%** | **2697 / 4.99%** | 54000 |
+
+分区（改前 → 改后，同一几何）：
+
+| 区域 | 改前 | 改后 |
+|---|---|---|
+| 卡片 1（`130x150+680+395`） | 19403 | **2621** |
+| 卡片 2（`130x150+826+395`） | 19403 | **2969** |
+| 名称 1（`128x19+681+463`） | 2432 | **136** |
+| 名称 2（`128x19+827+467`） | 2432 | **389** |
+| 描述 1（`128x37+681+486`） | 4736 | **1559** |
+| 描述 2（`128x37+827+490`） | 4736 | **1636** |
+| 头像 1（`48x48+721+412`） | 2294 | **726** |
+| 头像 2（`48x48+867+412`） | 2304 | **744** |
+| 侧栏（`264x820+0+0`） | 3114 | **2974** |
+| 右栏（`716x820+564+0`） | 42723 | **7203** |
+
+原始输出：`out/final-close/logs/41-quickstart-final.log`；改前 QML 图
+`/tmp/qml-pages-final/empty.png`（md5 `d99d297b…`），改后
+`out/final-close/quickstart/empty-qml.png`（md5 `3b1ddb91…`）。
+
+### 9.6 剩余 2697 由什么构成（逐块拆，不是「大概」）
+
+卡片区按元素对齐切成不重叠的横带，和正好等于 2697：
+
+| 局部坐标 | 内容 | AE |
+|---|---|---|
+| `y+0..4` | 区域上方空白 | 0 |
+| `y+5..21` | 卡上边框 + padding + 头像顶部 | 163 |
+| `y+22..69` | 头像主体 | 726 |
+| `y+70..72` | 间隙 | 0 |
+| `y+73..91` | 名称行 | 136 |
+| `y+92..95` | 间隙 | 0 |
+| `y+96..132` | 描述两行 | 1563 |
+| `y+133..154` | 卡下留白 | 109 |
+| `y+155..179` | 区域余下 | 0 |
+| **合计** | | **2697** |
+
+再按行看：描述两行分别是 **634 / 855**（卡 1）、**723 / 833**（卡 2），占卡片区
+58%；头像 726 占 27%；名称 136 占 5%；边框 + padding 272 占 10%。
+
+**描述为什么压不下去**：不是换行位置错，是同一行内**省略号截断的字数不同**。
+`128x37+681+486` 的墨迹 bbox 两侧都是 `98x…+3+6`，但第二行宽度 deva `97px`、
+QML `86px` —— 原版第二行是 `用各类工具解决实…`，QML 是 `用各类工具解决…`
+（`out/final-close/quickstart/desc-ellipsis-pair.png` 放大可读）。原因是 Qt 对
+CJK 的宽度表与 Chromium 差零点几个像素，`maximumLineCount: 2` + `elide: ElideRight`
+在"刚好装到第 N 个字"的边界上落到不同 N。这一条也是所有会话页 12% 的主因（字体光栅）。
+
+fuzz 分级（卡片区）：0 → 2697、2% → 1929、5% → 1518、10% → 927、20% → 555；
+整页：0 → 10325、2% → 7012、5% → 5619、10% → 3877、20% → 2368。说明差的都是
+边缘一两个灰阶，不是结构位移。
+
+### 9.7 点击真的进会话（可执行验证）
+
+`Xvfb + xdotool` 这条路在本机走不通（`libxcb-cursor0` 缺失，`xcb` 平台插件加载失败，
+`/tmp/qs-click/app.log` 有原始报错）。改用 `QT_QPA_PLATFORM=offscreen` + 向真实窗口
+`sendEvent` 鼠标事件：Qt 仍会做命中测试并把事件派发给 `MouseArea`。
+
+```
+$ .venv/bin/python scripts/parity/qml_quickstart_click.py
+QML QUICK cards [["general", "Deva"], ["xiaomajiang", "小码酱"]]
+QML QUICK quickStart.visible True
+QML QUICK hit-chain QQuickImage(-) <- Avatar_QMLTYPE_23(-) <- QQuickColumn(-)
+  <- QQuickMouseArea(-) <- QQuickRectangle_QML_55(-) <- QQuickGrid_QML_53(-)
+  <- QQuickColumn(-) <- QQuickItem(quickStart) <- QQuickItem(-)
+  <- QQuickContentItem(ApplicationWindow) <- QQuickControl(ApplicationWindowContentControl)
+QML QUICK sessions before 0
+QML QUICK sessions after 1 new ['qml-mwqe0yxhf59adb']
+QML QUICK active 'qml-mwqe0yxhf59adb'
+QML QUICK quickStart.visible after click False
+QML QUICK session personaId 'general'
+OK 点击命中第一张卡片 -> 建会话(绑定该角色) -> 切走空态
+```
+
+点的是第一张卡头像中心 `(744, 435)`（对应 deva 实测头像框 `721..768 / 412..458`）。
+命中链里出现 `QQuickMouseArea` 才算真的点中；断言到「会话文件数 0→1、
+`bridge._active` 切换、`personaId == general`、空态消失」。前后截图
+`out/final-close/quickstart/click-before.png` / `click-after.png`（两图 AE 63815）。
+
+### 9.8 18 页对照表刷新
+
+全 18 页重拍后与 `out/final-close/deva-rerun/` 基线比对，逐页都变好或持平：
+
+| 页 | 改前 % | 改后 % |
+|---|---|---|
+| empty / first-run | 4.44 | **0.98** |
+| chat / search-open / focus-composer | 12.35 | 12.08 |
+| hover-thread | 12.39 | 12.12 |
+| long-mid | 12.88 | 12.61 |
+| long-bottom | 12.24 | 11.98 |
+| ctx-menu | 13.04 | 12.77 |
+| model-picker | 13.68 | 13.41 |
+| dark-chat | 24.03 | 23.76 |
+| delete-confirm | 37.85 | 37.74 |
+| search-none | 7.87 | 7.85 |
+| search-results | 10.13 | 9.94 |
+| settings-about | 31.95 | 31.84 |
+| settings-extensions | 31.52 | 31.41 |
+| settings-general | 32.53 | 32.41 |
+| settings-models | 31.36 | 31.25 |
+
+新表落盘 `out/final-close/logs/42-page-diff-table-quickstart.txt`，18 页 stderr 全 0 字节。
+
+### 9.9 pytest 真实数字
+
+```
+$ AI_UPPER_HOME=/tmp/aiu-qs-home HOME=/tmp/aiu-qs-home .venv/bin/python -m pytest -q app/tests/test_qml_shell.py
+..............................................                           [100%]
+46 passed in 0.76s
+```
+
+新增 3 条（`app/tests/test_qml_shell.py`），覆盖本轮新加的两个桥接口：
+
+1. `test_quick_start_personas_project_the_persona_store` —— 投影出 id/name/desc/
+   avatarImage，且改盘上的花名册后重读生效（按 id 取，`list_personas()` 是按名排序的）。
+2. `test_start_quick_start_creates_a_session_bound_to_that_persona` —— 会话 id 以
+   `qml-` 开头、桥的 `_active` 切换、会话文件存在且只有一行、
+   `store.load_session(id).personaId == "xiaomajiang"`；未知 id 返回 `""` 且不建不切。
+3. `test_quick_start_labels_follow_the_shell_language` —— 中英文案随语言切。
+
+全量（隔离 `HOME`，这是既有约定，见 8.2）：
+
+```
+$ AI_UPPER_HOME=/tmp/aiu-pytest-home HOME=/tmp/aiu-pytest-home .venv/bin/python -m pytest -q app/tests
+1267 passed, 5 skipped in 28.72s
+```
+
+### 9.10 是否达标：达标，但有一项要写明边界
+
+- **功能**：达标。空态有两张卡、头像/名称/描述都来自花名册、点击真的建会话并切进去
+  （9.7 有可执行验证，不是"看起来能点"）。
+- **几何**：达标。卡片四条边、卡间距、头像框与 deva 逐像素相同（9.4）。
+- **像素**：整页 **0.98%**、卡片区 **4.99%**。整页已进入「字体光栅」量级，与
+  `search-none`（7.85%）、`search-results`（9.94%）这些纯文本页相比更低；
+  卡片区仍高于其它页的整页数，原因是卡片区 300×180 里 63% 是两段 CJK 小字，
+  分母小所以比例放大。卡片区剩下的 2697 有 1563（58%）是描述两行的省略号截断差
+  （9.6），头像 726、边框 272、名称 136 是抗锯齿。
+- **没做到的部分**：省略号在第几个字截断这一点没有压平。要压平需要替换 Qt 的
+  CJK 度量或自己按 Chromium 的宽度表断字，属于渲染层改造，不在本轮范围；如实报数。
+
+### 9.11 硬约束（本节）
+
+- deva 只读：本轮对 deva 只做 `grep` / `sed -n` 读源码，未写入。
+- `AI_UPPER_HOME` 与 `HOME` 一律指 `/tmp`（`/tmp/aiu-qs-home`、`/tmp/aiu-pytest-home`），
+  未触碰真实 `~/.ai_upper`。
+- 只在本地 `develop` 提交；未新建分支、未 force push、未 push。
+
+---
+
+## 10. 本轮提交与远端一致性（只读核对，未 push）
+
+### 10.1 本轮落盘
+
+| commit | 内容 |
+|---|---|
+| `5a53be0` | `feat(qml): 空态 QuickStart 卡片接真实角色数据 + 点击进会话`（缺口 8 的桥 / QML / 头像 / 测试 / 脚本 / 实测日志） |
+| 本报告 9–10 节 | 单独一次提交，好让上一行的 hash 有据可查 |
+
+```
+$ git rev-parse HEAD
+5a53be07966187b10dbbd7113e222183953ce11b
+$ git rev-parse origin/develop
+2285a1617ae71be2b390832fa5f2af17be3889a2
+$ git rev-list --count origin/develop..HEAD
+24
+$ git log --oneline origin/develop..HEAD
+5a53be0 feat(qml): 空态 QuickStart 卡片接真实角色数据 + 点击进会话
+9c09128 docs(final-close): 缺口 7 收口 —— 18 页对照表、扩展面板前后实测、四条硬判据
+6e84fbe feat(qml): 设置页扩展面板接上真实技能数据 + 逐页对照表脚本
+ecac6f6 docs(final-close): 开工前盘面核对 —— HEAD/日志/工作树与缺口 1–3 提交状态
+17a8d2f fix(parity): delete-confirm 点错菜单项（Archive→Delete），坐标改由 CDP 实测
+bafa9db fix(markdown): 行高断言锁错量纲 —— 改为按定义反算像素
+38bdf10 feat(qml): 页面状态注入后重应用 + 输入区/列表桥接槽
+c7a7faf feat(qml): 补齐图标与状态色 token
+c1d4f8c fix(parity): deva_pages_all 参数 bug 静默产出 0 图，补齐图标生成
+4bdd884 chore(evidence): 在 HEAD b98d59e 上复验 QtWebEngine 移除的 6 条结项
+b98d59e docs(render-opt4): attach 两个方向逐条证伪，代码未改
+3f01757 docs(render-opt3): 报告、全部探针与逐条日志证据
+90849cd test(markdown): 自适应判据、分组保真与热路径缓存的回归用例
+6d8e1ed perf(markdown): 自适应分块判据与渲染热路径缓存
+3d6b94a docs(render-opt2): 表格路径收益、attach 归因更正与全部探针数据
+c5b25df test(markdown): 表格逐行内容与逐格边框回归用例
+4aaa631 perf(markdown): 表格一次插满行，边框并入同一次 setFormat
+fb5cca8 docs(render-chunking): 分块渲染报告、长/短会话分开计时探针与截图证据
+e711a5f perf(markdown): 长文档改分块渲染，结构性插入的二次成本摊平成线性
+f7fef75 docs(conversation-picker): 报告补回归清单与未解决残留
+807923b docs(conversation-picker): 报告补修复后实测、保真度更正与截图证据
+ea75897 fix(markdown): 片段搬运后对齐 documentMargin，接管排版与直接渲染一致
+c67a402 test: 锁住正文接管的「只渲染一遍 / 行高不塌 / 高亮不白跑」
+b513d7c perf(markdown): 正文接管改用一次 insertFragment，不再重渲染进 QML 文档
+```
+
+`origin/develop` 停在 `2285a16`（`2026-11-17 16:52:15 +0800`，
+`fix(packaging): macOS 的默认 Controls 样式是独立模块目录，不能裁`）。
+
+### 10.2 HEAD 是否在远端被 CI 跑过
+
+```
+$ git branch -r --contains HEAD
+（空输出，rc=0）
+```
+
+没有任何远端分支包含 `5a53be0`，也没有任何远端分支包含它之前的 23 个提交。
+也就是说，**远端 CI 从未见过这 24 个提交中的任何一个**。
+
+```
+$ git fetch origin
+Warning: Identity file /root/.ssh/fanchcho not accessible: No such file or directory.
+Host key verification failed.
+fatal: Could not read from remote repository.
+$ command -v gh
+gh: not found
+```
+
+`git fetch` 失败、本机也没有 `gh` CLI，所以 **无法从本地读取 CI 记录**。
+本地缓存的 CI 证据（`out/ci-fix/run-*/run.json`、`out/ci-fix/*jobs*.json`，
+共 4 个 run + 11 个 job 文件，全部 2026-11-14，`conclusion` 全是 `failure`）
+里每个 `head_sha` 都已在 `origin/develop` 上——它们比这 24 个未推送提交**更早**，
+不能用来证明 HEAD 的状态。
+
+### 10.3 结论（直说）
+
+**未 push ⇒ CI 未闭合。** HEAD `5a53be0` 及其前 23 个提交都没有被 CI 验证过；
+本地能看到的最后一轮 CI 是 2026-11-14 的失败记录，与这些提交无关。
+本轮验证全部来自本地：pytest（`46 passed` / `1267 passed, 5 skipped`）、
+18 页 QML 重拍（stderr 全 0）、点击进会话的 offscreen 真事件验证、逐区 AE 实测。
+按硬约束，本轮**没有推送、没有新建分支、没有改 remote**，所以「CI 是否绿」
+这一项在本地无法闭合，只能如实标注为未闭合。
