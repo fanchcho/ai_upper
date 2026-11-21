@@ -32,7 +32,21 @@ from typing import Any, Dict, List
 
 from mvvm.services.attachments import AttachmentService
 from mvvm.services.chat_session_store import ChatSessionStore
+from mvvm.services.compaction import (
+    CompactModel,
+    context_window_for,
+    estimate_tokens,
+    trigger_tokens_for,
+)
+from mvvm.services.model_view import model_messages
 from mvvm.services.deliverables import open_item, reveal
+from mvvm.services.effort import (
+    clamp_effort,
+    is_toggle_effort,
+    is_effort_level,
+    supported_effort_levels,
+)
+from mvvm.services.model_resolve import resolve_default_model, resolve_ref
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services.settings_service import SettingsService
@@ -80,6 +94,49 @@ SETTINGS_LABELS = {
         "providers": "Providers", "noProviders": "No providers yet — click + to add one",
         "modelCount": "{count} models", "extensions": "Extensions", "builtIn": "Built-in",
     },
+}
+
+# 思考等级文案：逐字取自原版 `i18n/messages.ts` 的 `chat.effort.*`（zh 216-236 / en 1749-1772）。
+# 名字与说明分开：菜单每档一行为「名字 + 说明」，贴片只写名字。
+EFFORT_TEXT = {
+    "zh": {
+        "title": "思考等级",
+        "on": "开启",
+        "onHint": "开启思考（该模型无法设置思考等级）",
+        "levels": {"default": "默认", "low": "低", "medium": "中", "high": "高", "xhigh": "极高", "max": "最高"},
+        "hints": {
+            "default": "不额外设置，交给模型自己决定",
+            "low": "想得少、回得快，适合简单问答",
+            "medium": "速度与质量兼顾",
+            "high": "多想一步，适合编码与多步任务",
+            "xhigh": "更深入，适合复杂的编码与长任务",
+            "max": "不计成本地深想，最慢最贵",
+        },
+    },
+    "en": {
+        "title": "Thinking level",
+        "on": "On",
+        "onHint": "Turn thinking on (this model has no thinking levels)",
+        "levels": {"default": "Default", "low": "Low", "medium": "Medium", "high": "High", "xhigh": "Extra high", "max": "Max"},
+        "hints": {
+            "default": "No extra setting; let the model decide",
+            "low": "Thinks less, answers faster; good for simple Q&A",
+            "medium": "Balances speed and quality",
+            "high": "Thinks further; good for coding and multi-step tasks",
+            "xhigh": "Goes deeper; for complex coding and long tasks",
+            "max": "Thinks as hard as it can; slowest and most expensive",
+        },
+    },
+}
+# 列表筛选与空态文案（原版 `cf.searchChats` / `cf.searchNoResults` / `chat.noSessions`）。
+LIST_TEXT = {
+    "zh": {"searchChats": "搜索对话", "noMatches": "未找到匹配项", "noSessions": "暂无对话"},
+    "en": {"searchChats": "Search chats", "noMatches": "No matches", "noSessions": "No conversations"},
+}
+# 输入区贴片的兜底文案（没有可选模型时，原版显示 `chat.selectModel`）。
+CHAT_TEXT = {
+    "zh": {"selectModel": "选择模型", "selectModelTitle": "选择模型"},
+    "en": {"selectModel": "Select model", "selectModelTitle": "Select model"},
 }
 
 # 页面名 → 让壳呈现该状态的标识；与 scripts/parity/qml_pages_all.sh 的清单一致。
@@ -463,6 +520,176 @@ class ShellBridge(QtCore.QObject):
             )
         return rows
 
+    # ── 输入区贴片：模型菜单 / 思考等级（原版 ModelPanel.tsx + EffortPicker.tsx）──────
+    def _models_section(self) -> Dict[str, Any]:
+        section = self._config().get("models")
+        return section if isinstance(section, dict) else {}
+
+    def _active_ref(self) -> Any:
+        """本对话生效的模型引用。
+
+        原版 `ModelPanel.tsx:49`：本对话已选 → 否则回落「最近使用」（`models.activeModelId`），
+        与主进程 `resolveModelRef` 的兜底同一口径；两者都解析不出才留空。
+        """
+        section = self._models_section()
+        session = self._session() if self._active else None
+        stored = getattr(session, "model", None) if session is not None else None
+        return resolve_ref(stored, section) or resolve_default_model(section)
+
+    def _active_effort(self) -> str:
+        """本对话生效档位：会话定格值 > 全局最近使用 > 默认（`ModelGateway.effort_level` 同口径）。"""
+        session = self._session() if self._active else None
+        stored = getattr(session, "effort", None) if session is not None else None
+        if isinstance(stored, str) and stored:
+            return stored
+        value = self._models_section().get("activeEffort")
+        return value if isinstance(value, str) and value else "default"
+
+    @QtCore.Slot(result=list)
+    def modelMenuGroups(self) -> List[Dict[str, Any]]:
+        """模型菜单：已启用服务商 × 已启用模型，按服务商分组（原版 `ModelPanel.tsx:38`）。
+
+        只列对话模型（`purpose == 'llm'`）：决策模型不生成文本，绝不可被选为对话模型。
+        没有模型的组不出现；组内顺序沿用配置顺序（原版同样不过滤顺序）。
+        """
+        providers = self._models_section().get("providers")
+        groups: List[Dict[str, Any]] = []
+        for provider in providers if isinstance(providers, list) else []:
+            if not isinstance(provider, dict):
+                continue
+            if provider.get("enabled") is not True:
+                continue
+            if (provider.get("purpose") or "llm") != "llm":
+                continue
+            models = provider.get("models")
+            items = [
+                {
+                    "id": str(model.get("id") or ""),
+                    "name": str(model.get("name") or model.get("id") or ""),
+                }
+                for model in (models if isinstance(models, list) else [])
+                if isinstance(model, dict) and model.get("enabled") is True and model.get("id")
+            ]
+            if not items:
+                continue
+            groups.append(
+                {
+                    "id": str(provider.get("id") or ""),
+                    "name": str(provider.get("name") or provider.get("id") or ""),
+                    "models": items,
+                }
+            )
+        return groups
+
+    @QtCore.Slot(result="QVariantMap")
+    def effortMenu(self) -> Dict[str, Any]:
+        """思考等级菜单：档位收敛到当前模型真正支持的那几档（原版 `EffortPicker.tsx`）。
+
+        `levels` 空 = 该模型不支持思考等级（原版此时整个贴片不出现）；`toggle` = 只能开、
+        不能调档，唯一一档显示为「开启」。名字与说明逐字取自原版 i18n。
+        """
+        text = EFFORT_TEXT[self.language()]
+        active = self._active_ref()
+        adapter = active.adapter if active is not None else ""
+        model_id = active.model if active is not None else ""
+        levels = supported_effort_levels(adapter, model_id) if adapter else []
+        toggle = is_toggle_effort(adapter, model_id) if levels else False
+        options: List[Dict[str, Any]] = []
+        for level in (["default"] + levels) if levels else []:
+            name = text["on"] if toggle and level != "default" else text["levels"].get(level, level)
+            hint = text["onHint"] if toggle and level != "default" else text["hints"].get(level, "")
+            options.append({"level": level, "name": name, "hint": hint})
+        current = clamp_effort(adapter, model_id, self._active_effort()) if levels else "default"
+        return {
+            "title": text["title"],
+            "toggle": toggle,
+            "current": current,
+            # 「默认」只放灯泡：贴片文案为空串（原版 `current !== 'default'` 才写名字）。
+            "label": "" if current == "default" else text["on"] if toggle else text["levels"].get(current, current),
+            "options": options,
+        }
+
+    @QtCore.Slot(result="QVariantMap")
+    def chatLabels(self) -> Dict[str, Any]:
+        """输入区/列表的本地化文案（模型贴片兜底名、搜索占位、两种空态）。"""
+        return {**CHAT_TEXT[self.language()], **LIST_TEXT[self.language()]}
+
+    @QtCore.Slot(result="QVariantMap")
+    def contextUsage(self) -> Dict[str, Any]:
+        """本对话的上下文占用（原版 `chat:context-usage`，只读，不参与任何判定）。
+
+        读数口径与压缩判定同一套：回合结束后的 `session.lastInputTokens` 优先；没有时按
+        `estimate_tokens(model_messages(...))` 估算并标 `estimated`。窗口与压缩线直接调
+        `compaction.context_window_for` / `trigger_tokens_for`，用户改窗口、引擎从报错学到的
+        真实窗口都会反映到这里，壳里不另存一份真相。
+
+        `used` 为 None = 没有读数（新对话 / 没有可用模型），QML 据此不画圆环。
+        """
+        section = self._models_section()
+        ref = self._active_ref()
+        session = self._session() if self._active else None
+        if ref is None:
+            return {"used": None, "estimated": False, "window": 0, "trigger": None}
+        model = CompactModel(
+            adapter=ref.adapter,
+            provider_id=ref.provider_id,
+            base_url=ref.base_url,
+            model=ref.model,
+        )
+        window = context_window_for(model, section)
+        trigger = trigger_tokens_for(model, section)
+        messages = list(getattr(session, "messages", None) or []) if session is not None else []
+        if not messages:
+            return {"used": None, "estimated": False, "window": window, "trigger": trigger}
+        last = getattr(session, "lastInputTokens", None)
+        if isinstance(last, int) and last > 0:
+            return {"used": last, "estimated": False, "window": window, "trigger": trigger}
+        return {
+            "used": estimate_tokens(model_messages(messages)),
+            "estimated": True,
+            "window": window,
+            "trigger": trigger,
+        }
+
+    @QtCore.Slot(str, str, result=bool)
+    def setActiveModel(self, provider_id: str, model_id: str) -> bool:
+        """点选模型：本对话定格 + 记为「最近使用」，两处都落盘（原版 `ModelPanel.tsx:95`）。
+
+        失败显式返回 False（模型不存在 / 配置写失败），界面据此提示，不做假成功。
+        """
+        section = self._models_section()
+        if resolve_ref(f"{provider_id}:{model_id}", section) is None:
+            return False
+        models = dict(section)
+        models["activeModelId"] = f"{provider_id}:{model_id}"
+        if self._active and not self._store.set_model(self._active, f"{provider_id}:{model_id}"):
+            # 会话尚未建档（惰性会话）不是错误：原版同样返回 `{ok:false}` 且不建档，
+            # 由首发时的覆盖层落库。这里同样只记「最近使用」，不报失败。
+            pass
+        if not self._write_models(models):
+            return False
+        self._publish()
+        return True
+
+    @QtCore.Slot(str, result=bool)
+    def setActiveEffort(self, level: str) -> bool:
+        """点选档位：本对话定格 + 记为「最近使用」（原版 `ModelPanel.tsx:105`）。"""
+        if not is_effort_level(level):
+            return False
+        models = dict(self._models_section())
+        models["activeEffort"] = level
+        if self._active:
+            self._store.set_effort(self._active, None if level == "default" else level)
+        if not self._write_models(models):
+            return False
+        self._publish()
+        return True
+
+    def _write_models(self, models: Dict[str, Any]) -> bool:
+        """`models` 段整块写回（`config:set` 只做顶层浅合并，漏写兄弟字段即被清掉）。"""
+        cleaned = {key: value for key, value in models.items() if value is not None}
+        return self._write_config({"models": cleaned})
+
     @QtCore.Slot(result=list)
     def extensionRows(self) -> List[Dict[str, Any]]:
         """扩展页：真实技能列表（内置三条 + 磁盘技能），启用态来自 config.json。"""
@@ -783,18 +1010,24 @@ class ShellBridge(QtCore.QObject):
         return self._persona_names.get(persona_id or "", "") or "Deva"
 
     def _rows(self) -> List[Dict[str, Any]]:
-        """列表行：会话行 + 角色 id/名（副标题）。角色名只影响显示，不参与排序。
+        """列表行：会话行 + 角色 id/名（副标题）+ 挂载目录名（搜索用）。
 
         可见会话元信息只取一次：行投影与副标题取 personaId 用的是同一份，没必要列两遍索引。
+        `focusName` 是 `focusRoot` 的 basename：原版搜索按「标题 + 角色名 + 挂载目录名」过滤
+        （`Rail.tsx:444-452`），目录名在栏里显示的就是 basename。
         """
         metas = self._store.visible_sessions()
         rows = session_rows(self._store, lang=self.language(), metas=metas)
         owner = {str(getattr(m, "id", "")): str(getattr(m, "personaId", "") or "general")
                  for m in metas}
+        focus = {str(getattr(m, "id", "")): str(getattr(m, "focusRoot", "") or "")
+                 for m in metas}
         for row in rows:
             persona = owner.get(row["id"], "general")
             row["persona"] = persona
             row["personaName"] = self._persona_name(persona)
+            root = focus.get(row["id"], "")
+            row["focusName"] = os.path.basename(root.rstrip("/\\")) if root else ""
         return rows
 
     def _publish(self) -> None:
@@ -820,6 +1053,19 @@ class ShellBridge(QtCore.QObject):
         session = self._session() if active else None
         window.setProperty("attachments", attachment_rows(session))
         window.setProperty("deliveries", delivery_rows(session))
+        # 输入区两个贴片：文案与勾选都按「本对话生效 → 最近使用」现算，不缓存成另一份真相。
+        labels = self.chatLabels()
+        ref = self._active_ref()
+        effort = self.effortMenu()
+        window.setProperty("modelLabel", ref.model if ref is not None else labels["selectModel"])
+        window.setProperty("activeModelRef", ref.ref if ref is not None else "")
+        window.setProperty("modelGroups", self.modelMenuGroups())
+        window.setProperty("effortMenu", effort)
+        window.setProperty("effortLabel", effort["label"])
+        window.setProperty("activeEffort", effort["current"])
+        window.setProperty("chatText", labels)
+        # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。
+        window.setProperty("contextUsage", self.contextUsage())
 
     def initial(self) -> None:
         """首帧之前：没有选中会话就选第一条（空数据时保持空状态）。"""

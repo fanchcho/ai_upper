@@ -50,8 +50,13 @@ ApplicationWindow {
     property string searchQuery: page === "search-results" ? "00"
                                : page === "search-none" ? "zzz" : ""
     property bool modelPickerOpen: page === "model-picker"
+    // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
+    property string pickerMode: page === "model-picker" ? "model" : ""
     // 交互态页面：hover 指定行、右键菜单、删除确认框
     property int forceHoverRow: page === "hover-thread" ? 1 : -1
+    // 输入区焦点态：focus-composer 页要让输入卡片真的拿到键盘焦点，
+    // 原版此时边框从 #d5d5db 变 #5b5bd6（CDP 实测 border-color）。
+    property bool composerFocused: page === "focus-composer"
     property bool ctxOpen: page === "ctx-menu" || page === "delete-confirm"
     property bool confirmOpen: page === "delete-confirm"
 
@@ -59,9 +64,45 @@ ApplicationWindow {
     // Theme 单例（单例的 property 不能从 Python 直接 setProperty，实测落不下去）。
     Binding { target: Theme; property: "dark"; value: shellBridge ? shellBridge.darkMode : false }
 
-    // 输入区：true 时占位文案与模型名同步原版（原版就是这个形状）。
+    // 输入区两个贴片的文案：由 Python 按 config.json 的 activeModelId / activeEffort 写入，
+    // 点菜单里的选项也写回这里（见 pickModel / pickEffort）。空串时退回下面的静态初值。
     property string modelLabel: "deepseek-v4.1-flash"
-    property string effortLabel: "Default"
+    property string effortLabel: ""
+    // 当前生效模型（"providerId:modelId"）与思考等级：菜单据此画勾、算支持哪几档。
+    property string activeModelRef: ""
+    property string activeEffort: "default"
+    // 模型菜单的分组（[{id,name,models:[{id,name}]}]）、思考等级菜单（{title,toggle,current,
+    // label,options:[{level,name,hint}]}）与输入区/列表文案（chatText）。三者都由 Python 的
+    // `_publish()` 按当前配置现算后 setProperty 写进来；这里声明成属性，QML 才有可绑定的槽。
+    property var modelGroups: []
+    property var effortMenu: ({})
+    property var chatText: ({})
+
+    // 列表筛选：搜索框里的词（原版按标题 / 角色名 / 挂载目录 basename 过滤，大小写不敏感）。
+    readonly property string searchTerm: window.searchQuery.trim().toLowerCase()
+    // 过滤后的会话行；顺序沿用 Python 给的 updatedAt 倒序，不重排。
+    readonly property var visibleSessions: {
+        var all = window.sessions || []
+        var q = window.searchTerm
+        if (!q)
+            return all
+        var out = []
+        for (var i = 0; i < all.length; i++) {
+            var row = all[i]
+            var hay = [row.title, row.personaName, row.focusName]
+            var hit = false
+            for (var k = 0; k < hay.length; k++) {
+                var text = hay[k] ? String(hay[k]).toLowerCase() : ""
+                if (text.indexOf(q) >= 0) {
+                    hit = true
+                    break
+                }
+            }
+            if (hit)
+                out.push(row)
+        }
+        return out
+    }
 
     // 交付卡「复制路径」的短暂反馈：1.2s 后把对勾换回复制图标。
     property string copiedPath: ""
@@ -219,19 +260,26 @@ ApplicationWindow {
             color: Theme.bg
             border.width: 1
             border.color: window.searchActive ? Theme.borderStrong : Theme.border
-            // 左侧 26×26 的过滤按钮（实测 x 71 → 相对 3），内部放大镜 15px
-            Icon {
-                x: 3 + (26 - 15) / 2
-                y: (parent.height - 15) / 2
-                name: IconData.search
-                size: 15
-                color: Theme.fgSubtle
+            // 左侧 26×26 的筛选按钮：原版对话 tab 这里是 list-filter（不是放大镜），
+            // 26×26 命中区、图标 15px 居中（redesign.css `.cf-search__filter`）。
+            Item {
+                id: filterBtn
+                x: 3
+                y: (parent.height - 26) / 2
+                width: 26
+                height: 26
+                Icon {
+                    anchors.centerIn: parent
+                    name: IconData.listFilter
+                    size: 15
+                    color: Theme.fgSubtle
+                }
             }
             TextInput {
                 id: searchInput
                 objectName: "searchInput"
                 x: 35
-                width: parent.width - 35 - 8
+                width: parent.width - 35 - (clearBtn.visible ? 26 : 8)
                 y: (parent.height - height) / 2
                 height: 16
                 text: window.searchQuery
@@ -248,13 +296,41 @@ ApplicationWindow {
                 visible: searchInput.text.length === 0
                 x: 35
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Search chats"
+                text: window.chatText.searchChats || "Search chats"
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
             }
+            // 有检索词才出现的清空按钮：18×18，右侧留 8（原版 `.cf-search__clear`，X 13px）。
+            Rectangle {
+                id: clearBtn
+                objectName: "searchClear"
+                visible: searchInput.text.length > 0
+                width: 18
+                height: 18
+                radius: Theme.radiusSm
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
+                color: clearHover.hovered ? Theme.bgHover : "transparent"
+                Icon {
+                    anchors.centerIn: parent
+                    name: IconData.x
+                    size: 13
+                    color: clearHover.hovered ? Theme.fg : Theme.fgSubtle
+                }
+                HoverHandler { id: clearHover }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        searchInput.text = ""
+                        window.searchQuery = ""
+                    }
+                }
+            }
             MouseArea {
                 anchors.fill: parent
+                // 清空按钮自己处理点击：盖住它那块的鼠标事件不再触发「聚焦」。
                 onClicked: {
                     window.searchActive = true
                     searchInput.forceActiveFocus()
@@ -293,10 +369,12 @@ ApplicationWindow {
             width: 283
             height: parent.height - 56 - 8
             clip: true
-            model: window.sessions
+            model: window.visibleSessions
             spacing: 0
             boundsBehavior: Flickable.StopAtBounds
-            // 长列表两张页面：滚到中途 / 滚到底（原版是真实滚轮事件）。
+            // 长列表两张页面：原版同样是滚动位置，但位置由 applyListScroll() 按实测像素摆。
+            // 注意 `Component.onCompleted` 时 Python 还没写 page（_select_page 在 initial() 之后），
+            // 所以这里只能靠 page 变化触发；onCompleted 保留给 contentHeight 已就绪的场合。
             onContentHeightChanged: window.applyListScroll()
             Component.onCompleted: window.applyListScroll()
 
@@ -318,15 +396,22 @@ ApplicationWindow {
             }
         }
 
-        // 空状态：原版此处只有一行 "No conversations"（实测 x 152–257, y 79–93）
+        // 空状态：原版 `.cf-empty`（12px / padding 20 / 文本居中）。
+        //   没有任何会话        → "No conversations"（实测 x155–256 y80–89）
+        //   有会话但筛选无命中  → "No matches"       （实测 x171–240 y80–89，i18n `cf.searchNoResults`）
+        // 列表区从 x56 起、宽 283，文本水平居中即落在实测位置。
         Text {
-            visible: window.sessions.length === 0
-            x: 96
-            y: 79
-            text: "No conversations"
-            color: Theme.fgMuted
+            objectName: "listEmpty"
+            visible: window.visibleSessions.length === 0
+            x: 8
+            y: 68
+            width: 283
+            horizontalAlignment: Text.AlignHCenter
+            text: window.searchTerm !== "" ? (window.chatText.noMatches || "No matches")
+                                          : (window.chatText.noSessions || "No conversations")
+            color: Theme.fgSubtle
             font.family: Theme.sansFamily
-            font.pixelSize: 13
+            font.pixelSize: 12
         }
     }
 
@@ -419,12 +504,7 @@ ApplicationWindow {
                 color: Theme.fg
                 selectionColor: Theme.bgSelected
                 selectedTextColor: Theme.fg
-                Component.onCompleted: {
-                    shellBridge.attach(textDocument)
-                    // focus-composer 页面：原版是真实点进输入框，这里让输入框拿到焦点。
-                    if (window.page === "focus-composer")
-                        inputField.forceActiveFocus()
-                }
+                Component.onCompleted: shellBridge.attach(textDocument)
             }
 
             // 正文之后：本轮会话的附件贴片（缩略图 + 名称 + 真实体积）与交付卡。
@@ -747,7 +827,8 @@ ApplicationWindow {
             radius: Theme.radiusLg
             color: Theme.bg
             border.width: 1
-            border.color: Theme.borderStrong
+            // 输入框拿到键盘焦点时边框转主题色（原版 `:focus-within`，实测 91,91,214）。
+            border.color: inputField.activeFocus || window.composerFocused ? Theme.accent : Theme.borderStrong
 
             // 草稿区：y 671（卡片内 13），高 80，占位 13.5px
             TextArea {
@@ -1042,12 +1123,79 @@ ApplicationWindow {
         return ok
     }
 
-    // 长列表页面状态：原版是真实滚轮事件，这里按同一目标位置摆好列表。
+    // 交互态页面由 Python 在 QML 建好后写入，所以这些状态要监听 page 变化才真生效。
+    onPageChanged: Qt.callLater(applyPageState)
+
+    // 页名对应的「一次性」状态：抢焦点。列表滚动见 applyListScroll。
+    function applyPageState() {
+        if (window.page === "focus-composer") {
+            // 原版是用户真实点进输入框：这里让输入框拿到键盘焦点，边框随之转主题色。
+            inputField.forceActiveFocus()
+        }
+        applyListScroll()
+    }
+
+    // 模型 / 思考等级：写回 config.json（SettingsViewModel.set_active_* 同一份数据），
+    // 成功才更新贴片与勾选，失败显式提示，不做「点了就有反应」的假成功。
+    function pickModel(providerId, modelId) {
+        if (!shellBridge.setActiveModel(String(providerId), String(modelId))) {
+            notify("切换模型失败")
+            return
+        }
+        window.modelLabel = findModelName(providerId, modelId)
+        window.activeModelRef = String(providerId) + ":" + String(modelId)
+        window.pickerMode = ""
+        window.modelPickerOpen = false
+    }
+
+    function pickEffort(level) {
+        if (!shellBridge.setActiveEffort(String(level))) {
+            notify("切换思考等级失败")
+            return
+        }
+        window.activeEffort = String(level)
+        window.effortLabel = level === "default" ? "" : effortName(level)
+        window.pickerMode = ""
+        window.modelPickerOpen = false
+    }
+
+    function findModelName(providerId, modelId) {
+        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
+        for (var i = 0; i < rows.length; i++) {
+            if (String(rows[i].id) !== String(providerId))
+                continue
+            var models = rows[i].models || []
+            for (var k = 0; k < models.length; k++)
+                if (String(models[k].id) === String(modelId))
+                    return String(models[k].name || models[k].id)
+        }
+        return String(modelId)
+    }
+
+    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
+    function effortName(level) {
+        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
+        for (var i = 0; i < rows.length; i++)
+            if (String(rows[i].level) === String(level))
+                return String(rows[i].name)
+        return String(level)
+    }
+    // 列表滚动：落点按原版实拍的滚动位置反算，不用「百分比」近似。
+    //   行距 54px，首行顶在列表内 y8（窗口 y64）。原版 long-mid 的首个完整可见行是「会话 027」
+    //   （index 26，头像顶 y83）→ contentY = 8 + 54×26 - (83-56) = 1386。
+    //   long-bottom 是列表真底（原版末屏可见「会话 106」…「会话 119」），用 positionViewAtEnd。
+    // page 由 Python 在 initial() 之后才写入，所以必须监听 page 变化；onCompleted 时它还是 "chat"。
     function applyListScroll() {
-        if (window.page === "long-bottom")
+        if (window.page === "long-bottom") {
+            // 真底：positionViewAtEnd() 在 contentHeight 还没最终确定时会落在估算位置，
+            // 这里直接按 contentHeight - height 摆到底，再让 positionViewAtEnd 兜一次。
             sessionList.positionViewAtEnd()
-        else if (window.page === "long-mid")
-            sessionList.contentY = Math.max(0, (sessionList.contentHeight - sessionList.height) * 0.45)
+            sessionList.contentY = Math.max(0, sessionList.contentHeight - sessionList.height)
+        } else if (window.page === "long-mid")
+            sessionList.contentY = Math.max(0, Math.min(1386,
+                sessionList.contentHeight - sessionList.height))
+        else
+            sessionList.contentY = 0
     }
 
     // 右键菜单：原版 .cf-menu 实测 (165,88) 175×124，圆角 10，1px #e6e6ea，四项各 31。
