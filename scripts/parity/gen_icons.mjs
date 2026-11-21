@@ -26,7 +26,13 @@ const WANTED = [
   'copy', 'x', 'settings-2', 'blocks', 'info', 'sparkles', 'square-pen', 'check',
   'panel-left', 'panel-right', 'trash-2', 'pencil', 'archive',
   // 交付卡「打开」按钮：原版 DeliverablesCard 用的就是 lucide 的 external-link。
-  'external-link'
+  'external-link',
+  // 侧栏搜索：原版 Rail 的筛选按钮是 list-filter，清空按钮是 x（上面已有）。
+  'list-filter', 'folder-minus',
+  // 输入区思考等级 chip：原版 EffortPicker 用的是 lightbulb（不是 sparkles）。
+  'lightbulb',
+  // 设置页：面板行的右侧箭头与模型行上的告警三角。
+  'chevron-right', 'chevron-left', 'alert-triangle'
 ]
 
 const ELEMENT_RE = /\[\s*"(path|circle|rect|line|polyline|polygon)"\s*,\s*\{([^}]*)\}/g
@@ -76,7 +82,14 @@ const entries = []
 for (const name of WANTED) {
   const file = path.join(ICONS_DIR, name + '.js')
   if (!fs.existsSync(file)) continue
-  const src = fs.readFileSync(file, 'utf8')
+  let src = fs.readFileSync(file, 'utf8')
+  // lucide 有若干「改名保留旧名」的文件，内容只是一行 re-export（如 alert-triangle.js
+  // 就是 `export { default } from './triangle-alert.js'`）。这类文件里没有任何 path 元素，
+  // 直接解析会得到空图标，所以要顺着 re-export 指到真正的实现文件。
+  const reexport = /export\s*\{\s*default\s*\}\s*from\s*'\.\/([\w-]+)\.js'/.exec(src)
+  if (reexport) {
+    src = fs.readFileSync(path.join(ICONS_DIR, reexport[1] + '.js'), 'utf8')
+  }
   const paths = []
   let m
   ELEMENT_RE.lastIndex = 0

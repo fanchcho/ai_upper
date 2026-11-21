@@ -19,7 +19,7 @@ echo "== 1/5 夹具（120 会话，相对时间）"
 "$PY" scripts/parity/make_pages_config.py /tmp/fx-page-home --model || exit 2
 
 if [ "${1:-}" != "--skip-deva" ]; then
-  echo "== 2/5 原版 Deva 19 页实拍（Electron + Xvfb）"
+  echo "== 2/5 原版 Deva 18 页实拍（Electron + Xvfb）"
   bash scripts/parity/deva_pages_all.sh out/qml-shell/pages/deva || exit 3
 else
   echo "== 2/5 跳过原版实拍（复用 out/qml-shell/pages/deva）"
@@ -28,7 +28,7 @@ fi
 echo "== 3/5 QML 数据目录"
 "$PY" scripts/parity/make_qml_home.py /tmp/fx-qml-home /tmp/fx-pages/data/chats /tmp/fx-page-home || exit 4
 
-echo "== 4/5 QML 19 页实拍（offscreen + 软件光栅）"
+echo "== 4/5 QML 18 页实拍（offscreen + 软件光栅）"
 bash scripts/parity/qml_pages_all.sh /tmp/qml-pages-out /tmp/fx-qml-home || exit 5
 
 echo "== 5/5 逐页比对"

@@ -25,6 +25,9 @@ cfg['theme'] = 'dark'
 json.dump(cfg, open(sys.argv[2], 'w'), ensure_ascii=False, indent=2)
 PY
 
+FAILED=()
+PRODUCED=0
+
 run() {  # run <page> [config] [seed-chats]
   # 第三个参数允许显式传空串 = 不预置会话；用 ${3-...} 而不是 ${3:-...}，否则空串会被替换成默认值。
   local page="$1" cfg="${2:-$CONFIG}" seed="${3-$FIXTURE}"
@@ -38,18 +41,22 @@ run() {  # run <page> [config] [seed-chats]
       bytes=$(stat -c %s "$OUT/$page-deva.png")
       if [ "$bytes" -ge 5000 ]; then
         echo "ok   $page $(identify -format '%wx%h %b' "$OUT/$page-deva.png")"
+        PRODUCED=$((PRODUCED + 1))
         return 0
       fi
     fi
     echo "retry $page (attempt $attempt)"
   done
   echo "FAIL $page"
+  FAILED+=("$page")
   return 1
 }
 
 # 只跑指定页：`deva_pages_all.sh out/... chat empty`（不给页名 = 全跑）。
-# 分块跑是因为 19 页一次性跑约 7 分钟，跑挂了要整批重来；分块能把失败限制在一小段里。
-ONLY="$*"
+# 分块跑是因为 18 页一次性跑约 7 分钟，跑挂了要整批重来；分块能把失败限制在一小段里。
+# 注意 $1 是输出目录，页名从 $2 开始；早先写成 "$*" 会把输出目录也算进页名，
+# 于是所有 want 判定都不命中、静默产出 0 张图还返回 0。
+ONLY="${*:2}"
 want() {
   [ -z "$ONLY" ] && return 0
   case " $ONLY " in
@@ -85,3 +92,15 @@ run_if settings-models
 run_if settings-extensions
 run_if settings-about
 run_if dark-chat "$DARK_CONFIG"
+
+# 静默成功是这次踩到的坑：筛选条件与实跑页名对不上时，跑 0 页也返回 0。收尾把
+# 「一张都没产出」和「有页失败」都变成非零退出码，调用方（CI / 分块脚本）才看得见。
+if [ "$PRODUCED" -eq 0 ]; then
+  echo "FAIL: 0 页产出（输出目录 $OUT，筛选条件 ONLY='${ONLY}'）" >&2
+  exit 1
+fi
+if [ "${#FAILED[@]}" -gt 0 ]; then
+  echo "FAIL: ${#FAILED[@]} 页失败: ${FAILED[*]}" >&2
+  exit 1
+fi
+echo "done: $PRODUCED 页 -> $OUT"
