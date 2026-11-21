@@ -734,7 +734,7 @@ $ AI_UPPER_HOME=/tmp/aiu-pytest-b pytest -q <两条用例>
 
    5 个文件全部被 git 跟踪，工作树无改动。
 
-4. **CI 未闭合**：本轮 24 个提交全部只在本地 `develop`，`git branch -r --contains HEAD`
+4. **CI 未闭合**：本轮 26 个提交全部只在本地 `develop`，`git branch -r --contains HEAD`
    为空，远端 CI 从未跑过它们；本机 `git fetch` 失败（缺 `/root/.ssh/fanchcho`、
    `Host key verification failed`）、无 `gh` CLI，读不到远端 CI 记录。详见 §10.2–10.3。
 
@@ -996,16 +996,22 @@ $ env -u AI_UPPER_HOME HOME=/tmp/aiu-final-home2 .venv/bin/python -m pytest -q a
 | commit | 内容 |
 |---|---|
 | `5a53be0` | `feat(qml): 空态 QuickStart 卡片接真实角色数据 + 点击进会话`（缺口 8 的桥 / QML / 头像 / 测试 / 脚本 / 实测日志） |
-| 本报告 9–10 节 | 单独一次提交，好让上一行的 hash 有据可查 |
+| `db6885e` | 本报告 §9 与 §10（实测数值、逐块拆解、CI 一致性核对） |
+| `610dcbd` | 订正 §9.9 的 pytest 跑法（只隔离 `HOME`），并把红项现象写清 |
+
+本报告写完后的 HEAD 就是 `610dcbd`。这三条与之前缺口 1/2/3/7 的提交一起，
+**全部只在本地 `develop`**，未新建分支、未 force push、未 push。
 
 ```
 $ git rev-parse HEAD
-5a53be07966187b10dbbd7113e222183953ce11b
+610dcbd7154c6cc82beadc283095d9cdc67e7667
 $ git rev-parse origin/develop
 2285a1617ae71be2b390832fa5f2af17be3889a2
 $ git rev-list --count origin/develop..HEAD
-24
+26
 $ git log --oneline origin/develop..HEAD
+610dcbd docs(final-close): 订正 9.9 的 pytest 跑法 —— 只隔离 HOME，附 AI_UPPER_HOME 泄漏时的红项
+db6885e docs(final-close): 缺口 8 收口 —— QuickStart 前后实测、逐块拆解与 CI 一致性核对
 5a53be0 feat(qml): 空态 QuickStart 卡片接真实角色数据 + 点击进会话
 9c09128 docs(final-close): 缺口 7 收口 —— 18 页对照表、扩展面板前后实测、四条硬判据
 6e84fbe feat(qml): 设置页扩展面板接上真实技能数据 + 逐页对照表脚本
@@ -1034,6 +1040,7 @@ b513d7c perf(markdown): 正文接管改用一次 insertFragment，不再重渲�
 
 `origin/develop` 停在 `2285a16`（`2026-11-17 16:52:15 +0800`，
 `fix(packaging): macOS 的默认 Controls 样式是独立模块目录，不能裁`）。
+上面 26 条提交，远端一条都没有。
 
 ### 10.2 HEAD 是否在远端被 CI 跑过
 
@@ -1042,8 +1049,8 @@ $ git branch -r --contains HEAD
 （空输出，rc=0）
 ```
 
-没有任何远端分支包含 `5a53be0`，也没有任何远端分支包含它之前的 23 个提交。
-也就是说，**远端 CI 从未见过这 24 个提交中的任何一个**。
+没有任何远端分支包含 `610dcbd`（本轮三提交中的第一条 `5a53be0` 同样为空）。
+也就是说，**远端 CI 从未见过这 26 个提交中的任何一个**。
 
 ```
 $ git fetch origin
@@ -1057,12 +1064,12 @@ gh: not found
 `git fetch` 失败、本机也没有 `gh` CLI，所以 **无法从本地读取 CI 记录**。
 本地缓存的 CI 证据（`out/ci-fix/run-*/run.json`、`out/ci-fix/*jobs*.json`，
 共 4 个 run + 11 个 job 文件，全部 2026-11-14，`conclusion` 全是 `failure`）
-里每个 `head_sha` 都已在 `origin/develop` 上——它们比这 24 个未推送提交**更早**，
+里每个 `head_sha` 都已在 `origin/develop` 上——它们比这 26 个未推送提交**更早**，
 不能用来证明 HEAD 的状态。
 
 ### 10.3 结论（直说）
 
-**未 push ⇒ CI 未闭合。** HEAD `5a53be0` 及其前 23 个提交都没有被 CI 验证过；
+**未 push ⇒ CI 未闭合。** HEAD `610dcbd` 及其前 25 个提交都没有被 CI 验证过；
 本地能看到的最后一轮 CI 是 2026-11-14 的失败记录，与这些提交无关。
 本轮验证全部来自本地：pytest（`46 passed` / `1267 passed, 5 skipped`）、
 18 页 QML 重拍（stderr 全 0）、点击进会话的 offscreen 真事件验证、逐区 AE 实测。
