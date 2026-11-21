@@ -4,6 +4,13 @@
 
 本轮三件事：① 打包链路接通并真跑；② 台账刷新；③ 全量测试。三件均已落盘并提交。
 
+> 2026-11-21 补注：本文是第六阶段（web 承载窗口时代）的历史收口报告，内容不改写。
+> 文中 `app/src/deva_web.py`、`mvvm/views/web_shell_window.py`、`app/assets/renderer`、
+> `app/tests/test_web_e2e_stream.py` 与 `QtWebEngine` 载荷核对项已随 QtWebEngine 移除
+> 一并删除，那些命令现在**无法重放**（实测：`strings dist/ai_upper/ai_upper | grep -c
+> "from deva_web import main"` → `0`）。当前入口是 `app/src/main.py` → `qml_shell.run()`，
+> 现行状态见 `out/qwebengine-remove/REPORT.md`。
+
 ---
 
 ## 一、三档清单（每项附验证方式）

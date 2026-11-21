@@ -1,0 +1,10 @@
+$ strings dist/ai_upper/ai_upper | grep -c "from deva_web import main"
+0
+$ strings dist/ai_upper/ai_upper | grep -c "from main import main"
+1
+$ ls app/tests/test_web_e2e_stream.py
+ls: cannot access 'app/tests/test_web_e2e_stream.py': No such file or directory
+$ ls app/src/deva_web.py app/src/mvvm/views/web_shell_window.py app/assets/renderer
+ls: cannot access 'app/src/deva_web.py': No such file or directory
+ls: cannot access 'app/src/mvvm/views/web_shell_window.py': No such file or directory
+ls: cannot access 'app/assets/renderer': No such file or directory

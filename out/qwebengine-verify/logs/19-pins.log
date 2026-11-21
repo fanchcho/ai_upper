@@ -1,0 +1,78 @@
+app/pyproject.toml.example:23:# "PySide6==6.11.0", "pyserial==3.5", "bleak==3.0.2", "qasync==0.28.0".
+app/pyproject.toml.example:57:# PySide6 ships manylinux_2_34 (x86_64) and manylinux_2_39 (aarch64) wheels, so
+app/pyproject.toml.example:63:# PySide2/PySide6 payload the bundle cannot honour, dropped instead of failing
+app/pyproject.toml.example:68:#   - the Windows wheels ship an ARM32 vccorlib140.dll, in the PySide2/PySide6
+app/pyproject.toml.example:74:#     PySide2/PySide6 and the shiboken2/shiboken6 wheel alike. The UCRT belongs
+app/pyproject.toml.example:80:    # macOS and Windows wheels use different PySide6 plugin/qml prefixes, and
+app/pyproject.toml.example:82:    "PySide6/plugins/sqldrivers/*qsqlibase*",
+app/pyproject.toml.example:83:    "PySide6/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml.example:84:    "PySide6/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml.example:85:    "PySide6/plugins/sqldrivers/*qsqloci*",
+app/pyproject.toml.example:86:    "PySide6/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml.example:87:    "PySide6/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml.example:88:    "PySide6/Qt/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml.example:89:    "PySide6/Qt/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml.example:90:    "PySide6/Qt/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml.example:91:    "PySide6/Qt/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml.example:92:    "PySide6/ucrtbase.dll",
+app/pyproject.toml.example:93:    "PySide6/vccorlib140.dll",
+app/pyproject.toml.example:96:    # The same wheel defects exist under the PySide2 prefix. Listing both
+app/pyproject.toml.example:98:    "PySide2/plugins/sqldrivers/*qsqlibase*",
+app/pyproject.toml.example:99:    "PySide2/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml.example:100:    "PySide2/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml.example:101:    "PySide2/plugins/sqldrivers/*qsqloci*",
+app/pyproject.toml.example:102:    "PySide2/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml.example:103:    "PySide2/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml.example:104:    "PySide2/Qt/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml.example:105:    "PySide2/Qt/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml.example:106:    "PySide2/Qt/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml.example:107:    "PySide2/Qt/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml.example:108:    "PySide2/ucrtbase.dll",
+app/pyproject.toml.example:109:    "PySide2/vccorlib140.dll",
+app/pyproject.toml.example:183:#                  PySide*/PyQt* 的 examples/include，
+app/pyproject.toml.example:184:#                  以及 PySide*/shiboken* 顶层的 scripts/support/doc/docs/lib
+app/pyproject.toml.example:185:#                  （PySide6/Qt/lib 是运行时库目录，不会被删除）；
+app/pyproject.toml.example:192:# `**/` 同时覆盖 Windows 平铺、PySide6/Qt、PyQt5/Qt5 和 PyQt6/Qt6 布局；
+app/pyproject.toml.example:199:#   python tools/build.py --trim-site "PySide2/translations/*.qm"
+app/pyproject.toml:23:# "PySide6==6.11.0", "pyserial==3.5", "bleak==3.0.2", "qasync==0.28.0".
+app/pyproject.toml:28:    # 只需要 QtCore/QtGui/QtWidgets/QtQml/QtQuick：Essentials 就够。元包 PySide6 会
+app/pyproject.toml:29:    # 拉进 PySide6-Addons（QtWebEngine 等整套 Chromium，约 240 MiB），本工程不用。
+app/pyproject.toml:30:    "PySide6-Essentials==6.11.2",
+app/pyproject.toml:74:# PySide6 ships manylinux_2_34 (x86_64) and manylinux_2_39 (aarch64) wheels, so
+app/pyproject.toml:80:# PySide2/PySide6 payload the bundle cannot honour, dropped instead of failing
+app/pyproject.toml:85:#   - the Windows wheels ship an ARM32 vccorlib140.dll, in the PySide2/PySide6
+app/pyproject.toml:91:#     PySide2/PySide6 and the shiboken2/shiboken6 wheel alike. The UCRT belongs
+app/pyproject.toml:97:    # macOS and Windows wheels use different PySide6 plugin/qml prefixes, and
+app/pyproject.toml:99:    "PySide6/plugins/sqldrivers/*qsqlibase*",
+app/pyproject.toml:100:    "PySide6/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml:101:    "PySide6/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml:102:    "PySide6/plugins/sqldrivers/*qsqloci*",
+app/pyproject.toml:103:    "PySide6/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml:104:    "PySide6/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml:105:    "PySide6/Qt/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml:106:    "PySide6/Qt/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml:107:    "PySide6/Qt/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml:108:    "PySide6/Qt/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml:109:    "PySide6/ucrtbase.dll",
+app/pyproject.toml:110:    "PySide6/vccorlib140.dll",
+app/pyproject.toml:113:    # The same wheel defects exist under the PySide2 prefix. Listing both
+app/pyproject.toml:115:    "PySide2/plugins/sqldrivers/*qsqlibase*",
+app/pyproject.toml:116:    "PySide2/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml:117:    "PySide2/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml:118:    "PySide2/plugins/sqldrivers/*qsqloci*",
+app/pyproject.toml:119:    "PySide2/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml:120:    "PySide2/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml:121:    "PySide2/Qt/plugins/sqldrivers/*qsqlmimer*",
+app/pyproject.toml:122:    "PySide2/Qt/plugins/sqldrivers/*qsqlodbc*",
+app/pyproject.toml:123:    "PySide2/Qt/plugins/sqldrivers/*qsqlpsql*",
+app/pyproject.toml:124:    "PySide2/Qt/qml/QtQuick/Shapes/DesignHelpers/*",
+app/pyproject.toml:125:    "PySide2/ucrtbase.dll",
+app/pyproject.toml:126:    "PySide2/vccorlib140.dll",
+app/pyproject.toml:200:#                  PySide*/PyQt* 的 examples/include，
+app/pyproject.toml:201:#                  以及 PySide*/shiboken* 顶层的 scripts/support/doc/docs/lib
+app/pyproject.toml:202:#                  （PySide6/Qt/lib 是运行时库目录，不会被删除）；
+app/pyproject.toml:209:# `**/` 同时覆盖 Windows 平铺、PySide6/Qt、PyQt5/Qt5 和 PyQt6/Qt6 布局；
+app/pyproject.toml:216:#   python tools/build.py --trim-site "PySide2/translations/*.qm"
+app/requirements.txt:5:# 界面只需要 QtCore/QtGui/QtWidgets/QtQml/QtQuick，全部在 PySide6-Essentials 里；
+app/requirements.txt:6:# 元包 PySide6 会连带装 PySide6-Addons（含 QtWebEngine 等整套 Chromium，约 240 MiB），
+app/requirements.txt:8:PySide6-Essentials==6.11.2

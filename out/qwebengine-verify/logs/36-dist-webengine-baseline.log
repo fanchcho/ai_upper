@@ -1,0 +1,17 @@
+### baseline dist WebEngine payload
+ dist/ai_upper/site-packages/PySide6/QtWebEngineWidgets.abi3.so
+ dist/ai_upper/site-packages/PySide6/QtWebEngineCore.abi3.so
+ dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_devtools_resources.pak
+ dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources.pak
+ dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources_100p.pak
+ dist/ai_upper/site-packages/PySide6/Qt/resources/qtwebengine_resources_200p.pak
+ dist/ai_upper/site-packages/PySide6/Qt/lib/libQt6WebEngineWidgets.so.6
+ dist/ai_upper/site-packages/PySide6/Qt/lib/libQt6WebEngineCore.so.6
+ dist/ai_upper/site-packages/PySide6/Qt/translations/qtwebengine_locales
+ dist/ai_upper/site-packages/PySide6/Qt/libexec/QtWebEngineProcess
+count=10
+
+522M	dist/ai_upper
+534860827	dist/ai_upper
+
+2.6G	.

@@ -1,0 +1,9 @@
+.github/workflows/validate.yml:63:            # PySide6 publishes no 32-bit Windows wheel, so this job proves the
+.github/workflows/validate.yml:78:            # PySide6 6.11 has no cp38 wheel. This job needs a GUI payload, and
+.github/workflows/validate.yml:80:            # (PySide6_Essentials 6.6.3.1 cp38-abi3-win_amd64; 6.7 moved its
+.github/workflows/validate.yml:81:            # floor to >=3.9). Essentials rather than the PySide6 meta-package,
+.github/workflows/validate.yml:84:            # drags in PySide6-Addons with its WebEngine payload.
+.github/workflows/validate.yml:112:            dependencies: '["PySide6-Essentials==6.6.3.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
+.github/workflows/validate.yml:227:          # x86_64. No Chromium runtime libraries: the application never
+.github/workflows/validate.yml:228:          # imported QtWebEngine, and that is the only thing that needed them.
+.github/workflows/validate.yml:246:      # PySide6. Installing the working copy's own requirement set here keeps

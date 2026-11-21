@@ -1,0 +1,38 @@
+$ .venv/bin/python -V
+Python 3.13.5
+$ .venv/bin/python -m pytest --version
+pytest 9.2.0
+$ .venv/bin/python -c "import PySide6; print(PySide6.__version__)"
+6.11.2
+$ /tmp/qwe-verify-venv/bin/python -V
+Python 3.14.9
+$ /tmp/qwe-verify-venv/bin/pip list
+annotated-types==0.8.0
+anyio==4.16.0
+certifi==2026.11.20
+cffi==2.1.1
+cryptography==46.0.3
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+jaraco.classes==3.4.0
+jaraco.context==6.1.2
+jaraco.functools==4.6.0
+jeepney==0.9.0
+keyring==25.7.0
+more-itertools==11.2.1
+pillow==13.0.0
+pip==26.2.2
+pycparser==3.12
+pydantic==2.14.3
+pydantic_core==2.50.4
+PySide6_Essentials==6.11.2
+SecretStorage==3.5.0
+shiboken6==6.11.2
+typing_extensions==4.16.0
+typing-inspection==0.4.5
+$ git describe --always --dirty
+v0.17.28-165-gb98d59e-dirty
+$ uname -m
+aarch64

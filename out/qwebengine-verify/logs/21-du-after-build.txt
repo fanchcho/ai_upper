@@ -1,0 +1,3 @@
+256M	dist/ai_upper
+256543291	dist/ai_upper
+261824	dist/ai_upper

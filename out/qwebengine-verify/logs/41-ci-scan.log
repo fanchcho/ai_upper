@@ -1,0 +1,13 @@
+$ grep -nE "^  [a-z0-9-]+:$" .github/workflows/validate.yml
+9:  push:
+11:  pull_request:
+16:  workflow_dispatch:
+19:  build-tool-compat:
+49:  native-integration:
+515:  aggregate-artifacts:
+
+$ grep -nE "test_web|web_shell|port_shots|port_run|renderer" .github/workflows/*.yml
+(0 hits)
+
+$ grep -rnE "AI_UPPER_UI" .github/ scripts/ tools/ app/ || true
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`

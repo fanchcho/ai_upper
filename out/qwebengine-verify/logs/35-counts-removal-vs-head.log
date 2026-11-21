@@ -1,0 +1,8 @@
+removal-end total: 1224 HEAD total: 1265
+  test_ci_tail.py: 12 -> 14 (+2)
+  test_markdown_body.py: 17 -> 23 (+6)
+  test_markdown_chunked.py: 0 -> 20 (+20)
+  test_markdown_document.py: 51 -> 58 (+7)
+  test_qml_shell.py: 35 -> 39 (+4)
+  test_qt_prune.py: 53 -> 54 (+1)
+  test_verify.py: 6 -> 7 (+1)

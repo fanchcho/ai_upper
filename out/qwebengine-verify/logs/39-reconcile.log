@@ -1,0 +1,33 @@
+$ git rev-parse --abbrev-ref HEAD
+develop
+
+$ git log --oneline -12
+b98d59e docs(render-opt4): attach 两个方向逐条证伪，代码未改
+3f01757 docs(render-opt3): 报告、全部探针与逐条日志证据
+90849cd test(markdown): 自适应判据、分组保真与热路径缓存的回归用例
+6d8e1ed perf(markdown): 自适应分块判据与渲染热路径缓存
+3d6b94a docs(render-opt2): 表格路径收益、attach 归因更正与全部探针数据
+c5b25df test(markdown): 表格逐行内容与逐格边框回归用例
+4aaa631 perf(markdown): 表格一次插满行，边框并入同一次 setFormat
+fb5cca8 docs(render-chunking): 分块渲染报告、长/短会话分开计时探针与截图证据
+e711a5f perf(markdown): 长文档改分块渲染，结构性插入的二次成本摊平成线性
+f7fef75 docs(conversation-picker): 报告补回归清单与未解决残留
+807923b docs(conversation-picker): 报告补修复后实测、保真度更正与截图证据
+ea75897 fix(markdown): 片段搬运后对齐 documentMargin，接管排版与直接渲染一致
+
+$ git status --porcelain | wc -l
+124
+
+$ git status --porcelain | grep -v "^?? out/" 
+(none — 除 out/ 下新增证据外工作区干净)
+
+$ git status --porcelain | grep "^ M" | wc -l
+0
+
+$ git diff --stat
+
+$ git diff --stat 1d53e4a..HEAD | tail -1
+ 364 files changed, 21933 insertions(+), 88480 deletions(-)
+
+$ git log --oneline 1d53e4a..HEAD | wc -l
+30

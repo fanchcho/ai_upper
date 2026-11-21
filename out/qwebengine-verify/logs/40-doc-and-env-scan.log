@@ -1,0 +1,34 @@
+$ grep -rn "AI_UPPER_UI" --include=* . (排除 out/ .git/ deva/ build/ dist/ .venv/)
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+
+$ grep -rn "web_shell_window\|title_bar_overlay\|DevaBridge\|renderer/" app/ docs/ README* 2>/dev/null
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+app/src/mvvm/services/attachments.py:14:八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+app/tests/test_qt_prune.py:966:    fallback still existed, ``web_shell_window`` imported it behind
+app/tests/test_mvvm.py:197:    was evaluated** are gone with the web entry: ``title_bar_overlay`` (the
+app/tests/test_mvvm.py:198:    frameless WebEngine window's own title bar), ``web_shell_window`` (the
+app/tests/test_mvvm.py:199:    QWebEngineView host) and the ``DevaBridge`` QObject inside
+app/tests/test_mvvm.py:216:    for gone in ("views.web_shell_window", "views.title_bar_overlay"):
+app/tests/test_settings_write.py:3:**为什么存在**：原 `app/tests/test_web_settings_write.py` 经已删除的 `DevaBridge`
+app/tests/test_host_write.py:3:**为什么存在**：原 `app/tests/test_web_chat_write.py` 经已删除的 `DevaBridge`
+app/tests/test_deliverables.py:15:删除的 `DevaBridge` 通道层不再是产品代码。
+docs/STAGE5-CLOSEOUT-REPORT.md:24:| 窗口几何与原版一致：1280×820，最小 940×600，无边框 | `app/src/mvvm/views/web_shell_window.py` |
+docs/STAGE5-CLOSEOUT-REPORT.md:25:| 自绘 `titleBarOverlay`：右上角 96×40 实色，三个 32×40 按钮 | `app/src/mvvm/views/title_bar_overlay.py` |
+docs/audit/IPC-158-LEDGER.md:5:> QtWebEngine 移除一并删除——它们统计的正是 `DevaBridge` 的 IPC 通道，而该桥对象
+docs/audit/qml-shell-audit.md:14:> 2026-11-17 更新：QtWebEngine 承载窗口、`DevaBridge` 通道层、React 渲染层资产
+docs/audit/qml-shell-audit.md:22:- 承载窗口：`app/src/mvvm/views/web_shell_window.py:120 class DevaWebWindow(QMainWindow)`，
+docs/audit/qml-shell-audit.md:24:  （`:195`），`QWebChannel` 注册 `DevaBridge`（`:184`），无边框 + `TitleBarOverlay`（`:200–207`）；
+docs/audit/qml-shell-audit.md:25:- 数据/事件：`app/src/mvvm/webui/bridge.py:62 class DevaBridge(QObject)`（789 行），
+docs/audit/qml-shell-audit.md:90:| 标题栏 | `app/src/mvvm/views/title_bar_overlay.py:38` `TitleBarOverlay(QWidget)` | `:27 TITLEBAR_HEIGHT = 40`、`:28 BUTTON_WIDTH = 32`；`:61` 三个按钮的矩形；`:98 paintEvent` 自绘最小化/最大化/关闭 |
+docs/audit/qml-shell-audit.md:98:  `web_shell_window.py:207 self.bridge.set_overlay_callback(self.overlay.set_dark)`，
+docs/audit/qml-shell-audit.md:242:| `app/tests/test_mvvm.py:199–228` | 遍历 `mvvm` 全部模块可导入；**已无豁免项**，另断言 `views.web_shell_window` / `views.title_bar_overlay` 两个文件不得回潮 |
+docs/audit/qml-shell-audit.md:357:   `web_shell_window.py`、`title_bar_overlay.py`、`DevaBridge`、`app/assets/renderer`、
+docs/BUILD-PROGRESS.md:30:?? app/src/mvvm/views/title_bar_overlay.py  ?? app/src/mvvm/views/web_shell_window.py
+docs/BUILD-PROGRESS.md:45:- `app/src/mvvm/views/web_shell_window.py`：QtWebEngine 承载，窗口几何与原版一致；
+docs/BUILD-PROGRESS.md:46:- `app/src/mvvm/views/title_bar_overlay.py`：自绘窗口控件，复刻 Electron Linux 的
+docs/BUILD-PROGRESS.md:164:| 写路径未接通 | 成立。`app/src/mvvm/webui/bridge.py` 只注册约 30 条只读通道；`chat:send`/`abort`/`create-session` 等 31 条 chat 通道**一条都没注册**；`web_shell_window.py` 没有 store/gateway/tools/VM 装配 | `bridge.py:136-172`（`_register_defaults`）、`web_shell_window.py:68-129`（构造里只建 bridge） |
+docs/BUILD-PROGRESS.md:576:| `app/src/mvvm/views/web_shell_window.py`（改） | 构造里建 `WorkspaceGuard`、按 `DEVA_APP_WORKSPACE` 登记受信根、装配宿主与网关、注入桥；`DRAIN_INTERVAL_MS=50` 定时调 `host.drain` | `:97-127`、`:157-162` |
+docs/BUILD-PROGRESS.md:863:| 调用点 | `web_shell_window.py`、`persona_store.py` | `ASSETS_DIR = assets_root() / "renderer"`；角色资产走 `assets_root() / "personas"` |
+docs/BUILD-PROGRESS.md:977:  且被 `views/web_shell_window.py:139` 与端口启动器共用。
+docs/BUILD-PROGRESS.md:979:  `web_shell_window.py:135-138` 与 `assembly.py:87-92` 里已有实现，未随目录丢失。

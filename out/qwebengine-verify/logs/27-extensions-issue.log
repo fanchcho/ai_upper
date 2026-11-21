@@ -1,0 +1,1 @@
+app/src/qml/SettingsModal.qml:372:                text: shellBridge ? shellBridge.extensionsSummary() : ""

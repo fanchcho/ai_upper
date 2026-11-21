@@ -1,0 +1,25 @@
+$ find dist/ai_upper \( -name "*QtWebEngine*" -o -name "*QtWebChannel*" -o -name "QtWebEngineProcess" -o -name "qtwebengine*" -o -name "*qwebchannel*" \) | wc -l
+0
+
+$ ls dist/ai_upper
+ai_upper
+assets
+bundle
+data
+personas
+runtime
+site-packages
+
+$ ls dist/ai_upper/assets
+personas
+qml
+
+$ ls dist/ai_upper/site-packages/PySide6/*.so
+dist/ai_upper/site-packages/PySide6/QtCore.abi3.so
+dist/ai_upper/site-packages/PySide6/QtGui.abi3.so
+dist/ai_upper/site-packages/PySide6/QtNetwork.abi3.so
+dist/ai_upper/site-packages/PySide6/QtOpenGL.abi3.so
+dist/ai_upper/site-packages/PySide6/QtQml.abi3.so
+dist/ai_upper/site-packages/PySide6/QtQuick.abi3.so
+dist/ai_upper/site-packages/PySide6/QtQuickControls2.abi3.so
+dist/ai_upper/site-packages/PySide6/QtWidgets.abi3.so

@@ -1,0 +1,16 @@
+tools/ai_upper/third_party.py:316:    (``Qt/libexec/QtWebEngineProcess``); the rule stays generic because any
+tools/ai_upper/qt_prune.py:3:A PySide6 install ships every Qt module, and QtWebEngineCore alone is roughly
+tools/ai_upper/qt_prune.py:88:    win_arm64 wheels ship no QtWebEngineCore at all (and PySide6-Essentials
+tools/ai_upper/qt_prune.py:474:    "QtWebEngineCore": {"webview"},
+tools/ai_upper/qt_prune.py:499:# every bundle that shipped QtWebEngineCore. It belongs to that module the same
+tools/ai_upper/qt_prune.py:593:# therefore has to ship beside it. ``QtWebEngineProcess`` is dlopen'd by
+tools/ai_upper/qt_prune.py:594:# QtWebEngineCore when the view attaches: a bundle that keeps the module but
+tools/ai_upper/qt_prune.py:598:MODULE_HELPERS = {"QtWebEngineProcess": "QtWebEngineCore"}
+tools/ai_upper/qt_prune.py:657:        helpers=(pyside / "QtWebEngineProcess.exe",),
+tools/ai_upper/qt_prune.py:851:    QtWebEngineCore for win_arm64), it is reported and skipped instead of
+tools/ai_upper/qt_prune.py:1118:    # whole directory took `QtWebEngineProcess` with it, so a bundle that kept
+tools/ai_upper/qt_prune.py:1119:    # QtWebEngineCore shipped without the process it spawns to render a page:
+tools/ai_upper/qt_prune.py:1155:    # QtWebEngineCore alone, so they go whenever that module is not imported.
+tools/ai_upper/qt_prune.py:1159:    if "QtWebEngineCore" not in modules:
+tools/ai_upper/qt_prune.py:1255:                if "QtWebEngineCore" not in modules:
+.github/workflows/validate.yml:228:          # imported QtWebEngine, and that is the only thing that needed them.

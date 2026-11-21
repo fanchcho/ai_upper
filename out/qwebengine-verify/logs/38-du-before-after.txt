@@ -1,0 +1,54 @@
+# du 前后对比（本次会话独立重建，均为 linux-arm64 全量构建）
+# baseline tree = /tmp/qwe-baseline-src @ 1d53e4a，pyproject 用 PySide6==6.11.2
+# HEAD tree      = /home/agent/shared_workspace/ai_upper @ b98d59e
+# 构建命令(两侧相同)：PATH=.venv/bin:$PATH python tools/build.py --target linux-arm64
+# 日志：25-build-baseline.log(删前) / 13-build-head.log(删后)，两侧均 EXIT=0
+
+## 删前 (baseline)
+$ du -sh /tmp/qwe-baseline-src/dist/ai_upper
+522M
+$ du -sb /tmp/qwe-baseline-src/dist/ai_upper          # 构建结束 immediately after READY
+534860827
+$ du -sb /tmp/qwe-baseline-src/dist/ai_upper          # 启动实测之后（launcher 把 AI_UPPER_HOME 指向 entry_dir，写出了 chats）
+534892534
+$ du -sh /tmp/qwe-baseline-src/dist/ai_upper/site-packages/PySide6
+406M
+$ find /tmp/qwe-baseline-src/dist/ai_upper -iname '*WebEngine*' | wc -l
+10        # 清单见 36-dist-webengine-baseline.log
+
+## 删后 (HEAD)
+$ du -sh dist/ai_upper
+256M
+$ du -sb dist/ai_upper
+256543291
+$ du -sh dist/ai_upper/site-packages/PySide6
+144M
+$ find dist/ai_upper -iname '*WebEngine*' | wc -l
+0
+
+## 差值
+du -sh : 522M  -> 256M          (−266M)
+du -sb : 534860827 -> 256543291 (−278317536 B = −265.4 MiB)
+PySide6 子树 : 406M -> 144M     (−262M，即 Addons 里 WebEngine/Chromium 的载荷)
+
+# Qt pruning 阶段自身打印的释放量
+# baseline 25-build-baseline.log:106  Qt pruning: removed 496 file(s) and 141 director(ies), freed 258 MB
+# HEAD     13-build-head.log:98      Qt pruning: removed 232 file(s) and  87 director(ies), freed 100 MB
+# 差 158 MB 即基线里被 prune 判定为「无 import」却又随 PySide6 元包落地、
+# 随后在此基线上被更激进的 prune 规则放过的那部分（见 36 号日志的实际残留清单）。
+
+# 基线残留 WebEngine 载荷实际占用（10 个路径合计）
+# $ find dist/ai_upper -iname '*WebEngine*' -print0 | du -ch --files0-from=- | tail -1
+# 240M    total
+# 明细：
+#   182M  Qt/lib/libQt6WebEngineCore.so.6
+#   2.4M  Qt/resources/qtwebengine_resources.pak
+#   44M   Qt/translations/qtwebengine_locales（53 个 .pak）
+#   12M   Qt/resources/qtwebengine_devtools_resources.pak
+#   196K  Qt/lib/libQt6WebEngineWidgets.so.6
+#   148K  Qt/resources/qtwebengine_resources_100p.pak
+#   196K  Qt/resources/qtwebengine_resources_200p.pak
+#   688K  QtWebEngineCore.abi3.so (Python 绑定)
+#   200K  QtWebEngineWidgets.abi3.so
+#   132K  Qt/libexec/QtWebEngineProcess
+# 该 240M 与 522M→256M 的 −266M 基本吻合（余下 26M 来自 prune 在两头都会删的其它插件/qml 模块差异）。

@@ -1,0 +1,39 @@
+### 1) 可执行代码里的 WebEngine import（AST，非 grep）
+$ python /tmp/ast_scan.py app/src tools scripts launcher
+scanned py files: 123
+webengine/webchannel imports: 0
+
+### 2) 全仓 grep（排除 out/ .git/ build/ dist/ .venv/ deva/），按文件计数
+$ grep -rnE "QtWebEngine|QtWebChannel|web_shell_window|DevaBridge|AI_UPPER_UI" --exclude-dir=... . | cut -d: -f1 | sort | uniq -c | sort -rn
+     43 ./app/tests/test_qt_prune.py
+     25 ./docs/BUILD-PROGRESS.md
+     14 ./tools/ai_upper/qt_prune.py
+     10 ./docs/audit/qml-shell-audit.md
+      9 ./docs/STAGE6-CLOSEOUT-REPORT.md
+      6 ./docs/STAGE5-CLOSEOUT-REPORT.md
+      4 ./docs/ROADMAP-NEXT.md
+      4 ./CHANGELOG.md
+      3 ./docs/audit/IPC-158-LEDGER.md
+      3 ./app/tests/test_third_party.py
+      3 ./app/tests/test_mvvm.py
+      2 ./docs/DEVELOPMENT_GUIDE.md
+      2 ./app/tests/test_settings_write.py
+      2 ./app/tests/test_host_write.py
+      2 ./app/pyproject.toml
+      2 ./README.md
+      1 ./tools/ai_upper/third_party.py
+      1 ./app/tests/test_deliverables.py
+      1 ./app/src/mvvm/webui/bridge.py
+      1 ./app/src/mvvm/services/attachments.py
+      1 ./app/src/main.py
+      1 ./app/requirements.txt
+      1 ./app/pyproject.toml.example
+      1 ./HISTORY.md
+      1 ./.github/workflows/validate.yml
+
+### 3) 其中在 app/src（产品代码运行期）的命中
+$ grep -rnE "QtWebEngine|QtWebChannel|web_shell_window|DevaBridge|AI_UPPER_UI" app/src
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+app/src/mvvm/services/attachments.py:14:八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+count=3

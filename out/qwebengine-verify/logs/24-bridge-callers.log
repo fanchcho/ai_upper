@@ -1,0 +1,20 @@
+app/src/mvvm/webui/host.py:46:from mvvm.webui.bridge import BridgeError, display_messages
+app/src/mvvm/webui/bridge.py:8:- `display_messages`：把落盘消息转换成展示形状（合并 assistant 段、回填工具卡状态、
+app/src/mvvm/webui/bridge.py:30:def display_messages(
+app/src/mvvm/webui/bridge.py:139:    "display_messages",
+app/src/mvvm/webui/host.py:46:from mvvm.webui.bridge import BridgeError, display_messages
+app/src/mvvm/webui/host.py:360:            first = next((m for m in display_messages(session.messages) if m.get("role") == "user"
+app/src/mvvm/webui/host.py:415:        return display_messages(messages)
+app/src/mvvm/webui/host.py:504:        messages = display_messages(session.messages) if session is not None else []
+app/src/mvvm/webui/host.py:588:    再用 `display_messages` 转换，`index_base` 取它在整份记录里的下标——这样图片 ref
+app/src/mvvm/webui/host.py:594:    displayed = display_messages([synthetic], index_base=len(stored))
+app/src/mvvm/view_models/chat_vm.py:283:        self.transcript_property.set_value(_display_messages(session.messages))
+app/src/mvvm/view_models/chat_vm.py:761:def _display_messages(messages: list[Message]) -> list[dict[str, Any]]:
+app/src/qml_shell_sessions.py:26:from mvvm.services.deliverables import delivered_paths
+app/src/qml_shell.py:35:from mvvm.services.deliverables import open_item, reveal
+app/src/qml_shell.py:622:        from mvvm.services.deliverables import delivered_paths
+app/src/qml_shell.py:631:        from mvvm.services.deliverables import delivered_paths
+app/src/qml_shell.py:885:    # mvvm/services/deliverables.py 的 `_icon_data_url`）。
+app/src/mvvm/services/deliverables.py:35:# `deva/apps/desktop/src/main/services/deliverables.ts:17-34`。
+app/src/mvvm/services/transcript_parts.py:12:  取（见 `mvvm/services/deliverables.py` 文件头的安全不变式），大小按磁盘现算，
+app/src/mvvm/services/transcript_parts.py:27:from mvvm.services.deliverables import delivered_paths, is_openable

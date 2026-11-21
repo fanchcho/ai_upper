@@ -1,0 +1,3 @@
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+app/src/mvvm/services/attachments.py:14:八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的

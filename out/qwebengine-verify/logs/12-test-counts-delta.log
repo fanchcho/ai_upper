@@ -1,0 +1,24 @@
+baseline total: 1256 files: 60
+head total    : 1265 files: 58
+
+--- files only in baseline (deleted) ---
+  test_web_attachments.py: 26
+  test_web_chat_write.py: 23
+  test_web_e2e_stream.py: 1
+  test_web_settings_write.py: 30
+  test_web_shell_modules.py: 20
+
+--- files only in head (added) ---
+  test_host_write.py: 26
+  test_markdown_chunked.py: 20
+  test_settings_write.py: 30
+
+--- changed counts ---
+  test_ci_tail.py: 12 -> 14 (+2)
+  test_deliverables.py: 29 -> 26 (-3)
+  test_markdown_body.py: 17 -> 23 (+6)
+  test_markdown_document.py: 51 -> 58 (+7)
+  test_qml_chat_files.py: 25 -> 40 (+15)
+  test_qml_shell.py: 35 -> 39 (+4)
+  test_qt_prune.py: 53 -> 54 (+1)
+  test_verify.py: 6 -> 7 (+1)

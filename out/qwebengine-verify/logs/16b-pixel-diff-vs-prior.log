@@ -1,0 +1,18 @@
+chat.png                 bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+ctx-menu.png             bbox=(289, 70, 296, 780) changed_px=420 (0.040%) max_channel_delta=(0, 109)
+dark-chat.png            bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 82)
+delete-confirm.png       bbox=(289, 70, 296, 780) changed_px=420 (0.040%) max_channel_delta=(0, 63)
+empty.png                identical
+first-run.png            identical
+focus-composer.png       bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+hover-thread.png         bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+long-bottom.png          bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+long-mid.png             bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+model-picker.png         bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+search-none.png          bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+search-open.png          bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+search-results.png       bbox=(289, 70, 296, 780) changed_px=490 (0.047%) max_channel_delta=(0, 109)
+settings-about.png       bbox=(289, 70, 296, 780) changed_px=131 (0.012%) max_channel_delta=(0, 63)
+settings-extensions.png  bbox=(289, 70, 296, 780) changed_px=131 (0.012%) max_channel_delta=(0, 63)
+settings-general.png     bbox=(289, 70, 296, 780) changed_px=131 (0.012%) max_channel_delta=(0, 63)
+settings-models.png      bbox=(289, 70, 296, 780) changed_px=131 (0.012%) max_channel_delta=(0, 63)

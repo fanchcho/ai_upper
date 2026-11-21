@@ -1,11 +1,12 @@
 # QtWebEngine 移除结项报告（方案 1：唯一界面 = QML 壳 + QTextDocument）
 
-- 日期：2026-11-17
+- 日期：2026-11-17（**2026-11-21 在 HEAD `b98d59e` 上复验，见 §9**）
 - 分支：`develop`（**只在本地提交，未 push、未建分支**）
 - 基线：`1d53e4a`（移除前最后一个提交）
 - 舞台提交：`a191a9c` → `749d407` → `0b02bd1` → `6f02994` → `e725c8d` → `7ce85fa` → `4bea1ba`
   → `0433783`（本轮补测）
-- 证据目录：`out/qwebengine-remove/logs/`（原始命令输出）、`out/qwebengine-remove/shots/`（18 张实拍 PNG）
+- 证据目录：`out/qwebengine-remove/logs/`（原始命令输出）、`out/qwebengine-remove/shots/`（18 张实拍 PNG）；
+  2026-11-21 复验证据在 `out/qwebengine-verify/`（`logs/01…46`、`shots/`）
 - 口径：**每条结论都附真实命令与输出**。没做到的直接写「未完成 + 原因」，不拿对账当成果。
 - 本报告**不主张启动变快**。收益是**包体与依赖面收敛**；首帧耗时未测，见 §5.3。
 
@@ -21,6 +22,12 @@
 本轮再补 15），**新增失败 0**；
 QML 壳 offscreen 实跑打印 `QML OK … size=1280x820`，18 个页面截图 rc 全 0，5 张对比页与基线
 **逐像素一致**（md5 相同）。
+
+**2026-11-21 复验**（HEAD `b98d59e`）：以上每一条都重新跑了一遍，结论全部成立。
+复验期新增数据：删前产物独立重建 522M / 240M WebEngine 载荷 / `EXIT=0`，删后 256M / 命中 0 /
+`QML OK` `EXIT=0`；两侧首屏截图 md5 相同；pytest 基线 1250P/6S → 移除完成点 1219P/5S →
+今天 HEAD **1260P/5S**，新增失败 0。复验发现的唯一实质问题是
+`docs/STAGE6-CLOSEOUT-REPORT.md` 缺历史台账注（原文 §5.1 声称已加），已补。详见 §9。
 
 ---
 
@@ -751,7 +758,8 @@ HEAD 里只剩 `:84` 与 `:218` 两处**注释**（解释为什么不用 Addons�
 | `docs/DEVELOPMENT_GUIDE.md` | 三处 pin 示例改 Essentials；§9.3 补「本应用只声明 Essentials，Addons 根本不会被下载」；§9.5 补「（两者只有 Addons 才带，本应用不再声明它）」 |
 | `docs/ROADMAP-NEXT.md` | R1「补 Web 层覆盖」→「补 QML 页面覆盖」；R3 记明 `test_web_e2e_stream.py` 已删、当前无真 provider 自动化入口；R12 删掉「改用 `QWebEngineView.grab()`」这条已不可能的退路；§414 改为「本工程已彻底移除 QtWebEngine」 |
 | `docs/BUILD-PROGRESS.md` | 顶部加「2026-11-17 注：本文件是历史台账」+ 指向本报告的说明 |
-| `docs/STAGE5-CLOSEOUT-REPORT.md` / `docs/STAGE6-CLOSEOUT-REPORT.md` | 同样加历史台账说明 |
+| `docs/STAGE5-CLOSEOUT-REPORT.md` | 顶部加历史台账说明 |
+| `docs/STAGE6-CLOSEOUT-REPORT.md` | **当时漏了**（此处原文写「同样加历史台账说明」与事实不符，2026-11-21 复验发现并已补，见 §9.6） |
 | `docs/audit/IPC-158-LEDGER.md` | 顶部说明「通道统计对象 `DevaBridge` 已删」 |
 | `docs/audit/qml-shell-audit.md` | §4.5 覆盖表去掉已删用例，补 QML 附件/交付用例行，截图入口改正 |
 | `scripts/parity/deva_original_shots.sh` | 去掉 `AI_UPPER_UI` 相关传参 |
@@ -792,7 +800,7 @@ app/tests/test_qml_chat_files_ui.py:3:这条链路与 web 入口共用同一份�
 | 2 | 依赖面 | **完成（CI 实跑未验证）** | pin 差异见 `pin-diff.log`；纯 Essentials venv 7 个模块导入 OK、`QtWebEngineWidgets` ImportError；9 个 wheel 中央目录 6/6 QML 谓词全 YES；7 个发布目标逐行说明均不需 Addons；**未验证**：本轮 HEAD 未触发真实 CI（`e2b9392` 不含本轮删除提交） |
 | 3 | 打包链 | **完成** | `build-final3.log` EXIT=0；`Qt pruning: … freed 100 MB`；`du` 522M→256M；`find` WebEngine/WebChannel/Process/locales 命中 **0**；产物实跑 `QML OK … size=1280x820` EXIT=0 |
 | 4 | 用例与 CI | **完成（2 处缺口已如实记）** | pytest 1250P/6S → **1219P/5S**（删 100 / 补 56 / 再补 15），`EXIT=0`，新增失败 0，算式 `1256-100+56-3=1209` 与 `1219=1204+15`；5 个被删文件逐条给出覆盖损失；附件限额文案**本轮已补齐 15 条**；仍缺 `profile:*`（能力缺失）与真 provider E2E，写明原因 |
-| 5 | 文档 | **完成** | 9 个文件 +83/−55；「`AI_UPPER_UI=web` 启动」类**可执行指令 0 条**；四条历史台账加了「不改写」的顶部说明；ROADMAP 三处与现状对齐 |
+| 5 | 文档 | **完成（2026-11-21 修正一处）** | 9 个文件 +83/−55；「`AI_UPPER_UI=web` 启动」类**可执行指令 0 条**；四条历史台账加了「不改写」的顶部说明；ROADMAP 三处与现状对齐。**更正**：`STAGE6-CLOSEOUT-REPORT.md` 当时**没有**加注（本条原写「已加」），2026-11-21 复验时补上，见 §9.6 |
 
 ### 6.1 明确「未完成 + 原因」
 
@@ -803,7 +811,7 @@ app/tests/test_qml_chat_files_ui.py:3:这条链路与 web 入口共用同一份�
 | 真 provider 端到端用例 | **未完成** | 需真 key，本环境没有；写了也只能 skip |
 | 本轮 HEAD 的 GitHub CI 实跑 | **未验证** | 硬约束「不 push」，无法触发；只有 wheel 级静态验证 |
 | 首帧启动耗时对比 | **未测** | 无基线对照实验，不给编造数字 |
-| `SettingsModal.qml:372` 的 `extensionsSummary` TypeError | **未修（基线既有）** | 不在授权范围；已在 §1.4 标注为**非本轮引入** |
+| `SettingsModal.qml:372` 的 `extensionsSummary` TypeError | **未修（基线既有）** | 不在授权范围；已在 §1.4 标注为**非本轮引入**。2026-11-21 复验仍未修，结论不变（`out/qwebengine-verify/logs/27-extensions-issue.log`） |
 
 ---
 
@@ -860,3 +868,277 @@ e725c8d perf(sessions): 列表首屏批量载入，目录只扫一遍
 | `shots-reltime-diff-explained.txt` | 多轮 HEAD 截图的 6px 竖带差异归因（相对时间标签） |
 | `deleted-test-counts.log` | 5 个被删文件的用例数（AST） |
 | `../shots/*.png` | 18 张 offscreen 实拍 PNG（1280×820） |
+
+---
+
+# 9. 复验（2026-11-21，HEAD `b98d59e`）
+
+本节不是重做一遍删除，而是**在今天的 HEAD 上独立复验**上文的结论。上文写于 2026-11-17
+（HEAD `0433783`/`4db9671`），此后 `develop` 又前进到 `b98d59e`（渲染优化若干提交）。
+复验的目的只有一个：**确认删除结论没有被后续提交悄悄推翻**。
+
+全部原始输出在 `out/qwebengine-verify/logs/`（编号即下文引用号），截图在
+`out/qwebengine-verify/shots/`。环境：`aarch64`、Python 3.13.5、pytest 9.2.0、
+PySide6 6.11.2（`logs/46-env-facts.log`）。
+
+## 9.1 对账（复验时的真实工作区状态）
+
+```
+$ git rev-parse --abbrev-ref HEAD
+develop
+$ git describe --always --dirty
+v0.17.28-165-gb98d59e-dirty
+$ git status --porcelain | grep -v '^?? out/'
+(none — 除 out/ 下新增证据外工作区干净)
+$ git status --porcelain | grep -c '^ M'
+0
+$ git diff --stat
+（空）
+$ git diff --stat 1d53e4a..HEAD | tail -1
+ 364 files changed, 21933 insertions(+), 88480 deletions(-)
+$ git log --oneline 1d53e4a..HEAD | wc -l
+30
+```
+
+（`logs/39-reconcile.log`）基线 `1d53e4a` 到 HEAD 共 30 个提交，其中 8 个属于本次移除
+（§7 的提交清单），其余 22 个是 `e725c8d` 之后不同主题的渲染/会话优化。工作区除 `out/`
+下本轮新增的证据目录外**没有任何改动**，没有覆盖任何已完成的工作。
+
+## 9.2 依赖面：pin、纯 Essentials 实跑、7 平台
+
+pin 与 2026-11-17 一致，未再变更（`logs/17-pin-diff.log` 是相对 `1d53e4a` 的 diff，只有
+`PySide6==6.11.2` → `PySide6-Essentials==6.11.2` 一行 + 3 行注释；`app/pyproject.toml` 的值
+见 `logs/19-pins.log:30`）。**本次复验没有改动任何 pin。**
+
+纯 Essentials 环境（`/tmp/qwe-verify-venv`，`pip list` 里只有 `PySide6_Essentials==6.11.2`
+与 `shiboken6==6.11.2`，**没有** `PySide6` 元包、**没有** `PySide6_Addons`）：
+
+```
+$ /tmp/qwe-verify-venv/bin/python -V
+Python 3.14.9
+ok  PySide6.QtCore / …/QtCore.abi3.so
+ok  PySide6.QtGui / …/QtGui.abi3.so
+ok  PySide6.QtWidgets / …/QtWidgets.abi3.so
+ok  PySide6.QtQml / …/QtQml.abi3.so
+ok  PySide6.QtQuick / …/QtQuick.abi3.so
+ok  PySide6.QtSvg / …/QtSvg.abi3.so
+ok  PySide6.QtNetwork / …/QtNetwork.abi3.so
+absent QtWebEngineWidgets -> ModuleNotFoundError No module named 'PySide6.QtWebEngineWidgets'
+absent QtWebEngineCore -> ModuleNotFoundError No module named 'PySide6.QtWebEngineCore'
+absent QtWebEngineQuick -> ModuleNotFoundError No module named 'PySide6.QtWebEngineQuick'
+absent QtWebChannel -> ModuleNotFoundError No module named 'PySide6.QtWebChannel'
+PySide6_Addons present: False
+meta PySide6 present: False
+```
+
+（`logs/03-essentials-imports.log`）同一 venv 里 QML 壳实跑（`AI_UPPER_HOME=/tmp/qwe-verify-home`）：
+
+```
+QML OK platform=offscreen title='Deva' sessions=0 active='' plain=False turn_stop='' deltas=0 \
+  home=/tmp/qwe-verify-home png=/tmp/qwe-verify-ess.png size=1280x820
+```
+
+（`logs/04-essentials-launch.log`；该 venv 额外装了 `pillow` 用于截图比对，与 Qt 依赖无关。）
+这张 `/tmp/qwe-verify-ess.png` 的 md5 与 HEAD 产物启动图、基线产物启动图**三者完全相同**
+（`dbdddec9793656631b9041db4d2b3030`），即首屏在删前/删后/纯 Essentials 三种环境里逐字节一致。
+
+7 平台矩阵复核（`logs/28-pypi-wheels.log`，PyPI 文件列表的真实输出）：`PySide6-Essentials
+6.11.2` 有 macOS universal2 / manylinux_2_34 x86_64 / manylinux_2_39 aarch64 / win_amd64 /
+win_arm64 五个 wheel，`6.6.3.1`（py38 行）有 cp38-abi3 的四个。**没有哪一行因为缺 Essentials
+而必须回到 Addons**；py38 行用的是 `PySide6-Essentials==6.6.3.1`，已在 `validate.yml:112`
+（`logs/20-ci.log`）。**本次复验未触发真实 CI**（约束「不 push」），见 §9.7。
+
+## 9.3 代码面：没有第二条界面路线
+
+```
+$ python ast_scan.py app/src tools scripts launcher
+scanned py files: 123
+webengine/webchannel imports: 0
+```
+
+（`logs/44-final-scan.log` 第 1 段；全仓含 tests 的版本是 `logs/02-ast-imports.log`：190 个 py 文件、0 命中。）
+
+`app/src` 里只剩 3 行**注释/docstring**提到旧结构，没有一行可执行：
+
+```
+$ grep -rnE 'QtWebEngine|QtWebChannel|web_shell_window|DevaBridge|AI_UPPER_UI' app/src
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 `mvvm.views.web_shell_window`
+app/src/mvvm/services/attachments.py:14:八条渲染层通道，它们唯一的调用方是已删除的 `DevaBridge`（QtWebChannel）。QML 壳不走
+app/src/mvvm/webui/bridge.py:3:本模块原先还承载 QtWebChannel 的桥对象（`DevaBridge`），把原版渲染层的
+count=3
+```
+
+（`logs/44-final-scan.log` 第 3 段）`AI_UPPER_UI` 全仓只剩 `main.py:8` 这一句历史注释
+（`logs/40-doc-and-env-scan.log`、`logs/14-ui-env.log`、`logs/15-dead-instructions.log`）。
+
+仍在被 QML 壳使用的两条能力**没有被连带删除**（`logs/24-bridge-callers.log`）：
+`mvvm.webui.bridge.display_messages` 被 `mvvm/webui/host.py:46` 导入、用于 `:360/:415/:504/:594`；
+`mvvm.services.deliverables` 被 `qml_shell.py:35`、`qml_shell_sessions.py:26`、`transcript_parts.py:27` 导入。
+`BridgeError` 同样在 `host.py:46` 被使用。
+
+## 9.4 打包链：本次会话两边各重建一次
+
+两侧同命令、同 target，都是独立全量构建：
+
+```
+# 删后（HEAD b98d59e）
+$ PATH="$PWD/.venv/bin:$PATH" .venv/bin/python tools/build.py --target linux-arm64
+Qt pruning: removed 232 file(s) and 87 director(ies), freed 100 MB
+SMOKE PASS 6 modules (launcher registers merged bundles)
+SMOKE PASS launcher
+READY: /home/agent/shared_workspace/ai_upper/dist/ai_upper
+EXIT=0
+```
+
+（`logs/13-build-head.log`）
+
+```
+# 删前（/tmp/qwe-baseline-src @ 1d53e4a，pyproject 用 PySide6==6.11.2）
+Qt pruning: removed 496 file(s) and 141 director(ies), freed 258 MB
+SMOKE PASS 6 modules (launcher registers merged bundles)
+SMOKE PASS launcher
+READY: /tmp/qwe-baseline-src/dist/ai_upper
+EXIT=0
+```
+
+（`logs/25-build-baseline.log`）
+
+体积（`logs/38-du-before-after.txt`）：
+
+| | 删前 (1d53e4a) | 删后 (HEAD) | 差 |
+|---|---|---|---|
+| `du -sh dist/ai_upper` | 522M | 256M | −266M |
+| `du -sb dist/ai_upper` | 534860827 | 256543291 | −278317536 B = −265.4 MiB |
+| `du -sh site-packages/PySide6` | 406M | 144M | −262M |
+| `find … -iname '*WebEngine*' \| wc -l` | **10** | **0** | −10 |
+
+删前那 10 条残留（`logs/36-dist-webengine-baseline.log`）合计 240M，明细里最大的是
+`Qt/lib/libQt6WebEngineCore.so.6` 182M、`qtwebengine_locales` 44M、`qtwebengine_devtools_resources.pak` 12M。
+（这与 2026-11-17 报告的 522M→256M 完全一致；本次是**重新跑出来的**，不是抄。）
+
+删后产物清点（`logs/42-head-dist-inventory.log`）：
+
+```
+$ find dist/ai_upper \( -name '*QtWebEngine*' -o -name '*QtWebChannel*' -o -name 'QtWebEngineProcess' \
+    -o -name 'qtwebengine*' -o -name '*qwebchannel*' \) | wc -l
+0
+$ ls dist/ai_upper/assets
+personas
+qml
+$ ls dist/ai_upper/site-packages/PySide6/*.so
+QtCore QtGui QtNetwork QtOpenGL QtQml QtQuick QtQuickControls2 QtWidgets   （8 个，全是 Essentials 的）
+```
+
+两条产物都实跑了，**都打印 QML OK**：
+
+```
+# 删后产物
+QML OK … deltas=0 home=/home/agent/shared_workspace/ai_upper/dist/ai_upper png=/tmp/qwe-verify-pack2.png size=1280x820
+EXIT=0                                                                    （logs/23-packaged-launch.log）
+
+# 删前产物（对照）
+QML OK … deltas=0 home=/tmp/qwe-baseline-src/dist/ai_upper png=/tmp/qwe-baseline-launch.png size=1280x820
+EXIT=0                                                                    （logs/37-baseline-packaged-launch.log）
+```
+
+两张截图 md5 相同（`dbdddec9793656631b9041db4d2b3030`）。即：**删掉的 240M 载荷，一个像素都没用到。**
+
+## 9.5 用例与 CI
+
+```
+$ cd app && env -u AI_UPPER_HOME -u DEVA_HOME ../.venv/bin/python -m pytest tests -q
+1260 passed, 5 skipped in 29.26s
+EXIT=0
+```
+
+（`logs/45-pytest-final.log`；skip 原因逐条见 `logs/26-pytest-skips.log`：2 条 Windows-only、
+2 条需 `AI_UPPER_E2E=1`、1 条需 cc/patchelf/readelf。）
+
+三次全量计数并列：
+
+| 树 | passed | skipped | 出处 |
+|---|---|---|---|
+| 基线 `1d53e4a` | 1250 | 6 | `logs/06-pytest-baseline.log` |
+| 移除完成点 `4db9671` | 1219 | 5 | `logs/34-pytest-at-removal-end.log` |
+| 今天 HEAD `b98d59e` | **1260** | **5** | `logs/45-pytest-final.log` |
+
+`4db9671 → HEAD` 的 +41 条全部来自后续渲染/会话工作，逐文件差额：
+`test_ci_tail +2`、`test_markdown_body +6`、`test_markdown_chunked +20`、`test_markdown_document +7`、
+`test_qml_shell +4`、`test_qt_prune +1`、`test_verify +1`（`logs/35-counts-removal-vs-head.log`）。
+**新增失败 0**；三次运行 `EXIT=0`。
+
+替代用例单独跑：`173 passed in 1.45s`（`logs/33-replacement-tests.log`，覆盖
+`test_host_write.py` / `test_settings_write.py` / `test_qml_chat_files*.py`）。
+
+CI 侧（`logs/41-ci-scan.log`）：
+
+```
+$ grep -nE '^  [a-z0-9_-]+:$' .github/workflows/validate.yml
+19:  build-tool-compat:      49:  native-integration:      515:  aggregate-artifacts:
+$ grep -nE 'test_web|web_shell|port_shots|port_run|renderer' .github/workflows/*.yml
+(0 hits)
+```
+
+剩下的 2 行 WebEngine 字样（`validate.yml:228` 附近的注释）是在解释「Linux 依赖里为什么
+不需要 Chromium 运行库」，不是要执行的步骤。
+
+## 9.6 文档：死指令复扫
+
+```
+$ grep -rn "AI_UPPER_UI" . --exclude-dir=.git --exclude-dir=out --exclude-dir=build \
+    --exclude-dir=dist --exclude-dir=.venv --exclude-dir=deva --exclude-dir=.cache
+app/src/main.py:8:装配（原 `AI_UPPER_UI=web` 的 QtWebEngine 承载窗口已随 …
+```
+
+（`logs/40-doc-and-env-scan.log`）**可执行指令 0 条**，只有一句历史解释。
+
+**本轮发现并补了一处真实遗漏：** `6f02994` 给 `STAGE5-CLOSEOUT-REPORT.md` 加了历史台账注，
+但 `docs/STAGE6-CLOSEOUT-REPORT.md` 没有加（原文 §5.1 把它与 STAGE5 并列写成「同样加历史台账
+说明」，与事实不符）。该文里有可直接照抄、但现在必然失败的指令：
+
+```
+$ strings dist/ai_upper/ai_upper | grep -c "from deva_web import main"
+0
+$ ls app/tests/test_web_e2e_stream.py app/src/deva_web.py app/src/mvvm/views/web_shell_window.py app/assets/renderer
+ls: cannot access …: No such file or directory   （四项全部不存在）
+```
+
+（`logs/43-stage6-dead-commands.log`）已在 `docs/STAGE6-CLOSEOUT-REPORT.md` 头部补注，
+写明这些命令无法重放、当前入口是 `app/src/main.py` → `qml_shell.run()`。上文 §5.1 的那一行
+据此**更正**为：STAGE5 加了注；STAGE6 是本次补加。
+
+现行文档（README / DEVELOPMENT_GUIDE / ROADMAP-NEXT / MIGRATION-PLAN）复扫：
+`deva_web`、`port_shots`、`port_run`、`test_web_` 均**0 命中**，只有 `ROADMAP-NEXT.md:147`
+一句「`test_web_e2e_stream.py` 已随 QtWebEngine 一并删除」的历史陈述。
+
+**一处需要说明的差异（不是本报告编造，是基线树自己的状态）：** 基线 `1d53e4a` 的 `app/src`
+里仍然有 `web_shell_window.py` 与写满 WebEngine 的 `main.py`，而 `tools/ai_upper/qt_prune.py`
+按 import 裁剪——它只看到 `PySide6.QtWebEngineWidgets` 被**条件导入**，所以删掉了
+496 个文件后仍然**没有**删掉 240M 的 WebEngine 载荷（`Qt/lib/libQt6WebEngineCore.so.6` 等
+10 个路径完整留在基线产物里，`logs/36-dist-webengine-baseline.log`）。这正是本轮改动
+真正解决的东西：把"条件导入"变成"没有导入"，裁剪器才敢删。
+
+## 9.7 本轮复验的「未完成 / 未验证」
+
+| 项 | 状态 | 原因 |
+|---|---|---|
+| 真实 GitHub CI 复跑 | **未验证** | 硬约束「只在本地 develop 提交，不 push」，无法触发。本轮只有 wheel 级静态验证（`logs/28-pypi-wheels.log`）与本地全量 pytest |
+| 其余 6 个发布目标的**真机构建** | **未验证** | 本机只有 aarch64 Linux 工具链；macOS/Windows/arm64-Windows 只有 wheel 可用性证据，没有交叉构建产物 |
+| 首帧启动耗时 | **未测** | 无基线对照实验；给出数字即为编造 |
+| 真 provider 端到端 | **未完成** | 无真 key，自 `test_web_e2e_stream.py` 删除后仓库无此类入口（能力损失，见 §4.1 缺口 C） |
+| `profile:*` 三条通道的 QML 对位 | **未完成** | 需产品决策，见 §4.1 缺口 B |
+| `settings-about` 等 4 页与上一轮截图的 md5 差异 | **已归因，非回归** | 逐像素比对 bbox 全部落在 `x=289–296`（左栏会话列表的相对时间标签），单页最多 490 px / 0.047%，`empty.png`/`first-run.png` 逐字节相同（`logs/16b-pixel-diff-vs-prior.log`） |
+| `SettingsModal.qml:372` `extensionsSummary` TypeError | **未修（基线既有）** | 与 2026-11-17 结论一致：基线 `qml_shell.py` 也没有该 slot，非本次引入 |
+| 打包产物把 `AI_UPPER_HOME` 覆盖为 entry_dir | **已记录，未改** | `launcher/src/AiUpper.cpp:881` 无条件导出；导致 headless 实测写在 `dist/ai_upper/data/chats`。属 launcher 既有行为，不在本次授权范围 |
+
+## 9.8 本次复验新增/更正的产物
+
+| 路径 | 内容 |
+|---|---|
+| `out/qwebengine-verify/README.md` | 证据目录说明与命令对照 |
+| `out/qwebengine-verify/logs/01…46`（含 `16b`） | 47 份原始日志（对账、AST、Essentials、构建、du、pytest、CI、文档扫描、STAGE6 死命令） |
+| `out/qwebengine-verify/shots/*.png` | 18 张 offscreen 实拍 + 1 张 Essentials 启动图 |
+| `docs/STAGE6-CLOSEOUT-REPORT.md` | 头部补历史台账注（本轮唯一代码/文档改动） |
+
+**复验结论：6 条结项的结论在 HEAD `b98d59e` 上全部仍然成立，未发现被后续提交推翻的项；
+唯一实质修正是 STAGE6 那处遗漏的历史台账注。**
