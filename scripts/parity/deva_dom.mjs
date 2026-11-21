@@ -468,6 +468,30 @@ const MEASURE = String.raw`
   // 消息区逐条：外框 + 内部文本块
   out.messages = many('.cf-msg')
   out.mdBlocks = many('.md > *').slice(0, 40)
+  // 空态快速开启：卡片与卡片内部（头像/名称/描述）的实测 rect。
+  // 原来只 dump 到 cf-quick__grid 一层，卡片几何只能靠截图反推。
+  out.quickCards = many('.cf-qcard')
+  out.quickCardParts = many('.cf-qcard > *, .cf-qcard *')
+  // 卡片内部排版：每个直接子项的 offsetHeight / 行盒高度 / margin，
+  // 用来解释「卡片 150 高但内容只有 146」这类差值（子项本身只给 rect 不够）。
+  out.quickDetail = Array.from(document.querySelectorAll('.cf-qcard')).slice(0, 2).map((card) => {
+    const c = cs(card)
+    return {
+      card: { rect: rect(card), boxSizing: c.boxSizing, padding: c.padding,
+        height: c.height, minHeight: c.minHeight, gap: c.gap, alignItems: c.alignItems },
+      kids: Array.from(card.children).map((k) => {
+        const ks = cs(k)
+        return {
+          tag: k.tagName.toLowerCase(), cls: String(k.className).slice(0, 60),
+          offsetTop: k.offsetTop, offsetHeight: k.offsetHeight,
+          offsetWidth: k.offsetWidth, marginTop: ks.marginTop, marginBottom: ks.marginBottom,
+          lineHeight: ks.lineHeight, paddingTop: ks.paddingTop, paddingBottom: ks.paddingBottom,
+          display: ks.display, height: ks.height, rect: rect(k),
+          text: (k.innerText || '').slice(0, 30),
+        }
+      }),
+    }
+  })
   out.mdAll = many('.md *').length
   // 中列正文滚动信息
   const sc = document.querySelector('.cf-msgs')

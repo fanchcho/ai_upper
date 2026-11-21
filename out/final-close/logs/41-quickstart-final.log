@@ -1,0 +1,74 @@
+## quickstart 收口实测 2026-11-21T20:23:09+08:00
+
+### 1) 18 页重拍（含 empty/first-run）
+ok   empty 1280x820 39667B rc=0
+ok   first-run 1280x820 39667B rc=0
+ok   chat 1280x820 157667B rc=0
+ok   search-open 1280x820 158002B rc=0
+ok   search-results 1280x820 129646B rc=0
+ok   search-none 1280x820 63015B rc=0
+ok   ctx-menu 1280x820 157748B rc=0
+ok   delete-confirm 1280x820 158207B rc=0
+ok   model-picker 1280x820 162533B rc=0
+ok   hover-thread 1280x820 157905B rc=0
+ok   focus-composer 1280x820 157826B rc=0
+ok   long-mid 1280x820 159622B rc=0
+ok   long-bottom 1280x820 156448B rc=0
+ok   settings-general 1280x820 119295B rc=0
+ok   settings-models 1280x820 109335B rc=0
+ok   settings-extensions 1280x820 118169B rc=0
+ok   settings-about 1280x820 110953B rc=0
+ok   dark-chat 1280x820 156926B rc=0
+
+### 2) 18 页对照表
+page                 deva_md5                           qml_md5                               diff_px  diff_pct
+chat                 06a81f02a1ef8b789329f2808268dbb6   e36d9edbf5050ebbc3a234e3b6285026       126790     12.08
+ctx-menu             872dc19994a37d9a5cefe2e5aa56bf36   8ff33025ec3d322b5b95329acb8a676e       134021     12.77
+dark-chat            dd174cfe874cca285df5cfd2b6ef3038   cc0672231f132fc22c1452ec4fcf79b1       249385     23.76
+delete-confirm       115b84c3c896b33ce07e59f8a2d2b751   55a629b95560534d3b38c7ed6ccb2b38       396130     37.74
+empty                e07548ba4a6511b62e5e45ab07c27121   3b1ddb91be99f2154a9a4a04e55507ce        10325      0.98
+first-run            26a05a5435320d03600e00b40fc06d0a   3b1ddb91be99f2154a9a4a04e55507ce        10325      0.98
+focus-composer       a5273989e6eb741908af9273352ad1af   3c8b55f5dede4e60a60174fd4b510821       126806     12.08
+hover-thread         358efb1a6e05413687487207ae7a3541   96a86cfdffc9ac6f78e4c4235ffcf76f       127198     12.12
+long-bottom          8f6fded19b63b3f90a9213c7ec55c960   8d291d668979a7c9c0f486f46a3db549       125691     11.98
+long-mid             6e1673c62c6b0a59feb449f065ec20fb   6bea500db3fe19228f6db9f55a4be318       132328     12.61
+model-picker         b3857b3344c4c8e42c8d4cfe3ebb9c0f   ff84da6c479a69e0f7b3795e5737bbb9       140784     13.41
+search-none          72036a2dabc6e64dc4626e38be891a33   db2e09d184b85add5500b9c2f49a97ee        82432      7.85
+search-open          9c8a62e33f55f2be59b65ee96870c839   be846a41ef7cd61adbde76157c1def05       126819     12.08
+search-results       0523e1a443a3a1fb91b23b84c0a769b9   8ad4403a182966c744a03ba38c0091c7       104330      9.94
+settings-about       50b2ee8135ee7c4cc4f5568d36cac0ab   96154d72cf807c9a46c6a9d951a71fb7       334145     31.84
+settings-extensions  59ce447e9abfe50f32d9b39e65701b5b   72ee5888a25e5e8affb61f72e8dbda18       329645     31.41
+settings-general     98dd6a130c4f340f8393a6272f299990   9858fecd59a2091169eee2ba19a227ee       340213     32.41
+settings-models      6ecf7e64c87db41f8204cb2166da9338   6319db2e46ce058b5171c00c283a4d09       327979     31.25
+
+### 3) empty/first-run 分区 AE
+page (1280x820+0+0): 10325
+cardRegion (300x180+540+390): 2697
+card1 (130x150+680+395): 2621
+card2 (130x150+826+395): 2969
+sidebar (264x820+0+0): 2974
+rightPanel (716x820+564+0): 7203
+
+### 4) 改前基线（本段开工前）
+page: 46610
+cardRegion: 21703
+
+### 5) 真点击验证
+QML QUICK cards [["general", "Deva"], ["xiaomajiang", "小码酱"]]
+QML QUICK quickStart.visible True
+QML QUICK hit-chain QQuickImage(-) <- Avatar_QMLTYPE_5(-) <- QQuickColumn(-) <- QQuickMouseArea(-) <- QQuickRectangle_QML_55(-) <- QQuickGrid_QML_53(-) <- QQuickColumn(-) <- QQuickItem(quickStart) <- QQuickItem(-) <- QQuickContentItem(ApplicationWindow) <- QQuickControl(ApplicationWindowContentControl)
+QML QUICK sessions before 0
+QML QUICK sessions after 1 new ['qml-mwqdq6pl0b9249']
+QML QUICK active 'qml-mwqdq6pl0b9249'
+QML QUICK quickStart.visible after click False
+QML QUICK session personaId 'general'
+OK 点击命中第一张卡片 -> 建会话(绑定该角色) -> 切走空态
+
+### 6) pytest test_qml_shell
+..............................................                           [100%]
+46 passed in 0.62s
+
+### 7) pytest 全量
+........................................................................ [ 96%]
+................................................                         [100%]
+1267 passed, 5 skipped in 28.72s

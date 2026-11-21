@@ -39,6 +39,8 @@ ApplicationWindow {
     property var pendingFiles: []
     // 页名：由 Python 按环境变量选择要呈现的界面状态（设置页/搜索等，见 qml_shell.py）。
     property string page: "chat"
+    // 空态快速开启的角色卡片（Python 每次 _publish 现读 PersonaStore 写进来）。
+    property var quickStartPersonas: []
     property bool dark: Theme.dark
     property bool settingsOpen: page === "settings-general" || page === "settings-models"
                               || page === "settings-extensions" || page === "settings-about"
@@ -426,6 +428,9 @@ ApplicationWindow {
         // 顶部 26px 的会话头：下缘 1px 分隔线横贯 x 356–1183（实测 828px 宽）
         Item {
             id: head
+            // 原版无任何对话时中列是 `QuickStart`（只有 DragBar，没有会话头），
+            // 会话头（含下缘分隔线）仅在存在对话时出现。
+            visible: window.sessions.length > 0
             x: 0
             y: 0
             width: parent.width - 96
@@ -449,26 +454,183 @@ ApplicationWindow {
             }
         }
 
-        // 空状态：中列 "Start a conversation" + 提示（实测 title y 393.25 居中）
-        Column {
+        // 空状态：原版 `QuickStart`（`Rail.tsx:1296-1326`）。无任何对话时中列列出花名册
+        // 全部角色，点卡片/头像即以该角色开一条新对话（`startQuickStart` → `startWith` 同语义）。
+        //
+        // 几何取自原版 `redesign.css:3054-3131` 与 `out/qml-shell/dom/empty.json` 实测：
+        //   `.cf-quick` 从 DragBar（40px）下沿起、占满余下高度；`.cf-quick__inner` 宽 780
+        //   居中、padding 24/20、纵向 flex 居中；标题 20/750（line-height 30）、提示
+        //   margin-top 6 / 13px；网格 margin-top 24、flex 居中、gap 16；卡片宽 130、
+        //   纵向 flex、gap 8、padding 16/12、1px 边框、radius-lg、底色 bg-panel。
+        //   2 张卡片：130+16+130 = 276 居中 → x 682..812 / 828..958（与实测一致）。
+        Item {
+            id: quickStart
+            objectName: "quickStart"
             visible: window.sessions.length === 0 && !window.settingsOpen
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 388
-            spacing: 6
-            Text {
+            x: 0
+            y: 40
+            width: parent.width
+            height: parent.height - 40
+
+            // `.cf-quick__inner`：max-width 780 的居中列，容器内纵向居中。
+            // 宽度取内容列可用宽 740（780 - 左右各 20 的 padding）；窄窗时跟随容器。
+            Column {
+                id: quickInner
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Start a conversation"
-                color: Theme.fg
-                font.family: Theme.sansFamily
-                font.pixelSize: 20
-                font.weight: 700
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Pick a persona — tap its avatar to begin"
-                color: Theme.fgMuted
-                font.family: Theme.sansFamily
-                font.pixelSize: 13
+                width: Math.min(740, quickStart.width - 40)
+                // 原版 `justify-content: center` 把标题+提示+网格整体居中：
+                // 内容总高 30 + (6+19.5) + 24 + 卡片高，实测标题行盒上沿 315.25。
+                y: Math.round((parent.height - height) / 2)
+                spacing: 0
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: window.chatText.quickStartTitle || "Start a conversation"
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 20
+                    // 原版 750：QML 只有整数字重，最接近的是 Bold(700)。
+                    font.weight: 700
+                    // 原版 line-height 30px（1.5 × 20）。
+                    // Qt 的 FixedHeight 行盒与 Chromium 的半行距算法不同：同样 30px 行盒，
+                    // 基线比原版高 3px（实测墨迹 319 vs 322），用 topPadding 补偿；
+                    // 高度锁回 30，避免 padding 把下面整列（提示/网格）整体推低。
+                    topPadding: 3
+                    height: 30
+                    lineHeight: 30
+                    lineHeightMode: Text.FixedHeight
+                }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    // 原版 `margin-top: 6px` + 19.5 行盒 = 25.5 总高。Qt 的行内基线比
+                    // Chromium 高 2px（实测墨迹 353 vs 355），把 2px 从 padding 挪进来、
+                    // 高度仍锁 25.5，网格位置不动。
+                    topPadding: 8
+                    height: 25.5
+                    text: window.chatText.quickStartHint || "Pick a persona — tap its avatar to begin"
+                    color: Theme.fgMuted
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    // 原版 19.5px（1.5 × 13）。
+                    lineHeight: 19.5
+                    lineHeightMode: Text.FixedHeight
+                }
+
+                // `.cf-quick__grid`：margin-top 24、flex wrap 居中、gap 16。
+                // 卡片 130 宽。QML 没有 flex-wrap，用 Grid 按可用宽算列数再整块居中：
+                // 一行能放几列 = floor((可用宽 + 16) / (130 + 16))，等于 CSS 的折行结果。
+                // 单行（当前花名册 2 人）与原版逐像素一致；折成多行时 CSS 的最后一行
+                // 也会居中，Grid 靠左——这是 QML 无 flexbox 的已知残差。
+                Grid {
+                    id: quickGrid
+                    readonly property int gap: 16
+                    readonly property int cardW: 130
+                    readonly property int avail: parent.width
+                    // 一行最多能排几列（= CSS flex-wrap 的折行容量）。
+                    readonly property int capacity: Math.max(1, Math.floor((avail + gap) / (cardW + gap)))
+                    // 只有一行时按实际卡片数收紧宽度，`horizontalCenter` 才能把整行摆到
+                    // 容器正中；否则 2 张卡会贴在第 1、2 列（实测左移 219px）。
+                    columns: Math.max(1, Math.min(quickRepeater.count, capacity))
+                    rowSpacing: gap
+                    columnSpacing: gap
+                    width: columns * cardW + (columns - 1) * gap
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    topPadding: 24
+                    // 原版网格是 flex，默认 `align-items: stretch`：同一行的卡片等高，
+                    // 高度取该行最高那张（实测 150 = 内容 116 + 上下 padding 32 + 边框 2，
+                    // 由 CJK 名称 19px 行盒撑起；纯拉丁名称时是 146）。QML 的 Grid 不会拉伸
+                    // 子项，所以这里显式取「同行最高」。
+                    readonly property real cellHeight: {
+                        var m = 0
+                        for (var i = 0; i < quickRepeater.count; ++i) {
+                            var item = quickRepeater.itemAt(i)
+                            if (item)
+                                m = Math.max(m, item.naturalHeight)
+                        }
+                        return m
+                    }
+
+                    Repeater {
+                        id: quickRepeater
+                        model: window.quickStartPersonas
+                        delegate: Rectangle {
+                            required property var modelData
+                            // 原版 `.cf-qcard`：宽 130、padding 16/12、1px 边框（border-box）。
+                            // 内容盒宽 = 130 - 2×1(边框) - 2×12(padding) = 104。
+                            width: 130
+                            // 内容自然高（Column + 上下 padding 32 + 边框 2）；实际高度按行拉伸。
+                            readonly property real naturalHeight: cardColumn.height + 34
+                            height: quickGrid.cellHeight
+                            radius: Theme.radiusLg
+                            color: cardHover.hovered ? Theme.bgHover : Theme.bgPanel
+                            border.width: 1
+                            border.color: cardHover.hovered ? Theme.borderStrong : Theme.border
+
+                            HoverHandler { id: cardHover }
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: window.quickStart(modelData.id)
+                            }
+
+                            Column {
+                                id: cardColumn
+                                x: 13
+                                y: 17
+                                width: parent.width - 26
+                                spacing: 8
+
+                                Avatar {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    persona: modelData.id || "general"
+                                    // 原版 `Avatar size={48}`：48 > 20 且未传 compact，
+                                    // PersonaFace 走探出构图（POP_BOX），人脸比框内构图大一档
+                                    // ——这是 Avatar 按尺寸自动判定的，这里不用再写。
+                                    size: 48
+                                }
+                                Text {
+                                    width: parent.width
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: modelData.name
+                                    color: Theme.fg
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 13
+                                    // 原版 650 → 600（QML 整数字重）。
+                                    font.weight: 600
+                                    // 原版 `.cf-qcard__name` 未设 line-height：computed normal，
+                                    // 拉丁名行盒 15px、CJK 名 19px。Qt 默认行盒各多 1px，
+                                    // 会把下面的描述整体推低；这里锁回原版行盒高（墨迹位置不变）。
+                                    property int rowBox: {
+                                        var m = /[^\x00-\x7F]/.test(text) ? 19 : 15
+                                        return m
+                                    }
+                                    height: rowBox
+                                    elide: Text.ElideRight
+                                }
+                                Text {
+                                    visible: (modelData.desc || "") !== ""
+                                    width: parent.width
+                                    horizontalAlignment: Text.AlignHCenter
+                                    text: modelData.desc
+                                    color: Theme.fgSubtle
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 11
+                                    // 原版 11 × 1.5 = 16.5，clamp 2 行。Qt 在固定行盒里
+                                    // 把 11px 字的墨迹整体压低 1px（实测墨迹首行 493 vs 492）。
+                                    // 用 16 的行盒并把两行总高锁回 33（= 2 × 16.5），再给 -1 的
+                                    // topPadding 把墨迹提上去：列高/卡片高一个像素都不动，只有
+                                    // 墨迹对齐。实测描述带 AE 1786 → 1590、卡片区 2893 → 2697。
+                                    lineHeight: 16
+                                    lineHeightMode: Text.FixedHeight
+                                    height: 33
+                                    topPadding: -1
+                                    wrapMode: Text.Wrap
+                                    maximumLineCount: 2
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -1074,6 +1236,13 @@ ApplicationWindow {
             inputField.text = ""
             window.pendingFiles = []
         }
+    }
+
+    // 空态卡片点击：以该角色开一条新对话（原版 `startWith`：建会话 → 切进去）。
+    function quickStart(personaId) {
+        if (!personaId || !shellBridge)
+            return
+        shellBridge.startQuickStart(String(personaId))
     }
 
     // 回形针：真弹系统选择框（Python 侧 QFileDialog），选中项追加到待发列表。

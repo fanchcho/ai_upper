@@ -27,9 +27,16 @@ if [ "$CONFIG" != "config.json" ]; then
 fi
 
 cd "$ROOT" || exit 1
+# 种子角色（`PersonaStore.ensure_seeded`）取自 `assets_root()`：它把 `AI_UPPER_HOME`
+# 当作 launcher 导出的 payload 根（打包态确实如此，`<payload>/assets` 就在旁边）。
+# 逐页对比时 `AI_UPPER_HOME` 指向的是**数据目录**，旁边没有 assets，角色就种不出来，
+# 空态自然只剩标题——而 deva 那份 home 里带着自己的 `personas/`。这里用
+# `DEVA_ASSETS_DIR`（`paths.assets_root()` 的显式覆盖，就是给 parity 脚本用的）
+# 指回源码资产树，两端才拿到同一份花名册。
 timeout 120 env \
   AI_UPPER_HEADLESS=1 \
   AI_UPPER_HOME="$HOME_DIR" \
   AI_UPPER_QML_PAGE="$PAGE" \
   AI_UPPER_QML_SHOT="$OUT" \
+  DEVA_ASSETS_DIR="$ROOT/app/assets" \
   "${PYTHON:-$ROOT/.venv/bin/python}" app/src/main.py

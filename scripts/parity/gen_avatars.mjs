@@ -88,6 +88,56 @@ function mapPath(box) {
   return out
 }
 
+/**
+ * 卡片/列表用的大头像：原版 `Avatar size={48}` 走的是「探出」构图（`humation.tsx:510`
+ * `POP_BOX = {x:4, y:12, s:72}`）——人物比框内构图大约 22%，身体按圆形裁、头部在中线
+ * 以上放开（否则头发/猫会被切出硬边）。`avatarSvg` 生成的是框内构图，两者人脸大小不同，
+ * 卡片里直接复用会明显偏小。
+ */
+const POP_BOX = { x: 4, y: 12, s: 72 }
+
+function avatarPopSvg(seed, spec) {
+  const pal = seededPalette(seed)
+  const data = createAvatar(humation1, {
+    seed,
+    selections: spec?.selections,
+    colors: { ...pal.colors, ...(spec?.colors ?? {}) },
+    background: 'transparent'
+  }).toRenderData()
+  let body = ''
+  let head = ''
+  const re = /<g data-hm-layer-slot="([^"]+)"[\s\S]*?<\/g>(?=<g data-hm-layer-slot|$)/g
+  let m
+  while ((m = re.exec(data.content))) {
+    if (m[1] === 'bottom' || m[1] === 'body') body += m[0]
+    else head += m[0]
+  }
+  const colors = { ...pal.colors, ...(spec?.colors ?? {}) }
+  const bg = hex(spec?.background || pal.background)
+  const resolveVars = (markup) =>
+    markup.replace(/var\(--hm-([a-z]+)(?:,\s*([^)]*))?\)/g, (_all, slot, fallback) => {
+      const v = colors[slot]
+      return v ? hex(v) : (fallback || 'none').trim()
+    })
+  body = resolveVars(body)
+  head = resolveVars(head)
+  const box = POP_BOX
+  const d = mapPath(box)
+  // 头部裁切 = 圆形 ∪ 中线以上的大矩形（原版 clipPath「路径 + rect」两条并集；
+  // Qt 的 SVG 渲染器不支持多子元素 clipPath，这里合成一条路径，语义等价）。
+  const midY = box.y + box.s / 2
+  const headClip = `${d} M${box.x - 60} ${box.y - 80} H${box.x + box.s + 60} V${midY} H${box.x - 60} Z`
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.x} ${box.y} ${box.s} ${box.s}">` +
+    `<defs><clipPath id="s"><path d="${d}"/></clipPath>` +
+    `<clipPath id="h"><path d="${headClip}"/></clipPath></defs>` +
+    `<path d="${d}" fill="${bg}"/>` +
+    `<g clip-path="url(#s)">${body}</g>` +
+    (head ? `<g clip-path="url(#h)">${head}</g>` : '') +
+    `</svg>`
+  )
+}
+
 /** 与 humation.tsx 的 avatarDataUri 同口径：框内构图、圆形底板、身体+头部按形状裁切。 */
 function avatarSvg(seed, spec) {
   const pal = seededPalette(seed)
@@ -152,10 +202,21 @@ const JOBS = [
   ['general.svg', 'general', GENERAL_SPEC],
   ['xiaomajiang.svg', 'xiaomajiang', XIAOMAJIANG_SPEC]
 ]
+// 探出构图（大尺寸头像用）：`<id>-pop.svg`，与 `Avatar.qml` 的 `pop` 属性对应。
+const POP_JOBS = [
+  ['user-pop.svg', 'deva-you', USER_SPEC],
+  ['general-pop.svg', 'general', GENERAL_SPEC],
+  ['xiaomajiang-pop.svg', 'xiaomajiang', XIAOMAJIANG_SPEC]
+]
 
 fs.mkdirSync(outDir, { recursive: true })
 for (const [file, seed, spec] of JOBS) {
   const svg = avatarSvg(seed, spec)
   fs.writeFileSync(path.join(outDir, file), svg)
   console.log(file, 'seed=' + seed, 'bytes=' + svg.length)
+}
+for (const [file, seed, spec] of POP_JOBS) {
+  const svg = avatarPopSvg(seed, spec)
+  fs.writeFileSync(path.join(outDir, file), svg)
+  console.log(file, 'seed=' + seed, 'bytes=' + svg.length, 'pop')
 }

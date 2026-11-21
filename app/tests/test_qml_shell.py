@@ -589,6 +589,73 @@ def test_extension_rows_honor_disk_skill_and_config_enabled(qapp, tmp_path, monk
     assert bridge.extensionRows()[-1]["enabled"] is True
 
 
+# ── 空态快速开启（QuickStart：真实角色 + 点击建会话）─────────────────────
+def _seed_personas(home):
+    """在测试数据目录里落两条角色文件（与首启种子同格式）。"""
+    folder = home / "personas"
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "general.md").write_text(
+        "---\nname: Deva\ndescription: 全能型工作助手。\n---\n\n# Deva\n", encoding="utf-8"
+    )
+    (folder / "xiaomajiang.md").write_text(
+        "---\nname: 小码酱\ndescription: 擅长红队研究。\n---\n\n# 小码酱\n", encoding="utf-8"
+    )
+
+
+def test_quick_start_personas_project_the_persona_store(qapp, tmp_path, monkeypatch):
+    """空态卡片吃的是真实花名册，不是写死的占位文案。
+
+    QML 的 `quickStartPersonas` 直接绑这个列表（`id` 决定头像文件、`name`/`desc`
+    画在卡片里）。判据锁在投影上：改了角色文件，下次重绘就必须是新值。
+    """
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    home = tmp_path / "home"
+    _seed_personas(home)
+    monkeypatch.setenv("AI_UPPER_HOME", str(home))
+
+    rows = bridge.quickStartPersonas()
+    assert [row["id"] for row in rows] == ["general", "xiaomajiang"]
+    assert rows[0]["name"] == "Deva" and rows[0]["desc"] == "全能型工作助手。"
+    assert rows[1]["name"] == "小码酱" and rows[1]["desc"] == "擅长红队研究。"
+    assert all(row["avatarImage"] == "" for row in rows)  # 无自定义头像 → QML 用预生成 SVG
+
+    # 角色文件改了，重绘就是新值（不缓存开机那一刻的列表）。
+    (home / "personas" / "general.md").write_text(
+        "---\nname: 新名字\ndescription: 新描述\n---\n", encoding="utf-8"
+    )
+    by_id = {row["id"]: row for row in bridge.quickStartPersonas()}
+    assert by_id["general"]["name"] == "新名字"
+
+
+def test_start_quick_start_creates_a_session_bound_to_that_persona(qapp, tmp_path, monkeypatch):
+    """点头像 = 原版 `startWith`：建一条绑定该角色的空会话并切进去。"""
+    bridge, store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    home = tmp_path / "home"
+    _seed_personas(home)
+    monkeypatch.setenv("AI_UPPER_HOME", str(home))
+    assert session_rows(store) == []
+
+    session_id = bridge.startQuickStart("xiaomajiang")
+    assert session_id.startswith("qml-")
+    assert bridge._active == session_id
+    assert store.session_path(session_id).exists()
+    assert [row["id"] for row in session_rows(store)] == [session_id]
+    assert store.load_session(session_id).personaId == "xiaomajiang"
+
+    # 不存在的角色：不建会话、不切会话，返回空串（原版宁可停在原地）。
+    before = [row["id"] for row in session_rows(store)]
+    assert bridge.startQuickStart("no-such-persona") == ""
+    assert [row["id"] for row in session_rows(store)] == before
+    assert bridge._active == session_id
+
+
+def test_quick_start_labels_follow_the_shell_language(qapp, tmp_path, monkeypatch):
+    """空态标题/提示来自 i18n 表（原版 `cf.quickStartTitle` / `cf.quickStartHint`）。"""
+    bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+    labels = bridge.chatLabels()
+    assert labels["quickStartTitle"] and labels["quickStartHint"]
+
+
 def test_set_skill_enabled_leaves_builtin_rows_untouched(qapp, tmp_path, monkeypatch):
     """内置技能恒启用：写入口 no-op，不落 `skills.enabled` 键（原版 RESERVED_IDS 语义）。"""
     bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))

@@ -135,6 +135,11 @@ LIST_TEXT = {
     "zh": {"searchChats": "搜索对话", "noMatches": "未找到匹配项", "noSessions": "暂无对话"},
     "en": {"searchChats": "Search chats", "noMatches": "No matches", "noSessions": "No conversations"},
 }
+# 无任何对话时的快速开启（原版 `i18n/messages.ts:1368-1369` 中文 / `:2883-2884` 英文）。
+QUICK_TEXT = {
+    "zh": {"quickStartTitle": "快速开启对话", "quickStartHint": "选择一个角色，点头像即可直接开始"},
+    "en": {"quickStartTitle": "Start a conversation", "quickStartHint": "Pick a persona — tap its avatar to begin"},
+}
 # 输入区贴片的兜底文案（没有可选模型时，原版显示 `chat.selectModel`）。
 CHAT_TEXT = {
     "zh": {"selectModel": "选择模型", "selectModelTitle": "选择模型"},
@@ -486,6 +491,59 @@ class ShellBridge(QtCore.QObject):
         self._publish()
         return session_id
 
+    # ── 快速开启（无任何对话时的中列）────────────────────────────────────────
+    @QtCore.Slot(result=list)
+    def quickStartPersonas(self) -> List[Dict[str, Any]]:
+        """无对话空态的角色卡片，形状对齐原版 `QuickStart`（`Rail.tsx:1296-1326`）。
+
+        原版直接遍历 `personas`（`useExtensions()`，即 `personas:list` 的同一份排好序的
+        花名册）：`<Avatar persona={p} size={48} />` + `p.name` + `p.desc`。这里同样现读
+        `PersonaStore.list_personas()`，不另存一份投影——角色改名/改描述/新加文件后
+        下次重绘就是新的，空态不会停在开机那一刻的旧列表。
+        """
+        try:
+            records = PersonaStore(app_home()).list_personas()
+        except OSError:
+            return []
+        return [
+            {
+                "id": str(item.get("id") or ""),
+                "name": str(item.get("name") or item.get("id") or ""),
+                "desc": str(item.get("description") or ""),
+                # 自定义头像（data URI）优先；空串时 QML 走预生成的 `avatars/<id>.svg`。
+                "avatarImage": str(item.get("avatarImage") or ""),
+            }
+            for item in records
+            if item.get("id")
+        ]
+
+    @QtCore.Slot(str, result=str)
+    def startQuickStart(self, persona_id: str) -> str:
+        """点头像开新对话：等价原版 `startWith`（`ChatFirstShell.tsx:408-411`）。
+
+        `newSession(personaId, undefined, personas.find(p => p.id === personaId)?.model)`：
+        建一条绑定该角色（以及角色自带模型，若有）的会话并落盘，随即切过去。角色 id 非法
+        或不存在时什么都不做、返回空串——原版这时 `newSession` 拿到的是一个查不到的角色，
+        宁可停在原地也不建一条绑定未知角色的空对话。
+        """
+        record = PersonaStore(app_home()).get(str(persona_id or ""))
+        if record is None:
+            return ""
+        session_id = new_session_id()
+        self._host.create_session(
+            {
+                "sessionId": session_id,
+                "personaId": record["id"],
+                "modelRef": str(record.get("model") or "") or None,
+            }
+        )
+        self._active = session_id
+        self._turn = None
+        self._turn_session = ""
+        self._render()
+        self._publish()
+        return session_id
+
     # ── 设置页数据（真实来源：config.json / skills 目录 / secrets 库）────────────
     @QtCore.Slot(result=list)
     def modelRows(self) -> List[Dict[str, Any]]:
@@ -613,8 +671,8 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(result="QVariantMap")
     def chatLabels(self) -> Dict[str, Any]:
-        """输入区/列表的本地化文案（模型贴片兜底名、搜索占位、两种空态）。"""
-        return {**CHAT_TEXT[self.language()], **LIST_TEXT[self.language()]}
+        """输入区/列表的本地化文案（模型贴片兜底名、搜索占位、两种空态、快速开启）。"""
+        return {**CHAT_TEXT[self.language()], **LIST_TEXT[self.language()], **QUICK_TEXT[self.language()]}
 
     @QtCore.Slot(result="QVariantMap")
     def contextUsage(self) -> Dict[str, Any]:
@@ -1086,6 +1144,8 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("effortLabel", effort["label"])
         window.setProperty("activeEffort", effort["current"])
         window.setProperty("chatText", labels)
+        # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
+        window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。
         window.setProperty("contextUsage", self.contextUsage())
 
