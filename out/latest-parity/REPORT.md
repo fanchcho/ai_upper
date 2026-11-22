@@ -387,3 +387,59 @@ app/src/qml/IconData.qml:108:        if (key === "refreshCw") return refreshCw
 ```
 
 判否项：无。
+
+### 4.4 设置 · Models 面板：Providers 标题 + 28×28 加号 + 描边容器（B2-2）
+
+commit `96e7136`（`feat(settings): Models 面板 Providers 标题 + 28×28 加号 + 描边容器`）。
+改动路径：`app/src/qml/SettingsModal.qml`（`modelsPane` 三项结构）、`app/src/qml/Theme.qml`
+（补 `--bg-elevated` 语义 token：浅色 `#ffffff` / 深色 `#2a2a2e`）。
+
+几何逐值取自 deva 只读源码 `features/settings/ModelSettings.tsx` + `styles/app.css`：
+`.cf-pane` 内边距 `var(--space-4) var(--space-5)`（16px 20px）；`.models__head` 高 28
+（flex/align-items:center）+ `margin-bottom: var(--space-4)`（16px）；`.models__title`
+15px/700、`var(--fg)`；`.models__add-btn` 28×28、`1px solid var(--border)`、
+`border-radius: var(--radius)`（8px）、`background: var(--bg-elevated)`、Plus 图标 16；
+`.models__rows` `border: 1px solid var(--border)`、`border-radius: var(--radius-lg)`（12px）。
+数据只走已入库的 `app/src/mvvm/services/settings_models.py` 投影（`shellBridge.modelRows()` /
+`shellBridge.modelsPaneLabels()`），QML 未新建数据源。
+
+**单页重拍**（只拍 settings-models，AI_UPPER_HOME 指向 /tmp 夹具）：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/settings-models-after.png /tmp/fx-qml-home config.json > /tmp/shot-after.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '1p' /tmp/shot-after.log
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=/tmp/settings-models-after.png size=1280x820
+```
+
+**差异复算**（`scripts/parity/page_diff18.py`，改前基线 `out/latest-parity/qml/settings-models.png`
+已先备份到 `/tmp/settings-models-before.png`，改后图写入同路径）：
+
+```
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/after-diff18.txt 2>&1; echo rc=$?
+rc=0
+$ grep 'settings-models' /tmp/after-diff18.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 5cfc65fa1103ba93eea1d3627595cee8  132243  102589  326609  31.12% max=237 same=False
+```
+
+改前基线同一算法：`328000 px / 31.25%`；改后实测：`326609 px / 31.12%`（降低 1391 像素、
+0.13 个百分点）。注：该指标按任意通道非零差计，整页背景/字体抗锯齿的系统性差异占大头；
+本次只改 Models 列表头与容器，结构差异集中在这三处。
+
+**受影响测试**：
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-shell .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/test-qml-shell.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-shell.log
+46 passed in 0.58s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-settings .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/test-qml-settings-models.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-settings-models.log
+44 passed in 0.21s
+```
+
+判否项：provider 行高 52px、警告三角、chevron、详情下钻、Wrench、provider 详情请求头界面、
+About 版本单一来源、18 页全量重拍、四条硬判据复核均未做——本轮只交付 Providers 标题、
+28×28 加号、1px 描边圆角容器三项；provider 行仍沿用旧 delegate，留待下一段。
