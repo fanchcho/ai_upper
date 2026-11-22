@@ -67,6 +67,10 @@ QtObject {
     readonly property string chevronLeft: "m15 18-6-6 6-6"
     // alert-triangle
     readonly property string alertTriangle: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3|M12 9v4|M12 17h.01"
+    // wrench
+    readonly property string wrench: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+    // refresh-cw
+    readonly property string refreshCw: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8|M21 3v5h-5|M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16|M8 16H3v5"
 
     function get(key) {
         if (key === "messageCircle") return messageCircle
@@ -100,6 +104,8 @@ QtObject {
         if (key === "chevronRight") return chevronRight
         if (key === "chevronLeft") return chevronLeft
         if (key === "alertTriangle") return alertTriangle
+        if (key === "wrench") return wrench
+        if (key === "refreshCw") return refreshCw
         return ""
     }
 }
