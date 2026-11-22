@@ -165,6 +165,25 @@ def _is_effort_rejection(status: int, body: str) -> bool:
     ) is not None
 
 
+def _forbidden_error(body: str) -> NormalizedError:
+    """403：密钥多半是对的，被拒另有原因（见 Deva `forbiddenError`）。
+
+    账号没有该模型的权限、地区受限、余额 / 套餐不符，或中转只放行特定客户端（按 UA /
+    `originator` 识别）。此前与 401 一并报成「请检查 API 密钥」，用户照做也无济于事，
+    真正的原因写在响应正文里却没显示。这里把正文带出来；正文为空或是整页 HTML
+    （WAF 拦截页）时给出排查方向。kind 仍为 'auth'：不重试，接入引导等按
+    「凭据 / 权限问题」处理的地方照旧。
+    """
+    hint = "" if body.lstrip().startswith("<") else _body_hint(body)
+    advice = "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。"
+    return NormalizedError(
+        "auth",
+        f"服务商拒绝了请求（403）{hint or advice}",
+        False,
+        403,
+    )
+
+
 def http_error(
     status: int,
     body: str = "",
@@ -181,8 +200,10 @@ def http_error(
             limit=parse_context_limit(body),
             overflow=parse_context_overflow(body),
         )
-    if status in (401, 403):
+    if status == 401:
         return NormalizedError("auth", f"鉴权失败（{status}）：请检查 API 密钥。", False, status)
+    if status == 403:
+        return _forbidden_error(body)
     if status == 429:
         return NormalizedError(
             "rate_limit",

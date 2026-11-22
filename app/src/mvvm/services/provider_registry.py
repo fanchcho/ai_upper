@@ -23,6 +23,7 @@ from mvvm.services.anthropic_provider import AnthropicProvider
 from mvvm.services.model_resolve import ResolvedModel
 from mvvm.services.openai_provider import OpenAIProvider
 from mvvm.services.provider_gateway import NormalizedError, Provider
+from mvvm.services.provider_headers import sanitize_headers
 from mvvm.services.responses_provider import ResponsesProvider
 from mvvm.services.transport import CancelToken, NetworkError, Transport
 
@@ -53,15 +54,48 @@ def _is_opencode_inference(base_url: str) -> bool:
     return path == "/inference" or path.startswith("/inference/")
 
 
-def provider_headers(base_url: str, session_id: Optional[str] = None, run_id: str = "") -> dict[str, str]:
-    """模型请求要追加的请求头（见模块注释）。"""
+def provider_headers(
+    base_url: str,
+    session_id: Optional[str] = None,
+    run_id: str = "",
+    provider_id: str = "",
+    models_section: Any = None,
+) -> dict[str, str]:
+    """模型请求要追加的请求头（见模块注释）。
+
+    `provider_id` 给出时，最后并入该服务商的自定义请求头（`config.models.providers[].headers`），
+    同名即覆盖前面的默认头 —— 与 Deva `providerHeaders(baseURL, providerId, sessionId)` 同语义。
+    自定义头已由 `sanitize_headers` 剔掉非法 / 保留名，这里不再校验。
+    """
     headers = {"user-agent": f"deva/{app_version()}"}
-    if not _is_opencode_inference(base_url):
-        return headers
-    stable = (session_id or "").strip() or run_id
-    if stable:
-        headers["x-opencode-session"] = stable
+    if _is_opencode_inference(base_url):
+        stable = (session_id or "").strip() or run_id
+        if stable:
+            headers["x-opencode-session"] = stable
+    if provider_id:
+        headers.update(provider_custom_headers(provider_id, models_section))
     return headers
+
+
+def provider_custom_headers(provider_id: str, models_section: Any = None) -> dict[str, str]:
+    """读某服务商的自定义请求头；未填 / 找不到 / 配置非法 → 空表，永不抛错。
+
+    `models_section` 是 `config.json` 的 `models` 段（由调用方从 SettingsService 传入，
+    与上游 `providerCustomHeaders(providerId)` 现查配置同语义：改了即对下一次请求生效）。
+    """
+    for provider in _provider_entries(models_section):
+        if provider.get("id") == provider_id:
+            return sanitize_headers(provider.get("headers"))
+    return {}
+
+
+def _provider_entries(models_section: Any) -> list[dict[str, Any]]:
+    if not isinstance(models_section, dict):
+        return []
+    providers = models_section.get("providers")
+    if not isinstance(providers, list):
+        return []
+    return [item for item in providers if isinstance(item, dict)]
 
 
 def opencode_models_url(base_url: str) -> Optional[str]:
@@ -126,12 +160,16 @@ def build_provider(
     cancel: Optional[CancelToken] = None,
     session_id: Optional[str] = None,
     run_id: str = "",
+    models_section: Any = None,
 ) -> Provider:
     """按 adapter 构造适配器；不认识的 adapter 抛错而不是退回某个协议。
 
     `api_key` 为空是允许的：本地 Ollama 之类可以无钥，由目标服务决定是否放行。
+    `models_section` 给定时并入该服务商的自定义请求头（见 `provider_headers`）。
     """
-    headers = provider_headers(resolved.base_url, session_id, run_id)
+    headers = provider_headers(
+        resolved.base_url, session_id, run_id, resolved.provider_id, models_section
+    )
     common = {
         "transport": transport,
         "extra_headers": headers,
@@ -162,6 +200,8 @@ async def list_models(
     api_key: str,
     transport: Transport,
     run_id: str = "",
+    provider_id: str = "",
+    models_section: Any = None,
 ) -> ListModelsResult:
     """拉取模型清单。失败时返回 `ok=False` 与归一化后的原因，界面据此退回手动输入。"""
     from mvvm.services.provider_gateway import http_error
@@ -169,7 +209,7 @@ async def list_models(
     url = models_url(adapter, base_url)
     headers = {"content-type": "application/json"}
     headers.update(auth_headers(adapter, api_key))
-    headers.update(provider_headers(base_url, None, run_id))
+    headers.update(provider_headers(base_url, None, run_id, provider_id, models_section))
     cancel = CancelToken()
     try:
         response = await transport.post(url, headers=headers, body=b"", cancel=cancel)
@@ -219,5 +259,6 @@ __all__ = [
     "models_url",
     "normalized_not_configured",
     "opencode_models_url",
+    "provider_custom_headers",
     "provider_headers",
 ]

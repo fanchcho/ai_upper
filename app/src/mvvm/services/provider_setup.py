@@ -108,6 +108,7 @@ class ModelGateway:
             transport=self._transport or build_transport(self.settings.proxy()),
             cancel=cancel,
             session_id=session_id,
+            models_section=self.settings.models_section(),
         )
 
     def provider_for_turn(
@@ -178,6 +179,8 @@ class ModelGateway:
             self.api_key(provider_id),
             self._transport or build_transport(self.settings.proxy()),
             run_id=f"models-{provider_id}",
+            provider_id=provider_id,
+            models_section=self.settings.models_section(),
         )
 
     def _provider_entry(self, provider_id: str) -> dict[str, Any]:
