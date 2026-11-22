@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from importlib import metadata
 from typing import Any, Optional
 from urllib.parse import urlsplit
 
@@ -31,14 +30,14 @@ LIST_MODELS_TIMEOUT_MS = 15_000
 _API_SEGMENTS = {"openai", "anthropic", "google"}
 
 
+# 应用版本号的唯一来源：About 页与 User-Agent 都只读这里。
+# 值与 Deva 基线 `apps/desktop/package.json` 一致；源码态没有安装 dist-info 时也必须有确定值。
+APP_VERSION = "0.1.16"
+
+
 def app_version() -> str:
-    """本应用版本号（用于 User-Agent 自报身份）。取不到就退回 0.0.0，不抛错。"""
-    for package in ("ai_upper", "deva"):
-        try:
-            return metadata.version(package)
-        except metadata.PackageNotFoundError:
-            continue
-    return "0.0.0"
+    """本应用版本号（About 页与 User-Agent 自报身份共用的唯一入口）。"""
+    return APP_VERSION
 
 
 def _is_opencode_inference(base_url: str) -> bool:

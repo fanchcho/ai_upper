@@ -517,3 +517,86 @@ $ sed -n '$p' /tmp/test-qml-settings-models-final.log
 ```
 
 两份均 0 failed、0 skipped。仍未做：**About 版本单一来源 + refreshCw、18 页全量重拍、四条硬判据 均未做**。
+
+### 4.6 设置 · About 版本单一来源 + refreshCw 检查更新（A）
+
+**版本单一来源**：`app/src/mvvm/services/provider_registry.py::APP_VERSION`（唯一常量）经
+`app_version()` 暴露；`ShellBridge.appVersion()` 只读该函数，QML `SettingsModal.qml` 的
+`root.appVersion` 通过桥接取值。原 QML 第 1358 行硬编码的 `0.1.15` 已删除；`app/src`
+全域 grep 后只剩这一个版本字面量（见下）。基线版本链为
+`apps/desktop/package.json` `0.1.16` → `electron.vite.config.ts:41` `__APP_VERSION__` →
+`SettingsPane.tsx` About 的 `settings.version` 文案；本仓库用 `APP_VERSION = "0.1.16"`
+对齐基线值，但不在 QML 复制版本号。
+
+**取值来源与逐值对应**（只读 `/tmp/deva-merged/apps/desktop/src/renderer/src`）：
+
+| 文件 | 选择器 / 组件 | 取到的值 |
+|---|---|---|
+| `styles/app.css` | `.btn`（line 2530） | `height:30px; padding:0 var(--space-3); border:1px solid var(--border-strong); border-radius:var(--radius-sm); background:var(--bg-elevated); gap:var(--space-2); font-weight:500` |
+| `styles/app.css` | `.btn--sm`（line 2558） | `height:26px; padding:0 var(--space-2); font-size:12px` |
+| `styles/app.css` | `.btn:not(:disabled):hover`（line 2542） | `background:var(--bg-hover)` |
+| `styles/app.css` | `.btn:disabled`（line 2546） | `opacity:0.45; cursor:not-allowed` |
+| `redesign/redesign.css` | `.cf-about`（line 3440） | `padding:24px 0` |
+| `redesign/redesign.css` | `.cf-about__name`（line 3451） | `margin-top:12px; font-size:20px; font-weight:750` |
+| `redesign/redesign.css` | `.cf-about__ver`（line 3456） | `margin-top:2px; font-size:12px; color:var(--fg-subtle)` |
+| `redesign/redesign.css` | `.cf-update`（line 3468） | `margin-top:var(--space-4); gap:var(--space-2)` |
+| `redesign/UpdateSection.tsx` | idle button | `<button className="btn btn--sm" ...>` + `<RefreshCw size={13} />` |
+| `redesign/UpdateSection.tsx` | checking | `<Loader2 size={13} className="spin" />`，按钮 disabled；`check` 调 `window.deva.update.check()` |
+| `redesign/SettingsPane.tsx` | AboutPane | `settings.version` + `__APP_VERSION__` |
+
+落地值：按钮 `height:26px`、`radius:6px`（`--radius-sm`）、`1px solid #d5d5db`
+（`--border-strong`）、背景 `#ffffff`（`--bg-elevated`）、hover `Theme.bgHover`
+（`rgba(0,0,0,0.045)`）、checking `opacity:0.45`、内容 gap `8px`、内边距 `0 8px`、
+refreshCw 图标 `13×13`、文字 `12px/500`；版本前缀取 `modelsText.version`（中文
+`版本`、英文 `Version`），即 `版本 0.1.16` / `Version 0.1.16`。About 图标替换为
+`app/src/qml/assets/deva-icon.svg`（基线 `apps/desktop/build/icon.svg` 的逐字节副本）。
+
+**grep 证据**：
+
+```
+$ grep -RIn --exclude-dir=__pycache__ -E '0\.1\.15|0\.1\.16|0\.17\.33' app/src
+app/src/mvvm/services/provider_registry.py:35:APP_VERSION = "0.1.16"
+```
+
+**单页重拍**：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-about /tmp/settings-about-final.png /tmp/fx-qml-home config.json > /tmp/shot-about-final.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '1p' /tmp/shot-about-final.log
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=/tmp/settings-about-final.png size=1280x820
+```
+
+落盘 `out/latest-parity/qml/settings-about.png`（104052 bytes，sha256
+`8afc66aa48eb65e6f0a196e7fff6525b1055f7c7abb9242b6c5f21c411c94c07`）。改前 `settings-about` diff：
+`334166 px / 31.84%`；改后:
+`328222 px / 31.27%`（降低 5944 px、0.57 个百分点；按任意通道非零差计，剩余主要是
+整页字体抗锯齿/主题通道差异，不是 About 组件结构差）。
+
+**点击行为实测**：真实 `QTest.mouseClick(window, ..., (724,394))` 后
+`ShellBridge.updateState()` 由 `{'phase':'idle'}` → `{'phase':'checking'}`，网络返回后
+→ `{'phase':'latest','version':'0.1.16'}`；QML `aboutPaneRoot.updatePhase` 同步变为
+`latest`，截图 `/tmp/probe-click-about.png` 显示 `You're on the latest version`。
+hover 实测按钮底色 `#ffffff` → `#ececed`（`Theme.bgHover` 在面板底色上的合成结果）。
+
+**受影响测试**：
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-about-test-shell .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/test-about-qml-shell.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-about-qml-shell.log
+46 passed in 0.58s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-about-test-settings .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/test-about-qml-settings.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-about-qml-settings.log
+44 passed in 0.21s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-about-test-providers .venv/bin/python -m pytest app/tests/test_provider_adapters.py -q > /tmp/test-about-providers.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-about-providers.log
+26 passed in 0.18s
+```
+
+判否项：无 About 组件结构判否项。B 的 18 页全量重拍、C 的四条硬判据、D 的逐页结构
+缺口清单仍未做，随后按顺序执行。

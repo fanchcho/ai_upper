@@ -73,6 +73,10 @@ MODELS_TEXT: Dict[str, Dict[str, Any]] = {
         "version": "版本",
         "about": "关于",
         "checkForUpdates": "检查更新",
+        "checkingUpdates": "正在检查…",
+        "latestVersion": "已是最新版本",
+        "updateCheckFailed": "检查更新失败",
+        "newVersion": "发现新版本 {version}",
     },
     "en": {
         "providers": "Providers",
@@ -123,6 +127,10 @@ MODELS_TEXT: Dict[str, Dict[str, Any]] = {
         "version": "Version",
         "about": "About",
         "checkForUpdates": "Check for updates",
+        "checkingUpdates": "Checking…",
+        "latestVersion": "You’re on the latest version",
+        "updateCheckFailed": "Couldn’t check for updates",
+        "newVersion": "New version {version} available",
     },
 }
 

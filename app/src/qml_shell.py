@@ -24,8 +24,10 @@ import json
 import os
 import queue
 import sys
+import threading
 import tempfile
 import time
+import urllib.request
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List
@@ -48,6 +50,7 @@ from mvvm.services.effort import (
 )
 from mvvm.services.model_resolve import resolve_default_model, resolve_ref
 from mvvm.services.persona_store import PersonaStore
+from mvvm.services.provider_registry import app_version
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services import settings_models
 from mvvm.services.settings_service import SettingsService
@@ -74,6 +77,11 @@ SHOT_ENV = "AI_UPPER_QML_SHOT"
 SEND_ENV = "AI_UPPER_QML_SEND"
 PAGE_ENV = "AI_UPPER_QML_PAGE"
 RENDER_TIMEOUT_S = 90.0
+
+# 关于页「检查更新」：原版 UpdateSection.tsx -> window.deva.update.check() 走主进程 updater，
+# 这里用同一个 GitHub releases 数据源做最小可验证实现；状态只回传界面，不自动下载安装。
+UPDATE_RELEASES_API = "https://api.github.com/repos/sqfcyily/deva/releases/latest"
+UPDATE_TIMEOUT_S = 15
 
 # 原版「文字大小」倍率（deva tokens.css `--chat-scale`）：标准 = 1，其余据 14px 基准。
 CHAT_SCALES = {"sm": 13.0 / 14.0, "md": 1.0, "lg": 15.5 / 14.0, "xl": 17.0 / 14.0}
@@ -257,6 +265,17 @@ def _coerce_attachment_paths(attachments: Any) -> List[str]:
     return paths
 
 
+def _version_tuple(value: str) -> tuple:
+    """比较版本号：只取数字段，忽略预发布后缀（与 updater.ts 的 semver newer 判定同量级）。"""
+    parts = []
+    for chunk in value.split("."):
+        digits = "".join(ch for ch in chunk if ch.isdigit())
+        if not digits:
+            break
+        parts.append(int(digits))
+    return tuple(parts)
+
+
 def new_session_id() -> str:
     """新会话 id：渲染层用 `chat-<时间36><随机>` 的同一形状（复用 `base36`）。"""
     from mvvm.services.chat_session_store import base36
@@ -266,6 +285,9 @@ def new_session_id() -> str:
 
 class ShellBridge(QtCore.QObject):
     """QML 调过来的入口，以及回合事件回写 QML 属性的唯一出口。"""
+
+    # 关于页检查更新：worker 线程算完发一次状态，QML 的 Connections 接收。
+    updateStateChanged = QtCore.Signal("QVariantMap")
 
     # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
     # 为什么不写 Theme 单例的 property：`QQmlApplicationEngine.singletonInstance()`
@@ -304,6 +326,9 @@ class ShellBridge(QtCore.QObject):
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
+        # 检查更新的状态机：idle / checking / latest / available / error。
+        self._update_state: Dict[str, Any] = {"phase": "idle"}
+        self._update_thread: Any = None
         # 附件白名单只此一套服务；对话框由这里的 QFileDialog 提供。
         # **必须优先用宿主那一份**：`send()` 交给 `ChatHost.send` 读附件，宿主只认自己
         # `self.attachments` 的白名单。各 new 一份的话，回形针选中的文件在发送时会被判
@@ -366,6 +391,61 @@ class ShellBridge(QtCore.QObject):
     def labels(self) -> Dict[str, str]:
         """设置页文案（界面语言跟随 config.json 的 locale）。"""
         return dict(SETTINGS_LABELS[self.language()])
+
+    @QtCore.Slot(result=str)
+    def appVersion(self) -> str:
+        """About 页版本号：只从 provider_registry.app_version() 取，QML 不写版本字面量。"""
+        return app_version()
+
+    @QtCore.Slot(result="QVariantMap")
+    def updateState(self) -> Dict[str, Any]:
+        """当前检查更新状态（About 页重新挂载时接回已有状态）。"""
+        return dict(self._update_state)
+
+    @QtCore.Slot()
+    def checkForUpdates(self) -> None:
+        """原版 UpdateSection 的 `check()`：只触发检查，不自动下载安装。"""
+        if self._update_state.get("phase") == "checking":
+            return
+        self._set_update_state({"phase": "checking"})
+        thread = threading.Thread(target=self._check_updates_worker, daemon=True)
+        self._update_thread = thread
+        thread.start()
+
+    def _set_update_state(self, state: Dict[str, Any]) -> None:
+        self._update_state = dict(state)
+        self.updateStateChanged.emit(dict(state))
+
+    def _check_updates_worker(self) -> None:
+        state: Dict[str, Any]
+        try:
+            request = urllib.request.Request(
+                UPDATE_RELEASES_API,
+                headers={
+                    "Accept": "application/vnd.github+json",
+                    "User-Agent": f"deva/{app_version()}",
+                },
+            )
+            with urllib.request.urlopen(request, timeout=UPDATE_TIMEOUT_S) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            tag = str(payload.get("tag_name") or "").strip().lstrip("vV")
+            if not tag:
+                raise ValueError("release tag missing")
+            if _version_tuple(tag) > _version_tuple(app_version()):
+                state = {
+                    "phase": "available",
+                    "version": tag,
+                    "url": str(payload.get("html_url") or ""),
+                }
+            else:
+                state = {"phase": "latest", "version": app_version()}
+        except Exception as exc:  # 网络 / 解析失败都如实回到界面
+            state = {"phase": "error", "message": f"{type(exc).__name__}: {exc}"}
+        try:
+            self._set_update_state(state)
+        except RuntimeError:
+            # 窗口已销毁时对象可能已断开，忽略这一次收尾。
+            pass
 
     @QtCore.Slot(result=str)
     def theme(self) -> str:

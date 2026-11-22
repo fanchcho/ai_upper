@@ -12,6 +12,8 @@ Item {
     property string pane: "general"
     // 截图/深链页可指定 Models 的初始子视图：list | provider | advanced。
     property string modelsView: "list"
+    // About 版本号只从 ShellBridge.appVersion() 取，不在 QML 写版本字面量。
+    readonly property string appVersion: shellBridge ? shellBridge.appVersion() : ""
     signal close()
     signal paneRequested(string name)
 
@@ -1327,57 +1329,180 @@ Item {
         }
     }
 
-    // ── About：56px 渐变图标 + 名称 + 版本 + 检查更新 ─────────────────────
+    // ── About：56px 图标 + 名称 + 版本 + 检查更新 ─────────────────────────
+    // 几何逐项取自原版：.cf-about padding 24px 0；.cf-about__name margin-top 12px、
+    // font-size 20/weight 750；.cf-about__ver margin-top 2px、12px；.cf-update margin-top 16px、gap 8px。
     Component {
         id: aboutPane
         Item {
+            id: aboutPaneRoot
+            objectName: "aboutPaneRoot"
+            // 文案与状态都从 Python 投影取；QML 只画。
+            property var labels: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+            property var updateState: ({phase: "idle"})
+            property string updatePhase: "idle"
+            property bool checking: updatePhase === "checking"
+
+            function applyUpdateState(state) {
+                updateState = state || {phase: "idle"}
+                var phase = state ? (state["phase"] || state.phase || "idle") : "idle"
+                updatePhase = "" + phase
+            }
+
+            function checkUpdates() {
+                if (!shellBridge || checking)
+                    return
+                applyUpdateState({phase: "checking"})
+                shellBridge.checkForUpdates()
+            }
+
+            Component.onCompleted: {
+                if (shellBridge)
+                    applyUpdateState(shellBridge.updateState())
+            }
+
+            Connections {
+                target: shellBridge
+                function onUpdateStateChanged(state) { aboutPaneRoot.applyUpdateState(state) }
+            }
+
             Column {
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: 80
-                spacing: 10
-                Rectangle {
+                id: aboutColumn
+                width: parent.width
+                y: 63
+                spacing: 0
+
+                Image {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 56
                     height: 56
-                    radius: 14
-                    gradient: Gradient {
-                        GradientStop { position: 0; color: "#4F46E5" }
-                        GradientStop { position: 1; color: "#7C3AED" }
-                    }
+                    source: "assets/deva-icon.svg"
+                    smooth: true
                 }
+                // .cf-about__name { margin-top: 12px }；Text 的隐式盒比字形高，留 15px 对齐实测。
+                Item { width: parent.width; height: 15 }
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: "Deva"
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 20
-                    font.weight: 700
+                    font.weight: 750
                 }
+                // .cf-about__ver { margin-top: 2px }
+                Item { width: parent.width; height: 6 }
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: "0.1.15"
+                    text: (labels.version || "Version") + " " + root.appVersion
                     color: Theme.fgSubtle
                     font.family: Theme.sansFamily
                     font.pixelSize: 12
                 }
-                Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: 120
-                    height: 30
-                    radius: Theme.radius
-                    color: Theme.bgInset
-                    border.width: 1
-                    border.color: Theme.border
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Check for updates"
-                        color: Theme.fg
-                        font.family: Theme.sansFamily
-                        font.pixelSize: 12
-                        font.weight: 600
+                // .cf-update { margin-top: var(--space-4); gap: var(--space-2) }
+                Item { width: parent.width; height: 19 }
+
+                Column {
+                    id: updateSection
+                    width: parent.width
+                    spacing: Theme.space2
+
+                    Rectangle {
+                        id: updateButton
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: updateButtonRow.implicitWidth + Theme.space2 * 2 + 2
+                        height: 26
+                        radius: Theme.radiusSm
+                        color: updateMouse.containsMouse && !aboutPaneRoot.checking
+                               ? Theme.bgHover : Theme.bgElevated
+                        border.width: 1
+                        border.color: Theme.borderStrong
+                        opacity: aboutPaneRoot.checking ? 0.45 : 1
+
+                        Row {
+                            id: updateButtonRow
+                            anchors.centerIn: parent
+                            spacing: Theme.space2
+                            Icon {
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: IconData.refreshCw
+                                size: 13
+                                color: Theme.fg
+                                visible: !aboutPaneRoot.checking
+                            }
+                            Icon {
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: IconData.refreshCw
+                                size: 13
+                                color: Theme.fg
+                                visible: aboutPaneRoot.checking
+                                RotationAnimator on rotation {
+                                    from: 0
+                                    to: 360
+                                    duration: 800
+                                    loops: Animation.Infinite
+                                    running: aboutPaneRoot.checking
+                                }
+                            }
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: aboutPaneRoot.checking
+                                      ? (aboutPaneRoot.labels.checkingUpdates || "Checking…")
+                                      : (aboutPaneRoot.labels.checkForUpdates || "Check for updates")
+                                color: Theme.fg
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 12
+                                font.weight: 500
+                            }
+                        }
+                        MouseArea {
+                            id: updateMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            enabled: !aboutPaneRoot.checking
+                            cursorShape: aboutPaneRoot.checking ? Qt.ForbiddenCursor : Qt.PointingHandCursor
+                            onClicked: aboutPaneRoot.checkUpdates()
+                        }
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        visible: aboutPaneRoot.updatePhase === "latest"
+                        Icon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: IconData.check
+                            size: 13
+                            color: Theme.success
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: aboutPaneRoot.labels.latestVersion || ""
+                            color: Theme.success
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                        }
+                    }
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        visible: aboutPaneRoot.updatePhase === "error"
+                        Icon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: IconData.alertTriangle
+                            size: 13
+                            color: Theme.danger
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: aboutPaneRoot.labels.updateCheckFailed || ""
+                            color: Theme.danger
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                        }
                     }
                 }
             }
         }
     }
+
 }
