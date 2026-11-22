@@ -267,3 +267,57 @@ $ convert rerun final -compose difference -composite -colorspace gray -threshold
    与 `IconData.qml` 都没有）。
 
 第 3 步每修一项单独提交，并把「前/后」截图或数字写进本文件后续章节。
+
+---
+
+## 4. 第 3 步逐项修复
+
+### 4.1 仓库根残留清理 + 像素对照脚本入库（A1）
+
+**残留取证**（清理前）：
+
+```
+$ du -sh core data personas
+88M	core
+12K	data
+40K	personas
+$ ls -ld core data personas
+-rw------- 1 root hermes 516042752 Nov 21 17:29 core
+drwxr-sr-x 3 root hermes      4096 Nov 21 20:08 data
+drwxr-sr-x 2 root hermes      4096 Nov 21 20:08 personas
+$ head -c 16 core | od -c
+0000000 177   E   L   F 002 001 001  \0  \0  \0  \0  \0  \0  \0  \0
+$ find data -type f; find personas -type f
+data/chats/_index.json
+personas/general.md
+personas/xiaomajiang.md
+$ cat data/chats/_index.json
+[]
+$ md5sum personas/*.md app/assets/personas/*.md
+8bb697ed335d63391d2208efa2c275d6  personas/xiaomajiang.md
+8bb697ed335d63391d2208efa2c275d6  app/assets/personas/xiaomajiang.md
+90557fe34053a2814d5534348b89eb1b  personas/general.md
+90557fe34053a2814d5534348b89eb1b  app/assets/personas/general.md
+```
+
+判定依据：
+
+- `core` 首 4 字节是 `\177ELF`，516 MB、mtime 11-21 17:29 —— 是**进程崩溃的 core dump**
+  （Linux 把它写在进程 CWD，而当时有一次从仓库根起应用的运行），不是仓库内容；
+- `personas/` 两份 md5 与 `app/assets/personas/` 的种子**逐字节相同** —— 是
+  `PersonaStore.ensure_seeded()` 在数据根被指到仓库根时复制出来的首启种子，不是用户数据；
+- `data/chats/_index.json` 是 `[]` —— 空会话索引，同上。
+
+处置：三者全部删除；`.gitignore` 增加 `core` / `core.*` 与 `/personas/` / `/data/`
+（前两项堵住再次误生成的路径，后两项保证误指向时也不会被 `git add .` 收进库）。
+**没有把任何一项提交进库。**
+
+**脚本入库**：`scripts/parity/page_diff18.py` 原先依赖 ImageMagick 的
+`identify` / `convert`，而当前环境里两者**都不存在**（`command -v convert identify
+magick` → rc=1）。新增 `scripts/parity/pngread.py`（纯标准库 PNG 解码：位深 8、
+非隔行、颜色类型 0/2/4/6，逐行反滤波），`page_diff18.py` 与 `out/latest-parity/pixlib.py`
+都改用它，这样重拍对照不再依赖外部二进制。
+
+新解码器的正确性以旧数字为准：对同一批 `out/latest-parity/{deva,qml}` 复算，18 页
+差异像素与 §2.2 表**逐项一致**（chat 126790 / empty 10325 / search-results 104080 /
+settings-models 328000 / settings-about 334166 …），整表 37 秒跑完，rc=0。

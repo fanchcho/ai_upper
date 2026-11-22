@@ -12,3 +12,12 @@ dist/
 *.egg-info/
 .DS_Store
 Thumbs.db
+
+# 进程崩溃留下的 core dump（Linux 默认写在进程 CWD）。
+core
+core.*
+
+# 把数据目录 / 资源根误指到仓库根时的运行产物：首启种子副本 personas/、
+# 会话库 data/chats/。它们属于用户数据，绝不入库。
+/personas/
+/data/
