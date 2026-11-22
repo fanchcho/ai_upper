@@ -996,6 +996,27 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 2. 分组标题宽度 +2px：11.5px 无法在 Qt 表达，取 12px 后的字形度量残差，已在上文说明。
 3. 阴影尾部 +42 px：Canvas 阴影与 CSS `box-shadow` 的衰落曲线不同，`blur` 已从 24 收到 20，仍未逐像素相同。
 
+**提交记录**：`127e44f` `fix(qml): model-picker 双模式弹层 + 弹层态聚焦描边 (§4.9)`
+（2026-11-23，父提交 `0805d16`，未 push，只在本地 `develop`）。
+`git show --name-status --format='' 127e44f` 实测 47 个路径，与本轮改动逐条对上：
+
+```
+M  app/src/qml/Main.qml                     ← D2 聚焦分支 + 贴片 open 态 + 两个实例
+M  app/src/qml/ModelPicker.qml              ← D1 双模式弹层（逐值注释来源 file:line）
+A  app/tests/test_qml_model_picker.py       ← 3 条真实鼠标路径 + 渲染像素断言
+M  out/latest-parity/REPORT.md              ← §4.9 新增 + §5.2/§5.3/§5.4/§5.5 重算
+M  out/latest-parity/qml/model-picker.png   ← 交付图 md5 7af296ea…
+A  out/latest-parity/probes/c6_*.py         ← 9 个量距/归因探针
+A  out/latest-parity/logs/c6-*/c7-*/d1-*/d2-*/pytest-*  ← 本节引用的全部实测日志
+A  out/latest-parity/ab-font/*.png          ← 分组标题字号 A/B 两张（非交付图）
+```
+
+本节所有数字都出自该提交里的日志，可用
+`.venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml`
+复算（`logs/c7-page-diff18-final.log`，rc=0）；重拍用
+`bash scripts/parity/qml_page_shot.sh model-picker out/latest-parity/qml/model-picker.png /tmp/fx-qml-home config.json`
+（`logs/c7-mp-shoot.out` / `.err` 0 字节，产物 md5 与交付图一致 `7af296ea76c95baccbdd4c837e0f3159`）。
+
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
 
