@@ -103,8 +103,30 @@ def test_403_carries_provider_reason_instead_of_key_advice():
     assert err.status == 403
     assert "403" in err.message
     assert "model not allowed for this account" in err.message
+    # 解析出 message 后只显示原因，不把整段 JSON 原样塞给用户
+    assert '{"error"' not in err.message
     # 有正文原因时只显示原因（上游 `hint || advice` 同一取舍），不再给通用建议
     assert "请检查 API 密钥、账号对该模型的权限" not in err.message
+
+
+def test_403_json_message_and_error_fields():
+    message = http_error(403, '{"message":"quota exhausted, contact admin"}')
+    assert "quota exhausted, contact admin" in message.message
+    assert '{"message"' not in message.message
+
+    error = http_error(403, '{"error":"region not supported"}')
+    assert "region not supported" in error.message
+    assert '{"error"' not in error.message
+
+
+def test_403_plain_text_and_truncation():
+    plain = http_error(403, "Forbidden: model not enabled")
+    assert "Forbidden: model not enabled" in plain.message
+
+    long_body = "x" * 300
+    truncated = http_error(403, long_body)
+    assert truncated.message.endswith("：" + "x" * 200)
+    assert len(truncated.message) < len(long_body)
 
 
 def test_403_html_body_falls_back_to_advice():

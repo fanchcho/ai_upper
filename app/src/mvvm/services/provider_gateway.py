@@ -165,6 +165,39 @@ def _is_effort_rejection(status: int, body: str) -> bool:
     ) is not None
 
 
+def _forbidden_reason(body: str) -> str:
+    """从 403 正文里取服务商给的原因。
+
+    优先解析 JSON 里的 `message` / `error`（OpenAI 兼容网关常写成
+    `{"error":{"message":"..."}}`）；解析不出就回退到折叠空白、截断 200 字的原文。
+    整页 HTML（WAF 拦截页）没有可读原因，返回空串交给通用建议。
+    """
+    if body.lstrip().startswith("<"):
+        return ""
+    text = ""
+    try:
+        data = json.loads(body)
+    except (TypeError, ValueError):
+        data = None
+    if isinstance(data, dict):
+        candidates = [data.get("message")]
+        error = data.get("error")
+        if isinstance(error, dict):
+            candidates.append(error.get("message"))
+        elif isinstance(error, str):
+            candidates.append(error)
+        for value in candidates:
+            if isinstance(value, str) and value.strip():
+                text = value
+                break
+    elif isinstance(data, str):
+        text = data
+    if not text:
+        text = body
+    text = " ".join(text.split())[:200]
+    return f"：{text}" if text else ""
+
+
 def _forbidden_error(body: str) -> NormalizedError:
     """403：密钥多半是对的，被拒另有原因（见 Deva `forbiddenError`）。
 
@@ -174,7 +207,7 @@ def _forbidden_error(body: str) -> NormalizedError:
     （WAF 拦截页）时给出排查方向。kind 仍为 'auth'：不重试，接入引导等按
     「凭据 / 权限问题」处理的地方照旧。
     """
-    hint = "" if body.lstrip().startswith("<") else _body_hint(body)
+    hint = _forbidden_reason(body)
     advice = "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。"
     return NormalizedError(
         "auth",
