@@ -1,0 +1,269 @@
+# 对齐基线更新到 deva 最新代码 · 第 1–2 步报告
+
+> 本文件只覆盖「基线取证 + 在新基线上重拍两侧」。第 3 步（逐页补齐）另起章节，
+> 每条修复单独提交并把 commit 记进来。
+
+日期：2026-11-22　仓库：`/home/agent/shared_workspace/ai_upper`（分支 `develop`）
+
+---
+
+## 1. 「最新版」是哪一版（只读取证）
+
+### 1.1 本地 deva HEAD 与远端 main
+
+```
+$ cd /home/agent/shared_workspace/deva
+$ git rev-parse HEAD
+61f6a357be5d23d8dc534966e5447b2efe4e345f
+$ git status --short
+（空输出，rc=0）
+$ git log -1 --format='%H %ci %s'
+61f6a357be5d23d8dc534966e5447b2efe4e345f 2026-11-22 09:37:46 +0800 chore(out): 记录文档收尾后的四项快检 / note post-docs re-check
+$ git branch -vv | head -3
+  backup/pre-merge-20261120 109937f chore(desktop): 版本号升级至 0.1.15 / bump version to 0.1.15
+  deva_web                  3ddd9dc [fork/deva_web] feat(web): 将 apps/web 源码纳入版本管理 / track apps/web sources in version control
+* feat/plugin-deva-agent    61f6a35 [fork/feat/plugin-deva-agent] chore(out): 记录文档收尾后的四项快检 / note post-docs re-check
+$ git remote -v
+fork    git@github.com:fanchcho/deva.git (fetch)
+fork    git@github.com:fanchcho/deva.git (push)
+origin  https://github.com/sqfcyily/deva.git (fetch)
+origin  https://github.com/sqfcyily/deva.git (push)
+$ git ls-remote origin main
+b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838	refs/heads/main
+```
+
+**结论：本地 deva HEAD `61f6a35` 不是远端最新。** 远端 `origin/main` 在
+`b0f0d82`，两者从 merge-base `8997ecb` 分叉：
+
+```
+$ git merge-base HEAD b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838
+8997ecb10914f2b14134eb7e17025ff138bd43f2
+$ git rev-list --left-right --count HEAD...b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838
+20	1
+```
+
+即本地领先 20 个提交、落后 1 个提交。为什么没有直接切到 `b0f0d82`：`/home/agent/shared_workspace/deva`
+是**只读**工作树（硬约束不许 checkout / pull）。所以按硬约束的做法，在 `/tmp` 下
+用它做了一份合并树：
+
+```
+$ git merge-tree --write-tree HEAD b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838
+b4c30a7ae217c7a701833eff38eee5cab65240be
+（rc=0，无冲突）
+$ comm -12 <(git diff --name-only 8997ecb HEAD | sort) \
+           <(git diff --name-only 8997ecb b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838 | sort) | wc -l
+0
+$ git diff --name-only 8997ecb HEAD | wc -l
+214
+$ git diff --name-only 8997ecb b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838 | wc -l
+12
+```
+
+两侧改动文件集合交集为 0，所以合并树 = 本地 214 个文件 + 远端的 12 个文件，无取舍。
+
+**基线定义（写死，后面所有对照都指向它）：**
+
+| 项 | 值 |
+|---|---|
+| 基线来源 | 合并树 `b4c30a7` = 本地 `61f6a35` + 远端 main `b0f0d82` |
+| 构建位置 | `/tmp/deva-merged`（源码树拷贝，非 git 工作树，`git status` 报 not a repository） |
+| 是否远端最新 | **是**：包含 `origin/main` 当前 tip 的全部 12 个改动文件 |
+| 原版版本号 | `apps/desktop/package.json` → `"version": "0.1.16"` |
+
+远端 main 那 1 个提交的实际内容（也是第 3 步要补的功能来源）：
+
+```
+$ git diff --stat 8997ecb b0f0d828b58b07f43ac4de8bd883a8ad8dbc7838
+ apps/desktop/src/main/providers/index.ts           |   4 +-
+ apps/desktop/src/main/providers/opencode.ts        |  16 ++-
+ apps/desktop/src/main/providers/types.ts           |  28 ++++-
+ apps/desktop/src/main/services/model-resolve.ts    |  17 +++
+ apps/desktop/src/main/services/provider.ts         |   2 +-
+ .../src/features/settings/ModelSettings.tsx        |  25 +++-
+ .../src/features/settings/ProviderAdvanced.tsx     | 134 +++++++++++++++++++++
+ apps/desktop/src/renderer/src/i18n/messages.ts     |  26 ++++
+ apps/desktop/src/renderer/src/mock/models.ts         |  5 +
+ apps/desktop/src/renderer/src/store/models.tsx      |   9 +
+ apps/desktop/src/renderer/src/styles/app.css       |  14 +++
+ apps/desktop/src/shared/provider-headers.ts        |  62 ++++++++++
+ 12 files changed, 328 insertions(+), 14 deletions(-)
+```
+
+### 1.2 渲染前提（字面值）
+
+| 前提 | 实测值 / 命令 |
+|---|---|
+| node | `v24.22.1`（`node -v`） |
+| npm | `11.19.1`（`npm -v`） |
+| pnpm | **缺失**：`pnpm: command not found`；corepack `0.36.0` 可用 |
+| 包管理声明 | `package.json`: `"packageManager": "pnpm@10.8.0"`, `"engines": {"node": ">=20"}` |
+| 依赖 | deva 已有 pnpm-hoisted `node_modules`；`/tmp/deva-merged/node_modules` → 符号链接到 deva 的，`apps/desktop/node_modules` 同样链接，不重复装 |
+| 构建 | `electron-vite build` → `apps/desktop/out/{main,preload,renderer}`（gitignored）；合并树产物 `978047 B` main、`779 B` renderer/index.html，out 合计 `4.3M` |
+| electron 二进制 | `$DEVA_ROOT/node_modules/electron/dist/electron`（178MB） |
+| 启动方式 | `DEVA_HOME=<tmp> electron --no-sandbox --disable-gpu --user-data-dir=<tmp> $DEVA_ROOT/apps/desktop/out/main/index.js` |
+| Xvfb | `:97`，`-screen 0 1400x900x24`；窗口 `windowmove 0 0` + `windowsize 1280 820` |
+| 客户端区 | `1280x820`，DPR 1（未设 `QT_SCALE_FACTOR` / `QT_ENABLE_HIGHDPI_SCALING`） |
+| 页面清单来源 | deva 侧 `scripts/parity/deva_pages_all.sh` 第 79–96 行 18 个 `run_if`；QML 侧 `app/src/qml_shell.py:150` 的 `PAGE_NAMES`（同名 18 个，逐项一致） |
+| QML 侧渲染 | `QT_QPA_PLATFORM=offscreen`（`app/src/main.py:52` setdefault）+ 软件光栅 + `QQuickWindow.grabWindow()`（`qml_shell.py:1325`）；窗口 1280×820 见 `Main.qml:19-20` |
+| 字体 | QML `Theme.sansFamily = "DejaVu Sans"`（`Theme.qml:95`）；deva 侧为 Chromium 默认 sans，二者同族 |
+| 遮罩 | `Theme.backdrop = Qt.rgba(0,0,0,0.42)`（`Theme.qml:64`） |
+| 数据夹具 | `/tmp/fx-pages/data/chats`（121 个文件，120 会话 + 1 索引）；`/tmp/fx-page-home/{config.json,config-dark.json}`，同一份 provider 配置两端共用 |
+
+---
+
+## 2. 在新基线上重拍两侧
+
+产物目录（**没有写 `out/final-close/`**，新目录独立）：
+
+- deva：`out/latest-parity/deva/<page>-deva.png`，日志 `out/latest-parity/deva-18pages.log`
+- QML：`out/latest-parity/qml/<page>.png`（另有 18 份 `.out`/`.err`），日志 `out/latest-parity/qml-18pages.log`
+
+命令（deva 侧只多一个 `DEVA_ROOT` 指到合并树）：
+
+```
+DEVA_ROOT=/tmp/deva-merged bash scripts/parity/deva_pages_all.sh out/latest-parity/deva
+bash scripts/parity/qml_pages_all.sh out/latest-parity/qml
+```
+
+### 2.1 页数与失败
+
+```
+$ ls out/latest-parity/deva | wc -l        → 18
+$ ls out/latest-parity/qml/*.png | wc -l   → 18
+$ tail -1 out/latest-parity/deva-18pages.log
+done: 18 页 -> out/latest-parity/deva
+$ cat out/latest-parity/qml-18pages.log   → 18 行全是 `ok <page> 1280x820 <size>B rc=0`
+$ ls -l out/latest-parity/qml/*.err | awk '{print $5}' | sort -u
+0
+```
+
+QML 侧 18 份 stderr 全部 0 字节 —— 没有 QML 警告/报错被吞掉。
+
+过程异常（已处置，记录在案）：`hover-thread` deva 侧第一次出图被判为空图并自动重试，
+第二次正常（`retry hover-thread (attempt 1)` → `ok hover-thread 158169B`）；
+`model-picker` 首轮是全批次里唯一一张 stub 图（左侧全黑、中列还是 QuickStart），
+按单页重拍：
+
+```
+$ DEVA_ROOT=/tmp/deva-merged bash scripts/parity/deva_pages_all.sh out/latest-parity/deva model-picker
+ok   model-picker 1280x820 164258B
+```
+
+表里 13.41% 用的是重拍后的图（`946b07de…`），不是首轮那张 39,718B 的残图。
+
+### 2.2 逐页 md5 与差异像素
+
+分母统一 `1280*820 = 1049600`。表格原文另存 `out/latest-parity/page-diff-table.txt`
+（md5 `2b453517e89610258fbe53efe0663361`）。
+
+| 页名 | deva md5 | QML md5 | 差异像素 | 差异% |
+|---|---|---|---|---|
+| chat | `ac72cd59…` | `e36d9edb…` | 126790 | 12.08 |
+| ctx-menu | `64c8c33a…` | `8ff33025…` | 133997 | 12.77 |
+| dark-chat | `252996a5…` | `cc067223…` | 249359 | 23.76 |
+| delete-confirm | `964c32d1…` | `55a629b9…` | 396118 | 37.74 |
+| empty | `a616eabe…` | `3b1ddb91…` | 10325 | 0.98 |
+| first-run | `0e2b5786…` | `3b1ddb91…` | 10325 | 0.98 |
+| focus-composer | `e976e085…` | `3c8b55f5…` | 126806 | 12.08 |
+| hover-thread | `16917898…` | `96a86cfd…` | 127197 | 12.12 |
+| long-bottom | `be7b7fe8…` | `8d291d66…` | 125692 | 11.98 |
+| long-mid | `147fb156…` | `6bea500d…` | 132329 | 12.61 |
+| model-picker | `946b07de…` | `ff84da6c…` | 140783 | 13.41 |
+| search-none | `49503995…` | `db2e09d1…` | 82432 | 7.85 |
+| search-open | `3a5f8098…` | `be846a41…` | 126819 | 12.08 |
+| search-results | `1d1ba812…` | `8ad4403a…` | 104080 | 9.92 |
+| settings-about | `3fac0ec7…` | `96154d72…` | 334166 | 31.84 |
+| settings-extensions | `15d607e1…` | `72ee5888…` | 329666 | 31.41 |
+| settings-general | `4d16a5c6…` | `9858fecd…` | 340234 | 32.42 |
+| settings-models | `7f7a6dd8…` | `6319db2e…` | 328000 | 31.25 |
+
+`empty` 与 `first-run` 是**同一屏**，两侧像素级都是零差：
+
+```
+$ compare -metric AE deva/empty-deva.png deva/first-run-deva.png → 0
+$ compare -metric AE qml/empty.png       qml/first-run.png       → 0
+```
+
+deva 侧两张的 PNG 文件 md5 不同（`a616eabe…` / `0e2b5786…`），但解码后像素签名完全相同
+（`identify -verbose` 的 `signature` 两张都是 `76390a45…`），差异只在 PNG 的
+`date:create` / `date:modify` 文本块（两张拍摄间隔 16 秒）。QML 侧两张连文件字节都相同
+（都是 `3b1ddb91…`）。**结论：md5 列在这里只对「同一时刻拍的同一帧」可比，`empty` /
+`first-run` 这一对被 PNG 时间戳分开了，像素差为 0。**
+
+### 2.3 关键校验：新基线没有改变这 18 页的既有画面
+
+合并 upstream 后必须回答一个问题 —— **新增的 Provider 高级设置 UI 是否动了老页面？**
+逐页把「新拍 deva」与旧对照 `out/final-close/deva-final`（老基线上拍的）做 AE：
+
+```
+$ for f in out/latest-parity/deva/*-deva.png; do compare -metric AE "$f" out/final-close/deva-final/$(basename $f) null:; done
+chat                5
+ctx-menu            0
+dark-chat           0
+delete-confirm      0
+empty               0
+first-run           0
+focus-composer      0
+hover-thread        0
+long-bottom         0
+long-mid            0
+model-picker        5
+search-none         0
+search-open         0
+search-results      0
+settings-about      0
+settings-extensions 0
+settings-general    0
+settings-models     0
+```
+
+**16/18 页逐字节相同，2 页各差 5 个像素**（chat / model-picker 各 5 个像素，落在输入框
+光标闪烁相位）。结论：远端 main 的 12 个文件改动对 18 个既有页面状态**零可见影响**
+（provider 高级设置只在 `purpose !== 'decision'` 的 provider 详情里出现，而这些页面
+都不进详情页）。所以本轮第 3 步的「结构差异」全部来自 **QML 尚未实现的功能**，
+不是基线漂移造成的。
+
+### 2.4 旧对照 `deva-rerun` 的漂移已定性
+
+`out/final-close/deva-final` 与 `out/final-close/deva-rerun` 之间的差异（此前遗留的
+「不是字节一致」问题）现在有定量答复：
+
+```
+$ compare -metric AE deva-rerun/chat-deva.png  deva-final/chat-deva.png   → 4444
+$ compare -metric AE deva-rerun/long-mid-deva.png …                       → 4438
+$ compare -metric AE deva-rerun/settings-general-deva.png …               → 1676
+$ compare -metric AE deva-rerun/search-results-deva.png …                 → 3170
+$ convert rerun final -compose difference -composite -colorspace gray -threshold 5% -format '%@' info:
+55x712+272+71
+```
+
+差异区域是一个 `55×712 @ (272,71)` 的窄条 —— 正好是会话栏里相对时间文案那一列
+（`22 hr ago` → `yesterday`）。同一份数据在两天拍，相对时间必然会跳；这是**夹具语义
+漂移，不是渲染差异**。本轮新拍（`out/latest-parity/deva`）与 `deva-final` 的 AE 已回到
+0/5，说明当天时段内两侧时区与文案一致。
+
+---
+
+## 3. 下一步（第 3 步）的清单来源
+
+由 §1.1 的 12 个文件 + 逐页表定性，待补的**结构/功能**差异（不是字体光栅）：
+
+1. **设置 · Models 面板结构**：QML 现在只有一个标题 + 裸 ListView（`SettingsModal.qml`
+   `modelsPane`）；deva 是 `Providers` 标题（15/700）+ 28×28 `+` 按钮 + 1px 描边圆角
+   容器（`models__rows`）+ 52 高 provider 行（10×10 启用点、13/600 名称、11.5 subtle
+   副标题、警告三角 `#d68a00`、chevron）。
+2. **provider 详情下钻页**：`view: 'list' | 'detail' | 'model' | 'advanced'`，
+   顶栏 Wrench 按钮（仅 `purpose !== 'decision'`）进 `ProviderAdvanced`。
+3. **自定义请求头**（upstream 新功能）：`ProviderAdvanced.tsx` + `shared/provider-headers.ts`
+   —— `MAX_CUSTOM_HEADERS=32`、`RESERVED_HEADERS`、`NAME_RE`/`VALUE_RE`、`headerIssue()`、
+   `sanitizeHeaders()`、`providerCustomHeaders(providerId)` 读
+   `config.models.providers[].headers`，并在 `providerHeaders(baseURL, providerId, sessionId)`
+   里**最后合并**；ai_upper 侧 `provider_registry.provider_headers()` 目前只有
+   `user-agent` + 可选 `x-opencode-session`，**未实现**。
+4. **403 文案**：`types.ts` 新增 `forbiddenError(body)`，把 provider 返回的原因带进消息。
+5. **设置 · About 面板**：deva 用 `{t('settings.version')} {__APP_VERSION__}`
+   （`0.1.16`），QML 硬编码 `"0.1.15"` 且无前缀、图标是纯紫渐变块、更新按钮缺 RefreshCw。
+6. **图标**：需要新增 `wrench`、`refresh-cw`（`scripts/parity/gen_icons.mjs` 的 WANTED
+   与 `IconData.qml` 都没有）。
+
+第 3 步每修一项单独提交，并把「前/后」截图或数字写进本文件后续章节。
