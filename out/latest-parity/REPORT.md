@@ -691,9 +691,9 @@ rc=0
 **未做 / 已知残留**：本节只修输入卡片，整页仍余 `12.22%`，集中在左侧栏 `14.60%`、正文 `9.80%`
 和页面底部 `y≥810` 的 `45.90%` 带（A/B/E 类既有缺口，见 §5.4），按任务范围不在本轮。
 
-**提交记录**：见本轮提交（`fix(qml): dark-chat 输入卡片改用 --bg-elevated 并补 --shadow`），
-变更路径 4 个：`app/src/qml/Main.qml`、`out/latest-parity/qml/dark-chat.png`、
-`out/latest-parity/qml/chat.png`、`out/latest-parity/REPORT.md`，另附
+**提交记录**：`dd0b38e` `fix(qml): dark-chat 输入卡片改用 --bg-elevated 并补 --shadow`，
+`git show --name-only --format='' dd0b38e` 实测 7 个路径：`app/src/qml/Main.qml`、
+`out/latest-parity/qml/dark-chat.png`、`out/latest-parity/qml/chat.png`、`out/latest-parity/REPORT.md`，另附
 `out/latest-parity/logs/dark-composer-ab.log`、`out/latest-parity/logs/dark-fix-page-diff18.log`、
 `out/latest-parity/probes/dark_composer_ab.py`。
 
@@ -818,7 +818,32 @@ rc=0
 项数与 Delete 颜色 + 删除链路）；菜单阴影按 `0 6 24 / .12` 补齐后与 deva 逐像素相差 ≤1 灰阶，
 未再调参。
 
-**提交记录**：见紧随本节之后的本轮提交。
+**提交记录**：`cddf2fb` `fix(qml): align context menu and make delete confirmation interactive`
+（2026-11-22 23:31:37 +0800，父提交 `dd0b38e`，未 push，只在本地 `develop`）。
+`git show --name-only --format='%H %s' cddf2fb` 实测 17 个路径，与本节改动清单逐条对上：
+
+```
+app/src/qml/IconData.qml                       ← listChecks
+app/src/qml/Main.qml                           ← 右键菜单 + 确认层 + threadRow<i>
+app/src/qml/SoftShadow.qml                     ← 新组件（dd0b38e 的内联 Canvas 抽出）
+app/src/qml_shell.py                           ← deleteSession(str) -> bool
+app/tests/test_qml_context_menu.py             ← 新文件，3 条真实 QTest 点击路径
+app/tests/test_qml_shell.py                    ← deleteSession 单测
+scripts/parity/gen_icons.mjs                   ← 生成清单加 list-checks
+out/latest-parity/REPORT.md                    ← 本节
+out/latest-parity/probes/c5_ctx_confirm.py     ← 判据 1/2 探针
+out/latest-parity/logs/c5-ctx-confirm.log
+out/latest-parity/logs/c5-ctx-menu-shoot.{out,err}
+out/latest-parity/logs/c5-delete-confirm-shoot.{out,err}
+out/latest-parity/logs/c5-page-diff18.log
+out/latest-parity/qml/ctx-menu.png
+out/latest-parity/qml/delete-confirm.png
+```
+
+无未提交残留：本节改动清单里的 6 个源码/测试文件与 `SoftShadow.qml` 全部在 `cddf2fb` 的
+`--name-only` 内；`git status --porcelain` 的「已修改」条目为 **0**（其余全是既有 `out/`
+未跟踪产物，与本批无关）。回归口径复核：`dd0b38e` 提交的 `chat.png` / `dark-chat.png`
+在工作区 md5 仍为 `dc133011…` / `3aa7be54…`，未被本节重写。
 
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
@@ -839,17 +864,19 @@ rc=0
 
 ### 5.2 18 页逐页差异整表
 
-上方命令的原始输出（每行原样对应一页）：
+上方命令的原始输出（**已按 §4.7 / §4.8 修复后的当前图重算**，命令与日志：
+`.venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml`
+→ `out/latest-parity/logs/c6-page-diff18.log`，rc=0；每行原样对应一页）：
 
 ```
-chat                   ac72cd597ae44377b608777cbd5e2e81 ed199154dc7399a207d8155f79985d98  158583  140666  136141  12.97% max=248 same=False
+chat                   ac72cd597ae44377b608777cbd5e2e81 dc1330117d4b7631721a9768fb1f8e12  158583  142346  129909  12.38% max=248 same=False
 empty                  a616eabe08d8c107709b89d699604d13 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
 first-run              0e2b5786d552a73525ded72469f224ea 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
 search-open            3a5f80988f34cbcccf98281d7697498e 2bf956a8237e685cdf2033ced3c242ae  158824  140997  136170  12.97% max=248 same=False
 search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b8583efa9  130449  115306  113729  10.84% max=248 same=False
 search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
-ctx-menu               64c8c33a5c5c5e905288cca4fab37285 59a84b0eb9dd182892148e6b87abfb0c  158033  141313  143461  13.67% max=248 same=False
-delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 7586ce627fec6e8ee7bcb3f788052a77  162718  145140  401948  38.30% max=237 same=False
+ctx-menu               64c8c33a5c5c5e905288cca4fab37285 3c1fdb4633790aadb495881f2732bd23  158033  143492  127196  12.12% max=248 same=False
+delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 5b8baeb969eb5d8a416be851c24d7dce  162718  147103  384883  36.67% max=224 same=False
 model-picker           946b07def583e696822df943b6935f04 c2670aa5cd2f78c1693a6eeea2a118f3  164258  145541  149105  14.21% max=248 same=False
 hover-thread           16917898b7b5fb7b95a515bee87001d1 bab936657c1f28ce5862c40672d47e8a  158169  140893  136545  13.01% max=248 same=False
 focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 6a4ff152ff3aacae596c849968cc9cde  158745  140778  136157  12.97% max=248 same=False
@@ -859,21 +886,30 @@ settings-general       4d16a5c68b170e998bb4892713b8263e 6a95b886d52ce6695f046316
 settings-models        7f7a6dd835823f50475db7a3c9e727c1 ddee23d6140c34d38e4b3b07d6b524b7  132243  103282  325672  31.03% max=237 same=False
 settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 4fb02618eea39c43f95d17ae760fee4e  139387  110088  330260  31.47% max=216 same=False
 settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e556a683a  135693  104052  328222  31.27% max=224 same=False
-dark-chat              252996a52c0b1d02cfb3205ba1798c94 ebcdcb986c1e8bcc4efd3b18772809b6  158038  139575  258651  24.64% max=230 same=False
+dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22b11516ec  158038  141637  128299  12.22% max=230 same=False
 ```
+
+与 §4.7 / §4.8 修复前的旧值对照（只列被修复改动的 4 页）：
+
+| 页 | 修复前 差异像素 / % | 修复后 差异像素 / % | 修复来源 |
+|---|---:|---:|---|
+| chat | 136141 / 12.97% | 129909 / 12.38% | §4.7 dark-chat 那批把输入卡片换成 `SoftShadow` 后重拍了 chat |
+| ctx-menu | 143461 / 13.67% | 127196 / 12.12% | §4.8 菜单 5 项 + Delete 危险色 |
+| delete-confirm | 401948 / 38.30% | 384883 / 36.67% | §4.8 真可交互的确认层 |
+| dark-chat | 258651 / 24.64% | 128299 / 12.22% | §4.7 输入卡片 `--bg-elevated` + `--shadow` |
 
 整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
 
 | 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 |
 |---|---|---|---|---|---|
-| chat | `ac72cd597ae44377b608777cbd5e2e81` | `ed199154dc7399a207d8155f79985d98` | 136141 | 12.97% | 248 |
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `dc1330117d4b7631721a9768fb1f8e12` | 129909 | 12.38% | 248 |
 | empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
 | first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
 | search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 |
 | search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 |
 | search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 |
-| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `59a84b0eb9dd182892148e6b87abfb0c` | 143461 | 13.67% | 248 |
-| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `7586ce627fec6e8ee7bcb3f788052a77` | 401948 | 38.30% | 237 |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `3c1fdb4633790aadb495881f2732bd23` | 127196 | 12.12% | 248 |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 |
 | model-picker | `946b07def583e696822df943b6935f04` | `c2670aa5cd2f78c1693a6eeea2a118f3` | 149105 | 14.21% | 248 |
 | hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 |
 | focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 |
@@ -883,7 +919,7 @@ dark-chat              252996a52c0b1d02cfb3205ba1798c94 ebcdcb986c1e8bcc4efd3b18
 | settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `ddee23d6140c34d38e4b3b07d6b524b7` | 325672 | 31.03% | 237 |
 | settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 |
 | settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 |
-| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `ebcdcb986c1e8bcc4efd3b18772809b6` | 258651 | 24.64% | 230 |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `3aa7be544db6effc57214a22b11516ec` | 128299 | 12.22% | 230 |
 
 注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
 
@@ -995,7 +1031,7 @@ rc=0
 
 结论：focus-composer 页四边全部取值 (91,91,214) = `#5b5bd6`；同一位置的 `chat`（未聚焦）页四边全部为 (213,213,219) = `#d5d5db`。沿上边 y=658 横扫，focus-composer 有 764 个紫蓝像素（x=436..1199，起色 (186,186,238)），未聚焦的 chat 页该行紫蓝像素 0。deva 参考图同为四边 (91,91,214)、同样 764 像素，**判据三成立，无需修改 QML。**
 
-#### 判据四：删除确认框的 Delete / Cancel 必须真的生效 —— 不成立
+#### 判据四：删除确认框的 Delete / Cancel 必须真的生效 —— ~~不成立~~ **已由 §4.8 修复为成立**
 
 判定标准：在 `delete-confirm` 页真实点击对话框里的「Delete」和「Cancel」。点 Delete 应删除当前会话、把 active 切到其他会话；点 Cancel 应只关闭对话框且会话数不变。截图相同不代表交互成立，必须用真实点击事件验证 `confirmLayer.visible`、会话数与 active。
 
@@ -1015,32 +1051,57 @@ after click at Delete(795,462): confirm visible= True sessions= 120 active= pari
 after click at Cancel(695,462): confirm visible= True
 ```
 
-实测结果：击 Delete 前后 `confirm visible=True`、`sessions=120`、`active=parity-000` 全部不变；击 Cancel 后 `confirm visible=True` 仍不关闭。源码侧同因：`app/src/qml/Main.qml:1432` 的 `confirmLayer` 只由 `window.confirmOpen`（即 `page === "delete-confirm"`）控制显示，内部两个按钮只是 `Text` / `Rectangle`，没有 `MouseArea` / `TapHandler`；`ctxMenu` 也仍在 `z:40` 后面保持打开。**判据四不成立：删除确认框没有交互，点 Delete / Cancel 都不生效。**
+实测结果（**修复前，历史记录**）：击 Delete 前后 `confirm visible=True`、`sessions=120`、`active=parity-000` 全部不变；击 Cancel 后 `confirm visible=True` 仍不关闭。源码侧同因：`app/src/qml/Main.qml:1432` 的 `confirmLayer` 只由 `window.confirmOpen`（即 `page === "delete-confirm"`）控制显示，内部两个按钮只是 `Text` / `Rectangle`，没有 `MouseArea` / `TapHandler`；`ctxMenu` 也仍在 `z:40` 后面保持打开。
 
-**四条硬判据汇总**：判据一成立（三页滚动位置两两不同）、判据二成立（search-results 恰好 10 行）、判据三成立（focus-composer 四边 `#5b5bd6`）、**判据四不成立（删除确认框无交互，Delete / Cancel 点击均无效）**。
+**修复后（§4.8，`cddf2fb`）**：同一批用户路径改用 `QTest.mouseClick` 注入真实鼠标事件，坐标由控件 `mapToScene(中心)` 现算：
+
+```
+起点：sessions=120 active=parity-000 parity-000 文件存在=True
+点菜单 Delete 后：confirm visible=True
+confirmCancel 中心=(718.0, 468.0) bbox=(683.0, 453.0, 753.0, 483.0)
+confirmDelete 中心=(794.5, 467.0) bbox=(760.0, 452.0, 829.0, 482.0)
+[a] 点取消中心后：confirm visible=False confirmOpen=False sessions=120 active=parity-000 文件存在=True
+[b] 点确认中心后：confirm visible=False confirmOpen=False sessions=119 active=parity-001 parity-000 文件存在=False
+[c] 点遮罩空白 (100,700) 后：confirm visible=False confirmOpen=False sessions=119 active=parity-001
+```
+
+日志路径 `out/latest-parity/logs/c5-ctx-confirm.log`，探针 `out/latest-parity/probes/c5_ctx_confirm.py`。
+即：取消不删、确认真删并把活跃会话按 Deva `openFirstSession` 规则回退到 `parity-001`、遮罩关闭不删。
+
+**四条硬判据汇总**：判据一成立（三页滚动位置两两不同）、判据二成立（search-results 恰好 10 行）、判据三成立（focus-composer 四边 `#5b5bd6`）、~~判据四不成立（删除确认框无交互，Delete / Cancel 点击均无效）~~ **判据四已由 §4.8 修复为成立**（真实鼠标点击：取消不删、确认真删并回退活跃会话、遮罩关闭不删）。
 
 #### 差异量级备注（供后续修复排优先级）
 
-对差异像素按单像素最大通道差 d 分桶（`out/latest-parity/delta-histogram.log`）：
+对差异像素按单像素最大通道差 d 分桶（**修复后复算**：`.venv/bin/python -I /tmp/c6_hist.py`
+→ `out/latest-parity/logs/c6-delta-histogram.log`；旧值见 `out/latest-parity/delta-histogram.log`）：
 
 | 页 | 差异像素 | d≤2 | d≤8 | d>8 | d≤2 占比 |
 |---|---|---|---|---|---|
-| chat | 136141 | 11689 | 29630 | 94822 | 8.59% |
+| chat | 129909 | 30243 | 17216 | 82450 | 23.28% |
 | empty | 10214 | 2086 | 1775 | 6353 | 20.42% |
 | search-results | 113729 | 11124 | 28357 | 74248 | 9.78% |
-| ctx-menu | 143461 | 14387 | 38773 | 90301 | 10.03% |
-| delete-confirm | 401948 | 254611 | 68633 | 78704 | 63.34% |
+| ctx-menu | 127196 | 41474 | 17258 | 68464 | 32.61% |
+| delete-confirm | 384883 | 292905 | 29793 | 62185 | 76.10% |
 | model-picker | 149105 | 15034 | 34044 | 100027 | 10.08% |
 | hover-thread | 136545 | 11678 | 29649 | 95218 | 8.55% |
 | long-mid | 126160 | 11486 | 21473 | 93201 | 9.10% |
 | settings-general | 340813 | 235777 | 55354 | 49682 | 69.18% |
 | settings-models | 325672 | 230906 | 49617 | 45149 | 70.90% |
 | settings-about | 328222 | 232545 | 49560 | 46117 | 70.85% |
-| dark-chat | 258651 | 26195 | 38239 | 194217 | 10.13% |
+| dark-chat | 128299 | 28412 | 18348 | 81539 | 22.15% |
 
-读法：settings-* 与 delete-confirm 的差异有 63%–71% 落在 d≤2，属于遮罩底色差 1 个灰阶造成的整体偏移；而 chat / dark-chat / model-picker 只有 8.6%–10.1% 落在 d≤2，其余是真结构差异（缺控件、缺结构）。
+读法（修复后）：settings-* 与 delete-confirm 的差异有 69%–76% 落在 d≤2，属于遮罩底色差 1 个灰阶
+造成的整体偏移——§4.8 把 delete-confirm 从 63.34% 推到 76.10%，说明剩下的确实只是遮罩合成取整。
+chat / dark-chat 的 d≤2 占比从 8.59% / 10.13% 升到 23.28% / 22.15%（卡片底色对齐后，原本的
+大跳变变成了 1–2 灰阶），ctx-menu 从 10.03% 升到 32.61%（菜单几何与字号接近后同理）。
+model-picker / hover-thread / long-mid 仍在 8.6%–10.1%，是这三页独有的真结构差异
+（model-picker 见 §5.4 D1–D3，hover-thread 见 B1/B2）。
 
 ### 5.4 逐组件缺口清单（覆盖 18 页，全部来自本轮实测日志）
+
+> **状态说明（2026-11-22 复算）**：本节写于 §4.7 / §4.8 修复之前，其中 **C1、C4、E6 三行已被修复**，
+> 行内已改为「已由 §4.8 / §4.7 修复」并换成当前实测值；其余各行仍是实测口径。§5.2 / §5.5 的差异数字
+> 已按修复后重算（日志 `out/latest-parity/logs/c6-page-diff18.log`）。
 
 下表每行都给「实测值 + 证据文件」，没有「符合预期」这类空话。
 
@@ -1067,10 +1128,10 @@ after click at Cancel(695,462): confirm visible= True
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| C1 | 菜单项数量不对 | QML 4 项（文字带 y101–110 / 129–140 / 157–168 / 185–194，面板 y89–210）；deva 5 项（y105–114 / 134–145 / 163–172 / 192–203 / 222–230 红色项，面板 y91–245）。deva 多出的两项为「Select」（y163–172）与断接的「Delete」（y222–230 红色 `(229,72,77)`）；QML 最后一项写成 `Delete conversation` 并占掉红色项位置（`gap-probe2.log` 首节；QML 源码 `app/src/qml/Main.qml:1396-1399` 只定义 4 项：New chat / Rename / Archive / Delete conversation） |
+| C1 | ~~菜单项数量不对~~ **已由 §4.8 修复** | 修复前：QML 4 项（文字带 y101–110 / 129–140 / 157–168 / 185–194，面板 y89–210）；deva 5 项（y105–114 / 134–145 / 163–172 / 192–203 / 222–230 红色项）。**当前实测 5 项**：`labels = ['New chat', 'Rename', 'Select', 'Archive', 'Delete']`、`labels==deva = True`，其中 Delete 项红色像素 227（deva 230）、深色文字像素 0，其余四项相反（`logs/c5-ctx-confirm.log`，探针 `probes/c5_ctx_confirm.py`） |
 | C2 | 面板左缘偏右 5 px | QML 白色菜单框 x 起点 166，deva 161（`probe-final2.log` §6、`gap-probe.log` 缺口D） |
 | C3 | 面板高度差 35 px | QML y89–210（121 px），deva y91–245（154 px）（`gap-probe.log` 缺口D） |
-| C4 | 删除确认框没有交互：Delete / Cancel 都点不动 | `Main.qml:1432` 的 `confirmLayer` 仅由 `window.confirmOpen` 控制；按钮只是 `Text` / `Rectangle`，无 `MouseArea` / `TapHandler`。真实 `QTest.mouseClick`：点 Delete 后 `confirm=True sessions=120 active=parity-000`，点 Cancel 后 `confirm=True`（`out/latest-parity/logs/criterion4-delete-current.log`） |
+| C4 | ~~删除确认框没有交互：Delete / Cancel 都点不动~~ **已由 §4.8 修复** | 修复前：`Main.qml` 的 `confirmLayer` 仅由 `window.confirmOpen` 控制，按钮只是 `Text` / `Rectangle`，无 `MouseArea`/`TapHandler`；真实 `QTest.mouseClick`：点 Delete 后 `confirm=True sessions=120`。**当前实测三处点击均生效**（坐标由 `mapToScene(中心)` 现算）：[a] 取消 → `visible=False sessions=120 文件存在=True`；[b] 确认 → `visible=False sessions=119 active=parity-001 parity-000 文件存在=False`；[c] 遮罩 `(100,700)` → `visible=False sessions=119`（`logs/c5-ctx-confirm.log`） |
 
 **D. 模型选择弹层（model-picker）**
 
@@ -1089,7 +1150,7 @@ after click at Cancel(695,462): confirm visible= True
 | E3 | 正文滚动偏移约 13 px | QML 首页文本带 `(54,65)` 起，deva `(43,43)`+`(57,66)`；QML 末个可见带 `(584,595)`，deva `(606,619)`（`probe-body.log`、`probe-empty.log` 末节） |
 | E4 | 缺 broken-image 占位 | deva 有 `示意图` 占位文本带 y602–619 与图片框 y658–699；QML 无 `示意图` 带，y658–699 只剩白底与边框（`probe-gaps2.log` §4） |
 | E5 | search-none 正文也少 3 带 | QML 11 带，deva 14 带（`probe-rail.log` §3、`probe-gaps2.log` §3） |
-| E6 | dark-chat 输入卡片底色偏暗 | QML `(30,30,32)`，deva `(42,42,46)`（`probe-scroll.log` §3） |
+| E6 | ~~dark-chat 输入卡片底色偏暗~~ **已由 §4.7 修复** | 修复前：QML `(30,30,32)`，deva `(42,42,46)`（`probe-scroll.log` §3）。**当前实测** region x700–1180 × y600–700：QML `(42,42,46)`×19680 与 deva `(42,42,46)`×19680 **完全相同**，剩余 `(30,30,32)` QML 17280 / deva 14400 是卡片外页面底色，不是卡片本身（`.venv/bin/python -I /tmp/c6_e6.py`，落盘 `logs/c6-e6-darkchat-card.log`） |
 
 **F. Settings 模态**
 
@@ -1122,14 +1183,14 @@ after click at Cancel(695,462): confirm visible= True
 
 | 页 | 差异像素 / % | 主要结构缺口 | 判定 |
 |---|---:|---|---|
-| chat | 136141 / 12.97% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
+| chat | 129909 / 12.38% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
 | empty | 10214 / 0.97% | H1（头像绘制与字体度量） | 仅光栅差异 |
 | first-run | 10214 / 0.97% | H1；与 empty 像素相同 | 仅光栅差异 |
 | search-open | 136170 / 12.97% | 同 chat；搜索框打开态差异随正文/侧栏缺口 | 真结构缺口 |
 | search-results | 113729 / 10.84% | 同 chat；判据二 10 行已对齐（判据二成立） | 真结构缺口 |
 | search-none | 93091 / 8.87% | E5、A1–A5、B1–B3 | 真结构缺口 |
-| ctx-menu | 143461 / 13.67% | C1（少 Select、Delete 文案/颜色不对）、C2/C3；C4 功能缺口 | 真结构缺口 |
-| delete-confirm | 401948 / 38.30% | C4（Delete/Cancel 都点不动）；A5 遮罩灰阶 | 真结构缺口（功能） |
+| ctx-menu | 127196 / 12.12% | ~~C1~~（已由 §4.8 修复：5 项、Delete 危险色）；C2/C3 小幅几何；A/B/E 共用缺口 | 真结构缺口（C1 已闭环） |
+| delete-confirm | 384883 / 36.67% | ~~C4~~（已由 §4.8 修复：三处点击均生效）；A5 遮罩灰阶 | 剩余为遮罩合成差（76.1% 只差 1–2 灰阶） |
 | model-picker | 149105 / 14.21% | D1（整块菜单内容错：THINKING LEVEL vs 模型列表）、D2/D3 | 真结构缺口 |
 | hover-thread | 136545 / 13.01% | B1/B2（悬停行位置错）、A/B/E 共用缺口 | 真结构缺口 |
 | focus-composer | 136157 / 12.97% | 判据三成立；其余同 chat | 真结构缺口 |
@@ -1139,8 +1200,10 @@ after click at Cancel(695,462): confirm visible= True
 | settings-models | 325672 / 31.03% | F1–F5；Models 内容差异 | 真结构缺口 |
 | settings-extensions | 330260 / 31.47% | F1–F5；Extensions 内容差异 | 真结构缺口 |
 | settings-about | 328222 / 31.27% | F1–F5；About 版本单一来源已修复，剩余为遮罩/窗口控制/图标 | 真结构缺口 |
-| dark-chat | 258651 / 24.64% | E6（输入卡片底色 `(30,30,32)` vs `(42,42,46)`）、A/B | 真结构缺口 |
+| dark-chat | 128299 / 12.22% | ~~E6~~（已由 §4.7 修复：卡片 `(42,42,46)` 与 deva 同值）；A/B 共用缺口 | 真结构缺口 |
 
-结论：18 页中 **2 页（empty / first-run）只剩光栅级差异，16 页仍有结构或功能缺口**。其中 `delete-confirm` 是唯一的功能性不成立项（判据四），其余是视觉/控件结构差异。
+结论（修复后复算）：18 页中 **2 页（empty / first-run）只剩光栅级差异**；`delete-confirm` 的功能性缺口（判据四）
+已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 12.12% 与 dark-chat 的 12.22%
+已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
 
-**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（含判据四的删除框无交互），D 类 3 项，E 类 6 项，F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。
+**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项，E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、D1–D3（model-picker）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。
