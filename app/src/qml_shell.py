@@ -49,6 +49,7 @@ from mvvm.services.effort import (
 from mvvm.services.model_resolve import resolve_default_model, resolve_ref
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.secrets_vault import SecretsVault
+from mvvm.services import settings_models
 from mvvm.services.settings_service import SettingsService
 from mvvm.services.skill_store import SkillStore
 from mvvm.services.workspace_guard import WorkspaceGuard
@@ -545,40 +546,126 @@ class ShellBridge(QtCore.QObject):
         return session_id
 
     # ── 设置页数据（真实来源：config.json / skills 目录 / secrets 库）────────────
+    def _has_key(self, provider_id: str) -> bool:
+        """该服务商是否已存密钥（只读布尔；明文不出服务层）。"""
+        if self._vault is None or not provider_id:
+            return False
+        try:
+            return bool(self._vault.has_secret(provider_id))
+        except OSError:  # 钥匙串/密文读失败按「没有」处理，不让设置页整页崩
+            return False
+
     @QtCore.Slot(result=list)
     def modelRows(self) -> List[Dict[str, Any]]:
-        """模型页：原版只列「在用」的服务商（已启用 / 已配密钥 / 自定义）。
+        """模型页列表：原版只列「在用」的服务商（已启用 / 已配密钥 / 自定义）。
 
-        行的形状对齐原版 `provider-row`：名称、`N models`、启用点、缺密钥警告、详情箭头。
+        行形状对齐原版 `provider-row`：名称、`N models`、启用点、缺密钥警告、详情箭头。
+        过滤与判定都在 `settings_models`（同一份规则被列表/详情/写回共用）。
         """
-        config = self._config()
-        section = config.get("models") if isinstance(config.get("models"), dict) else {}
-        providers = section.get("providers") if isinstance(section, dict) else None
-        labels = SETTINGS_LABELS[self.language()]
-        rows: List[Dict[str, Any]] = []
-        for provider in providers if isinstance(providers, list) else []:
-            if not isinstance(provider, dict):
-                continue
-            if (provider.get("purpose") or "llm") != "llm":
-                continue
-            provider_id = str(provider.get("id") or "")
-            enabled = provider.get("enabled") is True
-            has_key = bool(self._vault is not None and provider_id and self._vault.has_secret(provider_id))
-            if not (enabled or has_key or provider.get("kind") == "custom"):
-                continue
-            models = provider.get("models")
-            count = len(models) if isinstance(models, list) else 0
-            rows.append(
-                {
-                    "id": provider_id,
-                    "name": str(provider.get("name") or provider_id),
-                    "accent": str(provider.get("accent") or "#8a8a94"),
-                    "enabled": enabled,
-                    "detail": labels["modelCount"].replace("{count}", str(count)),
-                    "warn": enabled and not has_key,
-                }
-            )
-        return rows
+        return settings_models.provider_rows(self._models_section(), self._has_key, self.language())
+
+    @QtCore.Slot(result="QVariantMap")
+    def modelsPaneLabels(self) -> Dict[str, Any]:
+        """模型页文案（标题 / 空态 / 添加按钮 / 详情页标签），界面语言跟随 config.json。"""
+        return settings_models.models_text(self.language())
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def providerDetail(self, provider_id: str) -> Dict[str, Any]:
+        """服务商详情页投影；id 不存在返回空字典（界面据此退回列表，不画半页）。"""
+        detail = settings_models.provider_detail(
+            self._models_section(), provider_id, self.language(), self._has_key
+        )
+        return detail or {}
+
+    @QtCore.Slot(str, str, str, result=bool)
+    def setProviderField(self, provider_id: str, field: str, value: str) -> bool:
+        """改服务商的一个文本/布尔字段（名称、地址、启用位）。
+
+        只收这三类：密钥走钥匙串、协议/模型清单有各自入口——把任意字段名直接写进配置
+        会让界面一个拼写错误就改坏别的东西。
+        """
+        if field not in ("name", "apiHost", "enabled"):
+            return False
+        if field == "enabled":
+            patch: Dict[str, Any] = {"enabled": value == "1"}
+        elif field == "name":
+            name = value.strip()
+            if not name:
+                return False
+            patch = {"name": name}
+        else:
+            patch = {"apiHost": value.strip().rstrip("/")}
+        return self._commit_models(settings_models.update_provider(self._models_section(), provider_id, patch))
+
+    @QtCore.Slot(str, result=bool)
+    def deleteProvider(self, provider_id: str) -> bool:
+        """删除服务商：配置里的条目与钥匙串里的密钥一起删（原版 `removeProvider`）。"""
+        updated = settings_models.remove_provider(self._models_section(), provider_id)
+        if updated is None:
+            return False
+        if not self._commit_models(updated):
+            return False
+        if self._vault is not None:
+            try:
+                self._vault.delete_secret(provider_id)
+            except OSError as exc:  # 配置已删，密钥删失败要留下痕迹
+                print("QML SECRET FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+        return True
+
+    @QtCore.Slot(result=str)
+    def addProvider(self) -> str:
+        """新建自定义对话服务商并返回其 id（原版 `addCustomProvider`）；失败返回空串。"""
+        section = self._models_section()
+        existing = {str(p.get("id")) for p in settings_models.provider_entries(section)}
+        base = "custom"
+        index = 1
+        while f"{base}-{index}" in existing:
+            index += 1
+        provider_id = f"{base}-{index}"
+        name = settings_models.models_text(self.language())["newProviderName"]
+        provider = settings_models.new_provider(section, provider_id, name)
+        return provider_id if self._commit_models(settings_models.add_provider(section, provider)) else ""
+
+    @QtCore.Slot(str, str, bool, result=bool)
+    def setModelEnabled(self, provider_id: str, model_id: str, enabled: bool) -> bool:
+        """模型行开关：写 `models[].enabled`（原版 `toggleModel`）。"""
+        return self._commit_models(
+            settings_models.set_model_enabled(self._models_section(), provider_id, model_id, enabled)
+        )
+
+    @QtCore.Slot(str, str, result=bool)
+    def addModel(self, provider_id: str, model_id: str) -> bool:
+        return self._commit_models(settings_models.add_model(self._models_section(), provider_id, model_id))
+
+    @QtCore.Slot(str, str, result=bool)
+    def removeModel(self, provider_id: str, model_id: str) -> bool:
+        return self._commit_models(settings_models.remove_model(self._models_section(), provider_id, model_id))
+
+    @QtCore.Slot(str, "QVariantList", result=bool)
+    def setProviderHeaders(self, provider_id: str, rows: Any) -> bool:
+        """自定义请求头：把界面上的行整理成表写进 `models.providers[].headers`。
+
+        行来自 QML（`[{name, value}, ...]`）；整理规则（保留名 / 非法字符 / 32 条上限）
+        在 `provider_headers.sanitize_headers`，与发出请求时同一份，界面写的就等于会发的。
+        """
+        raw: Dict[str, Any] = {}
+        for row in rows if isinstance(rows, list) else []:
+            if isinstance(row, dict):
+                raw[str(row.get("name") or "")] = row.get("value")
+        return self._commit_models(settings_models.set_headers(self._models_section(), provider_id, raw))
+
+    def _commit_models(self, models: Any) -> bool:
+        """新的 `models` 段落盘并让界面重读；None = 目标不存在/未改动成功。
+
+        `config:set` 只做顶层浅合并，所以整段 `models` 回写（`_write_models` 同一条路径），
+        漏写兄弟字段就会被清掉。
+        """
+        if models is None:
+            return False
+        if not self._write_models(models):
+            return False
+        self._publish()
+        return True
 
     # ── 输入区贴片：模型菜单 / 思考等级（原版 ModelPanel.tsx + EffortPicker.tsx）──────
     def _models_section(self) -> Dict[str, Any]:
