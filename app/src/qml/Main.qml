@@ -43,10 +43,14 @@ ApplicationWindow {
     property var quickStartPersonas: []
     property bool dark: Theme.dark
     property bool settingsOpen: page === "settings-general" || page === "settings-models"
+                              || page === "settings-models-provider" || page === "settings-models-advanced"
                               || page === "settings-extensions" || page === "settings-about"
     property string settingsPane: page === "settings-about" ? "about"
-                                : page === "settings-models" ? "models"
+                                : (page === "settings-models" || page === "settings-models-provider"
+                                   || page === "settings-models-advanced") ? "models"
                                 : page === "settings-extensions" ? "extensions" : "general"
+    property string settingsModelsView: page === "settings-models-provider" ? "provider"
+                                       : page === "settings-models-advanced" ? "advanced" : "list"
     property bool searchActive: page === "search-open" || page === "search-results"
                                 || page === "search-none"
     property string searchQuery: page === "search-results" ? "00"
@@ -1205,6 +1209,7 @@ ApplicationWindow {
         anchors.fill: parent
         visible: window.settingsOpen
         pane: window.settingsPane
+        modelsView: window.settingsModelsView
         onClose: window.page = "chat"
         onPaneRequested: function (name) { window.page = "settings-" + name }
     }

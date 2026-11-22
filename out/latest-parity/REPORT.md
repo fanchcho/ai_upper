@@ -443,3 +443,77 @@ $ sed -n '$p' /tmp/test-qml-settings-models.log
 判否项：provider 行高 52px、警告三角、chevron、详情下钻、Wrench、provider 详情请求头界面、
 About 版本单一来源、18 页全量重拍、四条硬判据复核均未做——本轮只交付 Providers 标题、
 28×28 加号、1px 描边圆角容器三项；provider 行仍沿用旧 delegate，留待下一段。
+
+### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
+
+**交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的
+`alertTriangle` 14px、右侧 `chevronRight` 16px），整行可点击进入 provider 详情；详情页
+顶部有返回入口与 `Wrench` 15px 按钮位；详情页可进入高级设置，自定义请求头按名称/值
+两列增删（含空态、hover、删除按钮、备注文案），写回走已入库的 `setProviderHeaders()`。
+
+**几何取值**（只读 `/tmp/deva-merged/apps/desktop/src/renderer/src`，逐值对应）：
+`.provider-row` `min-height:52px; padding:10px 14px; gap:12px`；`.provider-row__dot`
+10×10；`.provider-row__sub` 11.5px（QML 取整 12px）；`.provider-row__warn` 14px；
+`ChevronRight` 16px；`.provider-detail__topbar` 30px + 16px；`.provider-detail__head`
+名称 18px/600、底边 1px；`.model-list` 1px 边框、radius 8px；`.model-row` 44px；
+`.header-item__name` 占 34%；`.input` 32px；`.icon-btn` 30×30；`.switch` 36×20。
+
+**数据与页面状态**：QML 只读 `shellBridge.modelRows()` / `modelsPaneLabels()` /
+`providerDetail()`；写回只走 `setProviderHeaders()` / `setProviderField()`，投影和
+`sanitize_headers`（保留名、非法字符、32 条上限）在
+`app/src/mvvm/services/settings_models.py` / `provider_headers.py`，未另建数据源。
+`Main.qml` 新增 `settings-models-provider` / `settings-models-advanced` 两个仅用于截图
+验证的页面名；`qml_shell.py::PAGE_NAMES` 收录它们，但 `qml_pages_all.sh` 的 18 页清单未改。
+
+**单页重拍**（只拍 settings-models，AI_UPPER_HOME 指向 /tmp 夹具）：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/settings-models-final.png /tmp/fx-qml-home config.json > /tmp/shot-models-final.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '1p' /tmp/shot-models-final.log
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=/tmp/settings-models-final.png size=1280x820
+```
+
+**差异复算**（`scripts/parity/page_diff18.py`；改前基线为 `out/latest-parity/qml/settings-models.png`
+备份 `/tmp/settings-models-before.png`，改后图已写回同路径）：
+
+```
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/after-diff18-final.txt 2>&1; echo rc=$?
+rc=0
+$ grep 'settings-models' /tmp/after-diff18-final.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 ddee23d6140c34d38e4b3b07d6b524b7  132243  103282  325672  31.03% max=237 same=False
+```
+
+改前 `31.12%`（326609 px）→ 改后 `31.03%`（325672 px，降低 937 px、0.09 个百分点；
+逐像素差按任意通道非零计，字体抗锯齿与截图像素级渲染差异占主要部分）。
+
+**详情页单独成图**（同一 1280×820，两个页面名均为截图专用）：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models-provider /tmp/settings-models-provider-final.png /tmp/fx-qml-home config.json > /tmp/shot-provider-final.log 2>&1; echo rc=$?
+rc=0
+$ bash scripts/parity/qml_page_shot.sh settings-models-advanced /tmp/settings-models-advanced-final.png /tmp/fx-qml-home config-advanced.json > /tmp/shot-advanced-final.log 2>&1; echo rc=$?
+rc=0
+```
+
+落盘：`out/latest-parity/qml/settings-models-provider.png`（详情：Back + Wrench +
+Enabled + 告警条 + 模型列表）、`out/latest-parity/qml/settings-models-advanced.png`
+（高级设置：自定义请求头两行）。另用真实鼠标事件探针实测：点击 provider 行进入详情、
+详情 Back 返回列表、Wrench 进入高级设置，Add header 增行后出现占位输入框、trash 删除
+行后列表恢复两行（探针截图 `/tmp/probe-header-added.png` / `/tmp/probe-header-deleted.png`）。
+
+**受影响测试**（真实 rc 与输出末行）：
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-shell .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/test-qml-shell-final.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-shell-final.log
+46 passed in 0.76s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-settings .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/test-qml-settings-models-final.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-settings-models-final.log
+44 passed in 0.21s
+```
+
+两份均 0 failed、0 skipped。仍未做：**About 版本单一来源 + refreshCw、18 页全量重拍、四条硬判据 均未做**。

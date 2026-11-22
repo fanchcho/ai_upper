@@ -147,10 +147,12 @@ CHAT_TEXT = {
     "en": {"selectModel": "Select model", "selectModelTitle": "Select model"},
 }
 
-# 页面名 → 让壳呈现该状态的标识；与 scripts/parity/qml_pages_all.sh 的清单一致。
+# 页面名 → 让壳呈现该状态的标识；18 页对比清单见 scripts/parity/qml_pages_all.sh，
+# 末尾两项是本轮详情/高级设置截图用的单页状态，不加入 18 页全量清单。
 PAGE_NAMES = (
     "chat", "empty", "first-run", "search-open", "search-results", "search-none",
-    "settings-general", "settings-models", "settings-extensions", "settings-about",
+    "settings-general", "settings-models", "settings-models-provider",
+    "settings-models-advanced", "settings-extensions", "settings-about",
     "model-picker", "ctx-menu", "delete-confirm", "hover-thread", "focus-composer",
     "long-mid", "long-bottom", "dark-chat",
 )

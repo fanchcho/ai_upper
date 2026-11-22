@@ -10,6 +10,8 @@ import "."
 Item {
     id: root
     property string pane: "general"
+    // 截图/深链页可指定 Models 的初始子视图：list | provider | advanced。
+    property string modelsView: "list"
     signal close()
     signal paneRequested(string name)
 
@@ -299,123 +301,854 @@ Item {
         }
     }
 
-    // ── Models：真实模型列表来自 config.json 的 models 段 ────────────────
-    // 本段几何逐值取自原版 `features/settings/ModelSettings.tsx` 列表态与 `styles/app.css`：
-    //   `.cf-pane` 内边距 var(--space-4) var(--space-5) = 16px 20px；
-    //   `.models__head`（flex / align-items:center / margin-bottom:16）撑高 28px；
-    //   `.models__title` 15px/700、颜色 var(--fg)；
-    //   `.models__add-btn` 28×28、border 1px var(--border)、radius var(--radius)=8、
-    //   background var(--bg-elevated)、图标 Plus size=16、颜色 var(--fg-muted)；
-    //   `.models__rows` border 1px var(--border)、radius var(--radius-lg)=12、overflow hidden。
-    // 数据只走已入库的 `mvvm.services.settings_models` 投影（ShellBridge 的
-    // `modelRows` / `modelsPaneLabels`），QML 侧不重复计算任何规则。
+    // ── Models：服务商列表（52px 行）→ 详情（返回 / Wrench / 启用）→ 高级设置（自定义请求头）──
+    // 几何逐值取自原版只读源码 `features/settings/ModelSettings.tsx`、
+    // `features/settings/ProviderAdvanced.tsx` 与 `styles/app.css`：
+    //   `.cf-pane` 内边距 16px 20px；`.models__head` 28px + 下间距 16px；
+    //   `.provider-row` min-height:52px、padding:10px 14px、gap:12px；
+    //   `.provider-row__dot` 10×10；`.provider-row__sub` 11.5px / fg-subtle；
+    //   `.provider-detail__topbar` 30px + 下间距 16px；`.provider-detail__head` 名称 18px、
+    //     下边框上方留 16px；`.provider-detail__name-input` 只用于自定义服务商；
+    //   `.field` 下间距 20px；`.field__row-between` 下间距 8px；`.model-list` 1px 边框、radius 8；
+    //   `.model-row` 44px、padding 0 12px、gap 8px；`.header-item__name` 占 34%。
+    // 数据只走已入库的 `mvvm.services.settings_models` 投影：`modelRows()` /
+    // `modelsPaneLabels()` / `providerDetail()`，写回只走 `setProviderHeaders()` /
+    // `setProviderField()`；QML 不新建数据源，也不在界面重算保留头规则。
     Component {
         id: modelsPane
         Item {
             id: modPane
             property var rows: shellBridge ? shellBridge.modelRows() : []
             property var text: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+            // 列表 / 详情 / 高级设置三态；page=settings-models-* 时由 Main.qml 指定初始态。
+            property string view: "list"
+            property string selectedId: ""
+            property var detail: ({})
+            property var headerRows: []
 
-            Item {
-                id: modHead
-                x: 20
-                y: 16
-                width: parent.width - 40
-                height: 28
-
-                Text {
-                    id: modTitle
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: modPane.text.providers || ""
-                    color: Theme.fg
-                    font.family: Theme.sansFamily
-                    font.pixelSize: 15
-                    font.weight: 700
+            function applyInitialView() {
+                if (root.modelsView === "list") {
+                    view = "list"
+                    return
                 }
-
-                Rectangle {
-                    id: addBtn
-                    anchors.right: parent.right
-                    width: 28
-                    height: 28
-                    radius: Theme.radius
-                    color: addHover.hovered ? Theme.bgHover : Theme.bgElevated
-                    border.width: 1
-                    border.color: Theme.border
-                    Icon {
-                        anchors.centerIn: parent
-                        name: IconData.plus
-                        size: 16
-                        color: addHover.hovered ? Theme.fg : Theme.fgMuted
-                    }
-                    HoverHandler { id: addHover }
+                if (rows.length > 0) {
+                    openProvider(rows[0].id)
+                    if (root.modelsView === "advanced") view = "advanced"
                 }
             }
 
-            Rectangle {
-                id: modRows
-                x: 20
-                y: 60   // 16（上内边距）+ 28（head）+ 16（`.models__head` 下间距）
-                width: parent.width - 40
-                height: modPane.rows.length === 0
-                        ? modEmpty.implicitHeight + 32
-                        : modPane.rows.length * 52 + 2
-                radius: Theme.radiusLg
-                color: "transparent"
-                border.width: 1
-                border.color: Theme.border
-                clip: true
+            Component.onCompleted: applyInitialView()
 
-                Text {
-                    id: modEmpty
-                    visible: modPane.rows.length === 0
-                    x: 1
-                    y: 17
-                    width: parent.width - 2
-                    horizontalAlignment: Text.AlignHCenter
-                    text: modPane.text.noProvidersYet || ""
-                    color: Theme.fgSubtle
-                    font.family: Theme.sansFamily
-                    font.pixelSize: 13
+            // qml_shell 在 QML 加载完成后才写 `page`；监听 modelsView 的后续变化，
+            // 截图页才能从默认 list 切到 provider / advanced。
+            Connections {
+                target: root
+                function onModelsViewChanged() { modPane.applyInitialView() }
+            }
+
+            function refreshRows() {
+                rows = shellBridge ? shellBridge.modelRows() : []
+            }
+
+            function openProvider(providerId) {
+                selectedId = providerId
+                reloadDetail()
+                view = "detail"
+            }
+
+            function reloadDetail() {
+                detail = shellBridge ? shellBridge.providerDetail(selectedId) : ({})
+                var list = (detail && detail.headers) ? detail.headers : []
+                var next = []
+                for (var i = 0; i < list.length; i++) {
+                    next.push({
+                        name: list[i].name || "",
+                        value: list[i].value || "",
+                        issueText: list[i].issueText || ""
+                    })
+                }
+                headerRows = next
+            }
+
+            function openAdvanced() {
+                reloadDetail()
+                view = "advanced"
+            }
+
+            function backToList() {
+                view = "list"
+                selectedId = ""
+                detail = ({})
+                headerRows = []
+                refreshRows()
+            }
+
+            function persistHeaders() {
+                if (!shellBridge || selectedId === "") return
+                var out = []
+                for (var i = 0; i < headerRows.length; i++) {
+                    out.push({
+                        name: headerRows[i].name || "",
+                        value: headerRows[i].value || ""
+                    })
+                }
+                shellBridge.setProviderHeaders(selectedId, out)
+            }
+
+            function addHeader() {
+                var next = []
+                for (var i = 0; i < headerRows.length; i++) next.push(headerRows[i])
+                next.push({ name: "", value: "", issueText: "" })
+                headerRows = next
+                headerSaveTimer.restart()
+            }
+
+            function removeHeader(index) {
+                if (index < 0 || index >= headerRows.length) return
+                var next = []
+                for (var i = 0; i < headerRows.length; i++) {
+                    if (i !== index) next.push(headerRows[i])
+                }
+                headerRows = next
+                persistHeaders()
+            }
+
+            function editHeader(index, field, value) {
+                if (index < 0 || index >= headerRows.length) return
+                // 数组元素是 JS 对象；原地改，不重绑整个 Repeater（否则输入框会丢焦点）。
+                headerRows[index][field] = value
+                headerRows[index].issueText = ""
+                headerSaveTimer.restart()
+            }
+
+            Timer {
+                id: headerSaveTimer
+                interval: 350
+                repeat: false
+                onTriggered: modPane.persistHeaders()
+            }
+
+            // ── 列表态 ────────────────────────────────────────────────
+            Item {
+                id: modelsListView
+                anchors.fill: parent
+                visible: modPane.view === "list"
+
+                Item {
+                    id: modHead
+                    x: 20
+                    y: 16
+                    width: parent.width - 40
+                    height: 28
+
+                    Text {
+                        id: modTitle
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: modPane.text.providers || ""
+                        color: Theme.fg
+                        font.family: Theme.sansFamily
+                        font.pixelSize: 15
+                        font.weight: 700
+                    }
+
+                    Rectangle {
+                        id: addBtn
+                        anchors.right: parent.right
+                        width: 28
+                        height: 28
+                        radius: Theme.radius
+                        color: addHover.hovered ? Theme.bgHover : Theme.bgElevated
+                        border.width: 1
+                        border.color: Theme.border
+                        Icon {
+                            anchors.centerIn: parent
+                            name: IconData.plus
+                            size: 16
+                            color: addHover.hovered ? Theme.fg : Theme.fgMuted
+                        }
+                        HoverHandler { id: addHover }
+                    }
                 }
 
-                ListView {
-                    id: modList
-                    visible: modPane.rows.length > 0
-                    x: 1
-                    y: 1
-                    width: parent.width - 2
-                    height: parent.height - 2
+                Rectangle {
+                    id: modRows
+                    // 左缘对齐原版 `.models__rows` 实测：外框从内容区 x=19 起，
+                    // 右缘仍与标题/加号同宽（宽度补偿 2px），不改变右侧对齐。
+                    x: 19
+                    y: 60   // 16（上内边距）+ 28（head）+ 16（`.models__head` 下间距）
+                    width: parent.width - 38
+                    height: modPane.rows.length === 0
+                            ? modEmpty.implicitHeight + 32
+                            : modPane.rows.length * 52 + 2
+                    radius: Theme.radiusLg
+                    color: "transparent"
+                    border.width: 1
+                    border.color: Theme.border
                     clip: true
-                    model: modPane.rows
-                    delegate: Rectangle {
-                        required property var modelData
-                        width: modList.width
-                        height: 52
-                        color: "transparent"
+
+                    Text {
+                        id: modEmpty
+                        visible: modPane.rows.length === 0
+                        x: 1
+                        y: 17
+                        width: parent.width - 2
+                        horizontalAlignment: Text.AlignHCenter
+                        text: modPane.text.noProvidersYet || ""
+                        color: Theme.fgSubtle
+                        font.family: Theme.sansFamily
+                        font.pixelSize: 13
+                    }
+
+                    ListView {
+                        id: modList
+                        visible: modPane.rows.length > 0
+                        x: 1
+                        y: 1
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        clip: true
+                        model: modPane.rows
+                        delegate: Rectangle {
+                            id: providerRow
+                            required property var modelData
+                            required property int index
+
+                            width: modList.width
+                            height: 52
+                            color: providerMouse.containsMouse ? Theme.bgHover : "transparent"
+
+                            // `.provider-row + .provider-row`：只在行与行之间画 1px 顶线。
+                            Rectangle {
+                                visible: providerRow.index > 0
+                                anchors.top: parent.top
+                                width: parent.width
+                                height: 1
+                                color: Theme.border
+                            }
+
+                            // `.provider-row__dot`：启用绿点 / 未启用灰点。
+                            Rectangle {
+                                x: 14
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 10
+                                height: 10
+                                radius: 5
+                                color: providerRow.modelData.enabled === true ? Theme.success : Theme.fgSubtle
+                            }
+
+                            Column {
+                                id: providerMain
+                                anchors.left: parent.left
+                                anchors.leftMargin: 36   // 14 padding + 10 dot + 12 gap
+                                anchors.right: providerAside.left
+                                anchors.rightMargin: 12
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: 2
+
+                                Text {
+                                    width: parent.width
+                                    text: providerRow.modelData.name || ""
+                                    color: Theme.fg
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 13
+                                    font.weight: 600
+                                    elide: Text.ElideRight
+                                }
+                                Text {
+                                    width: parent.width
+                                    text: providerRow.modelData.detail || ""
+                                    color: Theme.fgSubtle
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 12
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            Row {
+                                id: providerAside
+                                anchors.right: parent.right
+                                anchors.rightMargin: 14
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: 8
+
+                                Icon {
+                                    visible: providerRow.modelData.warn === true
+                                    name: IconData.alertTriangle
+                                    size: 14
+                                    color: Theme.warning
+                                }
+                                Icon {
+                                    name: IconData.chevronRight
+                                    size: 16
+                                    color: Theme.fgSubtle
+                                }
+                            }
+
+                            MouseArea {
+                                id: providerMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: modPane.openProvider(providerRow.modelData.id)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ── 详情态 ────────────────────────────────────────────────
+            Item {
+                id: detailView
+                x: 20
+                y: 16
+                width: parent.width - 40
+                height: parent.height - 32
+                visible: modPane.view === "detail"
+
+                Item {
+                    id: detailTopbar
+                    width: parent.width
+                    height: 30
+
+                    Item {
+                        id: detailBack
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: detailBackRow.width + 16
+                        height: 24
+
                         Rectangle {
-                            anchors.bottom: parent.bottom
-                            width: parent.width
-                            height: 1
-                            color: Theme.border
+                            anchors.fill: parent
+                            radius: Theme.radiusSm
+                            color: detailBackMouse.containsMouse ? Theme.bgHover : "transparent"
+                        }
+                        Row {
+                            id: detailBackRow
+                            x: 6
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 4
+                            Icon {
+                                name: IconData.chevronLeft
+                                size: 16
+                                color: detailBackMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                            }
+                            Text {
+                                text: modPane.text.back || ""
+                                color: detailBackMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 13
+                            }
+                        }
+                        MouseArea {
+                            id: detailBackMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: modPane.backToList()
+                        }
+                    }
+
+                    Row {
+                        id: detailActions
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 12
+
+                        Rectangle {
+                            id: detailWrench
+                            visible: modPane.detail.advanced === true
+                            width: 30
+                            height: 30
+                            radius: Theme.radiusSm
+                            color: wrenchMouse.containsMouse ? Theme.bgHover : "transparent"
+                            Icon {
+                                anchors.centerIn: parent
+                                name: IconData.wrench
+                                size: 15
+                                color: wrenchMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                            }
+                            MouseArea {
+                                id: wrenchMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: modPane.openAdvanced()
+                            }
+                        }
+
+                        Text {
+                            text: modPane.text.enableProvider || modPane.text.enabled || ""
+                            height: 30
+                            verticalAlignment: Text.AlignVCenter
+                            color: Theme.fgMuted
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 12
+                        }
+
+                        Item {
+                            id: detailSwitch
+                            width: 36
+                            height: 20
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 10
+                                color: modPane.detail.enabled === true ? Theme.accent : Theme.bgActive
+                            }
+                            Rectangle {
+                                x: modPane.detail.enabled === true ? 18 : 2
+                                y: 2
+                                width: 16
+                                height: 16
+                                radius: 8
+                                color: "#ffffff"
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    if (!shellBridge) return
+                                    shellBridge.setProviderField(modPane.selectedId, "enabled",
+                                                                 modPane.detail.enabled === true ? "0" : "1")
+                                    modPane.reloadDetail()
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    id: detailHead
+                    y: 46   // topbar 30 + `.provider-detail__topbar` margin-bottom 16
+                    width: parent.width
+                    height: 38
+
+                    Text {
+                        x: 0
+                        y: 0
+                        width: parent.width
+                        text: modPane.detail.name || ""
+                        color: Theme.fg
+                        font.family: Theme.sansFamily
+                        font.pixelSize: 18
+                        font.weight: 600
+                        elide: Text.ElideRight
+                    }
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: 1
+                        color: Theme.border
+                    }
+                }
+
+                Rectangle {
+                    id: detailWarn
+                    visible: modPane.detail.warn === true
+                    y: detailHead.y + detailHead.height + 12   // head 下间距 20 + `.provider-warn` margin-top -8
+                    width: parent.width
+                    height: detailWarnRow.implicitHeight + 16
+                    radius: Theme.radiusSm
+                    color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.08)
+                    border.width: 1
+                    border.color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.4)
+
+                    Row {
+                        id: detailWarnRow
+                        x: 10
+                        y: 8
+                        spacing: 6
+                        Icon {
+                            name: IconData.alertTriangle
+                            size: 13
+                            color: Theme.warning
                         }
                         Text {
-                            x: 4
-                            y: 8
-                            text: modelData.name
+                            text: modPane.text.keyMissingWarn || ""
+                            color: Theme.warning
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 12
+                        }
+                    }
+                }
+
+                Item {
+                    id: detailModels
+                    y: detailWarn.visible ? detailWarn.y + detailWarn.height + 16
+                                             : detailHead.y + detailHead.height + 20
+                    width: parent.width
+                    height: detailModelsLabel.implicitHeight + 8 + detailModelsBox.height
+
+                    Text {
+                        id: detailModelsLabel
+                        text: modPane.detail.modelList || ""
+                        color: Theme.fg
+                        font.family: Theme.sansFamily
+                        font.pixelSize: 13
+                        font.weight: 600
+                    }
+
+                    Rectangle {
+                        id: detailModelsBox
+                        y: 21   // label 行高约 13 + `.field__row-between` 下间距 8
+                        width: parent.width
+                        height: {
+                            var list = modPane.detail.models || []
+                            if (list.length === 0) return 49
+                            return list.length * 44 + Math.max(0, list.length - 1) * 1 + 2
+                        }
+                        radius: Theme.radius
+                        color: "transparent"
+                        border.width: 1
+                        border.color: Theme.border
+                        clip: true
+
+                        Text {
+                            visible: (modPane.detail.models || []).length === 0
+                            x: 1
+                            y: 17
+                            width: parent.width - 2
+                            horizontalAlignment: Text.AlignHCenter
+                            text: modPane.text.noModels || ""
+                            color: Theme.fgSubtle
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                        }
+
+                        Column {
+                            x: 1
+                            y: 1
+                            width: parent.width - 2
+                            Repeater {
+                                model: modPane.detail.models || []
+                                delegate: Rectangle {
+                                    id: detailModelRow
+                                    required property var modelData
+                                    required property int index
+                                    width: detailModelsBox.width - 2
+                                    height: 44
+                                    color: "transparent"
+
+                                    Rectangle {
+                                        visible: detailModelRow.index < (modPane.detail.models || []).length - 1
+                                        anchors.bottom: parent.bottom
+                                        width: parent.width
+                                        height: 1
+                                        color: Theme.border
+                                    }
+
+                                    Row {
+                                        x: 12
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        spacing: 8
+                                        Text {
+                                            text: detailModelRow.modelData.name || ""
+                                            color: Theme.fg
+                                            font.family: Theme.sansFamily
+                                            font.pixelSize: 13
+                                            font.weight: 500
+                                        }
+                                        Text {
+                                            visible: detailModelRow.modelData.showId === true
+                                            text: detailModelRow.modelData.id || ""
+                                            color: Theme.fgSubtle
+                                            font.family: Theme.monoFamily
+                                            font.pixelSize: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ── 高级设置态：自定义请求头 ────────────────────────────────
+            Item {
+                id: advancedView
+                x: 20
+                y: 16
+                width: parent.width - 40
+                height: parent.height - 32
+                visible: modPane.view === "advanced"
+
+                Item {
+                    id: advancedTopbar
+                    width: parent.width
+                    height: 30
+
+                    Item {
+                        id: advancedBack
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: advancedBackRow.width + 16
+                        height: 24
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Theme.radiusSm
+                            color: advancedBackMouse.containsMouse ? Theme.bgHover : "transparent"
+                        }
+                        Row {
+                            id: advancedBackRow
+                            x: 6
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 4
+                            Icon {
+                                name: IconData.chevronLeft
+                                size: 16
+                                color: advancedBackMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                            }
+                            Text {
+                                text: (modPane.text.backTo || "").replace("{name}", modPane.detail.name || "")
+                                color: advancedBackMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 13
+                            }
+                        }
+                        MouseArea {
+                            id: advancedBackMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: modPane.view = "detail"
+                        }
+                    }
+                }
+
+                Item {
+                    id: advancedField
+                    y: 46   // topbar 30 + 16
+                    width: parent.width
+                    height: advancedFieldHead.height + 8 + headerListBox.height + 8
+                            + headersHint.implicitHeight
+
+                    Item {
+                        id: advancedFieldHead
+                        width: parent.width
+                        height: 26
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: modPane.text.headers || ""
                             color: Theme.fg
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                             font.weight: 600
                         }
-                        Text {
-                            x: 4
-                            y: 27
-                            text: modelData.detail
-                            color: Theme.fgMuted
-                            font.family: Theme.sansFamily
-                            font.pixelSize: 12
+
+                        Rectangle {
+                            id: addHeaderBtn
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: addHeaderRow.implicitWidth + 16
+                            height: 26
+                            radius: Theme.radiusSm
+                            color: addHeaderMouse.containsMouse ? Theme.bgHover : "transparent"
+
+                            Row {
+                                id: addHeaderRow
+                                anchors.centerIn: parent
+                                spacing: 8
+                                Icon {
+                                    name: IconData.plus
+                                    size: 14
+                                    color: addHeaderMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                                }
+                                Text {
+                                    text: modPane.text.addHeader || ""
+                                    color: addHeaderMouse.containsMouse ? Theme.fg : Theme.fgMuted
+                                    font.family: Theme.sansFamily
+                                    font.pixelSize: 12
+                                    font.weight: 500
+                                }
+                            }
+                            MouseArea {
+                                id: addHeaderMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: modPane.addHeader()
+                            }
                         }
+                    }
+
+                    Rectangle {
+                        id: headerListBox
+                        y: 34   // field__row-between 26 + 下间距 8
+                        width: parent.width
+                        height: {
+                            if (modPane.headerRows.length === 0) return 49
+                            var issueExtra = 0
+                            for (var i = 0; i < modPane.headerRows.length; i++) {
+                                if (modPane.headerRows[i].issueText) issueExtra += 18
+                            }
+                            return modPane.headerRows.length * 44
+                                 + Math.max(0, modPane.headerRows.length - 1) * 1
+                                 + issueExtra + 2
+                        }
+                        radius: Theme.radius
+                        color: "transparent"
+                        border.width: 1
+                        border.color: Theme.border
+                        clip: true
+
+                        Text {
+                            visible: modPane.headerRows.length === 0
+                            x: 1
+                            y: 17
+                            width: parent.width - 2
+                            horizontalAlignment: Text.AlignHCenter
+                            text: modPane.text.noHeaders || ""
+                            color: Theme.fgSubtle
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                        }
+
+                        Column {
+                            x: 1
+                            y: 1
+                            width: parent.width - 2
+                            Repeater {
+                                model: modPane.headerRows
+                                delegate: Item {
+                                    id: headerRow
+                                    required property var modelData
+                                    required property int index
+                                    width: headerListBox.width - 2
+                                    height: 44 + (modelData.issueText ? 18 : 0)
+                                            + (headerRow.index > 0 ? 1 : 0)
+
+                                    Rectangle {
+                                        visible: headerRow.index > 0
+                                        anchors.top: parent.top
+                                        width: parent.width
+                                        height: 1
+                                        color: Theme.border
+                                    }
+
+                                    Rectangle {
+                                        id: headerNameBox
+                                        x: 12
+                                        y: 6 + (headerRow.index > 0 ? 1 : 0)
+                                        width: Math.round((headerRow.width - 24) * 0.34)
+                                        height: 32
+                                        radius: Theme.radiusSm
+                                        color: Theme.bgElevated
+                                        border.width: 1
+                                        border.color: headerNameInput.activeFocus ? Theme.accent : Theme.borderStrong
+
+                                        Text {
+                                            visible: headerNameInput.text.length === 0
+                                            x: 12
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: modPane.text.headerName || ""
+                                            color: Theme.fgSubtle
+                                            font.family: Theme.sansFamily
+                                            font.pixelSize: 13
+                                            enabled: false
+                                        }
+                                        TextInput {
+                                            id: headerNameInput
+                                            anchors.fill: parent
+                                            anchors.leftMargin: 12
+                                            anchors.rightMargin: 12
+                                            verticalAlignment: TextInput.AlignVCenter
+                                            text: headerRow.modelData.name || ""
+                                            color: Theme.fg
+                                            font.family: Theme.sansFamily
+                                            font.pixelSize: 13
+                                            selectByMouse: true
+                                            clip: true
+                                            onTextEdited: modPane.editHeader(headerRow.index, "name", text)
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        id: headerValueBox
+                                        x: headerNameBox.x + headerNameBox.width + 8
+                                        y: headerNameBox.y
+                                        width: headerRow.width - 12 - 28 - 8 - x
+                                        height: 32
+                                        radius: Theme.radiusSm
+                                        color: Theme.bgElevated
+                                        border.width: 1
+                                        border.color: headerValueInput.activeFocus ? Theme.accent : Theme.borderStrong
+
+                                        Text {
+                                            visible: headerValueInput.text.length === 0
+                                            x: 12
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: modPane.text.headerValue || ""
+                                            color: Theme.fgSubtle
+                                            font.family: Theme.sansFamily
+                                            font.pixelSize: 13
+                                            enabled: false
+                                        }
+                                        TextInput {
+                                            id: headerValueInput
+                                            anchors.fill: parent
+                                            anchors.leftMargin: 12
+                                            anchors.rightMargin: 12
+                                            verticalAlignment: TextInput.AlignVCenter
+                                            text: headerRow.modelData.value || ""
+                                            color: Theme.fg
+                                            font.family: Theme.sansFamily
+                                            font.pixelSize: 13
+                                            selectByMouse: true
+                                            clip: true
+                                            onTextEdited: modPane.editHeader(headerRow.index, "value", text)
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        id: headerDelete
+                                        anchors.right: parent.right
+                                        anchors.rightMargin: 12
+                                        y: headerNameBox.y
+                                        width: 28
+                                        height: 28
+                                        radius: Theme.radiusSm
+                                        color: headerDeleteMouse.containsMouse ? Theme.bgHover : "transparent"
+
+                                        Icon {
+                                            anchors.centerIn: parent
+                                            name: IconData.trash2
+                                            size: 14
+                                            color: headerDeleteMouse.containsMouse ? Theme.fg : Theme.fgSubtle
+                                        }
+                                        MouseArea {
+                                            id: headerDeleteMouse
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: modPane.removeHeader(headerRow.index)
+                                        }
+                                    }
+
+                                    Text {
+                                        visible: (headerRow.modelData.issueText || "") !== ""
+                                        x: 12
+                                        y: 40 + (headerRow.index > 0 ? 1 : 0)
+                                        width: headerRow.width - 24
+                                        text: headerRow.modelData.issueText || ""
+                                        color: Theme.warning
+                                        font.family: Theme.sansFamily
+                                        font.pixelSize: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Text {
+                        id: headersHint
+                        y: headerListBox.y + headerListBox.height + 8
+                        width: parent.width
+                        text: modPane.text.headersHint || ""
+                        color: Theme.fgSubtle
+                        font.family: Theme.sansFamily
+                        font.pixelSize: 12
+                        wrapMode: Text.WordWrap
                     }
                 }
             }
