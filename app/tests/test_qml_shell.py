@@ -686,3 +686,25 @@ def test_skill_toggle_survives_a_later_settings_write(qapp, tmp_path, monkeypatc
     assert config["theme"] == "dark"
     assert config["skills"]["enabled"]["demo"] is False, "设置写入不能覆盖技能开关"
     assert {row["id"]: row for row in bridge.extensionRows()}["demo"]["enabled"] is False
+
+
+def test_delete_current_session_removes_file_and_falls_back(tmp_path, monkeypatch):
+    """删除当前会话：文件消失、索引同步，当前会话按列表第一行回退。"""
+    bridge, store, _host = _bridge(
+        tmp_path, monkeypatch, text_stream("x"), sessions=[("s-old", "旧会话"), ("s-new", "新会话")]
+    )
+    old = store.load_session("s-old")
+    new = store.load_session("s-new")
+    old.updatedAt = 1000
+    new.updatedAt = 2000
+    store.save("s-old")
+    store.save("s-new")
+    assert bridge.openSession("s-old") is True
+    old_path = store.session_path("s-old")
+    assert old_path.exists()
+
+    assert bridge.deleteSession("s-old") is True
+    assert not old_path.exists()
+    assert bridge._active == "s-new"
+    assert [row["id"] for row in bridge._rows()] == ["s-new"]
+    assert bridge.deleteSession("s-old") is False

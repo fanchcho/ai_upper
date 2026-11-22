@@ -53,6 +53,8 @@ QtObject {
     readonly property string pencil: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z|m15 5 4 4"
     // archive
     readonly property string archive: "M3 3H21A1 1 0 0 1 22 4V7A1 1 0 0 1 21 8H3A1 1 0 0 1 2 7V4A1 1 0 0 1 3 3Z|M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8|M10 12h4"
+    // list-checks
+    readonly property string listChecks: "m3 17 2 2 4-4|m3 7 2 2 4-4|M13 6h8|M13 12h8|M13 18h8"
     // external-link
     readonly property string externalLink: "M15 3h6v6|M10 14 21 3|M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
     // list-filter
@@ -97,6 +99,7 @@ QtObject {
         if (key === "trash2") return trash2
         if (key === "pencil") return pencil
         if (key === "archive") return archive
+        if (key === "listChecks") return listChecks
         if (key === "externalLink") return externalLink
         if (key === "listFilter") return listFilter
         if (key === "folderMinus") return folderMinus

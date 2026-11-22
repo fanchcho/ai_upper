@@ -574,6 +574,26 @@ class ShellBridge(QtCore.QObject):
         self._publish()
         return session_id
 
+    @QtCore.Slot(str, result=bool)
+    def deleteSession(self, session_id: str) -> bool:
+        """删除一条真实会话；删当前会话时按 Deva `openFirstSession` 选后备。
+
+        Deva `deleteSession` 先 reload 列表，再 `openFirstSession(list)`：
+        在剩下的非归档/非成员会话里取 `updatedAt` 最大的一条；一条都没有就回到空态。
+        """
+        key = str(session_id or "")
+        if not key or not self._store.session_path(key).exists():
+            return False
+        self._host.delete_session(key)
+        if self._active == key:
+            rows = self._rows()
+            self._active = str(rows[0]["id"]) if rows else ""
+            self._turn = None
+            self._turn_session = ""
+            self._render()
+        self._publish()
+        return True
+
     # ── 快速开启（无任何对话时的中列）────────────────────────────────────────
     @QtCore.Slot(result=list)
     def quickStartPersonas(self) -> List[Dict[str, Any]]:

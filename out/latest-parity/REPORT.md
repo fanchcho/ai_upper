@@ -697,8 +697,130 @@ rc=0
 `out/latest-parity/logs/dark-composer-ab.log`、`out/latest-parity/logs/dark-fix-page-diff18.log`、
 `out/latest-parity/probes/dark_composer_ab.py`。
 
-## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
+### 4.8 ctx-menu / delete-confirm：5 项菜单与真可交互的删除确认
 
+`dd0b38e` 提交时把 `ctx-menu` / `delete-confirm` 那批改动留在了工作区（`Main.qml` 另 6 个 hunk
+与 `IconData.qml`）。本节把这批收尾，三条判据全部用**真实鼠标事件**取证，不用「已接线」口径。
+
+**改动清单**：
+
+| 文件 | 改动 |
+|---|---|
+| `app/src/qml/Main.qml` | 会话行右键打开菜单（`openCtxMenu`）；菜单 5 项（New chat / Rename / Select / Archive / Delete，Delete `danger`）；遮罩点击关闭；确认层 Cancel/Delete 两个真按钮 + 卡片吞点击 + 遮罩点击取消；`threadRow<i>` objectName 便于命中 |
+| `app/src/qml/IconData.qml` | 新增 `listChecks`（lucide `list-checks`，对应原版 `Rail.tsx:475` 的 `<ListChecks/>`） |
+| `scripts/parity/gen_icons.mjs` | 生成清单加 `list-checks` |
+| `app/src/qml_shell.py` | 新增 `deleteSession(str) -> bool`；删当前会话时按 Deva `openFirstSession` 回退到列表首行 |
+| `app/src/qml/SoftShadow.qml`（新） | 软件光栅投影组件：Canvas `ctx.shadow*` + evenodd 挖空；把 `dd0b38e` 里写死在输入卡片上的画布抽出来，菜单/对话框/输入卡片三处共用同一份参数 |
+| `app/tests/test_qml_context_menu.py`、`app/tests/test_qml_shell.py` | 真实 `QTest.mouseClick` 的三条用户路径 + `deleteSession` 单测 |
+
+`SoftShadow.qml` 是本节唯一动到 `dd0b38e` 已提交代码的地方（输入卡片由内联 Canvas 换成该组件）。
+参数未变，重拍 `chat` / `dark-chat` 的 md5 与提交里完全一致（`dc133011…` / `3aa7be54…`），
+即无回归。
+
+**判据 1：菜单 5 项 + Delete 危险色**
+
+探针 `out/latest-parity/probes/c5_ctx_confirm.py`（日志 `out/latest-parity/logs/c5-ctx-confirm.log`）：
+起始页 `chat`（`ctxMenu` 不可见）→ 对 `threadRow0` 中心 `(205.5, 83.0)` 注入**右键**：
+
+```
+  右键后 ctxMenu 可见=True
+  labels        = ['New chat', 'Rename', 'Select', 'Archive', 'Delete']
+  labels==deva  = True
+  item0 New chat  中心=(234.0, 110.5) bbox=(166.0, 96.0, 302.0, 125.0)
+  item1 Rename    中心=(234.0, 139.5) bbox=(166.0, 125.0, 302.0, 154.0)
+  item2 Select    中心=(234.0, 168.5) bbox=(166.0, 154.0, 302.0, 183.0)
+  item3 Archive   中心=(234.0, 197.5) bbox=(166.0, 183.0, 302.0, 212.0)
+  item4 Delete    中心=(234.0, 226.5) bbox=(166.0, 212.0, 302.0, 241.0)
+  item0 New chat  红色像素=0    深色文字像素=124
+  item1 Rename    红色像素=0    深色文字像素=145
+  item2 Select    红色像素=0    深色文字像素=99
+  item3 Archive   红色像素=0    深色文字像素=150
+  item4 Delete    红色像素=227  深色文字像素=0
+
+  同一 bbox 在 deva 参考图上的同判据计数：
+    deva New chat  红色像素=0    深色文字像素=131
+    deva Rename    红色像素=0    深色文字像素=155
+    deva Select    红色像素=0    深色文字像素=101
+    deva Archive   红色像素=0    深色文字像素=149
+    deva Delete    红色像素=230  深色文字像素=0
+```
+
+「红色像素」判据：`r>150 且 r>g+60 且 r>b+50`；「深色文字像素」判据：`r+g+b<320`。
+Delete 项 227 个红色像素、0 个普通前景像素，其余四项相反；同一 bbox 在 deva 参考图上是
+230 / 0——说明第 5 项用的是 `Theme.danger`（浅色 `#e5484d` = `(229,72,77)`，`Theme.qml:61`；
+deva `tokens.css:66` 同值），不是 `Theme.fg`。两侧只差 3 个抗锯齿边缘像素。
+
+**判据 2：三处真实点击各自产生预期结果**
+
+同一探针，坐标全部由控件 `mapToScene(中心)` 现算：
+
+```
+  起点：sessions=120 active=parity-000 parity-000 文件存在=True
+  点菜单 Delete 后：confirm visible=True
+  confirmCancel 中心=(718.0, 468.0)   bbox=(683.0, 453.0, 753.0, 483.0)
+  confirmDelete 中心=(794.5, 467.0)   bbox=(760.0, 452.0, 829.0, 482.0)
+  [a] 点取消中心后：confirm visible=False confirmOpen=False sessions=120 active=parity-000 文件存在=True
+  [b] 点确认中心后：confirm visible=False confirmOpen=False sessions=119 active=parity-001 parity-000 文件存在=False
+  confirmDialog bbox=(430.0, 317.0, 850.0, 503.0)
+  [c] 点遮罩空白 (100,700) 后：confirm visible=False confirmOpen=False sessions=119 active=parity-001
+```
+
+- [a] 取消：关闭且**不删**（120→120，`parity-000` 文件仍在）；
+- [b] 确认：关闭且**真删**（120→119，文件消失，活跃会话按 Deva 规则回退到 `parity-001`）；
+- [c] 遮罩：关闭且不删（119→119），点击点 `(100,700)` 在卡片 bbox `(430,317,850,503)` 之外。
+
+**判据 3：两页重拍（1280×820，stderr 0 字节）**
+
+```
+$ bash scripts/parity/qml_page_shot.sh ctx-menu out/latest-parity/qml/ctx-menu.png /tmp/fx-qml-home
+ctx-menu rc=0 errbytes=0
+QML OK platform=offscreen … png=out/latest-parity/qml/ctx-menu.png size=1280x820
+
+$ bash scripts/parity/qml_page_shot.sh delete-confirm out/latest-parity/qml/delete-confirm.png /tmp/fx-qml-home
+delete-confirm rc=0 errbytes=0
+QML OK platform=offscreen … png=out/latest-parity/qml/delete-confirm.png size=1280x820
+```
+
+stderr 与 stdout 分别落盘在 `out/latest-parity/logs/c5-ctx-menu-shoot.{out,err}`、
+`c5-delete-confirm-shoot.{out,err}`（`.err` 均为 0 字节）。`AI_UPPER_HOME` 指向 `/tmp/fx-qml-home`，
+deva 目录只读未改。
+
+**与参考图的差异（`page_diff18.py`，rc=0；日志 `logs/c5-page-diff18.log`）**：
+
+```
+ctx-menu        64c8c33a… 3c1fdb46…  158033 143492 127196 12.12% max=248 same=False
+delete-confirm  964c32d1… 5b8baeb9…  162718 147103 384883 36.67% max=224 same=False
+```
+
+| 页 | 改前（HEAD 图复算） | 改后 |
+|---|---:|---:|
+| ctx-menu | 143461 / 13.67% | 127196 / 12.12% |
+| delete-confirm | 401948 / 38.30% | 384883 / 36.67% |
+
+`delete-confirm` 剩余差异里 76.1% 只差 1–2 个灰阶（`deva(144,144,144)` vs `qml(143,143,144)`
+共 183194 px），是遮罩 `rgba(0,0,0,.42)`（deva `redesign.css:3139`，QML `Theme.qml:68` 同值）
+叠在背景对话上的合成取整差，不是结构缺口；本轮任务只要求两页可交互 + 重拍，
+未改遮罩合成，故不再往下压。
+
+**受影响测试**：
+
+```
+$ .venv/bin/python -m pytest app/tests/test_qml_context_menu.py app/tests/test_qml_shell.py -q
+49 passed in 6.48s
+rc=0
+```
+
+无 skipped、无 xfail。`test_qml_context_menu.py` 的三组断言与本节点探针覆盖同一批用户路径
+（5 项几何 → 菜单 Delete → 确认 Delete；Cancel；遮罩），但它直接走 QML 内部事件路径，
+本节探针额外测了 Delete 项的**像素颜色**与「右键入口」这两项。
+
+**未做**：右键菜单的 Rename / Select / Archive 三项只渲染、不接动作（本轮判据只覆盖
+项数与 Delete 颜色 + 删除链路）；菜单阴影按 `0 6 24 / .12` 补齐后与 deva 逐像素相差 ≤1 灰阶，
+未再调参。
+
+**提交记录**：见紧随本节之后的本轮提交。
+
+## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
 
 `app/src/qml_shell.py::PAGE_NAMES` 共 **20** 项；`scripts/parity/qml_pages_all.sh` 的 `shot` 行共 **18** 项。

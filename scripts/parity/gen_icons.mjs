@@ -25,6 +25,8 @@ const WANTED = [
   'search', 'plus', 'paperclip', 'folder', 'chevron-down', 'arrow-up',
   'copy', 'x', 'settings-2', 'blocks', 'info', 'sparkles', 'square-pen', 'check',
   'panel-left', 'panel-right', 'trash-2', 'pencil', 'archive',
+  // 会话右键菜单的「Select」项（Rail.tsx 用 lucide ListChecks）。
+  'list-checks',
   // 交付卡「打开」按钮：原版 DeliverablesCard 用的就是 lucide 的 external-link。
   'external-link',
   // 侧栏搜索：原版 Rail 的筛选按钮是 list-filter，清空按钮是 x（上面已有）。

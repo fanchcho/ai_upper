@@ -63,8 +63,17 @@ ApplicationWindow {
     // 输入区焦点态：focus-composer 页要让输入卡片真的拿到键盘焦点，
     // 原版此时边框从 #d5d5db 变 #5b5bd6（CDP 实测 border-color）。
     property bool composerFocused: page === "focus-composer"
-    property bool ctxOpen: page === "ctx-menu" || page === "delete-confirm"
-    property bool confirmOpen: page === "delete-confirm"
+    // 右键菜单 / 删除确认框：页面深链负责截图初始态，用户点击后可独立开关。
+    property bool ctxDismissed: false
+    property bool confirmDismissed: false
+    property bool ctxUserOpen: false
+    property bool confirmUserOpen: false
+    readonly property bool ctxOpen: (page === "ctx-menu" && !ctxDismissed) || ctxUserOpen
+    readonly property bool confirmOpen: (page === "delete-confirm" && !confirmDismissed) || confirmUserOpen
+    property string ctxSessionId: ""
+    property string ctxTitle: ""
+    property string pendingDeleteId: ""
+    property string pendingDeleteTitle: ""
 
     // 深浅主题：Python 侧把 config.json 的 theme 解析成 bool，QML 用 Binding 写进
     // Theme 单例（单例的 property 不能从 Python 直接 setProperty，实测落不下去）。
@@ -385,6 +394,7 @@ ApplicationWindow {
             Component.onCompleted: window.applyListScroll()
 
             delegate: ThreadRow {
+                objectName: "threadRow" + index
                 required property int index
                 required property var modelData
                 width: ListView.view.width
@@ -397,7 +407,12 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: window.activate(modelData.id)
+                    onClicked: function (mouse) {
+                        if (mouse.button === Qt.RightButton)
+                            window.openCtxMenu(modelData.id, modelData.title)
+                        else
+                            window.activate(modelData.id)
+                    }
                 }
             }
         }
@@ -983,56 +998,11 @@ ApplicationWindow {
         // ── 输入区 ────────────────────────────────────────────────────
         // 卡片实测：(428,658) 780×146，padding 12，边框 #d5d5db，圆角 12。
         // 阴影：原版 `.cf-box { box-shadow: var(--shadow) }`（redesign.css:2661），
-        // 深色 `0 8px 30px rgba(0,0,0,.5)`（tokens.css:149）、浅色 `0 6px 24px rgba(0,0,0,.12)`
-        // （tokens.css:82）。QML 没有 box-shadow，而 QtQuick.Effects 的 MultiEffect 与
-        // Qt5Compat 的 DropShadow 在 `QT_QUICK_BACKEND=software` 下实测都**不出影**（灰底不变），
-        // 只有 Canvas 的 ctx.shadow* 在软件光栅里生效；所以用一张垫在卡片下面的画布画阴影。
-        // 画布向外扩 38px（= blur 30 的外沿 + 8px 偏移），内侧再挖掉卡片本身那圈——
-        // 不挖的话卡片自己的半透明阴影会叠在卡面上把它压暗。
-        Canvas {
+        // 深色 `0 8px 30px rgba(0,0,0,.5)`、浅色 `0 6px 24px rgba(0,0,0,.12)`
+        // （tokens.css:149 / :82）。参数字面量集中在 SoftShadow.qml。
+        SoftShadow {
             id: composerShadow
-            // 与卡片同位、四周各外扩 38px（卡片本身是居中的，所以这里跟 composer 的 x/y 走）。
-            x: composer.x - 38
-            y: composer.y - 38
-            width: composer.width + 76
-            height: composer.height + 76
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                var pad = 38
-                var box = { x: pad, y: pad, w: width - 2 * pad, h: height - 2 * pad, r: Theme.radiusLg }
-                function ringPath(c) {
-                    // 圆角矩形（arcTo 顺序：右上 → 右下 → 左下 → 左上）
-                    c.moveTo(box.x + box.r, box.y)
-                    c.arcTo(box.x + box.w, box.y, box.x + box.w, box.y + box.h, box.r)
-                    c.arcTo(box.x + box.w, box.y + box.h, box.x, box.y + box.h, box.r)
-                    c.arcTo(box.x, box.y + box.h, box.x, box.y, box.r)
-                    c.arcTo(box.x, box.y, box.x + box.w, box.y, box.r)
-                    c.closePath()
-                }
-                // 只保留画布内、卡片外的那一圈
-                ctx.beginPath()
-                ctx.rect(0, 0, width, height)
-                ringPath(ctx)
-                ctx.clip("evenodd")
-                if (Theme.dark) {
-                    ctx.shadowColor = Qt.rgba(0, 0, 0, 0.50)
-                    ctx.shadowBlur = 30
-                    ctx.shadowOffsetY = 8
-                } else {
-                    ctx.shadowColor = Qt.rgba(0, 0, 0, 0.12)
-                    ctx.shadowBlur = 24
-                    ctx.shadowOffsetY = 6
-                }
-                ctx.fillStyle = "rgba(0,0,0,1)"
-                ctx.beginPath()
-                ringPath(ctx)
-                ctx.fill()
-            }
-            Connections {
-                target: Theme
-                function onDarkChanged() { composerShadow.requestPaint() }
-            }
+            target: composer
         }
 
         Rectangle {
@@ -1352,8 +1322,58 @@ ApplicationWindow {
         return ok
     }
 
+    // 右键菜单 / 删除确认：Deva 的菜单项与确认按钮都是真实可点的。
+    function openCtxMenu(id, title) {
+        window.ctxSessionId = String(id || "")
+        window.ctxTitle = String(title || "")
+        window.ctxDismissed = false
+        window.confirmDismissed = false
+        window.ctxUserOpen = true
+        window.confirmUserOpen = false
+    }
+
+    function dismissCtxMenu() {
+        window.ctxDismissed = true
+        window.ctxUserOpen = false
+    }
+
+    function ctxAction(action) {
+        if (action === "new") {
+            window.dismissCtxMenu()
+            shellBridge.newSession()
+        } else if (action === "delete") {
+            window.pendingDeleteId = window.ctxSessionId || window.activeId
+            window.pendingDeleteTitle = window.ctxTitle || window.activeTitle
+            window.dismissCtxMenu()
+            window.confirmDismissed = false
+            window.confirmUserOpen = true
+        }
+    }
+
+    function cancelDelete() {
+        window.confirmUserOpen = false
+        window.confirmDismissed = true
+        window.pendingDeleteId = ""
+        window.pendingDeleteTitle = ""
+    }
+
+    function confirmDelete() {
+        var id = window.pendingDeleteId || window.activeId
+        if (!id || !shellBridge.deleteSession(id)) {
+            notify("删除对话失败")
+            return
+        }
+        window.cancelDelete()
+    }
+
     // 交互态页面由 Python 在 QML 建好后写入，所以这些状态要监听 page 变化才真生效。
-    onPageChanged: Qt.callLater(applyPageState)
+    onPageChanged: {
+        window.ctxDismissed = false
+        window.confirmDismissed = false
+        window.ctxUserOpen = false
+        window.confirmUserOpen = false
+        Qt.callLater(applyPageState)
+    }
 
     // 页名对应的「一次性」状态：抢焦点。列表滚动见 applyListScroll。
     function applyPageState() {
@@ -1427,54 +1447,94 @@ ApplicationWindow {
             sessionList.contentY = 0
     }
 
-    // 右键菜单：原版 .cf-menu 实测 (165,88) 175×124，圆角 10，1px #e6e6ea，四项各 31。
-    Rectangle {
-        id: ctxMenu
-        objectName: "ctxMenu"
+    // 右键菜单：Deva `Rail.tsx` 线程菜单 5 项，CSS `.cf-ctx` 实测
+    // (160,90) 148×157、padding 5、项 136×29、圆角 8、阴影 0 6 24、无分隔线。
+    Item {
+        id: ctxLayer
+        objectName: "ctxLayer"
         visible: window.ctxOpen
-        x: 165
-        y: 88
-        width: 175
-        height: 124
-        radius: 10
-        color: Theme.bg
-        border.width: 1
-        border.color: Theme.border
+        anchors.fill: parent
         z: 40
 
-        Column {
-            x: 5
-            y: 5
-            spacing: 0
-            Repeater {
-                model: [
-                    { label: "New chat", icon: IconData.plus, danger: false },
-                    { label: "Rename", icon: IconData.pencil, danger: false },
-                    { label: "Archive", icon: IconData.archive, danger: false },
-                    { label: "Delete conversation", icon: IconData.trash2, danger: true }
-                ]
-                delegate: Rectangle {
-                    required property var modelData
-                    width: 165
-                    height: 28
-                    radius: Theme.radiusSm
-                    color: "transparent"
-                    Row {
-                        x: 8
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 10
-                        Icon {
+        // 点击菜单外关闭：Deva `.cf-ctx__backdrop` 的透明点击层。
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: window.dismissCtxMenu()
+        }
+
+        // `.cf-ctx` 的 `box-shadow: var(--shadow)`（redesign.css:455）：浅色 0 6 24 / 12%。
+        SoftShadow {
+            id: ctxMenuShadow
+            target: ctxMenu
+        }
+
+        Rectangle {
+            id: ctxMenu
+            objectName: "ctxMenu"
+            x: 160
+            y: 90
+            width: 148
+            height: 157
+            radius: Theme.radiusLg
+            color: Theme.bgElevated
+            border.width: 1
+            border.color: Theme.border
+
+            // 面板本身吞掉点击，避免点在 padding 上把菜单关掉。
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {}
+            }
+
+            Column {
+                x: 6
+                y: 6
+                spacing: 0
+                Repeater {
+                    model: [
+                        { label: "New chat", icon: IconData.plus, danger: false, action: "new" },
+                        { label: "Rename", icon: IconData.pencil, danger: false, action: "rename" },
+                        { label: "Select", icon: IconData.listChecks, danger: false, action: "select" },
+                        { label: "Archive", icon: IconData.archive, danger: false, action: "archive" },
+                        { label: "Delete", icon: IconData.trash2, danger: true, action: "delete" }
+                    ]
+                    delegate: Rectangle {
+                        required property int index
+                        required property var modelData
+                        objectName: "ctxMenuItem" + index
+                        width: 136
+                        height: 29
+                        radius: Theme.radius
+                        color: itemMouse.containsMouse
+                               ? (modelData.danger
+                                  ? Qt.rgba(229 / 255, 72 / 255, 77 / 255, 0.14)
+                                  : Theme.bgHover)
+                               : "transparent"
+                        Row {
+                            x: 9
                             anchors.verticalCenter: parent.verticalCenter
-                            name: modelData.icon
-                            size: 14
-                            color: modelData.danger ? Theme.danger : Theme.fg
+                            spacing: 8
+                            Icon {
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: modelData.icon
+                                size: 14
+                                color: modelData.danger ? Theme.danger : Theme.fg
+                            }
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: modelData.label
+                                color: modelData.danger ? Theme.danger : Theme.fg
+                                font.family: Theme.sansFamily
+                                font.pixelSize: 13
+                            }
                         }
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: modelData.label
-                            color: modelData.danger ? Theme.danger : Theme.fg
-                            font.family: Theme.sansFamily
-                            font.pixelSize: 13
+                        MouseArea {
+                            id: itemMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: window.ctxAction(modelData.action)
                         }
                     }
                 }
@@ -1482,30 +1542,60 @@ ApplicationWindow {
         }
     }
 
-    // 删除确认框：背板 42%，弹窗 420×180 居中偏上（实测 430,320），标题 15/700。
+    // 删除确认框：Deva `Modal` / `DialogProvider` 实测卡片 (430,317) 420×186，
+    // 背板 rgba(0,0,0,.42)，标题 15/600，正文 13/1.6，按钮 30px、Cancel 68、Delete 69。
     Item {
         id: confirmLayer
         objectName: "confirmLayer"
         visible: window.confirmOpen
         anchors.fill: parent
         z: 60
+
         Rectangle {
+            id: confirmBackdrop
+            objectName: "confirmBackdrop"
             anchors.fill: parent
             color: Theme.backdrop
+
+            // Deva Modal：只有点在背板自身（卡片外）才取消。
+            MouseArea {
+                anchors.fill: parent
+                onClicked: window.cancelDelete()
+            }
         }
+
+        // `.modal__card` 的 `box-shadow: var(--shadow)`：浅色 0 6 24 / 12%。
+        SoftShadow {
+            id: confirmDialogShadow
+            target: confirmDialog
+        }
+
         Rectangle {
+            id: confirmDialog
+            objectName: "confirmDialog"
             x: 430
-            y: 320
+            y: 317
             width: 420
-            height: 180
+            height: 186
             radius: Theme.radiusLg
-            color: Theme.bg
+            color: Theme.bgElevated
+            border.width: 1
+            border.color: Theme.border
+
+            // 卡片吞掉点击，避免点正文时穿透到背板触发取消。
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {}
+            }
+
             Text {
                 x: 20
-                y: 18
+                y: 20
                 width: parent.width - 40
                 wrapMode: Text.WordWrap
-                text: "Delete conversation “" + window.activeTitle + "”?"
+                lineHeight: 22
+                lineHeightMode: Text.FixedHeight
+                text: "Delete conversation “" + (window.pendingDeleteTitle || window.activeTitle) + "”?"
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -1513,38 +1603,68 @@ ApplicationWindow {
             }
             Text {
                 x: 20
-                y: 74
+                y: 80
                 width: parent.width - 40
                 wrapMode: Text.WordWrap
+                lineHeight: 21
+                lineHeightMode: Text.FixedHeight
                 text: "This conversation and all its messages will be permanently removed. This cannot be undone."
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 13
-                lineHeight: 1.5
             }
-            Text {
-                id: cancelText
-                x: 266
-                y: 135
-                text: "Cancel"
-                color: Theme.fg
-                font.family: Theme.sansFamily
-                font.pixelSize: 13
-            }
+
             Rectangle {
-                x: 330
-                y: 127
+                id: cancelButton
+                objectName: "confirmCancel"
+                x: 253
+                y: 136
                 width: 70
                 height: 30
                 radius: Theme.radiusSm
-                color: Theme.danger
+                color: cancelMouse.containsMouse ? Theme.bgHover : "transparent"
                 Text {
                     anchors.centerIn: parent
+                    text: "Cancel"
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: cancelMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: window.cancelDelete()
+                }
+            }
+
+            Rectangle {
+                id: deleteButton
+                objectName: "confirmDelete"
+                x: 330
+                y: 135
+                width: 69
+                height: 30
+                radius: Theme.radiusSm
+                color: deleteMouse.containsMouse ? Qt.lighter(Theme.danger, 1.07) : Theme.danger
+                Text {
+                    anchors.centerIn: parent
+                    anchors.horizontalCenterOffset: -1
+                    anchors.verticalCenterOffset: 1
                     text: "Delete"
                     color: "#ffffff"
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
-                    font.weight: 600
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: deleteMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: window.confirmDelete()
                 }
             }
         }
