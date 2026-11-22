@@ -300,53 +300,122 @@ Item {
     }
 
     // ── Models：真实模型列表来自 config.json 的 models 段 ────────────────
+    // 本段几何逐值取自原版 `features/settings/ModelSettings.tsx` 列表态与 `styles/app.css`：
+    //   `.cf-pane` 内边距 var(--space-4) var(--space-5) = 16px 20px；
+    //   `.models__head`（flex / align-items:center / margin-bottom:16）撑高 28px；
+    //   `.models__title` 15px/700、颜色 var(--fg)；
+    //   `.models__add-btn` 28×28、border 1px var(--border)、radius var(--radius)=8、
+    //   background var(--bg-elevated)、图标 Plus size=16、颜色 var(--fg-muted)；
+    //   `.models__rows` border 1px var(--border)、radius var(--radius-lg)=12、overflow hidden。
+    // 数据只走已入库的 `mvvm.services.settings_models` 投影（ShellBridge 的
+    // `modelRows` / `modelsPaneLabels`），QML 侧不重复计算任何规则。
     Component {
         id: modelsPane
         Item {
-            Text {
+            id: modPane
+            property var rows: shellBridge ? shellBridge.modelRows() : []
+            property var text: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+
+            Item {
+                id: modHead
                 x: 20
                 y: 16
-                text: "Models"
-                color: Theme.fg
-                font.family: Theme.sansFamily
-                font.pixelSize: 15
-                font.weight: 700
-            }
-            ListView {
-                x: 20
-                y: 55
                 width: parent.width - 40
-                height: parent.height - 75
-                clip: true
-                model: shellBridge ? shellBridge.modelRows() : []
-                delegate: Rectangle {
-                    required property var modelData
-                    width: ListView.view.width
-                    height: 52
+                height: 28
+
+                Text {
+                    id: modTitle
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: modPane.text.providers || ""
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 15
+                    font.weight: 700
+                }
+
+                Rectangle {
+                    id: addBtn
+                    anchors.right: parent.right
+                    width: 28
+                    height: 28
                     radius: Theme.radius
-                    color: "transparent"
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        width: parent.width
-                        height: 1
-                        color: Theme.border
+                    color: addHover.hovered ? Theme.bgHover : Theme.bgElevated
+                    border.width: 1
+                    border.color: Theme.border
+                    Icon {
+                        anchors.centerIn: parent
+                        name: IconData.plus
+                        size: 16
+                        color: addHover.hovered ? Theme.fg : Theme.fgMuted
                     }
-                    Text {
-                        x: 4
-                        y: 8
-                        text: modelData.name
-                        color: Theme.fg
-                        font.family: Theme.sansFamily
-                        font.pixelSize: 13
-                        font.weight: 600
-                    }
-                    Text {
-                        x: 4
-                        y: 27
-                        text: modelData.detail
-                        color: Theme.fgMuted
-                        font.family: Theme.sansFamily
-                        font.pixelSize: 12
+                    HoverHandler { id: addHover }
+                }
+            }
+
+            Rectangle {
+                id: modRows
+                x: 20
+                y: 60   // 16（上内边距）+ 28（head）+ 16（`.models__head` 下间距）
+                width: parent.width - 40
+                height: modPane.rows.length === 0
+                        ? modEmpty.implicitHeight + 32
+                        : modPane.rows.length * 52 + 2
+                radius: Theme.radiusLg
+                color: "transparent"
+                border.width: 1
+                border.color: Theme.border
+                clip: true
+
+                Text {
+                    id: modEmpty
+                    visible: modPane.rows.length === 0
+                    x: 1
+                    y: 17
+                    width: parent.width - 2
+                    horizontalAlignment: Text.AlignHCenter
+                    text: modPane.text.noProvidersYet || ""
+                    color: Theme.fgSubtle
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                }
+
+                ListView {
+                    id: modList
+                    visible: modPane.rows.length > 0
+                    x: 1
+                    y: 1
+                    width: parent.width - 2
+                    height: parent.height - 2
+                    clip: true
+                    model: modPane.rows
+                    delegate: Rectangle {
+                        required property var modelData
+                        width: modList.width
+                        height: 52
+                        color: "transparent"
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            width: parent.width
+                            height: 1
+                            color: Theme.border
+                        }
+                        Text {
+                            x: 4
+                            y: 8
+                            text: modelData.name
+                            color: Theme.fg
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 13
+                            font.weight: 600
+                        }
+                        Text {
+                            x: 4
+                            y: 27
+                            text: modelData.detail
+                            color: Theme.fgMuted
+                            font.family: Theme.sansFamily
+                            font.pixelSize: 12
+                        }
                     }
                 }
             }

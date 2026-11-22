@@ -14,6 +14,8 @@ QtObject {
     readonly property color _bgLight: "#ffffff"
     readonly property color _bgPanelLight: "#f7f7f8"
     readonly property color _bgInsetLight: "#f0f0f2"
+    // tokens.css `--bg-elevated`（浅色 43 行 / 深色 111 行）：抬升面（如 Models 页加号按钮底）。
+    readonly property color _bgElevatedLight: "#ffffff"
     readonly property color _bgHoverLight: Qt.rgba(0, 0, 0, 0.045)
     readonly property color _bgActiveLight: Qt.rgba(0, 0, 0, 0.08)
     readonly property color _bgSelectedLight: Qt.rgba(91 / 255, 91 / 255, 214 / 255, 0.12)
@@ -29,6 +31,7 @@ QtObject {
     readonly property color _bgDark: "#1e1e20"
     readonly property color _bgPanelDark: "#252528"
     readonly property color _bgInsetDark: "#191919"
+    readonly property color _bgElevatedDark: "#2a2a2e"
     readonly property color _bgHoverDark: Qt.rgba(1, 1, 1, 0.06)
     readonly property color _bgActiveDark: Qt.rgba(1, 1, 1, 0.10)
     readonly property color _bgSelectedDark: Qt.rgba(124 / 255, 124 / 255, 240 / 255, 0.20)
@@ -43,6 +46,7 @@ QtObject {
     readonly property color bg: dark ? _bgDark : _bgLight
     readonly property color bgPanel: dark ? _bgPanelDark : _bgPanelLight
     readonly property color bgInset: dark ? _bgInsetDark : _bgInsetLight
+    readonly property color bgElevated: dark ? _bgElevatedDark : _bgElevatedLight
     readonly property color bgHover: dark ? _bgHoverDark : _bgHoverLight
     readonly property color bgActive: dark ? _bgActiveDark : _bgActiveLight
     readonly property color bgSelected: dark ? _bgSelectedDark : _bgSelectedLight
