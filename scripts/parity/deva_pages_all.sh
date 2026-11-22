@@ -6,6 +6,8 @@
 #
 # deva 工程只读：只启动它、不写它。
 set -u
+# 透传给 deva_page_shot.sh（对齐 deva 新版时指向 /tmp 构建产物），默认只读源仓库。
+export DEVA_ROOT="${DEVA_ROOT:-/home/agent/shared_workspace/deva}"
 OUT="${1:-out/qml-shell/pages/deva}"
 FIXTURE=/tmp/fx-pages/data/chats
 CONFIG=/tmp/fx-page-home/config.json

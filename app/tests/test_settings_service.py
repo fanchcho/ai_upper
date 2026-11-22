@@ -161,6 +161,10 @@ def test_patch_must_be_object(home):
 
 
 def test_default_home_uses_deva_home_env(monkeypatch, tmp_path):
+    # 同 test_secrets_vault 里的同名用例：解析顺序 AI_UPPER_HOME → DEVA_HOME，
+    # 宿主导出了 AI_UPPER_HOME 时它优先，DEVA_HOME 这条路径根本不会被走到。
+    # 先清掉它，断言才真的是「旧变量仍被读取」。
+    monkeypatch.delenv("AI_UPPER_HOME", raising=False)
     monkeypatch.setenv("DEVA_HOME", str(tmp_path / "custom"))
     service = SettingsService()
     service.set_config({"theme": "dark"})

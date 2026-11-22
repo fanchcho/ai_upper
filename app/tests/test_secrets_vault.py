@@ -272,6 +272,10 @@ def test_unknown_backend_env_is_ignored(monkeypatch, home):
 
 
 def test_default_home_uses_deva_home_env(monkeypatch, tmp_path):
+    # 这条锁的是「旧变量 DEVA_HOME 仍被读取」。解析顺序是 AI_UPPER_HOME → DEVA_HOME，
+    # 所以必须先清掉 AI_UPPER_HOME：宿主机若导出了它（打包启动器、parity 脚本都会），
+    # 不清就会读到宿主目录，用例变成对宿主环境的隐式依赖而不是对行为的断言。
+    monkeypatch.delenv("AI_UPPER_HOME", raising=False)
     monkeypatch.setenv("DEVA_HOME", str(tmp_path / "custom"))
     monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
     vault = SecretsVault()

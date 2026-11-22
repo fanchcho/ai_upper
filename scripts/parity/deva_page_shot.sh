@@ -29,7 +29,8 @@ OUT="${2:?缺少输出路径}"
 HOME_DIR="${3:?缺少 DEVA_HOME}"
 SEED_DIR="${4:-}"
 CONFIG_FILE="${5:-}"
-DEVA_ROOT=/home/agent/shared_workspace/deva
+# 允许用 DEVA_ROOT 指向 /tmp 下的构建产物（对齐 deva 新版时用），默认仍是只读的源仓库。
+DEVA_ROOT="${DEVA_ROOT:-/home/agent/shared_workspace/deva}"
 DISPLAY_NUM=:97
 
 cleanup() {
