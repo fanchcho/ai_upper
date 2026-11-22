@@ -356,3 +356,34 @@ $ tail -1 /tmp/all.log
 
 判否项：无。本节只交付数据层与桥接，QML 的 Models 面板结构（`models__head` /
 28×28 加号 / 1px 描边圆角容器 / 52 高行）仍未改，留给下一节。
+
+### 4.3 图标：wrench / refresh-cw（B2-1）
+
+**改动**：`scripts/parity/gen_icons.mjs` 的 WANTED 末尾加 `'wrench', 'refresh-cw'`；用同一个生成器
+重出 `app/src/qml/IconData.qml`（几何直接来自 deva 只读仓库的
+`node_modules/lucide-react/dist/esm/icons/`，没有手写路径）。提交：`7c04b21`。
+
+**生成命令与真实退出码**：
+
+```
+$ node scripts/parity/gen_icons.mjs /home/agent/shared_workspace/deva /tmp/IconData.regen.qml > /tmp/b2-gen.log 2>&1; echo rc=$?
+rc=0
+$ tail -n 1 /tmp/b2-gen.log
+icons -> /tmp/IconData.regen.qml count=33 names=messageCircle,...,alertTriangle,wrench,refreshCw
+$ diff /tmp/IconData.regen.qml app/src/qml/IconData.qml > /tmp/b2-diff.log 2>&1; echo diff_rc=$?
+diff_rc=0   # 空 diff：入库文件与生成器输出逐字节一致
+```
+
+**两个图标可被查到的证据**（`grep -n "wrench\|refreshCw\|refresh-cw"`）：
+
+```
+scripts/parity/gen_icons.mjs:37:  'wrench', 'refresh-cw'
+app/src/qml/IconData.qml:70:    // wrench
+app/src/qml/IconData.qml:71:    readonly property string wrench: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6..."
+app/src/qml/IconData.qml:72:    // refresh-cw
+app/src/qml/IconData.qml:73:    readonly property string refreshCw: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8|..."
+app/src/qml/IconData.qml:107:        if (key === "wrench") return wrench
+app/src/qml/IconData.qml:108:        if (key === "refreshCw") return refreshCw
+```
+
+判否项：无。
