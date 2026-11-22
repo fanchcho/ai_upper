@@ -321,3 +321,38 @@ magick` → rc=1）。新增 `scripts/parity/pngread.py`（纯标准库 PNG 解�
 新解码器的正确性以旧数字为准：对同一批 `out/latest-parity/{deva,qml}` 复算，18 页
 差异像素与 §2.2 表**逐项一致**（chat 126790 / empty 10325 / search-results 104080 /
 settings-models 328000 / settings-about 334166 …），整表 37 秒跑完，rc=0。
+
+### 4.2 设置页数据投影与请求头语义（A2）
+
+commit `f96766a`（`feat(settings): 设置页 Model/About 数据投影 + 自定义请求头语义 + 桥接`）。
+
+新增 `app/src/mvvm/services/settings_models.py`（服务商过滤 / 列表行 / 详情投影 /
+整段 `models` 写回）与 `app/tests/test_qml_settings_models.py`（44 条）；`ShellBridge`
+把 `modelRows` 改为走同一份投影，并新增 `modelsPaneLabels` / `providerDetail` /
+`setProviderField` / `deleteProvider` / `addProvider` / `setModelEnabled` /
+`addModel` / `removeModel` / `setProviderHeaders`。
+
+真实命令与输出：
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-b1 .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/t1.log 2>&1; echo rc=$?
+rc=0
+$ tail -1 /tmp/t1.log
+44 passed in 0.21s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-b1 .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/t2.log 2>&1; echo rc=$?
+rc=0
+$ tail -1 /tmp/t2.log
+46 passed in 0.74s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-b1 .venv/bin/python -m pytest -q > /tmp/all.log 2>&1; echo rc=$?
+rc=0
+$ tail -1 /tmp/all.log
+1320 passed, 5 skipped in 30.22s
+```
+
+5 条 skip 均为环境门禁（Windows 专属 pyconfig / GUI-subsystem 用例各 1，`AI_UPPER_E2E=1`
+未设的本地构建 E2E 2 条，缺 `cc`/`patchelf`/`readelf` 的原生部署 1 条），无 failed。
+
+判否项：无。本节只交付数据层与桥接，QML 的 Models 面板结构（`models__head` /
+28×28 加号 / 1px 描边圆角容器 / 52 高行）仍未改，留给下一节。
