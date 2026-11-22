@@ -606,6 +606,97 @@ $ sed -n '$p' /tmp/test-about-providers.log
 `app/src/qml/SettingsModal.qml`、`app/src/qml/assets/deva-icon.svg`、`app/src/qml_shell.py`、
 `out/latest-parity/REPORT.md`、`out/latest-parity/qml/settings-about.png`。
 
+### 4.7 dark-chat：输入卡片底色取错 token
+
+**先纠正一个口径**：任务书里的「dark-chat 整页差异 97.82%」不是差异百分比。`97.82%` 出自
+`out/latest-parity/criterion4-stub-scan.log:19` 的**第 5 列「墨迹占比」**（`sum(r,g,b) < 420`
+的像素占比）——深色页本来就几乎全是「墨迹」，这个数在修复前后**都是 97.82%**，不随任何改动变化。
+真正的整页差异在 `page_diff18` 表里：修复前 `258651 px / 24.64%`
+（`out/latest-parity/page-diff-table.txt:4`）。本节按后者报数。
+
+**根因判定**（任务书要求的四选一）：**配色 token 取错值**。
+
+- 排除「深色主题根本没生效」：改前整页主色 `(30,30,32)` 共 735886 px、侧栏 `(37,37,40)` 共
+  193970 px，与 deva 的深色 `--bg #1e1e20`（`tokens.css:109`）/ `--bg-panel #252528` 合成值一致；
+  `(60,760)=(37,37,40)` 两侧完全相同（`logs/dark-composer-ab.log`）。
+- 排除「截图流程没进 dark 态」：`config-dark.json` 已生效，否则整页不会是暗色。
+- 排除「页面状态注入后未重应用主题」：同一次截图里侧栏、正文、边框深浅都对，只有输入卡片一处错。
+- 定为「token 取错值」：输入卡片底色在改前为 `(30,30,32)`=`--bg #1e1e20`，而 deva 是
+  `(42,42,46)`=`--bg-elevated #2a2a2e`。QML 侧写的是 `color: Theme.bg`，应写 `Theme.bgElevated`。
+
+**deva 取值出处（只读源，逐行核对）**：
+
+| 事实 | deva 文件:行 |
+|---|---|
+| `.cf-box { … background: var(--bg-elevated); … box-shadow: var(--shadow); }` | `apps/desktop/src/renderer/src/redesign/redesign.css:2655-2662` |
+| 卡片实例 `<div className="cf-box">` | `apps/desktop/src/renderer/src/redesign/Composer.tsx:866` |
+| `--bg-elevated: #ffffff`（浅） | `apps/desktop/src/renderer/src/styles/tokens.css:43` |
+| `--bg-elevated: #2a2a2e`（深） | `apps/desktop/src/renderer/src/styles/tokens.css:111` |
+| `--bg: #1e1e20`（深，= 页面底色，**不是**卡片底色） | `apps/desktop/src/renderer/src/styles/tokens.css:109` |
+| `--shadow: 0 6px 24px rgba(0,0,0,.12)`（浅） | `apps/desktop/src/renderer/src/styles/tokens.css:82` |
+| `--shadow: 0 8px 30px rgba(0,0,0,.5)`（深） | `apps/desktop/src/renderer/src/styles/tokens.css:149` |
+
+QML 侧 `Theme.qml:34` `_bgElevatedDark: "#2a2a2e"`、`:49` `bgElevated: dark ? …Dark : …Light`
+取值本来就对，所以这是**引用错 token**，不是 token 表错。
+
+**改动**（`app/src/qml/Main.qml`，两处）：
+
+1. `composer` 的 `color: Theme.bg` → `color: Theme.bgElevated`（并注明 `redesign.css:2655-2662`
+   与深/浅两色差异）。
+2. 补卡片投影。`.cf-box` 带 `box-shadow: var(--shadow)`，QML 原先完全没有。实测在
+   `QT_QUICK_BACKEND=software` 下 `MultiEffect` 与 `DropShadow` **都不出影**（灰底像素不变），
+   只有 `Canvas` 的 `ctx.shadowColor/shadowBlur/shadowOffsetY` 生效；因此垫一张
+   `composerShadow` 画布（外扩 38px = blur 30 外沿 + 8px 偏移，内侧 evenodd 挖掉卡面，
+   否则半透明阴影会把卡面压暗），并在 `Theme.dark` 变化时 `requestPaint()`
+   切深/浅两组参数（深 `rgba(0,0,0,.5)/30/8`，浅 `rgba(0,0,0,.12)/24/6`）。
+
+**改前 / 改后（`scripts/parity/page_diff18.py` 真实输出，rc=0）**：
+
+```
+$ .venv/bin/python scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
+dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22b11516ec  158038  141637  128299  12.22% max=230 same=False
+```
+
+改前 `258651 px / 24.64%`（`git show HEAD:out/latest-parity/qml/dark-chat.png` 复算，
+258651 与 `page-diff-table.txt` 一致）→ **改后 `128299 px / 12.22%`**，降 12.42 个百分点，
+差异像素减半（-130352 px，-50.4%）。分区对照（`out/latest-parity/probes/dark_composer_ab.py`，
+日志 `out/latest-parity/logs/dark-composer-ab.log`）：
+
+| 窗口 | 改前 | 改后 |
+|---|---:|---:|
+| 输入卡片 `440..1195 × 658..804` | 108710 / 110230 = **98.62%** | 3602 / 110230 = **3.27%** |
+| 卡片+投影 `400..1240 × 620..820` | 157200 / 168000 = 93.57% | 26848 / 168000 = 15.98% |
+| 左侧栏 `0..400`（未触及） | 47891 / 328000 = 14.60% | 47891 / 328000 = 14.60% |
+| 正文 `400..1240 × 60..620`（未触及） | 46080 / 470400 = 9.80% | 46080 / 470400 = 9.80% |
+
+未触及的两区像素级完全相同，说明改动只落在输入卡片上。卡面探针
+`(500,690)/(800,700)/(900,780)` 改前全是 `(30,30,32)`、改后全是 `(42,42,46)`，与 deva
+逐点相同；卡下 `x=800 y=805..819` 与卡左 `y=700 x=400..424` 投影灰阶改后与 deva 相差 ≤1
+（如 `y=808` deva `(21,21,22)` / 改后 `(21,21,23)`）。
+
+**顺带确认浅色无回归**：同一份 QML 重拍 `chat`，`page_diff18` 由 `136141 / 12.97%` →
+`129909 / 12.38%`（浅色 `--bg` 与 `--bg-elevated` 同为 `#ffffff`，改 token 不影响底色，
+差异下降来自新增的浅色阴影 `0 6 24 /.12`）。
+
+**受影响测试**（在只含本节改动的干净树上跑，避免工作区其它未提交改动干扰）：
+
+```
+$ .venv/bin/python -m pytest app/tests/test_qml_shell.py -q
+46 passed in 0.65s
+rc=0
+```
+
+无 skipped、无 xfail、无 warning 输出。
+
+**未做 / 已知残留**：本节只修输入卡片，整页仍余 `12.22%`，集中在左侧栏 `14.60%`、正文 `9.80%`
+和页面底部 `y≥810` 的 `45.90%` 带（A/B/E 类既有缺口，见 §5.4），按任务范围不在本轮。
+
+**提交记录**：见本轮提交（`fix(qml): dark-chat 输入卡片改用 --bg-elevated 并补 --shadow`），
+变更路径 4 个：`app/src/qml/Main.qml`、`out/latest-parity/qml/dark-chat.png`、
+`out/latest-parity/qml/chat.png`、`out/latest-parity/REPORT.md`，另附
+`out/latest-parity/logs/dark-composer-ab.log`、`out/latest-parity/logs/dark-fix-page-diff18.log`、
+`out/latest-parity/probes/dark_composer_ab.py`。
+
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 
 ### 5.0 页面清单只读核对

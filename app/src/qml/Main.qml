@@ -981,7 +981,60 @@ ApplicationWindow {
         }
 
         // ── 输入区 ────────────────────────────────────────────────────
-        // 卡片实测：(428,658) 780×146，padding 12，边框 #d5d5db，圆角 12，阴影 0 6 24。
+        // 卡片实测：(428,658) 780×146，padding 12，边框 #d5d5db，圆角 12。
+        // 阴影：原版 `.cf-box { box-shadow: var(--shadow) }`（redesign.css:2661），
+        // 深色 `0 8px 30px rgba(0,0,0,.5)`（tokens.css:149）、浅色 `0 6px 24px rgba(0,0,0,.12)`
+        // （tokens.css:82）。QML 没有 box-shadow，而 QtQuick.Effects 的 MultiEffect 与
+        // Qt5Compat 的 DropShadow 在 `QT_QUICK_BACKEND=software` 下实测都**不出影**（灰底不变），
+        // 只有 Canvas 的 ctx.shadow* 在软件光栅里生效；所以用一张垫在卡片下面的画布画阴影。
+        // 画布向外扩 38px（= blur 30 的外沿 + 8px 偏移），内侧再挖掉卡片本身那圈——
+        // 不挖的话卡片自己的半透明阴影会叠在卡面上把它压暗。
+        Canvas {
+            id: composerShadow
+            // 与卡片同位、四周各外扩 38px（卡片本身是居中的，所以这里跟 composer 的 x/y 走）。
+            x: composer.x - 38
+            y: composer.y - 38
+            width: composer.width + 76
+            height: composer.height + 76
+            onPaint: {
+                var ctx = getContext("2d")
+                ctx.reset()
+                var pad = 38
+                var box = { x: pad, y: pad, w: width - 2 * pad, h: height - 2 * pad, r: Theme.radiusLg }
+                function ringPath(c) {
+                    // 圆角矩形（arcTo 顺序：右上 → 右下 → 左下 → 左上）
+                    c.moveTo(box.x + box.r, box.y)
+                    c.arcTo(box.x + box.w, box.y, box.x + box.w, box.y + box.h, box.r)
+                    c.arcTo(box.x + box.w, box.y + box.h, box.x, box.y + box.h, box.r)
+                    c.arcTo(box.x, box.y + box.h, box.x, box.y, box.r)
+                    c.arcTo(box.x, box.y, box.x + box.w, box.y, box.r)
+                    c.closePath()
+                }
+                // 只保留画布内、卡片外的那一圈
+                ctx.beginPath()
+                ctx.rect(0, 0, width, height)
+                ringPath(ctx)
+                ctx.clip("evenodd")
+                if (Theme.dark) {
+                    ctx.shadowColor = Qt.rgba(0, 0, 0, 0.50)
+                    ctx.shadowBlur = 30
+                    ctx.shadowOffsetY = 8
+                } else {
+                    ctx.shadowColor = Qt.rgba(0, 0, 0, 0.12)
+                    ctx.shadowBlur = 24
+                    ctx.shadowOffsetY = 6
+                }
+                ctx.fillStyle = "rgba(0,0,0,1)"
+                ctx.beginPath()
+                ringPath(ctx)
+                ctx.fill()
+            }
+            Connections {
+                target: Theme
+                function onDarkChanged() { composerShadow.requestPaint() }
+            }
+        }
+
         Rectangle {
             id: composer
             objectName: "composer"
@@ -991,7 +1044,9 @@ ApplicationWindow {
             width: 780
             height: 146
             radius: Theme.radiusLg
-            color: Theme.bg
+            // 原版 `.cf-box` 底色是 `--bg-elevated`（redesign.css:2655-2662），不是页面底色
+            // `--bg`：深色下两者不同（#2a2a2e vs #1e1e20），浅色下都是 #ffffff。
+            color: Theme.bgElevated
             border.width: 1
             // 输入框拿到键盘焦点时边框转主题色（原版 `:focus-within`，实测 91,91,214）。
             border.color: inputField.activeFocus || window.composerFocused ? Theme.accent : Theme.borderStrong
