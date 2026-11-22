@@ -600,3 +600,8 @@ $ sed -n '$p' /tmp/test-about-providers.log
 
 判否项：无 About 组件结构判否项。B 的 18 页全量重拍、C 的四条硬判据、D 的逐页结构
 缺口清单仍未做，随后按顺序执行。
+
+**提交记录**：`0642d6e` `feat(settings): About 版本单一来源 + refreshCw 检查更新`。变更路径（7 个）：
+`app/src/mvvm/services/provider_registry.py`、`app/src/mvvm/services/settings_models.py`、
+`app/src/qml/SettingsModal.qml`、`app/src/qml/assets/deva-icon.svg`、`app/src/qml_shell.py`、
+`out/latest-parity/REPORT.md`、`out/latest-parity/qml/settings-about.png`。
