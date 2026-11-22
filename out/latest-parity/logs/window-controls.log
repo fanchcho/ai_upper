@@ -1,0 +1,7 @@
+deva dark_pixels= 134 bbox= (1162, 15, 1268, 43)
+ glyph x (1162, 1162) y (43, 43) pixels 1
+ glyph x (1167, 1167) y (43, 43) pixels 1
+ glyph x (1195, 1204) y (23, 24) pixels 20
+ glyph x (1227, 1236) y (15, 24) pixels 64
+ glyph x (1259, 1268) y (15, 24) pixels 48
+qml dark_pixels=0

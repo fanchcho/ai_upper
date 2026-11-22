@@ -605,3 +605,329 @@ $ sed -n '$p' /tmp/test-about-providers.log
 `app/src/mvvm/services/provider_registry.py`、`app/src/mvvm/services/settings_models.py`、
 `app/src/qml/SettingsModal.qml`、`app/src/qml/assets/deva-icon.svg`、`app/src/qml_shell.py`、
 `out/latest-parity/REPORT.md`、`out/latest-parity/qml/settings-about.png`。
+
+## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
+
+### 5.0 页面清单只读核对
+
+`app/src/qml_shell.py::PAGE_NAMES` 共 **20** 项；`scripts/parity/qml_pages_all.sh` 的 `shot` 行共 **18** 项。
+剔除截图专用页 `settings-models-provider`、`settings-models-advanced` 后，两侧集合完全相等（`set_equal=True`），
+两个专用页均存在于 `PAGE_NAMES`、均不在 `qml_pages_all.sh` 中；顺序不同，但页面集合一致。
+即：18 个真实页面 + 2 个仅用于详情截图的页面，未把截图专用页计入 18 页全量重拍。
+
+### 5.1 重拍命令与结果
+
+```
+$ bash scripts/parity/qml_pages_all.sh out/latest-parity/qml
+rc=0（18 页全部 1280x820，18 个 .err 均为 0 字节，日志 18 行全 rc=0，见 out/latest-parity/qml-run-2102.log）
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
+rc=0
+```
+
+### 5.2 18 页逐页差异整表
+
+上方命令的原始输出（每行原样对应一页）：
+
+```
+chat                   ac72cd597ae44377b608777cbd5e2e81 ed199154dc7399a207d8155f79985d98  158583  140666  136141  12.97% max=248 same=False
+empty                  a616eabe08d8c107709b89d699604d13 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
+first-run              0e2b5786d552a73525ded72469f224ea 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
+search-open            3a5f80988f34cbcccf98281d7697498e 2bf956a8237e685cdf2033ced3c242ae  158824  140997  136170  12.97% max=248 same=False
+search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b8583efa9  130449  115306  113729  10.84% max=248 same=False
+search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
+ctx-menu               64c8c33a5c5c5e905288cca4fab37285 59a84b0eb9dd182892148e6b87abfb0c  158033  141313  143461  13.67% max=248 same=False
+delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 7586ce627fec6e8ee7bcb3f788052a77  162718  145140  401948  38.30% max=237 same=False
+model-picker           946b07def583e696822df943b6935f04 c2670aa5cd2f78c1693a6eeea2a118f3  164258  145541  149105  14.21% max=248 same=False
+hover-thread           16917898b7b5fb7b95a515bee87001d1 bab936657c1f28ce5862c40672d47e8a  158169  140893  136545  13.01% max=248 same=False
+focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 6a4ff152ff3aacae596c849968cc9cde  158745  140778  136157  12.97% max=248 same=False
+long-mid               147fb156af029f6c57cfb686d6e84c0c 8905296c9f8d7e2b372b7e44acb68623  143456  142304  126160  12.02% max=255 same=False
+long-bottom            be7b7fe814eb8ebcf11369bdec650a68 880b26bdebdb3e10d3afff973460ce37  157770  139668  135084  12.87% max=248 same=False
+settings-general       4d16a5c68b170e998bb4892713b8263e 6a95b886d52ce6695f0463168023b019  142486  111189  340813  32.47% max=224 same=False
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 ddee23d6140c34d38e4b3b07d6b524b7  132243  103282  325672  31.03% max=237 same=False
+settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 4fb02618eea39c43f95d17ae760fee4e  139387  110088  330260  31.47% max=216 same=False
+settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e556a683a  135693  104052  328222  31.27% max=224 same=False
+dark-chat              252996a52c0b1d02cfb3205ba1798c94 ebcdcb986c1e8bcc4efd3b18772809b6  158038  139575  258651  24.64% max=230 same=False
+```
+
+整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
+
+| 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 |
+|---|---|---|---|---|---|
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `ed199154dc7399a207d8155f79985d98` | 136141 | 12.97% | 248 |
+| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
+| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 |
+| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 |
+| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `59a84b0eb9dd182892148e6b87abfb0c` | 143461 | 13.67% | 248 |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `7586ce627fec6e8ee7bcb3f788052a77` | 401948 | 38.30% | 237 |
+| model-picker | `946b07def583e696822df943b6935f04` | `c2670aa5cd2f78c1693a6eeea2a118f3` | 149105 | 14.21% | 248 |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 |
+| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `6a95b886d52ce6695f0463168023b019` | 340813 | 32.47% | 224 |
+| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `ddee23d6140c34d38e4b3b07d6b524b7` | 325672 | 31.03% | 237 |
+| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 |
+| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `ebcdcb986c1e8bcc4efd3b18772809b6` | 258651 | 24.64% | 230 |
+
+注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
+
+18 页 `same=` 全部为 False，无任何一页与参考图逐像素相同。
+
+### 5.3 四条硬判据（每条附真实命令与实测输出）
+
+探针脚本已随报告落盘在 `out/latest-parity/probes/`，日志在 `out/latest-parity/criteria*-rerun.log`。
+
+#### 判据一：long-mid / long-bottom / chat 三页必须互不相同 —— 成立
+
+```
+$ python3 -I out/latest-parity/probes/c1_three_pages.py
+rc=0
+```
+
+输出（原样）：
+
+```
+chat         md5=ed199154dc7399a207d8155f79985d98  1280x820
+long-mid     md5=8905296c9f8d7e2b372b7e44acb68623  1280x820
+long-bottom  md5=880b26bdebdb3e10d3afff973460ce37  1280x820
+
+=== 判据1：三页 md5 两两不同 + 逐像素差 ===
+比较函数：像素 (r,g,b) 三通道任一不同即计为差异像素；max = 该像素最大通道差。
+  chat         vs long-mid     diffpx=67145  pct=6.3972%  max=241
+  chat         vs long-bottom  diffpx=16258  pct=1.5490%  max=216
+  long-mid     vs long-bottom  diffpx=55612  pct=5.2984%  max=241
+
+=== 判据1 附加：三页侧栏末尾可见会话标题文字带（证明滚动位置不同）===
+  chat         会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
+  long-mid     会话标题文字带 n=13  首个=(57, 65) 末个=(676, 713)
+  long-bottom  会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
+```
+
+判定：三页 md5 两两不同；两两差异像素分别为 67145 / 16258 / 55612，差异率 6.3972% / 1.5490% / 5.2984%，均远大于 0。三页侧栏可见会话标题文字带的起点不同（chat 与 long-bottom 首带 64–101，long-mid 首带 57–65），说明三页确实是三个不同的滚动位置，不是同一张图重复保存。**判据一成立。**
+
+#### 判据二：search-results 只显示命中的 10 行 —— 成立
+
+```
+$ python3 -I out/latest-parity/probes/c2_c3_search_and_focus.py
+rc=0
+```
+
+计数方法 A（读图）：在头像列 x∈[70,108) 内找紫色头像像素（|r−138|≤25 且 |g−56|≤25 且 |b−245|≤25），把纵向连续（间隔 ≤20 px）的行合并成簇，一簇即一行命中。
+
+```
+=== 判据2：search-results 命中行数（头像列 x70..108 的紫色头像簇）===
+  qml 簇数=10  tops=[66, 120, 174, 228, 282, 336, 390, 444, 498, 552]
+     每簇像素数=[349, 349, 349, 349, 349, 349, 349, 349, 349, 349]
+     簇高=[32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
+  deva 簇数=10  tops=[66, 120, 174, 228, 282, 336, 390, 444, 498, 552]
+     每簇像素数=[346, 346, 346, 347, 346, 346, 346, 346, 346, 346]
+     簇高=[32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
+```
+
+QML 侧簇数 = 10，每簇像素数完全相同（349 px）、簇高完全相同（32 px），说明是 10 个等价的头像行，不是噪声。deva 侧同样 10 簇，簇顶 y 完全一致（66,120,174,228,282,336,390,444,498,552）。
+
+计数方法 B（核对 fixture 数据）：
+
+```
+$ python3 -I out/latest-parity/probes/c4_stub_scan.py   # 第 2 节
+```
+
+```
+=== 判据2 方法B：fixture 会话标题含 "00" 的文件数 ===
+会话文件总数=120（排除 _index.json）；标题含 "00" 的=10
+  parity-001.json  会话 001：准备发布说明
+  parity-002.json  会话 002：准备发布说明
+  parity-003.json  会话 003：准备发布说明
+  parity-004.json  会话 004：准备发布说明
+  parity-005.json  会话 005：准备发布说明
+  parity-006.json  会话 006：准备发布说明
+  parity-007.json  会话 007：准备发布说明
+  parity-008.json  会话 008：准备发布说明
+  parity-009.json  会话 009：准备发布说明
+  parity-100.json  会话 100：准备发布说明
+```
+
+120 个会话文件（已排除列表型的 `_index.json`）中标题含「00」的恰好 10 个。两种独立方法都得 10，**判据二成立，无需修改 QML。**
+
+#### 判据三：focus-composer 输入区有可见焦点边框 —— 成立
+
+采样点：输入卡片四边中点 —— 上 (800,658)、下 (800,803)、左 (428,740)、右 (1207,740)。
+
+```
+$ python3 -I out/latest-parity/probes/c2_c3_search_and_focus.py   # 判据3 两节
+rc=0
+```
+
+```
+=== 判据3：focus-composer 输入卡片四边取色 ===
+  qml focus        上(800,658)=(91,91,214)  下(800,803)=(91,91,214)  左(428,740)=(91,91,214)  右(1207,740)=(91,91,214)
+  qml chat(未聚焦)    上(800,658)=(213,213,219)  下(800,803)=(213,213,219)  左(428,740)=(213,213,219)  右(1207,740)=(213,213,219)
+  deva focus       上(800,658)=(91,91,214)  下(800,803)=(91,91,214)  左(428,740)=(91,91,214)  右(1207,740)=(91,91,214)
+  deva chat(未聚焦)   上(800,658)=(213,213,219)  下(800,803)=(213,213,219)  左(428,740)=(213,213,219)  右(1207,740)=(213,213,219)
+
+=== 判据3 补充：沿输入卡片上边横扫，找连续的高饱和边框像素段 ===
+  qml focus   y=657 紫蓝像素数=0
+  qml focus   y=658 紫蓝像素数=764 x=436..1199 首色=(186, 186, 238)
+  qml focus   y=659 紫蓝像素数=6 x=434..1201 首色=(154, 154, 230)
+  qml chat    y=657 紫蓝像素数=0
+  qml chat    y=658 紫蓝像素数=0
+  qml chat    y=659 紫蓝像素数=0
+  deva focus  y=657 紫蓝像素数=0
+  deva focus  y=658 紫蓝像素数=764 x=436..1199 首色=(194, 194, 236)
+  deva focus  y=659 紫蓝像素数=8 x=434..1201 首色=(179, 179, 233)
+```
+
+结论：focus-composer 页四边全部取值 (91,91,214) = `#5b5bd6`；同一位置的 `chat`（未聚焦）页四边全部为 (213,213,219) = `#d5d5db`。沿上边 y=658 横扫，focus-composer 有 764 个紫蓝像素（x=436..1199，起色 (186,186,238)），未聚焦的 chat 页该行紫蓝像素 0。deva 参考图同为四边 (91,91,214)、同样 764 像素，**判据三成立，无需修改 QML。**
+
+#### 判据四：删除确认框的 Delete / Cancel 必须真的生效 —— 不成立
+
+判定标准：在 `delete-confirm` 页真实点击对话框里的「Delete」和「Cancel」。点 Delete 应删除当前会话、把 active 切到其他会话；点 Cancel 应只关闭对话框且会话数不变。截图相同不代表交互成立，必须用真实点击事件验证 `confirmLayer.visible`、会话数与 active。
+
+探针：`out/latest-parity/probes/c4_delete_dialog.py`（启动真实 QML 引擎，页面 `delete-confirm`，用 `QTest.mouseClick` 点按钮坐标）。
+
+```
+$ AI_UPPER_HOME=/tmp/fx-qml-home .venv/bin/python out/latest-parity/probes/c4_delete_dialog.py > out/latest-parity/logs/criterion4-delete-current.log 2>&1; echo rc=$?
+rc=0
+$ cat out/latest-parity/logs/criterion4-delete-current.log
+roots 1
+ctx visible= True geometry= 165.0 88.0 175.0 124.0
+ctx texts= ['New chat', 'Rename', 'Archive', 'Delete conversation']
+ctx item count= 4
+confirm visible= True
+sessions before= 120 active= parity-000
+after click at Delete(795,462): confirm visible= True sessions= 120 active= parity-000
+after click at Cancel(695,462): confirm visible= True
+```
+
+实测结果：击 Delete 前后 `confirm visible=True`、`sessions=120`、`active=parity-000` 全部不变；击 Cancel 后 `confirm visible=True` 仍不关闭。源码侧同因：`app/src/qml/Main.qml:1432` 的 `confirmLayer` 只由 `window.confirmOpen`（即 `page === "delete-confirm"`）控制显示，内部两个按钮只是 `Text` / `Rectangle`，没有 `MouseArea` / `TapHandler`；`ctxMenu` 也仍在 `z:40` 后面保持打开。**判据四不成立：删除确认框没有交互，点 Delete / Cancel 都不生效。**
+
+**四条硬判据汇总**：判据一成立（三页滚动位置两两不同）、判据二成立（search-results 恰好 10 行）、判据三成立（focus-composer 四边 `#5b5bd6`）、**判据四不成立（删除确认框无交互，Delete / Cancel 点击均无效）**。
+
+#### 差异量级备注（供后续修复排优先级）
+
+对差异像素按单像素最大通道差 d 分桶（`out/latest-parity/delta-histogram.log`）：
+
+| 页 | 差异像素 | d≤2 | d≤8 | d>8 | d≤2 占比 |
+|---|---|---|---|---|---|
+| chat | 136141 | 11689 | 29630 | 94822 | 8.59% |
+| empty | 10214 | 2086 | 1775 | 6353 | 20.42% |
+| search-results | 113729 | 11124 | 28357 | 74248 | 9.78% |
+| ctx-menu | 143461 | 14387 | 38773 | 90301 | 10.03% |
+| delete-confirm | 401948 | 254611 | 68633 | 78704 | 63.34% |
+| model-picker | 149105 | 15034 | 34044 | 100027 | 10.08% |
+| hover-thread | 136545 | 11678 | 29649 | 95218 | 8.55% |
+| long-mid | 126160 | 11486 | 21473 | 93201 | 9.10% |
+| settings-general | 340813 | 235777 | 55354 | 49682 | 69.18% |
+| settings-models | 325672 | 230906 | 49617 | 45149 | 70.90% |
+| settings-about | 328222 | 232545 | 49560 | 46117 | 70.85% |
+| dark-chat | 258651 | 26195 | 38239 | 194217 | 10.13% |
+
+读法：settings-* 与 delete-confirm 的差异有 63%–71% 落在 d≤2，属于遮罩底色差 1 个灰阶造成的整体偏移；而 chat / dark-chat / model-picker 只有 8.6%–10.1% 落在 d≤2，其余是真结构差异（缺控件、缺结构）。
+
+### 5.4 逐组件缺口清单（覆盖 18 页，全部来自本轮实测日志）
+
+下表每行都给「实测值 + 证据文件」，没有「符合预期」这类空话。
+
+**A. 全局性缺口（影响全部 18 页）**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| A1 | QML 无窗口控制按钮（− □ ×） | deva 每页 `x1140..1270 y0..40` 有 132 个暗像素，bbox=(1195,15,1268,24)，三枚图标 x 组 `[(1195,1204),(1227,1236),(1259,1268)]`；QML 同区 `n=0`（`probe-rail.log` §5、`gap-probe3.log` 末节、`gap-probe4.log` 末节） |
+| A2 | QML 无侧栏列表滚动条 | deva 有 `(202,202,203)` 滑块：x349–352，chat/search-open/ctx-menu/model-picker/hover-thread/focus-composer 各 332 px（y59–142），long-mid 332 px（y228–311）；QML 12 页全部为 0（`probe-settings.log` 末节、`probe-gaps2.log` §5） |
+| A3 | QML 无正文滚动条 | deva chat 正文右缘 x1274–1277 有 `(209,209,209)` 共 380 行；QML 该区间列为空列表 `[]`（`probe-rail.log` §6） |
+| A4 | 源码层即无滚动条实现 | `grep -rn 'ScrollBar\|ScrollView' app/src/qml/` 无任何命中 |
+| A5 | 模态遮罩底色比 deva 暗 1 个灰阶 | QML 侧栏 `(143,143,144)` vs deva `(144,144,144)`；QML 左轨 `(139,139,140)` vs deva `(140,140,141)`（`probe-mask.log` §1/§4） |
+
+**B. 侧栏 / 会话列表**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| B1 | 悬停高亮打在错误的行上 | QML 把**整个悬停行**填成 `(236,236,237)`：hover-thread 页 bbox=(64,110,339,801)、12573 px；deva 的悬停带在**列表最底部一行**：chat 页 bbox=(64,561,338,711)、12207 px，long-mid 页 y670–711；deva 在 hover-thread 页只有 42 px 该底色（`probe-hover2.log` §2/§3/§4、`final-probe.log` §A） |
+| B2 | 悬停时列表底部没有悬停带 | `gap-probe4.log` chat 页：QML `(236,236,237)` n=56、bbox=(83,122,227,693)（几乎只有圆形头像边缘），deva n=11169、bbox=(64,117,338,699)——deva 的整条底部行被填色 |
+| B3 | 侧栏选中态纵向范围偏长 | QML 选中紫底 bbox=(64,56,339,715)、n=12542；deva bbox=(42,48,338,628)、n=12334（`probe-hover.log` §4） |
+| B4 | 左侧图标轨基本一致 | QML 簇 `[(22,55),(81,98),(125,141),(170,186),(736,751),(779,796)]` vs deva `[(19,55),(81,98),(126,141),(170,185),(735,752),(779,796)]`，最大偏差 3 px（`probe-rail.log` §1）——非缺口，记录以免误判 |
+
+**C. 右键菜单（ctx-menu）**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| C1 | 菜单项数量不对 | QML 4 项（文字带 y101–110 / 129–140 / 157–168 / 185–194，面板 y89–210）；deva 5 项（y105–114 / 134–145 / 163–172 / 192–203 / 222–230 红色项，面板 y91–245）。deva 多出的两项为「Select」（y163–172）与断接的「Delete」（y222–230 红色 `(229,72,77)`）；QML 最后一项写成 `Delete conversation` 并占掉红色项位置（`gap-probe2.log` 首节；QML 源码 `app/src/qml/Main.qml:1396-1399` 只定义 4 项：New chat / Rename / Archive / Delete conversation） |
+| C2 | 面板左缘偏右 5 px | QML 白色菜单框 x 起点 166，deva 161（`probe-final2.log` §6、`gap-probe.log` 缺口D） |
+| C3 | 面板高度差 35 px | QML y89–210（121 px），deva y91–245（154 px）（`gap-probe.log` 缺口D） |
+| C4 | 删除确认框没有交互：Delete / Cancel 都点不动 | `Main.qml:1432` 的 `confirmLayer` 仅由 `window.confirmOpen` 控制；按钮只是 `Text` / `Rectangle`，无 `MouseArea` / `TapHandler`。真实 `QTest.mouseClick`：点 Delete 后 `confirm=True sessions=120 active=parity-000`，点 Cancel 后 `confirm=True`（`out/latest-parity/logs/criterion4-delete-current.log`） |
+
+**D. 模型选择弹层（model-picker）**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| D1 | 弹层内容完全不对 | QML 渲染的是 THINKING LEVEL 面板（Default / Low / High / Max）；deva 渲染的是模型列表（表头 `Anthropic` + 一行 `deepseek-v4.1-flash` 带 ✓）。`app/src/qml/ModelPicker.qml`（70 行）只有 thinking-level 分支，`pickerMode` 为死接线（`out/latest-parity/gaps/picker-deva.png` 与 `picker-qml.png` 对照） |
+| D2 | 弹层态缺少输入框聚焦描边 | QML `(800,658)=(255,255,255)`，其余三边 `(213,213,219)`；deva 四边全为 `(91,91,214)`（`gap-probe4.log` 中节） |
+| D3 | 面板白底像素量差 16.8k | QML n=161546 vs deva n=144791，同 bbox=(600,470,1119,799)（`probe-final2.log` §7）——内容不同所致 |
+
+**E. 正文 Markdown 渲染（chat / search-none / dark-chat）**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| E1 | 正文可见行数少 3 行 | QML 15 个文本带，deva 18 个（`probe-body.log` 末节；`final-probe.log` §8：QML 带起点差 `[37,37,37,46,...]` vs deva `[13,41,35,35,34,41,...]`） |
+| E2 | 表格渲染残缺 | QML `(244,244,244)` 表底 2781 px，bbox=(538,91,780,142)；deva 8979 px，bbox=(489,43,1054,208)。deva 有完整表头行（文件/类型/说明）与首行数据（package.json / 配置 / 依赖清单），QML 只有一小块残片（`probe-scroll.log` §4） |
+| E3 | 正文滚动偏移约 13 px | QML 首页文本带 `(54,65)` 起，deva `(43,43)`+`(57,66)`；QML 末个可见带 `(584,595)`，deva `(606,619)`（`probe-body.log`、`probe-empty.log` 末节） |
+| E4 | 缺 broken-image 占位 | deva 有 `示意图` 占位文本带 y602–619 与图片框 y658–699；QML 无 `示意图` 带，y658–699 只剩白底与边框（`probe-gaps2.log` §4） |
+| E5 | search-none 正文也少 3 带 | QML 11 带，deva 14 带（`probe-rail.log` §3、`probe-gaps2.log` §3） |
+| E6 | dark-chat 输入卡片底色偏暗 | QML `(30,30,32)`，deva `(42,42,46)`（`probe-scroll.log` §3） |
+
+**F. Settings 模态**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| F1 | 无右上角白色窗口控制缺口 | deva `x1160..1279 y0..40` = `(255,255,255)`×3680 + `(148,148,148)`×960 + `(95,99,104)`×100；QML 全区 `(148,148,148)`×4776（`probe-rail.log` §5） |
+| F2 | 面板白底 bbox 高度不同 | QML `(736,257,961,391)`，deva `(736,0,1279,391)`（`probe-settings.log`）——deva 的白色区包含顶部窗口条，QML 没有 |
+| F3 | 遮罩灰阶差 1 级（同 A5） | settings 页侧栏 QML `(143,143,144)`×72483 vs deva `(144,144,144)`×63722（`probe-mask.log` §1） |
+| F4 | 遮罩把背景对话压成纯灰，deva 保留可辨认的暗化对话 | 正文区 region=345480：deva 暗像素 7215、unique_colors=452；QML 暗像素 6、unique_colors=27（`settings-backdrop-content.log`）。QML 用一层不透明灰盖住，deva 是半透明遮罩 |
+| F5 | 设置左栏三个导航图标与 deva 不一致 | deva `SettingsPane.tsx` 用 `Cog` / `Brain` / `Puzzle` / `Info`；QML `SettingsModal.qml:119-122` 用 `settings2` / `blocks` / `cog` / `info`，General、Models、Extensions 三个图标不对 |
+
+**G. 输入区**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| G1 | 左侧图标簇整体左移约 90 px | QML 簇 `[860-990][1010][1035-1040][1110][1125-1190]`；deva `[950-1080][1100-1105][1125-1190]`（`final-probe.log` §E） |
+| G2 | 右侧 chip 位置基本对齐 | 彩色簇 QML `[(1140,760),(1140,780),(1160,780),(1160,760),...]` vs deva 同坐标集合（`gap-probe2.log` 末节）——非缺口 |
+| G3 | 聚焦描边存在且颜色一致 | 见 5.3 判据三，四边 `(91,91,214)` 与 deva 相同——非缺口 |
+| G4 | 输入区缺 ContextRing（上下文使用圆环） | Python 已发布 `contextUsage` 属性（`qml_shell.py:_publish`），但 `Main.qml` 输入区无任何圆环绘制，`grep -n "contextUsage" app/src/qml/Main.qml` 只在属性声明处出现 |
+| G5 | effort chip 点击打开的是模型菜单 | `Main.qml:1157` 的 `effortChip` MouseArea 只写 `window.modelPickerOpen = !window.modelPickerOpen`，从不设置 `pickerMode`；`pickerMode` 在页面映射里恒为 `"model"`（`Main.qml:60`），思考等级菜单不可达 |
+
+**H. empty / first-run**
+
+| # | 缺口 | 实测证据 |
+|---|---|---|
+| H1 | 差异 0.97% 集中在 quick-start 文字与头像 | QML 文字带 `(412,459)/(470,481)/(492,521)` vs deva `(408,459)/(471,484)/(492,522)`；差异行带见 `probe-gaps2.log` §1（y12–55、y69–109、y323–559 等）。搜索框、rail 图标、卡片底色均一致（`probe-empty.log` §2） |
+| H2 | deva 的 empty 与 first-run 像素完全相同 | `probe-final2.log` §1：「deva 侧 empty/first-run 像素完全相同」；QML 侧差异像素=0 |
+
+### 5.5 18 页 → 缺口映射（收口核对）
+
+| 页 | 差异像素 / % | 主要结构缺口 | 判定 |
+|---|---:|---|---|
+| chat | 136141 / 12.97% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
+| empty | 10214 / 0.97% | H1（头像绘制与字体度量） | 仅光栅差异 |
+| first-run | 10214 / 0.97% | H1；与 empty 像素相同 | 仅光栅差异 |
+| search-open | 136170 / 12.97% | 同 chat；搜索框打开态差异随正文/侧栏缺口 | 真结构缺口 |
+| search-results | 113729 / 10.84% | 同 chat；判据二 10 行已对齐（判据二成立） | 真结构缺口 |
+| search-none | 93091 / 8.87% | E5、A1–A5、B1–B3 | 真结构缺口 |
+| ctx-menu | 143461 / 13.67% | C1（少 Select、Delete 文案/颜色不对）、C2/C3；C4 功能缺口 | 真结构缺口 |
+| delete-confirm | 401948 / 38.30% | C4（Delete/Cancel 都点不动）；A5 遮罩灰阶 | 真结构缺口（功能） |
+| model-picker | 149105 / 14.21% | D1（整块菜单内容错：THINKING LEVEL vs 模型列表）、D2/D3 | 真结构缺口 |
+| hover-thread | 136545 / 13.01% | B1/B2（悬停行位置错）、A/B/E 共用缺口 | 真结构缺口 |
+| focus-composer | 136157 / 12.97% | 判据三成立；其余同 chat | 真结构缺口 |
+| long-mid | 126160 / 12.02% | A/B/E；滚动位置与已提交基线不同 | 真结构缺口 |
+| long-bottom | 135084 / 12.87% | A/B/E；真底内容仍少 | 真结构缺口 |
+| settings-general | 340813 / 32.47% | F1–F5（窗口控制、面板 bbox、遮罩、背景对话不可见、导航图标） | 真结构缺口 |
+| settings-models | 325672 / 31.03% | F1–F5；Models 内容差异 | 真结构缺口 |
+| settings-extensions | 330260 / 31.47% | F1–F5；Extensions 内容差异 | 真结构缺口 |
+| settings-about | 328222 / 31.27% | F1–F5；About 版本单一来源已修复，剩余为遮罩/窗口控制/图标 | 真结构缺口 |
+| dark-chat | 258651 / 24.64% | E6（输入卡片底色 `(30,30,32)` vs `(42,42,46)`）、A/B | 真结构缺口 |
+
+结论：18 页中 **2 页（empty / first-run）只剩光栅级差异，16 页仍有结构或功能缺口**。其中 `delete-confirm` 是唯一的功能性不成立项（判据四），其余是视觉/控件结构差异。
+
+**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（含判据四的删除框无交互），D 类 3 项，E 类 6 项，F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。

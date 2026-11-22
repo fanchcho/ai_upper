@@ -1,0 +1,28 @@
+=== 当前会话行高亮 (236,236,237) 在列表区的 bbox ===
+chat           qml  n=56 bbox=(83,122,227,693)
+chat           deva n=11169 bbox=(64,117,338,699)
+long-mid       qml  n=61 bbox=(83,63,227,690)
+long-mid       deva n=6724 bbox=(64,81,338,699)
+long-bottom    qml  n=61 bbox=(83,68,227,693)
+long-bottom    deva n=11189 bbox=(64,63,338,699)
+hover-thread   qml  n=12563 bbox=(64,110,339,693)
+hover-thread   deva n=35 bbox=(89,117,209,674)
+empty          qml  无该底色
+empty          deva 无该底色
+
+=== 列表滚动条 track(228,228,244) 纵向范围 ===
+chat           qml  track y=56..109 x=325..346 n=813
+chat           deva track y=56..109 x=325..338 n=443
+long-mid       qml  track y=-..- x=-..- n=0
+long-mid       deva track y=-..- x=-..- n=0
+long-bottom    qml  track y=-..- x=-..- n=0
+long-bottom    deva track y=-..- x=-..- n=0
+search-results qml  track y=-..- x=-..- n=0
+search-results deva track y=-..- x=-..- n=0
+
+=== model-picker：输入框聚焦描边（四边采样）===
+  qml  (800,658)=(255, 255, 255)  qml  (800,803)=(213, 213, 219)  qml  (428,740)=(213, 213, 219)  qml  (1207,740)=(213, 213, 219)
+  deva (800,658)=(91, 91, 214)  deva (800,803)=(91, 91, 214)  deva (428,740)=(91, 91, 214)  deva (1207,740)=(91, 91, 214)
+
+=== 窗口控制：deva 的 − □ × 三枚图标 x 区间 ===
+deva 图标x组=[(1195, 1204), (1227, 1236), (1259, 1268)]

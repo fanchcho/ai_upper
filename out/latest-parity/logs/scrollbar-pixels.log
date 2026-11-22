@@ -1,0 +1,11 @@
+== out/latest-parity/deva/chat-deva.png
+x=1274: nonwhite=417 ranges=[(238, 654)] sample=(240, 240, 240)
+x=1275: nonwhite=417 ranges=[(238, 654)] sample=(217, 217, 217)
+x=1276: nonwhite=417 ranges=[(238, 654)] sample=(217, 217, 217)
+x=1277: nonwhite=417 ranges=[(238, 654)] sample=(240, 240, 240)
+== out/latest-parity/qml/chat.png
+x=342: nonwhite=54 ranges=[(56, 109)] sample=(244, 244, 248)
+x=343: nonwhite=52 ranges=[(57, 108)] sample=(236, 236, 245)
+x=344: nonwhite=50 ranges=[(58, 107)] sample=(233, 233, 245)
+x=345: nonwhite=48 ranges=[(59, 106)] sample=(236, 236, 245)
+x=346: nonwhite=46 ranges=[(60, 105)] sample=(244, 244, 248)

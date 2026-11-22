@@ -1,0 +1,20 @@
+| page | baseline md5 | before md5 | before px | before % | after md5 | after px | after % | Δ px | Δ pp | max | same |
+|---|---|---|---:|---:|---|---:|---:|---:|---:|---:|---|
+| empty | `a616eabe08d8c107709b89d699604d13` | `3b1ddb91be99f2154a9a4a04e55507ce` | 10,325 | 0.98% | `1d26dc8bad6864d49ae706556efca3bc` | 10,214 | 0.97% | +111 | +0.01 | 248 | False |
+| first-run | `0e2b5786d552a73525ded72469f224ea` | `3b1ddb91be99f2154a9a4a04e55507ce` | 10,325 | 0.98% | `1d26dc8bad6864d49ae706556efca3bc` | 10,214 | 0.97% | +111 | +0.01 | 248 | False |
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `e36d9edbf5050ebbc3a234e3b6285026` | 126,790 | 12.08% | `ed199154dc7399a207d8155f79985d98` | 136,141 | 12.97% | -9,351 | -0.89 | 248 | False |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `be846a41ef7cd61adbde76157c1def05` | 126,819 | 12.08% | `2bf956a8237e685cdf2033ced3c242ae` | 136,170 | 12.97% | -9,351 | -0.89 | 248 | False |
+| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8ad4403a182966c744a03ba38c0091c7` | 104,080 | 9.92% | `8680485a1ea14fc8eff49a6b8583efa9` | 113,729 | 10.84% | -9,649 | -0.92 | 248 | False |
+| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `db2e09d184b85add5500b9c2f49a97ee` | 82,432 | 7.85% | `478a9e7e0b001dd7215dab3f8074c1d7` | 93,091 | 8.87% | -10,659 | -1.02 | 224 | False |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `8ff33025ec3d322b5b95329acb8a676e` | 133,997 | 12.77% | `59a84b0eb9dd182892148e6b87abfb0c` | 143,461 | 13.67% | -9,464 | -0.90 | 248 | False |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `55a629b95560534d3b38c7ed6ccb2b38` | 396,118 | 37.74% | `7586ce627fec6e8ee7bcb3f788052a77` | 401,948 | 38.30% | -5,830 | -0.56 | 237 | False |
+| model-picker | `946b07def583e696822df943b6935f04` | `ff84da6c479a69e0f7b3795e5737bbb9` | 140,783 | 13.41% | `c2670aa5cd2f78c1693a6eeea2a118f3` | 149,105 | 14.21% | -8,322 | -0.80 | 248 | False |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `96a86cfdffc9ac6f78e4c4235ffcf76f` | 127,197 | 12.12% | `bab936657c1f28ce5862c40672d47e8a` | 136,545 | 13.01% | -9,348 | -0.89 | 248 | False |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `3c8b55f5dede4e60a60174fd4b510821` | 126,806 | 12.08% | `6a4ff152ff3aacae596c849968cc9cde` | 136,157 | 12.97% | -9,351 | -0.89 | 248 | False |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `6bea500db3fe19228f6db9f55a4be318` | 132,329 | 12.61% | `8905296c9f8d7e2b372b7e44acb68623` | 126,160 | 12.02% | +6,169 | +0.59 | 255 | False |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `8d291d668979a7c9c0f486f46a3db549` | 125,692 | 11.98% | `880b26bdebdb3e10d3afff973460ce37` | 135,084 | 12.87% | -9,392 | -0.89 | 248 | False |
+| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `9858fecd59a2091169eee2ba19a227ee` | 340,234 | 32.42% | `6a95b886d52ce6695f0463168023b019` | 340,813 | 32.47% | -579 | -0.05 | 224 | False |
+| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `ddee23d6140c34d38e4b3b07d6b524b7` | 325,672 | 31.03% | `ddee23d6140c34d38e4b3b07d6b524b7` | 325,672 | 31.03% | +0 | +0.00 | 237 | False |
+| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `72ee5888a25e5e8affb61f72e8dbda18` | 329,666 | 31.41% | `4fb02618eea39c43f95d17ae760fee4e` | 330,260 | 31.47% | -594 | -0.06 | 216 | False |
+| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `96154d72cf807c9a46c6a9d951a71fb7` | 334,166 | 31.84% | `0c9bfc43f211a89ec8e1f50e556a683a` | 328,222 | 31.27% | +5,944 | +0.57 | 224 | False |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `cc0672231f132fc22c1452ec4fcf79b1` | 249,359 | 23.76% | `ebcdcb986c1e8bcc4efd3b18772809b6` | 258,651 | 24.64% | -9,292 | -0.88 | 230 | False |

@@ -1,0 +1,12 @@
+roots 1
+ctx visible= True geometry= 165.0 88.0 175.0 124.0
+--- ctx tree ---
+--- confirm tree ---
+    QQuickItem text='Delete conversation “对比用会话：一条完整回合”?' w=380.0 h=40.0
+    QQuickItem text='This conversation and all its messages will be permanently removed. This cannot be undone.' w=380.0 h=48.0
+    QQuickItem text='Cancel' w=43.984375 h=16.0
+      QQuickItem text='Delete' w=47.875 h=16.0
+confirm visible= True
+sessions before= 120 active= parity-000
+after click at Delete(795,462): confirm visible= True sessions= 120 active= parity-000
+after click at Cancel(695,462): confirm visible= True

@@ -1,0 +1,7 @@
+ed199154dc7399a207d8155f79985d98  out/latest-parity/qml/chat.png
+8905296c9f8d7e2b372b7e44acb68623  out/latest-parity/qml/long-mid.png
+880b26bdebdb3e10d3afff973460ce37  out/latest-parity/qml/long-bottom.png
+
+chat vs long-mid    AE=67145
+chat vs long-bottom AE=16258
+long-mid vs long-bottom AE=55612

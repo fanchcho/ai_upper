@@ -1,0 +1,14 @@
+chat         md5=ed199154dc7399a207d8155f79985d98  1280x820
+long-mid     md5=8905296c9f8d7e2b372b7e44acb68623  1280x820
+long-bottom  md5=880b26bdebdb3e10d3afff973460ce37  1280x820
+
+=== 判据1：三页 md5 两两不同 + 逐像素差 ===
+比较函数：像素 (r,g,b) 三通道任一不同即计为差异像素；max = 该像素最大通道差。
+  chat         vs long-mid     diffpx=67145  pct=6.3972%  max=241
+  chat         vs long-bottom  diffpx=16258  pct=1.5490%  max=216
+  long-mid     vs long-bottom  diffpx=55612  pct=5.2984%  max=241
+
+=== 判据1 附加：三页侧栏末尾可见会话标题文字带（证明滚动位置不同）===
+  chat         会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
+  long-mid     会话标题文字带 n=13  首个=(57, 65) 末个=(676, 713)
+  long-bottom  会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)

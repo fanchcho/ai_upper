@@ -1,0 +1,32 @@
+== deva
+50 long_runs [] nonwhite_px 0
+55 long_runs [] nonwhite_px 0
+60 long_runs [] nonwhite_px 206
+80 long_runs [] nonwhite_px 0
+85 long_runs [] nonwhite_px 0
+90 long_runs [(488, 789)] nonwhite_px 302
+100 long_runs [(488, 789)] nonwhite_px 302
+110 long_runs [(488, 789)] nonwhite_px 302
+120 long_runs [(488, 789)] nonwhite_px 302
+125 long_runs [] nonwhite_px 4
+130 long_runs [(500, 571)] nonwhite_px 76
+160 long_runs [(488, 789)] nonwhite_px 302
+190 long_runs [(488, 789)] nonwhite_px 302
+210 long_runs [(499, 593)] nonwhite_px 152
+samples [((520, 90), (247, 247, 248)), ((520, 100), (31, 31, 36)), ((520, 60), (255, 255, 255)), ((800, 100), (255, 255, 255)), ((800, 60), (187, 187, 188)), ((860, 100), (255, 255, 255))]
+== qml
+50 long_runs [] nonwhite_px 4
+55 long_runs [(509, 595), (617, 642), (664, 780)] nonwhite_px 234
+60 long_runs [(509, 595), (617, 642), (664, 780)] nonwhite_px 234
+80 long_runs [] nonwhite_px 4
+85 long_runs [] nonwhite_px 4
+90 long_runs [(509, 573)] nonwhite_px 69
+100 long_runs [(509, 573)] nonwhite_px 147
+110 long_runs [] nonwhite_px 4
+120 long_runs [] nonwhite_px 4
+125 long_runs [] nonwhite_px 4
+130 long_runs [(509, 595), (617, 642), (664, 780)] nonwhite_px 234
+160 long_runs [] nonwhite_px 4
+190 long_runs [] nonwhite_px 4
+210 long_runs [] nonwhite_px 0
+samples [((520, 90), (240, 240, 242)), ((520, 100), (240, 240, 242)), ((520, 60), (247, 247, 248)), ((800, 100), (255, 255, 255)), ((800, 60), (255, 255, 255)), ((860, 100), (255, 255, 255))]
