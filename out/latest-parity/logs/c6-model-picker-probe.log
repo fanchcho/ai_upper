@@ -1,0 +1,20 @@
+chips model=(938,775) effort=(1075,775)
+modelChip geometry x=852 y=761 w=172 h=28
+effortChip geometry x=1028 y=761 w=94 h=28
+after click model chip: modelPickerOpen=True pickerMode='model'
+modelList.visible=True thinkingList.visible=False
+panel width=248.0 height=65.0
+groupHead0 text='Anthropic' color=#8a8a94
+model rows=1 texts=[['deepseek-v4.1-flash']]
+row0 label props=['deepseek-v4.1-flash', None, None]
+edges(model mode)={'top': (91, 91, 214), 'bottom': (91, 91, 214), 'left': (91, 91, 214), 'right': (91, 91, 214)}
+after second model click: modelPickerOpen=False pickerMode=''
+after click effort chip: modelPickerOpen=True pickerMode='thinking'
+thinkingList.visible=True
+thinking option texts=['Default', 'No extra setting; let the model decide', 'Low', 'Thinks less, answers faster; good for simple Q&A', 'High', 'Thinks further; good for coding and multi-step tasks', 'Max', 'Thinks as hard as it can; slowest and most expensive']
+edges(thinking mode)={'top': (91, 91, 214), 'bottom': (91, 91, 214), 'left': (91, 91, 214), 'right': (91, 91, 214)}
+thinking rows found=4 activeEffort before='default'
+after click High: pickerOpen=False activeEffort='high' effortLabel='High'
+model ref before='anthropic:deepseek-v4.1-flash'
+after click model row: pickerOpen=False activeModelRef='anthropic:deepseek-v4.1-flash' modelLabel='deepseek-v4.1-flash'
+probe done

@@ -1018,8 +1018,11 @@ ApplicationWindow {
             // `--bg`：深色下两者不同（#2a2a2e vs #1e1e20），浅色下都是 #ffffff。
             color: Theme.bgElevated
             border.width: 1
-            // 输入框拿到键盘焦点时边框转主题色（原版 `:focus-within`，实测 91,91,214）。
-            border.color: inputField.activeFocus || window.composerFocused ? Theme.accent : Theme.borderStrong
+            // 输入框拿到键盘焦点时边框转主题色（原版 `.cf-box:focus-within`，实测 91,91,214）。
+            // 贴片也是卡片内的 focusable 元素：点开模型/思考等级菜单时焦点落在贴片上，
+            // 原版四边同为 `#5b5bd6`——所以菜单打开时也按聚焦态上色。
+            border.color: inputField.activeFocus || window.composerFocused
+                          || window.modelPickerOpen ? Theme.accent : Theme.borderStrong
 
             // 草稿区：y 671（卡片内 13），高 80，占位 13.5px
             TextArea {
@@ -1144,27 +1147,31 @@ ApplicationWindow {
 
                 Rectangle {
                     id: effortChip
+                    objectName: "effortChip"
                     anchors.right: sendBtn.left
                     anchors.rightMargin: 4
                     width: 94
                     height: 28
                     y: 2
                     radius: Theme.radius
+                    readonly property bool open: window.modelPickerOpen && window.pickerMode === "thinking"
                     // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
-                    color: "transparent"
+                    // 展开态 `.chip.is-open { background: var(--bg-active); color: var(--fg) }`
+                    // （styles/app.css:2874-2877），箭头 `.chip.is-open .chip__caret` 转 180°（:2902）。
+                    color: open ? Theme.bgActive : "transparent"
                     border.width: 0
                     Icon {
                         x: 5
                         anchors.verticalCenter: parent.verticalCenter
                         name: IconData.sparkles
                         size: 13
-                        color: Theme.fgMuted
+                        color: effortChip.open ? Theme.fg : Theme.fgMuted
                     }
                     Text {
                         x: 23
                         anchors.verticalCenter: parent.verticalCenter
                         text: window.effortLabel
-                        color: Theme.fgMuted
+                        color: effortChip.open ? Theme.fg : Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 12
                         font.weight: 500
@@ -1175,24 +1182,42 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         name: IconData.chevronDown
                         size: 13
-                        color: Theme.fgMuted
+                        rotation: effortChip.open ? 180 : 0
+                        color: effortChip.open ? Theme.fg : Theme.fgMuted
                     }
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: window.modelPickerOpen = !window.modelPickerOpen
+                        onClicked: window.openPicker("thinking")
+                    }
+
+                    // 思考等级菜单：原版 EffortPicker 把 `.model-pick__menu` 挂在这个贴片
+                    // 自己的 `.model-pick` 容器里（`right:0; bottom: calc(100% + 8px)`），
+                    // 所以右缘对齐贴片右缘、底边在贴片上沿往上 8px。
+                    // 只在本页呈现（`pickerMode === "thinking"`），不靠 z 序猜。
+                    ModelPicker {
+                        objectName: "thinkingPicker"
+                        visible: window.modelPickerOpen && window.pickerMode === "thinking"
+                        mode: "thinking"
+                        effortMenu: window.effortMenu
+                        x: parent.width - width
+                        y: -height - 8
+                        onEffortPicked: function (level) { window.pickEffort(level) }
                     }
                 }
 
                 Rectangle {
                     id: modelChip
+                    objectName: "modelChip"
                     anchors.right: effortChip.left
                     anchors.rightMargin: 4
                     width: 172
                     height: 28
                     y: 2
                     radius: Theme.radius
+                    readonly property bool open: window.modelPickerOpen && window.pickerMode === "model"
                     // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
-                    color: "transparent"
+                    // 展开态同 `.chip.is-open`：底 `--bg-active`、文字转 `--fg`、箭头翻转。
+                    color: open ? Theme.bgActive : "transparent"
                     border.width: 0
                     // 状态点 7px #d97757
                     Rectangle {
@@ -1207,7 +1232,7 @@ ApplicationWindow {
                         x: 21
                         anchors.verticalCenter: parent.verticalCenter
                         text: window.modelLabel
-                        color: Theme.fgMuted
+                        color: modelChip.open ? Theme.fg : Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 12
                         font.weight: 500
@@ -1218,11 +1243,25 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         name: IconData.chevronDown
                         size: 13
-                        color: Theme.fgMuted
+                        rotation: modelChip.open ? 180 : 0
+                        color: modelChip.open ? Theme.fg : Theme.fgMuted
                     }
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: window.modelPickerOpen = !window.modelPickerOpen
+                        onClicked: window.openPicker("model")
+                    }
+
+                    // 模型菜单：与思考等级同一套外壳，挂在模型贴片自己的容器里。
+                    ModelPicker {
+                        objectName: "modelPicker"
+                        visible: window.modelPickerOpen && window.pickerMode === "model"
+                        mode: "model"
+                        groups: window.modelGroups
+                        activeRef: window.activeModelRef
+                        emptyText: window.chatText.noModel || ""
+                        x: parent.width - width
+                        y: -height - 8
+                        onPicked: function (providerId, modelId) { window.pickModel(providerId, modelId) }
                     }
                 }
             }
@@ -1239,12 +1278,18 @@ ApplicationWindow {
         onPaneRequested: function (name) { window.page = "settings-" + name }
     }
 
-    // ── 模型/强度下拉 ─────────────────────────────────────────────────
-    ModelPicker {
-        visible: window.modelPickerOpen
-        x: 700
-        y: 542
-        onClose: window.modelPickerOpen = false
+    function openPicker(mode) {
+        if (window.modelPickerOpen && window.pickerMode === mode) {
+            closePicker()
+            return
+        }
+        window.pickerMode = mode
+        window.modelPickerOpen = true
+    }
+
+    function closePicker() {
+        window.modelPickerOpen = false
+        window.pickerMode = ""
     }
 
     // ── 函数 ──────────────────────────────────────────────────────────

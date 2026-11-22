@@ -1,0 +1,9 @@
+像素 (520, y) 输入卡片下方投影带：
+  y806 chat=(236, 236, 236) archived-mp=(255, 255, 255) fresh-before=(236, 236, 236) after=(236, 236, 236)
+  y808 chat=(238, 238, 238) archived-mp=(255, 255, 255) fresh-before=(238, 238, 238) after=(238, 238, 238)
+  y810 chat=(240, 240, 240) archived-mp=(255, 255, 255) fresh-before=(240, 240, 240) after=(240, 240, 240)
+  y812 chat=(242, 242, 242) archived-mp=(255, 255, 255) fresh-before=(242, 242, 242) after=(242, 242, 242)
+  y815 chat=(245, 245, 245) archived-mp=(255, 255, 255) fresh-before=(245, 245, 245) after=(245, 245, 245)
+  y818 chat=(247, 247, 247) archived-mp=(255, 255, 255) fresh-before=(247, 247, 247) after=(247, 247, 247)
+
+归档 model-picker.png (8fd3c8a) 与 HEAD 同代码重拍：diff 只在 y638..819 的浅灰投影（255→245..254）

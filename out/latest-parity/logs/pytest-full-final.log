@@ -1,0 +1,51 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 16%]
+........................................................................ [ 21%]
+.....................ss................................................. [ 27%]
+........................................................................ [ 32%]
+........................................................................ [ 37%]
+........................................................................ [ 43%]
+........................................s............................... [ 48%]
+........................................................................ [ 54%]
+........................................................................ [ 59%]
+........................................................................ [ 64%]
+Fatal Python error: Segmentation fault
+
+Current thread 0x0000ffffa7bf2ba0 (most recent call first):
+  File "/home/agent/shared_workspace/ai_upper/app/tests/test_qml_context_menu.py", line 162 in _menu_items
+  File "/home/agent/shared_workspace/ai_upper/app/tests/test_qml_context_menu.py", line 170 in test_menu_geometry_and_delete_confirm_flow
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/python.py", line 187 in pytest_pyfunc_call
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/python.py", line 1798 in runtest
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 184 in pytest_runtest_call
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 250 in <lambda>
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 361 in from_call
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 249 in call_and_report
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 139 in runtestprotocol
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/runner.py", line 118 in pytest_runtest_protocol
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/main.py", line 411 in pytest_runtestloop
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/main.py", line 387 in _main
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/main.py", line 333 in wrap_session
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/main.py", line 380 in pytest_cmdline_main
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_execution.py", line 147 in _multicall
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_manager.py", line 183 in _hookexec
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pluggy/_caller.py", line 197 in __call__
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py", line 262 in _main
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py", line 286 in _console_main
+  File "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pytest/__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+
+Extension modules: _cffi_backend, shiboken6.Shiboken, cython.cimports.libc.math, Cython.Utils, Cython.Plex.Actions, Cython.Plex.Transitions, Cython.Plex.Machines, Cython.Plex.DFA, Cython.Plex.Scanners, Cython.Compiler.Scanning, Cython.StringIOTree, Cython.Compiler.Code, PySide6.QtCore, PySide6.QtGui, PySide6.QtWidgets, PySide6.QtNetwork, PySide6.QtQml (total: 17)

@@ -845,6 +845,157 @@ out/latest-parity/qml/delete-confirm.png
 未跟踪产物，与本批无关）。回归口径复核：`dd0b38e` 提交的 `chat.png` / `dark-chat.png`
 在工作区 md5 仍为 `dc133011…` / `3aa7be54…`，未被本节重写。
 
+### 4.9 model-picker 弹层内容与聚焦态
+
+本轮范围只有 model-picker 一页的 D1 / D2 / D3 三项；A/B/E/F/G 类缺口不在本轮范围内，未动。
+所有证据都用**真实鼠标事件**打开菜单（注入到贴片中心，见探针 `probes/c6_model_picker.py`），
+从不直接置位 `pickerMode` 造态；截图 1280×820，stderr 0 字节（`logs/c6-mp-shoot.err`）。
+
+**改动清单**
+
+| 文件 | 改动 |
+|---|---|
+| `app/src/qml/ModelPicker.qml` | 双模式弹层（`mode="model"` / `"thinking"`）：分组标题 + 模型行 + 14px 勾选位、空态、外框 1px `--border` / radius 12 / `--bg-elevated` / `SoftShadow`(blur 20)。每个取值在文件头注释里标了「来源文件:行号 → 落地值」 |
+| `app/src/qml/Main.qml` | `openPicker(mode)` / `closePicker()`；两个 `ModelPicker` 实例分别挂在 `effortChip` / `modelChip` 内（`right:0`、`bottom: calc(100% + 8px)`）；贴片展开态换 `--bg-active` 底 / `--fg` 字 / 箭头 180°；输入卡片 `border.color` 增加 `window.modelPickerOpen` 分支 |
+| `app/tests/test_qml_model_picker.py`（新） | 3 条真实 `QTest.mouseClick` 路径 + 渲染像素断言（四边取色、面板几何、字号与位置、accent 与 weight） |
+
+**D1：弹层内容与逐项取值**
+
+原版取值（只读 `/tmp/deva-merged/apps/desktop/src/renderer/src`）与落地值一一对应：
+
+| 项 | 原版来源 → 值 | QML 落地 |
+|---|---|---|
+| 面板外壳 | `styles/app.css:3367-3376` `.model-pick__menu` → padding 5、1px `var(--border)`、`var(--radius-lg)`=12、`var(--bg-elevated)`、`var(--shadow)`、`bottom: calc(100% + 8px)` | `ModelPicker.qml:96-108` 面板 + `SoftShadow`(blur 20)；两个实例 `x: parent.width - width`、`y: -height - 8` |
+| 面板尺寸 | `styles/app.css:3387-3395` → `right:0`、min-width 248、max-width 360、`width: max-content`、max-height 340 | `panelWidth: Math.max(248, Math.min(360, measure.implicitWidth + 38 + 10))`；实测 248 |
+| 分组标题 | `redesign/model-panel.css:111-125` → `padding: 9px 8px 3px`（首组 4px）、11.5px、`--fg-subtle` | 26 高行盒 + `x:8 / y:6`、`font.pixelSize: 12`、`Theme.fgSubtle`（字号取舍见下） |
+| 模型行 | `styles/app.css:3418-3438` → gap 8、`padding: 7px 8px`、radius `--radius-sm`=6、13px、`--fg`；`.is-active` accent + 600 | 27 高行、`radius: Theme.radiusSm`、13px、选中 `Theme.accent` + `weight 600` |
+| 勾选位 | `redesign/model-panel.css:127-131` 固定 14px 占位；`styles/app.css:3452-3455` 14px `--accent` | 右侧 `rightMargin: 8` 的 14×14 位 + `IconData.check` |
+| 空态 | `styles/app.css:3456-3461` → `padding: 10px 8px`、12px、`--fg-subtle`、居中 | `pickerEmpty`（40 高、12px、`Theme.fgSubtle`、`AlignHCenter`） |
+| 思考等级行 | `redesign/model-panel.css:133-143` → 名字 13px + 说明 11.5px `--fg-subtle`、`gap:1px` | 44 高行、`Column(x:8, spacing:1)`，名字 13px、说明 12px |
+| 贴片展开态 | `styles/app.css:2874-2877` `.chip.is-open{background:var(--bg-active);color:var(--fg)}`；`:2902-2904` 箭头 `rotate(180deg)` | `color: open ? Theme.bgActive : "transparent"`、文字/图标 `open ? Theme.fg : Theme.fgMuted`、`rotation: open ? 180 : 0` |
+
+实测几何（`.venv/bin/python -I out/latest-parity/probes/c6_panel_subgeom.py` → `logs/c6-d1-subgeom-final.log`；相对坐标以面板外框左上角为原点）：
+
+| 量 | deva | QML | 差 |
+|---|---|---|---|
+| 面板外框 | x847..1094（248 宽）、y688..752（65 高） | x776..1023（248 宽）、y688..752（65 高） | 尺寸一致 |
+| 圆角 / 边框 / 底色 | 12 / `(230,230,234)` / `(255,255,255)` | 12 / `(230,230,234)` / `(255,255,255)` | 一致 |
+| 分组标题墨迹 | rel x14..68、y12..24，212 px | rel x14..70、y12..24，220 px | 行带一致，宽 +2 |
+| 模型行文字墨迹 | rel x15..161、y39..51，747 px | rel x14..160、y39..51，752 px | 行带一致，x −1 |
+| ✓ 墨迹 | rel x222..232、y41..48，27 px | rel x222..232、y41..48，27 px | 逐像素同位 |
+
+模型行文字色与字重取自同一张图：选中行文字为 `Theme.accent`（`#5b5bd6` → 实测 `(91,91,214)`）、`weight 600`，
+与 deva 的 `.is-active` 相同（`logs/c6-d1-verify-final.log`）。
+
+**分组标题字号：11.5px 在 Qt 侧取不到，实际落在 12px**
+
+原版 CSS 是 `font-size: 11.5px`。Qt 的 `font.pixelSize` 只收整数，`pointSize` 也会被取整到整像素：
+
+```
+$ .venv/bin/python -I out/latest-parity/probes/c6_ghead_font.py \
+      out/latest-parity/ab-font/ghead-8.625pt-y5.png:776 \
+      out/latest-parity/ab-font/ghead-8.75pt-y5.png:776
+deva                         (14, 68, 12, 24, 212)   # x14..68（宽 55）、y12..24（13 行）、212 墨迹像素
+qml after(current)           (14, 70, 12, 24, 220)   # ← 落地值：12px + y6（宽 57，+2）
+ghead-8.625pt-y5.png         (13, 64, 12, 21, 198)   # 8.625pt → 11px：只有 10 行、宽 52
+ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整体上移 1px
+```
+
+两个 A/B 变体的重拍图留在 `out/latest-parity/ab-font/`（md5 `ccfd026d…` / `f0216bc4…`），
+它们不是交付图，只为复现这一组对照。
+
+即：11.5px 无法表达，`8.5 / 8.625pt` 都落 11px（墨迹行数与宽度都明显偏小），`8.75pt / 12px` 落 12px。
+选 12px 并把 `y` 从 5 调到 6，得到与 deva **逐行同带**（y12..24）的结果；宽度多 2px 是 Qt 字形度量的残余差，
+不是取值错误。这一条是本轮唯一「不能逐值复刻」的项，原因写在代码注释与本节。
+
+**D2：弹层态输入卡片四边 `#5b5bd6`**
+
+修复点是 `Main.qml` 输入卡片的 `border.color`：原来只有 `inputField.activeFocus || window.composerFocused`，
+而弹层打开时焦点在贴片而不是 TextArea，所以四边仍是 `--border-strong`。补上 `|| window.modelPickerOpen` 后，
+`border.color` 与 deva 的 `.cf-box:focus-within` 同值。四边实测（`logs/c6-d2-final.log`、`logs/d2-four-edges-sampling.log`）：
+
+| 图 | top (700,658) | bottom (700,803) | left (428,720) | right (1207,720) |
+|---|---|---|---|---|
+| deva model-picker | (91,91,214) | (91,91,214) | (91,91,214) | (91,91,214) |
+| QML 修复前（HEAD 同代码重拍） | (230,230,234) | (213,213,219) | (213,213,219) | (213,213,219) |
+| QML 修复后 | (91,91,214) | (91,91,214) | (91,91,214) | (91,91,214) |
+| 对照：chat 页（菜单未打开）deva / QML | (213,213,219) / (213,213,219) | 同 | 同 | 同 |
+
+整行扫描（y=658 从 x450 到 x1150）修复后全为 `(91,91,214)`，与 deva 相同；chat 页全为 `(213,213,219)`，
+说明聚焦描边只在弹层打开时出现，没有污染其它页面。真实鼠标探针在 model 与 thinking 两种模式下各测一次，四边同为 `(91,91,214)`
+（`logs/c6-model-picker-probe.log`）。
+
+**D3：bbox(600,470,1119,799) 纯白像素数与归因**
+
+| 图 | 纯白 (255,255,255) 像素 | 说明 |
+|---|---:|---|
+| deva | 144791 | 参考 |
+| QML 修复前（归档 `8fd3c8a` 图，§5 基线） | 161546 | 旧值 |
+| QML 修复前（HEAD 同代码重拍） | 159666 | 归档图已过期，同代码重拍差 27876 px |
+| QML 修复后 | **141844** | 比 deva 少 2947（−2.0%） |
+
+**必须先说清的一件事**：`out/latest-parity/qml/model-picker.png` 在 §5 基线（`8fd3c8a`）里那张是**过期图**。
+用 HEAD 的同一份代码、同一份夹具重拍，md5 是 `5db7a50f…` 而不是归档的 `c2670aa5…`，两者差 27876 px（max=43），
+差异只落在 y638..819 的一条浅灰带：归档图在那里是纯白 `(255,255,255)`，重拍图是 `SoftShadow` 的 `(236..247)`
+（`logs/d1-shadow-staleness.log`，逐点对照见下）。所以本节所有「before」都用**同代码重拍**的口径，
+不用归档数字：
+
+```
+像素 (520, y) 输入卡片下方投影带：
+  y806 chat=(236,236,236) archived-mp=(255,255,255) fresh-before=(236,236,236) after=(236,236,236)
+  y812 chat=(242,242,242) archived-mp=(255,255,255) fresh-before=(242,242,242) after=(242,242,242)
+```
+
+也因此 `page_diff18.py` 的 model-picker 行从归档的 `149105 / 14.21%` 变成同代码 `141550 / 13.49%`，
+修复后 `137282 / 13.08%`（本轮最终值见下），三者的 md5 分别为 `c2670aa5…` / `5db7a50f…` / `7af296ea…`。
+
+**修正后仍差 2947 px 的归因**：把 model-picker 页的纯白计数逐带与 chat 页（同一 bbox、菜单关闭）相减，
+剩下的才是 picker 独有的量（`logs/c6-d3-attribution-final.log`）：
+
+| 子区间 | deva | QML | 差 | 归因 |
+|---|---:|---:|---:|---|
+| y470-619 正文上半 | 77367 | 76797 | +570 | chat 页同差 +570 → picker 专属 0 |
+| y620-650 正文末段 | 11440 | 9360 | +2080 | chat 页同差 +2080 → picker 专属 0 |
+| y651-687 面板上方投影 | 11066 | 11024 | +42 | picker 专属 +42（Canvas 阴影尾部比 CSS `0 6px 24px` 略窄） |
+| y688-752 面板本体 | 29245 | 29223 | +22 | picker 专属 +22（标题宽 +2px 与圆角抗锯齿） |
+| y753-799 输入区贴片行 | 15673 | 15440 | +233 | chat 页 −19 → picker 专属 +252 |
+| **合计** | **144791** | **141844** | **+2947** | picker 专属 **+316**，其余 2631 是 chat 页就有的 A/B 类正文差 |
+
+所以 D3 的结论是：**picker 自身引入的白像素差只剩 316 px**（其中 252 在贴片行、42 在阴影尾、22 在面板本体），
+而 2631 px 来自 §5.4 的 A/B 类 chat 正文缺口（`E1`–`E5`、`B1`–`B3`），不在本轮范围。
+贴片行的 252 px 是 chip 锚点横向偏移造成的（见本节末尾「未闭环」）。
+
+**回归核查**
+
+| 项 | 结果 | 日志 |
+|---|---|---|
+| 单页差异（`page_diff18.py`，只取 model-picker 行） | deva `946b07de…` / QML `7af296ea…`，**137282 px / 13.08%，max=248**（同代码 before `141550 / 13.49%`，max=248） | `logs/c6-page-diff18-final.log` |
+| chat / dark-chat 未被改动影响 | md5 仍为 `dc133011…` / `3aa7be54…`，与 §4.7 提交一致 | `logs/c6-page-diff18-final.log` |
+| 真实鼠标探针（model + thinking 两模式） | 打开 → 内容正确 → 四边聚焦 → 点行生效并收起 | `logs/c6-model-picker-probe.log`（`.err` 0 字节） |
+| `app/tests/test_qml_model_picker.py` | **3 passed**，rc=0 | `logs/pytest-model-picker-final.log` |
+| 受影响测试（picker + chat-files ×2 + shell + packaging + settings-models） | **169 passed**，rc=0 | `logs/pytest-affected-final.log` |
+| `app/tests/test_qml_context_menu.py`（单独跑） | **2 passed**，rc=0 | `logs/pytest-ctx-menu-final.log` |
+| 全量（排除两个交互式 QML 模块） | **1323 passed, 5 skipped**，rc=0 | `logs/pytest-full-ignore-interactive-final.log` |
+| 全量（不排除） | **rc=139 段错误**，位置 `test_qml_context_menu.py:162`；HEAD 工作树 `/tmp/base-head` 同样复现 | `logs/pytest-full-final.log`、`logs/pytest-segv-head-full.log` |
+
+全量段错误是**既有问题、与本轮无关**：在 `/tmp/base-head`（提交 `0805d16`，不含本轮任何改动）上按同一口径跑
+`pytest app/tests`，同样在 `test_qml_context_menu.py:162 _menu_items` 崩（`logs/pytest-segv-head-full.log`）；
+而这两个交互式模块单独跑、或与其它 QML 模块一起跑都通过（上面的 169 / 2 passed）。
+根因是同一进程里先后创建 `QGuiApplication` 与 `QApplication` 两套 Qt 应用对象，`test_qml_chat_files.py` 先跑时触发。
+本轮没有改这两个模块的夹具，所以不在此处修，记录在案。
+
+**差异量级（修复后）**：model-picker 差异像素 137282，其中 d≤2 共 35761（26.05%）、d≤8 共 21985、d>8 共 79536
+（`logs/c6-delta-histogram-final.log`）。d≤2 占比从 10.08% 升到 26.05%，与 chat 的 23.28%、dark-chat 的 22.15% 同一水平，
+说明面板区域的大跳变已经消掉，剩余大头是与 chat 共用的正文缺口。
+
+**未闭环（明确列出，未在本轮修）**
+
+1. 面板横向位置：QML 面板 x776..1023，deva x847..1094，两侧都右对齐到各自贴片、宽度都对（248），
+   差的是 `modelChip` 自身的 x（QML 852 vs deva 923）——这是 §5.4 G1「输入区左侧图标簇整体左移约 90 px」
+   的同一处锚点偏移，属 G 类，本轮不动。同理贴片行的 252 白像素差也是它带来的。
+2. 分组标题宽度 +2px：11.5px 无法在 Qt 表达，取 12px 后的字形度量残差，已在上文说明。
+3. 阴影尾部 +42 px：Canvas 阴影与 CSS `box-shadow` 的衰落曲线不同，`blur` 已从 24 收到 20，仍未逐像素相同。
+
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
 
@@ -864,9 +1015,10 @@ rc=0
 
 ### 5.2 18 页逐页差异整表
 
-上方命令的原始输出（**已按 §4.7 / §4.8 修复后的当前图重算**，命令与日志：
+上方命令的原始输出（**已按 §4.7 / §4.8 / §4.9 修复后的当前图重算**，命令与日志：
 `.venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml`
-→ `out/latest-parity/logs/c6-page-diff18.log`，rc=0；每行原样对应一页）：
+→ `out/latest-parity/logs/c6-page-diff18-final.log`，rc=0；每行原样对应一页。
+model-picker 一行在 §4.9 之后重拍过，值为 `137282 / 13.08%`，比 §4.9 之前的同代码 `141550 / 13.49%` 少 4268 px）：
 
 ```
 chat                   ac72cd597ae44377b608777cbd5e2e81 dc1330117d4b7631721a9768fb1f8e12  158583  142346  129909  12.38% max=248 same=False
@@ -877,7 +1029,7 @@ search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b
 search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
 ctx-menu               64c8c33a5c5c5e905288cca4fab37285 3c1fdb4633790aadb495881f2732bd23  158033  143492  127196  12.12% max=248 same=False
 delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 5b8baeb969eb5d8a416be851c24d7dce  162718  147103  384883  36.67% max=224 same=False
-model-picker           946b07def583e696822df943b6935f04 c2670aa5cd2f78c1693a6eeea2a118f3  164258  145541  149105  14.21% max=248 same=False
+model-picker           946b07def583e696822df943b6935f04 7af296ea76c95baccbdd4c837e0f3159  164258  148495  137282  13.08% max=248 same=False
 hover-thread           16917898b7b5fb7b95a515bee87001d1 bab936657c1f28ce5862c40672d47e8a  158169  140893  136545  13.01% max=248 same=False
 focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 6a4ff152ff3aacae596c849968cc9cde  158745  140778  136157  12.97% max=248 same=False
 long-mid               147fb156af029f6c57cfb686d6e84c0c 8905296c9f8d7e2b372b7e44acb68623  143456  142304  126160  12.02% max=255 same=False
@@ -889,13 +1041,14 @@ settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e
 dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22b11516ec  158038  141637  128299  12.22% max=230 same=False
 ```
 
-与 §4.7 / §4.8 修复前的旧值对照（只列被修复改动的 4 页）：
+与修复前的旧值对照（只列被修复改动的 5 页）：
 
 | 页 | 修复前 差异像素 / % | 修复后 差异像素 / % | 修复来源 |
 |---|---:|---:|---|
 | chat | 136141 / 12.97% | 129909 / 12.38% | §4.7 dark-chat 那批把输入卡片换成 `SoftShadow` 后重拍了 chat |
 | ctx-menu | 143461 / 13.67% | 127196 / 12.12% | §4.8 菜单 5 项 + Delete 危险色 |
 | delete-confirm | 401948 / 38.30% | 384883 / 36.67% | §4.8 真可交互的确认层 |
+| model-picker | 149105 / 14.21%（归档图）→ 同代码重拍 141550 / 13.49% | 137282 / 13.08% | §4.9 弹层内容 + 聚焦态；归档图本身过期，口径见 §4.9 |
 | dark-chat | 258651 / 24.64% | 128299 / 12.22% | §4.7 输入卡片 `--bg-elevated` + `--shadow` |
 
 整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
@@ -910,7 +1063,7 @@ dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22
 | search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 |
 | ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `3c1fdb4633790aadb495881f2732bd23` | 127196 | 12.12% | 248 |
 | delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 |
-| model-picker | `946b07def583e696822df943b6935f04` | `c2670aa5cd2f78c1693a6eeea2a118f3` | 149105 | 14.21% | 248 |
+| model-picker | `946b07def583e696822df943b6935f04` | `7af296ea76c95baccbdd4c837e0f3159` | 137282 | 13.08% | 248 |
 | hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 |
 | focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 |
 | long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 |
@@ -1072,7 +1225,7 @@ confirmDelete 中心=(794.5, 467.0) bbox=(760.0, 452.0, 829.0, 482.0)
 
 #### 差异量级备注（供后续修复排优先级）
 
-对差异像素按单像素最大通道差 d 分桶（**修复后复算**：`.venv/bin/python -I /tmp/c6_hist.py`
+对差异像素按单像素最大通道差 d 分桶（**修复后复算**：`.venv/bin/python -I out/latest-parity/probes/c6_delta_histogram.py`
 → `out/latest-parity/logs/c6-delta-histogram.log`；旧值见 `out/latest-parity/delta-histogram.log`）：
 
 | 页 | 差异像素 | d≤2 | d≤8 | d>8 | d≤2 占比 |
@@ -1082,7 +1235,7 @@ confirmDelete 中心=(794.5, 467.0) bbox=(760.0, 452.0, 829.0, 482.0)
 | search-results | 113729 | 11124 | 28357 | 74248 | 9.78% |
 | ctx-menu | 127196 | 41474 | 17258 | 68464 | 32.61% |
 | delete-confirm | 384883 | 292905 | 29793 | 62185 | 76.10% |
-| model-picker | 149105 | 15034 | 34044 | 100027 | 10.08% |
+| model-picker | 137282 | 35761 | 21985 | 79536 | 26.05% |
 | hover-thread | 136545 | 11678 | 29649 | 95218 | 8.55% |
 | long-mid | 126160 | 11486 | 21473 | 93201 | 9.10% |
 | settings-general | 340813 | 235777 | 55354 | 49682 | 69.18% |
@@ -1094,14 +1247,15 @@ confirmDelete 中心=(794.5, 467.0) bbox=(760.0, 452.0, 829.0, 482.0)
 造成的整体偏移——§4.8 把 delete-confirm 从 63.34% 推到 76.10%，说明剩下的确实只是遮罩合成取整。
 chat / dark-chat 的 d≤2 占比从 8.59% / 10.13% 升到 23.28% / 22.15%（卡片底色对齐后，原本的
 大跳变变成了 1–2 灰阶），ctx-menu 从 10.03% 升到 32.61%（菜单几何与字号接近后同理）。
-model-picker / hover-thread / long-mid 仍在 8.6%–10.1%，是这三页独有的真结构差异
-（model-picker 见 §5.4 D1–D3，hover-thread 见 B1/B2）。
+model-picker 从 10.08% 升到 26.05%（§4.9 弹层内容与聚焦态修复后，面板区域的大跳变消掉，
+剩 137282 px 中 2631 px 是与 chat 共用的正文缺口，picker 专属只剩 316 px）。
+hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差异（hover-thread 见 B1/B2）。
 
 ### 5.4 逐组件缺口清单（覆盖 18 页，全部来自本轮实测日志）
 
-> **状态说明（2026-11-22 复算）**：本节写于 §4.7 / §4.8 修复之前，其中 **C1、C4、E6 三行已被修复**，
-> 行内已改为「已由 §4.8 / §4.7 修复」并换成当前实测值；其余各行仍是实测口径。§5.2 / §5.5 的差异数字
-> 已按修复后重算（日志 `out/latest-parity/logs/c6-page-diff18.log`）。
+> **状态说明（2026-11-23 复算）**：本节写于 §4.7 / §4.8 修复之前，其中 **C1、C4、E6、D1–D3 已被修复**，
+> 行内已改为「已由 §4.8 / §4.7 / §4.9 修复」并换成当前实测值；其余各行仍是实测口径。§5.2 / §5.3 / §5.5
+> 的差异数字已按修复后重算（日志 `out/latest-parity/logs/c6-page-diff18-final.log`）。
 
 下表每行都给「实测值 + 证据文件」，没有「符合预期」这类空话。
 
@@ -1137,9 +1291,9 @@ model-picker / hover-thread / long-mid 仍在 8.6%–10.1%，是这三页独有�
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| D1 | 弹层内容完全不对 | QML 渲染的是 THINKING LEVEL 面板（Default / Low / High / Max）；deva 渲染的是模型列表（表头 `Anthropic` + 一行 `deepseek-v4.1-flash` 带 ✓）。`app/src/qml/ModelPicker.qml`（70 行）只有 thinking-level 分支，`pickerMode` 为死接线（`out/latest-parity/gaps/picker-deva.png` 与 `picker-qml.png` 对照） |
-| D2 | 弹层态缺少输入框聚焦描边 | QML `(800,658)=(255,255,255)`，其余三边 `(213,213,219)`；deva 四边全为 `(91,91,214)`（`gap-probe4.log` 中节） |
-| D3 | 面板白底像素量差 16.8k | QML n=161546 vs deva n=144791，同 bbox=(600,470,1119,799)（`probe-final2.log` §7）——内容不同所致 |
+| D1 | ~~弹层内容完全不对~~ **已由 §4.9 修复** | 修复前：QML 渲染的是 THINKING LEVEL 面板（Default / Low / High / Max），deva 渲染的是模型列表（表头 `Anthropic` + 一行 `deepseek-v4.1-flash` 带 ✓）。**当前实测**：真实 `QTest.mouseClick` 点模型贴片后 `modelList.visible=True`、分组标题 `Anthropic`、一行 `deepseek-v4.1-flash`、✓ 墨迹 rel x222..232 与 deva 逐像素同位；点思考贴片则反过来（`logs/c6-model-picker-probe.log`、`logs/c6-d1-subgeom-final.log`） |
+| D2 | ~~弹层态缺少输入框聚焦描边~~ **已由 §4.9 修复** | 修复前：QML 上边 `(230,230,234)`、其余三边 `(213,213,219)`；deva 四边全为 `(91,91,214)`。**当前实测**：model 与 thinking 两种模式四边均 `(91,91,214)`，chat 页仍为 `(213,213,219)`（`logs/c6-d2-final.log`、`logs/d2-four-edges-sampling.log`） |
+| D3 | ~~面板白底像素量差 16.8k~~ **已由 §4.9 修复（残差已归因）** | bbox(600,470,1119,799) 纯白：deva 144791；QML 修复后 141844（−2947）。逐带与 chat 相减后 picker 专属只剩 +316 px（阴影尾 +42 / 面板本体 +22 / 贴片行 +252），其余 2631 px 是 chat 页同有的 A/B 正文缺口（`logs/c6-d3-attribution-final.log`） |
 
 **E. 正文 Markdown 渲染（chat / search-none / dark-chat）**
 
@@ -1191,7 +1345,7 @@ model-picker / hover-thread / long-mid 仍在 8.6%–10.1%，是这三页独有�
 | search-none | 93091 / 8.87% | E5、A1–A5、B1–B3 | 真结构缺口 |
 | ctx-menu | 127196 / 12.12% | ~~C1~~（已由 §4.8 修复：5 项、Delete 危险色）；C2/C3 小幅几何；A/B/E 共用缺口 | 真结构缺口（C1 已闭环） |
 | delete-confirm | 384883 / 36.67% | ~~C4~~（已由 §4.8 修复：三处点击均生效）；A5 遮罩灰阶 | 剩余为遮罩合成差（76.1% 只差 1–2 灰阶） |
-| model-picker | 149105 / 14.21% | D1（整块菜单内容错：THINKING LEVEL vs 模型列表）、D2/D3 | 真结构缺口 |
+| model-picker | 137282 / 13.08% | ~~D1/D2/D3~~（已由 §4.9 修复：弹层内容、四边聚焦、面板几何）；剩余为 picker 专属 316 px + chat 共用 A/B/E 缺口；面板横向 x 偏移属 G1 | 真结构缺口（D1–D3 已闭环） |
 | hover-thread | 136545 / 13.01% | B1/B2（悬停行位置错）、A/B/E 共用缺口 | 真结构缺口 |
 | focus-composer | 136157 / 12.97% | 判据三成立；其余同 chat | 真结构缺口 |
 | long-mid | 126160 / 12.02% | A/B/E；滚动位置与已提交基线不同 | 真结构缺口 |
@@ -1206,4 +1360,4 @@ model-picker / hover-thread / long-mid 仍在 8.6%–10.1%，是这三页独有�
 已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 12.12% 与 dark-chat 的 12.22%
 已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
 
-**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项，E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、D1–D3（model-picker）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。
+**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。model-picker 的残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。

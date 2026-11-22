@@ -1,0 +1,8 @@
+== deva (panel 248x65)
+   ghead    rel x14..68 y12..24 px=212
+   rowtext  rel x15..161 y39..51 px=747
+   check    rel x222..232 y41..48 px=27
+== qml  (panel 248x65)
+   ghead    rel x13..69 y12..24 px=220
+   rowtext  rel x13..159 y39..51 px=752
+   check    rel x223..233 y41..48 px=27
