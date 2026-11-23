@@ -684,6 +684,36 @@ $ tail -1 /tmp/ours-pytest.log
 ```
 
 
+#### 4.4.4 dsh 复验（HEAD 858b2a4）
+
+de8564ef 空输出的补跑只做复验，不改 QML；实现提交为 `23de5e7`
+（`app/src/qml/SettingsModal.qml`）。复验命令与结果：
+
+```
+$ H=$(mktemp -d /tmp/dsh-shell-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/dsh-shell.log 2>&1; echo rc=$?
+rc=0
+$ grep -E "passed|failed|skipped|error" /tmp/dsh-shell.log
+48 passed in 10.56s
+
+$ H=$(mktemp -d /tmp/dsh-models-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/dsh-models.log 2>&1; echo rc=$?
+rc=0
+$ grep -E "passed|failed|skipped|error" /tmp/dsh-models.log
+44 passed in 0.17s
+
+$ git show 23de5e7^:out/latest-parity/qml/settings-models.png > /tmp/sm-before-git.png
+$ md5sum /tmp/sm-before-git.png
+487b0f063cec7387802856ebeacdf9d4  /tmp/sm-before-git.png
+$ H=$(mktemp -d /tmp/sm-after-home-XXXXXX); cp -a /tmp/fx-qml-home/. "$H"/; bash scripts/parity/qml_page_shot.sh settings-models /tmp/sm-after.png "$H" config.json > /tmp/sm-after.log 2>&1; echo rc=$?
+rc=0
+$ md5sum /tmp/sm-after.png
+92c0f06f8b41707f3e6396e8c1bfe529  /tmp/sm-after.png
+$ python3 -I -c "import sys;sys.path.insert(0,'scripts/parity');from page_diff18 import load,diff;d,w,h,_,_=load('out/latest-parity/deva/settings-models-deva.png');exec('for p in [\"/tmp/sm-before-git.png\",\"/tmp/sm-after.png\"]:\n b,_,_,_,_=load(p);n,worst=diff(d,b,w,h);print(p,n,round(n*100/(w*h),2),worst)')"
+/tmp/sm-before-git.png 323783 30.85 237
+/tmp/sm-after.png 294323 28.04 216
+```
+
+**30.85% → 28.04%**（−2.81pp，−29,460 px；before 323,783 px，after 294,323 px）。
+
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
 **交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的
