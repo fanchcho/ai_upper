@@ -1,0 +1,34 @@
+{
+  "🚀": {
+    "xy": [
+      484,
+      69
+    ],
+    "dark_pixels": 114,
+    "colored_pixels": 0,
+    "runs": [
+      {
+        "font": "Noto Sans CJK SC",
+        "glyphs": [
+          0
+        ]
+      }
+    ]
+  },
+  "✅": {
+    "xy": [
+      501,
+      69
+    ],
+    "dark_pixels": 114,
+    "colored_pixels": 0,
+    "runs": [
+      {
+        "font": "Noto Sans CJK SC",
+        "glyphs": [
+          0
+        ]
+      }
+    ]
+  }
+}

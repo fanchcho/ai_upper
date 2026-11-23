@@ -73,6 +73,8 @@ class BodyDocument:
                  highlight: bool = True) -> None:
         if not QT_AVAILABLE:  # pragma: no cover - 无 Qt 环境
             raise ImportError("BodyDocument requires a Qt binding")
+        from utils.emoji_font import ensure_emoji_font
+        ensure_emoji_font()
         self.document = QTextDocument()
         self.style = style or BodyStyle()
         self.content_width = float(content_width)

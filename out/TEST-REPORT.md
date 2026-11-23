@@ -600,3 +600,27 @@ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/layout-close
 
 本轮未闭环：E3整体像素仍有偏移、表格底边仍两行、表格行高35px对34.4375px及近似padding残差。第3项为部分修复，不能标全完成。
 本轮明确未做：emoji缺字形、deva 2x、CI终态归因、settings遮罩内部残差、long-mid非悬停差异、18页全量重拍，原因是用户指定延期。
+
+
+## b752b0e 之后：B/C/A/D 最终收尾
+
+起点实测 HEAD/远端均 `b752b0e17e5b9e92e17dae8016c0b0168365e063`，tracked status 空；原始输出 out/final-parity/start-*.log。A要求最终产品代码，因此先B/C，再A，最后D。
+
+### B：emoji 缺字形已修复
+
+原版 tokens.css:9 字体栈 `-apple-system, BlinkMacSystemFont, Segoe UI, Microsoft YaHei, Roboto, Helvetica, Arial, sans-serif`，没有明确 emoji 家族，走系统 fallback。
+`fc-list :charset=1f680 file family` 与 `fc-list :charset=2705 file family` 均 rc=0、输出0字节；Qt 的实际fallback为Noto Sans CJK SC，🚀/✅ glyph index都是0。因此是**缺字形方块**，不是没有渲染。
+
+使用上游 Noto Color Emoji v2.047，git tag commit `22e564626297b4df0a40570ad81d6c05cc7c38bd`；从只读克隆 `git show v2.047:fonts/NotoColorEmoji.ttf` 提取到 app/assets/fonts，10643852字节，OFL许可一并打包。main分支的旧fonts下载地址404，原始错误保留在 .tmp/final-parity/font-download*.log；没有假称首次下载成功。
+实现：BodyDocument创建时注册该字体，设置Qt emoji fallback；正文主字体不变。命令及文件sha见 out/final-parity/b-font-file.log。
+
+真实 QML 像素探针：`AI_UPPER_HOME=/tmp/ai-upper-emoji-pixel-before .venv/bin/python out/final-parity/emoji_probe.py before > out/final-parity/emoji-pixel-before.log 2>&1; rc=$?`，after同理换后缀，两次rc=0。before只在独立探针进程禁用本次新加的注册函数，不修改产品或原提交。
+
+| 字符 | 改前位置/像素/glyph | 改后位置/像素/glyph |
+|---|---|---|
+| 🚀 | (484,69)，暗像素114、彩色0、glyph0 | (484,69)，暗像素93、彩色76、Noto Color Emoji glyph963 |
+| ✅ | (501,69)，暗像素114、彩色0、glyph0 | (502,69)，暗像素146、彩色143、Noto Color Emoji glyph143 |
+
+截图 out/final-parity/emoji-before/glyphs.png → emoji-after/glyphs.png。18页固定夹具不含这两个字符（源搜索rc1），所以chat复拍严格差异 **108149px/10.30%→108149px/10.30%**、md5相同；不为制造改善数字篡改标准夹具。实际命中的专用emoji正文截图如上，功能有真实改善。
+chat命令：`AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/final-parity/b-after/chat.png /tmp/ai-upper-residual-20261123 config.json > out/final-parity/b-after/chat.log 2>&1; rc=$?`，rc0；page_diff18.py对b-before/b-after两次rc0，原始输出b-before-diff.log/b-after-diff.log。
+测试：`AI_UPPER_HOME=/tmp/ai-upper-emoji-tests .venv/bin/python -m pytest app/tests/test_emoji_font.py app/tests/test_markdown_body.py app/tests/test_qml_shell.py -q > out/final-parity/b-tests.log 2>&1; rc=$?`，**74 passed in 17.12s，0 skipped，rc0**。

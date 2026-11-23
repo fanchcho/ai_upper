@@ -1,0 +1,34 @@
+{
+  "🚀": {
+    "xy": [
+      484,
+      69
+    ],
+    "dark_pixels": 93,
+    "colored_pixels": 76,
+    "runs": [
+      {
+        "font": "Noto Color Emoji",
+        "glyphs": [
+          963
+        ]
+      }
+    ]
+  },
+  "✅": {
+    "xy": [
+      502,
+      69
+    ],
+    "dark_pixels": 146,
+    "colored_pixels": 143,
+    "runs": [
+      {
+        "font": "Noto Color Emoji",
+        "glyphs": [
+          143
+        ]
+      }
+    ]
+  }
+}
