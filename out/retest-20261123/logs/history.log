@@ -1,0 +1,8 @@
+c660bf8 docs(parity): 补记 E1–E5 与 2a6e2a3 的拆分归属
+c1eee70 test(parity): 记录全量 pytest 基线验收
+8d9a2a9 docs(parity): 补记未闭环项当前实测结论
+2b84a3a docs(parity): 归因 A5/F3 遮罩灰阶差为合成取整
+5e8a26c fix(markdown): 恢复 a8aa45b 已推送正文修复（撤销重复旧补丁）
+3ddd826 docs(parity): 校正最终行数值标注
+3a8929b docs(parity): 完成 E1–E5 合并后 18 页最终重拍与差值回填
+4a5c035 merge: 接入 E1–E5 正文渲染修复（12a786a/601137f/3baad36）

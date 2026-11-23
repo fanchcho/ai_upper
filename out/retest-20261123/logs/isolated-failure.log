@@ -1,0 +1,47 @@
+
+    def test_targets_and_abi():
+        assert TARGETS["windows-x86"].triple == "i686-pc-windows-msvc"
+>       assert runtime_spec(TARGETS["linux-x86_64"]).abi_tag.startswith("cp")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+app/tests/test_ai_upper_config.py:8: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/ai_upper/config.py:354: in runtime_spec
+    provider = runtime_provider()
+               ^^^^^^^^^^^^^^^^^^
+tools/ai_upper/config.py:347: in runtime_provider
+    provider = str(runtime_config().get("provider") or "pbs").strip().lower()
+                   ^^^^^^^^^^^^^^^^
+tools/ai_upper/config.py:334: in runtime_config
+    value = ai_upper_config().get("runtime", {})
+            ^^^^^^^^^^^^^^^^^
+tools/ai_upper/config.py:226: in ai_upper_config
+    tool = load_app_config().get("tool", {})
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def load_app_config() -> dict:
+        if not APP_CONFIG.is_file():
+            target = _readable_path(APP_CONFIG)
+            example = _readable_path(APP_CONFIG_EXAMPLE)
+>           raise RuntimeError(
+                f"{target} is missing.\n"
+                "Create your local configuration from the tracked template:\n"
+                f"    cp {example} {target}"
+            )
+E           RuntimeError: app/pyproject.toml is missing.
+E           Create your local configuration from the tracked template:
+E               cp app/pyproject.toml.example app/pyproject.toml
+
+tools/ai_upper/config.py:209: RuntimeError
+_____________________ test_project_version_and_user_agent ______________________
+
+    def test_project_version_and_user_agent():
+        from ai_upper.config import load_app_config, project_version, user_agent
+>       assert project_version() == load_app_config()["project"]["version"]
+               ^^^^^^^^^^^^^^^^^
+
+app/tests/test_ai_upper_config.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/ai_upper/config.py:242: in project_version
+    value = str(project_config().get("version") or "").strip()

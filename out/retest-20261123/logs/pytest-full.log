@@ -1,0 +1,76 @@
+..............................................F......................... [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 21%]
+.....................ss................................................. [ 26%]
+........................................................................ [ 31%]
+........................................................................ [ 37%]
+........................................................................ [ 42%]
+........................................s............................... [ 47%]
+........................................................................ [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 63%]
+........................................................................ [ 69%]
+........................................................................ [ 74%]
+........................................................................ [ 79%]
+........................................................................ [ 85%]
+........................................................................ [ 90%]
+........................................................................ [ 95%]
+..........................................................               [100%]
+=================================== FAILURES ===================================
+___________________ test_repository_keeps_no_stale_old_name ____________________
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/pytest-tmp/test_repository_keeps_no_stale0')
+
+    def test_repository_keeps_no_stale_old_name(tmp_path):
+        """改名的验收线：仓库里只允许「显式兼容旧名」这几处提到旧拼写。"""
+        root = Path(__file__).parents[2]
+        allowed = {
+            "README.md",
+            "tools/ai_upper/config.py",
+            "tools/ai_upper/egg_loader.py",
+            "tools/ai_upper/lock.py",
+            "tools/ai_upper/third_party.py",
+            "app/src/utils/app_home.py",
+            "app/src/utils/paths.py",
+            "launcher/src/AiUpper.cpp",
+            "app/tests/test_app_home.py",
+        }
+        offenders: list[str] = []
+        for path in root.rglob("*"):
+            if not path.is_file() or path.suffix not in {".py", ".cpp", ".h", ".md", ".toml", ".yml", ".json", ".js", ".sh"}:
+                continue
+            relative = path.relative_to(root).as_posix()
+            if relative.startswith(("out/", ".git/", ".cache/", "build/", "dist/", "runtimes/")):
+                continue
+            if relative in allowed:
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError):
+                continue
+            # 工作区根目录由宿主固定，不随改名移动；它的绝对路径出现在历史证据里
+            # 是记录而不是命名，替换掉再查。
+            #
+            # 这个路径是**常量**：CI 的检出根是另一条路径（`/home/agent/work/...`），
+            # 只剔除 `str(root)` 时，文档里写死的宿主路径会留下来，被当成残留旧名——
+            # 本机跑绿、CI 十二条 job 全红正是这么来的。
+            for host_fixed in (str(root), HOST_FIXED_WORKSPACE):
+                text = text.replace(host_fixed, "<repo>")
+            for old in ("py_upper", "PY_UPPER", "PyUpper", "pyupper"):
+                if old in text:
+                    offenders.append(f"{relative}: {old}")
+                    break
+>       assert not offenders, offenders
+E       AssertionError: ['.tmp/retest-20261123/pytest-tmp/test_paths_reads_a_legacy_app_0/app/pyproject.toml: py_upper']
+E       assert not ['.tmp/retest-20261123/pytest-tmp/test_paths_reads_a_legacy_app_0/app/pyproject.toml: py_upper']
+
+app/tests/test_app_home.py:261: AssertionError
+=========================== short test summary info ============================
+SKIPPED [1] app/tests/test_build_tool_compat.py:1704: the auto-link pragma belongs to the Windows pyconfig.h
+SKIPPED [1] app/tests/test_build_tool_compat.py:1758: handle inheritance for GUI-subsystem children belongs to Windows
+SKIPPED [1] app/tests/test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] app/tests/test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] app/tests/test_native_deployment.py:177: requires cc, patchelf and readelf
+FAILED app/tests/test_app_home.py::test_repository_keeps_no_stale_old_name - ...
+1 failed, 1348 passed, 5 skipped in 170.05s (0:02:50)

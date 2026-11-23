@@ -1,0 +1,31 @@
+initial inherited untracked entries: 244
+tracked modifications: 0
+out/about-window-xvfb.png 1
+out/about-window.png 1
+out/audit-model-path 24
+out/baseline-pytest-app.log 1
+out/baseline-pytest.log 1
+out/body 1
+out/body-markdown-fix 1
+out/chat-files-baseline.log 1
+out/ci-fix 4
+out/ci-verify 1
+out/demo-page-reset.png 1
+out/demo-page.png 1
+out/deva-app-audit 1
+out/entry-refactor 1
+out/final-close 47
+out/latest-parity 73
+out/main-window-xvfb.png 1
+out/main-window.png 1
+out/packaging 13
+out/parity 2
+out/pyside624-compat 1
+out/qml-baseline-pytest.log 1
+out/qml-body 55
+out/qml-shell 5
+out/qwebengine-drop 1
+out/rename 1
+out/startup-opt 1
+out/startup-opt-v2 1
+out/ui 1

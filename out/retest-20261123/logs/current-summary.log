@@ -1,0 +1,9 @@
+chat {'total': 113088, 'percent': 10.7744, 'd1_2': 31006, 'outside': 0, 'outside_d1_2': 0, 'inside': 0, 'inside_gt8': 0}
+search-none {'total': 85175, 'percent': 8.115, 'd1_2': 28505, 'outside': 0, 'outside_d1_2': 0, 'inside': 0, 'inside_gt8': 0}
+long-mid {'total': 142444, 'percent': 13.5713, 'd1_2': 30702, 'outside': 0, 'outside_d1_2': 0, 'inside': 0, 'inside_gt8': 0}
+long-bottom {'total': 124452, 'percent': 11.8571, 'd1_2': 30928, 'outside': 0, 'outside_d1_2': 0, 'inside': 0, 'inside_gt8': 0}
+settings-general {'total': 315274, 'percent': 30.0375, 'd1_2': 255093, 'outside': 297039, 'outside_d1_2': 248842, 'inside': 18235, 'inside_gt8': 5732}
+settings-models {'total': 300497, 'percent': 28.6297, 'd1_2': 250119, 'outside': 297039, 'outside_d1_2': 248842, 'inside': 3458, 'inside_gt8': 1596}
+settings-extensions {'total': 305797, 'percent': 29.1346, 'd1_2': 251645, 'outside': 297039, 'outside_d1_2': 248842, 'inside': 8758, 'inside_gt8': 4777}
+settings-about {'total': 302389, 'percent': 28.8099, 'd1_2': 251539, 'outside': 297039, 'outside_d1_2': 248842, 'inside': 5350, 'inside_gt8': 2114}
+delete-confirm {'total': 382652, 'percent': 36.4569, 'd1_2': 301507, 'outside': 375172, 'outside_d1_2': 301200, 'inside': 7480, 'inside_gt8': 6645}
