@@ -1,3 +1,25 @@
+## 0.17.35
+
+### Problem
+- 构建工具把应用目录硬编码成仓库内的 `app/`。fork 后想换一个应用，必须改 `tools/py_upper/config.py` 里的路径，或者把应用塞进示例目录；应用放在仓库外、甚至和仓库不在同一个 Windows 盘符时无法使用。
+
+### Changes
+- 新增 `tools/py_upper/appdir.py`：应用目录统一由 `--app DIR` 或 `PY_UPPER_APP_DIR` 选择，默认仍是 `<repo>/app`；`--app` 在导入 `py_upper.config` 之前解析。
+- 没有 `app/` 子目录时，如果仓库根 `pyproject.toml` 带 `[tool.py_upper]`，自动把仓库根目录当作应用，便于把 `tools/` 直接放进自己的应用仓库。
+- `--doctor` 输出实际选中的 app 路径；锁文件、原生依赖、Qt 剪枝和 Cython 的相对路径错误信息改为读取当前应用的配置路径。
+- 修复应用与 `build/` 不在同一个 Windows 盘符时 Cython 生成 `.c` 的 `os.path.relpath` 抛 `ValueError`：跨盘时退回绝对输出路径。
+- 新增外部应用、根目录自动发现、`--app` 帮助文本和跨盘路径的回归测试；README / DEVELOPMENT_GUIDE 增加自有 app 契约和 fork 用法。
+
+### Verification
+- `python -m pytest app/tests -q`：387 passed, 15 skipped（Python 3.11）。
+- 在仓库外的临时应用上执行 `python tools/build.py --app <tmp> --target windows-x86_64 --no-egg`：6 个阶段全部通过，`PASS native binaries checked=29`，launcher smoke `READY`。应用位于 C:、仓库位于 D:，验证了跨盘路径；同一外部应用不传 `--no-egg` 的默认 encrypted egg 构建也通过。
+- 默认 `app/` 配置的完整构建与 `--verify` 通过；外部应用构建不读取示例源码。
+
+### Impact
+- 默认行为不变：继续使用 `app/` 的现有命令和产物路径完全兼容。
+- 自有应用只需提供 `pyproject.toml`、`src/`，可选 `resources/` 和开发 `.venv/`；构建产物、锁文件和缓存仍归属于构建工具仓库。
+- `--app` 与 `PY_UPPER_APP_DIR` 二选一即可；通过 `tools/build.py` 的 `main([...])` 传 `--app` 时会在子进程中按同一选择重新执行，避免与已导入的配置常量冲突。
+
 ## 0.17.34
 
 ### Problem

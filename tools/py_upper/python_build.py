@@ -345,8 +345,15 @@ def cythonize_to_c(sources: list[Path], host_python: Path) -> dict[Path, Path]:
     print(f"Cython: {len(pending)} of {len(sources)} module(s) changed")
     tasks: list[tuple[list[str], Path | None, dict[str, str] | None]] = []
     for source, destination, _ in pending:
-        output_rel = os.path.relpath(destination, source.parent)
-        tasks.append(([str(host_python), "-m", "cython", "--force", "-3", "-o", output_rel, source.name], source.parent, env))
+        try:
+            # A relative output path keeps Cython diagnostics short, but an
+            # application can live on a different Windows drive from build/.
+            # ntpath.relpath raises across drives, so fall back to the absolute
+            # destination instead of failing the build.
+            output = os.path.relpath(destination, source.parent)
+        except ValueError:
+            output = str(destination)
+        tasks.append(([str(host_python), "-m", "cython", "--force", "-3", "-o", output, source.name], source.parent, env))
     _run_parallel(tasks)
     for source, destination, key in pending:
         if not destination.exists():

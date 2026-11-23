@@ -241,7 +241,7 @@ def expected_arch(target) -> str:
 # to weaken the guard instead.
 _ARCH_MISMATCH_REMEDY = (
     " A foreign payload that no bundled image loads can be dropped with"
-    " [tool.py_upper.native].exclude in app/pyproject.toml."
+    " [tool.py_upper.native].exclude in the application pyproject.toml."
 )
 
 

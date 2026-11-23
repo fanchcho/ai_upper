@@ -1,9 +1,13 @@
 # py_upper application configuration.
 #
-# This file is the tracked template. Copy it to app/pyproject.toml and edit the
-# copy: the local file is Git-ignored, so your application name, dependencies
-# and runtime choices stay on your machine while this template keeps tracking
-# the repository.
+# This file is the tracked template for the bundled example application. Copy
+# it to app/pyproject.toml and edit the copy: the local file is Git-ignored, so
+# your application name, dependencies and runtime choices stay on your machine
+# while this template keeps tracking the repository.
+#
+# Your own application can live anywhere with this same file at its root; run
+# `python tools/build.py --app /path/to/app` or set PY_UPPER_APP_DIR. The
+# build tool reads this configuration and src/ without importing app code.
 
 [build-system]
 requires = [
@@ -16,7 +20,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py_upper"
-version = "0.17.34"
+version = "0.17.35"
 description = "py_upper standalone Python application"
 requires-python = ">=3.8,<3.14"
 # Runtime dependencies of your application, as requirement strings, e.g.

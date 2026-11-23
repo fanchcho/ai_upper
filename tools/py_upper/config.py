@@ -8,10 +8,37 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from .appdir import selected_app_dir
 from .compat import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-APP = ROOT / "app"
+
+
+def _default_app_dir() -> Path:
+    """Find the application when no explicit directory was selected.
+
+    The repository keeps its example application under ``app/``. A fork that
+    uses the build tool in a normal application repository has no such child
+    directory; in that case a root ``pyproject.toml`` carrying a
+    ``[tool.py_upper]`` table is the application.
+    """
+    bundled = ROOT / "app"
+    if (bundled / "pyproject.toml").is_file() or (bundled / "pyproject.toml.example").is_file():
+        return bundled
+    root_config = ROOT / "pyproject.toml"
+    if root_config.is_file():
+        try:
+            with root_config.open("rb") as f:
+                data = tomllib.load(f)
+        except (OSError, ValueError):
+            data = {}
+        tool = data.get("tool")
+        if isinstance(tool, dict) and isinstance(tool.get("py_upper"), dict):
+            return ROOT
+    return bundled
+
+
+APP = selected_app_dir(_default_app_dir())
 CACHE = ROOT / ".cache"
 BUILD = ROOT / "build"
 DIST = ROOT / "dist"
@@ -19,9 +46,9 @@ RUNTIMES = ROOT / "runtimes"
 LAUNCHER = ROOT / "launcher"
 LOCK = ROOT / "py_upper.lock.json"
 MIN_BUILD_PYTHON = (3, 8)
-# The tracked template and the Git-ignored working copy of the application
-# configuration. Everything reads the working copy; the template is what a
-# fresh clone starts from.
+# The application configuration. The bundled example keeps a tracked template
+# and a Git-ignored working copy; an application supplied with --app or
+# PY_UPPER_APP_DIR normally has only pyproject.toml.
 APP_CONFIG = APP / "pyproject.toml"
 APP_CONFIG_EXAMPLE = APP / "pyproject.toml.example"
 
@@ -193,14 +220,27 @@ def _readable_path(path: Path) -> str:
         return str(path)
 
 
+def app_config_label() -> str:
+    """The active application configuration path for diagnostics."""
+    return _readable_path(APP_CONFIG)
+
+
 def load_app_config() -> dict:
     if not APP_CONFIG.is_file():
         target = _readable_path(APP_CONFIG)
+        if APP_CONFIG_EXAMPLE.is_file():
+            example = _readable_path(APP_CONFIG_EXAMPLE)
+            raise RuntimeError(
+                f"{target} is missing.\n"
+                "Create your local configuration from the tracked template:\n"
+                f"    cp {example} {target}"
+            )
         example = _readable_path(APP_CONFIG_EXAMPLE)
         raise RuntimeError(
             f"{target} is missing.\n"
-            "Create your local configuration from the tracked template:\n"
-            f"    cp {example} {target}"
+            f"Create it from {example} when that template exists, or point "
+            "--app (PY_UPPER_APP_DIR) at a directory containing pyproject.toml "
+            "and src/."
         )
     with APP_CONFIG.open("rb") as f:
         return tomllib.load(f)
@@ -249,7 +289,7 @@ def entry_path() -> Path:
     try:
         path.relative_to(root)
     except ValueError as exc:
-        raise RuntimeError("[tool.py_upper].entry must stay under app/src") from exc
+        raise RuntimeError("[tool.py_upper].entry must stay under the application src/ directory") from exc
     if path.suffix != ".py" or not path.exists():
         raise RuntimeError(f"Application entry file does not exist: {path}")
     return path

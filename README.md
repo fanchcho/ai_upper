@@ -2,7 +2,7 @@
 
 `py_upper` 是一个面向 Windows、macOS、Linux 的独立 Python 应用运行时与打包工程。
 
-当前稳定开发线：**0.17.34**。
+当前稳定开发线：**0.17.35**。
 
 ## 构建模型
 
@@ -39,12 +39,12 @@ Application run
 
 核心原则：
 
-- `app/src/` 直接就是应用源码，不再套额外项目包名。
+- 应用目录的 `src/` 直接就是应用源码，不再套额外项目包名；默认示例是 `app/src/`，自有 `app` 可以用 `--app` 指向任意目录。
 - Build Tool Python 与最终 Target Python 完全独立；Build Tool 最低支持 Python 3.8。
 - 应用自己的 Python 模块默认 Cython 化；`__init__.py` 保留为 package marker。
 - 应用模块增量编译：只有内容变化的模块重新 Cython 化并编译，其余复用 `build/cache/` 里的产物；多个模块并行编译（`[tool.py_upper.build]`）。
 - 第三方依赖不 Cython 化，而是根据 Target 的 wheel compatibility tags 安装目标 wheel。
-- `app/src/` 下的 `.dylib/.so/.dll/.pyd` 是正式应用输入，会参加 native dependency closure。
+- 应用目录 `src/` 下的 `.dylib/.so/.dll/.pyd` 是正式应用输入，会参加 native dependency closure。
 - `runtimes/` 是机器本地 Runtime 缓存，不进入 Git。
 - `dist/` 只在一次 rename 中更新：bundle 在 `build/publish/<target>.<pid>/` 组装完成后再原子换入 `dist/`。构建期间 `dist/` 要么是上一版的完整产物，要么是新版的完整产物，不会被原地删改——发布路径上的 runtime 会被编辑器等外部进程执行，原地清理必然与它们的写入互相踩。
 - 最终验证不仅检查文件存在，还会用 bundled Target Python 真正 import 应用和直接声明的第三方依赖。
@@ -58,7 +58,7 @@ Application run
 
 ```text
 py_upper/
-├── app/
+├── app/                        # 默认示例应用，可整体替换
 │   ├── pyproject.toml.example  # 配置模板（入库）
 │   ├── pyproject.toml          # 本地配置（Git ignored，从模板复制而来）
 │   ├── src/
@@ -76,6 +76,39 @@ py_upper/
 └── dist/                     # Git ignored
 ```
 
+## 用自己的 app（fork 后直接使用）
+
+Build Tool 不 import 应用代码，只读取应用目录；`app/` 只是仓库自带的示例，不是框架的一部分。fork 后可以替换 `app/src` 和配置，也可以把应用放在仓库外面，不需要改 `tools/` 或 `launcher/`。
+
+一个应用目录只需要这些内容：
+
+```text
+myapp/
+├── pyproject.toml      # 必填，schema 同 app/pyproject.toml.example
+├── src/                # 必填，src 下直接是包根
+│   └── main.py         # [tool.py_upper].entry 指定的入口
+├── resources/          # 可选，存在就随包复制
+└── .venv/              # 可选，开发用解释器
+```
+
+三种指定方式：
+
+```bash
+# 1. 默认：继续用仓库里的 app/
+cp app/pyproject.toml.example app/pyproject.toml
+python tools/build.py
+
+# 2. 仓库外的应用
+python tools/build.py --app ../myapp
+
+# 3. 环境变量（对 --doctor / build / run / verify / lock / clean 都生效）
+PY_UPPER_APP_DIR=../myapp python tools/build.py --doctor
+```
+
+`--app` 可以和其他命令组合，例如 `python tools/build.py --app ../myapp --run`。如果仓库根目录本身就是应用（根 `pyproject.toml` 带 `[tool.py_upper]`），删掉 `app/` 后也会自动识别根目录，不必额外传参。
+
+`build/`、`dist/` 和 `py_upper.lock.json` 仍属于构建工具所在的仓库；应用目录只提供源码、配置、可选资源和开发 `.venv`。`app/tests` 是示例应用自己的测试，替换示例时一并替换即可。
+
 ## 首次使用
 
 应用配置不入库，克隆后先把模板复制成工作副本：
@@ -84,11 +117,11 @@ py_upper/
 cp app/pyproject.toml.example app/pyproject.toml
 ```
 
-`app/pyproject.toml` 被 `.gitignore` 忽略：应用名、依赖、runtime 版本这些跟着你机器走的东西写在里面，不会进 Git；`app/pyproject.toml.example` 是入库模板，跟着仓库走。忘了复制的话，构建工具会直接报错并把上面这条命令打出来。
+`app/pyproject.toml` 被 `.gitignore` 忽略：应用名、依赖、runtime 版本这些跟着你机器走的东西写在里面，不会进 Git；`app/pyproject.toml.example` 是入库模板，跟着仓库走。忘了复制的话，构建工具会直接报错并把上面这条命令打出来。使用 `--app` 指向自己的应用时，只需要该目录里有 `pyproject.toml`，不要求有 `.example`。
 
 ## App 名称
 
-项目名固定为 `py_upper`。最终 App 名称只在**一处**配置：本地配置 `app/pyproject.toml`（不入库，克隆后由 `app/pyproject.toml.example` 复制而来）的 `[tool.py_upper.app]` 节，当前是 `Upper`：
+项目名固定为 `py_upper`。最终 App 名称只在**一处**配置：当前应用配置（默认示例是本地 `app/pyproject.toml`，不入库，克隆后由 `app/pyproject.toml.example` 复制而来；自有应用则是 `--app` 指向的 `pyproject.toml`）的 `[tool.py_upper.app]` 节，当前是 `Upper`：
 
 ```toml
 [tool.py_upper.app]
@@ -100,7 +133,7 @@ identifier = "com.example.pyupper"   # macOS bundle id，与名字无关
 
 ### 改名怎么操作
 
-1. 改上面那一行 `name = "..."`——`app/pyproject.toml`（工作副本）和 `app/pyproject.toml.example`（入库模板）各有一份，两边都改，否则新克隆的人得到的还是旧名；
+1. 改上面那一行 `name = "..."`——默认示例的 `app/pyproject.toml`（工作副本）和 `app/pyproject.toml.example`（入库模板）各有一份，两边都改，否则新克隆的人得到的还是旧名；自有应用只改自己的 `pyproject.toml`；
 2. 重新构建：`python tools/build.py --clean`。
 
 **旧产物不会自动删除**：构建只写当前名字的产物，`dist/` 里从 `MyApp` 时代的 `MyApp.app`（或 `MyApp/`）会留着，双击旧的那个跑的还是旧包。`--clean` 是唯一会替你清理的开关，它把 `build/` 和 `dist/` 整个删掉；不想全量重建就手工删 `dist/` 下的旧 bundle。
@@ -126,6 +159,7 @@ identifier = "com.example.pyupper"   # macOS bundle id，与名字无关
 
 ```bash
 python tools/build.py
+python tools/build.py --app ../myapp --run
 python tools/build.py --run
 python tools/build.py --verify
 python tools/build.py --target linux-x86_64
@@ -256,7 +290,7 @@ app/src/
 
 ## Qt 裁剪
 
-PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取应用 `src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
 
 ```toml
 [tool.py_upper.optimize]
@@ -363,7 +397,7 @@ backend = "auto"          # auto / memory / extract
 compression = "deflated"  # deflated / stored / lzma
 ```
 
-只有应用自己的代码进 egg：`app/src` 下的 Python 模块、本次构建编译出的
+只有应用自己的代码进 egg：应用 `src` 下的 Python 模块、本次构建编译出的
 `.pyd`/`.so`，以及随应用分发的其它非原生文件。第三方 wheel、runtime 和
 `[tool.py_upper.native]` 依赖闭包需要看到的原生输入仍留在 `site-packages`，
 否则闭合检查看不见它们。
@@ -435,7 +469,7 @@ python = "3.13.15"
 开发 Python 可以是 3.8–3.13 的另一个独立解释器。选择顺序：
 
 1. `PY_UPPER_PYTHON` / 兼容旧变量 `PYSTAND_PYTHON`
-2. `app/.venv`
+2. 应用目录的 `.venv`（默认示例是 `app/.venv`）
 3. 当前执行 `tools/build.py` 的 Python
 4. `python` / `python3`
 

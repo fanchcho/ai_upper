@@ -6,7 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from ..config import BUILD, app_name, native_exclude_patterns, optimize_config
+from ..config import BUILD, app_config_label, app_name, native_exclude_patterns, optimize_config
 from ..fs import copy_file_contents, sha256
 from .deps import (
     Dependency, DependencyResolver, _mac_install_name, _system_dependency,
@@ -248,7 +248,7 @@ def bundle_native_dependencies(root: Path, target, env: dict[str, str] | None = 
         raise RuntimeError(
             "Unresolved native dependencies:\n  " + "\n  ".join(lines)
             + "\nOptional native payloads can be dropped with [tool.py_upper.native].exclude "
-              "in app/pyproject.toml."
+              f"in {app_config_label()}."
         )
 
     # Full RPATH replacement remains opt-in. The mandatory relocation below

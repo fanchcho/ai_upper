@@ -491,7 +491,7 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
             raise RuntimeError("[tool.py_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
         requested = used_qt_modules()
         if not requested:
-            print("Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload")
+            print(f"Qt pruning: {APP / 'src'} does not reference a Qt binding, keeping the full Qt payload")
             return None
     elif isinstance(value, list):
         requested = {str(item).strip() for item in value if str(item).strip()}
