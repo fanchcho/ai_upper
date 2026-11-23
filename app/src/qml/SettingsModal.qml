@@ -14,6 +14,14 @@ Item {
     property string modelsView: "list"
     // About 版本号只从 ShellBridge.appVersion() 取，不在 QML 写版本字面量。
     readonly property string appVersion: shellBridge ? shellBridge.appVersion() : ""
+    // 删除服务商确认：原版 `dialog.confirm({ title: name, message, confirmText: delete,
+    // variant: 'danger' })`，确认后删服务商并退回列表（`ModelSettings.tsx:195-207`）。
+    // 放在 root 上，确认卡片才不必依赖 Models 面板当前是否已加载。
+    property bool providerDeleteOpen: false
+    property string providerDeleteName: ""
+    // 确认卡片的按钮/正文文案也取自同一份投影（`mvvm.services.settings_models`），
+    // 卡片挂在 root 上，因此在这里取一份 labels，不在 QML 写字面量。
+    readonly property var modelsLabels: shellBridge ? shellBridge.modelsPaneLabels() : ({})
     signal close()
     signal paneRequested(string name)
 
@@ -167,6 +175,7 @@ Item {
                 height: parent.height
 
                 Loader {
+                    id: modelsLoader
                     anchors.fill: parent
                     sourceComponent: root.pane === "about" ? aboutPane
                                    : root.pane === "models" ? modelsPane
@@ -328,6 +337,7 @@ Item {
             property var detail: ({})
             property var headerRows: []
 
+
             function applyInitialView() {
                 if (root.modelsView === "list") {
                     view = "list"
@@ -356,6 +366,22 @@ Item {
                 selectedId = providerId
                 reloadDetail()
                 view = "detail"
+            }
+
+            function requestDelete() {
+                if (selectedId === "") return
+                root.providerDeleteName = detail.name || ""
+                root.providerDeleteOpen = true
+            }
+
+            function confirmDelete() {
+                if (!shellBridge || selectedId === "") {
+                    root.providerDeleteOpen = false
+                    return
+                }
+                var ok = shellBridge.deleteProvider(selectedId)
+                root.providerDeleteOpen = false
+                if (ok) backToList()
             }
 
             function reloadDetail() {
@@ -455,6 +481,7 @@ Item {
 
                     Rectangle {
                         id: addBtn
+                        objectName: "modelsAddProvider"
                         anchors.right: parent.right
                         width: 28
                         height: 28
@@ -469,6 +496,19 @@ Item {
                             color: addHover.hovered ? Theme.fg : Theme.fgMuted
                         }
                         HoverHandler { id: addHover }
+                        // 原版 `onAddProvider('llm')`：新建自定义服务商后直接进其详情
+                        // （`ModelSettings.tsx:223-230`；`addProvider` 返回新 id）。
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (!shellBridge) return
+                                var newId = shellBridge.addProvider()
+                                if (!newId) return
+                                modPane.refreshRows()
+                                modPane.openProvider(newId)
+                            }
+                        }
                     }
                 }
 
@@ -655,8 +695,34 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 12
 
+                        // `.provider-detail__del`（`app.css:4905`）：官方与自定义服务商都可删，
+                        // 点按弹确认（原版 `onDeleteProvider`，`ModelSettings.tsx:195`）。
+                        Rectangle {
+                            id: detailDelete
+                            objectName: "providerDelete"
+                            visible: modPane.selectedId !== ""
+                            width: 30
+                            height: 30
+                            radius: Theme.radiusSm
+                            color: deleteMouse.containsMouse ? Theme.bgHover : "transparent"
+                            Icon {
+                                anchors.centerIn: parent
+                                name: IconData.trash2
+                                size: 15
+                                color: deleteMouse.containsMouse ? Theme.danger : Theme.fgSubtle
+                            }
+                            MouseArea {
+                                id: deleteMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: modPane.requestDelete()
+                            }
+                        }
+
                         Rectangle {
                             id: detailWrench
+                            objectName: "providerWrench"
                             visible: modPane.detail.advanced === true
                             width: 30
                             height: 30
@@ -1499,6 +1565,120 @@ Item {
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    // ── 删除服务商确认：沿用 `out/qml-shell/dom` 实测的 Modal 卡片规格
+    //    （420×186、radius 12、背板 rgba(0,0,0,.42)、Cancel 70 / Delete 69、按钮 30px）──
+    Item {
+        id: providerDeleteLayer
+        objectName: "providerDeleteLayer"
+        anchors.fill: parent
+        visible: root.providerDeleteOpen
+        z: 40
+
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.backdrop
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.providerDeleteOpen = false
+            }
+        }
+
+        Rectangle {
+            id: providerDeleteCard
+            objectName: "providerDeleteCard"
+            anchors.centerIn: parent
+            width: 420
+            height: 186
+            radius: Theme.radiusLg
+            color: Theme.bgElevated
+            border.width: 1
+            border.color: Theme.border
+
+            MouseArea { anchors.fill: parent; onClicked: {} }
+
+            Text {
+                x: 20
+                y: 20
+                width: parent.width - 40
+                wrapMode: Text.WordWrap
+                elide: Text.ElideRight
+                text: root.providerDeleteName
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 15
+                font.weight: 700
+            }
+            Text {
+                x: 20
+                y: 80
+                width: parent.width - 40
+                wrapMode: Text.WordWrap
+                lineHeight: 21
+                lineHeightMode: Text.FixedHeight
+                text: root.modelsLabels.deleteProviderConfirm || ""
+                color: Theme.fgMuted
+                font.family: Theme.sansFamily
+                font.pixelSize: 13
+            }
+
+            Rectangle {
+                id: providerDeleteCancel
+                objectName: "providerDeleteCancel"
+                x: 253
+                y: 136
+                width: 70
+                height: 30
+                radius: Theme.radiusSm
+                color: providerCancelMouse.containsMouse ? Theme.bgHover : "transparent"
+                Text {
+                    anchors.centerIn: parent
+                    text: root.modelsLabels.cancel || ""
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: providerCancelMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.providerDeleteOpen = false
+                }
+            }
+
+            Rectangle {
+                id: providerDeleteConfirm
+                objectName: "providerDeleteConfirm"
+                x: 330
+                y: 135
+                width: 69
+                height: 30
+                radius: Theme.radiusSm
+                color: providerConfirmMouse.containsMouse ? Qt.lighter(Theme.danger, 1.07) : Theme.danger
+                Text {
+                    anchors.centerIn: parent
+                    text: root.modelsLabels.delete || ""
+                    color: "#ffffff"
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: providerConfirmMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        // 确认删除要落到 Models 面板（它持有 selectedId 与删除后的回列表）。
+                        if (modelsLoader.item) modelsLoader.item.confirmDelete()
+                        else root.providerDeleteOpen = false
                     }
                 }
             }

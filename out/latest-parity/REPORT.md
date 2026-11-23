@@ -444,6 +444,122 @@ $ sed -n '$p' /tmp/test-qml-settings-models.log
 About 版本单一来源、18 页全量重拍、四条硬判据复核均未做——本轮只交付 Providers 标题、
 28×28 加号、1px 描边圆角容器三项；provider 行仍沿用旧 delegate，留待下一段。
 
+#### 4.4.1 复测回填：五要素复核 + 两处缺口补齐
+
+本节回填的是**测量结论**，不是新改结构：Providers 标题 / 28×28 加号 / 描边容器 /
+52px 行五要素 / 详情下钻这五项复核后全部「已存在」，逐项对照见下。
+
+**逐项复核（数据一律走 `app/src/mvvm/services/settings_models.py`）**
+
+| # | 项 | 结论 | 证据（`app/src/qml/SettingsModal.qml` ↔ deva） |
+|---|---|---|---|
+| 1 | 「Providers」分区标题 | 已存在 | `:473`（`modTitle`）15px/700 `Theme.fg` ↔ `.models__title` `app.css:4481-4486` |
+| 2 | 28×28 加号按钮 | 已存在 | `:483`（`addBtn`）28×28 / radius 8 / 1px `Theme.border` ↔ `.models__add-btn` `app.css:4493-4503` |
+| 3 | 描边容器 | 已存在 | `:516`（`modRows`）radius `radiusLg`(12) / 1px / `x:19` ↔ `.models__rows` `app.css:4509-4515` |
+| 4 | 52px 行五要素 | 已存在 | `:559` height 52、`:575` 10×10 点、`:592` 名称、`:601` 副标题、`:617` 告警 14、`:623` chevron 16 ↔ `.provider-row` `app.css:4516-4582` |
+| 5 | 行下钻详情 | 已存在 | `:634` `MouseArea → openProvider()`；详情态 `:643`（`detailView`）起 ↔ `renderProviderRow` `ModelSettings.tsx:137-158` |
+
+**两处真实缺口（本轮补齐）**
+
+1. **详情顶栏缺删除按钮**。deva `ModelSettings.tsx:387-393` 的 topbar 顺序是
+   `返回 · spacer · Trash2 · 「启用」 · Switch`，QML 只有 `Wrench + 启用 + Switch`；
+   `shellBridge.deleteProvider()`（`app/src/qml_shell.py:703`）与
+   `remove_provider()`（`settings_models.py:310`）早已入库却无人调用。
+2. **加号按钮只有悬停、没有点击**。`:483` 那块止于 `HoverHandler`，而 deva
+   `ModelSettings.tsx:365` 是 `onClick={() => onAddProvider('llm')}`；
+   `shellBridge.addProvider()`（`qml_shell.py:718`）同样已入库未接线。本轮在 `:506`
+   接上 `shellBridge.addProvider()` 并随后 `openProvider(newId)` 进详情。
+
+补齐值全部取自 deva：删除按钮 30×30 / `radius-sm` / 常态 `--fg-subtle`、hover `--danger`
+（`.icon-btn` `app.css:139-149`、`.provider-detail__del` `app.css:4905-4910`）；确认卡片沿用
+已实测的 Modal 规格（420×186、radius 12、背板 `rgba(0,0,0,.42)`、Cancel 70 / Delete 69 × 30）。
+
+**改前 → 改后实测**
+
+改前（本机复算，与表中原记录同值）：
+
+```
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/before-diff18.txt 2>&1; echo rc=$?
+rc=0
+$ grep 'settings-models' /tmp/before-diff18.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 ddee23d6140c34d38e4b3b07d6b524b7  132243  103282  325672  31.03% max=237 same=False
+```
+
+改后：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/sm-after.png /tmp/models-after-home config.json > /tmp/sm-after.log 2>&1; echo rc=$?
+rc=0
+$ cp /tmp/sm-after.png out/latest-parity/qml/settings-models.png
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/after-diff18.txt 2>&1; echo rc=$?
+rc=0
+$ grep 'settings-models' /tmp/after-diff18.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 487b0f063cec7387802856ebeacdf9d4  132243  104913  323783  30.85% max=237 same=False
+```
+
+**31.03% → 30.85%**（−0.18pp，−1889 px）。但必须先说清这 0.18pp 的来路，否则数字会被误读：
+
+- 本轮改前/改后两张列表页截图 **md5 完全相同**
+  （`487b0f063cec7387802856ebeacdf9d4`，`104913` B，两次独立拍摄亦逐像素一致），
+  即列表态**一个像素都没变**——删除按钮与加号点击都只存在于详情态/交互路径。
+- 原记录 `31.03%` 对应的是仓库里那张 `ddee23d6…png`；本机用同一 commit 的 QML 重拍得到
+  `487b0f06…`，两者差 `1889 px`。差异来自重拍本身（同为 offscreen + 软件光栅的栅格化产物），
+  而非本轮代码改动。
+- 因此本轮对**该页像素指标的真实贡献是 0**；`30.85%` 是「当前代码 + 当前光栅环境」的实测值。
+
+**31.03% 里到底差在哪（区域拆解，改后图）**
+
+```
+$ python3 -I - <<'PY'
+# 逐像素比对 deva 基线 vs out/latest-parity/qml/settings-models.png
+# modal bbox = (281,131)-(999,690)，即弹窗卡片本体
+PY
+modal             diff=   3875  area= 401362  pct= 0.97%
+backdrop_left     diff= 220943  area= 230420  pct= 95.89%
+backdrop_right    diff=  30570  area= 230420  pct= 13.27%
+backdrop_top      diff=  31129  area=  94058  pct= 33.10%
+backdrop_bottom   diff=  37266  area=  93340  pct= 39.93%
+```
+
+弹窗内 3875 px 仅占整页差异的 **1.2%**；其余 98.8% 全部在弹窗外——deva 那张基线是
+「聊天页 + 盖一层设置弹窗」，背后有正文、附件卡、composer、模型选择器，而 QML 的同名页
+背后是空聊天页。这不是 Models 面板的对齐问题，而是 `settings-models` 这个页面场景本身
+两侧背景不同；单页指标无法反映弹窗质量。弹窗内残留的 3875 px 经连通域聚类后落在
+文字栅格（`Providers` 标题 1px 横向偏移、`Anthropic`/`1 models` 亚像素抗锯齿）与
+弹窗内 4 个图标字形上，无结构性差异。
+
+**建议**：后续比较设置类页面应改用「弹窗区域裁切后比对」或「背景遮罩后比对」，
+否则该指标恒在 30% 附近且几乎不随弹窗改动变化。本次未改指标定义（避免动到其它 17 页
+的历史数字），只把拆解记录在此。
+
+**受影响测试（本轮）**
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-shell .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/test-qml-shell.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-shell.log
+47 passed in 0.48s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-models-test-settings .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/test-qml-settings-models.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-settings-models.log
+44 passed in 0.17s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-prov-test4 .venv/bin/python -m pytest app/tests/test_qml_settings_provider.py -q > /tmp/tp4.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/tp4.log
+3 passed in 8.94s
+```
+
+新增 `app/tests/test_qml_settings_provider.py`（3 例）：删除按钮几何 30×30 → 点开确认卡片
+（420×186 / 70×30 / 69×30）→ 点「删除」后服务商与其密钥一起消失并退回列表；Cancel 与
+背板点击只关卡片不删；加号 28×28 点击后新建 custom 对话服务商并直接进其详情。
+
+**全量套件仍有既有 segfault（非本轮引入）**：`pytest app/tests -q` 在
+`test_qml_context_menu.py:162 _menu_items` 处崩溃 `rc=139`。把本轮对
+`SettingsModal.qml` 的改动 stash 掉后重跑，仍在同一行崩溃（`rc=139`），
+故为环境中既有的 Qt 交互测试问题，与本次改动无关；本轮涉及的三套测试单跑全绿。
+
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
 **交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的
