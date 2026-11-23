@@ -1,0 +1,6 @@
+modPane QQuickItem width=550.0
+modTitle QQuickItem width=80.796875
+modRows QQuickItem width=510.0
+modList QQuickItem width=508.0
+detailView QQuickItem width=510.0
+advancedView QQuickItem width=510.0

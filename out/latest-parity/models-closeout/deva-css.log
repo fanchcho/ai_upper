@@ -1,0 +1,119 @@
+  display: block;
+  min-height: 0;
+}
+
+/* —— 列表态 —— */
+.models__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.models__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+}
+/* 右上角「添加模型」——图标按钮 + 浮动菜单锚点（对话/决策二选一） */
+.models__addwrap {
+  position: relative;
+  margin-left: auto;
+  display: inline-flex;
+}
+.models__add-btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.models__add-btn:hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+/* 扁平行列表：外框 + 分隔线（对齐扩展页 .cf-rows 观感） */
+.models__rows {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.provider-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.provider-row + .provider-row {
+  border-top: 1px solid var(--border);
+}
+.provider-row:hover {
+  background: var(--bg-hover);
+}
+/* 启用状态点：默认灰（未启用），启用后转绿 */
+.provider-row__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fg-subtle);
+}
+.provider-row__dot.is-on {
+  background: var(--success);
+}
+/* 名称行（名 + 类型徽标）+ 模型数副标题两行堆叠 */
+.provider-row__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.provider-row__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  min-width: 0;
+}
+.provider-row__name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.provider-row__sub {
+  font-size: 11.5px;
+  color: var(--fg-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.provider-row__aside {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg-subtle);
+}
+.provider-row__warn {
+  color: var(--warning, #d68a00);
+}
+
+/* —— 详情态 —— 内边距/滚动交给父容器（.cf-pane / .settings2__content），避免「面板套面板」 */
+.provider-detail {
+  min-width: 0;
+  user-select: text;

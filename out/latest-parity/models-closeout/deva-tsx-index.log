@@ -1,0 +1,20 @@
+13:  AlertTriangle,
+14:  ChevronLeft,
+15:  ChevronRight,
+17:  Wrench
+134:  const renderProviderRow = (p: (typeof providers)[number]): React.JSX.Element => {
+137:      <button key={p.id} className="provider-row" onClick={() => openProvider(p.id)}>
+139:          className={`provider-row__dot${p.enabled ? ' is-on' : ''}`}
+142:        <span className="provider-row__main">
+143:          <span className="provider-row__name">
+144:            <span className="provider-row__name-text">{p.name}</span>
+148:          <span className="provider-row__sub">
+154:        <span className="provider-row__aside">
+155:          {p.enabled && !hasKey(p.id) && <AlertTriangle className="provider-row__warn" size={14} />}
+156:          <ChevronRight size={16} />
+357:          <div className="models__head">
+375:              visibleProviders.map(renderProviderRow)
+382:          <div className="provider-detail__topbar">
+384:              <ChevronLeft size={16} />
+444:              <AlertTriangle size={13} />
+465:                          <Wrench size={13} />

@@ -1,0 +1,6 @@
+2d51982002c45d3289e284d038546b3a710e0b682be271a2cc120ce686641e31  app/src/qml/SettingsModal.qml
+665ed31870cb1b18b4f25e6777743d17a27966395fe6be3f4018a6b764d2859a  app/src/mvvm/services/settings_models.py
+f6c4aa450536a336347614024c261a7eddb15fd1baf8fc1b6eefca7c840835a5  /home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/app.css
+d847c5defd578f10dd4bc82c4b67f645c652a59e08c3114d99406261acb0da50  /home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/tokens.css
+4c40bdaed1454dc5f4fc3e4cfbc56bb0ef7d525b8e1699bc498de915206d8035  /home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css
+bb4e9f5afaea66fad945d3189b8c010cb7f583de106557f22e92d6b57c0b4820  /home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/features/settings/ModelSettings.tsx

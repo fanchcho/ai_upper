@@ -1,0 +1,31 @@
+              决策模型无 LLM 预置，故不显示。 */}
+          {selectedProvider.kind === 'custom' && selectedProvider.purpose !== 'decision' && (
+            <div className="field">
+              <label className="field__label">{t('models.selectProvider')}</label>
+              <div className="field__control">
+                <Select
+                  aria-label={t('models.selectProvider')}
+                  value={presetSel}
+                  onChange={(id) => void onPickPreset(id)}
+                  items={[
+                    {
+                      value: '',
+                      label: t('models.presetCustomOption'),
+                      lead: (
+                        <span className="select-icon">
+                          <Wrench size={13} />
+                        </span>
+                      )
+                    },
+                    { separator: true },
+                    ...providerPresets.map((p) => ({
+                      value: p.id,
+                      label: p.name,
+                      lead: <span className="select-dot" style={{ background: p.accent }} />
+                    }))
+                  ]}
+                />
+              </div>
+            </div>
+          )}
+

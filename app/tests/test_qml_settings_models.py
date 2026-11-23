@@ -61,6 +61,102 @@ def _ids(section):
     return [p["id"] for p in provider_entries(section)]
 
 
+@pytest.fixture(scope="module")
+def models_qapp():
+    # Reuse the provider interaction harness and its offscreen Qt setup.
+    import test_qml_settings_provider  # noqa: F401
+    from PySide6.QtGui import QGuiApplication
+
+    application = QGuiApplication.instance() or QGuiApplication([])
+    yield application
+
+
+@pytest.mark.parametrize("enabled,keyed,warn", [
+    (True, True, False), (True, False, True), (False, False, False),
+])
+def test_models_panel_structure_and_drilldown(
+    models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+):
+    """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+
+    Use QML contexts to inspect the existing component IDs without adding a
+    second view model or changing production objects just for test selectors.
+    """
+    from PySide6.QtQml import QQmlEngine, QQmlProperty
+    from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+
+    window, bridge, settings, vault, ticker, engine = _build_window(
+        tmp_path, monkeypatch, page="chat"
+    )
+    try:
+        section = {"providers": [{
+            "id": "p1", "kind": "custom", "purpose": "llm",
+            "name": "Projected provider", "enabled": enabled,
+            "models": [{"id": "first"}, {"id": "second"}],
+        }]}
+        settings.set_config({"models": section})
+        if not keyed:
+            vault.delete_secret("p1")
+        window.setProperty("page", "settings-models")
+        _pump(models_qapp, 0.6)
+        add = _find_item(window.contentItem(), "modelsAddProvider")
+        context = QQmlEngine.contextForObject(add)
+        title = context.contextProperty("modTitle")
+        head = title.parentItem()
+        rows = context.contextProperty("modRows")
+        listing = context.contextProperty("modList")
+        pane = context.contextProperty("modPane")
+        assert title.property("text") == "Providers"
+        assert title.property("color").name() == "#1f1f24"
+        assert title.property("font").pixelSize() == 15
+        assert (head.x(), head.y(), head.height()) == (20, 16, 28)
+        assert (add.width(), add.height(), add.property("radius")) == (28, 28, 8)
+        assert QQmlProperty.read(add, "border.width") == 1
+        assert QQmlProperty.read(add, "border.color").name() == "#e6e6ea"
+        assert (rows.x(), rows.y(), rows.width(), rows.height()) == (20, 60, 510, 54)
+        assert rows.property("radius") == 12
+        assert QQmlProperty.read(rows, "border.width") == 1
+        assert QQmlProperty.read(rows, "border.color").name() == "#e6e6ea"
+        assert (listing.x(), listing.y(), listing.width(), listing.height()) == (1, 1, 508, 52)
+        row = next(child for child in listing.property("contentItem").childItems()
+                   if child.property("modelData") is not None)
+        assert row.height() == 52
+        projected = provider_rows(section, lambda _id: keyed, "en")
+        assert bridge.modelRows() == projected
+        assert row.property("modelData") == projected[0]
+        row_context = QQmlEngine.contextForObject(row)
+        main = row_context.contextProperty("providerMain")
+        aside = row_context.contextProperty("providerAside")
+        name, subtitle = main.childItems()
+        assert (name.property("text"), subtitle.property("text")) == ("Projected provider", "2 models")
+        assert main.x() == 36  # 14px padding + 10px dot + 12px gap
+        dot = next(child for child in row.childItems() if child.width() == 10 and child.height() == 10)
+        assert (dot.x(), dot.y()) == (14, 21)
+        assert dot.property("color").name() == ("#2f9e44" if enabled else "#8a8a94")
+        warning, chevron = aside.childItems()
+        assert warning.property("visible") is warn
+        assert (warning.property("size"), chevron.property("size")) == (14, 16)
+        assert warning.property("color").name() == "#d9860b"
+        assert chevron.property("visible") is True
+        assert row.width() - aside.x() - aside.width() == 14
+        _click(window, row)
+        _pump(models_qapp, 0.2)
+        assert pane.property("view") == "detail"
+        assert pane.property("selectedId") == "p1"
+        assert pane.property("detail") == bridge.providerDetail("p1")
+        wrench = _find_item(window.contentItem(), "providerWrench")
+        assert wrench.property("visible") is True
+        _click(window, wrench)
+        _pump(models_qapp, 0.2)
+        assert pane.property("view") == "advanced"
+        assert context.contextProperty("advancedView").property("visible") is True
+        assert settings.models_section() == section, "Navigation must not mutate the provider data"
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
 # ── visible_providers：列表只列「在用」的 ───────────────────────────────────
 def test_visible_providers_keeps_enabled_keyed_and_custom_only():
     ids = [p["id"] for p in visible_providers(MODELS, has_key)]

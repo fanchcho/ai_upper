@@ -1,0 +1,19 @@
+.cf-pane {
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5);
+}
+.cf-pane__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+.cf-pane__desc {
+  margin: 6px 0 var(--space-4);
+  font-size: 12px;
+  color: var(--fg-subtle);
+}
+
+/* 设置项：语言/主题/发送键 */
+.cf-set {
+  display: flex;

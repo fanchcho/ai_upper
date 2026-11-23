@@ -1,0 +1,71 @@
+    clearKeyTimer()
+    await doSaveKey(providerId, keyDraft)
+  }
+
+  return (
+    <div className="models">
+      {view === 'model' && selectedProvider && editingModel ? (
+        <ModelDetail
+          key={`${selectedProvider.id}:${editingModel.id}`}
+          provider={selectedProvider}
+          model={editingModel}
+          onBack={() => setView('detail')}
+          onUpdate={(patch) => updateModel(selectedProvider.id, editingModel.id, patch)}
+        />
+      ) : view === 'list' || !selectedProvider ? (
+        /* 列表态：扁平行列表，与通用/扩展页同构；右上角图标按钮新增服务商 */
+        <>
+          <div className="models__head">
+            <h2 className="models__title">{t('models.providers')}</h2>
+            {/* 决策模型隐藏期间「新增」只剩一种结果，故去掉浮动菜单，点按直接新建对话模型 */}
+            <div className="models__addwrap">
+              <button
+                className="models__add-btn"
+                title={t('models.addProvider')}
+                aria-label={t('models.addProvider')}
+                onClick={() => onAddProvider('llm')}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+          </div>
+          <div className="models__rows">
+            {visibleProviders.length === 0 ? (
+              <div className="model-list__empty">{t('models.noProvidersYet')}</div>
+            ) : (
+              visibleProviders.map(renderProviderRow)
+            )}
+          </div>
+        </>
+      ) : (
+        /* 详情态：编辑单个服务商，顶部工具条「返回 + 删除/启用」同一行 */
+        <section className="provider-detail" key={selectedProvider.id}>
+          <div className="provider-detail__topbar">
+            <button className="provider-detail__back" onClick={() => setView('list')}>
+              <ChevronLeft size={16} />
+              {t('common.back')}
+            </button>
+            <div className="provider-detail__spacer" />
+            {/* 官方服务商同样可删（恢复为初始状态，见 store/models.tsx removeProvider） */}
+            <button
+              className="icon-btn provider-detail__del"
+              title={t('models.deleteProvider')}
+              onClick={() => void onDeleteProvider()}
+            >
+              <Trash2 size={15} />
+            </button>
+            <span className="provider-detail__enable">{t('models.enableProvider')}</span>
+            <Switch
+              checked={selectedProvider.enabled}
+              onChange={(v) => updateProvider(selectedProvider.id, { enabled: v })}
+            />
+          </div>
+          <header className="provider-detail__head">
+            {selectedProvider.kind === 'custom' ? (
+              // 名称就地可改：常驻铅笔图标提示可编辑（点名称或铅笔都进入编辑），悬停显边框。
+              <span className="provider-detail__name-edit">
+                <input
+                  ref={nameInputRef}
+                  className="provider-detail__name-input"
+                  size={1}
+                  value={nameDraft}

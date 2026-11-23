@@ -717,6 +717,77 @@ $ python3 -I -c "import sys;sys.path.insert(0,'scripts/parity');from page_diff18
 
 **30.85% → 28.04%（当轮历史值；D 轮最终 28.63% / 300497 px）**（−2.81pp，−29,460 px；before 323,783 px，after 294,323 px）。
 
+#### 4.4.5 Models 开发收口：以当前实现和运行态重新验收（2026-11-23）
+
+**Models 面板：改前 31.25% → 改后 28.629668%（当前单页实测）。**
+
+31.25%（328000px）是本节保留的历史基线，不是本次开工图。本轮独立重拍的改前和改后均为
+300497px / 28.629668445%，MD5、字节数完全相同，本轮视觉降幅为0；不把既有提交的收益重复计入。
+
+实际起点：`1d1afb809e28394c427070d6dd587911aa5415fe`，本地 develop 与远端相同，
+`git status --porcelain --untracked-files=no` 无输出，三个命令均rc0。只读 deva HEAD 为
+`065657976c611a462d9844eed3ebab9575233af9`。没有沿用旧的“未做”结论，也没有重写已存在的实现。
+
+**源码和真实 QML 实例逐项验证**（来源为 deva `apps/desktop/src/renderer/src/` 下文件）：
+
+| 要求 | 运行态验收 | 只读源码依据 |
+|---|---|---|
+| Providers 分区标题 | 实际 text=Providers；15px，fg=#1f1f24；标题头 x20/y16/h28 | `styles/app.css:4475-4486`；`styles/tokens.css:49` |
+| 28×28 加号 | 28×28，radius8，border1/#e6e6ea；保留现有创建并下钻接线 | `app.css:4493-4503`；`ModelSettings.tsx:357-369` |
+| 描边容器 | x20/y60，510×54，radius12，border1/#e6e6ea；内部列表x1/y1、508×52 | `app.css:4509-4515`；`redesign/redesign.css:3230-3234`（pane padding16/20） |
+| 52px provider行 | h52；状态点10×10、左14；名称和副标题左36、gap2；告警14、chevron16、右14 | `app.css:4516-4582`；`ModelSettings.tsx:134-158` |
+| 行下钻与Wrench入口 | 真实鼠标点击行，view=list→detail，selectedId=p1；点击已有Wrench，view=detail→advanced；配置不变 | `ModelSettings.tsx:137` 的openProvider；QML现有openProvider/openAdvanced链路 |
+
+五项均已在起点产品代码中存在，**本轮不重复修改 SettingsModal.qml、settings_models.py 或 Theme.qml**。
+新增 `test_models_panel_structure_and_drilldown` 三个参数分支：启用且有密钥、启用无密钥、停用无密钥；
+分别验证点色、告警显示/隐藏、投影名称/模型数，以及真实指针下钻。预期行数据来自已有
+`mvvm.services.settings_models.provider_rows`，桥接 `modelRows/providerDetail` 与实际QML数据一致，没有另造数据源。
+使用已有QML context/ID检查几何，没有为测试新增产品对象或改尺寸。既有44个数据投影测试逐字保留。
+
+Wrench 是QML已有的30×30高级入口，本次保留并验证其可达性；当前deva `ModelSettings.tsx:465`
+的Wrench实际位于custom preset选项（13px），顶栏为返回/删除/启用。此次列表结构与现有详情入口验收
+**不代表整份provider详情页面已与当前deva像素一致**，未为旧入口重排整页详情。
+
+**单页截图和像素比对**（没有重拍其他页面、没有读取PNG进上下文、没有修改参考图）：
+
+```bash
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh settings-models .tmp/models-closeout/before.png /tmp/ai-upper-residual-20261123 config.json > .tmp/models-closeout/shot-before.log 2>&1; echo rc=$?
+# rc=0；before.png复制到models-closeout/settings-models-before.png留证
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh settings-models out/latest-parity/models-closeout/settings-models-after.png /tmp/ai-upper-residual-20261123 config.json > .tmp/models-closeout/shot-after.log 2>&1; echo rc=$?
+# rc=0
+python3 out/latest-parity/models-closeout/measure.py > .tmp/models-closeout/measure.log 2>&1; echo rc=$?
+# rc=0
+```
+
+比对仅调用仓库的 `page_diff18.load/diff`，参考图固定为 `out/latest-parity/deva/settings-models-deva.png`。
+原始输出：
+
+```text
+deva bytes=132243 md5=7f7a6dd835823f50475db7a3c9e727c1
+before diff=300497 percent=28.629668445% bytes=136487 md5=dc5ee213bfe4b8d7ef1641081cd09f2f
+after diff=300497 percent=28.629668445% bytes=136487 md5=dc5ee213bfe4b8d7ef1641081cd09f2f
+```
+
+**指定测试**：改前同两组共93 passed in 16.99s、rc0；增加3个运行态分支后，分别运行：
+
+```bash
+AI_UPPER_HOME=/tmp/ai-upper-models-closeout-shell .venv/bin/python -m pytest app/tests/test_qml_shell.py -q -ra > .tmp/models-closeout/test-shell.log 2>&1; echo rc=$?
+# rc=0
+# 49 passed in 16.78s
+AI_UPPER_HOME=/tmp/ai-upper-models-closeout-settings .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q -ra > .tmp/models-closeout/test-models.log 2>&1; echo rc=$?
+# rc=0
+# 47 passed in 14.13s
+```
+
+两组均0 skipped / 0 failed / 0 error，未删除、放宽或过滤既有测试。新测试编写过程曾因错误的
+颜色期望值及把PySide6已转换的dict再次toVariant而失败；均修正新测试后通过，原始失败日志保留，
+不冒充产品缺陷修复。本次未再跑完整app/tests，全量结果仍引用上一轮的1352 passed/5 skipped/rc0。
+
+证据：[测量JSON](models-closeout/metrics.json)、[单页比对脚本](models-closeout/measure.py)、
+[Shell测试日志](models-closeout/test-shell.log)、[Models测试日志](models-closeout/test-models.log)、
+[源码SHA-256](models-closeout/source-hashes.log)。本项独立提交；push后原始远端行写入本地
+`models-closeout/publish-final.txt`并在交付文字中给出，避免报告自引用commit hash。
+
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
 **交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的

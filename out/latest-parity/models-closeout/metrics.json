@@ -1,0 +1,21 @@
+{
+  "reference": {
+    "path": "out/latest-parity/deva/settings-models-deva.png",
+    "md5": "7f7a6dd835823f50475db7a3c9e727c1",
+    "bytes": 132243
+  },
+  "before": {
+    "diff_pixels": 300497,
+    "percent": 28.62966844512195,
+    "max_channel_delta": 216,
+    "bytes": 136487,
+    "md5": "dc5ee213bfe4b8d7ef1641081cd09f2f"
+  },
+  "after": {
+    "diff_pixels": 300497,
+    "percent": 28.62966844512195,
+    "max_channel_delta": 216,
+    "bytes": 136487,
+    "md5": "dc5ee213bfe4b8d7ef1641081cd09f2f"
+  }
+}

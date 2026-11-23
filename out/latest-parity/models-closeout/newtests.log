@@ -1,0 +1,157 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_models_panel_structure_and_drilldown[True-True-False] __________
+
+models_qapp = <PySide6.QtGui.QGuiApplication(0x2dbe2320) at 0xffffa389d880>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-62/test_models_panel_structure_an0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffa31ab5c0>
+enabled = True, keyed = True, warn = False
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+>           assert title.property("color").name() == "#202024"
+E           AssertionError: assert '#1f1f24' == '#202024'
+E             
+E             - #202024
+E             + #1f1f24
+
+app/tests/test_qml_settings_models.py:110: AssertionError
+__________ test_models_panel_structure_and_drilldown[True-False-True] __________
+
+models_qapp = <PySide6.QtGui.QGuiApplication(0x2dbe2320) at 0xffffa389d880>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-62/test_models_panel_structure_an1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffa4049220>
+enabled = True, keyed = False, warn = True
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+>           assert title.property("color").name() == "#202024"
+E           AssertionError: assert '#1f1f24' == '#202024'
+E             
+E             - #202024
+E             + #1f1f24
+
+app/tests/test_qml_settings_models.py:110: AssertionError
+_________ test_models_panel_structure_and_drilldown[False-False-False] _________
+
+models_qapp = <PySide6.QtGui.QGuiApplication(0x2dbe2320) at 0xffffa389d880>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-62/test_models_panel_structure_an2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff9acc3650>
+enabled = False, keyed = False, warn = False
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+>           assert title.property("color").name() == "#202024"
+E           AssertionError: assert '#1f1f24' == '#202024'
+E             
+E             - #202024
+E             + #1f1f24
+
+app/tests/test_qml_settings_models.py:110: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[True-True-False]
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[True-False-True]
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[False-False-False]
+3 failed, 44 deselected in 13.19s

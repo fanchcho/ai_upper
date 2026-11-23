@@ -112,3 +112,11 @@ c1fdbf1c3e407c5fc42ce3871ecbb50140129f1a	refs/heads/develop
 ```
 
 顺序依次为E4、E1/E3、E5、E5坐标补充、long-mid、模态。原始push/ls-remote日志在 [receipts](residual-20261123/commits.json) 对应映射目录。总报告随后独立提交推送；最终HEAD和远端原始行由本地交付文件 `out/residual-20261123/publish-final.txt` 记录，不把该回执纳入它自身证明的commit，避免自引用hash。
+
+## 追加项：Models 面板结构收口（2026-11-23）
+
+**Models 面板：改前 31.25% → 改后 28.629668%。** 31.25%是历史值；本轮同环境重拍前后均为28.629668445%，没有新增视觉降幅。
+
+五项结构在当前HEAD已经实现，本轮新增三种provider状态与真实点击下钻/Wrench回归验证，保留全部既有产品实现与44个投影测试。指定测试：Shell 49 passed/rc0，Models 47 passed/rc0，均0 skipped/failed/error；未再跑全量。
+
+只重拍settings-models，数据仍来自settings_models.py投影。详情与完整源码/命令/像素及测试证据见 [latest-parity报告 §4.4.5](latest-parity/REPORT.md#445-models-开发收口以当前实现和运行态重新验收2026-11-23)。其他原五项未闭环状态不因此关闭。
