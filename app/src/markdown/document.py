@@ -379,10 +379,20 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
                 # 干净的空块：不先断块的话，片段首块会和上一分块的末块合成一块。
                 # 判据必须是「第几块」而不是光标位置——上一分块的回填会把光标留在
                 # 该分块首块上，位置判据从第二块起就失效，每组静默少一块。
-                cursor.movePosition(QTextCursor.MoveOperation.End)
-                cursor.insertBlock(QTextBlockFormat())
-            start = cursor.position()
+                #
+                # 例外：表格/代码块现在是直接接在上一段后的块级对象，整篇渲染
+                # 不会在它们前面留空块。分块首块正好是这两种结构时若还插分隔块，
+                # 每道接缝都会多一个 21px 空块（turns=30/group=5 实测多 12 块）。
+                # 引用/分隔线仍要分隔块（它们前面本来就有一个继承格式的空块）。
+                first_kind = blocks[index].get("type") if index < len(blocks) else ""
+                if first_kind not in ("table", "code"):
+                    cursor.movePosition(QTextCursor.MoveOperation.End)
+                    cursor.insertBlock(QTextBlockFormat())
+            # 无论是否插分隔块，都必须先移到文末再记片段起点：跳过分隔块时
+            # 光标还停在上一个分块的首块上，拿那个位置回填会把上一块的格式
+            # 改成 scratch 首块（表格场景下是第一个单元格的块格式）。
             cursor.movePosition(QTextCursor.MoveOperation.End)
+            start = cursor.position()
             cursor.insertFragment(QtGui.QTextDocumentFragment(scratch))
             source_first = scratch.begin().blockFormat()
             cursor.setPosition(start)
@@ -467,6 +477,7 @@ class _Renderer:
         self._cell_formats = {}
         self._cell_block_formats = {}
         self._cell_char_formats = {}
+        self._row_height_chars = {}
 
     # ── 基础 ──────────────────────────────────────────────────────────────
     def color(self, value: str) -> Any:
@@ -716,8 +727,9 @@ class _Renderer:
         if not header:
             return
         align = list(block.get("align") or ["left"] * len(header))
-        if self._has_content:
-            cursor.insertBlock()
+        # 表格本身是块级对象；``insertTable`` 直接接在上一段末尾即可。这里若先
+        # ``insertBlock()`` 会多插一个空块（Qt 实测：空块 14px + 上下间距，正文
+        # 整体下移 21px），与浏览器 ``table { margin: 0 0 12px }`` 的段距不符。
         table_fmt = QTextTableFormat()
         # 表格级 1px 边框必须设：QML 的 `TextEdit`（QQuickTextEdit 的文本节点）**不画**
         # 单元格级边框，只画表格级边框（实测 out/qml-shell/probe 见 docs 审计 §正文）。
@@ -728,17 +740,76 @@ class _Renderer:
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        table_fmt.setMargin(12.0)
+        # CSS 的 ``.md table`` 只有下边距 12px，左右不缩进；上下留 12px 由
+        # 相邻段落的 margin-bottom 已经提供，表格自身只需要下边距。QML 的
+        # QTextTableFormat 没有单边 margin 的“仅下边”语义，因此左右归零、
+        # 上边距保留为 0，下边距用 QTextBlockFormat 的段后距叠加在表格后的
+        # 第一个块上（见 ``_table_row`` 的末尾块）。
+        table_fmt.setMargin(0.0)
+        table_fmt.setTopMargin(0.0)
+        table_fmt.setBottomMargin(0.0)
+        table_fmt.setLeftMargin(0.0)
+        table_fmt.setRightMargin(0.0)
         table_fmt.setAlignment(ALIGN_LEFT)
         # 一次插满所有行。``insertTable(1, n)`` + 逐行 ``appendRows(1)`` 是每行一次
         # 结构性插入，每次都要按「插入时文档规模」重排；400 轮文档整篇渲染实测
         # 5101.1 → 2773.2 ms（交替 A/B 七次中位数，out/render-opt2/）。
         # 形状不变：``parser`` 已把每行补齐到表头列数，所以直接按行数一次建表。
         table = cursor.insertTable(1 + len(rows), len(header), table_fmt)
+        # 列宽按 CSS ``table-layout: auto`` 的 max-content 语义计算：每列取
+        # 该列所有单元格（表头+正文）里最宽的内容，加上左右各 10px 的
+        # 文本缩进和 1px 边框。这样 ``README.md``/``package.json`` 这类行内
+        # 代码芯片不会被压成 87px（deva DOM 实测第一列 115.64px）。
+        widths = self._table_column_widths(header, rows, align)
+        if widths:
+            constraints = [QTextLength(QTextLength.Type.FixedLength, width)
+                           for width in widths]
+            table_fmt.setColumnWidthConstraints(constraints)
+            table_fmt.setWidth(QTextLength(QTextLength.Type.FixedLength, sum(widths)))
+            table.setFormat(table_fmt)
         self._table_row(table, 0, header, align, header_row=True)
         for row_index, row in enumerate(rows, start=1):
             self._table_row(table, row_index, row, align, header_row=False)
         self._after_frame(cursor, table.lastPosition() + 1)
+
+    def _table_column_widths(self, header: list, rows: list, align: list[str]) -> list[float]:
+        """按 max-content 语义算列宽（CSS ``.md table { width: max-content }``）。
+
+        ``QTextDocument.idealWidth()`` 给出内容宽；列宽再加 CSS 的左右
+        ``padding: 10px`` 对应的文本缩进（20px）与 1px 边框（QText 的列宽
+        包含边框）。
+        结果封顶到 ``content_width``，超过时按比例压缩，避免表格撑破正文列。
+        """
+        if not header:
+            return []
+        columns = len(header)
+        widths = [0.0] * columns
+        for row_index, cells in [(0, header)] + list(enumerate(rows, start=1)):
+            char_fmt = QTextCharFormat()
+            char_fmt.setFont(self.font(13.0 * self.style.scale,
+                                       bold=(row_index == 0)))
+            char_fmt.setForeground(self.color(self.palette.fg))
+            for column in range(min(columns, len(cells))):
+                measured = self._measure_cell_width(cells[column], char_fmt)
+                widths[column] = max(widths[column], measured + 20.0 * self.style.scale + 2.0)
+        total = sum(widths)
+        if total > self.content_width and total > 0:
+            factor = self.content_width / total
+            widths = [width * factor for width in widths]
+        return widths
+
+    def _measure_cell_width(self, nodes: list, char_fmt: Any) -> float:
+        """测量一个单元格的 max-content 宽度（含左右块边距）。"""
+        probe = QTextDocument()
+        probe.setDocumentMargin(0.0)
+        probe.setTextWidth(self.content_width)
+        cursor = QTextCursor(probe)
+        block_fmt = QTextBlockFormat()
+        block_fmt.setLeftMargin(0.0)
+        block_fmt.setRightMargin(0.0)
+        cursor.setBlockFormat(block_fmt)
+        self._inline(cursor, nodes or [], char_fmt)
+        return float(probe.idealWidth())
 
     def _table_row(self, table: Any, row_index: int, cells: list, align: list[str], *,
                    header_row: bool) -> None:
@@ -759,10 +830,15 @@ class _Renderer:
         cell_fmt = self._cell_formats.get(cell_key)
         if cell_fmt is None:
             cell_fmt = QTextTableCellFormat()
-            cell_fmt.setLeftPadding(10.0 * self.style.scale)
-            cell_fmt.setRightPadding(10.0 * self.style.scale)
-            cell_fmt.setTopPadding(6.0 * self.style.scale)
-            cell_fmt.setBottomPadding(6.0 * self.style.scale)
+            # CSS 的 10×6 padding：单元格内边距全部归零，因为 Qt 的
+            # 单元格/块背景都只画在内容矩形上，任何 cell padding 都会留下
+            # 白边。左右 10px 改由块格式的 textIndent 实现（见下），上下
+            # 6px 与行高合并成固定 34.45px，使块背景能铺满整格（deva DOM:
+            # th bg rgb(247,247,248)，even td rgba(0,0,0,0.043)）。
+            cell_fmt.setLeftPadding(0.0)
+            cell_fmt.setRightPadding(0.0)
+            cell_fmt.setTopPadding(0.0)
+            cell_fmt.setBottomPadding(0.0)
             if header_row:
                 cell_fmt.setBackground(self.color(self.palette.bg_panel))
             elif row_index % 2 == 0:
@@ -793,14 +869,42 @@ class _Renderer:
             cell.setFormat(cell_fmt)
             cell_cursor = cell.firstCursorPosition()
             alignment = align[column] if column < len(align) else "left"
-            block_fmt = self._cell_block_formats.get(alignment)
+            background = None
+            if header_row:
+                background = self.color(self.palette.bg_panel)
+            elif row_index % 2 == 0:
+                background = self.color(self.palette.bg_hover)
+            block_key = (alignment, bool(header_row), row_index % 2 == 0)
+            block_fmt = self._cell_block_formats.get(block_key)
             if block_fmt is None:
                 block_fmt = QTextBlockFormat()
                 block_fmt.setAlignment(_alignment(alignment))
+                # CSS: th/td padding 6px + line-height 21.45px + 1px 边框
+                # = 34.45px。Qt 的 ProportionalHeight 对单行块只影响行距，
+                # 不会撑满 cell 高度；用 FixedHeight 才能把背景铺满一行。
                 block_fmt.setLineHeight(
-                    line_height, QTextBlockFormat.LineHeightTypes.ProportionalHeight.value)
-                self._cell_block_formats[alignment] = block_fmt
+                    (13.0 * 1.65 + 12.0 + 1.0) * self.style.scale,
+                    QTextBlockFormat.LineHeightTypes.FixedHeight.value)
+                block_fmt.setLeftMargin(0.0)
+                block_fmt.setRightMargin(0.0)
+                block_fmt.setTopMargin(0.0)
+                block_fmt.setBottomMargin(0.0)
+                block_fmt.setTextIndent(10.0 * self.style.scale)
+                if background is not None:
+                    block_fmt.setBackground(background)
+                self._cell_block_formats[block_key] = block_fmt
             cell_cursor.setBlockFormat(block_fmt)
+            # Qt 在表格单元格里会忽略 QTextBlockFormat 的固定行高，背景只
+            # 覆盖 13/19px 的内容高度。这里塞一个零宽、全透明的 23px 字符：
+            # 它把单行块的行框撑到 34px（deva DOM 的 tr 高 34.44px），块背景
+            # 因此能铺满整行 301.67×34；字符宽 0 且 alpha=0，不改变可见文本。
+            spacer = self._row_height_chars.get(bool(header_row))
+            if spacer is None:
+                spacer = QTextCharFormat()
+                spacer.setFont(self.font(23.0 * self.style.scale, bold=header_row))
+                spacer.setForeground(QColor(0, 0, 0, 0))
+                self._row_height_chars[bool(header_row)] = spacer
+            cell_cursor.insertText("\u200b", spacer)
             self._inline(cell_cursor, cell_nodes or [], char_fmt)
 
     # ── 代码块 ────────────────────────────────────────────────────────────
@@ -829,18 +933,28 @@ class _Renderer:
         widest = max([_measure(mono_font, line) for line in lines] + [0.0])
         # 左右各 12px 正文内边距 + 2px 边框；再加 2px 余量，避免最宽行贴边触发无谓滚动。
         natural = widest + 24.0 + 4.0
-        frame_width = max(natural, self.content_width - 24.0)
+        # 代码块是满宽块：``.md-code`` 的左右边框贴正文列，不再额外缩进 12px。
+        # QTextTableFormat 的宽度不含左右边框，故减 2px 后外框正好 content_width。
+        frame_width = max(natural, self.content_width - 2.0)
         rows = 2 if language else 1
         first_code_row = 1 if language else 0
 
-        if self._has_content:
-            cursor.insertBlock()
+        # 与表格同理：不要再 insertBlock，否则代码块前多一个 21px 空块。
         table_fmt = QTextTableFormat()
         table_fmt.setBorder(0.0)
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        table_fmt.setMargin(12.0)
+        # CSS 的 ``.md table`` 只有下边距 12px，左右不缩进；上下留 12px 由
+        # 相邻段落的 margin-bottom 已经提供，表格自身只需要下边距。QML 的
+        # QTextTableFormat 没有单边 margin 的“仅下边”语义，因此左右归零、
+        # 上边距保留为 0，下边距用 QTextBlockFormat 的段后距叠加在表格后的
+        # 第一个块上（见 ``_table_row`` 的末尾块）。
+        table_fmt.setMargin(0.0)
+        table_fmt.setTopMargin(0.0)
+        table_fmt.setBottomMargin(0.0)
+        table_fmt.setLeftMargin(0.0)
+        table_fmt.setRightMargin(0.0)
         table_fmt.setAlignment(ALIGN_LEFT)
         table_fmt.setWidth(QTextLength(QTextLength.Type.FixedLength, frame_width))
         table_fmt.setColumnWidthConstraints(
@@ -927,10 +1041,21 @@ class _Renderer:
                 cursor.insertText(LINE_SEPARATOR, base)  # 块内换行
             elif kind == "code":
                 fmt = QTextCharFormat(base)
-                fmt.setFont(self.font(self.style.base_px * 0.88, mono=True))
+                base_font = base.font()
+                base_px = base_font.pixelSize()
+                if base_px <= 0:
+                    base_px = int(round(self.style.base_px))
+                fmt.setFont(self.font(base_px * 0.88, mono=True))
                 fmt.setBackground(self.color(self.palette.bg_inset))
                 fmt.setForeground(self.color(self.palette.fg))
-                cursor.insertText(str(node.get("text") or ""), fmt)
+                # Qt 的 QTextCharFormat 没有 CSS 的 padding/border。用两个
+                # U+2002（EN SPACE，等宽约 6.2px）模拟左右 5px 内边距，让
+                # README.md / package.json 这类芯片不再贴字；表格第一列宽度
+                # 也因此与 deva DOM 的 115.64px 对齐。
+                text = str(node.get("text") or "")
+                cursor.insertText("\u2002", fmt)
+                cursor.insertText(text, fmt)
+                cursor.insertText("\u2002", fmt)
             elif kind in ("strong", "em", "del"):
                 fmt = QTextCharFormat(base)
                 if kind == "strong":
@@ -962,7 +1087,13 @@ class _Renderer:
     def _image(self, cursor: Any, node: dict, base: Any) -> None:
         src = str(node.get("src") or "")
         alt = str(node.get("alt") or "")
-        image = self.image_resolver(src) if self.image_resolver is not None else None
+        # ReactMarkdown 默认 urlTransform 只放行 http/https/mailto 等协议，data:
+        # 会被清空成 ``src=""``，浏览器显示 broken-image 的 alt 文本。QML 侧
+        # 同样不应把 data URI 当图片解码，否则 1×1 图直接消失、连占位文本都没有。
+        if src.strip().lower().startswith("data:"):
+            image = None
+        else:
+            image = self.image_resolver(src) if self.image_resolver is not None else None
         if image is None:
             # 解析不到时保留 alt 文本并加标记：用户能看出这里有图，而不是被吞掉。
             fmt = QTextCharFormat(base)

@@ -218,7 +218,10 @@ def test_inline_code_switches_to_the_mono_family_and_inset_background(qapp):
         if fragment.isValid():
             formats.append((fragment.text(), fragment.charFormat()))
         iterator += 1
-    code = [fmt for text, fmt in formats if text == "inline"][0]
+    code_text, code = [(text, fmt) for text, fmt in formats if "inline" in text][0]
+    # Qt 的字符格式没有 CSS padding：左右各用一个 U+2002 EN SPACE 模拟
+    # ``.md-code`` 的 5px 内边距，视觉宽度与 deva 一致。
+    assert code_text == "\u2002inline\u2002"
     assert code.font().families()[0] == "Cascadia Code"
     assert code.font().pixelSize() == 12  # 14 * 0.88 取整
     assert code.background().color().name() == LIGHT.bg_inset
@@ -339,11 +342,23 @@ def test_table_body_text_is_not_bold_while_the_header_is(qapp):
     assert body_font.bold() is False
 
 
-def test_table_cells_have_10_by_6_padding(qapp):
+def test_table_cells_use_text_indent_and_fixed_row_height(qapp):
+    """CSS 的 10×6 padding 由块格式实现，保证 QML 背景铺满整格。
+
+    QQuickTextEdit 只画块背景、不画单元格背景；因此单元格 padding 归零，
+    左右 10px 改用 textIndent，行高用 34.45px（13×1.65 + 12 + 1）固定。
+    """
     document = render("| a |\n| - |\n| 1 |")
     cell = cell_format(tables(document)[0].cellAt(1, 0))
-    assert (cell.leftPadding(), cell.rightPadding()) == (10.0, 10.0)
-    assert (cell.topPadding(), cell.bottomPadding()) == (6.0, 6.0)
+    assert (cell.leftPadding(), cell.rightPadding()) == (0.0, 0.0)
+    assert (cell.topPadding(), cell.bottomPadding()) == (0.0, 0.0)
+    block = tables(document)[0].cellAt(1, 0).firstCursorPosition().blockFormat()
+    # Qt 的块背景只覆盖行框，不覆盖块边距；10px 左内边距改用 textIndent，
+    # 行高由单元格内一个全透明的 23px 零宽字符撑到约 34px 后再留 1px 边框。
+    assert (block.leftMargin(), block.rightMargin()) == (0.0, 0.0)
+    assert block.textIndent() == 10.0
+    assert block.lineHeightType() == QtGui.QTextBlockFormat.LineHeightTypes.FixedHeight.value
+    assert block.lineHeight() == 34.45
 
 
 def test_every_cell_draws_its_own_one_pixel_border(qapp):
@@ -401,7 +416,7 @@ def test_code_block_fills_the_content_width_when_it_is_short(qapp):
     document = render("```\nx\n```", width=600.0)
     table = tables(document)[0]
     assert table.format().width().type() == QtGui.QTextLength.Type.FixedLength
-    assert table.format().width().rawValue() == 576.0  # 600 - 2 * 12 边距
+    assert table.format().width().rawValue() == 598.0  # 600 - 2px 外框
 
 
 def test_code_block_grows_to_the_longest_line(qapp):
@@ -674,7 +689,9 @@ def test_a_table_with_many_rows_fills_every_row_and_column(qapp):
     for row in range(table.rows()):
         for column in range(table.columns()):
             expected = ("列一", "列二")[column] if row == 0 else "r%d-%s" % (row, "ab"[column])
-            assert table.cellAt(row, column).firstCursorPosition().block().text() == expected
+            # 每个单元格首字符是撑行高的透明零宽字符，不属于可见文本。
+            text = table.cellAt(row, column).firstCursorPosition().block().text()
+            assert text.lstrip("\u200b") == expected
 
 
 def test_every_cell_gets_its_own_border_brush_and_style(qapp):
@@ -697,8 +714,8 @@ def test_every_cell_gets_its_own_border_brush_and_style(qapp):
             for style in (cell.leftBorderStyle(), cell.rightBorderStyle(),
                           cell.topBorderStyle(), cell.bottomBorderStyle()):
                 assert style == solid
-            assert (cell.leftPadding(), cell.rightPadding()) == (10.0, 10.0)
-            assert (cell.topPadding(), cell.bottomPadding()) == (6.0, 6.0)
+            assert (cell.leftPadding(), cell.rightPadding()) == (0.0, 0.0)
+            assert (cell.topPadding(), cell.bottomPadding()) == (0.0, 0.0)
             expected_bg = (
                 LIGHT.bg_panel if row == 0
                 else LIGHT.bg_hover if row % 2 == 0
