@@ -200,7 +200,10 @@ def test_linux_bundled_external_chain_loads_after_removing_source(tmp_path, monk
     assert ("RUNPATH", "$ORIGIN/old:$ORIGIN") in deps.elf_dynamic_entries(owner)
     host.rename(tmp_path / "hidden-host")
     script = "import ctypes,sys; assert ctypes.CDLL(sys.argv[1]).application() == 7"
-    subprocess.run([sys.executable, "-I", "-c", script, str(owner)], check=True, cwd=tmp_path, timeout=10)
+    # sys.executable may be the relative PATH entry ".venv/bin/python"; resolve
+    # it before changing cwd to tmp_path or the child cannot be located.
+    python = str(Path(sys.executable).resolve())
+    subprocess.run([python, "-I", "-c", script, str(owner)], check=True, cwd=tmp_path, timeout=10)
 
 
 def test_native_discovery_uses_target_format_instead_of_filename_suffix(tmp_path):

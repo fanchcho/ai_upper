@@ -4,11 +4,34 @@ import sys
 import types
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(ROOT / "app" / "src"))
 
 QT_BINDINGS = ("PySide6", "PyQt6", "PySide2", "PyQt5")
+
+
+@pytest.fixture(autouse=True)
+def _flush_qt_deferred_deletes():
+    """Run ``deleteLater()`` while Qt is still alive.
+
+    QML tests close their window and call ``engine.deleteLater()`` in a
+    ``finally`` block, but pytest has no event loop between tests. The
+    deferred C++ delete then executes during interpreter shutdown, after the
+    QApplication has been destroyed, and Qt segfaults with no Python frame.
+    Flushing here keeps the object lifetime inside the application lifetime.
+
+    Only touch Qt when it is already loaded, so tests that assert the binding
+    shim does not import Qt keep an untouched environment.
+    """
+    yield
+    if "PySide6.QtCore" not in sys.modules:
+        return
+    from PySide6.QtCore import QCoreApplication, QEvent
+
+    QCoreApplication.sendPostedEvents(None, QEvent.DeferredDelete)
 
 
 def install_fake_binding(monkeypatch, bindings: dict[str, dict[str, dict[str, object]]]):

@@ -1,6 +1,7 @@
 """MVVM framework port: core, views, container, binding-neutral imports."""
 from __future__ import annotations
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -151,17 +152,31 @@ def test_two_way_binding_needs_an_explicit_getter():
 
 
 def test_mvvm_import_does_not_require_qt():
-    # The framework itself must not pull any Qt binding at import time.
-    for name in list(sys.modules):
-        if name.startswith(("PySide6", "PySide2", "PyQt6", "PyQt5")):
-            del sys.modules[name]
-    import importlib
-    importlib.import_module("mvvm")
-    importlib.import_module("mvvm.mvvm_application")
-    assert not any(
-        name.startswith(("PySide6", "PySide2", "PyQt6", "PyQt5"))
-        for name in sys.modules
+    """The framework must not pull a Qt binding at import time.
+
+    This has to run in a fresh interpreter. Deleting ``PySide6`` entries from
+    this process's ``sys.modules`` does not unload the C++ modules: the shim
+    and ``ShellBridge`` keep the original module generation, while the next
+    QML test imports a second generation. Mixing both in one QApplication
+    segfaults in ``QQuickWindow.contentItem`` (the full-suite crash).
+    """
+    script = (
+        "import sys\n"
+        "sys.path.insert(0, '.')\n"
+        "import mvvm\n"
+        "import mvvm.mvvm_application\n"
+        "bad = [name for name in sys.modules "
+        "if name.startswith(('PySide6', 'PySide2', 'PyQt6', 'PyQt5'))]\n"
+        "assert not bad, bad\n"
     )
+    result = subprocess.run(
+        [str(Path(sys.executable).resolve()), "-I", "-c", script],
+        cwd=SRC,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 0, result.stderr
 
 
 def test_factories_have_a_single_home():
