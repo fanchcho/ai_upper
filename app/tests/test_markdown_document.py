@@ -437,10 +437,11 @@ def test_code_body_is_12px_mono_on_both_sides(qapp):
 
 
 # ── 图片与占位 ───────────────────────────────────────────────────────────
-def test_missing_image_renders_an_explicit_placeholder(qapp):
+def test_missing_image_renders_bare_alt_text(qapp):
     document = render("![说明](missing.png)")
-    assert document.toPlainText() == "［图片：说明］"
-    assert first_fragment(document.begin()).charFormat().foreground().color().name() == LIGHT.fg_subtle
+    assert document.toPlainText() == "说明"
+    assert "［图片" not in document.toPlainText()
+    assert first_fragment(document.begin()).charFormat().foreground().color().name() == LIGHT.fg
 
 
 def test_resolved_image_is_inserted_at_its_natural_size(qapp):
@@ -662,8 +663,9 @@ def test_a_document_with_every_construct_renders(qapp):
     """全元素文档能渲染、能取纯文本——任何一类元素把排版搞崩都会在这里暴露。"""
     document = render(SEGFAULT_MARKDOWN)
     text = document.toPlainText()
-    for needle in ("标题", "引用", "嵌套", "def f():", "任务", "［图片：图］"):
+    for needle in ("标题", "引用", "嵌套", "def f():", "任务", "图"):
         assert needle in text
+    assert "［图片" not in text
     assert len(tables(document)) >= 3  # 引用 + 嵌套引用 + 表格 + 代码块
 
 

@@ -274,6 +274,17 @@ def test_attach_replaces_the_previous_content_in_one_edit_block(qapp):
     assert "第一版" not in text and "旧段落" not in text
 
 
+def test_broken_image_renders_bare_alt_text(qapp):
+    """断图只显示 alt 文本，不带「［图片：…］」占位 wrappers。"""
+    body = BodyDocument()
+    body.set_markdown("![示意图](data:image/png;base64,iVBORw0KGgo=)")
+    quick = QuickDocumentStub()
+    body.attach(quick)
+    text = quick.document.toPlainText()
+    assert text.strip() == "示意图"
+    assert "［图片" not in text
+
+
 def test_attach_copies_image_resources_by_name(qapp):
     """``insertFragment`` 不搬文档级资源，不补注册的话目标文档里的图会是空的。"""
     image = QtGui.QImage(4, 3, QtGui.QImage.Format.Format_RGB32)

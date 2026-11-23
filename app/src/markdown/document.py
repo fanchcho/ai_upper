@@ -1107,10 +1107,10 @@ class _Renderer:
         else:
             image = self.image_resolver(src) if self.image_resolver is not None else None
         if image is None:
-            # 解析不到时保留 alt 文本并加标记：用户能看出这里有图，而不是被吞掉。
-            fmt = QTextCharFormat(base)
-            fmt.setForeground(self.color(self.palette.fg_subtle))
-            cursor.insertText("［图片%s］" % ("：" + alt if alt else ""), fmt)
+            # 与 deva 的 <img> 行为一致：断图只显示 alt 文本本身，不加括号占位。
+            # 空 alt 在浏览器里不产生文字，这里同样什么都不插入。
+            if alt:
+                cursor.insertText(alt, QTextCharFormat(base))
             return
         name = "md-image:%d" % id(image)
         self.doc.addResource(QTextDocument.ResourceType.ImageResource.value,
