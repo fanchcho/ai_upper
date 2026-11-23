@@ -1,7 +1,7 @@
 """D1 子几何：面板外框 / 分组标题 / 模型行 / 勾选位的相对墨迹范围。
 
 用法: .venv/bin/python -I out/latest-parity/probes/c6_panel_subgeom.py
-相对坐标以面板外框左上角为原点（deva 847,688；QML 776,688 —— 面板宽度两侧都是 248）。
+相对坐标以面板外框左上角为原点（deva 847,688；QML 847,688 —— B 轮 +2 后两侧面板外框同 x，宽度都是 248）。
 
 不列「before」：HEAD 的旧代码是 (700,542) 的 thinking 面板，这组坐标上本来就没有面板。
 """
@@ -37,7 +37,7 @@ def analyse(path, left, top, thr=235):
 
 CASES = [
     ("deva", ROOT + '/deva/model-picker-deva.png', 847),
-    ("after(current)", ROOT + '/qml/model-picker.png', 776),
+    ("after(current)", ROOT + '/qml/model-picker.png', 847),
 ]
 
 for tag, path, left in CASES:

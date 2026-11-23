@@ -1147,7 +1147,7 @@ out/latest-parity/qml/delete-confirm.png
 
 | 项 | 原版来源 → 值 | QML 落地 |
 |---|---|---|
-| 面板外壳 | `styles/app.css:3367-3376` `.model-pick__menu` → padding 5、1px `var(--border)`、`var(--radius-lg)`=12、`var(--bg-elevated)`、`var(--shadow)`、`bottom: calc(100% + 8px)` | `ModelPicker.qml:96-108` 面板 + `SoftShadow`(blur 20)；两个实例 `x: parent.width - width`、`y: -height - 8` |
+| 面板外壳 | `styles/app.css:3367-3376` `.model-pick__menu` → padding 5、1px `var(--border)`、`var(--radius-lg)`=12、`var(--bg-elevated)`、`var(--shadow)`、`bottom: calc(100% + 8px)` | `ModelPicker.qml:96-108` 面板 + `SoftShadow`(blur 20)；两个实例 `x: parent.width - width + 2`、`y: -height - 8` |
 | 面板尺寸 | `styles/app.css:3387-3395` → `right:0`、min-width 248、max-width 360、`width: max-content`、max-height 340 | `panelWidth: Math.max(248, Math.min(360, measure.implicitWidth + 38 + 10))`；实测 248 |
 | 分组标题 | `redesign/model-panel.css:111-125` → `padding: 9px 8px 3px`（首组 4px）、11.5px、`--fg-subtle` | 26 高行盒 + `x:8 / y:6`、`font.pixelSize: 12`、`Theme.fgSubtle`（字号取舍见下） |
 | 模型行 | `styles/app.css:3418-3438` → gap 8、`padding: 7px 8px`、radius `--radius-sm`=6、13px、`--fg`；`.is-active` accent + 600 | 27 高行、`radius: Theme.radiusSm`、13px、选中 `Theme.accent` + `weight 600` |
@@ -1156,11 +1156,11 @@ out/latest-parity/qml/delete-confirm.png
 | 思考等级行 | `redesign/model-panel.css:133-143` → 名字 13px + 说明 11.5px `--fg-subtle`、`gap:1px` | 44 高行、`Column(x:8, spacing:1)`，名字 13px、说明 12px |
 | 贴片展开态 | `styles/app.css:2874-2877` `.chip.is-open{background:var(--bg-active);color:var(--fg)}`；`:2902-2904` 箭头 `rotate(180deg)` | `color: open ? Theme.bgActive : "transparent"`、文字/图标 `open ? Theme.fg : Theme.fgMuted`、`rotation: open ? 180 : 0` |
 
-实测几何（`.venv/bin/python -I out/latest-parity/probes/c6_panel_subgeom.py` → `logs/c6-d1-subgeom-final.log`；相对坐标以面板外框左上角为原点）：
+实测几何（`.venv/bin/python -I out/latest-parity/probes/c6_panel_subgeom.py` → `logs/d-c6-subgeom-final.log`；相对坐标以面板外框左上角为原点。早期 `logs/c6-d1-subgeom-final.log` 的 QML `left=776` 是 B 轮 +2 前的旧值，已过时）：
 
 | 量 | deva | QML | 差 |
 |---|---|---|---|
-| 面板外框 | x847..1094（248 宽）、y688..752（65 高） | x776..1023（248 宽）、y688..752（65 高） | 尺寸一致 |
+| 面板外框 | x847..1094（248 宽）、y688..752（65 高） | x847..1094（248 宽）、y688..752（65 高） | 完全一致 |
 | 圆角 / 边框 / 底色 | 12 / `(230,230,234)` / `(255,255,255)` | 12 / `(230,230,234)` / `(255,255,255)` | 一致 |
 | 分组标题墨迹 | rel x14..68、y12..24，212 px | rel x14..70、y12..24，220 px | 行带一致，宽 +2 |
 | 模型行文字墨迹 | rel x15..161、y39..51，747 px | rel x14..160、y39..51，752 px | 行带一致，x −1 |
@@ -1274,13 +1274,14 @@ B 轮当轮修复后 `137282 / 13.08%`（历史阶段值；D 轮最终 117437 / 
 （`logs/d-delta-histogram.log`）。d≤2 占比从 10.08% 升到 29.07%，与 chat 的 27.42%、dark-chat 的 25.78% 同一水平，
 说明面板区域的大跳变已经消掉，剩余大头是与 chat 共用的正文缺口。
 
-**未闭环（明确列出，未在本轮修）**
+**面板横向位置（B 轮已闭环）**：D 轮 `model-picker.png` 外框实测 x847..1094（248 宽）、y688..752（65 高），
+deva 同为 x847..1094、y688..752，**逐像素同边**。贴片行 252 白像素差仍来自 `modelChip` 自身的 x
+（QML 852 vs deva 923，§5.4 G1），不是面板偏移。
 
-1. 面板横向位置：QML 面板 x776..1023，deva x847..1094，两侧都右对齐到各自贴片、宽度都对（248），
-   差的是 `modelChip` 自身的 x（QML 852 vs deva 923）——这是 §5.4 G1「输入区左侧图标簇整体左移约 90 px」
-   的同一处锚点偏移，属 G 类，本轮不动。同理贴片行的 252 白像素差也是它带来的。
-2. 分组标题宽度 +2px：11.5px 无法在 Qt 表达，取 12px 后的字形度量残差，已在上文说明。
-3. 阴影尾部 +42 px：Canvas 阴影与 CSS `box-shadow` 的衰落曲线不同，`blur` 已从 24 收到 20，仍未逐像素相同。
+**未闭环（明确列出，本轮未修）**
+
+1. 分组标题宽度 +2px：11.5px 无法在 Qt 表达，取 12px 后的字形度量残差，已在上文说明。
+2. 阴影尾部 +42 px：Canvas 阴影与 CSS `box-shadow` 的衰落曲线不同，`blur` 已从 24 收到 20，仍未逐像素相同。
 
 **提交记录**：`127e44f` `fix(qml): model-picker 双模式弹层 + 弹层态聚焦描边 (§4.9)`
 （2026-11-23，父提交 `0805d16`，未 push，只在本地 `develop`）。
