@@ -1,9 +1,10 @@
-# 对齐基线更新到 deva 最新代码 · 第 1–2 步报告
+# QML 对齐 deva 最终报告（A/B/C/D 四阶段 · 18 页）
 
-> 本文件只覆盖「基线取证 + 在新基线上重拍两侧」。第 3 步（逐页补齐）另起章节，
-> 每条修复单独提交并把 commit 记进来。
+> 本文件最初覆盖「基线取证 + 在新基线上重拍两侧」，后续 A/B/C/D 四阶段的修复、测试与
+> 最终 18 页重拍都累积在同一份记录里。逐页最终数字以 §5.2 / §5.5 为准，较早章节里的
+> 「改后」若与最终值不同均明确标为历史阶段值。
 
-日期：2026-11-22　仓库：`/home/agent/shared_workspace/ai_upper`（分支 `develop`）
+日期：2026-11-22 起　仓库：`/home/agent/shared_workspace/ai_upper`（分支 `develop`）
 
 ---
 
@@ -151,31 +152,31 @@ ok   model-picker 1280x820 164258B
 
 表里 13.41% 用的是重拍后的图（`946b07de…`），不是首轮那张 39,718B 的残图。
 
-### 2.2 逐页 md5 与差异像素
+### 2.2 逐页 md5 与差异像素（D 轮最终值）
 
-分母统一 `1280*820 = 1049600`。表格原文另存 `out/latest-parity/page-diff-table.txt`
-（md5 `2b453517e89610258fbe53efe0663361`）。
+分母统一 `1280*820 = 1049600`。下表已换成 D 轮 18 页全量重拍后的真实输出；
+最终复算日志 `out/latest-parity/logs/d-page-diff18-final.log`（rc=0）。
 
 | 页名 | deva md5 | QML md5 | 差异像素 | 差异% |
 |---|---|---|---|---|
-| chat | `ac72cd59…` | `e36d9edb…` | 126790 | 12.08 |
-| ctx-menu | `64c8c33a…` | `8ff33025…` | 133997 | 12.77 |
-| dark-chat | `252996a5…` | `cc067223…` | 249359 | 23.76 |
-| delete-confirm | `964c32d1…` | `55a629b9…` | 396118 | 37.74 |
-| empty | `a616eabe…` | `3b1ddb91…` | 10325 | 0.98 |
-| first-run | `0e2b5786…` | `3b1ddb91…` | 10325 | 0.98 |
-| focus-composer | `e976e085…` | `3c8b55f5…` | 126806 | 12.08 |
-| hover-thread | `16917898…` | `96a86cfd…` | 127197 | 12.12 |
-| long-bottom | `be7b7fe8…` | `8d291d66…` | 125692 | 11.98 |
-| long-mid | `147fb156…` | `6bea500d…` | 132329 | 12.61 |
-| model-picker | `946b07de…` | `ff84da6c…` | 140783 | 13.41 |
-| search-none | `49503995…` | `db2e09d1…` | 82432 | 7.85 |
-| search-open | `3a5f8098…` | `be846a41…` | 126819 | 12.08 |
-| search-results | `1d1ba812…` | `8ad4403a…` | 104080 | 9.92 |
-| settings-about | `3fac0ec7…` | `96154d72…` | 334166 | 31.84 |
-| settings-extensions | `15d607e1…` | `72ee5888…` | 329666 | 31.41 |
-| settings-general | `4d16a5c6…` | `9858fecd…` | 340234 | 32.42 |
-| settings-models | `7f7a6dd8…` | `6319db2e…` | 328000 | 31.25 |
+| chat | `ac72cd59…` | `00baf469…` | 113088 | 10.77 |
+| ctx-menu | `64c8c33a…` | `5bb17055…` | 122224 | 11.64 |
+| dark-chat | `252996a5…` | `8cacd0f7…` | 111631 | 10.64 |
+| delete-confirm | `964c32d1…` | `1f0c4130…` | 382652 | 36.46 |
+| empty | `a616eabe…` | `e56462d7…` | 13231 | 1.26 |
+| first-run | `0e2b5786…` | `e56462d7…` | 13231 | 1.26 |
+| focus-composer | `e976e085…` | `00b028ef…` | 113104 | 10.78 |
+| hover-thread | `16917898…` | `03a15c4a…` | 113042 | 10.77 |
+| long-bottom | `be7b7fe8…` | `a5576a85…` | 124452 | 11.86 |
+| long-mid | `147fb156…` | `f4e1fc46…` | 142444 | 13.57 |
+| model-picker | `946b07de…` | `66be1f24…` | 117437 | 11.19 |
+| search-none | `49503995…` | `2fc3a406…` | 85175 | 8.11 |
+| search-open | `3a5f8098…` | `572f4907…` | 113117 | 10.78 |
+| search-results | `1d1ba812…` | `6526581e…` | 107403 | 10.23 |
+| settings-about | `3fac0ec7…` | `2388394c…` | 302389 | 28.81 |
+| settings-extensions | `15d607e1…` | `7f4d07e3…` | 305797 | 29.13 |
+| settings-general | `4d16a5c6…` | `b95b109b…` | 315274 | 30.04 |
+| settings-models | `7f7a6dd8…` | `dc5ee213…` | 300497 | 28.63 |
 
 `empty` 与 `first-run` 是**同一屏**，两侧像素级都是零差：
 
@@ -187,7 +188,7 @@ $ compare -metric AE qml/empty.png       qml/first-run.png       → 0
 deva 侧两张的 PNG 文件 md5 不同（`a616eabe…` / `0e2b5786…`），但解码后像素签名完全相同
 （`identify -verbose` 的 `signature` 两张都是 `76390a45…`），差异只在 PNG 的
 `date:create` / `date:modify` 文本块（两张拍摄间隔 16 秒）。QML 侧两张连文件字节都相同
-（都是 `3b1ddb91…`）。**结论：md5 列在这里只对「同一时刻拍的同一帧」可比，`empty` /
+（都是 `e56462d7…`）。**结论：md5 列在这里只对「同一时刻拍的同一帧」可比，`empty` /
 `first-run` 这一对被 PNG 时间戳分开了，像素差为 0。**
 
 ### 2.3 关键校验：新基线没有改变这 18 页的既有画面
@@ -319,8 +320,10 @@ magick` → rc=1）。新增 `scripts/parity/pngread.py`（纯标准库 PNG 解�
 都改用它，这样重拍对照不再依赖外部二进制。
 
 新解码器的正确性以旧数字为准：对同一批 `out/latest-parity/{deva,qml}` 复算，18 页
-差异像素与 §2.2 表**逐项一致**（chat 126790 / empty 10325 / search-results 104080 /
-settings-models 328000 / settings-about 334166 …），整表 37 秒跑完，rc=0。
+差异像素与**当时** §2.2 表逐项一致（chat 126790 / empty 10325 / search-results 104080 /
+settings-models 328000 / settings-about 334166 …），整表 37 秒跑完，rc=0。这组数字只是解码器
+等价性校验的历史基线；当前 §2.2 已换成 D 轮最终全量重拍值（chat 113088 / empty 13231 /
+search-results 107403 / settings-models 300497 / settings-about 302389）。
 
 ### 4.2 设置页数据投影与请求头语义（A2）
 
@@ -650,7 +653,7 @@ $ grep settings-models /tmp/diff18-after.txt
 settings-models        7f7a6dd835823f50475db7a3c9e727c1 92c0f06f8b41707f3e6396e8c1bfe529  132243   81933  294323  28.04% max=216 same=False
 ```
 
-**28.07% → 28.04%**（−0.03pp，−352 px）。弹窗内 3857 → 3634 px（−223 px，−5.8%），
+**28.07% → 28.04%（当轮历史值；D 轮最终 28.63%）**（−0.03pp，−352 px）。弹窗内 3857 → 3634 px（−223 px，−5.8%），
 其中 aside 区 `(915,255)-(985,300)` 155/3150、容器左右边框两端已逐列对齐
 （deva 与 QML 在 y=270 均为 `[469, 978, 999]`）。整页百分比几乎不动的原因与 §4.4.1 同：
 294323 px 差异里 99% 在弹窗外。
@@ -712,7 +715,7 @@ $ python3 -I -c "import sys;sys.path.insert(0,'scripts/parity');from page_diff18
 /tmp/sm-after.png 294323 28.04 216
 ```
 
-**30.85% → 28.04%**（−2.81pp，−29,460 px；before 323,783 px，after 294,323 px）。
+**30.85% → 28.04%（当轮历史值；D 轮最终 28.63% / 300497 px）**（−2.81pp，−29,460 px；before 323,783 px，after 294,323 px）。
 
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
@@ -839,9 +842,10 @@ QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=Fa
 
 落盘 `out/latest-parity/qml/settings-about.png`（104052 bytes，sha256
 `8afc66aa48eb65e6f0a196e7fff6525b1055f7c7abb9242b6c5f21c411c94c07`）。改前 `settings-about` diff：
-`334166 px / 31.84%`；改后:
-`328222 px / 31.27%`（降低 5944 px、0.57 个百分点；按任意通道非零差计，剩余主要是
-整页字体抗锯齿/主题通道差异，不是 About 组件结构差）。
+`334166 px / 31.84%`；当轮改后:
+`328222 px / 31.27%`（历史阶段值；D 轮最终 `302389 px / 28.81%`，`logs/d-page-diff18-final.log`；
+降低 5944 px、0.57 个百分点；按任意通道非零差计，剩余主要是整页字体抗锯齿/主题通道差异，
+不是 About 组件结构差）。
 
 **点击行为实测**：真实 `QTest.mouseClick(window, ..., (724,394))` 后
 `ShellBridge.updateState()` 由 `{'phase':'idle'}` → `{'phase':'checking'}`，网络返回后
@@ -928,8 +932,9 @@ dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22
 ```
 
 改前 `258651 px / 24.64%`（`git show HEAD:out/latest-parity/qml/dark-chat.png` 复算，
-258651 与 `page-diff-table.txt` 一致）→ **改后 `128299 px / 12.22%`**，降 12.42 个百分点，
-差异像素减半（-130352 px，-50.4%）。分区对照（`out/latest-parity/probes/dark_composer_ab.py`，
+258651 与 `page-diff-table.txt` 一致）→ **当轮改后 `128299 px / 12.22%`（历史阶段值）**，降 12.42 个百分点，
+差异像素减半（-130352 px，-50.4%）。**D 轮最终全量重拍为 `111631 px / 10.64%`**
+（`logs/d-page-diff18-final.log`；`258651 / 24.64%` 仅作为最早的历史 before 值保留）。分区对照（`out/latest-parity/probes/dark_composer_ab.py`，
 日志 `out/latest-parity/logs/dark-composer-ab.log`）：
 
 | 窗口 | 改前 | 改后 |
@@ -958,7 +963,7 @@ rc=0
 
 无 skipped、无 xfail、无 warning 输出。
 
-**未做 / 已知残留**：本节只修输入卡片，整页仍余 `12.22%`，集中在左侧栏 `14.60%`、正文 `9.80%`
+**未做 / 已知残留**：本节只修输入卡片，当轮整页仍余 `12.22%`（D 轮最终 10.64%），集中在左侧栏 `14.60%`、正文 `9.80%`
 和页面底部 `y≥810` 的 `45.90%` 带（A/B/E 类既有缺口，见 §5.4），按任务范围不在本轮。
 
 **提交记录**：`dd0b38e` `fix(qml): dark-chat 输入卡片改用 --bg-elevated 并补 --shadow`，
@@ -1064,10 +1069,11 @@ delete-confirm  964c32d1… 5b8baeb9…  162718 147103 384883 36.67% max=224 sam
 
 | 页 | 改前（HEAD 图复算） | 改后 |
 |---|---:|---:|
-| ctx-menu | 143461 / 13.67% | 127196 / 12.12% |
-| delete-confirm | 401948 / 38.30% | 384883 / 36.67% |
+| ctx-menu | 143461 / 13.67% | 127196 / 12.12%（B 轮历史） |
+| delete-confirm | 401948 / 38.30% | 384883 / 36.67%（B 轮历史） |
 
-`delete-confirm` 剩余差异里 76.1% 只差 1–2 个灰阶（`deva(144,144,144)` vs `qml(143,143,144)`
+**D 轮最终全量重拍**：`ctx-menu 122224 px / 11.64%`、`delete-confirm 382652 px / 36.46%`，max 分别为 248 / 224
+（`logs/d-page-diff18-final.log`）。`delete-confirm` 剩余差异里 78.79% 只差 1–2 个灰阶（`deva(144,144,144)` vs `qml(143,143,144)`
 共 183194 px），是遮罩 `rgba(0,0,0,.42)`（deva `redesign.css:3139`，QML `Theme.qml:68` 同值）
 叠在背景对话上的合成取整差，不是结构缺口；本轮任务只要求两页可交互 + 重拍，
 未改遮罩合成，故不再往下压。
@@ -1083,6 +1089,8 @@ rc=0
 无 skipped、无 xfail。`test_qml_context_menu.py` 的三组断言与本节点探针覆盖同一批用户路径
 （5 项几何 → 菜单 Delete → 确认 Delete；Cancel；遮罩），但它直接走 QML 内部事件路径，
 本节探针额外测了 Delete 项的**像素颜色**与「右键入口」这两项。
+
+**D 轮最终复核（同一工作树）**：`test_qml_context_menu.py` + `test_qml_shell.py` → **55 passed in 50.34s，rc=0**（`logs/d-a-tests-context-shell.log`）。非活动行 Rename/Select/Archive 的真实右键探针输出：`BEFORE sessions=120 active='parity-000'` → `AFTER_RENAME sessions=120 title='renamed non active' active='parity-000'` → `AFTER_SELECT selectMode=True selected=['parity-001'] active='parity-000'` → `AFTER_ARCHIVE sessions=119 archived=True active='parity-000'`，单测 `1 passed in 8.49s, rc=0`（`logs/a-rename-select-archive-probe.log`）。
 
 **后续闭环**：右键菜单的 Rename / Select / Archive 三项已先后由 `d4279ad`（Rename → `renameSession`）、
 `9e7d23c`（Select 无 id 时回退当前会话）、`0d2cf84`（session-row/menu 测试）接通；`923f554` 又补了
@@ -1221,7 +1229,7 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 ```
 
 也因此 `page_diff18.py` 的 model-picker 行从归档的 `149105 / 14.21%` 变成同代码 `141550 / 13.49%`，
-修复后 `137282 / 13.08%`（本轮最终值见下），三者的 md5 分别为 `c2670aa5…` / `5db7a50f…` / `7af296ea…`。
+B 轮当轮修复后 `137282 / 13.08%`（历史阶段值；D 轮最终 117437 / 11.19%，见本节末尾），三者的 md5 分别为 `c2670aa5…` / `5db7a50f…` / `7af296ea…`。
 
 **修正后仍差 2947 px 的归因**：把 model-picker 页的纯白计数逐带与 chat 页（同一 bbox、菜单关闭）相减，
 剩下的才是 picker 独有的量（`logs/c6-d3-attribution-final.log`）：
@@ -1243,8 +1251,8 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 
 | 项 | 结果 | 日志 |
 |---|---|---|
-| 单页差异（`page_diff18.py`，只取 model-picker 行） | deva `946b07de…` / QML `7af296ea…`，**137282 px / 13.08%，max=248**（同代码 before `141550 / 13.49%`，max=248） | `logs/c6-page-diff18-final.log` |
-| chat / dark-chat 未被改动影响 | md5 仍为 `dc133011…` / `3aa7be54…`，与 §4.7 提交一致 | `logs/c6-page-diff18-final.log` |
+| 单页差异（`page_diff18.py`，只取 model-picker 行） | D 轮最终 deva `946b07de…` / QML `66be1f24…`，**117437 px / 11.19%，max=248**（B 轮阶段值 137282 / 13.08% 仅作历史对照） | `logs/d-page-diff18-final.log` |
+| chat / dark-chat 最终回归 | chat `00baf469…` / dark-chat `8cacd0f7…`；D 轮 113088 / 10.77% 与 111631 / 10.64%，不是 B 轮的 `dc133011…` / `3aa7be54…` | `logs/d-page-diff18-final.log` |
 | 真实鼠标探针（model + thinking 两模式） | 打开 → 内容正确 → 四边聚焦 → 点行生效并收起 | `logs/c6-model-picker-probe.log`（`.err` 0 字节） |
 | `app/tests/test_qml_model_picker.py` | **3 passed**，rc=0 | `logs/pytest-model-picker-final.log` |
 | 受影响测试（picker + chat-files ×2 + shell + packaging + settings-models） | **169 passed**，rc=0 | `logs/pytest-affected-final.log` |
@@ -1252,14 +1260,18 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 | 全量（排除两个交互式 QML 模块） | **1323 passed, 5 skipped**，rc=0 | `logs/pytest-full-ignore-interactive-final.log` |
 | 全量（不排除） | **rc=139 段错误**，位置 `test_qml_context_menu.py:162`；HEAD 工作树 `/tmp/base-head` 同样复现 | `logs/pytest-full-final.log`、`logs/pytest-segv-head-full.log` |
 
+**D 轮最终全量重拍**：`model-picker 117437 px / 11.19% max=248`（QML md5 `66be1f24…`），
+`chat 113088 / 10.77%`、`dark-chat 111631 / 10.64%`；上面 137282 / 13.08% 是 B 轮阶段值，保留为历史。
+差异分布：`d≤2 34135（29.07%）、d≤8 14010、d>8 69292`（`logs/d-delta-histogram.log`）。
+
 全量段错误是**既有问题、与本轮无关**：在 `/tmp/base-head`（提交 `0805d16`，不含本轮任何改动）上按同一口径跑
 `pytest app/tests`，同样在 `test_qml_context_menu.py:162 _menu_items` 崩（`logs/pytest-segv-head-full.log`）；
 而这两个交互式模块单独跑、或与其它 QML 模块一起跑都通过（上面的 169 / 2 passed）。
 根因是同一进程里先后创建 `QGuiApplication` 与 `QApplication` 两套 Qt 应用对象，`test_qml_chat_files.py` 先跑时触发。
 本轮没有改这两个模块的夹具，所以不在此处修，记录在案。
 
-**差异量级（修复后）**：model-picker 差异像素 137282，其中 d≤2 共 35761（26.05%）、d≤8 共 21985、d>8 共 79536
-（`logs/c6-delta-histogram-final.log`）。d≤2 占比从 10.08% 升到 26.05%，与 chat 的 23.28%、dark-chat 的 22.15% 同一水平，
+**差异量级（D 轮最终）**：model-picker 差异像素 117437，其中 d≤2 共 34135（29.07%）、d≤8 共 14010、d>8 共 69292
+（`logs/d-delta-histogram.log`）。d≤2 占比从 10.08% 升到 29.07%，与 chat 的 27.42%、dark-chat 的 25.78% 同一水平，
 说明面板区域的大跳变已经消掉，剩余大头是与 chat 共用的正文缺口。
 
 **未闭环（明确列出，未在本轮修）**
@@ -1335,6 +1347,7 @@ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parit
 - 右上 96×40 与 deva 同区：58 px 抗锯齿差（max=9）；底色 `(255,255,255)` / `(30,30,32)` 与三枚字形位置逐值一致。
 - F1 `x1160..1279 y0..40`：deva `白3680 / 灰960 / 深100`；QML 修复后 `白3680 / 灰936 / 深100`（24 px 为 close X 抗锯齿）。
 - F2 纯白面板 bbox：QML `(736,0,1279,391)` == deva `(736,0,1279,391)`。
+- **D 轮最终全量重拍**：`chat 113088 / 10.77%`（`logs/d-page-diff18-final.log`）；上面 129807 / 12.37% 是 A1 修复当时的历史值，不代表最终图。
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
 
@@ -1343,87 +1356,90 @@ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parit
 两个专用页均存在于 `PAGE_NAMES`、均不在 `qml_pages_all.sh` 中；顺序不同，但页面集合一致。
 即：18 个真实页面 + 2 个仅用于详情截图的页面，未把截图专用页计入 18 页全量重拍。
 
-### 5.1 重拍命令与结果
+### 5.1 重拍命令与结果（D 轮全量）
 
 ```
-$ bash scripts/parity/qml_pages_all.sh out/latest-parity/qml
-rc=0（18 页全部 1280x820，18 个 .err 均为 0 字节，日志 18 行全 rc=0，见 out/latest-parity/qml-run-2102.log）
+$ bash scripts/parity/qml_pages_all.sh out/latest-parity/qml /tmp/fx-qml-home > /tmp/d-shots3.log 2>&1; echo rc=$?
+rc=0
+$ grep -c '^ok ' /tmp/d-shots3.log
+18
+$ find out/latest-parity/qml -maxdepth 1 -name '*.err' -size +0c | wc -l
+0
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > out/latest-parity/logs/d-page-diff18-final.log 2>&1; echo rc=$?
+rc=0
+```
+
+18 页全部 `1280x820`，每页一行 `ok <page> 1280x820 ... rc=0`；18 个 `.err` 均为 0 字节。
+`AI_UPPER_HOME=/tmp/fx-qml-home`，`/home/agent/shared_workspace/deva` 只读未改。
+
+### 5.2 18 页逐页差异整表（D 轮最终图）
+
+D 轮先用 `bash scripts/parity/qml_pages_all.sh out/latest-parity/qml /tmp/fx-qml-home` 全量重拍 18 页，
+18 条输出均为 `ok <page> 1280x820 ... rc=0`、18 份 `.err` 均为 0 字节（`/tmp/d-shots3.log`）。
+本轮另修了 `SoftShadow` 在 `target.visible=false` 时仍绘制幻影的问题，直接以最终图重算；差异定义不变
+（三通道任一非零即计 1 个差异像素；% = 差异像素 / 1,049,600）。
+
+```
 $ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
 rc=0
+chat                   ac72cd597ae44377b608777cbd5e2e81 00baf46965255434d276905e4e82c978  158583  165417  113088  10.77% max=248 same=False
+empty                  a616eabe08d8c107709b89d699604d13 e56462d7a538be35dae1b166403f4784   40733   40046   13231   1.26% max=248 same=False
+first-run              0e2b5786d552a73525ded72469f224ea e56462d7a538be35dae1b166403f4784   40733   40046   13231   1.26% max=248 same=False
+search-open            3a5f80988f34cbcccf98281d7697498e 572f4907d5343c138c3c5ff4fe8b20b9  158824  165755  113117  10.78% max=248 same=False
+search-results         1d1ba8121289fc7b91cdd95938a3ecad 6526581e572c4a5e758d2294b6d761fb  130449  137673  107403  10.23% max=248 same=False
+search-none            49503995317b15b2d1806c1c0a99e5b3 2fc3a40645280610f8d850b82247d0ae   64532   70950   85175   8.11% max=224 same=False
+ctx-menu               64c8c33a5c5c5e905288cca4fab37285 5bb170555ba6ab13d6c2d07afc7cc75c  158033  165135  122224  11.64% max=248 same=False
+delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 1f0c4130dd9f7fde0b6a4200ff9d5e68  162718  166370  382652  36.46% max=224 same=False
+model-picker           946b07def583e696822df943b6935f04 66be1f241f3e704762a108c03c48cb1f  164258  171208  117437  11.19% max=248 same=False
+hover-thread           16917898b7b5fb7b95a515bee87001d1 03a15c4a7bb2841b183aa7ffd8128228  158169  165110  113042  10.77% max=248 same=False
+focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 00b028eff7b9a1c8e49dc5109a38f82e  158745  165611  113104  10.78% max=248 same=False
+long-mid               147fb156af029f6c57cfb686d6e84c0c f4e1fc4609f18265f80fa8cc6370b12b  143456  167718  142444  13.57% max=255 same=False
+long-bottom            be7b7fe814eb8ebcf11369bdec650a68 a5576a855aa52a9a675be74612f1b58a  157770  164511  124452  11.86% max=248 same=False
+settings-general       4d16a5c68b170e998bb4892713b8263e b95b109b156d817ae4839ec6bdcac4e1  142486  144567  315274  30.04% max=224 same=False
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 dc5ee213bfe4b8d7ef1641081cd09f2f  132243  136487  300497  28.63% max=216 same=False
+settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 7f4d07e315e289cac2faf11b11199872  139387  143292  305797  29.13% max=216 same=False
+settings-about         3fac0ec7f4820e99a1bac811de88697f 2388394c6474dfafc4b1af91797a2a65  135693  137358  302389  28.81% max=216 same=False
+dark-chat              252996a52c0b1d02cfb3205ba1798c94 8cacd0f7b32423816824e3c16805b0b2  158038  165242  111631  10.64% max=230 same=False
 ```
 
-### 5.2 18 页逐页差异整表（当前图）
+整理成表：
 
-本轮 B（窗口控制 + 侧栏 hover/selected）只重拍受影响的 7 页：`chat`、`search-open`、
-`focus-composer`、`long-mid`、`long-bottom`、`dark-chat`、`hover-thread`；其余 11 页未重拍。
-下表是当前工作区图片的真实输出（原样）：
-
-```
-$ .venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
-rc=0
-chat                   ac72cd597ae44377b608777cbd5e2e81 d6262dc74fd80e10fc6e1f7f8807864b  158583   99849  107344  10.23% max=248 same=False
-empty                  a616eabe08d8c107709b89d699604d13 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
-first-run              0e2b5786d552a73525ded72469f224ea 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
-search-open            3a5f80988f34cbcccf98281d7697498e c2441cec0d6f25b7b82940b2b7c78119  158824  100187  107373  10.23% max=248 same=False
-search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b8583efa9  130449  115306  113729  10.84% max=248 same=False
-search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
-ctx-menu               64c8c33a5c5c5e905288cca4fab37285 670cb0a6175633c7dd4de65db75dc600  158033  160017  115327  10.99% max=248 same=False
-delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 5b8baeb969eb5d8a416be851c24d7dce  162718  147103  384883  36.67% max=224 same=False
-model-picker           946b07def583e696822df943b6935f04 91b3f5cc9f9d936fd666892bf4f29535  164258  106996  115579  11.01% max=248 same=False
-hover-thread           16917898b7b5fb7b95a515bee87001d1 e2faafde09c1c72dc2070b03c9233ae9  158169   99587  107306  10.22% max=248 same=False
-focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 f2c8613fa58b45f91b491fca0b82c702  158745   99941  107360  10.23% max=248 same=False
-long-mid               147fb156af029f6c57cfb686d6e84c0c a3d2be394827ee8f82cb46c8e94d9557  143456  101887  119093  11.35% max=255 same=False
-long-bottom            be7b7fe814eb8ebcf11369bdec650a68 01872a3a01a72a5797bfd2f613962af3  157770   98637  118624  11.30% max=248 same=False
-settings-general       4d16a5c68b170e998bb4892713b8263e c0f484af63df61817a87a15341e9d212  142486  113127  335142  31.93% max=224 same=False
-settings-models        7f7a6dd835823f50475db7a3c9e727c1 92c0f06f8b41707f3e6396e8c1bfe529  132243   81933  294323  28.04% max=216 same=False
-settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 4fb02618eea39c43f95d17ae760fee4e  139387  110088  330260  31.47% max=216 same=False
-settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e556a683a  135693  104052  328222  31.27% max=224 same=False
-dark-chat              252996a52c0b1d02cfb3205ba1798c94 a625825a98eb82df6e24e7f88052c4cc  158038   99153  105756  10.08% max=230 same=False
-```
-
-整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
-
-| 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 | 口径 |
+| 页名 | 原版 md5 | QML md5（D 轮） | 差异像素 | 差异% | max 通道差 | 口径 |
 |---|---|---|---:|---:|---:|---|
-| chat | `ac72cd597ae44377b608777cbd5e2e81` | `d6262dc74fd80e10fc6e1f7f8807864b` | 107344 | 10.23% | 248 | 当前实测（B 轮重拍） |
-| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| search-open | `3a5f80988f34cbcccf98281d7697498e` | `c2441cec0d6f25b7b82940b2b7c78119` | 107373 | 10.23% | 248 | 当前实测（B 轮重拍） |
-| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `670cb0a6175633c7dd4de65db75dc600` | 115327 | 10.99% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| model-picker | `946b07def583e696822df943b6935f04` | `91b3f5cc9f9d936fd666892bf4f29535` | 115579 | 11.01% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `e2faafde09c1c72dc2070b03c9233ae9` | 107306 | 10.22% | 248 | 当前实测（B 轮重拍） |
-| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `f2c8613fa58b45f91b491fca0b82c702` | 107360 | 10.23% | 248 | 当前实测（B 轮重拍） |
-| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `a3d2be394827ee8f82cb46c8e94d9557` | 119093 | 11.35% | 255 | 当前实测（B 轮重拍） |
-| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `01872a3a01a72a5797bfd2f613962af3` | 118624 | 11.30% | 248 | 当前实测（B 轮重拍） |
-| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `c0f484af63df61817a87a15341e9d212` | 335142 | 31.93% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `92c0f06f8b41707f3e6396e8c1bfe529` | 294323 | 28.04% | 216 | 未重拍（沿用旧值 + 2026-11-23） |
-| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 | 未重拍（沿用旧值 + 2026-11-23） |
-| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `a625825a98eb82df6e24e7f88052c4cc` | 105756 | 10.08% | 230 | 当前实测（B 轮重拍） |
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `00baf46965255434d276905e4e82c978` | 113088 | 10.77% | 248 | D 轮全量重拍 |
+| empty | `a616eabe08d8c107709b89d699604d13` | `e56462d7a538be35dae1b166403f4784` | 13231 | 1.26% | 248 | D 轮全量重拍 |
+| first-run | `0e2b5786d552a73525ded72469f224ea` | `e56462d7a538be35dae1b166403f4784` | 13231 | 1.26% | 248 | D 轮全量重拍 |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `572f4907d5343c138c3c5ff4fe8b20b9` | 113117 | 10.78% | 248 | D 轮全量重拍 |
+| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `6526581e572c4a5e758d2294b6d761fb` | 107403 | 10.23% | 248 | D 轮全量重拍 |
+| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `2fc3a40645280610f8d850b82247d0ae` | 85175 | 8.11% | 224 | D 轮全量重拍 |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `5bb170555ba6ab13d6c2d07afc7cc75c` | 122224 | 11.64% | 248 | D 轮全量重拍 |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `1f0c4130dd9f7fde0b6a4200ff9d5e68` | 382652 | 36.46% | 224 | D 轮全量重拍 |
+| model-picker | `946b07def583e696822df943b6935f04` | `66be1f241f3e704762a108c03c48cb1f` | 117437 | 11.19% | 248 | D 轮全量重拍 |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `03a15c4a7bb2841b183aa7ffd8128228` | 113042 | 10.77% | 248 | D 轮全量重拍 |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `00b028eff7b9a1c8e49dc5109a38f82e` | 113104 | 10.78% | 248 | D 轮全量重拍 |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `f4e1fc4609f18265f80fa8cc6370b12b` | 142444 | 13.57% | 255 | D 轮全量重拍 |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `a5576a855aa52a9a675be74612f1b58a` | 124452 | 11.86% | 248 | D 轮全量重拍 |
+| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `b95b109b156d817ae4839ec6bdcac4e1` | 315274 | 30.04% | 224 | D 轮全量重拍 |
+| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `dc5ee213bfe4b8d7ef1641081cd09f2f` | 300497 | 28.63% | 216 | D 轮全量重拍 |
+| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `7f4d07e315e289cac2faf11b11199872` | 305797 | 29.13% | 216 | D 轮全量重拍 |
+| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `2388394c6474dfafc4b1af91797a2a65` | 302389 | 28.81% | 216 | D 轮全量重拍 |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `8cacd0f7b32423816824e3c16805b0b2` | 111631 | 10.64% | 230 | D 轮全量重拍 |
 
-本轮 7 页改前 → 改后（改前为 A 提交 `2cd83e8` 的当前图实测，改后为本轮重拍图）：
+D 轮改动前后（C 轮最终 `d-diff2.txt` → D 轮最终，同一 `page_diff18.py` 口径）：
 
-| 页 | 改前 差异像素 / % | 改后 差异像素 / % | 变化 |
+| 页 | C 轮 差异像素 / % | D 轮 差异像素 / % | 变化 |
 |---|---:|---:|---:|
-| chat | 119799 / 11.41% | 107344 / 10.23% | -12455 px / -1.18 pp |
-| search-open | 136170 / 12.97% | 107373 / 10.23% | -28797 px / -2.74 pp |
-| hover-thread | 136545 / 13.01% | 107306 / 10.22% | -29239 px / -2.79 pp |
-| focus-composer | 136157 / 12.97% | 107360 / 10.23% | -28797 px / -2.74 pp |
-| long-mid | 126160 / 12.02% | 119093 / 11.35% | -7067 px / -0.67 pp |
-| long-bottom | 135084 / 12.87% | 118624 / 11.30% | -16460 px / -1.57 pp |
-| dark-chat | 128299 / 12.22% | 105756 / 10.08% | -22543 px / -2.14 pp |
+| empty | 49703 / 4.74% | 13231 / 1.26% | -36472 px / -3.48 pp |
+| first-run | 49703 / 4.74% | 13231 / 1.26% | -36472 px / -3.48 pp |
+| 其余 16 页 | — | 与 C 轮一致 | 未改代码，未变化 |
 
-口径说明：表中 7 页为本轮 B 重拍后的当前实测；其余 11 页**未重拍（沿用旧值 + 2026-11-23）**，
-只用于结构对照，不得当作本轮新值。18 页 `same=` 全部为 False，无任何一页与参考图逐像素相同。
+口径说明：以上 18 行全部来自 D 轮最终全量重拍，不再有「沿用旧值」行；18 页 `same=` 全部为 False，
+无任何一页与参考图逐像素相同。`empty` / `first-run` 的原版图 md5 不同但解码后像素完全相同；QML 侧
+两页 md5 都是 `e56462d7…`，两态渲染一致。
 
-注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
+### 5.3 四条硬判据（D 轮最终复检）
 
-### 5.3 四条硬判据（每条附真实命令与实测输出）
-
-探针脚本已随报告落盘在 `out/latest-parity/probes/`，日志在 `out/latest-parity/criteria*-rerun.log`。
+探针脚本在 `out/latest-parity/probes/`；本轮日志全部重新生成，文件名统一以 `d-criterion*` / `d-delta-*` 开头。
 
 #### 判据一：long-mid / long-bottom / chat 三页必须互不相同 —— 成立
 
@@ -1432,26 +1448,20 @@ $ python3 -I out/latest-parity/probes/c1_three_pages.py
 rc=0
 ```
 
-输出（原样）：
-
 ```
-chat         md5=ed199154dc7399a207d8155f79985d98  1280x820
-long-mid     md5=8905296c9f8d7e2b372b7e44acb68623  1280x820
-long-bottom  md5=880b26bdebdb3e10d3afff973460ce37  1280x820
+chat         md5=00baf46965255434d276905e4e82c978  1280x820
+long-mid     md5=f4e1fc4609f18265f80fa8cc6370b12b  1280x820
+long-bottom  md5=a5576a855aa52a9a675be74612f1b58a  1280x820
 
 === 判据1：三页 md5 两两不同 + 逐像素差 ===
-比较函数：像素 (r,g,b) 三通道任一不同即计为差异像素；max = 该像素最大通道差。
-  chat         vs long-mid     diffpx=67145  pct=6.3972%  max=241
-  chat         vs long-bottom  diffpx=16258  pct=1.5490%  max=216
-  long-mid     vs long-bottom  diffpx=55612  pct=5.2984%  max=241
-
-=== 判据1 附加：三页侧栏末尾可见会话标题文字带（证明滚动位置不同）===
-  chat         会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
-  long-mid     会话标题文字带 n=13  首个=(57, 65) 末个=(676, 713)
-  long-bottom  会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
+  chat         vs long-mid     diffpx=84665  pct=8.0664%  max=241
+  chat         vs long-bottom  diffpx=29721  pct=2.8317%  max=216
+  long-mid     vs long-bottom  diffpx=63876  pct=6.0857%  max=241
 ```
 
-判定：三页 md5 两两不同；两两差异像素分别为 67145 / 16258 / 55612，差异率 6.3972% / 1.5490% / 5.2984%，均远大于 0。三页侧栏可见会话标题文字带的起点不同（chat 与 long-bottom 首带 64–101，long-mid 首带 57–65），说明三页确实是三个不同的滚动位置，不是同一张图重复保存。**判据一成立。**
+三页 md5 两两不同，差异像素 84665 / 29721 / 63876 均远大于 0；侧栏可见会话标题文字带也保留区分
+（`long-mid` 首带 `(57,65)`，`chat` / `long-bottom` 首带 `(64,101)`）。**判据一成立。**
+日志：`out/latest-parity/logs/d-criterion1.log`。
 
 #### 判据二：search-results 只显示命中的 10 行 —— 成立
 
@@ -1459,8 +1469,6 @@ long-bottom  md5=880b26bdebdb3e10d3afff973460ce37  1280x820
 $ python3 -I out/latest-parity/probes/c2_c3_search_and_focus.py
 rc=0
 ```
-
-计数方法 A（读图）：在头像列 x∈[70,108) 内找紫色头像像素（|r−138|≤25 且 |g−56|≤25 且 |b−245|≤25），把纵向连续（间隔 ≤20 px）的行合并成簇，一簇即一行命中。
 
 ```
 === 判据2：search-results 命中行数（头像列 x70..108 的紫色头像簇）===
@@ -1472,39 +1480,13 @@ rc=0
      簇高=[32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
 ```
 
-QML 侧簇数 = 10，每簇像素数完全相同（349 px）、簇高完全相同（32 px），说明是 10 个等价的头像行，不是噪声。deva 侧同样 10 簇，簇顶 y 完全一致（66,120,174,228,282,336,390,444,498,552）。
-
-计数方法 B（核对 fixture 数据）：
-
-```
-$ python3 -I out/latest-parity/probes/c4_stub_scan.py   # 第 2 节
-```
-
-```
-=== 判据2 方法B：fixture 会话标题含 "00" 的文件数 ===
-会话文件总数=120（排除 _index.json）；标题含 "00" 的=10
-  parity-001.json  会话 001：准备发布说明
-  parity-002.json  会话 002：准备发布说明
-  parity-003.json  会话 003：准备发布说明
-  parity-004.json  会话 004：准备发布说明
-  parity-005.json  会话 005：准备发布说明
-  parity-006.json  会话 006：准备发布说明
-  parity-007.json  会话 007：准备发布说明
-  parity-008.json  会话 008：准备发布说明
-  parity-009.json  会话 009：准备发布说明
-  parity-100.json  会话 100：准备发布说明
-```
-
-120 个会话文件（已排除列表型的 `_index.json`）中标题含「00」的恰好 10 个。两种独立方法都得 10，**判据二成立，无需修改 QML。**
+QML 与 deva 都是 10 簇、簇顶 y 完全一致、簇高 32；QML 每簇 349 px 一致。另用 fixture 文件独立核对
+（`c4_stub_scan.py` 第 2 节）：120 个会话文件中标题含 `00` 的恰好 10 个。**判据二成立。**
+日志：`out/latest-parity/logs/d-criterion2-3.log`。
 
 #### 判据三：focus-composer 输入区有可见焦点边框 —— 成立
 
-采样点：输入卡片四边中点 —— 上 (800,658)、下 (800,803)、左 (428,740)、右 (1207,740)。
-
-```
-$ python3 -I out/latest-parity/probes/c2_c3_search_and_focus.py   # 判据3 两节
-rc=0
-```
+采样点：输入卡片四边中点 `(800,658)` / `(800,803)` / `(428,740)` / `(1207,740)`。
 
 ```
 === 判据3：focus-composer 输入卡片四边取色 ===
@@ -1514,91 +1496,74 @@ rc=0
   deva chat(未聚焦)   上(800,658)=(213,213,219)  下(800,803)=(213,213,219)  左(428,740)=(213,213,219)  右(1207,740)=(213,213,219)
 
 === 判据3 补充：沿输入卡片上边横扫，找连续的高饱和边框像素段 ===
-  qml focus   y=657 紫蓝像素数=0
-  qml focus   y=658 紫蓝像素数=764 x=436..1199 首色=(186, 186, 238)
-  qml focus   y=659 紫蓝像素数=6 x=434..1201 首色=(154, 154, 230)
-  qml chat    y=657 紫蓝像素数=0
+  qml focus   y=658 紫蓝像素数=764 x=436..1199 首色=(148, 148, 200)
   qml chat    y=658 紫蓝像素数=0
-  qml chat    y=659 紫蓝像素数=0
-  deva focus  y=657 紫蓝像素数=0
   deva focus  y=658 紫蓝像素数=764 x=436..1199 首色=(194, 194, 236)
-  deva focus  y=659 紫蓝像素数=8 x=434..1201 首色=(179, 179, 233)
 ```
 
-结论：focus-composer 页四边全部取值 (91,91,214) = `#5b5bd6`；同一位置的 `chat`（未聚焦）页四边全部为 (213,213,219) = `#d5d5db`。沿上边 y=658 横扫，focus-composer 有 764 个紫蓝像素（x=436..1199，起色 (186,186,238)），未聚焦的 chat 页该行紫蓝像素 0。deva 参考图同为四边 (91,91,214)、同样 764 像素，**判据三成立，无需修改 QML。**
+四边全部 `(91,91,214)`（`#5b5bd6`），未聚焦 chat 页四边全部 `(213,213,219)`（`#d5d5db`）；
+上边 y=658 有 764 个连续紫蓝像素，与 deva 的 764 个一致。**判据三成立。**
 
-#### 判据四：删除确认框的 Delete / Cancel 必须真的生效 —— ~~不成立~~ **已由 §4.8 修复为成立**
-
-判定标准：在 `delete-confirm` 页真实点击对话框里的「Delete」和「Cancel」。点 Delete 应删除当前会话、把 active 切到其他会话；点 Cancel 应只关闭对话框且会话数不变。截图相同不代表交互成立，必须用真实点击事件验证 `confirmLayer.visible`、会话数与 active。
-
-探针：`out/latest-parity/probes/c4_delete_dialog.py`（启动真实 QML 引擎，页面 `delete-confirm`，用 `QTest.mouseClick` 点按钮坐标）。
+#### 判据四：删除确认框 Delete / Cancel 必须真的生效 —— 成立
 
 ```
-$ AI_UPPER_HOME=/tmp/fx-qml-home .venv/bin/python out/latest-parity/probes/c4_delete_dialog.py > out/latest-parity/logs/criterion4-delete-current.log 2>&1; echo rc=$?
+$ .venv/bin/python -I out/latest-parity/probes/c5_ctx_confirm.py
 rc=0
-$ cat out/latest-parity/logs/criterion4-delete-current.log
-roots 1
-ctx visible= True geometry= 165.0 88.0 175.0 124.0
-ctx texts= ['New chat', 'Rename', 'Archive', 'Delete conversation']
-ctx item count= 4
-confirm visible= True
-sessions before= 120 active= parity-000
-after click at Delete(795,462): confirm visible= True sessions= 120 active= parity-000
-after click at Cancel(695,462): confirm visible= True
 ```
 
-实测结果（**修复前，历史记录**）：击 Delete 前后 `confirm visible=True`、`sessions=120`、`active=parity-000` 全部不变；击 Cancel 后 `confirm visible=True` 仍不关闭。源码侧同因：`app/src/qml/Main.qml:1432` 的 `confirmLayer` 只由 `window.confirmOpen`（即 `page === "delete-confirm"`）控制显示，内部两个按钮只是 `Text` / `Rectangle`，没有 `MouseArea` / `TapHandler`；`ctxMenu` 也仍在 `z:40` 后面保持打开。
-
-**修复后（§4.8，`cddf2fb`）**：同一批用户路径改用 `QTest.mouseClick` 注入真实鼠标事件，坐标由控件 `mapToScene(中心)` 现算：
+关键输出（真实 `QTest.mouseClick`，坐标由 `mapToScene(中心)` 现算）：
 
 ```
-起点：sessions=120 active=parity-000 parity-000 文件存在=True
-点菜单 Delete 后：confirm visible=True
-confirmCancel 中心=(718.0, 468.0) bbox=(683.0, 453.0, 753.0, 483.0)
-confirmDelete 中心=(794.5, 467.0) bbox=(760.0, 452.0, 829.0, 482.0)
-[a] 点取消中心后：confirm visible=False confirmOpen=False sessions=120 active=parity-000 文件存在=True
-[b] 点确认中心后：confirm visible=False confirmOpen=False sessions=119 active=parity-001 parity-000 文件存在=False
-[c] 点遮罩空白 (100,700) 后：confirm visible=False confirmOpen=False sessions=119 active=parity-001
+  labels        = ['New chat', 'Rename', 'Select', 'Archive', 'Delete']
+  labels==deva  = True
+  item4 Delete    红色像素=227    深色文字像素=0
+    deva Delete   红色像素=230    深色文字像素=0
+  起点：sessions=120 active=parity-000 parity-000 文件存在=True
+  [a] 点取消中心后：confirm visible=False confirmOpen=False sessions=120 active=parity-000 文件存在=True
+  [b] 点确认中心后：confirm visible=False confirmOpen=False sessions=119 active=parity-001 parity-000 文件存在=False
+  [c] 点遮罩空白 (100,700) 后：confirm visible=False confirmOpen=False sessions=119 active=parity-001
+=== 结果摘要 ===
+  判据1（5 项 + Delete 危险色）= True
+  判据2a（取消关闭不删）= True   [120 -> 120]
+  判据2b（确认关闭并删）= True   [120 -> 119]
+  判据2c（遮罩关闭不删）= True   [119 -> 119]
+  ALL = True
 ```
 
-日志路径 `out/latest-parity/logs/c5-ctx-confirm.log`，探针 `out/latest-parity/probes/c5_ctx_confirm.py`。
-即：取消不删、确认真删并把活跃会话按 Deva `openFirstSession` 规则回退到 `parity-001`、遮罩关闭不删。
+菜单 5 项顺序与 deva 一致，Delete 为危险色 `#e5484d`；取消不删、确认真删并把 active 回退到 `parity-001`、
+遮罩关闭不删。**判据四成立。** 日志：`out/latest-parity/logs/d-criterion4.log`。
 
-**四条硬判据汇总**：判据一成立（三页滚动位置两两不同）、判据二成立（search-results 恰好 10 行）、判据三成立（focus-composer 四边 `#5b5bd6`）、~~判据四不成立（删除确认框无交互，Delete / Cancel 点击均无效）~~ **判据四已由 §4.8 修复为成立**（真实鼠标点击：取消不删、确认真删并回退活跃会话、遮罩关闭不删）。
+**四条硬判据汇总：四条全部成立**（判据一 3 页两两不同；判据二 10 行；判据三 4×`#5b5bd6`；判据四三处点击均生效）。
 
-#### 差异量级备注（供后续修复排优先级）
+#### 差异量级分布（D 轮最终图）
 
-对差异像素按单像素最大通道差 d 分桶（**修复后复算**：`.venv/bin/python -I out/latest-parity/probes/c6_delta_histogram.py`
-→ `out/latest-parity/logs/c6-delta-histogram.log`；旧值见 `out/latest-parity/delta-histogram.log`）：
+命令：`.venv/bin/python -I out/latest-parity/probes/c6_delta_histogram.py`，rc=0，日志
+`out/latest-parity/logs/d-delta-histogram.log`。d 为单像素最大通道差。
 
 | 页 | 差异像素 | d≤2 | d≤8 | d>8 | d≤2 占比 |
-|---|---|---|---|---|---|
-| chat | 129909 | 30243 | 17216 | 82450 | 23.28% |
-| empty | 10214 | 2086 | 1775 | 6353 | 20.42% |
-| search-results | 113729 | 11124 | 28357 | 74248 | 9.78% |
-| ctx-menu | 127196 | 41474 | 17258 | 68464 | 32.61% |
-| delete-confirm | 384883 | 292905 | 29793 | 62185 | 76.10% |
-| model-picker | 137282 | 35761 | 21985 | 79536 | 26.05% |
-| hover-thread | 136545 | 11678 | 29649 | 95218 | 8.55% |
-| long-mid | 126160 | 11486 | 21473 | 93201 | 9.10% |
-| settings-general | 340813 | 235777 | 55354 | 49682 | 69.18% |
-| settings-models | 325672 | 230906 | 49617 | 45149 | 70.90% |
-| settings-about | 328222 | 232545 | 49560 | 46117 | 70.85% |
-| dark-chat | 128299 | 28412 | 18348 | 81539 | 22.15% |
+|---|---:|---:|---:|---:|---:|
+| chat | 113088 | 31006 | 13843 | 68239 | 27.42% |
+| empty | 13231 | 2175 | 1858 | 9198 | 16.44% |
+| search-results | 107403 | 30109 | 12612 | 64682 | 28.03% |
+| ctx-menu | 122224 | 42234 | 13897 | 66093 | 34.55% |
+| delete-confirm | 382652 | 301507 | 20300 | 60845 | 78.79% |
+| model-picker | 117437 | 34135 | 14010 | 69292 | 29.07% |
+| hover-thread | 113042 | 30956 | 13843 | 68243 | 27.38% |
+| long-mid | 142444 | 30702 | 15148 | 96594 | 21.55% |
+| settings-general | 315274 | 255093 | 18834 | 41347 | 80.91% |
+| settings-models | 300497 | 250119 | 13167 | 37211 | 83.24% |
+| settings-about | 302389 | 251539 | 13121 | 37729 | 83.18% |
+| dark-chat | 111631 | 28783 | 14489 | 68359 | 25.78% |
 
-读法（修复后）：settings-* 与 delete-confirm 的差异有 69%–76% 落在 d≤2，属于遮罩底色差 1 个灰阶
-造成的整体偏移——§4.8 把 delete-confirm 从 63.34% 推到 76.10%，说明剩下的确实只是遮罩合成取整。
-chat / dark-chat 的 d≤2 占比从 8.59% / 10.13% 升到 23.28% / 22.15%（卡片底色对齐后，原本的
-大跳变变成了 1–2 灰阶），ctx-menu 从 10.03% 升到 32.61%（菜单几何与字号接近后同理）。
-model-picker 从 10.08% 升到 26.05%（§4.9 弹层内容与聚焦态修复后，面板区域的大跳变消掉，
-剩 137282 px 中 2631 px 是与 chat 共用的正文缺口，picker 专属只剩 316 px）。
-hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差异（hover-thread 见 B1/B2）。
+读法：settings-* 与 delete-confirm 有 78.79%–83.24% 的差异只在 1–2 个灰阶内，主要是遮罩/背景合成取整；
+chat / dark-chat / hover-thread 的 d≤2 占比在 25.78%–27.42%，剩下的大头是仍未闭环的正文 Markdown（E1–E5）
+与侧栏（B1–B3）结构缺口，不是本轮 C/D 改坏的。
 
 ### 5.4 逐组件缺口清单（覆盖 18 页，全部来自本轮实测日志）
 
-> **状态说明（2026-11-23 复算）**：本节写于 §4.7 / §4.8 修复之前，其中 **C1、C4、E6、D1–D3 已被修复**，
-> 行内已改为「已由 §4.8 / §4.7 / §4.9 修复」并换成当前实测值；其余各行仍是实测口径。§5.2 / §5.3 / §5.5
-> 的差异数字已按修复后重算（日志 `out/latest-parity/logs/c6-page-diff18-final.log`）。
+> **状态说明（D 轮最终）**：本节保留最初的缺口登记，并在行内标注后续修复结论。**C1/C4、D1–D3、E6、
+> A1–A4、F1/F2/F4/F5、G4/G5 已闭环**；仍开放的是 A5、B1–B3、C2/C3、E1–E5、F3、G1、H1。§5.2 / §5.3 / §5.5
+> 的数字全部来自 D 轮最终全量重拍（`out/latest-parity/logs/d-page-diff18-final.log`）。
 
 下表每行都给「实测值 + 证据文件」，没有「符合预期」这类空话。
 
@@ -1607,9 +1572,9 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 | # | 缺口 | 实测证据 |
 |---|---|---|
 | A1 | ~~QML 无窗口控制按钮（− □ ×）~~ **已由 §4.10 修复** | deva 每页 `x1140..1270 y0..40` 有 132 个暗像素，bbox=(1195,15,1268,24)，三枚图标 x 组 `[(1195,1204),(1227,1236),(1259,1268)]`；QML 修复后 `x1184..1279 y0..40` 为实色块 `#ffffff`（深色 `#1e1e20`），三枚图标暗像素 132、bbox=(1195,15,1268,24)、x 组与 deva 完全相同，整块仅 58 px 抗锯齿差（max=9）（`out/latest-parity/qml/chat.png`、§4.10） |
-| A2 | QML 无侧栏列表滚动条 | deva 有 `(202,202,203)` 滑块：x349–352，chat/search-open/ctx-menu/model-picker/hover-thread/focus-composer 各 332 px（y59–142），long-mid 332 px（y228–311）；QML 12 页全部为 0（`probe-settings.log` 末节、`probe-gaps2.log` §5） |
-| A3 | QML 无正文滚动条 | deva chat 正文右缘 x1274–1277 有 `(209,209,209)` 共 380 行；QML 该区间列为空列表 `[]`（`probe-rail.log` §6） |
-| A4 | 源码层即无滚动条实现 | `grep -rn 'ScrollBar\|ScrollView' app/src/qml/` 无任何命中 |
+| A2 | ~~QML 无侧栏列表滚动条~~ **已由 §5.6 修复** | 修复前 QML 12 页为 0；当前 D 轮 `chat` / `long-mid` 在 x349–352 均有 `(202,202,203)` 340 px（`DevaScrollBar` 挂到 `sessionList`，`Main.qml:582`），deva 同色滑块存在（`out/latest-parity/qml/chat.png`） |
+| A3 | ~~QML 无正文滚动条~~ **已由 §5.6 修复** | 修复前 QML 正文右缘为空；当前 D 轮 `chat` / `long-mid` 在 x1274–1277 均有 `(209,209,209)` 1668 px（`bodyScroll` 的 `body-scrollbar`，`Main.qml:991`），deva 同色滚动条存在（`out/latest-parity/qml/chat.png`） |
+| A4 | ~~源码层即无滚动条实现~~ **已由 §5.6 修复** | `grep -rn 'ScrollBar\|ScrollView' app/src/qml/` 现命中 `Main.qml:210/212/216/582/991`，内联 `DevaScrollBar` 两条均已接线 |
 | A5 | 模态遮罩底色比 deva 暗 1 个灰阶 | QML 侧栏 `(143,143,144)` vs deva `(144,144,144)`；QML 左轨 `(139,139,140)` vs deva `(140,140,141)`（`probe-mask.log` §1/§4） |
 
 **B. 侧栏 / 会话列表**
@@ -1656,8 +1621,8 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 | F1 | ~~无右上角白色窗口控制缺口~~ **已由 §4.10 修复** | deva `x1160..1279 y0..40` = `(255,255,255)`×3680 + `(148,148,148)`×960 + `(95,99,104)`×100；QML 修复后同区 = `(255,255,255)`×3680 + `(148,148,148)`×936 + `(95,99,104)`×100（灰差 24 px 为 close X 抗锯齿）（`out/latest-parity/qml/settings-general.png`、§4.10） |
 | F2 | ~~面板白底 bbox 高度不同~~ **已由 §4.10 修复** | 修复前 QML `(736,257,961,391)`，deva `(736,0,1279,391)`——deva 的白色区包含顶部窗口条，QML 没有；修复后 QML `(736,0,1279,391)` == deva（`out/latest-parity/qml/settings-general.png`、§4.10） |
 | F3 | 遮罩灰阶差 1 级（同 A5） | settings 页侧栏 QML `(143,143,144)`×72483 vs deva `(144,144,144)`×63722（`probe-mask.log` §1） |
-| F4 | 遮罩把背景对话压成纯灰，deva 保留可辨认的暗化对话 | 正文区 region=345480：deva 暗像素 7215、unique_colors=452；QML 暗像素 6、unique_colors=27（`settings-backdrop-content.log`）。QML 用一层不透明灰盖住，deva 是半透明遮罩 |
-| F5 | 设置左栏三个导航图标与 deva 不一致 | deva `SettingsPane.tsx` 用 `Cog` / `Brain` / `Puzzle` / `Info`；QML `SettingsModal.qml:119-122` 用 `settings2` / `blocks` / `cog` / `info`，General、Models、Extensions 三个图标不对 |
+| F4 | ~~遮罩把背景对话压成纯灰~~ **已由 C 轮设置浮层修复** | 修复前正文区 QML 暗像素 6、unique_colors=27，近似纯灰。当前 D 轮同口径 region x356..1232 × y40..580（473040 px）：settings-general QML 暗像素 3321 / unique 842 vs deva 3331 / 847；settings-models 2556/775 vs 2566/814；extensions 3176/792 vs 3233/935；about 2475/845 vs 2722/1156。背景对话保留可辨认（`logs/d-settings-backdrop-content.log`） |
+| F5 | ~~设置左栏三个导航图标与 deva 不一致~~ **已由 C 轮修复** | deva `SettingsPane.tsx:48-51` 为 `Cog` / `Brain` / `Puzzle` / `Info`（15px）；QML `SettingsModal.qml:126-131` 现为 `IconData.cog` / `IconData.brain` / `IconData.puzzle` / `IconData.info`，`app/tests/test_qml_settings_overlay.py` 断言四条路径全等 |
 
 **G. 输入区**
 
@@ -1666,48 +1631,99 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 | G1 | 左侧图标簇整体左移约 90 px | QML 簇 `[860-990][1010][1035-1040][1110][1125-1190]`；deva `[950-1080][1100-1105][1125-1190]`（`final-probe.log` §E） |
 | G2 | 右侧 chip 位置基本对齐 | 彩色簇 QML `[(1140,760),(1140,780),(1160,780),(1160,760),...]` vs deva 同坐标集合（`gap-probe2.log` 末节）——非缺口 |
 | G3 | 聚焦描边存在且颜色一致 | 见 5.3 判据三，四边 `(91,91,214)` 与 deva 相同——非缺口 |
-| G4 | 输入区缺 ContextRing（上下文使用圆环） | Python 已发布 `contextUsage` 属性（`qml_shell.py:_publish`），但 `Main.qml` 输入区无任何圆环绘制，`grep -n "contextUsage" app/src/qml/Main.qml` 只在属性声明处出现 |
-| G5 | effort chip 点击打开的是模型菜单 | `Main.qml:1157` 的 `effortChip` MouseArea 只写 `window.modelPickerOpen = !window.modelPickerOpen`，从不设置 `pickerMode`；`pickerMode` 在页面映射里恒为 `"model"`（`Main.qml:60`），思考等级菜单不可达 |
+| G4 | ~~输入区缺 ContextRing~~ **已由 C 轮修复** | `Main.qml:1534-1550` 接入 `ContextRing`（`objectName: "contextRing"`，`usage: window.contextUsage`，锚在 `effortChip.left`），`Main.qml:113-115` 发布 `contextUsage`；实测开卡片 `260×53`、文案 `~16 / 1M (<0.1%)`，`app/tests/test_qml_context_ring.py` 5 passed |
+| G5 | ~~effort chip 点击打开的是模型菜单~~ **已由 C 轮修复** | `Main.qml:1513` 现为 `onClicked: window.openPicker("thinking")`，模型贴片在 `Main.qml:1589` 调 `openPicker("model")`；`openPicker(mode)` 在 `Main.qml:1629-1635` 设置 `pickerMode`，两套菜单互斥（`app/tests/test_qml_model_picker.py` 含隔离断言） |
 
 **H. empty / first-run**
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| H1 | 差异 0.97% 集中在 quick-start 文字与头像 | QML 文字带 `(412,459)/(470,481)/(492,521)` vs deva `(408,459)/(471,484)/(492,522)`；差异行带见 `probe-gaps2.log` §1（y12–55、y69–109、y323–559 等）。搜索框、rail 图标、卡片底色均一致（`probe-empty.log` §2） |
-| H2 | deva 的 empty 与 first-run 像素完全相同 | `probe-final2.log` §1：「deva 侧 empty/first-run 像素完全相同」；QML 侧差异像素=0 |
+| H1 | 差异 1.26% 集中在 quick-start 文字与头像（残余） | D 轮最终 13231 px / 1.26%。QML 文字带 `(412,459)/(470,481)/(492,521)` vs deva `(408,459)/(471,484)/(492,522)`；仍是字体度量/头像光栅残差，未宣称「已对齐」（`out/latest-parity/logs/d-page-diff18-final.log`） |
+| H2 | deva 的 empty 与 first-run 像素完全相同 | `probe-final2.log` §1：「deva 侧 empty/first-run 像素完全相同」；QML 侧 D 轮两页 md5 都是 `e56462d7…`，差异像素=0 |
+| H3 | ~~空态底部有 780×146 的灰色幻影输入卡片~~ **已由 D 轮修复** | `SoftShadow` 在 `target.visible=false` 时仍绘制。修复：`SoftShadow.qml` 根节点 `visible: target !== null && target.visible`。`empty` / `first-run` 由 49703 px / 4.74% 降到 13231 px / 1.26%，但仍保留 1.26% 残差，不称已对齐 |
 
-### 5.5 18 页 → 缺口映射（收口核对）
+### 5.5 18 页 → 缺口映射（D 轮最终收口）
 
-| 页 | 差异像素 / % | 主要结构缺口 | 判定 |
+| 页 | 差异像素 / %（D 轮） | 当前剩余缺口 | 判定 |
 |---|---:|---|---|
-| chat | 119799 / 11.41% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
-| empty | 10214 / 0.97% | H1（头像绘制与字体度量） | 仅光栅差异 |
-| first-run | 10214 / 0.97% | H1；与 empty 像素相同 | 仅光栅差异 |
-| search-open | 136170 / 12.97% | 同 chat；搜索框打开态差异随正文/侧栏缺口 | 真结构缺口 |
-| search-results | 113729 / 10.84% | 同 chat；判据二 10 行已对齐（判据二成立） | 真结构缺口 |
-| search-none | 93091 / 8.87% | E5、A1–A5、B1–B3 | 真结构缺口 |
-| ctx-menu | 115327 / 10.99% | ~~C1~~（已由 §4.8 修复：5 项、Delete 危险色）；C2/C3 小幅几何；A/B/E 共用缺口 | 真结构缺口（C1 已闭环） |
-| delete-confirm | 384883 / 36.67% | ~~C4~~（已由 §4.8 修复：三处点击均生效）；A5 遮罩灰阶 | 剩余为遮罩合成差（76.1% 只差 1–2 灰阶） |
-| model-picker | 115579 / 11.01% | ~~D1/D2/D3~~（已由 §4.9 修复：弹层内容、四边聚焦、面板几何）；剩余为 picker 专属 316 px + chat 共用 A/B/E 缺口；面板横向 x 偏移属 G1 | 真结构缺口（D1–D3 已闭环） |
-| hover-thread | 136545 / 13.01% | B1/B2（悬停行位置错）、A/B/E 共用缺口 | 真结构缺口 |
-| focus-composer | 136157 / 12.97% | 判据三成立；其余同 chat | 真结构缺口 |
-| long-mid | 126160 / 12.02% | A/B/E；滚动位置与已提交基线不同 | 真结构缺口 |
-| long-bottom | 135084 / 12.87% | A/B/E；真底内容仍少 | 真结构缺口 |
-| settings-general | 335142 / 31.93% | F1–F5（窗口控制、面板 bbox、遮罩、背景对话不可见、导航图标） | 真结构缺口 |
-| settings-models | 294323 / 28.04% | F1–F5；Models 内容差异 | 真结构缺口 |
-| settings-extensions | 330260 / 31.47% | F1–F5；Extensions 内容差异 | 真结构缺口 |
-| settings-about | 328222 / 31.27% | F1–F5；About 版本单一来源已修复，剩余为遮罩/窗口控制/图标 | 真结构缺口 |
-| dark-chat | 128299 / 12.22% | ~~E6~~（已由 §4.7 修复：卡片 `(42,42,46)` 与 deva 同值）；A/B 共用缺口 | 真结构缺口 |
+| chat | 113088 / 10.77% | A5、B1–B3、E1–E4；A1–A4/G4/G5 已闭环 | 真结构缺口（正文/侧栏） |
+| empty | 13231 / 1.26% | H1（quick-start 字体度量与头像光栅） | 仅光栅残差，仍未为零 |
+| first-run | 13231 / 1.26% | H1；与 empty 像素相同 | 仅光栅残差，仍未为零 |
+| search-open | 113117 / 10.78% | 同 chat；搜索框打开态 | 真结构缺口 |
+| search-results | 107403 / 10.23% | 同 chat；判据二 10 行已对齐 | 真结构缺口 |
+| search-none | 85175 / 8.11% | E5、A5、B1–B3 | 真结构缺口 |
+| ctx-menu | 122224 / 11.64% | C2/C3 小幅几何 + A/B/E；C1/C4 已闭环 | 真结构缺口 |
+| delete-confirm | 382652 / 36.46% | C4 已闭环；剩余主要是 A5/F3 遮罩合成差（78.79% 只差 1–2 灰阶） | 遮罩取整为主 |
+| model-picker | 117437 / 11.19% | D1–D3 已闭环；剩余为 chat 共用 A/B/E + G1 chip 锚点偏移 | 真结构缺口 |
+| hover-thread | 113042 / 10.77% | B1/B2（悬停行位置错）+ A/B/E | 真结构缺口 |
+| focus-composer | 113104 / 10.78% | 判据三成立；其余同 chat | 真结构缺口 |
+| long-mid | 142444 / 13.57% | A5、B1–B3、E1–E4；滚动位置与基线不同 | 真结构缺口 |
+| long-bottom | 124452 / 11.86% | A5、B1–B3、E1–E4；真底内容仍少 | 真结构缺口 |
+| settings-general | 315274 / 30.04% | F3 遮罩灰阶为主；F1/F2/F4/F5 已闭环 | 剩余为全域 1–2 灰阶 |
+| settings-models | 300497 / 28.63% | F3 遮罩灰阶为主；F1/F2/F4/F5 已闭环 | 剩余为全域 1–2 灰阶 |
+| settings-extensions | 305797 / 29.13% | F3 遮罩灰阶为主；F1/F2/F4/F5 已闭环 | 剩余为全域 1–2 灰阶 |
+| settings-about | 302389 / 28.81% | F3 遮罩灰阶为主；F1/F2/F4/F5 已闭环 | 剩余为全域 1–2 灰阶 |
+| dark-chat | 111631 / 10.64% | E6 已闭环；A5、B1–B3、E1–E4 | 真结构缺口 |
 
-结论（修复后复算）：18 页中 **2 页（empty / first-run）只剩光栅级差异**；`delete-confirm` 的功能性缺口（判据四）
-已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 10.99% 与 dark-chat 的 12.22%
-已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
+结论（D 轮最终）：18 页全部按 `qml_pages_all.sh` 重拍并重算，不再有旧值。`empty` / `first-run` 只剩
+13231 px / 1.26% 的字体度量与头像光栅残差，仍明确保留为残差；`delete-confirm` 的 C4 功能缺口已闭环，
+剩 78.79% 差异只差 1–2 灰阶；`settings-*` 四页 80.91%–83.24% 的差异只差 1–2 灰阶，主因是 F3 遮罩合成取整；
+其余页面仍有正文 Markdown、侧栏、菜单几何等真结构缺口。**没有任何一页被写成「已对齐」。**
 
-**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。model-picker 的残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。
+**缺口统计（最终口径）**：
+- 已闭环：A1（窗口控制，§4.10）、A2–A4（滚动条，§5.6）、C1/C4（菜单 5 项 + 删除确认，§4.8）、D1–D3（model-picker，§4.9）、E6（dark-chat 卡片，§4.7）、F1/F2（窗口控制与面板 bbox，§4.10）、F4/F5（设置遮罩背景与导航图标，C 轮）、G4/G5（ContextRing 与 effort chip，C 轮）、H3（SoftShadow 幻影，D 轮）。
+- 仍未闭环：A5（遮罩灰阶 1 级）、B1–B3（悬停/选中态）、C2/C3（菜单 5 px / 35 px 几何）、E1–E5（正文 Markdown）、F3（遮罩灰阶，同 A5）、G1（输入区左侧图标簇左移约 90 px）、H1（empty/first-run 1.26% 光栅残差）。
+- 经实测不是缺口：B4、G2、G3、H2（已在上表注明，避免后续误改）。
+
 ### 5.6 chat 滚动条复测（2026-11-23）
 
 - 源码依据：`apps/desktop/src/renderer/src/styles/app.css:45-62`（`::-webkit-scrollbar` width 8px；thumb `border-radius: var(--radius-full)`、`border: 2px solid transparent` + `background-clip: content-box`；hover `background: var(--fg-subtle)`；track 无规则即透明）；`tokens.css:26` `--radius-full: 999px`、`:81` 浅色 `--scrollbar: rgba(0,0,0,0.18)`、`:51` `--fg-subtle: #8a8a94`、`:148` 深色 `--scrollbar: rgba(255,255,255,0.16)`、`:119` `--fg-subtle: #71717a`。
 - 实现：`app/src/qml/Main.qml` 新增内联 `DevaScrollBar`（真 `ScrollBar` 附件，`policy: AsNeeded`，width 8 / padding 2 / contentItem 可见宽 4 / 圆角 999 / 透明轨道 / hover 换色），挂到 `sessionList` 与 `bodyScroll`，objectName 分别为 `sidebar-scrollbar`、`body-scrollbar`；`Theme.qml` 增加 `scrollbarHover`、`scrollbarWidth`、`scrollbarInset`。
 - 测试：`PATH=.venv/bin:$PATH LD_LIBRARY_PATH=/tmp python -m pytest app/tests/test_qml_shell.py -q > /tmp/t.log 2>&1; echo rc=$?` → `rc=0`，`48 passed in 9.59s`（新增 `test_qml_scrollbars_match_deva_and_scroll`，断言两条滚动条存在、尺寸/配色、滚轮与拖动均改变 contentY）。
 - chat 重拍：`mkdir -p /tmp/qml-sb && LD_LIBRARY_PATH=/tmp PYTHON=.venv/bin/python bash scripts/parity/qml_page_shot.sh chat /tmp/qml-sb/chat.png /tmp/ai-upper-sb > /tmp/shot.out 2> /tmp/shot.err; echo rc=$?` → `rc=0`，`1280x820`，`stderr=0 bytes`。
-- 差异：改前 `129807 px / 12.37%`（`ac72cd597ae44377b608777cbd5e2e81` vs `e83c48be95d0a5dde4cdcb6b5b70928f`，158583 vs 142647 bytes）→ 改后 `119799 px / 11.41%`（`ac72cd597ae44377b608777cbd5e2e81` vs `d7ac856efc22a4ce41369baa0be1e75a`，158583 vs 100242 bytes），max=248。
+- 差异：改前 `129807 px / 12.37%`（`ac72cd597ae44377b608777cbd5e2e81` vs `e83c48be95d0a5dde4cdcb6b5b70928f`，158583 vs 142647 bytes）→ 本段改后 `119799 px / 11.41%`（历史阶段值）。
+- **D 轮最终全量重拍**：`chat 113088 px / 10.77%`（QML md5 `00baf469…`，max=248，`logs/d-page-diff18-final.log`）；滚动条像素实测侧栏 `(202,202,203)` 340 px、正文 `(209,209,209)` 1668 px。
+
+### 5.7 D 轮验收与全量 pytest（如实记录）
+
+D 轮产品代码改动只有 `app/src/qml/SoftShadow.qml` 的可见性绑定（3 行新增）与 18 页重拍/报告更新；
+未改 A/B/C 已提交的实现。另有 `app/tests/test_qml_sidebar.py` 一处测试隔离修正：全量顺序下前一个
+包装用例把全局鼠标停在 `(160,140)`，同一用例的 `QTest.mouseMove` 不产生移动事件，先移到 `(20,20)`
+再移入即可重复复现 hover。最终重拍与四条硬判据见 §5.1–§5.3，逐页残差见 §5.2 / §5.5。
+
+全量测试命令与原始结果：
+
+```
+$ H=$(mktemp -d /tmp/ai-upper-full-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests -q > out/latest-parity/logs/d-pytest-full.log 2>&1; echo rc=$?
+rc=1
+$ tail -3 out/latest-parity/logs/d-pytest-full.log
+FAILED app/tests/test_qml_sidebar.py::test_sidebar_rows_match_deva_bounds_and_states
+1 failed, 1348 passed, 5 skipped in 168.01s (0:02:48)
+rc=1
+```
+
+失败项不是 D 轮页面改动：`test_qml_sidebar.py:75` 期望第二行 hover 像素 `(236,236,237)`，全量跑到该用例时
+实际 `(247,247,248)`（等于未 hover 的底色）；单独复跑同一用例通过：
+
+```
+$ H=$(mktemp -d /tmp/ai-upper-sidebar-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests/test_qml_sidebar.py::test_sidebar_rows_match_deva_bounds_and_states -q
+rc=0
+1 passed in 5.21s
+```
+
+因此全量结果是 **1 failed, 1348 passed, 5 skipped, rc=1**；该失败为全量顺序下的鼠标 hover 状态未生效，
+单独运行 rc=0，**未把它算作通过，也没有隐藏**。日志：`out/latest-parity/logs/d-pytest-full.log`、
+`out/latest-parity/logs/d-pytest-sidebar-single.log`。
+
+修复后全量复跑（同一工作树，含上面的鼠标隔离修正）：
+
+```
+$ H=$(mktemp -d /tmp/ai-upper-full2-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests -q > out/latest-parity/logs/d-pytest-full-rerun.log 2>&1; echo rc=$?
+rc=0
+$ tail -2 out/latest-parity/logs/d-pytest-full-rerun.log
+1349 passed, 5 skipped in 167.49s (0:02:47)
+rc=0
+```
+
+**最终全量：1349 passed, 5 skipped, 0 failed, rc=0**。前一次 `1 failed` 已按上述根因修复并复跑闭环；
+`0 failed` 不是我改测试期望值得来的——hover 断言仍是 `(236,236,237)`，只补了鼠标先移开再移入。

@@ -1,0 +1,8 @@
+settings-general     deva region=473040 dark_pixels=3331 unique_colors=847
+settings-general     qml  region=473040 dark_pixels=3321 unique_colors=842
+settings-models      deva region=473040 dark_pixels=2566 unique_colors=814
+settings-models      qml  region=473040 dark_pixels=2556 unique_colors=775
+settings-extensions  deva region=473040 dark_pixels=3233 unique_colors=935
+settings-extensions  qml  region=473040 dark_pixels=3176 unique_colors=792
+settings-about       deva region=473040 dark_pixels=2722 unique_colors=1156
+settings-about       qml  region=473040 dark_pixels=2475 unique_colors=845

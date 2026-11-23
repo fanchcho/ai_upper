@@ -1,0 +1,45 @@
+=== 判据 1：右键菜单 5 项 + Delete 危险色 ===
+  起始页=chat，ctxMenu 可见=False（应为 False）
+  对会话行 threadRow0 中心 (201.5, 83.0) 注入右键
+  右键后 ctxMenu 可见=True
+  labels        = ['New chat', 'Rename', 'Select', 'Archive', 'Delete']
+  labels==deva  = True
+  item0 New chat  中心=(234.0, 110.5) bbox=(166.0, 96.0, 302.0, 125.0)
+  item1 Rename    中心=(234.0, 139.5) bbox=(166.0, 125.0, 302.0, 154.0)
+  item2 Select    中心=(234.0, 168.5) bbox=(166.0, 154.0, 302.0, 183.0)
+  item3 Archive   中心=(234.0, 197.5) bbox=(166.0, 183.0, 302.0, 212.0)
+  item4 Delete    中心=(234.0, 226.5) bbox=(166.0, 212.0, 302.0, 241.0)
+  抓图尺寸 = 1280x820
+  Theme.danger(浅 #e5484d) = (229, 72, 77)
+  Theme.fg(浅 #1e1e20)     = (30, 30, 32)
+  item0 New chat  红色像素=0    深色文字像素=124 
+  item1 Rename    红色像素=0    深色文字像素=145 
+  item2 Select    红色像素=0    深色文字像素=99  
+  item3 Archive   红色像素=0    深色文字像素=150 
+  item4 Delete    红色像素=227  深色文字像素=0   
+
+  同一 bbox 在 deva 参考图上的同判据计数：
+    deva New chat  红色像素=0    深色文字像素=131 
+    deva Rename    红色像素=0    深色文字像素=155 
+    deva Select    红色像素=0    深色文字像素=101 
+    deva Archive   红色像素=0    深色文字像素=149 
+    deva Delete    红色像素=230  深色文字像素=0   
+  结论1a：项数=5，标签顺序=与原版一致
+  结论1b：Delete 红色像素=227（危险色）；其余四项红色像素=[0, 0, 0, 0]
+
+=== 判据 2：三处真实鼠标点击 ===
+  起点：sessions=120 active=parity-000 parity-000 文件存在=True
+  点菜单 Delete 后：confirm visible=True
+  confirmCancel 中心=(718.0, 468.0)   bbox=(683.0, 453.0, 753.0, 483.0)
+  confirmDelete 中心=(794.5, 467.0)   bbox=(760.0, 452.0, 829.0, 482.0)
+  [a] 点取消中心后：confirm visible=False confirmOpen=False sessions=120 active=parity-000 文件存在=True
+  [b] 点确认中心后：confirm visible=False confirmOpen=False sessions=119 active=parity-001 parity-000 文件存在=False
+  confirmDialog bbox=(430.0, 317.0, 850.0, 503.0)
+  [c] 点遮罩空白 (100,700) 后：confirm visible=False confirmOpen=False sessions=119 active=parity-001
+
+=== 结果摘要 ===
+  判据1（5 项 + Delete 危险色）= True
+  判据2a（取消关闭不删）= True   [120 -> 120]
+  判据2b（确认关闭并删）= True   [120 -> 119]
+  判据2c（遮罩关闭不删）= True   [119 -> 119]
+  ALL = True

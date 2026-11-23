@@ -1,0 +1,56 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+________________ test_sidebar_rows_match_deva_bounds_and_states ________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x216931b0) at 0xffff9b27edc0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-38/test_sidebar_rows_match_deva_b0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff9cce9220>
+
+    def test_sidebar_rows_match_deva_bounds_and_states(qapp, tmp_path, monkeypatch):
+        from PySide6.QtCore import QPoint, QPointF
+        from PySide6.QtTest import QTest
+    
+        import test_qml_window_controls as window_test
+    
+        sessions = [(f"s-{index:03d}", f"会话 {index:03d}") for index in range(20)]
+        window, _bridge, ticker, engine = window_test._build_window(
+            tmp_path, monkeypatch, sessions=sessions
+        )
+        try:
+            window_test._pump(qapp, 0.8)
+    
+            rows = [window_test._find_item(window.contentItem(), f"threadRow{index}") for index in range(2)]
+            assert all(row is not None for row in rows), "侧栏前两行必须已实例化"
+    
+            # x=64 来自 .cf-list x=56 + 左 padding 8；宽 275 来自 299-8×2-8。
+            origin = rows[0].mapToScene(QPointF(0, 0))
+            assert (origin.x(), origin.y()) == (64, 56)
+            assert rows[0].property("width") == pytest.approx(275)
+            assert rows[0].property("height") == pytest.approx(54)
+            assert rows[1].mapToScene(QPointF(0, 0)).y() == 110
+    
+            image = window.grabWindow()
+            # 第一行 active：rgba(91,91,214,0.12) 叠在 #f7f7f8 上 = (228,228,244)。
+            assert _pixel(image, 70, 70) == (228, 228, 244)
+            assert _pixel(image, 338, 70) == (228, 228, 244)
+            assert _pixel(image, 339, 70) == (247, 247, 248), "行右缘必须止于 x=338"
+    
+            # chat 第 11 行：deva 原图鼠标 (200,700) 的 hover，rgba(0,0,0,0.045) → (236,236,237)。
+            assert _pixel(image, 70, 660) == (236, 236, 237)
+            assert _pixel(image, 338, 660) == (236, 236, 237)
+            assert _pixel(image, 339, 660) == (247, 247, 248), "hover 范围同样止于 x=338"
+    
+            # 第二行 hover：真实鼠标移入后逐像素取同 token。
+            QTest.mouseMove(window, QPoint(160, 140))
+            window_test._pump(qapp, 0.2)
+            image = window.grabWindow()
+>           assert _pixel(image, 70, 140) == (236, 236, 237)
+E           assert (247, 247, 248) == (236, 236, 237)
+E             
+E             At index 0 diff: 247 != 236
+E             Use -v to get more diff
+
+app/tests/test_qml_sidebar.py:75: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_sidebar.py::test_sidebar_rows_match_deva_bounds_and_states
+1 failed, 1 passed in 9.47s

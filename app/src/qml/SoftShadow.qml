@@ -15,6 +15,9 @@ Item {
 
     // 被投影的卡片：位置、尺寸、圆角全部跟着它走（同一父级坐标系）。
     property Item target: null
+    // 目标不可见时不能继续画影子：Canvas 不会随 target.visible 自动隐藏，
+    // 否则空态（composer.visible=false）会在页面底部留下一个 780×146 的灰色幻影。
+    visible: target !== null && target.visible
     property real radius: target && target.radius !== undefined ? target.radius : Theme.radiusLg
     property color color: Theme.shadow
     property real blur: Theme.dark ? 30 : 24

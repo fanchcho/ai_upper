@@ -1,0 +1,6 @@
+BEFORE sessions=120 active='parity-000'
+AFTER_RENAME sessions=120 title='renamed non active' active='parity-000' file_exists=True
+AFTER_SELECT selectMode=True selected=['parity-001'] active='parity-000'
+AFTER_ARCHIVE sessions=119 archived=True active='parity-000' file_exists=True
+.
+1 passed in 8.49s

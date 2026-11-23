@@ -69,6 +69,11 @@ def test_sidebar_rows_match_deva_bounds_and_states(qapp, tmp_path, monkeypatch):
         assert _pixel(image, 339, 660) == (247, 247, 248), "hover 范围同样止于 x=338"
 
         # 第二行 hover：真实鼠标移入后逐像素取同 token。
+        # 全量顺序下 `test_qml_shell.py` 的包装用例会先把光标停在 (160,140)；
+        # 若第二次 mouseMove 目标与全局光标同点，Qt 不会产生移动事件。先移开再移入，
+        # 让本用例重复执行时仍能看到真实的 hover 切换。
+        QTest.mouseMove(window, QPoint(20, 20))
+        window_test._pump(qapp, 0.05)
         QTest.mouseMove(window, QPoint(160, 140))
         window_test._pump(qapp, 0.2)
         image = window.grabWindow()
