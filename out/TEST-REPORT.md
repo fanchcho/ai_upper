@@ -269,3 +269,100 @@ a70b71d6a12667927062dabc0bf2bd02fbfdbb33	refs/heads/develop
 未完成：代码块缺独立横向滚动承载；E4缺图图标仍缺；E3单独补列表间距会增加裁切，组合布局修复未完成；表格底边与像素级间距仍有残差；🚀/✅本机缺字形；deva 2x参考缺失，未验证2x像素等价；CI仍运行且job日志403，最终归因未完成。原设置内部残差和long-mid非悬停状态差不因本轮复核而关闭。
 
 本轮没有再跑完整app/tests。已跑的五组分别8/6/7/102/60 passed，均0 skipped/failed/error且rc0；不将有重叠覆盖的组相加冒充完整套件。Models沿用上轮49/47 passed，历史全量1352 passed/5 skipped/rc0明确属于先前快照。最终报告随后单独提交，最终远端回执在本地out/merged-review/publish-final.txt。
+
+### 第3步追加完成度判断：旧结构缺口 A1–A4 / D1–D3 / G5（今日 HEAD 复核）
+
+核验起点 **8455309568c1756e9381201b84ede831fb8d01c3**，本地develop与远端相同，tracked工作区为空，
+三个只读命令rc均0；原始行见 [start-head.log](structure-review/start-head.log)、
+[start-remote.log](structure-review/start-remote.log)、[start-status.log](structure-review/start-status.log)。
+本轮只追加同一报告及实测证据，不重写或回退既有实现。产品和测试相对已验收的7be5e48逐字相同。
+
+| 旧编号 | 今天结论 | 现有实现与真实操作证据 |
+|---|---|---|
+| A1 | **已不存在** | Main.qml:2350起windowControls和Minimize/Maximize/Close三个32×40热区，整块96×40；原版Linux参考在右上角x1184..1279，不是左上角。真实点击状态Minimized、Maximized/Windowed、visible=False均通过。deva main/index.ts:79–97定义原生标题栏叠加层；不将已验证控件挪到左上 |
+| A2 | **已不存在** | Main.qml:585将DevaScrollBar挂到sessionList，objectName=sidebar-scrollbar；常态可见滑块宽4px，已有真实wheel/drag测试当前重跑通过 |
+| A3 | **已不存在** | Main.qml:994将同一组件挂到bodyScroll，objectName=body-scrollbar；真实wheel/drag改变正文contentY，当前测试通过 |
+| A4 | **已不存在** | Main.qml:215是内联`component DevaScrollBar: ScrollBar`，含AsNeeded策略、8px宽、2px内缩；不需要再加ScrollView包装。最初搜索独立DevaScrollBar.qml返回不存在，已从内联组件找到实现 |
+| D1 | **已不存在** | ModelPicker.qml有独立modelList/thinkingList；Main.qml模型贴片openPicker("model")，模型深链默认mode=model。Anthropic/deepseek-v4.1-flash内容与当前勾选状态已实测；本轮真实点击用例继续通过 |
+| D2 | **已不存在** | Main.qml:1351菜单打开分支使用Theme.accent；本轮测试真实采样四边都为(91,91,214)，不是只看绑定代码 |
+| G5 | **已不存在** | Main.qml:1516 effort调用openPicker("thinking")，与模型贴片分开；点High写回activeEffort=high并关闭菜单，互斥测试通过 |
+| D3 | **旧16.8k结构缺口已不存在；小范围像素残差仍在** | 见下方新拍分区结果；没有发现缺面板、缺模型项或缺勾选，不通过调色/改阴影压低差异率 |
+
+对应既有交付证据：窗口和设置/侧栏复核309fa2e，模型/effort/ContextRing复核796910b；更早实现详见本报告引用的最新parity报告§4.9/§4.10/§5.6。
+源码定位：[implementation-evidence.log](structure-review/implementation-evidence.log)；只读参考：[标题栏](structure-review/deva-titlebar.log)、[滚动条CSS](structure-review/deva-scrollbar.log)。
+
+**本轮针对性回归**（没有删除或放宽测试；50 deselected不算skipped）：
+
+```bash
+AI_UPPER_HOME=/tmp/ai-upper-structure-check .venv/bin/python -m pytest app/tests/test_qml_model_picker.py app/tests/test_qml_window_controls.py app/tests/test_qml_shell.py -k 'model_chip_opens_model_menu or effort_chip_opens_thinking_menu_and_picks or model_and_effort_chips_keep_their_own_menus or window_controls or qml_scrollbars_match_deva_and_scroll' -q -ra > out/structure-review/targeted-tests.log 2>&1; echo rc=$?
+# rc=0
+# 6 passed, 50 deselected in 39.96s
+```
+
+0 skipped、0 failed、0 error。日志：[targeted-tests.log](structure-review/targeted-tests.log)。
+
+**D3重新归因：纯白净计数与通道差分分开**
+
+沿用旧的inclusive bbox x600..1119、y470..799；以同夹具的chat作为菜单关闭控制页。
+只重拍model-picker和其chat控制页，不重拍18页。原版沿用out/latest-parity/deva既有图。
+
+```bash
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh model-picker out/structure-review/qml/model-picker.png /tmp/ai-upper-residual-20261123 config.json > out/structure-review/shot-picker.log 2>&1; echo rc=$?
+# rc=0
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/structure-review/qml/chat.png /tmp/ai-upper-residual-20261123 config.json > out/structure-review/shot-chat.log 2>&1; echo rc=$?
+# rc=0
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/structure-review/qml > out/structure-review/page-diff.log 2>&1; echo rc=$?
+# rc=0
+python3 out/structure-review/d3_attribution.py > out/structure-review/d3-attribution.log 2>&1; echo rc=$?
+# rc=0
+python3 out/structure-review/d3_panel_detail.py > out/structure-review/d3-panel-detail.log 2>&1; echo rc=$?
+# rc=0
+```
+
+page_diff18原始行（其余页未放入该次输入目录，不当作新一轮18页验收）：
+
+```text
+chat                   ac72cd597ae44377b608777cbd5e2e81 e0a127e4773b01daf6cfddae6b1ad3eb  158583  164669  112725  10.74% max=248 same=False
+model-picker           946b07def583e696822df943b6935f04 4ca5e740ba78cca45a0723843a9b6e1e  164258  170480  117074  11.15% max=248 same=False
+```
+
+两张当前截图与上一轮同代码产物字节完全相同：model-picker 170480B、md5=4ca5e740ba78cca45a0723843a9b6e1e；chat 164669B、md5=e0a127e4773b01daf6cfddae6b1ad3eb。
+**本轮改前→改后：model-picker 117074→117074px，11.154153963%→11.154153963%；chat 112725→112725px，10.739805640%→10.739805640%。**
+没有新产品改动，不把旧收益重复算成本轮修复。只打印像素数、百分比、字节、md5，没有读取PNG进上下文。
+
+| y范围（两端含） | deva纯白 | QML纯白 | 差deva−QML | chat同区域差 | 菜单专属净计数差 |
+|---|---:|---:|---:|---:|---:|
+| 470–619 | 77367 | 76777 | 590 | 590 | 0 |
+| 620–650 | 11440 | 9360 | 2080 | 2080 | 0 |
+| 651–687 | 11066 | 11024 | 42 | 0 | 42 |
+| 688–752 | 29245 | 29223 | 22 | 0 | 22 |
+| 753–799 | 15673 | 15652 | 21 | -11 | 32 |
+| 合计 | 144791 | 142036 | 2755 | 2659 | 96 |
+
+旧归档161546 vs deva144791，即多16755（约16.8k），不在当前图复现。今天QML142036，比deva少2755；
+其中2659是chat原有的正文/输入区背景差，菜单自身纯白**净计数差96**＝阴影带42＋面板本体22＋贴片行32。
+历史报告的“菜单专属316”同样不是今天值；本轮按当前图重算，没有直接套用旧结论。
+净白像素数的相减可能抵消不同位置的差异，**96不是全部坏像素数**；因此同时用设置遮罩归因的max通道差分桶：
+
+| 区域 | 任意通道差非零 | 差1–2 | 差3–8 | 差>8 |
+|---|---:|---:|---:|---:|
+| 面板内部 x847..1094/y688..752 | 1308 | 167 | 196 | 945 |
+| 面板外 | 115766 | 33958 | 13785 | 68023 |
+
+内部945个>8像素中：标题带278，模型/勾选文字带615，顶/底边各26；893/945集中在文字带。
+内区没有“双方都是相邻同色平面但差>8”的像素（0），未见大块背景缺失。
+标题墨迹QML bbox(861,700,917,712)，deva(862,700,915,712)；模型文字QML左边861、deva862，右边及纵向相同；
+✓ 两侧均20个accent像素，bbox都为(1069,729,1078,736)。这些是文字度量/定位、圆角及阴影的细小绘制残差；
+**不能将>8残差全称为1灰阶取整，也没有证据支持重新实现菜单结构**。
+
+这页没有设置弹窗的整屏rgba(0,0,0,.42)遮罩：源码是绝对定位白色面板＋box-shadow，
+(60,120)/(1100,100)/(1200,100)在菜单开关两页均保持原RGB，左右页面没有统一变暗。
+因此D3不属于A5“整屏遮罩合成取整”；沿用相同分桶判据，并不意味着归因为相同根因。
+逐像素与子区域原始值：[d3-attribution.json](structure-review/d3-attribution.json)、[d3-panel-detail.json](structure-review/d3-panel-detail.json)。
+
+**第3步完成度**：本次追加的A1、A2、A3、A4、D1、D2、G5旧结构/接线缺陷均已不存在，D3约16.8k旧结构差已不复现；
+无需新增产品修复，未重做既有提交。D3字体/边缘/阴影像素残差仍存在，未宣称像素全等。
+整体任务仍未完成：代码块横向滚动、E4断图图标、E3组合布局、表格像素残差、🚀/✅缺字形、deva 2x像素等价、CI最终归因，
+以及此前设置内部残差和long-mid非悬停状态差，均沿用上一节的开放状态，本次不重复算作新缺口。
+
+本项审计证据独立commit并push；最终原始远端行由out/structure-review/publish-final.txt留存，并在文字交付中贴出。

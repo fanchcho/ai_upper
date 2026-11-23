@@ -1,0 +1,379 @@
+{
+  "meta": {
+    "deva_picker": {
+      "path": "out/latest-parity/deva/model-picker-deva.png",
+      "bytes": 164258,
+      "md5": "946b07def583e696822df943b6935f04"
+    },
+    "deva_chat": {
+      "path": "out/latest-parity/deva/chat-deva.png",
+      "bytes": 158583,
+      "md5": "ac72cd597ae44377b608777cbd5e2e81"
+    },
+    "qml_picker": {
+      "path": "out/structure-review/qml/model-picker.png",
+      "bytes": 170480,
+      "md5": "4ca5e740ba78cca45a0723843a9b6e1e"
+    },
+    "qml_chat": {
+      "path": "out/structure-review/qml/chat.png",
+      "bytes": 164669,
+      "md5": "e0a127e4773b01daf6cfddae6b1ad3eb"
+    }
+  },
+  "historical_box_half_open": [
+    600,
+    470,
+    1120,
+    800
+  ],
+  "panel_half_open": [
+    847,
+    688,
+    1095,
+    753
+  ],
+  "bands": [
+    {
+      "y_inclusive": [
+        470,
+        619
+      ],
+      "deva_picker": 77367,
+      "deva_chat": 77367,
+      "qml_picker": 76777,
+      "qml_chat": 76777,
+      "deva_minus_qml": 590,
+      "chat_deva_minus_qml": 590,
+      "picker_specific": 0,
+      "pixels": 78000,
+      "diff": 1856,
+      "d1_2": 5,
+      "d3_8": 11,
+      "gt8": 1840,
+      "gt8_flat_both": 0
+    },
+    {
+      "y_inclusive": [
+        620,
+        650
+      ],
+      "deva_picker": 11440,
+      "deva_chat": 11440,
+      "qml_picker": 9360,
+      "qml_chat": 9360,
+      "deva_minus_qml": 2080,
+      "chat_deva_minus_qml": 2080,
+      "picker_specific": 0,
+      "pixels": 16120,
+      "diff": 6240,
+      "d1_2": 6240,
+      "d3_8": 0,
+      "gt8": 0,
+      "gt8_flat_both": 0
+    },
+    {
+      "y_inclusive": [
+        651,
+        687
+      ],
+      "deva_picker": 11066,
+      "deva_chat": 15080,
+      "qml_picker": 11024,
+      "qml_chat": 15080,
+      "deva_minus_qml": 42,
+      "chat_deva_minus_qml": 0,
+      "picker_specific": 42,
+      "pixels": 19240,
+      "diff": 4129,
+      "d1_2": 4129,
+      "d3_8": 0,
+      "gt8": 0,
+      "gt8_flat_both": 0
+    },
+    {
+      "y_inclusive": [
+        688,
+        752
+      ],
+      "deva_picker": 29245,
+      "deva_chat": 33800,
+      "qml_picker": 29223,
+      "qml_chat": 33800,
+      "deva_minus_qml": 22,
+      "chat_deva_minus_qml": 0,
+      "picker_specific": 22,
+      "pixels": 33800,
+      "diff": 1805,
+      "d1_2": 664,
+      "d3_8": 196,
+      "gt8": 945,
+      "gt8_flat_both": 0
+    },
+    {
+      "y_inclusive": [
+        753,
+        799
+      ],
+      "deva_picker": 15673,
+      "deva_chat": 23609,
+      "qml_picker": 15652,
+      "qml_chat": 23620,
+      "deva_minus_qml": 21,
+      "chat_deva_minus_qml": -11,
+      "picker_specific": 32,
+      "pixels": 24440,
+      "diff": 3118,
+      "d1_2": 2127,
+      "d3_8": 110,
+      "gt8": 881,
+      "gt8_flat_both": 0
+    }
+  ],
+  "regions": {
+    "full": {
+      "pixels": 1049600,
+      "diff": 117074,
+      "d1_2": 34125,
+      "d3_8": 13981,
+      "gt8": 68968,
+      "gt8_flat_both": 4402
+    },
+    "historical_box": {
+      "pixels": 171600,
+      "diff": 17148,
+      "d1_2": 13165,
+      "d3_8": 317,
+      "gt8": 3666,
+      "gt8_flat_both": 0
+    },
+    "panel": {
+      "pixels": 16120,
+      "diff": 1308,
+      "d1_2": 167,
+      "d3_8": 196,
+      "gt8": 945,
+      "gt8_flat_both": 0
+    },
+    "panel_core": {
+      "pixels": 15498,
+      "diff": 1250,
+      "d1_2": 141,
+      "d3_8": 188,
+      "gt8": 921,
+      "gt8_flat_both": 0
+    },
+    "outside_panel": {
+      "pixels": 1033480,
+      "diff": 115766,
+      "d1_2": 33958,
+      "d3_8": 13785,
+      "gt8": 68023,
+      "gt8_flat_both": 4402
+    }
+  },
+  "white_threshold_diagnostic": {
+    "240": {
+      "deva_picker": 163149,
+      "deva_chat": 169771,
+      "qml_picker": 162514,
+      "qml_chat": 169210
+    },
+    "250": {
+      "deva_picker": 157414,
+      "deva_chat": 167610,
+      "qml_picker": 155852,
+      "qml_chat": 166008
+    },
+    "254": {
+      "deva_picker": 149051,
+      "deva_chat": 163396,
+      "qml_picker": 147034,
+      "qml_chat": 161267
+    },
+    "255": {
+      "deva_picker": 144791,
+      "deva_chat": 161296,
+      "qml_picker": 142036,
+      "qml_chat": 158637
+    }
+  },
+  "samples": {
+    "60,120": {
+      "deva_picker": [
+        247,
+        247,
+        248
+      ],
+      "deva_chat": [
+        247,
+        247,
+        248
+      ],
+      "qml_picker": [
+        247,
+        247,
+        248
+      ],
+      "qml_chat": [
+        247,
+        247,
+        248
+      ]
+    },
+    "300,700": {
+      "deva_picker": [
+        247,
+        247,
+        248
+      ],
+      "deva_chat": [
+        236,
+        236,
+        237
+      ],
+      "qml_picker": [
+        247,
+        247,
+        248
+      ],
+      "qml_chat": [
+        236,
+        236,
+        237
+      ]
+    },
+    "1100,100": {
+      "deva_picker": [
+        255,
+        255,
+        255
+      ],
+      "deva_chat": [
+        255,
+        255,
+        255
+      ],
+      "qml_picker": [
+        255,
+        255,
+        255
+      ],
+      "qml_chat": [
+        255,
+        255,
+        255
+      ]
+    },
+    "1200,100": {
+      "deva_picker": [
+        255,
+        255,
+        255
+      ],
+      "deva_chat": [
+        255,
+        255,
+        255
+      ],
+      "qml_picker": [
+        255,
+        255,
+        255
+      ],
+      "qml_chat": [
+        255,
+        255,
+        255
+      ]
+    },
+    "900,700": {
+      "deva_picker": [
+        255,
+        255,
+        255
+      ],
+      "deva_chat": [
+        255,
+        255,
+        255
+      ],
+      "qml_picker": [
+        255,
+        255,
+        255
+      ],
+      "qml_chat": [
+        255,
+        255,
+        255
+      ]
+    },
+    "850,720": {
+      "deva_picker": [
+        255,
+        255,
+        255
+      ],
+      "deva_chat": [
+        255,
+        255,
+        255
+      ],
+      "qml_picker": [
+        255,
+        255,
+        255
+      ],
+      "qml_chat": [
+        255,
+        255,
+        255
+      ]
+    },
+    "700,680": {
+      "deva_picker": [
+        255,
+        255,
+        255
+      ],
+      "deva_chat": [
+        255,
+        255,
+        255
+      ],
+      "qml_picker": [
+        255,
+        255,
+        255
+      ],
+      "qml_chat": [
+        255,
+        255,
+        255
+      ]
+    },
+    "520,812": {
+      "deva_picker": [
+        242,
+        242,
+        242
+      ],
+      "deva_chat": [
+        242,
+        242,
+        242
+      ],
+      "qml_picker": [
+        242,
+        242,
+        242
+      ],
+      "qml_chat": [
+        242,
+        242,
+        242
+      ]
+    }
+  }
+}

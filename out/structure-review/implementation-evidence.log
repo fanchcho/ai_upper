@@ -1,0 +1,11 @@
+app/src/qml/ModelPicker.qml:134:            objectName: "modelList"
+app/src/qml/ModelPicker.qml:246:            objectName: "thinkingList"
+app/src/qml/Main.qml:586:                objectName: "sidebar-scrollbar"
+app/src/qml/Main.qml:995:                objectName: "body-scrollbar"
+app/src/qml/Main.qml:1351:                          || window.modelPickerOpen ? Theme.accent : Theme.borderStrong
+app/src/qml/Main.qml:1516:                        onClicked: window.openPicker("thinking")
+app/src/qml/Main.qml:1592:                        onClicked: window.openPicker("model")
+app/src/qml/Main.qml:2351:        objectName: "windowControls"
+app/src/qml/Main.qml:2364:                objectName: "windowControlMinimize"
+app/src/qml/Main.qml:2369:                objectName: "windowControlMaximize"
+app/src/qml/Main.qml:2379:                objectName: "windowControlClose"

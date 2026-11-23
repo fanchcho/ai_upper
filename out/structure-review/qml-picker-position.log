@@ -1,0 +1,27 @@
+                        size: 13
+                        rotation: modelChip.open ? 180 : 0
+                        color: modelChip.open ? Theme.fg : Theme.fgMuted
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: window.openPicker("model")
+                    }
+
+                    // 模型菜单：与思考等级同一套外壳，挂在模型贴片自己的容器里。
+                    ModelPicker {
+                        objectName: "modelPicker"
+                        visible: window.modelPickerOpen && window.pickerMode === "model"
+                        mode: "model"
+                        groups: window.modelGroups
+                        activeRef: window.activeModelRef
+                        emptyText: window.chatText.noModel || ""
+                        // 同 thinking 面板：deva 外框 x847..1094；+2 后两边框逐像素对齐。
+                        x: parent.width - width + 2
+                        y: -height - 8
+                        onPicked: function (providerId, modelId) { window.pickModel(providerId, modelId) }
+                    }
+                }
+            }
+        }
+    }
+

@@ -1,0 +1,91 @@
+{
+  "parts": {
+    "top_edge": {
+      "diff": 82,
+      "gt8": 26,
+      "qml_has_deva_color_within2px": 3
+    },
+    "group_text_band": {
+      "diff": 341,
+      "gt8": 278,
+      "qml_has_deva_color_within2px": 209
+    },
+    "row_gap": {
+      "diff": 0,
+      "gt8": 0,
+      "qml_has_deva_color_within2px": 0
+    },
+    "model_check_band": {
+      "diff": 779,
+      "gt8": 615,
+      "qml_has_deva_color_within2px": 397
+    },
+    "bottom_edge": {
+      "diff": 106,
+      "gt8": 26,
+      "qml_has_deva_color_within2px": 0
+    }
+  },
+  "ink": {
+    "heading": {
+      "qml": {
+        "count": 150,
+        "bbox": [
+          861,
+          700,
+          917,
+          712
+        ]
+      },
+      "deva": {
+        "count": 145,
+        "bbox": [
+          862,
+          700,
+          915,
+          712
+        ]
+      }
+    },
+    "model": {
+      "qml": {
+        "count": 661,
+        "bbox": [
+          861,
+          727,
+          1007,
+          739
+        ]
+      },
+      "deva": {
+        "count": 655,
+        "bbox": [
+          862,
+          727,
+          1007,
+          739
+        ]
+      }
+    },
+    "check": {
+      "qml": {
+        "count": 20,
+        "bbox": [
+          1069,
+          729,
+          1078,
+          736
+        ]
+      },
+      "deva": {
+        "count": 20,
+        "bbox": [
+          1069,
+          729,
+          1078,
+          736
+        ]
+      }
+    }
+  }
+}

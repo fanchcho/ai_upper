@@ -1,0 +1,5 @@
+Buckets partition total; all region sums and white differences recomputed consistently.
+D3: white gap=2755; chat gap=2659; picker-specific net=96; panel >8=945.
+Selected checkmark QML/deva count and bbox identical.
+6 passed, 50 deselected, 0 skipped/failed/error; rc=0. All probes/captures rc=0.
+Product and existing tests unchanged; probe syntax valid.

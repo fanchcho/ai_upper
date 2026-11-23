@@ -1,0 +1,10 @@
+white bbox x600..1119 y470..799; sign=deva-qml
+band [470, 619] deva 77367 qml 76777 gap 590 chat_gap 590 picker_specific 0
+band [620, 650] deva 11440 qml 9360 gap 2080 chat_gap 2080 picker_specific 0
+band [651, 687] deva 11066 qml 11024 gap 42 chat_gap 0 picker_specific 42
+band [688, 752] deva 29245 qml 29223 gap 22 chat_gap 0 picker_specific 22
+band [753, 799] deva 15673 qml 15652 gap 21 chat_gap -11 picker_specific 32
+TOTAL {'deva_picker': 144791, 'qml_picker': 142036, 'deva_minus_qml': 2755, 'chat_deva_minus_qml': 2659, 'picker_specific': 96}
+full {'pixels': 1049600, 'diff': 117074, 'd1_2': 34125, 'd3_8': 13981, 'gt8': 68968, 'gt8_flat_both': 4402}
+panel {'pixels': 16120, 'diff': 1308, 'd1_2': 167, 'd3_8': 196, 'gt8': 945, 'gt8_flat_both': 0}
+outside_panel {'pixels': 1033480, 'diff': 115766, 'd1_2': 33958, 'd3_8': 13785, 'gt8': 68023, 'gt8_flat_both': 4402}

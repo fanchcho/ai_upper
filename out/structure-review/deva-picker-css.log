@@ -1,0 +1,29 @@
+.model-pick__menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  z-index: 50;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Chat：模型选择下拉 ---------- */
+.model-pick {
+  position: relative;
+}
+.model-pick__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+.model-pick__menu {
+  right: 0;
+  /* 菜单宽度按内容自适应（min~max 之间），使最长模型名单行铺开、短名不留空。 */
+  min-width: 248px;
+  max-width: 360px;
+  width: max-content;
+  max-height: 340px;
+  overflow-y: auto;
+}

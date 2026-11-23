@@ -1,0 +1,22 @@
+app.commandLine.appendSwitch('disable-backgrounding-occluded-windows')
+
+/** 明暗主题下的窗口控件叠加配色（与 tokens.css 的 --bg / --fg 对齐）。 */
+const OVERLAY_SYMBOL = { light: '#3a3a3d', dark: '#e4e4e7' } as const
+const OVERLAY_BG = { light: '#ffffff', dark: '#1e1e20' } as const
+
+/**
+ * 窗口控件叠加（Window Controls Overlay）参数；macOS 返回 undefined（红绿灯由系统绘制）。
+ * - Windows：透明底 + 显式 symbolColor，图标颜色随主题即时切换（见 window:set-overlay）。
+ * - Linux：不支持透明叠加区与 symbolColor（Electron 按 color 自动算对比色），只能用实色底，
+ *   所以跟着主题给底色，否则深色主题下会顶一条白条。
+ */
+function overlayOptions(
+  dark: boolean
+): { color: string; symbolColor?: string; height: number } | undefined {
+  if (process.platform === 'win32') {
+    return { color: '#00000000', symbolColor: dark ? OVERLAY_SYMBOL.dark : OVERLAY_SYMBOL.light, height: 40 }
+  }
+  if (process.platform === 'linux') {
+    return { color: dark ? OVERLAY_BG.dark : OVERLAY_BG.light, height: 40 }
+  }
+  return undefined
