@@ -31,6 +31,13 @@ Item {
         color: Theme.backdrop
     }
 
+    // 阴影：原版 `.cf-modal { box-shadow: var(--shadow) }`（redesign.css:3153）＝浅色
+    // `0 6px 24px rgba(0,0,0,.12)`、深色 `0 8px 30px rgba(0,0,0,.5)`（tokens.css:82/:149）。
+    // 用 Canvas 版 SoftShadow（软件光栅下也出影，参数集中在 SoftShadow.qml），替换硬边外扩矩形近似。
+    SoftShadow {
+        target: box
+    }
+
     Rectangle {
         id: box
         objectName: "settingsModal"
@@ -41,16 +48,6 @@ Item {
         color: Theme.bgPanel
         border.width: 1
         border.color: Theme.border
-
-        // 阴影：QML 没有 box-shadow，用一层外扩半透明矩形近似（原版 0 6 24, .12）。
-        Rectangle {
-            z: -1
-            anchors.fill: parent
-            anchors.margins: -6
-            radius: Theme.radiusLg + 4
-            color: Theme.shadow
-            opacity: 0.5
-        }
 
         // ── 头部 ──────────────────────────────────────────────────────
         Item {
