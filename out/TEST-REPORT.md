@@ -149,3 +149,18 @@ HEAD=4bea1ba，命令 `AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/qwe-final-pkg-home
 当前117074px / **11.154153963%**。本项未改产品代码，本轮画面无新增修复收益；旧图差异及MD5记录在
 [图片数值](merged-review/picker-image-summary.log)，不能把历史裸alt修复的降幅算成本项收益。
 源码摘录：[picker-source.log](merged-review/picker-source.log)；操作输出：[picker-probe.log](merged-review/picker-probe.log)。
+
+### 并入2：右键 Rename / Select / Archive — 已具备，渲染空接线缺陷已不存在
+
+命令：`AI_UPPER_HOME=/tmp/ai-upper-merged-menu .venv/bin/python -m pytest app/tests/test_qml_context_menu.py -q -s -ra > out/merged-review/menu-tests.log 2>&1; echo rc=$?`。
+**6 passed in 38.95s，0 skipped/failed/error，rc=0**。探针对非活动会话真实右键、点击菜单、键入并确认；非直接调用动作方法。
+
+```text
+BEFORE sessions=120 active='parity-000'
+AFTER_RENAME sessions=120 title='renamed non active' active='parity-000' file_exists=True
+AFTER_SELECT selectMode=True selected=['parity-001'] active='parity-000'
+AFTER_ARCHIVE sessions=119 archived=True active='parity-000' file_exists=True
+```
+
+会话文件、当前活动会话、归档入口列表同时断言，删除确认/取消原用例也通过。本项产品代码与视觉不变，不重拍、不虚构百分比收益。
+证据：[menu-tests.log](merged-review/menu-tests.log)。
