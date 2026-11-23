@@ -1,0 +1,2 @@
+before_exists False
+created_temp_dark_config /tmp/ai-upper-residual-20261123/config-dark.json theme dark

@@ -1,0 +1,6 @@
+assert len(session_rows(store)) == 120
+assert bridge._active == "parity-000"
+assert len(session_rows(store)) == 120, "确认前不得删会话"
+assert len(session_rows(store)) == 119
+assert not store.session_path("parity-000").exists()
+Execution: hard-clicks.log: 3 passed in 16.92s; rc=0; same existing mouse-click test, implementation unchanged.

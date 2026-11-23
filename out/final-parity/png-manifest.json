@@ -1,0 +1,362 @@
+[
+  {
+    "side": "qml",
+    "page": "chat",
+    "width": 1280,
+    "height": 820,
+    "bytes": 165707,
+    "md5": "069142b30b193cd575b485f9ad1ea86f",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "chat",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158583,
+    "md5": "017c2d22a8494161361b62f6700b2782",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "ctx-menu",
+    "width": 1280,
+    "height": 820,
+    "bytes": 165340,
+    "md5": "af760b6db78719cb3cf091a16e137052",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "ctx-menu",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158033,
+    "md5": "74c7f9768a70d042565f5377eb8c7ce2",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "dark-chat",
+    "width": 1280,
+    "height": 820,
+    "bytes": 165795,
+    "md5": "b749e14a6ffd1a7670925c9d2bc334d3",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "dark-chat",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158038,
+    "md5": "2131505fe8ff6c926d9df9e51851e95b",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "delete-confirm",
+    "width": 1280,
+    "height": 820,
+    "bytes": 167787,
+    "md5": "18fc8db0060c13d8d706f2efb75a396c",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "delete-confirm",
+    "width": 1280,
+    "height": 820,
+    "bytes": 162718,
+    "md5": "545df63bacbdc6bd81d2ec5beb72c405",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "empty",
+    "width": 1280,
+    "height": 820,
+    "bytes": 40046,
+    "md5": "e56462d7a538be35dae1b166403f4784",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "empty",
+    "width": 1280,
+    "height": 820,
+    "bytes": 40733,
+    "md5": "4f4c9dfec17a28972e71bd3b0af6293c",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "first-run",
+    "width": 1280,
+    "height": 820,
+    "bytes": 40046,
+    "md5": "e56462d7a538be35dae1b166403f4784",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "first-run",
+    "width": 1280,
+    "height": 820,
+    "bytes": 40733,
+    "md5": "b733a00423970926ce8d8ce074f19d6f",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "focus-composer",
+    "width": 1280,
+    "height": 820,
+    "bytes": 165816,
+    "md5": "de06e3e83e2639529043e60eee4dc3f6",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "focus-composer",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158745,
+    "md5": "199060a9521175d8229e5c0c05924c4a",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "hover-thread",
+    "width": 1280,
+    "height": 820,
+    "bytes": 165436,
+    "md5": "999247087766727423e9813d7636e901",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "hover-thread",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158169,
+    "md5": "cf5bd1576a4401d793efac0874ae3f2d",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "long-bottom",
+    "width": 1280,
+    "height": 820,
+    "bytes": 164790,
+    "md5": "27a123cd603cf31c9b44b7346e5af924",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "long-bottom",
+    "width": 1280,
+    "height": 820,
+    "bytes": 157770,
+    "md5": "2a127a7389ddfcd91d6398e8d173662a",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "long-mid",
+    "width": 1280,
+    "height": 820,
+    "bytes": 167840,
+    "md5": "14ac2c028e49f96eed19874f230b5409",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "long-mid",
+    "width": 1280,
+    "height": 820,
+    "bytes": 143456,
+    "md5": "0b37b973df9e88e29e031d21eb9628a9",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "model-picker",
+    "width": 1280,
+    "height": 820,
+    "bytes": 171304,
+    "md5": "c3fb50813dcaa33e86705285fb73fb0a",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "model-picker",
+    "width": 1280,
+    "height": 820,
+    "bytes": 164258,
+    "md5": "c8c1896285ec24025bcd1712407d396d",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "search-none",
+    "width": 1280,
+    "height": 820,
+    "bytes": 70907,
+    "md5": "91453b4433c64e607308cf8bc7c34f19",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "search-none",
+    "width": 1280,
+    "height": 820,
+    "bytes": 64532,
+    "md5": "7cf2e49ba271736e3b9b49de247fae81",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "search-open",
+    "width": 1280,
+    "height": 820,
+    "bytes": 166042,
+    "md5": "fa139b3cfd7105809322d88743f858e4",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "search-open",
+    "width": 1280,
+    "height": 820,
+    "bytes": 158824,
+    "md5": "2c30cdc33488ca5bb02e3af104034dff",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "search-results",
+    "width": 1280,
+    "height": 820,
+    "bytes": 138212,
+    "md5": "e07443a4ceb825c1927849d4fb384397",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "search-results",
+    "width": 1280,
+    "height": 820,
+    "bytes": 130449,
+    "md5": "60557e873ce81c02df43574ebbc17982",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "settings-about",
+    "width": 1280,
+    "height": 820,
+    "bytes": 137468,
+    "md5": "7309f0752dbf1fc8e0f26a0b2e22749e",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "settings-about",
+    "width": 1280,
+    "height": 820,
+    "bytes": 135693,
+    "md5": "df49a8ebe0736b14f55339ab054c5bca",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "settings-extensions",
+    "width": 1280,
+    "height": 820,
+    "bytes": 142449,
+    "md5": "e03f7bc85bbd0df77eaaa5747ee3e572",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "settings-extensions",
+    "width": 1280,
+    "height": 820,
+    "bytes": 139387,
+    "md5": "398bbcb34ff03b20d8f5335c9f01f7f2",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "settings-general",
+    "width": 1280,
+    "height": 820,
+    "bytes": 147617,
+    "md5": "6596ad852d45506287ab230dd9454d91",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "settings-general",
+    "width": 1280,
+    "height": 820,
+    "bytes": 142486,
+    "md5": "922a775521ea66aa38c4a468eece4733",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "qml",
+    "page": "settings-models",
+    "width": 1280,
+    "height": 820,
+    "bytes": 135560,
+    "md5": "cf7d5a62ea788a24fb3749a7b97105a0",
+    "stderr_bytes": 0,
+    "rc": 0
+  },
+  {
+    "side": "deva",
+    "page": "settings-models",
+    "width": 1280,
+    "height": 820,
+    "bytes": 132243,
+    "md5": "7e9a724cf60af94ec7820a59347b846f",
+    "stderr_bytes": 0,
+    "rc": 0
+  }
+]

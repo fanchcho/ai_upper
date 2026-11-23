@@ -12,6 +12,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 OUT="${1:-/tmp/qml-pages-out}"
 HOME_DIR="${2:-/tmp/fx-qml-home}"
 mkdir -p "$OUT"
+FAILED=0
 
 shot() {  # shot <page> [config] [seed]
   local page="$1" cfg="${2:-config.json}" seed="${3:-1}"
@@ -25,10 +26,12 @@ shot() {  # shot <page> [config] [seed]
   bash "$ROOT/scripts/parity/qml_page_shot.sh" "$page" "$png" "$home" "$cfg" \
     >"$OUT/$page.out" 2>"$OUT/$page.err"
   local rc=$?
-  if [ -f "$png" ]; then
+  printf '%s\n' "$rc" > "$OUT/$page.rc"
+  if [ "$rc" -eq 0 ] && [ -f "$png" ]; then
     echo "ok   $page $(identify -format '%wx%h %b' "$png") rc=$rc"
   else
     echo "FAIL $page rc=$rc"
+    FAILED=1
   fi
 }
 
@@ -50,3 +53,5 @@ shot settings-models
 shot settings-extensions
 shot settings-about
 shot dark-chat config-dark.json
+
+exit "$FAILED"

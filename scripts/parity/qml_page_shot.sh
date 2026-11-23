@@ -22,7 +22,7 @@ if [ "$CONFIG" != "config.json" ]; then
   rm -rf "$TMP"
   mkdir -p "$TMP"
   cp -a "$HOME_DIR/data" "$TMP/data" 2>/dev/null || true
-  cp "$HOME_DIR/$CONFIG" "$TMP/config.json"
+  cp "$HOME_DIR/$CONFIG" "$TMP/config.json" || exit $?
   HOME_DIR="$TMP"
 fi
 

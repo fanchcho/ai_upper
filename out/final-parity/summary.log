@@ -1,0 +1,62 @@
+/home/agent/shared_workspace/ai_upper/out/final-parity/summarize.py:12: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  diff=ImageChops.difference(a,b);n=sum(1 for c in diff.getdata() if max(c));previous=old.get(page)
+| chat | 113088 | 102454 | 9.76% | -10634 |
+| ctx-menu | 122224 | 112602 | 10.73% | -9622 |
+| dark-chat | 111631 | 101631 | 9.68% | -10000 |
+| delete-confirm | 382652 | 376604 | 35.88% | -6048 |
+| empty | 13231 | 13231 | 1.26% | +0 |
+| first-run | 13231 | 13231 | 1.26% | +0 |
+| focus-composer | 113104 | 102470 | 9.76% | -10634 |
+| hover-thread | 113042 | 102406 | 9.76% | -10636 |
+| long-bottom | 124452 | 114252 | 10.89% | -10200 |
+| long-mid | 142444 | 124617 | 11.87% | -17827 |
+| model-picker | 117437 | 106801 | 10.18% | -10636 |
+| search-none | 85175 | 80236 | 7.64% | -4939 |
+| search-open | 113117 | 102483 | 9.76% | -10634 |
+| search-results | 107403 | 98339 | 9.37% | -9064 |
+| settings-about | 302389 | 298197 | 28.41% | -4192 |
+| settings-extensions | 305797 | 301423 | 28.72% | -4374 |
+| settings-general | 315274 | 307767 | 29.32% | -7507 |
+| settings-models | 300497 | 296506 | 28.25% | -3991 |
+/home/agent/shared_workspace/ai_upper/out/final-parity/summarize.py:20: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  pa=root/'qml'/(a+'.png');pb=root/'qml'/(b+'.png');im=ImageChops.difference(Image.open(pa).convert('RGB'),Image.open(pb).convert('RGB'));ae=sum(1 for c in im.getdata() if max(c));different=pa.read_bytes()!=pb.read_bytes();assert ae>0 and different
+HARD_DIFFERENT chat long-mid AE 82077 md5 069142b30b193cd575b485f9ad1ea86f 14ac2c028e49f96eed19874f230b5409
+HARD_DIFFERENT chat long-bottom AE 29721 md5 069142b30b193cd575b485f9ad1ea86f 27a123cd603cf31c9b44b7346e5af924
+HARD_DIFFERENT long-mid long-bottom AE 74089 md5 14ac2c028e49f96eed19874f230b5409 27a123cd603cf31c9b44b7346e5af924
+MANIFEST
+qml chat 1280x820 bytes=165707 stderr=0 rc=0
+deva chat 1280x820 bytes=158583 stderr=0 rc=0
+qml ctx-menu 1280x820 bytes=165340 stderr=0 rc=0
+deva ctx-menu 1280x820 bytes=158033 stderr=0 rc=0
+qml dark-chat 1280x820 bytes=165795 stderr=0 rc=0
+deva dark-chat 1280x820 bytes=158038 stderr=0 rc=0
+qml delete-confirm 1280x820 bytes=167787 stderr=0 rc=0
+deva delete-confirm 1280x820 bytes=162718 stderr=0 rc=0
+qml empty 1280x820 bytes=40046 stderr=0 rc=0
+deva empty 1280x820 bytes=40733 stderr=0 rc=0
+qml first-run 1280x820 bytes=40046 stderr=0 rc=0
+deva first-run 1280x820 bytes=40733 stderr=0 rc=0
+qml focus-composer 1280x820 bytes=165816 stderr=0 rc=0
+deva focus-composer 1280x820 bytes=158745 stderr=0 rc=0
+qml hover-thread 1280x820 bytes=165436 stderr=0 rc=0
+deva hover-thread 1280x820 bytes=158169 stderr=0 rc=0
+qml long-bottom 1280x820 bytes=164790 stderr=0 rc=0
+deva long-bottom 1280x820 bytes=157770 stderr=0 rc=0
+qml long-mid 1280x820 bytes=167840 stderr=0 rc=0
+deva long-mid 1280x820 bytes=143456 stderr=0 rc=0
+qml model-picker 1280x820 bytes=171304 stderr=0 rc=0
+deva model-picker 1280x820 bytes=164258 stderr=0 rc=0
+qml search-none 1280x820 bytes=70907 stderr=0 rc=0
+deva search-none 1280x820 bytes=64532 stderr=0 rc=0
+qml search-open 1280x820 bytes=166042 stderr=0 rc=0
+deva search-open 1280x820 bytes=158824 stderr=0 rc=0
+qml search-results 1280x820 bytes=138212 stderr=0 rc=0
+deva search-results 1280x820 bytes=130449 stderr=0 rc=0
+qml settings-about 1280x820 bytes=137468 stderr=0 rc=0
+deva settings-about 1280x820 bytes=135693 stderr=0 rc=0
+qml settings-extensions 1280x820 bytes=142449 stderr=0 rc=0
+deva settings-extensions 1280x820 bytes=139387 stderr=0 rc=0
+qml settings-general 1280x820 bytes=147617 stderr=0 rc=0
+deva settings-general 1280x820 bytes=142486 stderr=0 rc=0
+qml settings-models 1280x820 bytes=135560 stderr=0 rc=0
+deva settings-models 1280x820 bytes=132243 stderr=0 rc=0

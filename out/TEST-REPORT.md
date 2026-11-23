@@ -678,3 +678,78 @@ empty 2 size (2560, 1640) AE 45299 pct 1.07896 qml_md5 a984d121858334d1aa8fdffc1
 ```
 
 两端尺寸同为1x1280×820、2x2560×1640。此为1x/2x已验证有差异，不宣称像素等价；CDP基线与常规X11截图路径不同，不能混用两套百分比。
+
+### A：最终产品代码两端18页与四条硬判据
+
+最终产品代码HEAD `0ebe4f06e67e5e4c97a4ceafb182d68a135e9b77`；后续D/A提交只报告、截图、采集脚本，不变更产品。产品/测试/assets 186文件哈希清单 `out/final-parity/product-hashes.json`。最终报告提交后仍将运行一次全页回验，执行HEAD写入 final-capture-head.log，回验输出置 final-pass/，不再产生新的产品提交。
+本轮重新启动原版18页（不是只复用旧图）和QML18页：
+
+```sh
+AI_UPPER_HOME=/tmp/ai-upper-deva-final bash scripts/parity/deva_pages_all.sh out/final-parity/deva > out/final-parity/deva-all.log 2>&1; rc=$?
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_pages_all.sh out/final-parity/qml /tmp/ai-upper-residual-20261123 > out/final-parity/qml-all.log 2>&1; rc=$?
+python3 -I scripts/parity/page_diff18.py out/final-parity/deva out/final-parity/qml > out/final-parity/page-diff18.log 2>&1; rc=$?
+```
+
+全部最终页rc0、尺寸1280×820；新脚本保留每页.out/.err/.rc。发现dark-chat临时config-dark.json缺失：原stderr为 `cp: cannot stat '/tmp/ai-upper-residual-20261123/config-dark.json': No such file or directory`（94字节），不能把浅色图当深色。已从同一config复制并设置theme=dark，仅重拍dark-chat；最终stderr0。qml_page_shot.sh现对配置复制失败返回非零，负测missing.json为rc1；qml_pages_all.sh也汇总失败，deva_pages_all.sh不再丢弃每页stderr。
+
+逐页对比基准是 `out/latest-parity/REPORT.md:162–179` 的上一份完整18页表（不将零散局部更新冒充完整新表）。如下升降同时包含之前已验证修复与本轮修复；不是都归功于本轮。
+
+| 页 | 上一完整表px | 本轮px | 本轮比例 | 增减px |
+|---|---:|---:|---:|---:|
+| chat | 113088 | 102454 | 9.76% | -10634 |
+| ctx-menu | 122224 | 112602 | 10.73% | -9622 |
+| dark-chat | 111631 | 101631 | 9.68% | -10000 |
+| delete-confirm | 382652 | 376604 | 35.88% | -6048 |
+| empty | 13231 | 13231 | 1.26% | +0 |
+| first-run | 13231 | 13231 | 1.26% | +0 |
+| focus-composer | 113104 | 102470 | 9.76% | -10634 |
+| hover-thread | 113042 | 102406 | 9.76% | -10636 |
+| long-bottom | 124452 | 114252 | 10.89% | -10200 |
+| long-mid | 142444 | 124617 | 11.87% | -17827 |
+| model-picker | 117437 | 106801 | 10.18% | -10636 |
+| search-none | 85175 | 80236 | 7.64% | -4939 |
+| search-open | 113117 | 102483 | 9.76% | -10634 |
+| search-results | 107403 | 98339 | 9.37% | -9064 |
+| settings-about | 302389 | 298197 | 28.41% | -4192 |
+| settings-extensions | 305797 | 301423 | 28.72% | -4374 |
+| settings-general | 315274 | 307767 | 29.32% | -7507 |
+| settings-models | 300497 | 296506 | 28.25% | -3991 |
+
+四条硬判据：
+
+1. chat/long-mid/long-bottom 的md5两两不同，真实AE分别为 **82077 / 29721 / 74089**，全部>0；完整md5及原始输出见summary.log的HARD_DIFFERENT行。
+2. 真实QML search-results ListView count=**10**。
+3. focus-composer矩形(428,658,780,146)，四边中点像素均**#5b5bd6=(91,91,214)**。
+4. 沿用原有 `test_menu_geometry_and_delete_confirm_flow` 鼠标点击探针：确认前120，确认后119，parity-000文件不存在；没有重做实现。
+
+命令 `AI_UPPER_HOME=/tmp/ai-upper-hard-final .venv/bin/python out/final-parity/hard_probe.py > out/final-parity/hard-probe.log 2>&1; rc=$?`，rc0，输出 `SEARCH_RESULTS count 10`、四边颜色全匹配。
+命令 `AI_UPPER_HOME=/tmp/ai-upper-final-clicks .venv/bin/python -m pytest app/tests/test_qml_context_menu.py::test_menu_geometry_and_delete_confirm_flow app/tests/test_qml_sidebar.py -q -s > out/final-parity/hard-clicks.log 2>&1; rc=$?`，**3 passed in 16.92s，rc0**；执行的是原鼠标探针，断言摘录delete-click-evidence.log。
+
+36张图尺寸/PNG字节数/stderr字节数/重拍rc原始值（对应单页进程输出，所有尺寸1280×820）：
+
+| 页 | QML尺寸 | QML字节 | QML stderr字节 | rc | deva尺寸 | deva字节 | deva stderr字节 | rc |
+|---|---|---:|---:|---:|---|---:|---:|---:|
+| chat | 1280×820 | 165707 | 0 | 0 | 1280×820 | 158583 | 0 | 0 |
+| ctx-menu | 1280×820 | 165340 | 0 | 0 | 1280×820 | 158033 | 0 | 0 |
+| dark-chat | 1280×820 | 165795 | 0 | 0 | 1280×820 | 158038 | 0 | 0 |
+| delete-confirm | 1280×820 | 167787 | 0 | 0 | 1280×820 | 162718 | 0 | 0 |
+| empty | 1280×820 | 40046 | 0 | 0 | 1280×820 | 40733 | 0 | 0 |
+| first-run | 1280×820 | 40046 | 0 | 0 | 1280×820 | 40733 | 0 | 0 |
+| focus-composer | 1280×820 | 165816 | 0 | 0 | 1280×820 | 158745 | 0 | 0 |
+| hover-thread | 1280×820 | 165436 | 0 | 0 | 1280×820 | 158169 | 0 | 0 |
+| long-bottom | 1280×820 | 164790 | 0 | 0 | 1280×820 | 157770 | 0 | 0 |
+| long-mid | 1280×820 | 167840 | 0 | 0 | 1280×820 | 143456 | 0 | 0 |
+| model-picker | 1280×820 | 171304 | 0 | 0 | 1280×820 | 164258 | 0 | 0 |
+| search-none | 1280×820 | 70907 | 0 | 0 | 1280×820 | 64532 | 0 | 0 |
+| search-open | 1280×820 | 166042 | 0 | 0 | 1280×820 | 158824 | 0 | 0 |
+| search-results | 1280×820 | 138212 | 0 | 0 | 1280×820 | 130449 | 0 | 0 |
+| settings-about | 1280×820 | 137468 | 0 | 0 | 1280×820 | 135693 | 0 | 0 |
+| settings-extensions | 1280×820 | 142449 | 0 | 0 | 1280×820 | 139387 | 0 | 0 |
+| settings-general | 1280×820 | 147617 | 0 | 0 | 1280×820 | 142486 | 0 | 0 |
+| settings-models | 1280×820 | 135560 | 0 | 0 | 1280×820 | 132243 | 0 | 0 |
+
+全部md5见png-manifest.json。PNG未读入对话上下文，取色和比对全部由脚本完成。
+最终真实工作区全量：`AI_UPPER_HOME=/tmp/ai-upper-final-full .venv/bin/python -m pytest app/tests -q > out/final-parity/full.log 2>&1; rc=$?`，**1360 passed, 5 skipped in 212.58s (0:03:32)，rc0**。
+C在最终产品代码再次分区，四页inside_gt8仍3122/1596/4250/1773，outside变为293048；内部未闭环的结论不变，原始值final-regions.log。
+
+本轮完成度：A四判据成立，B缺字形修复，C long-mid行内结构修复但设置内部仍未达到两种要求结论，D两页2x完成但本轮CI排队无终态。上轮表格底边/行高/padding仍为已知未闭环，本轮没有重做它。

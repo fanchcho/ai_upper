@@ -38,11 +38,13 @@ run() {  # run <page> [config] [seed-chats]
   local attempt bytes
   for attempt in 1 2; do
     rm -f "$OUT/$page-deva.png"
-    bash scripts/parity/deva_page_shot.sh "$page" "$OUT/$page-deva.png" "/tmp/pg-home-$page" "$seed" "$cfg" >/dev/null 2>&1
+    bash scripts/parity/deva_page_shot.sh "$page" "$OUT/$page-deva.png" "/tmp/pg-home-$page" "$seed" "$cfg" >"$OUT/$page.out" 2>"$OUT/$page.err"
+    local rc=$?
+    printf '%s\n' "$rc" > "$OUT/$page.rc"
     if [ -f "$OUT/$page-deva.png" ]; then
       bytes=$(stat -c %s "$OUT/$page-deva.png")
-      if [ "$bytes" -ge 5000 ]; then
-        echo "ok   $page $(identify -format '%wx%h %b' "$OUT/$page-deva.png")"
+      if [ "$bytes" -ge 5000 ] && [ "$rc" -eq 0 ]; then
+        echo "ok   $page $(identify -format '%wx%h %b' "$OUT/$page-deva.png") rc=$rc"
         PRODUCED=$((PRODUCED + 1))
         return 0
       fi
