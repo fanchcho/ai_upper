@@ -624,3 +624,29 @@ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/layout-close
 截图 out/final-parity/emoji-before/glyphs.png → emoji-after/glyphs.png。18页固定夹具不含这两个字符（源搜索rc1），所以chat复拍严格差异 **108149px/10.30%→108149px/10.30%**、md5相同；不为制造改善数字篡改标准夹具。实际命中的专用emoji正文截图如上，功能有真实改善。
 chat命令：`AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/final-parity/b-after/chat.png /tmp/ai-upper-residual-20261123 config.json > out/final-parity/b-after/chat.log 2>&1; rc=$?`，rc0；page_diff18.py对b-before/b-after两次rc0，原始输出b-before-diff.log/b-after-diff.log。
 测试：`AI_UPPER_HOME=/tmp/ai-upper-emoji-tests .venv/bin/python -m pytest app/tests/test_emoji_font.py app/tests/test_markdown_body.py app/tests/test_qml_shell.py -q > out/final-parity/b-tests.log 2>&1; rc=$?`，**74 passed in 17.12s，0 skipped，rc0**。
+
+### C：long-mid 行内结构已修；设置内部仍不能证明纯取整
+
+B已提交推送 `223274c5b24daac594e2eaf815e0e3a40561168c`，push rc0，回执 out/final-parity/b-remote.log。
+
+**long-mid：结构性缺口已修。** 不是54px行高累积：两端每行推进54px，悬停色带都为y668–721共54行；(668,721)这个单点在主正文区域，两端都是(255,255,255)，不能将它误作侧栏色带坐标。
+行内标题盒错误为17px，原版实时DOM为19px；角色名 y27 原版应y29。修正 ThreadRow.qml 的这两个值，行高、contentY=1386、悬停注入未改。
+原版源码 `.cf-thread__title font-size:13px/600`、`.cf-thread__sub margin-top:2px`，CDP实测第一个完整行rect y98/h54、title y106/h19、owner y127/h13（相对行8/29）。该次DOM自动滚动落点不同，使用的是行内相对几何，不将绝对y冒充截图滚动位置。源与输出 deva-thread-css.log / deva-thread.json。
+命令 `AI_UPPER_HOME=/tmp/ai-upper-thread-dom DEVA_HOME=/tmp/ai-upper-thread-dom DEVA_CONFIG=/tmp/ai-upper-residual-20261123/config.json DEVA_SEED=/tmp/ai-upper-residual-20261123/data/chats CDP_PORT=9336 node out/final-parity/deva_thread_probe.mjs long-mid out/final-parity/deva-thread.json > out/final-parity/deva-thread.log 2>&1; rc=$?`，rc0。
+重拍命令 `AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh long-mid out/final-parity/c-after/long-mid.png /tmp/ai-upper-residual-20261123 config.json > out/final-parity/c-after-long.log 2>&1; rc=$?`，rc0。page_diff18.py 的 long-mid **130093px/12.39%→124617px/11.87%**（本轮新deva基线）；并非整个页面像素全部一致。
+
+**设置内部：未达成用户要求的两种闭环结论。** 无证据允许把所有残差称为“纯取整”，也没有声称所有结构性差异已修。仍需后续处理，不编造二选一。
+逐页分区 `python3 out/final-parity/regions.py > out/final-parity/regions.log 2>&1; rc=$?`，rc0；区域(280,130)-(1000,690)：
+
+| 页 | inside_diff | inside_gt8 | outside_diff |
+|---|---:|---:|---:|
+| general |14719|3122|295806|
+| models |3458|1596|295806|
+| extensions |8375|4250|295806|
+| about |5149|1773|295806|
+
+原始像素例：内部边缘(280,130) QML(84,84,90)对deva(109,109,113)，差25；这是边缘采样，不能称1级遮罩取整。主要外部色对(143,143,144)对(144,144,144)，才符合1级合成差。
+`python3 out/final-parity/modal_probe.py settings-models settings-extensions settings-about settings-general > out/final-parity/modal-analysis.json 2> out/final-parity/modal-analysis.err; rc=$?`，rc0。
+大差像素在两侧都为平坦色块的计数各为0；但2px邻域双向匹配仅825/1596、2257/4250、835/1773、1907/3122，余项不能自动归为取整。
+具体文字bbox：Models provider_name QML[506,257,576,269] vs deva[506,258,576,274]；extensions row2 QML[483,302,667,313] vs deva[484,301,669,313]，见 modal-regions-summary.log。卡点为字体行盒/字重栅格与控件边缘的剩余差异，仍保留，没有只拿outside_diff下结论或改遮罩颜色。
+测试命令 `AI_UPPER_HOME=/tmp/ai-upper-c-tests .venv/bin/python -m pytest app/tests/test_qml_sidebar.py app/tests/test_qml_settings_overlay.py app/tests/test_qml_settings_models.py -q > out/final-parity/c-tests.log 2>&1; rc=$?`；具体原文见该日志及.rc。

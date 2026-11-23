@@ -1,0 +1,51 @@
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.cf-thread__main {
+  min-width: 0;
+}
+.cf-thread__top {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+/* 上行：对话标题。主色号 + 加粗，作为主视觉（醒目显示对话内容）；过长省略，时间不被挤走。 */
+.cf-thread__title {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cf-thread__time {
+  margin-left: auto;
+  flex: none;
+  font-size: 11px;
+  color: var(--fg-subtle);
+}
+/* 下行：左边文字、右边状态图标（定时任务 / 内置浏览器开着网页），图标右缘与上方时间对齐。 */
+.cf-thread__sub {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* 下行文字：角色名（或文件夹名、草稿）。副色号 + 常规字重，作为次要行；过长省略，给右侧图标让位。 */
+.cf-thread__owner {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--fg-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 会话里有没发出的草稿：下行开头的红色「[草稿]」（同 IM 里的草稿提示），其后是草稿开头 */
+.cf-thread__draft {
+  margin-right: 4px;
+  color: var(--danger);
+}

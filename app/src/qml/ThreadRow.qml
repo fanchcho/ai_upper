@@ -78,7 +78,7 @@ Rectangle {
         font.pixelSize: 13
         font.weight: 600
         elide: Text.ElideRight
-        height: 17
+        height: 19
         verticalAlignment: Text.AlignVCenter
     }
 
@@ -99,7 +99,7 @@ Rectangle {
     Text {
         id: ownerText
         x: row.selectionMode ? 80 : 62
-        y: 27
+        y: 29
         width: row.width - x - 12
         text: row.ownerName
         color: Theme.fgSubtle
