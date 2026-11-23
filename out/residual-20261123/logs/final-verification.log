@@ -1,0 +1,11 @@
+7/7 final source/test hashes match full-suite-tested files
+final full pytest: 1352 passed, 5 skipped, rc=0
+REMEASURE_MATCH long-mid diff= 130345 percent= 12.418540396341463 inside_gt8= 84470
+REMEASURE_MATCH settings-general diff= 311758 percent= 29.702553353658537 inside_gt8= 3122
+REMEASURE_MATCH settings-extensions diff= 305414 percent= 29.09813262195122 inside_gt8= 4250
+REMEASURE_MATCH settings-about diff= 302188 percent= 28.79077743902439 inside_gt8= 1773
+6/6 per-item pushes and raw remote lines verified
+TEST_ADDITIONS_ONLY 17 app/tests/test_qml_settings_overlay.py
+TEST_ADDITIONS_ONLY 30 app/tests/test_qml_sidebar.py
+incoming document.py preserved; tests neither deleted nor relaxed
+artifact links and Python script syntax verified

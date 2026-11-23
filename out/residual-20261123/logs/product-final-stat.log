@@ -1,0 +1,4 @@
+5	2	app/src/qml/Main.qml
+24	2	app/src/qml/SettingsModal.qml
+17	0	app/tests/test_qml_settings_overlay.py
+30	0	app/tests/test_qml_sidebar.py

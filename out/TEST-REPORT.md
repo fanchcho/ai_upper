@@ -1,117 +1,114 @@
-# 全量测试与遗留缺陷复核报告
+# 剩余五项专项执行报告（2026-11-23）
 
-本轮测试与归因复核已落盘；**没有新增产品修复，不能据此宣称视觉对齐全部完成**。完整套件在同一基线、同一本地应用配置、隔离测试输出目录下为 **1349 passed / 0 failed / 5 skipped，rc=0**。10 个指定复核项逐项独立提交，2 项原“缺三行”描述不再复现，8 项仍保留差异/待处理状态。E1/E5 的段距与图片残差并未随计数纠正而消失。
+本轮完成 long-mid 悬停修复、设置内部缺失标题/阴影及基线偏移修复，并给出 E1/E3、E5 的逐带定位。**E4 图标和 E3 布局残差未闭环，不能报告五项全部修复。** 裸 alt 修复已在本轮起点 ab66967 中，由另一执行提交，本轮未重复修改。
 
-## 0. 基线与工作树归属
+最终完整回归：**1352 passed, 5 skipped in 190.08s (0:03:10)，rc=0**；0 failed。原始日志 [final-full.log](residual-20261123/modal/final-full.log)，退出码 [final-full.rc](residual-20261123/modal/final-full.rc)。
 
-- UTC 日期：2026-11-23。启动基线：`c660bf887aea5eb4e3e9c68f8c6833c95294bbb7`；分支 `develop`；远端 `origin/develop` 开工时同 hash。
-- 首条仓库检查为 `git status --porcelain`。已跟踪文件修改 **0**；遗留未跟踪条目 **244**（目录条目不展开，不能称 244 个文件），均在 out 下，为前序探针/截图/日志。本轮未纳入、改写或删除它们。清单见 [git-status-initial.log](retest-20261123/logs/git-status-initial.log) 和 [ownership.log](retest-20261123/logs/ownership.log)。
-- 本轮新增交付集中在 `out/retest-20261123/` 和本报告；临时数据位于 `.tmp/retest-20261123/`。启动检查的两份短日志随后立即收归该目录。
-- 没有检查或修改 Codex 全局配置。本轮无源码、测试、应用配置修改；隔离检出仅复制仓库原有的 Git 忽略应用配置以恢复相同运行前提。
-- 环境：Python 3.13.5、pytest 9.2.0；解释器 `.venv/bin/python`。测试工程师的 `6db617a` QML 生命周期修复已在基线祖先中。
+## 起点和边界
 
-## 1. 全量测试：保留每轮真实结果
-
-| 运行 | rc | passed | failed | skipped | 耗时 | 归因 |
-|---|---:|---:|---:|---:|---:|---|
-| 首跑，主工作树 | 1 | 1348 | 1 | 5 | 170.05s | 仓库递归改名检查扫描到了 `.tmp/` 内旧名兼容测试自身生成的 pyproject 夹具 |
-| 同基线隔离检出，尚未复制本地应用配置 | 1 | 1299 | 50 | 5 | 170.46s | Git 忽略的 app/pyproject.toml 未随 worktree 检出；50 项 traceback 为配置缺失 |
-| 同基线隔离检出 + 相同本地应用配置 | **0** | **1349** | **0** | **5** | **167.94s** | 完整套件通过，无排除、无改测试、无源码修复 |
-
-日志：[首跑](retest-20261123/logs/pytest-full.log)、[隔离首跑](retest-20261123/logs/pytest-isolated.log)、[最终完整复验](retest-20261123/logs/pytest-final.log)，各有同名 `.rc` 文件。主工作树首次失败的断言对象明确是 `.tmp/.../test_paths_reads_a_legacy_app_0/app/pyproject.toml`；这是测试输出放在被扫描仓库内部造成的污染，不能记为本轮产品回归。
-
-最终命令（cwd 为 `.tmp/retest-20261123/baseline-checkout`，所有绝对路径仍在宿主工作区内）：
-
-```bash
-TMPDIR=/home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/tmp \
-AI_UPPER_HOME=/home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/test-home-final \
-/home/agent/shared_workspace/ai_upper/.venv/bin/python -m pytest app/tests -q -ra \
-  --basetemp=/home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/pytest-final \
-  > /home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/pytest-final.log 2>&1
-retest_rc=$?
-echo rc=$retest_rc
-```
-
-隔离检出是 `git worktree add --detach .tmp/retest-20261123/baseline-checkout c660bf887aea5eb4e3e9c68f8c6833c95294bbb7`。复制前后本地应用配置 SHA-256 均为 `fc979936f0cfba16d08e208aebd81bafb926528d4e59e4b22c97a729e5b7892c`。这修复的是检出前提，未变更原仓库配置。全量结果与前序同口径 **1349 passed / 5 skipped** 一致；没有用历史增强 PATH 环境的 1350/4 冒充当前结果。
-
-5 个 skip：Windows 专属两项；需 `AI_UPPER_E2E=1` 的构建 E2E 两项；需 cc/patchelf/readelf 的 native 一项。最终原始日志列出完整 skip 原因。这些门禁未执行，不能算通过。
-
-## 2. 截图与测量可比性
-
-当前代码重新拍摄 9 页：chat、search-none、long-mid、long-bottom、设置四页、delete-confirm。每页真实 headless 运行 rc=0，1280×820。新生成夹具显示 `21 hr ago`，与历史 `yesterday` 参考标签不同；首先逐像素证明只有侧栏时间标签受影响，再只将临时夹具时间戳前移 6 小时。归一化后 **9/9 新 QML 图 MD5 与对应已跟踪 QML 图完全一致**，证据 [compare-normalized.log](retest-20261123/logs/compare-normalized.log)。所以本轮改前→改后计数不变是实测结果，不是复制旧图冒充重拍。
-
-deva 使用已跟踪参考 PNG，本轮没有访问或重新运行工作区外的 deva。其 SHA-256 与 QML 的 SHA-256 均记录在 [measure-current.json](retest-20261123/logs/measure-current.json)。该比较验证当前 QML 对仓库参考的状态，不宣称外部 deva 最新版同场景验收。
-
-复现测量：
-
-```bash
-python3 out/retest-20261123/measure.py out/retest-20261123/qml > .tmp/review-measure.json 2> .tmp/review-measure.err
-echo rc=$?
-```
-
-实际运行时插桩入口 [runtime_probe.py](retest-20261123/runtime_probe.py) 只观察窗口/文档，不更改页面状态。chat/search-none/long-mid 的日志含真实活动会话、contentY、contentHeight、完整文档文本与块坐标。采样结果不依赖单元测试通过来推断视觉一致。
-
-## 3. 指定项逐项结论与独立提交
-
-下表“前→后”是基线截图重读→当前代码重拍；**本轮未做产品修复**。每项 commit 为独立复核文档提交；共同原始证据提交为 `738e3f5`。历史 `dc05e31` 修改了块间距/图片路径，`2a6e2a3` 只改表格，不能把 E1/E3/E4/E5 整体归功于后者。
-
-| 项目 | 当前结论 | 改前→改后实测 | 独立 commit |
-|---|---|---|---|
-| [E1](retest-20261123/E1.md) | 原缺三行已不存在；段距残差归 E3 | 原始带 18→18（deva 19）；图标/文字聚合 18→18（deva 18） | `f1f8818` |
-| [E3](retest-20261123/E3.md) | 仍存在，未修复 | 首带 −3→−3 px；18 带位移范围 −28..−1→−28..−1 px | `25983b4` |
-| [E4](retest-20261123/E4.md) | 仍存在，未修复 | 占位文本 8→8 字；目标裸 alt 3 字 + broken-image 图标 | `314073f` |
-| [E5](retest-20261123/E5.md) | 原缺三行已不存在；共享 E3/E4 | 原始带 18→18（deva 19）；聚合 18→18；chat/search-none 文档相同 | `14580a6` |
-| [long-mid](retest-20261123/long-mid.md) | 仍存在：两端会话/滚动/hover 不一致 | 差异 142444→142444 px；hover 0→0 行（deva 54） | `6049ac8` |
-| [settings-general](retest-20261123/settings-general.md) | 残差仍存在；遮罩量化已归因 | 差异 315274→315274 px；内部 >8 为 5732→5732 px | `cbd9cba` |
-| [settings-models](retest-20261123/settings-models.md) | 残差仍存在；遮罩量化已归因 | 差异 300497→300497 px；内部 >8 为 1596→1596 px | `59ce692` |
-| [settings-extensions](retest-20261123/settings-extensions.md) | 残差仍存在；遮罩量化已归因 | 差异 305797→305797 px；内部 >8 为 4777→4777 px | `f4024b5` |
-| [settings-about](retest-20261123/settings-about.md) | 残差仍存在；遮罩量化已归因 | 差异 302389→302389 px；内部 >8 为 2114→2114 px | `7a1ac0e` |
-| [delete-confirm](retest-20261123/delete-confirm.md) | 残差仍存在；遮罩量化已归因 | 差异 382652→382652 px；内部 >8 为 6645→6645 px | `b3fe97f` |
-
-E1/E5 的证据纠正：原始暗像素带为 18 对 19，参考图最后一行的 broken-image 图标单独形成 y602 带，alt 文字为 y606–619。按不超过 3 个空白像素行聚合后为 18 对 18；这只是避免把图标分裂计成正文行，不代表所有段距一致。旧报告 search-none 的 15/16 也不符合当前同区域重测，已在独立复核中更正。
-
-E3 的起点差不是统一 3 px：逐带范围 −28 至 −1 px；运行时正文已经在真底。long-mid 则更严重：QML 仍是 parity-000，而 deva 参考已选中第 6 个会话；侧栏首完整会话 026/027 不同，强制 hover=11 已滚出视口。不能把其整页差异归到 Markdown 引擎。
-
-## 4. 设置四页与 delete-confirm 拆层
-
-| 页 | 全页差异 px | 弹窗外 px | 外部 ≤2 px | 弹窗内 px | 内部 >8 px |
-|---|---:|---:|---:|---:|---:|
-| settings-general | 315274 | 297039 | 248842 | 18235 | 5732 |
-| settings-models | 300497 | 297039 | 248842 | 3458 | 1596 |
-| settings-extensions | 305797 | 297039 | 248842 | 8758 | 4777 |
-| settings-about | 302389 | 297039 | 248842 | 5350 | 2114 |
-| delete-confirm | 382652 | 375172 | 301200 | 7480 | 6645 |
-
-设置四页外部差异完全相同，取样 `(60,120)` 的 QML `(143,143,144)` 与 deva `(144,144,144)` 相差 `(-1,-1,0)`，支持共享遮罩量化来源；但外部并非全部 ≤2，面板内部还各有不同残差。不能把“主要是遮罩”扩展成“内部没有缺口”。delete-confirm 标题/说明暗像素包围框还有 1–2 px 差，数据见独立文档，未以调色压低总差异。
-
-## 5. 完成度与未解决项
-
-- [x] 固定真实基线并判断遗留工作树归属。
-- [x] 先运行完整 pytest，保存所有真实 rc/统计；同基线证明环境失败原因，不改测试。
-- [x] 10/10 指定复核项形成独立实测结论与 commit；9/9 页面重拍及哈希校验。
-- [x] 完成总报告、原始日志、测量脚本和运行时证据。
-- [x] 10 个独立复核提交及共同证据已 push；原始 ls-remote 与本地提交一致。总结提交的最终核验随交付保存。
-
-**复核覆盖率 10/10；本轮产品修复数 0。不能报告“视觉缺陷全部关闭”。** E1/E5 原缺行描述不再复现；E3、E4、long-mid 及 5 个模态页的残余差异仍在。
-
-待解决/卡点：
-
-1. E3 需同步 deva DOM 与 QTextDocument 的逐块几何，处理非均匀段距及视口裁切；当前没有工作区内可运行的 deva 同场景环境，只有已跟踪截图和历史证据。
-2. E4 需区分 URL 策略拦截的 data URI 与一般 missing image，再明确 broken-image 图标/alt 语义；现有通用占位测试契约未变更。
-3. long-mid 需统一两端选中会话、滚动行身份和鼠标位置，当前两侧不是同一状态。
-4. 设置和确认弹窗内部 >8 差值仍需按控件/字形定位；已测数量不足以断言全部是光栅差，也不能等价成对应数量的功能缺陷。
-5. 5 个 pytest 环境门禁用例仍跳过。本轮不涉及此前报告中的其他开放项，不替它们宣称完成。
-
-本轮范围按用户原文“全量测试 → 遗留项归因复核 → 完成度总结 → 独立 commit/push”执行。没有将测试复核冒称实现修复。未改变产品代码，所以完整基线套件已经覆盖本轮产品树，后续只校验文档/证据一致性。
-
-## 6. 提交与远端核验
-
-逐项完整 commit 映射：[review-commits.json](retest-20261123/review-commits.json)。第一批 11 个提交（共同证据 + 10 项独立复核）已执行 `git push origin HEAD:develop`，rc=0；`git ls-remote origin refs/heads/develop` rc=0，原始行：
+开工只读原始输出，三个命令 rc 均0：
 
 ```text
-b3fe97f9462618afb6a2c911143c3bb28c7f31f9	refs/heads/develop
+git rev-parse HEAD
+ab66967621de70b683ef5afd807d4117f6b1852a
+git ls-remote origin refs/heads/develop
+ab66967621de70b683ef5afd807d4117f6b1852a	refs/heads/develop
+git status --porcelain --untracked-files=no
 ```
 
-见 [push-reviews.log](retest-20261123/logs/push-reviews.log)、[ls-remote-reviews.log](retest-20261123/logs/ls-remote-reviews.log)。总结报告随后另作一个提交并推送；最终报告提交 hash、push rc 和最新 ls-remote 原始行由交付时的 `out/retest-20261123/publish-verification.txt` 保存。该运输回执是本地交付文件，不纳入它自身要证明的提交，避免自引用 hash；最终回复引用该文件和原始行。
+最后一条无输出，document.py 对 HEAD 也无差异。这个起点在上一轮12个提交之后已有 ab66967，不能将 c660bf8 继续写成本轮起点。`document.py` 本轮始终未改；未改全局配置、未重做用户列出的提交、未 reset/rebase/force-push/amend，所有提交均在 develop，没有新建分支。deva 目录只读取源码。
 
-交付校验：[verification.log](retest-20261123/logs/verification.log)。已验证 9/9 截图/哈希/退出码、3/3 全量测试统计、10/10 独立提交归属、报告链接存在，以及产品和测试树相对基线差异为零。
+运行应用和测试均显式设置 `/tmp/ai-upper-residual-*` 下的 AI_UPPER_HOME；临时脚本/工作日志在 `.tmp/residual-20261123/`，正式证据在 `out/residual-20261123/`。原来的未跟踪产物未删除或批量纳入提交。
+
+## 五项结论、前后数字与提交
+
+| 项 | 本轮结果 | 改前 → 改后 | 独立提交 |
+|---|---|---|---|
+| [1 E4](residual-20261123/E4.md) | 起点已有裸alt修复验收；断图图标仍缺 | 本轮 chat **112725→112725 px，10.739806%→10.739806%**；起点前旧包装113088px，减少363px属于ab66967 | `ae5eed6` |
+| [2 E1/E3](residual-20261123/E1-E3.md) | 逐带映射排除分段丢行；定位行推进/表格/列表/引用布局，未修复布局 | 原始 **18→18 带**（deva19）；首带 `[40,43]` 对 `[43,45]`；非均匀偏移仍为−28..−1px；chat百分比不变 | `1a8ac73` |
+| [3 E5](residual-20261123/E5.md) | 复现下部15/16带并定位额外断图图标；无搜索专属丢行 | **15→15 对16**（y200..699）；全正文18对19；search-none **84812→84812 px，8.080412%→8.080412%** | `8fa0fe5` + `8065d86` |
+| [4 long-mid](residual-20261123/LONG-MID.md) | 悬停缺口已修复，绑定随contentY更新 | **0→54行，(668,721)**；**142100→130345 px，13.538491%→12.418540%** | `c1fdbf1` |
+| [5 设置/删除确认](residual-20261123/MODALS.md) | 修复About标题、General选中阴影、3页标题2px leading；其他残差逐项分类 | 详见下表；遮罩未改 | `8c880e6` |
+
+E5 初始文档对旧区域说明不准确，另用独立追加提交补齐 y[200,700) 坐标表，没有 amend 已推送历史。该区域末两带来自输入框提示，不全是正文；缺少的额外带位于 deva y602（断图图标），alt文字为y606–619。逐带坐标详见链接文档和 [E1/E3 坐标表](residual-20261123/e13/bands.md)。
+
+## 弹窗内部实测
+
+| 页 | 全页差异 px 前→后 | 百分比前→后 | 内部 >8 px 前→后 | 判定 |
+|---|---:|---:|---:|---|
+| settings-general | 315274→311758 | 30.037538%→29.702553% | 5732→3122 | 缺选中阴影和标题基线2px，已修；余下字形/圆角差仍在 |
+| settings-extensions | 305797→305414 | 29.134623%→29.098133% | 4777→4250 | 标题2px已修；行/徽标字体尺寸量化与字形仍有差 |
+| settings-about | 302389→302188 | 28.809928%→28.790777% | 2114→1773 | 缺失About标题已补；品牌SVG等光栅残差仍在 |
+| settings-models | 300497→300497 | 28.629668%→28.629668% | 1596→1596 | 未见缺控件；名称/count文字度量及边缘差，未强行调色 |
+| delete-confirm | 382289→382289 | 36.422351%→36.422351% | 6645→6645 | 未见缺按钮/文案；文字光栅及1–2px定位差，不能算遮罩取整 |
+
+四页设置 outside_diff 均保持 **297039**、outside_le2 均保持 **248842**。总差异减少来自内部修改，没有修改 rgba(0,0,0,0.42)。delete-confirm 本轮起点全页382289与用户引用旧382652相差363px，来自此前ab66967裸alt修复，不归到本轮设置修改。
+
+归因使用每个>8像素的双向1/2px邻域匹配、局部平坦性、40px网格定位与文字bbox。邻域匹配不从原始差异中扣除，也不能独自证明纯光栅舍入。原始数值在 [modal/summary.log](residual-20261123/modal/summary.log)、[最终前后数值](residual-20261123/modal/final-summary.log) 和每页JSON；三页标题最终bbox逐坐标一致，见 [title-final-bbox.log](residual-20261123/modal/title-final-bbox.log)。
+
+## 修改文件
+
+产品源码仅两份：
+- `app/src/qml/Main.qml`：long-mid 强制悬停从固定11改为随contentY计算当前可见行；不改滚动距离。
+- `app/src/qml/SettingsModal.qml`：About标题、选中项复用SoftShadow、三页标题leading。
+
+测试仅新增：
+- `app/tests/test_qml_sidebar.py`：30行，真实滚动后检查悬停及回到chat。
+- `app/tests/test_qml_settings_overlay.py`：17行，断言右侧About标题实际存在。
+
+相对起点测试删除行数0。源码/测试 `git diff --check` rc0。保留的原始 `modal/change.patch` 内有diff上下文空白行，针对整个证据目录运行 `git diff --check` 会提示4处尾随空格；这是原始补丁内容，不是产品源码空白错误，未修改原始证据来掩盖。
+
+## 测试原始结果
+
+| 验证 | 原始结果 | 进程rc |
+|---|---|---:|
+| 正文Body/Document | 82 passed in 0.45s；0 skipped | 0 |
+| 新long-mid测试修复前 | 1 failed in 5.20s | 1 |
+| sidebar模块修复后 | 2 passed in 9.96s；0 skipped | 0 |
+| shell模块 | 49 passed in 15.28s；0 skipped | 0 |
+| long-mid后的完整套件 | 1351 passed, 5 skipped in 174.06s | 0 |
+| About标题新测试修复前 | 1 failed in 5.15s | 1 |
+| 设置/服务商/右键组合（含阴影） | 56 passed in 68.96s；0 skipped | 0 |
+| 最终标题overlay模块 | 3 passed in 14.37s；0 skipped | 0 |
+| **最终完整套件** | **1352 passed, 5 skipped in 190.08s** | **0** |
+
+**非零退出也保留**：sidebar+scrollbar+shell组合两次分别53 passed后rc139；scrollbar单跑2 passed后rc139。将未修改的改前Main.qml复制到临时资源目录、运行同一未改scrollbar测试，也2 passed后rc139。因此特定退出路径的Qt生命周期问题在hover修复前可复现，但底层原因未修。不能把这些运行写成rc0。最终完整套件正常退出。所有原始日志和rc均保留在 long-mid/。
+
+最终测试命令在之前已有的隔离检出执行，临时检出未提交、未新建分支。主工作树 `.tmp/` 已含旧名兼容夹具，会污染递归改名测试，因此把当前7份变化的产品/测试文件逐字同步到已有隔离检出；[SHA-256清单](residual-20261123/modal/final-regression-manifest.log) 与最终工作树一致。
+
+```bash
+# cwd: /home/agent/shared_workspace/ai_upper/.tmp/retest-20261123/baseline-checkout
+AI_UPPER_HOME=/tmp/ai-upper-residual-final-full /home/agent/shared_workspace/ai_upper/.venv/bin/python -m pytest app/tests -q -ra > /home/agent/shared_workspace/ai_upper/out/residual-20261123/modal/final-full.log 2>&1
+retest_rc=$?
+echo rc=$retest_rc
+# rc=0
+# 1352 passed, 5 skipped in 190.08s (0:03:10)
+```
+
+5个skip：Windows专属2项、需AI_UPPER_E2E=1的构建2项、需cc/patchelf/readelf的native1项。没有删除、过滤、放宽测试。
+
+## 未闭环及具体限制
+
+- **E4图标未实现**：裸alt已验收；直接QTextImage插入会产生U+FFFC，实际最小实验 `existing_bare_alt_contract=False`，见 [image-object-contract.log](residual-20261123/e4/image-object-contract.log)。现有测试要求裸纯文本，保持此契约还需独立绘制标记；本轮未完成，不能用已修文案代替图标验收。
+- **E3布局未修复**：行推进及表格/列表容器段后距路径已具体定位，仍需逐块实现和验证；没有通过全局contentY补偿掩盖非均匀差。
+- **E5共享残差**：没有额外搜索丢行；图标和间距仍随E4/E3开放。
+- **long-mid其他状态差**：本项0/54悬停缺口关闭；活动会话与参考不同、首完整行身份026/027不同仍未改，整页不算像素闭环。
+- **模态其余残差**：Models/delete-confirm内部未得到每个像素的唯一归因；没有发现缺控件但仍有文字/小几何残差。General/Extensions/About修复后也未清零。
+- **测试退出问题**：部分QML模块组合退出139在改前资源也可复现，未修；最终全量rc0不代表消除此问题。
+
+本轮无权限/网络推送阻塞。上述未完成项属于实现尚未闭环，已与完成的定位和修复分开，任务不能标记“全部修复”。
+
+## 每项push与远端原始行
+
+每个commit完成后立即单独 `git push origin HEAD:develop`；全部push rc0。每次紧接 `git ls-remote origin refs/heads/develop`，原始行如下（不是将最终HEAD重复填给每项）：
+
+```text
+ae5eed62ed7e99c7b9321b2e8ee0ad353393ad59	refs/heads/develop
+1a8ac73936a2446168fd1a886a7657461f1b4214	refs/heads/develop
+8fa0fe509aa4730a40a9e360822f2e9e69322a15	refs/heads/develop
+8065d86420f276d056a02bd74cff24089af7499a	refs/heads/develop
+c1fdbf1c3e407c5fc42ce3871ecbb50140129f1a	refs/heads/develop
+8c880e61f3cfae2638b45ed742101d6ec0a35130	refs/heads/develop
+```
+
+顺序依次为E4、E1/E3、E5、E5坐标补充、long-mid、模态。原始push/ls-remote日志在 [receipts](residual-20261123/commits.json) 对应映射目录。总报告随后独立提交推送；最终HEAD和远端原始行由本地交付文件 `out/residual-20261123/publish-final.txt` 记录，不把该回执纳入它自身证明的commit，避免自引用hash。

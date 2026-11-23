@@ -1,0 +1,8 @@
+7 source/test file SHA-256 values match the running full regression checkout
+document.py unchanged from incoming ab66967
+e4 ae5eed62ed7e99c7b9321b2e8ee0ad353393ad59	refs/heads/develop
+e13 1a8ac73936a2446168fd1a886a7657461f1b4214	refs/heads/develop
+e5 8fa0fe509aa4730a40a9e360822f2e9e69322a15	refs/heads/develop
+e5-correction 8065d86420f276d056a02bd74cff24089af7499a	refs/heads/develop
+long c1fdbf1c3e407c5fc42ce3871ecbb50140129f1a	refs/heads/develop
+3 changed modal pages retain identical outside/mask counts
