@@ -1,0 +1,932 @@
+{
+  "parser": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "我先看一下目录，然后把结果整理成表格。"
+        }
+      ],
+      "line": 0
+    },
+    {
+      "type": "code",
+      "language": "python",
+      "text": "def list_dir(path):\n    return sorted(os.listdir(path))",
+      "line": 2
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "const value = [\"item-00\", \"item-01\", \"item-02\", \"item-03\", \"item-04\", \"item-05\", \"item-06\", \"item-07\", \"item-08\", \"item-09\", \"item-10\", \"item-11\", \"item-12\", \"item-13\", \"item-14\", \"item-15\", \"item-16\", \"item-17\", \"item-18\", \"item-19\", \"item-20\", \"item-21\", \"item-22\", \"item-23\"];"
+        }
+      ],
+      "line": 6
+    },
+    {
+      "type": "table",
+      "align": [
+        "left",
+        "left",
+        "left"
+      ],
+      "header": [
+        [
+          {
+            "type": "text",
+            "text": "文件"
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "类型"
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "说明"
+          }
+        ]
+      ],
+      "rows": [
+        [
+          [
+            {
+              "type": "code",
+              "text": "README.md"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "文档"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "项目用途与运行方式"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "type": "code",
+              "text": "src/"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "目录"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "源代码"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "type": "code",
+              "text": "package.json"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "配置"
+            }
+          ],
+          [
+            {
+              "type": "text",
+              "text": "依赖清单"
+            }
+          ]
+        ]
+      ],
+      "line": 8
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "要点："
+        }
+      ],
+      "line": 14
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "start": 1,
+      "task": false,
+      "items": [
+        {
+          "task": null,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "先读 README"
+                }
+              ],
+              "line": 16
+            }
+          ],
+          "loose": false,
+          "line": 16
+        },
+        {
+          "task": null,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "再看依赖"
+                }
+              ],
+              "line": 17
+            }
+          ],
+          "loose": false,
+          "line": 17
+        },
+        {
+          "task": null,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "最后跑测试"
+                }
+              ],
+              "line": 18
+            }
+          ],
+          "loose": false,
+          "line": 18
+        }
+      ],
+      "line": 16
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "start": 1,
+      "task": true,
+      "items": [
+        {
+          "task": null,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "无序项一"
+                }
+              ],
+              "line": 20
+            }
+          ],
+          "loose": false,
+          "line": 20
+        },
+        {
+          "task": null,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "无序项二"
+                }
+              ],
+              "line": 21
+            }
+          ],
+          "loose": false,
+          "line": 21
+        },
+        {
+          "task": true,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "已完成"
+                }
+              ],
+              "line": 23
+            }
+          ],
+          "loose": false,
+          "line": 23
+        },
+        {
+          "task": false,
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "未完成"
+                }
+              ],
+              "line": 24
+            }
+          ],
+          "loose": false,
+          "line": 24
+        }
+      ],
+      "line": 20
+    },
+    {
+      "type": "quote",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "引用第一层"
+            }
+          ],
+          "line": 0
+        },
+        {
+          "type": "quote",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "嵌套引用第二层"
+                }
+              ],
+              "line": 0
+            }
+          ],
+          "line": 2
+        }
+      ],
+      "line": 26
+    },
+    {
+      "type": "hr",
+      "line": 30
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "参见"
+        },
+        {
+          "type": "link",
+          "href": "https://example.com/docs",
+          "title": "",
+          "children": [
+            {
+              "type": "text",
+              "text": "项目说明"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "。"
+        }
+      ],
+      "line": 32
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "image",
+          "title": "",
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+          "alt": "示意图"
+        }
+      ],
+      "line": 34
+    }
+  ],
+  "plain": "我先看一下目录，然后把结果整理成表格。\npython\ndef list_dir(path):\n    return sorted(os.listdir(path))\n\nconst value = [\"item-00\", \"item-01\", \"item-02\", \"item-03\", \"item-04\", \"item-05\", \"item-06\", \"item-07\", \"item-08\", \"item-09\", \"item-10\", \"item-11\", \"item-12\", \"item-13\", \"item-14\", \"item-15\", \"item-16\", \"item-17\", \"item-18\", \"item-19\", \"item-20\", \"item-21\", \"item-22\", \"item-23\"];\n​   文件\n​   类型\n​   说明\n​    README.md \n​   文档\n​   项目用途与运行方式\n​    src/ \n​   目录\n​   源代码\n​    package.json \n​   配置\n​   依赖清单\n要点：\n\t1.\t先读 README\n\t2.\t再看依赖\n\t3.\t最后跑测试\n\t•\t无序项一\n\t•\t无序项二\n\t☑\t已完成\n\t☐\t未完成\n\n引用第一层\n\n嵌套引用第二层\n\n\n\n\n参见项目说明。\n￼示意图",
+  "blocks": [
+    {
+      "text": "我先看一下目录，然后把结果整理成表格。",
+      "y": 0.0,
+      "height": 21.0,
+      "topMargin": 0.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 19
+        }
+      ]
+    },
+    {
+      "text": "python",
+      "y": 28.59375,
+      "height": 13.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 13.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "def list_dir(path):",
+      "y": 46.59375,
+      "height": 14.0,
+      "topMargin": 12.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 111.6111611161116,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 19
+        }
+      ]
+    },
+    {
+      "text": "    return sorted(os.listdir(path))",
+      "y": 62.21875,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 111.6111611161116,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 35
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 65.09375,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "const value = [\"item-00\", \"item-01\", \"item-02\", \"item-03\", \"item-04\", \"item-05\", \"item-06\", \"item-07\", \"item-08\", \"item-09\", \"item-10\", \"item-11\", \"item-12\", \"item-13\", \"item-14\", \"item-15\", \"item-16\", \"item-17\", \"item-18\", \"item-19\", \"item-20\", \"item-21\", \"item-22\", \"item-23\"];",
+      "y": 79.09375,
+      "height": 67.1875,
+      "topMargin": 0.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 103
+        },
+        {
+          "y": 25.328125,
+          "height": 21.0,
+          "textStart": 103,
+          "textLength": 110
+        },
+        {
+          "y": 48.421875,
+          "height": 21.0,
+          "textStart": 213,
+          "textLength": 66
+        }
+      ]
+    },
+    {
+      "text": "​   文件",
+      "y": 150.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​   类型",
+      "y": 150.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​   说明",
+      "y": 150.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​    README.md ",
+      "y": 185.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 15
+        }
+      ]
+    },
+    {
+      "text": "​   文档",
+      "y": 185.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​   项目用途与运行方式",
+      "y": 185.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 13
+        }
+      ]
+    },
+    {
+      "text": "​    src/ ",
+      "y": 220.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 10
+        }
+      ]
+    },
+    {
+      "text": "​   目录",
+      "y": 220.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​   源代码",
+      "y": 220.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 7
+        }
+      ]
+    },
+    {
+      "text": "​    package.json ",
+      "y": 255.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 18
+        }
+      ]
+    },
+    {
+      "text": "​   配置",
+      "y": 255.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "​   依赖清单",
+      "y": 255.875,
+      "height": 34.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 34.45,
+      "lines": [
+        {
+          "y": 0.875,
+          "height": 34.0,
+          "textStart": 0,
+          "textLength": 8
+        }
+      ]
+    },
+    {
+      "text": "要点：",
+      "y": 304.375,
+      "height": 21.0,
+      "topMargin": 0.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 3
+        }
+      ]
+    },
+    {
+      "text": "\t1.\t先读 README",
+      "y": 339.46875,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 2.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 13
+        }
+      ]
+    },
+    {
+      "text": "\t2.\t再看依赖",
+      "y": 364.5625,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 2.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 8
+        }
+      ]
+    },
+    {
+      "text": "\t3.\t最后跑测试",
+      "y": 389.65625,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 9
+        }
+      ]
+    },
+    {
+      "text": "\t•\t无序项一",
+      "y": 424.75,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 2.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 7
+        }
+      ]
+    },
+    {
+      "text": "\t•\t无序项二",
+      "y": 449.84375,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 2.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 7
+        }
+      ]
+    },
+    {
+      "text": "\t☑\t已完成",
+      "y": 474.9375,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 2.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "\t☐\t未完成",
+      "y": 500.03125,
+      "height": 21.0,
+      "topMargin": 2.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 6
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 535.125,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "引用第一层",
+      "y": 537.125,
+      "height": 21.0,
+      "topMargin": 0.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 5
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 572.21875,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "嵌套引用第二层",
+      "y": 574.21875,
+      "height": 21.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 7
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 585.21875,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 587.125,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 16.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 601.125,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "",
+      "y": 602.125,
+      "height": 14.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 0.0,
+      "lines": [
+        {
+          "y": 0.0,
+          "height": 14.0,
+          "textStart": 0,
+          "textLength": 0
+        }
+      ]
+    },
+    {
+      "text": "参见项目说明。",
+      "y": 632.125,
+      "height": 21.0,
+      "topMargin": 16.0,
+      "bottomMargin": 12.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 7
+        }
+      ]
+    },
+    {
+      "text": "￼示意图",
+      "y": 667.21875,
+      "height": 21.0,
+      "topMargin": 0.0,
+      "bottomMargin": 0.0,
+      "lineHeight": 23.099999999999998,
+      "lines": [
+        {
+          "y": 2.234375,
+          "height": 21.0,
+          "textStart": 0,
+          "textLength": 4
+        }
+      ]
+    }
+  ]
+}

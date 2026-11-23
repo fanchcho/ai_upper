@@ -1,0 +1,757 @@
+[
+  {
+    "rect": {
+      "x": 488,
+      "y": -134.640625,
+      "width": 696,
+      "height": 760,
+      "top": -134.640625,
+      "right": 1184,
+      "bottom": 625.359375,
+      "left": 488
+    },
+    "children": [
+      {
+        "tag": "P",
+        "text": "我先看一下目录，然后把结果整理成表格。",
+        "rect": {
+          "x": 488,
+          "y": -134.640625,
+          "width": 696,
+          "height": 23.09375,
+          "top": -134.640625,
+          "right": 1184,
+          "bottom": -111.546875,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": "const value = [\"item-00\", \"item-01\", \"item-02\", \"item-03\", \"item-04\", \"item-05\", \"item-06\"",
+        "rect": {
+          "x": 488,
+          "y": 5.203125,
+          "width": 696,
+          "height": 69.28125,
+          "top": 5.203125,
+          "right": 1184,
+          "bottom": 74.484375,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "TABLE",
+        "text": "文件类型说明README.md文档项目用途与运行方式src/目录源代码package.json配置依赖清单",
+        "rect": {
+          "x": 488,
+          "y": 86.484375,
+          "width": 301.671875,
+          "height": 138.75,
+          "top": 86.484375,
+          "right": 789.671875,
+          "bottom": 225.234375,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "0px none rgb(128, 128, 128)"
+      },
+      {
+        "tag": "TR",
+        "text": "文件类型说明",
+        "rect": {
+          "x": 488.5,
+          "y": 86.984375,
+          "width": 300.671875,
+          "height": 34.4375,
+          "top": 86.984375,
+          "right": 789.171875,
+          "bottom": 121.421875,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "0px none rgb(128, 128, 128)"
+      },
+      {
+        "tag": "TH",
+        "text": "文件",
+        "rect": {
+          "x": 488.5,
+          "y": 86.984375,
+          "width": 115.640625,
+          "height": 34.4375,
+          "top": 86.984375,
+          "right": 604.140625,
+          "bottom": 121.421875,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "600 13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TH",
+        "text": "类型",
+        "rect": {
+          "x": 604.140625,
+          "y": 86.984375,
+          "width": 47.015625,
+          "height": 34.4375,
+          "top": 86.984375,
+          "right": 651.15625,
+          "bottom": 121.421875,
+          "left": 604.140625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "600 13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TH",
+        "text": "说明",
+        "rect": {
+          "x": 651.15625,
+          "y": 86.984375,
+          "width": 138.015625,
+          "height": 34.4375,
+          "top": 86.984375,
+          "right": 789.171875,
+          "bottom": 121.421875,
+          "left": 651.15625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "600 13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TR",
+        "text": "README.md文档项目用途与运行方式",
+        "rect": {
+          "x": 488.5,
+          "y": 121.421875,
+          "width": 300.671875,
+          "height": 34.4375,
+          "top": 121.421875,
+          "right": 789.171875,
+          "bottom": 155.859375,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "0px none rgb(128, 128, 128)"
+      },
+      {
+        "tag": "TD",
+        "text": "README.md",
+        "rect": {
+          "x": 488.5,
+          "y": 121.421875,
+          "width": 115.640625,
+          "height": 34.4375,
+          "top": 121.421875,
+          "right": 604.140625,
+          "bottom": 155.859375,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "文档",
+        "rect": {
+          "x": 604.140625,
+          "y": 121.421875,
+          "width": 47.015625,
+          "height": 34.4375,
+          "top": 121.421875,
+          "right": 651.15625,
+          "bottom": 155.859375,
+          "left": 604.140625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "项目用途与运行方式",
+        "rect": {
+          "x": 651.15625,
+          "y": 121.421875,
+          "width": 138.015625,
+          "height": 34.4375,
+          "top": 121.421875,
+          "right": 789.171875,
+          "bottom": 155.859375,
+          "left": 651.15625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TR",
+        "text": "src/目录源代码",
+        "rect": {
+          "x": 488.5,
+          "y": 155.859375,
+          "width": 300.671875,
+          "height": 34.4375,
+          "top": 155.859375,
+          "right": 789.171875,
+          "bottom": 190.296875,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "0px none rgb(128, 128, 128)"
+      },
+      {
+        "tag": "TD",
+        "text": "src/",
+        "rect": {
+          "x": 488.5,
+          "y": 155.859375,
+          "width": 115.640625,
+          "height": 34.4375,
+          "top": 155.859375,
+          "right": 604.140625,
+          "bottom": 190.296875,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "目录",
+        "rect": {
+          "x": 604.140625,
+          "y": 155.859375,
+          "width": 47.015625,
+          "height": 34.4375,
+          "top": 155.859375,
+          "right": 651.15625,
+          "bottom": 190.296875,
+          "left": 604.140625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "源代码",
+        "rect": {
+          "x": 651.15625,
+          "y": 155.859375,
+          "width": 138.015625,
+          "height": 34.4375,
+          "top": 155.859375,
+          "right": 789.171875,
+          "bottom": 190.296875,
+          "left": 651.15625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TR",
+        "text": "package.json配置依赖清单",
+        "rect": {
+          "x": 488.5,
+          "y": 190.296875,
+          "width": 300.671875,
+          "height": 34.4375,
+          "top": 190.296875,
+          "right": 789.171875,
+          "bottom": 224.734375,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "0px none rgb(128, 128, 128)"
+      },
+      {
+        "tag": "TD",
+        "text": "package.json",
+        "rect": {
+          "x": 488.5,
+          "y": 190.296875,
+          "width": 115.640625,
+          "height": 34.4375,
+          "top": 190.296875,
+          "right": 604.140625,
+          "bottom": 224.734375,
+          "left": 488.5
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "配置",
+        "rect": {
+          "x": 604.140625,
+          "y": 190.296875,
+          "width": 47.015625,
+          "height": 34.4375,
+          "top": 190.296875,
+          "right": 651.15625,
+          "bottom": 224.734375,
+          "left": 604.140625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "TD",
+        "text": "依赖清单",
+        "rect": {
+          "x": 651.15625,
+          "y": 190.296875,
+          "width": 138.015625,
+          "height": 34.4375,
+          "top": 190.296875,
+          "right": 789.171875,
+          "bottom": 224.734375,
+          "left": 651.15625
+        },
+        "margin": "0px",
+        "padding": "6px 10px",
+        "font": "13px / 21.45px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "21.45px",
+        "border": "1px solid rgb(230, 230, 234)"
+      },
+      {
+        "tag": "P",
+        "text": "要点：",
+        "rect": {
+          "x": 488,
+          "y": 237.234375,
+          "width": 696,
+          "height": 23.09375,
+          "top": 237.234375,
+          "right": 1184,
+          "bottom": 260.328125,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "OL",
+        "text": "\n先读 README\n再看依赖\n最后跑测试\n",
+        "rect": {
+          "x": 488,
+          "y": 272.328125,
+          "width": 696,
+          "height": 73.28125,
+          "top": 272.328125,
+          "right": 1184,
+          "bottom": 345.609375,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px 0px 0px 21px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "先读 README",
+        "rect": {
+          "x": 509,
+          "y": 272.328125,
+          "width": 675,
+          "height": 23.09375,
+          "top": 272.328125,
+          "right": 1184,
+          "bottom": 295.421875,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "再看依赖",
+        "rect": {
+          "x": 509,
+          "y": 297.421875,
+          "width": 675,
+          "height": 23.09375,
+          "top": 297.421875,
+          "right": 1184,
+          "bottom": 320.515625,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "最后跑测试",
+        "rect": {
+          "x": 509,
+          "y": 322.515625,
+          "width": 675,
+          "height": 23.09375,
+          "top": 322.515625,
+          "right": 1184,
+          "bottom": 345.609375,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "UL",
+        "text": "\n\n无序项一\n\n\n无序项二\n\n\n 已完成\n\n\n 未完成\n\n",
+        "rect": {
+          "x": 488,
+          "y": 357.609375,
+          "width": 696,
+          "height": 98.375,
+          "top": 357.609375,
+          "right": 1184,
+          "bottom": 455.984375,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px 0px 0px 21px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "\n无序项一\n",
+        "rect": {
+          "x": 509,
+          "y": 357.609375,
+          "width": 675,
+          "height": 23.09375,
+          "top": 357.609375,
+          "right": 1184,
+          "bottom": 380.703125,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": "无序项一",
+        "rect": {
+          "x": 509,
+          "y": 357.609375,
+          "width": 675,
+          "height": 23.09375,
+          "top": 357.609375,
+          "right": 1184,
+          "bottom": 380.703125,
+          "left": 509
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "\n无序项二\n",
+        "rect": {
+          "x": 509,
+          "y": 382.703125,
+          "width": 675,
+          "height": 23.09375,
+          "top": 382.703125,
+          "right": 1184,
+          "bottom": 405.796875,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": "无序项二",
+        "rect": {
+          "x": 509,
+          "y": 382.703125,
+          "width": 675,
+          "height": 23.09375,
+          "top": 382.703125,
+          "right": 1184,
+          "bottom": 405.796875,
+          "left": 509
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "\n 已完成\n",
+        "rect": {
+          "x": 509,
+          "y": 407.796875,
+          "width": 675,
+          "height": 23.09375,
+          "top": 407.796875,
+          "right": 1184,
+          "bottom": 430.890625,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": " 已完成",
+        "rect": {
+          "x": 509,
+          "y": 407.796875,
+          "width": 675,
+          "height": 23.09375,
+          "top": 407.796875,
+          "right": 1184,
+          "bottom": 430.890625,
+          "left": 509
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "LI",
+        "text": "\n 未完成\n",
+        "rect": {
+          "x": 509,
+          "y": 432.890625,
+          "width": 675,
+          "height": 23.09375,
+          "top": 432.890625,
+          "right": 1184,
+          "bottom": 455.984375,
+          "left": 509
+        },
+        "margin": "2px 0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": " 未完成",
+        "rect": {
+          "x": 509,
+          "y": 432.890625,
+          "width": 675,
+          "height": 23.09375,
+          "top": 432.890625,
+          "right": 1184,
+          "bottom": 455.984375,
+          "left": 509
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "BLOCKQUOTE",
+        "text": "\n引用第一层\n\n嵌套引用第二层\n\n",
+        "rect": {
+          "x": 488,
+          "y": 467.984375,
+          "width": 696,
+          "height": 66.1875,
+          "top": 467.984375,
+          "right": 1184,
+          "bottom": 534.171875,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "2px 0px 2px 12px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": ""
+      },
+      {
+        "tag": "P",
+        "text": "引用第一层",
+        "rect": {
+          "x": 503,
+          "y": 469.984375,
+          "width": 681,
+          "height": 23.09375,
+          "top": 469.984375,
+          "right": 1184,
+          "bottom": 493.078125,
+          "left": 503
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(92, 92, 102)"
+      },
+      {
+        "tag": "BLOCKQUOTE",
+        "text": "\n嵌套引用第二层\n",
+        "rect": {
+          "x": 503,
+          "y": 505.078125,
+          "width": 681,
+          "height": 27.09375,
+          "top": 505.078125,
+          "right": 1184,
+          "bottom": 532.171875,
+          "left": 503
+        },
+        "margin": "0px",
+        "padding": "2px 0px 2px 12px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": ""
+      },
+      {
+        "tag": "P",
+        "text": "嵌套引用第二层",
+        "rect": {
+          "x": 518,
+          "y": 507.078125,
+          "width": 666,
+          "height": 23.09375,
+          "top": 507.078125,
+          "right": 1184,
+          "bottom": 530.171875,
+          "left": 518
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(92, 92, 102)"
+      },
+      {
+        "tag": "P",
+        "text": "参见项目说明。",
+        "rect": {
+          "x": 488,
+          "y": 567.171875,
+          "width": 696,
+          "height": 23.09375,
+          "top": 567.171875,
+          "right": 1184,
+          "bottom": 590.265625,
+          "left": 488
+        },
+        "margin": "0px 0px 12px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      },
+      {
+        "tag": "P",
+        "text": "",
+        "rect": {
+          "x": 488,
+          "y": 602.265625,
+          "width": 696,
+          "height": 23.09375,
+          "top": 602.265625,
+          "right": 1184,
+          "bottom": 625.359375,
+          "left": 488
+        },
+        "margin": "0px",
+        "padding": "0px",
+        "font": "14px / 23.1px -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft YaHei\", Roboto, Helvetica, Arial, sans-serif",
+        "lineHeight": "23.1px",
+        "border": "0px none rgb(31, 31, 36)"
+      }
+    ]
+  }
+]

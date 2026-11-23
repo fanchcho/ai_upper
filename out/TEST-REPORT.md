@@ -525,3 +525,78 @@ status 的代码块为空，表示 tracked 工作区干净。原 A/B/C 三个提
 ### 第 2 项：A/B/C 证据入口已补齐
 
 新增 `out/ab-closeout/REPORT.md`，按落盘日志逐项列出 A/B/C 命令、rc、真实滚轮值、断图像素和历史最终 HEAD 全量结果；另列本轮真实工作区全量及未闭环项。未重新实现 A/B。第1项提交 `71ff27b`，push rc=0；原始行见 `out/layout-closeout/remote1.log`。
+
+### 第 3 项：E3 组合布局已改善；表格底边/精确间距仍未闭环
+
+**不宣称全部修完**：列表行推进、列表容器段后距和引用边界已按原版修正；表格底边仍两行、行盒及精确 padding 残差仍存在。
+修改前 `git diff HEAD -- app/src/markdown/document.py` 输出 0 字节。只改 `app/src/markdown/document.py` 和两条新增几何回归测试；未修改旧测试断言、未重做 A/B。最终产品代码未保留失败的候选表格绘制器。
+
+实际来源：deva 只读 `apps/desktop/src/renderer/src/styles/app.css:765–875`；完整本段 CSS 抽取 `out/layout-closeout/deva-body.css`。
+CDP 实时原始几何 `deva-layout.json`：正文 line-height=23.1px，列表行高23.09375px、li margin=2px、ol/ul bottom=12px；blockquote 左边框3px、内边距左12px/上下2px、外边距左右0；table margin-bottom=12px、th/td padding=6px 10px、border=1px。
+CDP 命令：`AI_UPPER_HOME=/tmp/ai-upper-layout-deva DEVA_HOME=/tmp/ai-upper-layout-deva DEVA_CONFIG=/tmp/ai-upper-residual-20261123/config.json DEVA_SEED=/tmp/ai-upper-residual-20261123/data/chats CDP_PORT=9335 node .tmp/layout-closeout/deva_layout.mjs chat out/layout-closeout/deva-layout.json > out/layout-closeout/deva-layout.log 2>&1; rc=$?`；rc=0。仅运行时测量，无 deva 文件写入。
+
+| 子项 | 改前 → 改后实测 | deva 实测 / 判定 |
+|---|---|---|
+| CJK 列表行推进 | 25.921875 → **25.09375px** | deva25.09375；已修复字体 fallback 造成的比例行高漂移，使用 CSS 固定行高 |
+| 两组列表边界推进 | 25.921875 → **35.09375px** | deva35.09375；已修复容器12px段后距缺失 |
+| 嵌套引用横向缩进 | 27 → **15px**（3+12） | 原版每层15；去除6px全向补偿 margin、额外空块，新增测试锁定 |
+| 一级到二级引用纵向推进 | 43.921875 → **37.09375px** | deva37.09375；容器边界已修复 |
+| 表后间距 | 最后 cell 内容盒底到后段起点 **2.5→14.5px**；表格 margin-bottom **0→12px** | 原版表外边框底到后段起点12px；QText 的盒模型另含2.5px偏差，**精确像素仍缺** |
+| 表格底边 | 改前 y214/215 两行 → 改后 y217/218 两行 | 原版 y224 单行；**仍存在，未修复**。行坐标移动不等于双边已解决 |
+| 表格行推进与内边距 | 行推进 **35→35px**，3个NBSP的近似水平padding保留 | deva34.4375px、真实10×6 padding；**仍有差异**，不把结构格式的1px边框断言当成实拍单行 |
+| 分块渲染 | 候选曾多出接缝空块，修正边界状态传递后既有 **20项全部通过** | 未放宽分块/整篇 blockCount、size、内容及格式等价断言 |
+
+逐带坐标（暗像素 max<200、每行>3像素，x=[530,1184)、y=[40,640)，同阈值比较）：
+
+| 内容 | 改前 QML | 改后 QML | deva |
+|---|---|---|---|
+| 表头 | 92–105 | 94–107 | 96–109 |
+| README | 127–140 | 129–142 | 132–144 |
+| src | 163–175 | 165–177 | 166–178 |
+| package | 197–210 | 199–212 | 201–214 |
+| 有序1 | 259–269 | 275–285 | 277–287 |
+| 有序2 | 283–297 | 298–312 | 301–314 |
+| 有序3 | 309–323 | 323–337 | 327–340 |
+| 无序1 | 336–348 | 359–371 | 363–375 |
+| 无序2 | 362–374 | 384–396 | 388–400 |
+| 已完成 | 388–401 | 409–422 | 413–425 |
+| 未完成 | 413–426 | 434–447 | 437–450 |
+| 一级引用 | 447–460 | 471–484 | 475–487 |
+| 二级引用 | 490–504 | 507–521 | 511–524 |
+
+源码文档布局命令：`AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 .venv/bin/python out/residual-20261123/body_layout_probe.py > out/layout-closeout/after-layout.json 2> out/layout-closeout/after-layout.err; rc=$?`，rc=0；改前同命令使用 before-layout.json。
+像素带与底边命令：`python3 out/layout-closeout/measure_layout.py out/latest-parity/deva/chat-deva.png out/layout-closeout/before/chat.png out/layout-closeout/after/chat.png > out/layout-closeout/final-bands.log 2>&1; rc=$?`，rc=0；底边仍两行的原始输出保留。
+
+只重拍 chat/search-none：
+
+```sh
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/layout-closeout/after/chat.png /tmp/ai-upper-residual-20261123 config.json > out/layout-closeout/after-chat.log 2>&1; rc=$?
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh search-none out/layout-closeout/after/search-none.png /tmp/ai-upper-residual-20261123 config.json > out/layout-closeout/after-search.log 2>&1; rc=$?
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/layout-closeout/before > out/layout-closeout/before-diff.log 2>&1; rc=$?
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/layout-closeout/after > out/layout-closeout/after-diff.log 2>&1; rc=$?
+```
+
+以上 rc 均0；改前截图同命令把 after 换为 before，rc也为0。原版图复用既有基线。严格像素差：
+
+| 页面 | 改前 px / % | 改后 px / % | 减少 |
+|---|---:|---:|---:|
+| chat | 112844 / 10.75% | **108149 / 10.30%** | 4695px |
+| search-none | 84931 / 8.09% | **80236 / 7.64%** | 4695px |
+
+候选否决依据：只补列表/固定行高候选 chat126479px；原生 cell padding + 全表重画候选131636px，并曾引入分块差异；最终没有保留这些候选。给表格 border 显式 Solid 也未改变双行像素，已撤销无效改动。卡点是 QQuickTextEdit 的表格行盒/边界绘制，不能靠当前 QTextTableFormat 的1px格式直接得到单像素边缘；复现命令 `measure_layout.py` 输出 after 底边 `[(217,209),(218,209)]`，原版底边 `[(224,302)]`。
+
+受影响测试命令：`AI_UPPER_HOME=/tmp/ai-upper-layout-target .venv/bin/python -m pytest app/tests/test_markdown_document.py app/tests/test_markdown_body.py app/tests/test_markdown_chunked.py app/tests/test_qml_code_scroll.py app/tests/test_qml_broken_image.py -q -ra > out/layout-closeout/target-tests.log 2>&1; rc=$?`；**106 passed in 14.20s，0 skipped，rc=0**。
+
+
+第3项最终产品代码的真实工作区全量（保留 `.tmp/`）：
+`AI_UPPER_HOME=/tmp/ai-upper-layout-final .venv/bin/python -m pytest app/tests -q > out/layout-closeout/full-final.log 2>&1; rc=$?`。
+原文：**1359 passed, 5 skipped in 213.07s (0:03:33)，0 failed，rc=0**；增加的2项是本轮几何回归测试。
+第3项提交包含的产品/测试文件与此次运行一致；commit 前未再改源码。前后截图字节数和md5见 `out/layout-closeout/image-manifest.log`。
+
+第2项已推送，原始远端行：
+```text
+0617c04ee37315dac11932f74eaa4ba9b1fbd61a	refs/heads/develop
+```
+
+本轮未闭环：E3整体像素仍有偏移、表格底边仍两行、表格行高35px对34.4375px及近似padding残差。第3项为部分修复，不能标全完成。
+本轮明确未做：emoji缺字形、deva 2x、CI终态归因、settings遮罩内部残差、long-mid非悬停差异、18页全量重拍，原因是用户指定延期。

@@ -747,3 +747,28 @@ def test_every_cell_gets_its_own_border_brush_and_style(qapp):
                     assert cell.background().color().name() == LIGHT.bg_panel
             else:
                 assert cell.background().style() == QtGui.Qt.BrushStyle.NoBrush
+
+
+def test_cjk_list_line_and_container_gaps_match_css(qapp):
+    document = render("1. 第一项\n2. 第二项\n\n- 下一组\n- 尾项")
+    document.setTextWidth(696)
+    layout = document.documentLayout()
+    first, second, third = [find_block(document, text) for text in ("\t1.\t第一项", "\t2.\t第二项", "\t•\t下一组")]
+    y = [layout.blockBoundingRect(block).y() for block in (first, second, third)]
+    assert y[1]-y[0] == pytest.approx(14*1.65+2, abs=1/64)
+    assert y[2]-y[1] == pytest.approx(14*1.65+12, abs=1/64)
+
+
+def test_table_spacing_and_nested_quote_keep_css_boundaries(qapp):
+    document = render("| a | b |\n| - | - |\n| 1 | 2 |\n\nafter\n\n> outer\n>\n> > inner")
+    document.setTextWidth(696)
+    found = tables(document)
+    assert found[0].format().bottomMargin() == 12
+    after = find_block(document, "after")
+    # No second empty block inserted after the table's own trailing block.
+    assert after.previous().text().endswith("2")
+    outer = find_block(document, "outer")
+    inner = find_block(document, "inner")
+    layout = document.documentLayout()
+    assert layout.blockBoundingRect(inner).x()-layout.blockBoundingRect(outer).x() == 15
+    assert inner.blockFormat().bottomMargin() == 0

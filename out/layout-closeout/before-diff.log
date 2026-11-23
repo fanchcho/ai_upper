@@ -1,0 +1,18 @@
+chat                   ac72cd597ae44377b608777cbd5e2e81 783154083938b2b1e76921e486f210e2  158583  165232  112844  10.75% max=248 same=False
+empty                  MISSING
+first-run              MISSING
+search-open            MISSING
+search-results         MISSING
+search-none            49503995317b15b2d1806c1c0a99e5b3 a8e691b36116723cc9cf6b13e7113640   64532   70832   84931   8.09% max=224 same=False
+ctx-menu               MISSING
+delete-confirm         MISSING
+model-picker           MISSING
+hover-thread           MISSING
+focus-composer         MISSING
+long-mid               MISSING
+long-bottom            MISSING
+settings-general       MISSING
+settings-models        MISSING
+settings-extensions    MISSING
+settings-about         MISSING
+dark-chat              MISSING

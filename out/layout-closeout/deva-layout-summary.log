@@ -1,0 +1,57 @@
+md {'x': 488, 'y': -134.640625, 'width': 696, 'height': 760, 'top': -134.640625, 'right': 1184, 'bottom': 625.359375, 'left': 488}
+P 我先看一下目录，然后把结果整理成表格。 x=488.0000 y=-134.6406 width=696.0000 height=23.0938 0px 0px 12px 0px
+TABLE 文件类型说明README.md文档项目用途与运行方 x=488.0000 y=86.4844 width=301.6719 height=138.7500 0px 0px 12px 0px
+TR 文件类型说明 x=488.5000 y=86.9844 width=300.6719 height=34.4375 0px 0px
+TR README.md文档项目用途与运行方式 x=488.5000 y=121.4219 width=300.6719 height=34.4375 0px 0px
+TR src/目录源代码 x=488.5000 y=155.8594 width=300.6719 height=34.4375 0px 0px
+TR package.json配置依赖清单 x=488.5000 y=190.2969 width=300.6719 height=34.4375 0px 0px
+P 要点： x=488.0000 y=237.2344 width=696.0000 height=23.0938 0px 0px 12px 0px
+OL 
+先读 README
+再看依赖
+最后跑测试
+ x=488.0000 y=272.3281 width=696.0000 height=73.2812 0px 0px 12px 0px 0px 0px 21px
+LI 先读 README x=509.0000 y=272.3281 width=675.0000 height=23.0938 2px 0px 0px
+LI 再看依赖 x=509.0000 y=297.4219 width=675.0000 height=23.0938 2px 0px 0px
+LI 最后跑测试 x=509.0000 y=322.5156 width=675.0000 height=23.0938 2px 0px 0px
+UL 
+
+无序项一
+
+
+无序项二
+
+
+ 已完成
+
+
+ 未 x=488.0000 y=357.6094 width=696.0000 height=98.3750 0px 0px 12px 0px 0px 0px 21px
+LI 
+无序项一
+ x=509.0000 y=357.6094 width=675.0000 height=23.0938 2px 0px 0px
+P 无序项一 x=509.0000 y=357.6094 width=675.0000 height=23.0938 0px 0px
+LI 
+无序项二
+ x=509.0000 y=382.7031 width=675.0000 height=23.0938 2px 0px 0px
+P 无序项二 x=509.0000 y=382.7031 width=675.0000 height=23.0938 0px 0px
+LI 
+ 已完成
+ x=509.0000 y=407.7969 width=675.0000 height=23.0938 2px 0px 0px
+P  已完成 x=509.0000 y=407.7969 width=675.0000 height=23.0938 0px 0px
+LI 
+ 未完成
+ x=509.0000 y=432.8906 width=675.0000 height=23.0938 2px 0px 0px
+P  未完成 x=509.0000 y=432.8906 width=675.0000 height=23.0938 0px 0px
+BLOCKQUOTE 
+引用第一层
+
+嵌套引用第二层
+
+ x=488.0000 y=467.9844 width=696.0000 height=66.1875 0px 0px 12px 2px 0px 2px 12px
+P 引用第一层 x=503.0000 y=469.9844 width=681.0000 height=23.0938 0px 0px 12px 0px
+BLOCKQUOTE 
+嵌套引用第二层
+ x=503.0000 y=505.0781 width=681.0000 height=27.0938 0px 2px 0px 2px 12px
+P 嵌套引用第二层 x=518.0000 y=507.0781 width=666.0000 height=23.0938 0px 0px
+P 参见项目说明。 x=488.0000 y=567.1719 width=696.0000 height=23.0938 0px 0px 12px 0px
+P  x=488.0000 y=602.2656 width=696.0000 height=23.0938 0px 0px

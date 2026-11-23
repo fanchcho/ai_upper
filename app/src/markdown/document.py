@@ -365,6 +365,7 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
         pending_top = 0.0
         carry = None
         first = True
+        previous_has_content = True
         for index in range(0, len(blocks), size):
             scratch = QTextDocument()
             scratch_cursor = QTextCursor(scratch)
@@ -383,9 +384,9 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
                 # 例外：表格/代码块现在是直接接在上一段后的块级对象，整篇渲染
                 # 不会在它们前面留空块。分块首块正好是这两种结构时若还插分隔块，
                 # 每道接缝都会多一个 21px 空块（turns=30/group=5 实测多 12 块）。
-                # 引用/分隔线仍要分隔块（它们前面本来就有一个继承格式的空块）。
+                # 引用也直接接前块；表格/引用之后复用已有尾块，不额外断块。
                 first_kind = blocks[index].get("type") if index < len(blocks) else ""
-                if first_kind not in ("table", "code"):
+                if previous_has_content and first_kind not in ("table", "code", "quote"):
                     cursor.movePosition(QTextCursor.MoveOperation.End)
                     cursor.insertBlock(QTextBlockFormat())
             # 无论是否插分隔块，都必须先移到文末再记片段起点：跳过分隔块时
@@ -399,6 +400,7 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
             QTextCursor(cursor.block()).setBlockFormat(source_first)
             _copy_resources(scratch, document)
             first = False
+            previous_has_content = renderer._has_content
     finally:
         cursor.endEditBlock()
 
@@ -515,8 +517,10 @@ class _Renderer:
         fmt.setTopMargin(top + self._pending_top)
         self._pending_top = 0.0
         fmt.setBottomMargin(bottom)
-        fmt.setLineHeight(self.line_height(self.style.base_px, self.style.line_height),
-                          QTextBlockFormat.LineHeightTypes.ProportionalHeight.value)
+        # CSS fixes the line box in pixels; Qt proportional height uses the
+        # fallback font's actual height and accumulates a per-line CJK drift.
+        fmt.setLineHeight(self.style.base_px * self.style.line_height,
+                          QTextBlockFormat.LineHeightTypes.FixedHeight.value)
         return fmt
 
     def _begin(self, cursor: Any, fmt: Any) -> Any:
@@ -618,20 +622,22 @@ class _Renderer:
         """引用是整行块（原版 ``border-left`` + padding），宽度必须撑满容器。
 
         表格默认按内容收缩（实测 120px 单元格），嵌套引用的正文会被挤成一字一行。
-        设成 100% 宽度后，单元格宽度 = 容器宽度 - 边框 - 内边距，嵌套时逐层收 27px
-        （3px 竖线 + 12px 内边距 + 12px 表格外边距），与浏览器一致。
+        设成 100% 宽度后，嵌套时逐层收 15px（3px 竖线 + 12px 内边距），
+        对应原版 blockquote 的 border-left / padding-left。
         """
-        if self._has_content:
-            cursor.insertBlock()
         table_fmt = QTextTableFormat()
         table_fmt.setBorder(0.0)
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        # 引用表外边距 6px（不是段落用的 12px）：原版 `border-left` 直接贴正文列，
-        # 实测 12px 时竖线比原版右 8px、二级引用右 19px；6px 与 12/0/4/5/7/8 逐档
-        # 实拍比对，聊天页差异 57264 → 56373 像素，是这几档里最小的。
-        table_fmt.setMargin(6.0)
+        # 不用全向外边距补偿布局：原版左右 margin=0，前块段后距单独折叠。
+        table_fmt.setMargin(0.0)
+        # QTextTable insertion does not collapse the preceding block margin.
+        # Carry that CSS margin onto the frame instead of inserting an empty line.
+        previous_margin = (cursor.blockFormat().bottomMargin()
+                           if self._has_content or cursor.position() == 0 else 0.0)
+        table_fmt.setTopMargin(max(self._pending_top, previous_margin))
+        self._pending_top = 0.0
         table_fmt.setWidth(QTextLength(QTextLength.Type.PercentageLength, 100.0))
         table_fmt.setColumnWidthConstraints(
             [
@@ -654,8 +660,15 @@ class _Renderer:
         saved_content, saved_quote = self._has_content, self._quote_text
         self._has_content, self._quote_text = False, True
         self.render_blocks(block.get("children") or [], inner)
+        # Last child of blockquote has no bottom margin in deva.
+        last = QTextCursor(inner.block())
+        last_fmt = last.blockFormat()
+        last_fmt.setBottomMargin(0.0)
+        last.setBlockFormat(last_fmt)
         self._has_content, self._quote_text = saved_content, saved_quote
         self._after_frame(cursor, table.lastPosition() + 1)
+        self._has_content = False
+        self._pending_top = 12.0 * self.style.scale
 
     # ── 列表 ──────────────────────────────────────────────────────────────
     def _list(self, cursor: Any, block: dict, indent: float) -> None:
@@ -671,6 +684,10 @@ class _Renderer:
             if nested:
                 # 子列表从父条目的正文列开始，宽度跟父条目的标记列一致。
                 self.render_blocks(nested, cursor, indent + column)
+        # CSS collapses the final li margin into the list container's margin.
+        fmt = cursor.blockFormat()
+        fmt.setBottomMargin((2.0 if indent else 12.0) * self.style.scale)
+        cursor.setBlockFormat(fmt)
 
     def _list_item(self, cursor: Any, item: dict, ordered: bool, number: int,
                    indent: float) -> float:
@@ -741,14 +758,11 @@ class _Renderer:
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        # CSS 的 ``.md table`` 只有下边距 12px，左右不缩进；上下留 12px 由
-        # 相邻段落的 margin-bottom 已经提供，表格自身只需要下边距。QML 的
-        # QTextTableFormat 没有单边 margin 的“仅下边”语义，因此左右归零、
-        # 上边距保留为 0，下边距用 QTextBlockFormat 的段后距叠加在表格后的
-        # 第一个块上（见 ``_table_row`` 的末尾块）。
+        # CSS table 段后距设在表格自身；Qt 自动创建尾块，后继段落
+        # 复用该块，避免再插一个空行或让块 top margin 被表格吞掉。
         table_fmt.setMargin(0.0)
         table_fmt.setTopMargin(0.0)
-        table_fmt.setBottomMargin(0.0)
+        table_fmt.setBottomMargin(12.0 * self.style.scale)
         table_fmt.setLeftMargin(0.0)
         table_fmt.setRightMargin(0.0)
         table_fmt.setAlignment(ALIGN_LEFT)
@@ -772,6 +786,7 @@ class _Renderer:
         for row_index, row in enumerate(rows, start=1):
             self._table_row(table, row_index, row, align, header_row=False)
         self._after_frame(cursor, table.lastPosition() + 1)
+        self._has_content = False
 
     def _table_column_widths(self, header: list, rows: list, align: list[str]) -> list[float]:
         """按 max-content 语义算列宽（CSS ``.md table { width: max-content }``）。
@@ -957,11 +972,8 @@ class _Renderer:
         table_fmt.setCellSpacing(0.0)
         table_fmt.setCellPadding(0.0)
         table_fmt.setBorderCollapse(True)
-        # CSS 的 ``.md table`` 只有下边距 12px，左右不缩进；上下留 12px 由
-        # 相邻段落的 margin-bottom 已经提供，表格自身只需要下边距。QML 的
-        # QTextTableFormat 没有单边 margin 的“仅下边”语义，因此左右归零、
-        # 上边距保留为 0，下边距用 QTextBlockFormat 的段后距叠加在表格后的
-        # 第一个块上（见 ``_table_row`` 的末尾块）。
+        # CSS table 段后距设在表格自身；Qt 自动创建尾块，后继段落
+        # 复用该块，避免再插一个空行或让块 top margin 被表格吞掉。
         table_fmt.setMargin(0.0)
         table_fmt.setTopMargin(0.0)
         table_fmt.setBottomMargin(0.0)

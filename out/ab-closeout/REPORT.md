@@ -48,5 +48,11 @@ before_after_changed_pixels=769 bbox=(484, 599, 541, 617)
 
 ## 未闭环项
 
-E3 组合布局、正文表格底边与间距：本次第3项处理中，最新结果追加到 ../TEST-REPORT.md，不把旧证据当作已修。
+E3 组合布局已部分修复：chat 112844px/10.75%→108149px/10.30%，search-none 84931px/8.09%→80236px/7.64%；表格底边、行高及精确padding仍未闭环，逐项证据见 ../TEST-REPORT.md 第3项。
 用户明确延期：emoji 缺字形、deva 2x 对照、CI 终态归因、settings 遮罩内部残差、long-mid 非悬停差异、18页全量重拍。
+
+
+## 本次后续第3项最终全量
+
+真实工作区保留 `.tmp/`，命令 `AI_UPPER_HOME=/tmp/ai-upper-layout-final .venv/bin/python -m pytest app/tests -q > out/layout-closeout/full-final.log 2>&1; rc=$?`：**1359 passed, 5 skipped in 213.07s (0:03:33)，0 failed，rc=0**。
+本次新增两条几何回归断言，没有删除或跳过旧测试。此结果覆盖第3项提交的全部产品与测试改动；产品源码哈希清单见 ../layout-closeout/final-source-hashes.json。
