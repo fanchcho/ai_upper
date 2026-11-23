@@ -1758,3 +1758,16 @@ rc=0
 **G1（输入区左侧图标簇左移约 90 px）— 旧 90 px 位移当前不再复现。** 对 `chat` 输入区 `y730..799` 做暗像素列聚类：QML 前几组 `[449-462], [476-488], [500-507], [510-515], [518-522], [525-530]`；deva `[449-462], [484-496], [505-512], [515-520], [523-527], [530-535]`。第一组起点完全一致（449），第二组起点 QML 476 vs deva 484（8 px），第三组 500 vs 505（5 px）。**结论：G1 的 90 px 级别偏移已不存在；当前只剩图标字形内部的 5–8 px 差异，旧 `[860-990]` 数值为过期探针。**
 
 **H1（empty/first-run 1.26% 光栅残差）— 仍开放。** `logs/d-page-diff18-final.log` 的当前值：`empty` 与 `first-run` 都是 `13231 px / 1.26%`，`max=248`，两页像素相同。文本带实测：QML `(412,459)/(471,484)/(492,506)/(508,522)`，deva `(408,459)/(471,484)/(492,506)/(508,522)`；只有第一带左缘差 4 px，其余三带一致，说明残留主要在 quick-start 首行字体度量与头像光栅，不是布局结构。**结论：H1 仍为已知光栅残差，未宣称对齐。**
+
+### 5.9 最终全量 pytest（item 3）
+
+按与基线相同的调用方式，在全新临时 `AI_UPPER_HOME` 下跑完整测试套件：
+
+```
+$ H=$(mktemp -d /tmp/ai-upper-full-XXXXXX); AI_UPPER_HOME="$H" .venv/bin/python -m pytest app/tests -q > out/latest-parity/logs/item3-pytest-full-baseline-env.log 2>&1; echo rc=$?
+rc=0
+$ tail -1 out/latest-parity/logs/item3-pytest-full-baseline-env.log
+1349 passed, 5 skipped in 167.11s (0:02:47)
+```
+
+结果与基线 `1349 passed, 5 skipped, rc=0` 一致，没有 failed，passed 数未下降。完整原始日志：`out/latest-parity/logs/item3-pytest-full-baseline-env.log`。同一轮另用带 `PATH=.venv/bin:$PATH`、`QT_QPA_PLATFORM=offscreen` 的环境跑过一次，得到 `1350 passed, 4 skipped`，是多解开了一个环境门禁用例，记录在 `out/latest-parity/logs/item3-pytest-full-envfull.log`；验收口径仍以基线同款命令的 `1349 passed, 5 skipped` 为准。
