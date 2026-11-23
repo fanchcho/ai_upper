@@ -25,7 +25,8 @@ Item {
     signal close()
     signal paneRequested(string name)
 
-    // 背板（点击关闭 = 原版行为）
+    // 背板：redesign.css:3135-3142 `.cf-modal__backdrop` = rgba(0,0,0,.42) + 全屏；
+    // SettingsPane.tsx:54-55 明确遮罩层不响应点击，关闭只走右上角按钮。
     Rectangle {
         anchors.fill: parent
         color: Theme.backdrop
@@ -120,14 +121,18 @@ Item {
                     y: 12
                     spacing: 2
                     Repeater {
+                        // 原版 SettingsPane.tsx:48-51 的导航顺序/图标：
+                        //   general=Cog、models=Brain、extensions=Puzzle、about=Info（size=15）。
+                        // QML 旧版把前三个错写成 settings2 / blocks / cog，字形与语义都不对。
                         model: [
-                            { key: "general", label: "General", icon: IconData.settings2 },
-                            { key: "models", label: "Models", icon: IconData.blocks },
-                            { key: "extensions", label: "Extensions", icon: IconData.cog },
+                            { key: "general", label: "General", icon: IconData.cog },
+                            { key: "models", label: "Models", icon: IconData.brain },
+                            { key: "extensions", label: "Extensions", icon: IconData.puzzle },
                             { key: "about", label: "About", icon: IconData.info }
                         ]
                         delegate: Rectangle {
                             required property var modelData
+                            objectName: "settingsNav_" + modelData.key
                             width: 143
                             height: 31
                             radius: Theme.radius
@@ -139,6 +144,7 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 spacing: 8
                                 Icon {
+                                    objectName: "settingsNavIcon_" + modelData.key
                                     anchors.verticalCenter: parent.verticalCenter
                                     name: modelData.icon
                                     size: 15

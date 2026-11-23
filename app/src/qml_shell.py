@@ -151,8 +151,24 @@ QUICK_TEXT = {
 }
 # 输入区贴片的兜底文案（没有可选模型时，原版显示 `chat.selectModel`）。
 CHAT_TEXT = {
-    "zh": {"selectModel": "选择模型", "selectModelTitle": "选择模型"},
-    "en": {"selectModel": "Select model", "selectModelTitle": "Select model"},
+    "zh": {
+        "selectModel": "选择模型",
+        "selectModelTitle": "选择模型",
+        # 输入框上下文圆环与卡片（原版 messages.ts:238-242 `chat.panel.*`）。
+        "context": "上下文容量",
+        "approx": "约 {n}",
+        "usage": "{used}/{window} ({pct})",
+        "autoCompact": "自动压缩",
+    },
+    "en": {
+        "selectModel": "Select model",
+        "selectModelTitle": "Select model",
+        # 原版 messages.ts:1770-1774 `chat.panel.*`（英文 usage 的斜杠两侧有空格）。
+        "context": "Context",
+        "approx": "~{n}",
+        "usage": "{used} / {window} ({pct})",
+        "autoCompact": "Auto-compact",
+    },
 }
 
 # 页面名 → 让壳呈现该状态的标识；18 页对比清单见 scripts/parity/qml_pages_all.sh，

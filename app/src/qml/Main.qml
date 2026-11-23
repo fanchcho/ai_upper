@@ -59,6 +59,8 @@ ApplicationWindow {
     property bool modelPickerOpen: page === "model-picker"
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
     property string pickerMode: page === "model-picker" ? "model" : ""
+    // 上下文容量小卡片：独立于两个 picker；任一贴片展开时必须收起。
+    property bool contextOpen: false
     // 交互态页面：deva 截图的鼠标停在 (200,700)，落在第 11 行（y=56+54×11=650..703）；
     // 只有列表页会照原版显示该行 hover，设置页/弹层/确认层不造悬停。
     // `hover-thread` 原图指针不在任何行上（probe-hover.log 仅 42 px 噪声），因此保持 -1。
@@ -108,6 +110,9 @@ ApplicationWindow {
     property var modelGroups: []
     property var effortMenu: ({})
     property var chatText: ({})
+    // 上下文圆环读数（Python `contextUsage()`）：{used, estimated, window, trigger}。
+    // used=None 时整个圆环不占宽（原版 ModelPanel 不渲染 ContextRing）。
+    property var contextUsage: ({})
 
     // 列表筛选：搜索框里的词（原版按标题 / 角色名 / 挂载目录 basename 过滤，大小写不敏感）。
     readonly property string searchTerm: window.searchQuery.trim().toLowerCase()
@@ -797,7 +802,7 @@ ApplicationWindow {
         Item {
             id: quickStart
             objectName: "quickStart"
-            visible: window.sessions.length === 0 && !window.settingsOpen
+            visible: window.sessions.length === 0
             x: 0
             y: 40
             width: parent.width
@@ -970,7 +975,7 @@ ApplicationWindow {
         Flickable {
             id: bodyScroll
             objectName: "bodyScroll"
-            visible: window.sessions.length > 0 && !window.settingsOpen
+            visible: window.sessions.length > 0
             x: 0
             y: 27
             width: parent.width
@@ -1234,7 +1239,7 @@ ApplicationWindow {
         Rectangle {
             id: noticeBar
             objectName: "noticeBar"
-            visible: window.actionNotice !== "" && !window.settingsOpen
+            visible: window.actionNotice !== ""
             x: (parent.width - 780) / 2
             y: composer.y - 42
             width: Math.min(780, noticeText.implicitWidth + 28)
@@ -1256,7 +1261,7 @@ ApplicationWindow {
         Flow {
             id: pendingBar
             objectName: "pendingBar"
-            visible: window.pendingFiles.length > 0 && !window.settingsOpen
+            visible: window.pendingFiles.length > 0
             x: (parent.width - 780) / 2
             y: composer.y - (window.actionNotice !== "" ? 88 : 44)
             width: 780
@@ -1326,7 +1331,7 @@ ApplicationWindow {
         Rectangle {
             id: composer
             objectName: "composer"
-            visible: window.sessions.length > 0 && !window.settingsOpen
+            visible: window.sessions.length > 0
             x: (parent.width - 780) / 2
             y: parent.height - 162
             width: 780
@@ -1525,6 +1530,19 @@ ApplicationWindow {
                     }
                 }
 
+                // 上下文圆环：在模型贴片左侧，28×28；读数缺失时宽高为 0，不占位。
+                ContextRing {
+                    id: contextRing
+                    objectName: "contextRing"
+                    anchors.right: modelChip.left
+                    y: 2
+                    usage: window.contextUsage
+                    labels: window.chatText
+                    open: window.contextOpen
+                    viewportWidth: window.width
+                    onToggleRequested: window.toggleContext()
+                }
+
                 Rectangle {
                     id: modelChip
                     objectName: "modelChip"
@@ -1599,7 +1617,17 @@ ApplicationWindow {
         onPaneRequested: function (name) { window.page = "settings-" + name }
     }
 
+    function toggleContext() {
+        if (window.contextOpen) {
+            window.contextOpen = false
+            return
+        }
+        closePicker()
+        window.contextOpen = true
+    }
+
     function openPicker(mode) {
+        window.contextOpen = false
         if (window.modelPickerOpen && window.pickerMode === mode) {
             closePicker()
             return

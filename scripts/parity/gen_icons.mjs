@@ -21,7 +21,7 @@ const ICONS_DIR = path.join(devaRoot, 'node_modules/lucide-react/dist/esm/icons'
 
 // QML 里用到哪些图标：与 deva ChatFirstShell 的图标栏/输入区/设置页一一对应。
 const WANTED = [
-  'message-circle', 'users', 'alarm-clock', 'bot', 'cog',
+  'message-circle', 'users', 'alarm-clock', 'bot', 'cog', 'brain', 'puzzle',
   'search', 'plus', 'paperclip', 'folder', 'chevron-down', 'arrow-up',
   'copy', 'x', 'settings-2', 'blocks', 'info', 'sparkles', 'square-pen', 'check',
   'panel-left', 'panel-right', 'trash-2', 'pencil', 'archive',
