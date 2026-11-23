@@ -59,8 +59,12 @@ ApplicationWindow {
     property bool modelPickerOpen: page === "model-picker"
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
     property string pickerMode: page === "model-picker" ? "model" : ""
-    // 交互态页面：hover 指定行、右键菜单、删除确认框
-    property int forceHoverRow: page === "hover-thread" ? 1 : -1
+    // 交互态页面：deva 截图的鼠标停在 (200,700)，落在第 11 行（y=56+54×11=650..703）；
+    // 只有列表页会照原版显示该行 hover，设置页/弹层/确认层不造悬停。
+    // `hover-thread` 原图指针不在任何行上（probe-hover.log 仅 42 px 噪声），因此保持 -1。
+    property int forceHoverRow: (page === "chat" || page === "search-open"
+                                 || page === "focus-composer" || page === "long-mid"
+                                 || page === "long-bottom" || page === "dark-chat") ? 11 : -1
     // 输入区焦点态：focus-composer 页要让输入卡片真的拿到键盘焦点，
     // 原版此时边框从 #d5d5db 变 #5b5bd6（CDP 实测 border-color）。
     property bool composerFocused: page === "focus-composer"
@@ -220,8 +224,9 @@ ApplicationWindow {
     // 叠 18/255 黑（原版实拍量得；遮罩压不暗它，因为原生叠加层画在网页之上）。
     //
     // 几何/配色来源（只读参考，未改动 deva）：
-    //   deva/apps/desktop/src/main/index.ts:87-90  OVERLAY_BG light #ffffff / dark #1e1e20
-    //   deva/apps/desktop/src/main/index.ts:109-116 titleBarStyle 'hidden' + titleBarOverlay（height 40）
+    //   deva/apps/desktop/src/main/index.ts:79-81  OVERLAY_BG light #ffffff / dark #1e1e20
+    //   deva/apps/desktop/src/main/index.ts:89-97  overlayOptions 的 height 40
+    //   deva/apps/desktop/src/main/index.ts:112-116 titleBarStyle 'hidden' + titleBarOverlay
     //   deva/node_modules/electron/electron.d.ts:21424-21439 Linux 不吃 symbolColor（系统色）
     //   deva 原版 1280×820 实拍 out/latest-parity/deva/chat-deva.png 逐像素：
     //     整块 96×40 @ x1184；最小化 10×2 @ x1195 y23；最大化 10×10 框 @ x1227 y15；
@@ -551,14 +556,15 @@ ApplicationWindow {
             }
         }
 
-        // 会话列表：行宽 283（x=8，右缘 291），滚动条占右侧 8px（291..298），
-        // 刚好落在原版 `.cf-list` 的右内边距里、1px 分隔线左侧。
+        // 会话列表：第二列 --cf-side 300（redesign.css:32），.cf-rail 右框 1px（:193）
+        // => .cf-list clientWidth 299；左右 padding 8（redesign.css:741-746），
+        // 滚动条再占 8（styles/app.css:45-62），行内容宽 = 299 - 8×2 - 8 = 275；行 x=64..338。
         ListView {
             id: sessionList
             objectName: "sessionList"
             x: 0
             y: window.archiveView ? 92 : 56
-            width: 299
+            width: Theme.sideWidth - 1
             height: parent.height - y - 8
             clip: true
             leftMargin: 8
@@ -583,7 +589,8 @@ ApplicationWindow {
                 required property int index
                 required property var modelData
                 x: 8
-                width: ListView.view.width - 16
+                // 299 - 左右 padding 8×2 - 滚动条 8 = 275（deva DOM threads[0].rect.w）。
+                width: ListView.view.width - 2 * Theme.space2 - Theme.scrollbarWidth
                 title: modelData.title || ""
                 time: modelData.time || ""
                 persona: modelData.persona || "general"

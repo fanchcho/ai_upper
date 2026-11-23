@@ -1,6 +1,13 @@
 // 会话行的几何与配色逐项取自原版（CDP 实测 out/qml-shell/dom/chat.json）：
 //   行 275×54，padding 8/12，grid 38px + 12px gap，头像 38，标题 13/600，
 //   时间 11/#8a8a94，选中底色 rgba(91,91,214,0.12)，圆角 8。
+// 三态优先级严格照 apps/desktop/src/renderer/src/redesign/redesign.css：
+//   hover  = --bg-hover（styles/tokens.css:45 rgba(0,0,0,0.045)；深色 :113 rgba(255,255,255,0.06)），
+//            见 redesign.css:762-764；叠在 #f7f7f8 上为 (236,236,237)。
+//   active = --bg-selected（styles/tokens.css:47 rgba(91,91,214,0.12)；深色 :115 rgba(124,124,240,0.2)），
+//            见 redesign.css:765-767；叠在 #f7f7f8 上为 (228,228,244)。
+//   picked = 多选勾选态，同样用 --bg-selected（redesign.css:788-793），勾选框见 :795-813。
+// active / picked 的规则在 hover 之后，故二者优先于 hover，与下列绑定顺序一致。
 import QtQuick
 import "."
 
@@ -11,7 +18,7 @@ Rectangle {
     property string persona: "general"
     property string ownerName: ""
     property bool active: false
-    // 交互态：逐页对比里 hover-thread 需要指定某一行处于 hover（原版是真实鼠标悬停）。
+    // 交互态：逐页对比里需要固定某一行显示 hover 时使用（原版是真实鼠标悬停）。
     property bool forceHover: false
     // 多选态：右键「Select」进入后显示左侧勾选框，点击整行即切换选中。
     property bool selectionMode: false

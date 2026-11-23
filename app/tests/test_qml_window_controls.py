@@ -1,8 +1,9 @@
 """标题栏窗口控件：真实 QML 窗口 + 像素几何 + ``QTest.mouseClick`` 状态断言。
 
 判据来源（只读）：
-- deva `apps/desktop/src/main/index.ts:87-90`：Linux 叠加层底色 #ffffff / #1e1e20；
-- deva `apps/desktop/src/main/index.ts:109-116`：`titleBarStyle:'hidden'` + `titleBarOverlay`，height 40；
+- deva `apps/desktop/src/main/index.ts:79-81`：Linux 叠加层底色 #ffffff / #1e1e20；
+- deva `apps/desktop/src/main/index.ts:89-97`：`overlayOptions` 的 `height: 40`；
+- deva `apps/desktop/src/main/index.ts:112-116`：`titleBarStyle:'hidden'` + `titleBarOverlay`；
 - deva 原版 1280×820 实拍 `out/latest-parity/deva/chat-deva.png` 逐像素：
   右上 96×40 实色块，三个 32×40 按钮 x=1184/1216/1248；最小化 10×2 @ (1195,23)；
   最大化 10×10 框 @ (1227,15)；关闭 10×10 X @ (1259,15)；图标 #5F6368。
@@ -69,7 +70,7 @@ def _pump(app, seconds: float = 0.4) -> None:
     pump(app, lambda: False, seconds)
 
 
-def _build_window(tmp_path, monkeypatch):
+def _build_window(tmp_path, monkeypatch, sessions=None):
     from PySide6.QtCore import QUrl
     from PySide6.QtQml import QQmlApplicationEngine
 
@@ -95,6 +96,12 @@ def _build_window(tmp_path, monkeypatch):
     vault = SecretsVault(home)
     vault.set_secret("p1", "sk-test")
     store = ChatSessionStore(home)
+    for index, (session_id, title) in enumerate(sessions or []):
+        session = store.ensure_session(session_id)
+        session.title = title
+        session.createdAt = 1000 + index
+        session.updatedAt = 1000 + index
+        store.save(session_id)
     PersonaStore(home).ensure_seeded()
 
     box: dict = {}

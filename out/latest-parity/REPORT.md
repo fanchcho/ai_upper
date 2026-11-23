@@ -1352,74 +1352,74 @@ $ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-par
 rc=0
 ```
 
-### 5.2 18 页逐页差异整表
+### 5.2 18 页逐页差异整表（当前图）
 
-上方命令的原始输出（**已按 §4.4 / §4.7 / §4.8 / §4.9 / §4.10 与后续重拍后的当前图复算**：
-`.venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml`
-→ rc=0；每行原样对应一页。历史日志 `out/latest-parity/logs/c6-page-diff18-final.log` 保留修复当时的快照，
-本表下列五行已按当前图值与后续实测日志回填）：
+本轮 B（窗口控制 + 侧栏 hover/selected）只重拍受影响的 7 页：`chat`、`search-open`、
+`focus-composer`、`long-mid`、`long-bottom`、`dark-chat`、`hover-thread`；其余 11 页未重拍。
+下表是当前工作区图片的真实输出（原样）：
 
 ```
-chat                   ac72cd597ae44377b608777cbd5e2e81 d7ac856efc22a4ce41369baa0be1e75a  158583  100242  119799  11.41% max=248 same=False
+$ .venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
+rc=0
+chat                   ac72cd597ae44377b608777cbd5e2e81 d6262dc74fd80e10fc6e1f7f8807864b  158583   99849  107344  10.23% max=248 same=False
 empty                  a616eabe08d8c107709b89d699604d13 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
 first-run              0e2b5786d552a73525ded72469f224ea 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
-search-open            3a5f80988f34cbcccf98281d7697498e 2bf956a8237e685cdf2033ced3c242ae  158824  140997  136170  12.97% max=248 same=False
+search-open            3a5f80988f34cbcccf98281d7697498e c2441cec0d6f25b7b82940b2b7c78119  158824  100187  107373  10.23% max=248 same=False
 search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b8583efa9  130449  115306  113729  10.84% max=248 same=False
 search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
 ctx-menu               64c8c33a5c5c5e905288cca4fab37285 670cb0a6175633c7dd4de65db75dc600  158033  160017  115327  10.99% max=248 same=False
 delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 5b8baeb969eb5d8a416be851c24d7dce  162718  147103  384883  36.67% max=224 same=False
 model-picker           946b07def583e696822df943b6935f04 91b3f5cc9f9d936fd666892bf4f29535  164258  106996  115579  11.01% max=248 same=False
-hover-thread           16917898b7b5fb7b95a515bee87001d1 bab936657c1f28ce5862c40672d47e8a  158169  140893  136545  13.01% max=248 same=False
-focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 6a4ff152ff3aacae596c849968cc9cde  158745  140778  136157  12.97% max=248 same=False
-long-mid               147fb156af029f6c57cfb686d6e84c0c 8905296c9f8d7e2b372b7e44acb68623  143456  142304  126160  12.02% max=255 same=False
-long-bottom            be7b7fe814eb8ebcf11369bdec650a68 880b26bdebdb3e10d3afff973460ce37  157770  139668  135084  12.87% max=248 same=False
+hover-thread           16917898b7b5fb7b95a515bee87001d1 e2faafde09c1c72dc2070b03c9233ae9  158169   99587  107306  10.22% max=248 same=False
+focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 f2c8613fa58b45f91b491fca0b82c702  158745   99941  107360  10.23% max=248 same=False
+long-mid               147fb156af029f6c57cfb686d6e84c0c a3d2be394827ee8f82cb46c8e94d9557  143456  101887  119093  11.35% max=255 same=False
+long-bottom            be7b7fe814eb8ebcf11369bdec650a68 01872a3a01a72a5797bfd2f613962af3  157770   98637  118624  11.30% max=248 same=False
 settings-general       4d16a5c68b170e998bb4892713b8263e c0f484af63df61817a87a15341e9d212  142486  113127  335142  31.93% max=224 same=False
 settings-models        7f7a6dd835823f50475db7a3c9e727c1 92c0f06f8b41707f3e6396e8c1bfe529  132243   81933  294323  28.04% max=216 same=False
 settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 4fb02618eea39c43f95d17ae760fee4e  139387  110088  330260  31.47% max=216 same=False
 settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e556a683a  135693  104052  328222  31.27% max=224 same=False
-dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22b11516ec  158038  141637  128299  12.22% max=230 same=False
+dark-chat              252996a52c0b1d02cfb3205ba1798c94 a625825a98eb82df6e24e7f88052c4cc  158038   99153  105756  10.08% max=230 same=False
 ```
-
-与修复前的旧值对照（只列有修复前后实测的页面）：
-
-| 页 | 修复前 差异像素 / % | 修复后 差异像素 / % | 修复来源 |
-|---|---:|---:|---|
-| chat | 136141 / 12.97% | 119799 / 11.41% | §4.7 输入卡片 + §5.6 侧栏/正文滚动条后重拍 |
-| ctx-menu | 143461 / 13.67% | 115327 / 10.99% | §4.8 菜单 5 项 + Delete 危险色；`923f554` 重拍 |
-| delete-confirm | 401948 / 38.30% | 384883 / 36.67% | §4.8 真可交互的确认层 |
-| model-picker | 149105 / 14.21%（归档图）→ 同代码重拍 141550 / 13.49% | 115579 / 11.01% | §4.9 弹层内容 + 聚焦态；`342186e` 分组分隔与盒模型 |
-| settings-general | 340813 / 32.47%（旧表基线） | 335142 / 31.93% | §4.10 标题栏窗口控件 |
-| settings-models | 325672 / 31.03% | 294323 / 28.04% | §4.4.5 Models 容器/副标题/行尾图标 |
-| dark-chat | 258651 / 24.64% | 128299 / 12.22% | §4.7 输入卡片 `--bg-elevated` + `--shadow` |
 
 整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
 
 | 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 | 口径 |
-|---|---|---|---|---|---|---|
-| chat | `ac72cd597ae44377b608777cbd5e2e81` | `d7ac856efc22a4ce41369baa0be1e75a` | 119799 | 11.41% | 248 | 当前实测（§5.6） |
+|---|---|---|---:|---:|---:|---|
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `d6262dc74fd80e10fc6e1f7f8807864b` | 107344 | 10.23% | 248 | 当前实测（B 轮重拍） |
 | empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
 | first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `c2441cec0d6f25b7b82940b2b7c78119` | 107373 | 10.23% | 248 | 当前实测（B 轮重拍） |
 | search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
 | search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `670cb0a6175633c7dd4de65db75dc600` | 115327 | 10.99% | 248 | 当前实测（§4.8 / `923f554`） |
-| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 | 当前实测（§4.8） |
-| model-picker | `946b07def583e696822df943b6935f04` | `91b3f5cc9f9d936fd666892bf4f29535` | 115579 | 11.01% | 248 | 当前实测（§4.9 / `342186e`） |
-| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 | 未重拍（沿用旧值 + 2026-11-23） |
-| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
-| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `c0f484af63df61817a87a15341e9d212` | 335142 | 31.93% | 224 | 当前实测（§4.10） |
-| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `92c0f06f8b41707f3e6396e8c1bfe529` | 294323 | 28.04% | 216 | 当前实测（§4.4.5） |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `670cb0a6175633c7dd4de65db75dc600` | 115327 | 10.99% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
+| model-picker | `946b07def583e696822df943b6935f04` | `91b3f5cc9f9d936fd666892bf4f29535` | 115579 | 11.01% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `e2faafde09c1c72dc2070b03c9233ae9` | 107306 | 10.22% | 248 | 当前实测（B 轮重拍） |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `f2c8613fa58b45f91b491fca0b82c702` | 107360 | 10.23% | 248 | 当前实测（B 轮重拍） |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `a3d2be394827ee8f82cb46c8e94d9557` | 119093 | 11.35% | 255 | 当前实测（B 轮重拍） |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `01872a3a01a72a5797bfd2f613962af3` | 118624 | 11.30% | 248 | 当前实测（B 轮重拍） |
+| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `c0f484af63df61817a87a15341e9d212` | 335142 | 31.93% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
+| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `92c0f06f8b41707f3e6396e8c1bfe529` | 294323 | 28.04% | 216 | 未重拍（沿用旧值 + 2026-11-23） |
 | settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 | 未重拍（沿用旧值 + 2026-11-23） |
 | settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
-| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `3aa7be544db6effc57214a22b11516ec` | 128299 | 12.22% | 230 | 当前实测（§4.7） |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `a625825a98eb82df6e24e7f88052c4cc` | 105756 | 10.08% | 230 | 当前实测（B 轮重拍） |
 
-口径说明：表中 7 页为当前实测；其余 11 页**未重拍（沿用旧值 + 2026-11-23）**，只用于结构对照，不得当作本轮新值。
+本轮 7 页改前 → 改后（改前为 A 提交 `2cd83e8` 的当前图实测，改后为本轮重拍图）：
+
+| 页 | 改前 差异像素 / % | 改后 差异像素 / % | 变化 |
+|---|---:|---:|---:|
+| chat | 119799 / 11.41% | 107344 / 10.23% | -12455 px / -1.18 pp |
+| search-open | 136170 / 12.97% | 107373 / 10.23% | -28797 px / -2.74 pp |
+| hover-thread | 136545 / 13.01% | 107306 / 10.22% | -29239 px / -2.79 pp |
+| focus-composer | 136157 / 12.97% | 107360 / 10.23% | -28797 px / -2.74 pp |
+| long-mid | 126160 / 12.02% | 119093 / 11.35% | -7067 px / -0.67 pp |
+| long-bottom | 135084 / 12.87% | 118624 / 11.30% | -16460 px / -1.57 pp |
+| dark-chat | 128299 / 12.22% | 105756 / 10.08% | -22543 px / -2.14 pp |
+
+口径说明：表中 7 页为本轮 B 重拍后的当前实测；其余 11 页**未重拍（沿用旧值 + 2026-11-23）**，
+只用于结构对照，不得当作本轮新值。18 页 `same=` 全部为 False，无任何一页与参考图逐像素相同。
 
 注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
-
-18 页 `same=` 全部为 False，无任何一页与参考图逐像素相同。
 
 ### 5.3 四条硬判据（每条附真实命令与实测输出）
 

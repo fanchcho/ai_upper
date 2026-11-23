@@ -700,6 +700,13 @@ def test_qml_scrollbars_match_deva_and_scroll(qapp, tmp_path, monkeypatch):
     check_scroll(tmp_path / "scroll", monkeypatch, qapp)
 
 
+def test_qml_sidebar_rows_match_deva_bounds_and_states(qapp, tmp_path, monkeypatch):
+    """侧栏行宽 275、行高 54，hover/选中底色与边界按 deva CSS/DOM 锁定。"""
+    from test_qml_sidebar import test_sidebar_rows_match_deva_bounds_and_states as check_sidebar
+
+    check_sidebar(qapp, tmp_path / "sidebar", monkeypatch)
+
+
 def test_delete_current_session_removes_file_and_falls_back(tmp_path, monkeypatch):
     """删除当前会话：文件消失、索引同步，当前会话按列表第一行回退。"""
     bridge, store, _host = _bridge(
