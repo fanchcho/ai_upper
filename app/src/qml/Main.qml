@@ -1700,7 +1700,7 @@ ApplicationWindow {
         } else if (action === "rename") {
             window.openRenameDialog()
         } else if (action === "select") {
-            window.startSelect(window.ctxSessionId)
+            window.startSelect(window.ctxSessionId || window.activeId)
             window.dismissCtxMenu()
         } else if (action === "archive") {
             var archiveId = window.ctxSessionId || window.activeId
