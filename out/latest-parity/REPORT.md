@@ -1116,7 +1116,7 @@ out/latest-parity/qml/delete-confirm.png
 未跟踪产物，与本批无关）。回归口径复核：`dd0b38e` 提交的 `chat.png` / `dark-chat.png`
 在工作区 md5 仍为 `dc133011…` / `3aa7be54…`，未被本节重写。
 
-**紧随本节之后的本轮提交**：`cddf2fb`（右键菜单 5 项 + Delete 危险色 + 删除确认三处真实点击）
+**本节改动对应提交**：`cddf2fb`（右键菜单 5 项 + Delete 危险色 + 删除确认三处真实点击）
 与 `923f554`（非活动行右键 Rename / Select / Archive 三项动作端到端探针 + `ctx-menu` 重拍）。
 
 ### 4.9 model-picker 弹层内容与聚焦态
@@ -1397,25 +1397,25 @@ dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22
 | 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 | 口径 |
 |---|---|---|---|---|---|---|
 | chat | `ac72cd597ae44377b608777cbd5e2e81` | `d7ac856efc22a4ce41369baa0be1e75a` | 119799 | 11.41% | 248 | 当前实测（§5.6） |
-| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍，值为修复前基线 |
-| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍，值为修复前基线 |
-| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 | 未重拍，值为修复前基线 |
-| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 | 未重拍，值为修复前基线 |
-| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 | 未重拍，值为修复前基线 |
+| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
 | ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `670cb0a6175633c7dd4de65db75dc600` | 115327 | 10.99% | 248 | 当前实测（§4.8 / `923f554`） |
 | delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 | 当前实测（§4.8） |
 | model-picker | `946b07def583e696822df943b6935f04` | `91b3f5cc9f9d936fd666892bf4f29535` | 115579 | 11.01% | 248 | 当前实测（§4.9 / `342186e`） |
-| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 | 未重拍，值为修复前基线 |
-| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 | 未重拍，值为修复前基线 |
-| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 | 未重拍，值为修复前基线 |
-| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 | 未重拍，值为修复前基线 |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 | 未重拍（沿用旧值 + 2026-11-23） |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 | 未重拍（沿用旧值 + 2026-11-23） |
 | settings-general | `4d16a5c68b170e998bb4892713b8263e` | `c0f484af63df61817a87a15341e9d212` | 335142 | 31.93% | 224 | 当前实测（§4.10） |
 | settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `92c0f06f8b41707f3e6396e8c1bfe529` | 294323 | 28.04% | 216 | 当前实测（§4.4.5） |
-| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 | 未重拍，值为修复前基线 |
-| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 | 未重拍，值为修复前基线 |
+| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 | 未重拍（沿用旧值 + 2026-11-23） |
+| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 | 未重拍（沿用旧值 + 2026-11-23） |
 | dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `3aa7be544db6effc57214a22b11516ec` | 128299 | 12.22% | 230 | 当前实测（§4.7） |
 
-口径说明：表中 7 页为当前实测；其余 11 页**未重拍，值为修复前基线**，只用于结构对照，不得当作本轮新值。
+口径说明：表中 7 页为当前实测；其余 11 页**未重拍（沿用旧值 + 2026-11-23）**，只用于结构对照，不得当作本轮新值。
 
 注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
 
