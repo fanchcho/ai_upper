@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Shapes
 import QtQuick.Window
 import "."
 
@@ -157,6 +158,82 @@ ApplicationWindow {
             enabled: act.enabled
             hoverEnabled: true
             onClicked: act.triggered()
+        }
+    }
+
+    // 原版 Electron Linux `titleBarOverlay` 的单按钮：32×40 命中区，透明底，hover 时
+    // 叠 18/255 黑（原版实拍量得；遮罩压不暗它，因为原生叠加层画在网页之上）。
+    //
+    // 几何/配色来源（只读参考，未改动 deva）：
+    //   deva/apps/desktop/src/main/index.ts:87-90  OVERLAY_BG light #ffffff / dark #1e1e20
+    //   deva/apps/desktop/src/main/index.ts:109-116 titleBarStyle 'hidden' + titleBarOverlay（height 40）
+    //   deva/node_modules/electron/electron.d.ts:21424-21439 Linux 不吃 symbolColor（系统色）
+    //   deva 原版 1280×820 实拍 out/latest-parity/deva/chat-deva.png 逐像素：
+    //     整块 96×40 @ x1184；最小化 10×2 @ x1195 y23；最大化 10×10 框 @ x1227 y15；
+    //     关闭 10×10 X @ x1259 y15、线宽 2.1；图标 #5F6368 light / #E8EAED dark。
+    component WindowControlButton: Rectangle {
+        id: winBtn
+        signal clicked()
+        // 0 = 最小化，1 = 最大化，2 = 关闭。
+        property int kind: 0
+        width: 32
+        height: 40
+        color: winMouse.containsMouse ? Qt.rgba(0, 0, 0, 18 / 255) : "transparent"
+        readonly property color glyphColor: Theme.dark ? "#E8EAED" : "#5F6368"
+
+        // 最小化：10×2 实心横条。按钮内坐标 = 全局 x1195..1204 / y23..24 - 按钮左边界。
+        Rectangle {
+            visible: winBtn.kind === 0
+            x: 11
+            y: 23
+            width: 10
+            height: 2
+            color: winBtn.glyphColor
+        }
+
+        // 最大化：10×10 描边方框，四条边各 2px（与原版实拍逐像素一致）。
+        Item {
+            visible: winBtn.kind === 1
+            x: 11
+            y: 15
+            width: 10
+            height: 10
+            Rectangle { width: 10; height: 2; color: winBtn.glyphColor }
+            Rectangle { y: 8; width: 10; height: 2; color: winBtn.glyphColor }
+            Rectangle { width: 2; height: 10; color: winBtn.glyphColor }
+            Rectangle { x: 8; width: 2; height: 10; color: winBtn.glyphColor }
+        }
+
+        // 关闭：10×10 的 X，2.1px 平头线；端点取原版实拍拟合值。
+        Shape {
+            visible: winBtn.kind === 2
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
+            ShapePath {
+                strokeColor: winBtn.glyphColor
+                strokeWidth: 2.1
+                fillColor: "transparent"
+                capStyle: ShapePath.FlatCap
+                startX: 11.75
+                startY: 15.75
+                PathLine { x: 20.25; y: 24.25 }
+            }
+            ShapePath {
+                strokeColor: winBtn.glyphColor
+                strokeWidth: 2.1
+                fillColor: "transparent"
+                capStyle: ShapePath.FlatCap
+                startX: 20.25
+                startY: 15.75
+                PathLine { x: 11.75; y: 24.25 }
+            }
+        }
+
+        MouseArea {
+            id: winMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: winBtn.clicked()
         }
     }
 
@@ -1711,6 +1788,47 @@ ApplicationWindow {
                     cursorShape: Qt.PointingHandCursor
                     onClicked: window.confirmDelete()
                 }
+            }
+        }
+    }
+
+    // 窗口控制叠加层：原版 Electron Linux `titleBarOverlay` 的实色块，右上角 96×40，
+    // 三个 32×40 按钮右对齐贴边。z 高于设置弹框/遮罩（Main.qml 内最高 60），
+    // 因为原生叠加层永远画在网页与遮罩之上；按钮行为对应 deva main/index.ts:311-318
+    // 的 minimize / isMaximized ? unmaximize : maximize / close。
+    Rectangle {
+        id: windowControls
+        objectName: "windowControls"
+        x: window.width - width
+        y: 0
+        width: 96
+        height: 40
+        z: 1000
+        color: Theme.dark ? "#1e1e20" : "#ffffff"
+
+        Row {
+            anchors.fill: parent
+            spacing: 0
+
+            WindowControlButton {
+                objectName: "windowControlMinimize"
+                kind: 0
+                onClicked: window.showMinimized()
+            }
+            WindowControlButton {
+                objectName: "windowControlMaximize"
+                kind: 1
+                onClicked: {
+                    if (window.visibility === Window.Maximized)
+                        window.showNormal()
+                    else
+                        window.showMaximized()
+                }
+            }
+            WindowControlButton {
+                objectName: "windowControlClose"
+                kind: 2
+                onClicked: window.close()
             }
         }
     }

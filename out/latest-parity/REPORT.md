@@ -1175,6 +1175,50 @@ A  out/latest-parity/ab-font/*.png          ← 分组标题字号 A/B 两张（
 `bash scripts/parity/qml_page_shot.sh model-picker out/latest-parity/qml/model-picker.png /tmp/fx-qml-home config.json`
 （`logs/c7-mp-shoot.out` / `.err` 0 字节，产物 md5 与交付图一致 `7af296ea76c95baccbdd4c837e0f3159`）。
 
+
+### 4.10 标题栏窗口控件：最小化 / 最大化 / 关闭（A1 / F1 / F2）
+
+**实现**：`app/src/qml/Main.qml` 新增内联 `WindowControlButton`（32×40）与右上角 `windowControls`
+（96×40，x=1184，z=1000，高于设置弹框最高 z=60）。三按钮点击分别执行
+`window.showMinimized()`、`window.visibility === Window.Maximized ? window.showNormal() : window.showMaximized()`、
+`window.close()`。
+
+**数值与来源（deva 只读，未改动）**：
+
+- `deva/apps/desktop/src/main/index.ts:87-90`：`OVERLAY_BG` light `#ffffff` / dark `#1e1e20`；
+- `deva/apps/desktop/src/main/index.ts:109-116`：`titleBarStyle: 'hidden'` + `titleBarOverlay`，height 40；
+- `deva/node_modules/electron/electron.d.ts:21424-21439`：`symbolColor` 仅 win32，Linux 由系统对比色决定；
+- deva 原版 1280×820 实拍 `out/latest-parity/deva/chat-deva.png` 逐像素：实色块 96×40 @ x1184；
+  三个 32×40 命中区 x=1184/1216/1248；最小化 10×2 @ (1195,23)；最大化 10×10 框 @ (1227,15)；
+  关闭 10×10 X @ (1259,15)、线宽 2.1；图标 `#5F6368` light / `#E8EAED` dark；hover 叠 18/255 黑。
+
+**测试（真实 QML 窗口 + `QTest` 鼠标事件，`AI_UPPER_HOME` 为隔离临时目录）**：
+
+```
+AI_UPPER_HOME=/tmp/ai-upper-wctl-test .venv/bin/python -m pytest app/tests/test_qml_window_controls.py -q
+..                                                                       [100%]
+2 passed in 6.49s
+rc=0
+```
+
+覆盖并实测通过：96×40 位置/尺寸、三个 32×40 命中区、三枚字形暗像素 bbox
+`(1195,23,1204,24,20)` / `(1227,15,1236,24,64)` / `(1259,15,1268,24,48)`、hover 底色 `(237,237,237)`；
+点最小化后 `visibility=Minimized`、最大化一次 `Maximized` 再点回 `Windowed`、关闭后 `isVisible=False`。
+日志 `out/latest-parity/logs/wctl-pytest.log`。
+
+**重拍与百分比（只重拍 chat 页，原版基线沿用 `out/latest-parity/deva/`）**：
+
+```
+bash scripts/parity/qml_page_shot.sh chat out/latest-parity/qml/chat.png /tmp/fx-qml-home
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml
+```
+
+- `chat`：**129909 / 12.38% → 129807 / 12.37%**（−102 px）。
+  日志 `out/latest-parity/logs/wctl-page-diff-before.log` / `wctl-page-diff-after.log`；
+  重拍输出 `wctl-shot-chat.log`（rc=0，stderr 0 字节）。
+- 右上 96×40 与 deva 同区：58 px 抗锯齿差（max=9）；底色 `(255,255,255)` / `(30,30,32)` 与三枚字形位置逐值一致。
+- F1 `x1160..1279 y0..40`：deva `白3680 / 灰960 / 深100`；QML 修复后 `白3680 / 灰936 / 深100`（24 px 为 close X 抗锯齿）。
+- F2 纯白面板 bbox：QML `(736,0,1279,391)` == deva `(736,0,1279,391)`。
 ## 5. 18 页全量重拍 + 四条硬判据 + 逐页缺口清单
 ### 5.0 页面清单只读核对
 
@@ -1442,7 +1486,7 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| A1 | QML 无窗口控制按钮（− □ ×） | deva 每页 `x1140..1270 y0..40` 有 132 个暗像素，bbox=(1195,15,1268,24)，三枚图标 x 组 `[(1195,1204),(1227,1236),(1259,1268)]`；QML 同区 `n=0`（`probe-rail.log` §5、`gap-probe3.log` 末节、`gap-probe4.log` 末节） |
+| A1 | ~~QML 无窗口控制按钮（− □ ×）~~ **已由 §4.10 修复** | deva 每页 `x1140..1270 y0..40` 有 132 个暗像素，bbox=(1195,15,1268,24)，三枚图标 x 组 `[(1195,1204),(1227,1236),(1259,1268)]`；QML 修复后 `x1184..1279 y0..40` 为实色块 `#ffffff`（深色 `#1e1e20`），三枚图标暗像素 132、bbox=(1195,15,1268,24)、x 组与 deva 完全相同，整块仅 58 px 抗锯齿差（max=9）（`out/latest-parity/qml/chat.png`、§4.10） |
 | A2 | QML 无侧栏列表滚动条 | deva 有 `(202,202,203)` 滑块：x349–352，chat/search-open/ctx-menu/model-picker/hover-thread/focus-composer 各 332 px（y59–142），long-mid 332 px（y228–311）；QML 12 页全部为 0（`probe-settings.log` 末节、`probe-gaps2.log` §5） |
 | A3 | QML 无正文滚动条 | deva chat 正文右缘 x1274–1277 有 `(209,209,209)` 共 380 行；QML 该区间列为空列表 `[]`（`probe-rail.log` §6） |
 | A4 | 源码层即无滚动条实现 | `grep -rn 'ScrollBar\|ScrollView' app/src/qml/` 无任何命中 |
@@ -1489,8 +1533,8 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| F1 | 无右上角白色窗口控制缺口 | deva `x1160..1279 y0..40` = `(255,255,255)`×3680 + `(148,148,148)`×960 + `(95,99,104)`×100；QML 全区 `(148,148,148)`×4776（`probe-rail.log` §5） |
-| F2 | 面板白底 bbox 高度不同 | QML `(736,257,961,391)`，deva `(736,0,1279,391)`（`probe-settings.log`）——deva 的白色区包含顶部窗口条，QML 没有 |
+| F1 | ~~无右上角白色窗口控制缺口~~ **已由 §4.10 修复** | deva `x1160..1279 y0..40` = `(255,255,255)`×3680 + `(148,148,148)`×960 + `(95,99,104)`×100；QML 修复后同区 = `(255,255,255)`×3680 + `(148,148,148)`×936 + `(95,99,104)`×100（灰差 24 px 为 close X 抗锯齿）（`out/latest-parity/qml/settings-general.png`、§4.10） |
+| F2 | ~~面板白底 bbox 高度不同~~ **已由 §4.10 修复** | 修复前 QML `(736,257,961,391)`，deva `(736,0,1279,391)`——deva 的白色区包含顶部窗口条，QML 没有；修复后 QML `(736,0,1279,391)` == deva（`out/latest-parity/qml/settings-general.png`、§4.10） |
 | F3 | 遮罩灰阶差 1 级（同 A5） | settings 页侧栏 QML `(143,143,144)`×72483 vs deva `(144,144,144)`×63722（`probe-mask.log` §1） |
 | F4 | 遮罩把背景对话压成纯灰，deva 保留可辨认的暗化对话 | 正文区 region=345480：deva 暗像素 7215、unique_colors=452；QML 暗像素 6、unique_colors=27（`settings-backdrop-content.log`）。QML 用一层不透明灰盖住，deva 是半透明遮罩 |
 | F5 | 设置左栏三个导航图标与 deva 不一致 | deva `SettingsPane.tsx` 用 `Cog` / `Brain` / `Puzzle` / `Info`；QML `SettingsModal.qml:119-122` 用 `settings2` / `blocks` / `cog` / `info`，General、Models、Extensions 三个图标不对 |
