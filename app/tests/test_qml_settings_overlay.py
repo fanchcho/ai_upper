@@ -77,5 +77,22 @@ def test_settings_nav_icons_match_deva(qapp, tmp_path, monkeypatch):
         engine.deleteLater()
 
 
+def test_about_pane_includes_its_content_heading(qapp, tmp_path, monkeypatch):
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        window.setProperty("page", "settings-about")
+        _pump(qapp, 0.6)
+        heading = _find_item(window.contentItem(), "aboutPaneHeading")
+        assert heading is not None
+        assert heading.property("visible") is True
+        assert heading.property("text") == "About"
+        # 标题属于右侧内容面板，而非左侧已有的导航标签。
+        assert heading.parentItem().objectName() == "aboutPaneRoot"
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-q"]))

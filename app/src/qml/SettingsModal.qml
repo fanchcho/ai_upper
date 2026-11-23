@@ -237,12 +237,21 @@ Item {
                 Repeater {
                     model: row.options
                     delegate: Rectangle {
+                        id: segmentOption
                         required property int index
                         required property string modelData
                         width: optText.implicitWidth + 24
                         height: 24
                         radius: Theme.radiusSm
                         color: index === row.current ? Theme.bg : "transparent"
+                        // deva .cf-seg__opt.is-on 使用同一 --shadow；只给选中项投影。
+                        SoftShadow {
+                            target: segmentOption
+                            visible: segmentOption.index === row.current
+                            x: -pad
+                            y: -pad
+                            z: -1
+                        }
                         Text {
                             id: optText
                             anchors.centerIn: parent
@@ -278,7 +287,7 @@ Item {
             }
             Text {
                 x: 20
-                y: 16
+                y: 18
                 text: "General"
                 color: Theme.fg
                 font.family: Theme.sansFamily
@@ -1256,7 +1265,7 @@ Item {
 
             Text {
                 x: 20
-                y: 16
+                y: 18
                 text: "Extensions"
                 color: Theme.fg
                 font.family: Theme.sansFamily
@@ -1442,6 +1451,19 @@ Item {
             Connections {
                 target: shellBridge
                 function onUpdateStateChanged(state) { aboutPaneRoot.applyUpdateState(state) }
+            }
+
+            // SettingsPane.tsx::AboutPane 先绘制 cf-pane__title，再绘制居中的品牌区。
+            Text {
+                objectName: "aboutPaneHeading"
+                x: 20
+                // CSS h2 的 22.5px 行盒比 Qt 字形盒多出的 leading，实测基线需补 2px。
+                y: 18
+                text: "About"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 15
+                font.weight: 700
             }
 
             Column {

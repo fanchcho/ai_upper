@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_about_pane_includes_its_content_heading _________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x8c3da90) at 0xffffb0e57980>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-56/test_about_pane_includes_its_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffb136a520>
+
+    def test_about_pane_includes_its_content_heading(qapp, tmp_path, monkeypatch):
+        window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            window.setProperty("page", "settings-about")
+            _pump(qapp, 0.6)
+            heading = _find_item(window.contentItem(), "aboutPaneHeading")
+>           assert heading is not None
+E           assert None is not None
+
+app/tests/test_qml_settings_overlay.py:86: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_settings_overlay.py::test_about_pane_includes_its_content_heading
+1 failed in 5.15s

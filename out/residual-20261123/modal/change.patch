@@ -1,0 +1,91 @@
+diff --git a/app/src/qml/SettingsModal.qml b/app/src/qml/SettingsModal.qml
+index 18fdeb3..7ca530b 100644
+--- a/app/src/qml/SettingsModal.qml
++++ b/app/src/qml/SettingsModal.qml
+@@ -237,12 +237,21 @@ Item {
+                 Repeater {
+                     model: row.options
+                     delegate: Rectangle {
++                        id: segmentOption
+                         required property int index
+                         required property string modelData
+                         width: optText.implicitWidth + 24
+                         height: 24
+                         radius: Theme.radiusSm
+                         color: index === row.current ? Theme.bg : "transparent"
++                        // deva .cf-seg__opt.is-on 使用同一 --shadow；只给选中项投影。
++                        SoftShadow {
++                            target: segmentOption
++                            visible: segmentOption.index === row.current
++                            x: -pad
++                            y: -pad
++                            z: -1
++                        }
+                         Text {
+                             id: optText
+                             anchors.centerIn: parent
+@@ -278,7 +287,7 @@ Item {
+             }
+             Text {
+                 x: 20
+-                y: 16
++                y: 18
+                 text: "General"
+                 color: Theme.fg
+                 font.family: Theme.sansFamily
+@@ -1256,7 +1265,7 @@ Item {
+ 
+             Text {
+                 x: 20
+-                y: 16
++                y: 18
+                 text: "Extensions"
+                 color: Theme.fg
+                 font.family: Theme.sansFamily
+@@ -1444,6 +1453,19 @@ Item {
+                 function onUpdateStateChanged(state) { aboutPaneRoot.applyUpdateState(state) }
+             }
+ 
++            // SettingsPane.tsx::AboutPane 先绘制 cf-pane__title，再绘制居中的品牌区。
++            Text {
++                objectName: "aboutPaneHeading"
++                x: 20
++                // CSS h2 的 22.5px 行盒比 Qt 字形盒多出的 leading，实测基线需补 2px。
++                y: 18
++                text: "About"
++                color: Theme.fg
++                font.family: Theme.sansFamily
++                font.pixelSize: 15
++                font.weight: 700
++            }
++
+             Column {
+                 id: aboutColumn
+                 width: parent.width
+diff --git a/app/tests/test_qml_settings_overlay.py b/app/tests/test_qml_settings_overlay.py
+index 3dbac39..9a162de 100644
+--- a/app/tests/test_qml_settings_overlay.py
++++ b/app/tests/test_qml_settings_overlay.py
+@@ -77,5 +77,22 @@ def test_settings_nav_icons_match_deva(qapp, tmp_path, monkeypatch):
+         engine.deleteLater()
+ 
+ 
++def test_about_pane_includes_its_content_heading(qapp, tmp_path, monkeypatch):
++    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
++    try:
++        window.setProperty("page", "settings-about")
++        _pump(qapp, 0.6)
++        heading = _find_item(window.contentItem(), "aboutPaneHeading")
++        assert heading is not None
++        assert heading.property("visible") is True
++        assert heading.property("text") == "About"
++        # 标题属于右侧内容面板，而非左侧已有的导航标签。
++        assert heading.parentItem().objectName() == "aboutPaneRoot"
++    finally:
++        ticker.stop()
++        window.close()
++        engine.deleteLater()
++
++
+ if __name__ == "__main__":
+     raise SystemExit(pytest.main([__file__, "-q"]))

@@ -1,0 +1,12 @@
+37:type SettingsSection = 'general' | 'models' | 'extensions' | 'about'
+51:    { id: 'about', icon: <Info size={15} />, label: t('settings.about') }
+83:            {section === 'about' && <AboutPane />}
+114:      <h2 className="cf-pane__title">{t('settings.general')}</h2>
+237:      <h2 className="cf-pane__title">{t('activity.extensions')}</h2>
+855:function AboutPane(): React.JSX.Element {
+859:      <h2 className="cf-pane__title">{t('settings.about')}</h2>
+860:      <div className="cf-about">
+861:        <img className="cf-about__icon" src={devaIcon} alt="" aria-hidden />
+862:        <div className="cf-about__name">{t('app.name')}</div>
+863:        <div className="cf-about__ver">
+866:        {t('app.tagline') && <p className="cf-about__desc">{t('app.tagline')}</p>}

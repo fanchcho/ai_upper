@@ -1,0 +1,40 @@
+{
+  "total": 305414,
+  "inside": 8375,
+  "inside_gt8": 4250,
+  "outside": 297039,
+  "outside_le2": 248842,
+  "percent": 29.09813262195122,
+  "qml_bands": [
+    [
+      40,
+      639
+    ]
+  ],
+  "qml_lower_bands": [
+    [
+      200,
+      699
+    ]
+  ],
+  "qml_hover": [
+    0,
+    null
+  ],
+  "deva_bands": [
+    [
+      40,
+      639
+    ]
+  ],
+  "deva_lower_bands": [
+    [
+      200,
+      699
+    ]
+  ],
+  "deva_hover": [
+    0,
+    null
+  ]
+}

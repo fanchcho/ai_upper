@@ -1,0 +1,228 @@
+{
+  "settings-models": {
+    "provider_name": {
+      "qml": {
+        "dark_pixels": 365,
+        "bbox": [
+          506,
+          257,
+          576,
+          269
+        ]
+      },
+      "deva": {
+        "dark_pixels": 369,
+        "bbox": [
+          506,
+          258,
+          576,
+          274
+        ]
+      }
+    },
+    "provider_count": {
+      "qml": {
+        "dark_pixels": 110,
+        "bbox": [
+          507,
+          275,
+          555,
+          282
+        ]
+      },
+      "deva": {
+        "dark_pixels": 135,
+        "bbox": [
+          507,
+          274,
+          557,
+          283
+        ]
+      }
+    },
+    "title": {
+      "qml": {
+        "dark_pixels": 483,
+        "bbox": [
+          470,
+          207,
+          548,
+          218
+        ]
+      },
+      "deva": {
+        "dark_pixels": 492,
+        "bbox": [
+          470,
+          207,
+          548,
+          218
+        ]
+      }
+    }
+  },
+  "settings-extensions": {
+    "title": {
+      "qml": {
+        "dark_pixels": 575,
+        "bbox": [
+          470,
+          202,
+          559,
+          213
+        ]
+      },
+      "deva": {
+        "dark_pixels": 565,
+        "bbox": [
+          470,
+          204,
+          559,
+          215
+        ]
+      }
+    },
+    "row1": {
+      "qml": {
+        "dark_pixels": 548,
+        "bbox": [
+          483,
+          256,
+          654,
+          265
+        ]
+      },
+      "deva": {
+        "dark_pixels": 578,
+        "bbox": [
+          484,
+          256,
+          656,
+          265
+        ]
+      }
+    },
+    "row2": {
+      "qml": {
+        "dark_pixels": 621,
+        "bbox": [
+          483,
+          302,
+          667,
+          313
+        ]
+      },
+      "deva": {
+        "dark_pixels": 624,
+        "bbox": [
+          484,
+          301,
+          669,
+          313
+        ]
+      }
+    },
+    "row3": {
+      "qml": {
+        "dark_pixels": 555,
+        "bbox": [
+          483,
+          347,
+          655,
+          358
+        ]
+      },
+      "deva": {
+        "dark_pixels": 560,
+        "bbox": [
+          484,
+          346,
+          657,
+          358
+        ]
+      }
+    },
+    "switches": {
+      "qml": {
+        "dark_pixels": 0,
+        "bbox": null
+      },
+      "deva": {
+        "dark_pixels": 0,
+        "bbox": null
+      }
+    }
+  },
+  "delete-confirm": {
+    "title": {
+      "qml": {
+        "dark_pixels": 2428,
+        "bbox": [
+          450,
+          341,
+          798,
+          377
+        ]
+      },
+      "deva": {
+        "dark_pixels": 2453,
+        "bbox": [
+          451,
+          340,
+          800,
+          377
+        ]
+      }
+    },
+    "description": {
+      "qml": {
+        "dark_pixels": 1670,
+        "bbox": [
+          450,
+          399,
+          753,
+          432
+        ]
+      },
+      "deva": {
+        "dark_pixels": 1697,
+        "bbox": [
+          451,
+          399,
+          755,
+          432
+        ]
+      }
+    },
+    "cancel": {
+      "qml": {
+        "dark_pixels": 147,
+        "bbox": [
+          697,
+          462,
+          738,
+          471
+        ]
+      },
+      "deva": {
+        "dark_pixels": 141,
+        "bbox": [
+          696,
+          462,
+          737,
+          471
+        ]
+      }
+    },
+    "delete": {
+      "qml": {
+        "dark_pixels": 0,
+        "bbox": null
+      },
+      "deva": {
+        "dark_pixels": 0,
+        "bbox": null
+      }
+    }
+  }
+}

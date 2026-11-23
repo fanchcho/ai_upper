@@ -1,0 +1,14 @@
+function AboutPane(): React.JSX.Element {
+  const { t } = useI18n()
+  return (
+    <>
+      <h2 className="cf-pane__title">{t('settings.about')}</h2>
+      <div className="cf-about">
+        <img className="cf-about__icon" src={devaIcon} alt="" aria-hidden />
+        <div className="cf-about__name">{t('app.name')}</div>
+        <div className="cf-about__ver">
+          {t('settings.version')} {__APP_VERSION__}
+        </div>
+        {t('app.tagline') && <p className="cf-about__desc">{t('app.tagline')}</p>}
+        <UpdateSection />
+      </div>
