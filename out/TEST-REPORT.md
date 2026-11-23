@@ -435,3 +435,48 @@ AI_UPPER_HOME=/tmp/ai-upper-b-targeted BROKEN_IMAGE_EVIDENCE=out/ab-closeout/b-p
 截图：`out/ab-closeout/b-before/chat.png`（164669 字节，md5 e0a127e4773b01daf6cfddae6b1ad3eb）→ `out/ab-closeout/b-after/chat.png`（165232 字节，md5 783154083938b2b1e76921e486f210e2）。
 原版实时截图 `out/ab-closeout/deva-image-live.png`；细节图 `deva-image-detail.png`、`before-image-detail.png`、`after-image-detail.png` 均在同一证据目录。
 代码改动限于 `markdown/document.py`、新增 `markdown/broken_image.py`；测试涉及 `test_markdown_document.py`、`test_markdown_body.py`、新增 `test_qml_broken_image.py`。
+
+
+### C · 本段最终产品代码全量回归与交付边界
+
+B 已提交并推送：`c141d0d837bf1dd6f3ca3ed921f5aa976c48035e`，push rc=0；原始远端行：
+
+```text
+c141d0d837bf1dd6f3ca3ed921f5aa976c48035e	refs/heads/develop
+```
+
+**本段产品代码全量：1357 passed、5 skipped、0 failed，rc=0，213.46s。**
+测试源码为 A/B 完成后的 `c141d0d837bf1dd6f3ca3ed921f5aa976c48035e`；C 提交只补报告和证据，不改产品或测试。
+本轮不采用历史 `1352 passed, 5 skipped` 作为结论。
+
+| 运行环境 / 实测命令 | 真实结果 | 判定 |
+|---|---|---|
+| 原工作区：`AI_UPPER_HOME=/tmp/ai-upper-ab-full .venv/bin/python -m pytest app/tests -q -ra > out/ab-closeout/full-root.log 2>&1; rc=$?` | **1 failed, 1356 passed, 5 skipped in 214.45s (0:03:34)**；rc=1 | 原工作区原地全绿 **未达标**；唯一失败为 `test_repository_keeps_no_stale_old_name`，会扫描历史 `.tmp/` 内容 |
+| 当前提交源码快照：工作目录 `.tmp/ab-closeout/final-source`；`AI_UPPER_HOME=/tmp/ai-upper-ab-clean /home/agent/shared_workspace/ai_upper/.venv/bin/python -m pytest app/tests -q -ra > /home/agent/shared_workspace/ai_upper/out/ab-closeout/full-clean.log 2>&1; rc=$?` | **1357 passed, 5 skipped in 213.46s (0:03:33)**；rc=0 | 当前产品和测试全量通过，无 A/B 引入的测试失败 |
+| 同一未修改的名称扫描单测，在源码快照运行 | **1 passed in 0.07s**；rc=0 | 原地失败来自历史临时文件，不是新产品命名残留 |
+
+环境归因证据：
+
+- `app/tests/test_app_home.py` 与原始基线 `7f304e9` 完全一致，sha256 `822bf527c2196aa4404363adf17b09cea7379816b0e4ac06088c15ce11fe20e8`。
+- 使用基线和当前同一个函数对现工作区各扫描一次，都是 **21 个 offenders、全部在 .tmp/、两个列表完全相同**；详见 `out/ab-closeout/name-baseline-proof.log` 和 `name-offenders.json`。
+- 通过 `git archive c141d0d` 导出仓库源码，不包含本来就被测试排除的 `out/`；没有新分支、没有修改测试。
+  `app/`、`tools/`、`launcher/` 的 **231 个 tracked 文件逐字节相同**。
+  仓库现有且被 gitignore 的 `app/pyproject.toml` 原样复制，sha256 `fc979936f0cfba16d08e208aebd81bafb926528d4e59e4b22c97a729e5b7892c`。
+- 临时目录仍保留；不通过删除历史数据、修改忽略列表或放宽断言把原地结果伪装成绿色。
+
+5 个 skip 原文类别：2 个 Windows 专属构建行为；2 个需要 `AI_UPPER_E2E=1` 的完整本机构建 E2E；1 个要求 cc/patchelf/readelf 的原生部署测试。它们不是本轮新增跳过。
+
+报告提交后的 **最终 HEAD** 复验命令（全量，不是只测 A/B）：
+
+```sh
+AI_UPPER_HOME=/tmp/ai-upper-ab-final-head python3 out/ab-closeout/run_final_head.py > out/ab-closeout/final-head-run.log 2>&1; rc=$?
+```
+
+该入口从运行时 `git rev-parse HEAD` 再次导出源码，逐字节比对 231 个 tracked 文件，再运行同一条 `python -m pytest app/tests -q -ra`。
+最终 HEAD、命令、配置摘要、全部源文件哈希写入 `out/ab-closeout/final-head-verification.json`；真实 pytest 输出与退出码写入 `final-head.log` / `final-head.rc`。
+这次复验在报告提交后执行，结果文件留在工作区作为交付证据；最终回复给出实际 HEAD 和真实数字。
+
+本段完成度：A 独立横向滚动已修复，B 原生断图结构已修复；C 当前产品代码全量通过，但**原工作区历史临时目录导致的单个名称扫描红项仍在**，不能写成原地零失败。
+
+本轮按用户范围未做：D3 文字/边缘/阴影残差、E3 组合布局、表格底边与间距、🚀/✅ 缺字形、deva 2x 对照、CI 最终归因、旧设置内部残差、long-mid 非悬停差。
+原因均为用户明确延期，未另行尝试或改变已验证结果。A1、A2–A4、D1、D2、G5 没有重做；已消失的 D3 旧「约 16.8k 白像素差」没有按旧结论修改。

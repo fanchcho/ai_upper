@@ -1,0 +1,6 @@
+baseline_7f304e9 offenders 21 all_under_tmp True
+current offenders 21 all_under_tmp True
+identical_offenders True
+.tmp/ab-closeout/final-source/README.md: py_upper
+.tmp/ab-closeout/final-source/launcher/src/AiUpper.cpp: PY_UPPER
+.tmp/ab-closeout/final-source/app/tests/test_app_home.py: py_upper

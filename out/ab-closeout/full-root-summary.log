@@ -1,0 +1,10 @@
+64:>       assert not offenders, offenders
+65:E       AssertionError: ['.tmp/retest-20261123/baseline-checkout/README.md: py_upper', '.tmp/retest-20261123/pytest-isolated/test_paths_reads_...r/src/AiUpper.cpp: PY_UPPER', '.tmp/retest-20261123/baseline-checkout/out/qml-shell/PARITY-CLOSEOUT.md: py_upper', ...]
+66:E       assert not ['.tmp/retest-20261123/baseline-checkout/README.md: py_upper', '.tmp/retest-20261123/pytest-isolated/test_paths_reads_...r/src/AiUpper.cpp: PY_UPPER', '.tmp/retest-20261123/baseline-checkout/out/qml-shell/PARITY-CLOSEOUT.md: py_upper', ...]
+70:SKIPPED [1] app/tests/test_build_tool_compat.py:1704: the auto-link pragma belongs to the Windows pyconfig.h
+71:SKIPPED [1] app/tests/test_build_tool_compat.py:1758: handle inheritance for GUI-subsystem children belongs to Windows
+72:SKIPPED [1] app/tests/test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E
+73:SKIPPED [1] app/tests/test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E
+74:SKIPPED [1] app/tests/test_native_deployment.py:177: requires cc, patchelf and readelf
+75:FAILED app/tests/test_app_home.py::test_repository_keeps_no_stale_old_name - ...
+76:1 failed, 1356 passed, 5 skipped in 214.45s (0:03:34)
