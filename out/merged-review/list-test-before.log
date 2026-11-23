@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_separate_lists_keep_container_bottom_spacing _______________
+
+qapp = <PySide6.QtWidgets.QApplication(0x3b67e220) at 0xffffa6ba4680>
+
+    def test_separate_lists_keep_container_bottom_spacing(qapp):
+        # deva .md ol/ul margin-bottom:12px; li margin:2px must not erase it.
+        document = render("1. ordered\n\n- unordered\n\nafter")
+        ordered = find_block(document, "\t1.\tordered")
+        unordered = find_block(document, "\t•\tunordered")
+>       assert ordered.blockFormat().bottomMargin() == 12.0
+E       assert 2.0 == 12.0
+E        +  where 2.0 = <built-in method bottomMargin of PySide6.QtGui.QTextBlockFormat object at 0xffffa6ba4800>()
+E        +    where <built-in method bottomMargin of PySide6.QtGui.QTextBlockFormat object at 0xffffa6ba4800> = <PySide6.QtGui.QTextBlockFormat(QTextFormat::FormatType(1)) at 0xffffa6ba4800>.bottomMargin
+E        +      where <PySide6.QtGui.QTextBlockFormat(QTextFormat::FormatType(1)) at 0xffffa6ba4800> = <built-in method blockFormat of PySide6.QtGui.QTextBlock object at 0xffffa6ba4940>()
+E        +        where <built-in method blockFormat of PySide6.QtGui.QTextBlock object at 0xffffa6ba4940> = <PySide6.QtGui.QTextBlock object at 0xffffa6ba4940>.blockFormat
+
+app/tests/test_markdown_document.py:268: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_markdown_document.py::test_separate_lists_keep_container_bottom_spacing
+1 failed, 58 deselected in 0.29s

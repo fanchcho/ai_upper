@@ -1,0 +1,38 @@
+diff --git a/app/src/markdown/document.py b/app/src/markdown/document.py
+index 53f9210..b31ee0d 100644
+--- a/app/src/markdown/document.py
++++ b/app/src/markdown/document.py
+@@ -671,6 +671,12 @@ class _Renderer:
+             if nested:
+                 # 子列表从父条目的正文列开始，宽度跟父条目的标记列一致。
+                 self.render_blocks(nested, cursor, indent + column)
++        if block.get("items") and not indent:
++            # .md > ul/ol 的容器段后距不能被最后一个 li 的 2px 覆盖。
++            # 嵌套列表仍保留 .md li > ul/ol 的 2px；文档末尾由统一逻辑折叠。
++            fmt = cursor.blockFormat()
++            fmt.setBottomMargin(12.0 * self.style.scale)
++            cursor.setBlockFormat(fmt)
+ 
+     def _list_item(self, cursor: Any, item: dict, ordered: bool, number: int,
+                    indent: float) -> float:
+diff --git a/app/tests/test_markdown_document.py b/app/tests/test_markdown_document.py
+index 7db8eb8..f8b6faa 100644
+--- a/app/tests/test_markdown_document.py
++++ b/app/tests/test_markdown_document.py
+@@ -260,6 +260,16 @@ def test_ordered_items_number_from_the_source_start(qapp):
+     assert block_texts(document) == ["\t3.\tc", "\t4.\td"]
+ 
+ 
++def test_separate_lists_keep_container_bottom_spacing(qapp):
++    # deva .md ol/ul margin-bottom:12px; li margin:2px must not erase it.
++    document = render("1. ordered\n\n- unordered\n\nafter")
++    ordered = find_block(document, "\t1.\tordered")
++    unordered = find_block(document, "\t•\tunordered")
++    assert ordered.blockFormat().bottomMargin() == 12.0
++    assert unordered.blockFormat().bottomMargin() == 12.0
++    assert document.lastBlock().blockFormat().bottomMargin() == 0.0
++
++
+ def test_task_items_use_checkbox_glyphs(qapp):
+     document = render("- [ ] todo\n- [x] done")
+     assert block_texts(document) == ["\t☐\ttodo", "\t☑\tdone"]

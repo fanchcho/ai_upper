@@ -177,3 +177,41 @@ AFTER_ARCHIVE sessions=119 archived=True active='parity-000' file_exists=True
 
 证据：[controls-tests.log](merged-review/controls-tests.log)、[deva窗口取值](merged-review/controls-source.log)、[输入框和遮罩源码](merged-review/input-source.log)。
 本项产品代码不变，尺寸前→后相同，不声称新的全页百分比收益。
+
+### 并入4：正文真实操作与 E1/E3/E5 合并复核 — 部分已具备，缺口仍在
+
+新探针加载实际 `Main.qml` 的 `bodyView/bodyScroll` 和同一个 BodyDocument，复用真实壳装配；
+不使用旧 `scripts/qml_body_probe.py` 中直接设置剪贴板、仅比较超宽即认定可滚动的判据。
+
+```bash
+AI_UPPER_HOME=/tmp/ai-upper-merged-body QT_SCALE_FACTOR=1 .venv/bin/python out/merged-review/body_probe.py out/merged-review/body-1x > out/merged-review/body-1x.log 2>&1; echo rc=$?
+AI_UPPER_HOME=/tmp/ai-upper-merged-body-2x QT_SCALE_FACTOR=2 .venv/bin/python out/merged-review/body_probe.py out/merged-review/body-2x > out/merged-review/body-2x.log 2>&1; echo rc=$?
+```
+
+两个进程均rc0，**表示采集完成，不表示全部功能通过**；JSON明确保留 `horizontal_code.ok=false`。
+
+| 项目 | 结论 | 真实操作与数字 |
+|---|---|---|
+| 跨块连续选择/复制 | 已具备 | 鼠标从(485,58)拖到(558,196)，跨段落/代码/表格到尾段；Ctrl+C复制96字符，所有目标内容存在；Qt内部U+FDD0/FDD1/U+2029变换为换行、NBSP变为空格后与选区逐字相等。未直接写入剪贴板 |
+| 双击选词 | 已具备 | 真实mouseDClick后selectedText=`sorted`，1x/2x都通过 |
+| 代码块横向滚动 | **仍缺** | 长行idealWidth=7321，textWidth/view宽=696，尾部x7282.78125；横向滚轮后contentX仍0→0。bodyScroll contentWidth固定924，无单代码块横向滚动视图；不能把文档超宽当作成功 |
+| 表格边框/间距 | 已具备基础表格，像素等价未闭环 | format border=1/#e6e6ea，spacing=0；cell padding为0，由3个NBSP和固定34.45px行盒实现CSS 10/6留白。实际描边采样y148有150个边框像素，底部y182/183各150；存在2行底边/绘制机制残差，不能称所有边线均单像素一致 |
+| 本地图片 | 已具备 | 48×32图片进入QML资源；1x指定区域936个accent像素，2x3744，恰为4倍面积 |
+| broken-image | **仍缺图标** | data URI按deva默认urlTransform保留裸alt，正文为U+FFFC本地图加“示意图”；断图本身没有图标。沿用E4未闭环结论，不重复算收益 |
+| 浅深主题与字体 | 已具备 | 调用实际设置桥接setTheme(light/dark)，shellDark同步false/true，文档前景#1f1f24→#e4e4e7，字体族列表不变、14px不变 |
+| 中文/emoji | **部分具备** | “中/文”glyph9544/20036（Noto Sans CJK SC）；😀glyph5857（DejaVu Sans）；🚀/✅均glyph0，本机缺可用回退字形，未安装或替换系统字体 |
+| 1x/2x缩放 | 已具备物理缩放 | 相同逻辑1280×820，DPR1/2分别抓取1280×820、2560×1640；两种缩放下选择/复制/双击和本地图均实测。与deva的2x像素等价**未验证**，现有参考只有1x |
+
+正文测试命令：`AI_UPPER_HOME=/tmp/ai-upper-merged-body-tests .venv/bin/python -m pytest app/tests/test_markdown_document.py app/tests/test_markdown_body.py app/tests/test_markdown_chunked.py -q -ra > out/merged-review/body-tests.log 2>&1; echo rc=$?`。
+**102 passed in 3.60s，0 skipped/failed/error，rc=0**。
+
+**E3最小修复实验被验收否决，未提交到产品**：从deva `.md ul/ol` 12px段后距出发，新增候选回归测试先实测失败
+`2.0 != 12.0`（1 failed，rc1），候选补margin后103 passed/rc0；但只重拍chat后差异112725/10.739805640%
+→126094/12.013528963%，可见带数18→17。底部锚定把上方内容进一步裁掉，单独加列表间距并不解决
+表格/引用/滚动的组合问题。因此撤销的仅是本轮未提交候选及配套新测试，所有原测试和已推送产品保持逐字不变。
+完整候选保留于 [list-experiment.patch](merged-review/list-experiment.patch)，失败/通过日志及候选截图均保留。
+当前正式代码的chat仍为10.739805640%，search-none仍为8.080411585%，E1/E3/E5逐带坐标沿用同报告前节，未重复计算。
+
+证据：[1x原始结果](merged-review/body-1x/results.json)、[2x原始结果](merged-review/body-2x/results.json)、
+[真实操作探针](merged-review/body_probe.py)、[代码横向CSS原文](merged-review/code-source.log)、[列表CSS](merged-review/list-source.log)。
+代码横向滚动、E4图标、E3组合布局尚未实现；这属于明确的实现缺口，没有用“已核对”替代修复完成。

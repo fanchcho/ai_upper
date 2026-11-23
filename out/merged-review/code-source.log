@@ -1,0 +1,15 @@
+.md-code__body {
+  margin: 0;
+  padding: var(--space-3);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: calc(12.5px * var(--cs, 1));
+  line-height: 1.55;
+  color: var(--fg);
+}
+.md-code__body code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+  border: none;
+  white-space: pre;

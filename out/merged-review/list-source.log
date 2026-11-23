@@ -1,0 +1,33 @@
+  margin-bottom: 0;
+}
+/* ===== 助手 Markdown 正文（GFM）===== */
+/* 字号与段距乘以「文字大小」倍率 --cs：只在对话区（.cf-msgs / .cf-draft，见 redesign.css）有值，别处的 Markdown 回落 1 倍 */
+.md {
+  font-size: calc(14px * var(--cs, 1));
+  line-height: 1.65;
+  color: var(--fg);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.md > :first-child {
+  margin-top: 0;
+}
+.md > :last-child {
+  margin-bottom: 0;
+}
+.md p {
+  margin: 0 0 calc(var(--space-3) * var(--cs, 1));
+}
+.md ul,
+.md ol {
+  margin: 0 0 calc(var(--space-3) * var(--cs, 1));
+  padding-left: 1.5em;
+}
+.md li {
+  margin: calc(2px * var(--cs, 1)) 0;
+}
+.md li > ul,
+.md li > ol {
+  margin: 2px 0;
+}
+.md li::marker {
