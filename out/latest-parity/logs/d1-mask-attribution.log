@@ -1,0 +1,39 @@
+$ .venv/bin/python -I out/latest-parity/probes/mask_attribution.py
+canvas=1280x820 denominator=1049600
+page                     total_diff  pct_page  diff_d1_2  pct_of_diff  outside_diff  outside_d1_2  inside_diff  inside_gt8
+delete-confirm               382652    36.46%     301507      78.79%        375172        301200        7480      6645
+settings-general             315274    30.04%     255093      80.91%        297039        248842       18235      5732
+settings-models              300497    28.63%     250119      83.24%        297039        248842        3458      1596
+settings-extensions          305797    29.13%     251645      82.29%        297039        248842        8758      4777
+settings-about               302389    28.81%     251539      83.18%        297039        248842        5350      2114
+
+sample points (x,y): qml_rgb deva_rgb delta
+-- delete-confirm
+  (  60,120) qml=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+  ( 300,700) qml=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+  (1100,100) qml=(148, 148, 148) deva=(148, 148, 148) delta=(0, 0, 0)
+  (1200,100) qml=(148, 148, 148) deva=(148, 148, 148) delta=(0, 0, 0)
+  ( 600,450) qml=(255, 255, 255) deva=(255, 255, 255) delta=(0, 0, 0)
+-- settings-general
+  (  60,120) qml=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+  (  60,700) qml=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+  ( 300,700) qml=(137, 137, 138) deva=(138, 138, 138) delta=(-1, -1, 0)
+  ( 900,700) qml=(142, 142, 142) deva=(141, 141, 141) delta=(1, 1, 1)
+  (1200,700) qml=(148, 148, 148) deva=(148, 148, 148) delta=(0, 0, 0)
+  ( 500,600) qml=(247, 247, 248) deva=(247, 247, 248) delta=(0, 0, 0)
+
+settings shared-background check:
+  settings-general: outside_diff=297039 outside_d1_2=248842
+  settings-models: outside_diff=297039 outside_d1_2=248842
+  settings-extensions: outside_diff=297039 outside_d1_2=248842
+  settings-about: outside_diff=297039 outside_d1_2=248842
+  identical_outside_diff=True identical_outside_d1_2=True
+
+attribution:
+  delete-confirm: outside_share=98.05% diff_d1_2_share=78.79% inside_share=1.95% inside_gt8=6645
+  settings-general: outside_share=94.22% diff_d1_2_share=80.91% inside_share=5.78% inside_gt8=5732
+  settings-models: outside_share=98.85% diff_d1_2_share=83.24% inside_share=1.15% inside_gt8=1596
+  settings-extensions: outside_share=97.14% diff_d1_2_share=82.29% inside_share=2.86% inside_gt8=4777
+  settings-about: outside_share=98.23% diff_d1_2_share=83.18% inside_share=1.77% inside_gt8=2114
+  conclusion=mask-compositing-primary
+rc=0
