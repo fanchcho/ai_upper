@@ -76,6 +76,7 @@ class BodyDocument:
         self.document = QTextDocument()
         self.style = style or BodyStyle()
         self.content_width = float(content_width)
+        self._viewports = []
         self._source = ""
         self._plain = False
         self._image_resolver: Optional[Callable[[str], Any]] = None
@@ -190,6 +191,10 @@ class BodyDocument:
         ``QTextLayout`` 里的着色不能跨文档搬（会把块高打成 0），只能由目标文档自己的
         高亮器重算，见模块文档。
         """
+        for viewport in self._viewports:
+            viewport.setParentItem(None)
+            viewport.deleteLater()
+        self._viewports = []
         target = quick_document.textDocument()
         # 渲染器把自有文档的页边距设成 0（正文块自己控制留白）。片段不搬运文档级的
         # ``documentMargin``，不显式对齐的话接管后四边会多出 4px 默认内边距，正文
@@ -206,6 +211,11 @@ class BodyDocument:
         finally:
             cursor.endEditBlock()
         self._copy_images(target)
+        # Test stubs have no QQuickItem owner; actual QML keeps one shared document.
+        if isinstance(quick_document, QtCore.QObject):
+            from .viewport import attach_code_viewports
+            self._viewports = attach_code_viewports(
+                quick_document, target, QtGui.QColor(self.palette.code_bg))
         return target
 
     def _copy_images(self, target: Any) -> None:

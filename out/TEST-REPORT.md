@@ -366,3 +366,22 @@ model-picker           946b07def583e696822df943b6935f04 4ca5e740ba78cca45a072384
 以及此前设置内部残差和long-mid非悬停状态差，均沿用上一节的开放状态，本次不重复算作新缺口。
 
 本项审计证据独立commit并push；最终原始远端行由out/structure-review/publish-final.txt留存，并在文字交付中贴出。
+
+### A：代码块独立横向滚动（7f304e9之后，本轮实现）
+
+已修复。原来长代码文档宽7321px，但没有代码块视口，横向滚轮读不到尾部；现在仅对超宽代码单元建立局部绘制视口，复用同一QTextDocument，语言头固定、正文列裁切，普通纵向滚轮仍交给原Flickable。没有修改正文纵向滚动尺寸、偏移或滚动条。
+
+真实事件命令：`AI_UPPER_HOME=/tmp/ai-upper-code-tests CODE_SCROLL_EVIDENCE="$PWD/out/ab-closeout/a" .venv/bin/python -m pytest app/tests/test_qml_code_scroll.py -q -s -ra > out/ab-closeout/a-tests.log 2>&1; rc=$?`。
+结果rc0，1 passed in 6.14s，0 skipped/failed/error。原始操作输出：
+
+```text
+CODE width=7321.0 viewport=682.5 contentX=0->120->6638.5 tail_local_x=630.78125 second_contentX=0.0 bodyY=0.0->0.0
+VERTICAL bodyY=0.0->70.51579335804627 code_contentX=6638.5
+```
+
+横向wheel后第一块0→120→6638.5，第二块保持0，正文contentY保持0；普通纵向wheel后正文滚到70.516px，第一块横向位置不变。END字符从视口外进入local x630.78125，处于682.5px视口以内。
+截图：[长行首](ab-closeout/a/code-start.png)、[长行尾](ab-closeout/a/code-end.png)；两个代码块同时展示，第二块保持首部，证明不是移动整个正文列。
+
+回归命令：`AI_UPPER_HOME=/tmp/ai-upper-code-regression .venv/bin/python -m pytest app/tests/test_markdown_body.py app/tests/test_markdown_document.py app/tests/test_markdown_chunked.py app/tests/test_qml_code_scroll.py -q -ra > out/ab-closeout/a-regression.log 2>&1; rc=$?`。
+**103 passed in 9.59s，0 skipped/failed/error，rc=0**。跨块复制/双击仍由共享正文文档提供，旧操作探针也复测通过；旧探针检查父级contentX的字段不适用于新增子级视口，A以专用真实事件测试为验收。
+只读deva依据：[.md-code__body overflow-x:auto及white-space:pre](ab-closeout/deva-code-css.log)。本项立即独立提交推送，B另行实现。

@@ -998,6 +998,7 @@ ApplicationWindow {
             TextEdit {
                 id: bodyView
                 objectName: "bodyView"
+                clip: true
                 // 消息头（头像列 32 + gap 12）之外是 696 的正文块；列宽 780 在正文栏内居中。
                 x: (bodyScroll.width - Theme.mainWidth) / 2 + 56
                 y: 20
