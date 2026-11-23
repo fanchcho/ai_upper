@@ -1,0 +1,34 @@
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cf-todo__scroll {
+  overflow-y: auto;
+  padding: var(--space-3);
+}
+.cf-box {
+  position: relative; /* 上边框拖拽手柄的定位锚 */
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  padding: var(--space-3);
+  box-shadow: var(--shadow);
+}
+.cf-box:focus-within {
+  border-color: var(--accent);
+}
+.cf-box textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+.cf-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.42);
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+}
+.cf-modal {
+  width: 100%;

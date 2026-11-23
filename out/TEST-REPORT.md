@@ -164,3 +164,16 @@ AFTER_ARCHIVE sessions=119 archived=True active='parity-000' file_exists=True
 
 会话文件、当前活动会话、归档入口列表同时断言，删除确认/取消原用例也通过。本项产品代码与视觉不变，不重拍、不虚构百分比收益。
 证据：[menu-tests.log](merged-review/menu-tests.log)。
+
+### 并入3：窗口按钮、侧栏范围、设置遮罩导航 — 已具备，旧缺陷已不存在
+
+命令：`AI_UPPER_HOME=/tmp/ai-upper-merged-controls .venv/bin/python -m pytest app/tests/test_qml_window_controls.py app/tests/test_qml_sidebar.py app/tests/test_qml_settings_overlay.py -q -s -ra > out/merged-review/controls-tests.log 2>&1; echo rc=$?`。
+**7 passed in 36.23s，0 skipped/failed/error，rc=0**。
+
+- 窗口控件整块96×40，三个32×40连续热区，x1184/1216/1248；常态白底、hover(237,237,237)，图标bbox分别10×2/10×10/10×10，像素数20/64/48。真实点击：Windowed→Minimized→Windowed；Windowed→Maximized→Windowed；Close后visible=False。
+- 侧栏首行x64/y56/w275/h54，第二行y110；hover与selected底色均止于x338，x339保持背景。long-mid既有修复的54行hover回归通过，未重复实现。
+- 设置720×560浮层保持正文及输入卡片可见；四导航Cog/Brain/Puzzle/Info路径和About内容标题均通过。遮罩源码仍为rgba(0,0,0,.42)，未调整。四页outside_diff=297039及内部残差沿用前述专项，未重拍。
+- 输入卡片dark-chat既有修复未改；本轮正文主题桥接将在下一节单独实测。403文案、模型贴片和滚动条没有新增实现，不因并入重复调整。
+
+证据：[controls-tests.log](merged-review/controls-tests.log)、[deva窗口取值](merged-review/controls-source.log)、[输入框和遮罩源码](merged-review/input-source.log)。
+本项产品代码不变，尺寸前→后相同，不声称新的全页百分比收益。

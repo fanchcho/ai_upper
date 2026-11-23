@@ -1,0 +1,58 @@
+"""标题栏窗口控件：真实 QML 窗口 + 像素几何 + ``QTest.mouseClick`` 状态断言。
+
+判据来源（只读）：
+- deva `apps/desktop/src/main/index.ts:79-81`：Linux 叠加层底色 #ffffff / #1e1e20；
+- deva `apps/desktop/src/main/index.ts:89-97`：`overlayOptions` 的 `height: 40`；
+- deva `apps/desktop/src/main/index.ts:112-116`：`titleBarStyle:'hidden'` + `titleBarOverlay`；
+- deva 原版 1280×820 实拍 `out/latest-parity/deva/chat-deva.png` 逐像素：
+  右上 96×40 实色块，三个 32×40 按钮 x=1184/1216/1248；最小化 10×2 @ (1195,23)；
+  最大化 10×10 框 @ (1227,15)；关闭 10×10 X @ (1259,15)；图标 #5F6368。
+
+这里不直接调 QML 槽位：全部走 ``QTest`` 真实鼠标事件，证明按钮点得动、窗口状态真的变。
+"""
+from __future__ import annotations
+
+import os
+
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+import pytest
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+@pytest.fixture(scope="module")
+def qapp():
+    from PySide6.QtGui import QGuiApplication
+
+    application = QGuiApplication.instance() or QGuiApplication([])
+    yield application
+
+
+def _find_item(root, name: str):
+    """QML 的 Repeater 委托不是 QObject 子节点，必须走视觉树 ``childItems()``。"""
+    try:
+// 代价：Deva 窗口被别的程序挡住时也照常绘制，界面基本静止，影响很小。须早于 app ready。
+app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion')
+app.commandLine.appendSwitch('disable-backgrounding-occluded-windows')
+
+/** 明暗主题下的窗口控件叠加配色（与 tokens.css 的 --bg / --fg 对齐）。 */
+const OVERLAY_SYMBOL = { light: '#3a3a3d', dark: '#e4e4e7' } as const
+const OVERLAY_BG = { light: '#ffffff', dark: '#1e1e20' } as const
+
+/**
+ * 窗口控件叠加（Window Controls Overlay）参数；macOS 返回 undefined（红绿灯由系统绘制）。
+ * - Windows：透明底 + 显式 symbolColor，图标颜色随主题即时切换（见 window:set-overlay）。
+ * - Linux：不支持透明叠加区与 symbolColor（Electron 按 color 自动算对比色），只能用实色底，
+ *   所以跟着主题给底色，否则深色主题下会顶一条白条。
+ */
+function overlayOptions(
+  dark: boolean
+): { color: string; symbolColor?: string; height: number } | undefined {
+  if (process.platform === 'win32') {
+    return { color: '#00000000', symbolColor: dark ? OVERLAY_SYMBOL.dark : OVERLAY_SYMBOL.light, height: 40 }
+  }
+  if (process.platform === 'linux') {
+    return { color: dark ? OVERLAY_BG.dark : OVERLAY_BG.light, height: 40 }
+  }
+  return undefined
