@@ -1,0 +1,5 @@
+9/9 fresh screenshots match measurement SHA-256 and baseline QML MD5/bytes; capture rc=0
+3/3 full-suite results match original logs and rc files
+10/10 review items have independent commits reachable from HEAD
+Product and test trees are unchanged from the tested baseline
+Report links exist; evidence scripts parse successfully
