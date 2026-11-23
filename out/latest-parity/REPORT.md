@@ -1236,7 +1236,7 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 | **合计** | **144791** | **141844** | **+2947** | picker 专属 **+316**，其余 2631 是 chat 页就有的 A/B 类正文差 |
 
 所以 D3 的结论是：**picker 自身引入的白像素差只剩 316 px**（其中 252 在贴片行、42 在阴影尾、22 在面板本体），
-而 2631 px 来自 §5.4 的 A/B 类 chat 正文缺口（`E1`–`E5`、`B1`–`B3`），不在本轮范围。
+而 2631 px 来自 §5.4 的 A/B 类 chat 正文缺口（`E1`–`E5`、`B1`–`B3`），不在本轮范围（其中 E1–E5 已由 `12a786a` 修复，此处保留 D3 当时的归因口径）。
 贴片行的 252 px 是 chip 锚点横向偏移造成的（见本节末尾「未闭环」）。
 
 **回归核查**
@@ -1642,12 +1642,35 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 
 | # | 缺口 | 实测证据 |
 |---|---|---|
-| E1 | 正文可见行数少 3 行 | QML 15 个文本带，deva 18 个（`probe-body.log` 末节；`final-probe.log` §8：QML 带起点差 `[37,37,37,46,...]` vs deva `[13,41,35,35,34,41,...]`） |
-| E2 | 表格渲染残缺 | QML `(244,244,244)` 表底 2781 px，bbox=(538,91,780,142)；deva 8979 px，bbox=(489,43,1054,208)。deva 有完整表头行（文件/类型/说明）与首行数据（package.json / 配置 / 依赖清单），QML 只有一小块残片（`probe-scroll.log` §4） |
-| E3 | 正文滚动偏移约 13 px | QML 首页文本带 `(54,65)` 起，deva `(43,43)`+`(57,66)`；QML 末个可见带 `(584,595)`，deva `(606,619)`（`probe-body.log`、`probe-empty.log` 末节） |
-| E4 | 缺 broken-image 占位 | deva 有 `示意图` 占位文本带 y602–619 与图片框 y658–699；QML 无 `示意图` 带，y658–699 只剩白底与边框（`probe-gaps2.log` §4） |
-| E5 | search-none 正文也少 3 带 | QML 11 带，deva 14 带（`probe-rail.log` §3、`probe-gaps2.log` §3） |
+| E1 | ~~正文可见行数少 3 行~~ **已由 `12a786a` 修复** | 旧探针 QML 15 带 / deva 18 带（`probe-body.log` 末节）。**本轮同口径重拍**（x430–1200、y40–640、`max(R,G,B)<200`）：QML 修复前 16 带 → 修复后 **18 带**，deva **18 带**；修复后首带 `(43,56)` 对 deva `(43,45)+(56,68)`，末带 `(600,614)` 对 `(602,619)`（`out/body-markdown-fix/logs/e1-e5-recheck.log`）。行高依据 `.md` 14px × 1.65 = 23.1px（`apps/desktop/src/renderer/src/styles/app.css:764-770`），段距依据 `.md p` 的 `margin: 0 0 12px`（`app.css:777-779`、`tokens.css:16-17`）；实现见 `app/src/markdown/document.py:504-531,618-626` |
+| E2 | ~~表格渲染残缺~~ **已由 `12a786a` 修复（仍有像素残差）** | 旧实测 QML `(244,244,244)` 表底 2781 px、bbox=(538,91,780,142)，deva 8979 px、bbox=(489,43,1054,208)（`probe-scroll.log` §4）。**本轮同表框重拍** box=(470,80)-(800,200)：QML `1946 px → 6606 px`（×3.39），bbox `(538,159,724,174) → (487,139,777,188)`；deva `8951 px`、bbox `(489,138,788,189)`。修复后完整显示 `文件/类型/说明` 表头与 `README.md / src/ / package.json` 三行数据，表格左缘 487 对 deva 489、顶缘 139 对 138、高 50 对 52。依据 `.md table` 13px / `max-content` / `border-collapse`（`app.css:853-860`）、`th,td` `border:1px` + `padding:6px 10px`（`app.css:862-867`）、表头 `background: var(--bg-panel)`=`#f7f7f8`（`app.css:868-871`、`tokens.css:42`）、偶数行 `rgba(0,0,0,.045)`→实测 `(244,244,244)`（`app.css:872-874`、`tokens.css:45`）；实现见 `document.py:737-922`。**仍未完全对齐**：QML 表底比 deva 少 **2345 px**、总宽少 8px、右界短 11px；行文本与网格本身已齐全，剩余差异属 Qt 表格绘制残差 |
+| E3 | ~~正文滚动偏移约 13 px~~ **已由 `12a786a` 修复** | 旧探针 QML 首带 `(54,65)`、deva `(43,43)+(57,66)`，末带 `(584,595)` 对 `(606,619)`（`probe-body.log`）。**本轮重拍**：首带修复前 `(40,44)` → 修复后 `(43,56)`，deva `(43,45)+(56,68)`，首行同为 y43；末带修复后 `(600,614)` 对 deva `(602,619)`，残差 2/5px，线性 13px 偏移消失（`e1-e5-recheck.log`）。依据同一 23.1px 行高与 12px 段距；实现 `document.py:504-531,618-626` |
+| E4 | ~~缺 broken-image 占位~~ **已由 `12a786a` 修复** | deva 有 `示意图` 占位带 y602–619 与图片框 y658–699（`probe-gaps2.log` §4）。修复前 QML 的 y560–700 只有 `(586,598)` 文字带，无 `示意图`；修复后 `示意图` 带 `(600,614)`，紧邻 deva `(602,619)`，图片框仍为 y658–699（`e1-e5-recheck.log`）。依据 `.md img { max-width:100%; border-radius:var(--radius-sm) }`（`app.css:848-851`）；broken image 由浏览器回退 alt 文本，fixture 的 alt=`示意图`（`scripts/parity/make_pages_fixture.py:57`）；QML 回退 `alt or "图片"`（`document.py:1100-1115`） |
+| E5 | ~~search-none 正文也少 3 带~~ **已由 `12a786a` 修复** | 旧探针 QML 11 带 / deva 14 带（`probe-rail.log` §3、`probe-gaps2.log` §3）。**本轮同口径重拍**（y200–700）：QML 修复前 13 带 → 修复后 **14 带**，deva **14 带**；修复后末带 `(676,687)` 对 deva `(678,690)`，差 2/3px（`e1-e5-recheck.log`）。与 E1 共用同一行高/段距修复 |
 | E6 | ~~dark-chat 输入卡片底色偏暗~~ **已由 §4.7 修复** | 修复前：QML `(30,30,32)`，deva `(42,42,46)`（`probe-scroll.log` §3）。**当前实测** region x700–1180 × y600–700：QML `(42,42,46)`×19680 与 deva `(42,42,46)`×19680 **完全相同**，剩余 `(30,30,32)` QML 17280 / deva 14400 是卡片外页面底色，不是卡片本身（`.venv/bin/python -I /tmp/c6_e6.py`，落盘 `logs/c6-e6-darkchat-card.log`） |
+
+**E1–E5 的 deva 样式取值（只读源码，逐项给 file:line）**
+
+| 项目 | deva 值 | 源码 |
+|---|---|---|
+| 正文行高 | `font-size: calc(14px * var(--cs,1))`、`line-height:1.65` → 14×1.65=`23.1px` | `apps/desktop/src/renderer/src/styles/app.css:764-770` |
+| 段落间距 | `.md p { margin: 0 0 calc(var(--space-3) * var(--cs,1)); }`，`--space-3:12px` | `app.css:777-779`、`tokens.css:16-17` |
+| 列表缩进 | `ul/ol` 下边距 12px、`padding-left:1.5em`（14px 字号下 21px）；`li` 上下 2px | `app.css:780-787` |
+| 表格边框/内边距/表头底色 | `border-collapse:collapse`、13px；`th,td` `border:1px solid var(--border)` + `padding:6px 10px`；`th` `background:var(--bg-panel)`=`#f7f7f8`；偶数行 `rgba(0,0,0,.045)`→`(244,244,244)`；`--border:#e6e6ea` | `app.css:853-874`、`tokens.css:42,45,53` |
+| 代码块 | `.md-code` 下边距 12px、1px `#e6e6ea` 边框、底色 `#f0f0f2`；头部 `padding:4px 6px 4px 12px`、底色 `#f7f7f8`、1px 下边框；正文 `padding:12px`、12.5px 字号、1.55 行高 | `app.css:903-917,942-948`、`tokens.css:42,44,53` |
+| 图片占位 | `.md img { max-width:100%; border-radius:var(--radius-sm) }`；断图按浏览器行为回退 alt，fixture alt=`示意图` | `app.css:848-851`、`scripts/parity/make_pages_fixture.py:57` |
+| QML 实现索引 | 行高 `504-523`；段块 `525-531,618-626`；列表 `690-733`；表格 `737-922`；代码块 `925-1011`；图片 `1100-1115` | `app/src/markdown/document.py` |
+
+**E1–E5 四页重拍前后（`page_diff18.py`，1280×820 = 1,049,600 px）**
+
+| 页 | 修复前（§5.2） | 修复后（`12a786a`） | 变化 |
+|---|---:|---:|---:|
+| chat | 107344 / 10.23% | 105436 / 10.05% | −1908 px / −0.18 pp |
+| search-none | 93091 / 8.87% | 77523 / 7.39% | −15568 px / −1.48 pp |
+| long-mid | 119093 / 11.35% | 140233 / 13.36% | **+21140 px / +2.01 pp（回退）** |
+| long-bottom | 118624 / 11.30% | 116800 / 11.13% | −1824 px / −0.17 pp |
+
+`long-mid` 是唯一指标回退，且**不是正文修复造成的真实退步**：该页 deva 基线是「会话 038」的单条短消息页，QML 页却是多会话长正文的中段滚动位，二者内容本身不对应。按 `diff>0` 区域归因：sidebar x0–360 为 `47169 → 45771`，content x360–1280 为 `71924 → 94462`；content y0–60 `4507 → 6675`、y60–640 `38367 → 58737`、y640–820 `29050 → 29050`，其中表格框 (470,80)-(800,200) 单独贡献 `11835 → 24845`（+13010）。修复前页面多数字形是缺字方框、表格未铺底色，反而与空白基线更“像”；修复后字形和表格都正确出现，像素差因此上升。其余三页均下降，`search-none` 降幅最大。
 
 **F. Settings 模态**
 
@@ -1678,6 +1701,8 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 
 ### 5.5 18 页 → 缺口映射（收口核对）
 
+> 本表差异数字与缺口清单是 §5.4 的 E1–E5 复核前口径，保留用于收口对照；E1–E5 的修复后实测见 §5.4。
+
 | 页 | 差异像素 / % | 主要结构缺口 | 判定 |
 |---|---:|---|---|
 | chat | 119799 / 11.41% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
@@ -1703,7 +1728,7 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 10.99% 与 dark-chat 的 12.22%
 已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
 
-**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。model-picker 的残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。
+**缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（**E1–E5 已由 `12a786a` 修复，E6 已由 §4.7 修复**），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、F1–F5、G1/G4/G5。model-picker 残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。E2 的表底像素残差（-2345 px）作为 Qt 表格绘制限制留在 E2 行，不另立缺口项。
 ### 5.6 chat 滚动条复测（2026-11-23）
 
 - 源码依据：`apps/desktop/src/renderer/src/styles/app.css:45-62`（`::-webkit-scrollbar` width 8px；thumb `border-radius: var(--radius-full)`、`border: 2px solid transparent` + `background-clip: content-box`；hover `background: var(--fg-subtle)`；track 无规则即透明）；`tokens.css:26` `--radius-full: 999px`、`:81` 浅色 `--scrollbar: rgba(0,0,0,0.18)`、`:51` `--fg-subtle: #8a8a94`、`:148` 深色 `--scrollbar: rgba(255,255,255,0.16)`、`:119` `--fg-subtle: #71717a`。
