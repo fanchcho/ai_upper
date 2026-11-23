@@ -594,6 +594,56 @@ class ShellBridge(QtCore.QObject):
         self._publish()
         return True
 
+    @QtCore.Slot(str, str, result=bool)
+    def renameSession(self, session_id: str, title: str) -> bool:
+        """重命名会话：走 `ChatHost.rename_session`（与 Web 入口同一条服务链路）。
+
+        `ChatHost` 负责原版的空白折叠、长度上限与「空标题恢复自动标题」规则；
+        壳只负责刷新列表。未建档会话返回 false。
+        """
+        key = str(session_id or "")
+        if not key:
+            return False
+        result = self._host.rename_session({"sessionId": key, "title": str(title or "")})
+        if not result:
+            return False
+        self._publish()
+        return True
+
+    @QtCore.Slot(str, result=bool)
+    def archiveSession(self, session_id: str) -> bool:
+        """归档会话：走 `ChatHost.set_archived`，并复刻 Deva 的当前会话回退。
+
+        `ChatHost` 会拒绝进行中的会话（`{"ok": false}`），壳不做第二套忙碌判定。
+        当前会话被归档后，列表按 `visible_sessions()` 取最近一条作为新的当前会话。
+        """
+        key = str(session_id or "")
+        if not key:
+            return False
+        result = self._host.set_archived({"sessionId": key, "archived": True})
+        if not result or not result.get("ok"):
+            return False
+        if self._active == key:
+            rows = self._rows()
+            self._active = str(rows[0]["id"]) if rows else ""
+            self._turn = None
+            self._turn_session = ""
+            self._render()
+        self._publish()
+        return True
+
+    @QtCore.Slot(str, result=bool)
+    def unarchiveSession(self, session_id: str) -> bool:
+        """把会话移回对话列表：与归档共用 `ChatHost.set_archived`。"""
+        key = str(session_id or "")
+        if not key:
+            return False
+        result = self._host.set_archived({"sessionId": key, "archived": False})
+        if not result or not result.get("ok"):
+            return False
+        self._publish()
+        return True
+
     # ── 快速开启（无任何对话时的中列）────────────────────────────────────────
     @QtCore.Slot(result=list)
     def quickStartPersonas(self) -> List[Dict[str, Any]]:
@@ -1306,6 +1356,17 @@ class ShellBridge(QtCore.QObject):
         rows = self._rows()
         active = self._active if any(row["id"] == self._active for row in rows) else ""
         window.setProperty("sessions", rows)
+        # 已归档会话单独一份投影：归档视图（原版 `Archived chats`）用同一套
+        # `session_rows` 形状，来源仍是 `ChatSessionStore.list_sessions()`，不另造数据。
+        archived_metas = [
+            meta
+            for meta in self._store.list_sessions()
+            if meta.archived and not meta.parentId and self._store.session_path(meta.id).exists()
+        ]
+        window.setProperty(
+            "archivedSessions",
+            session_rows(self._store, lang=self.language(), metas=archived_metas),
+        )
         window.setProperty("activeId", active)
         window.setProperty(
             "activeTitle",

@@ -75,6 +75,17 @@ ApplicationWindow {
     property string ctxTitle: ""
     property string pendingDeleteId: ""
     property string pendingDeleteTitle: ""
+    // 归档列表：Python 每次 _publish 把已归档会话投影写进来；列表右键 Archive 后从这里可查。
+    property var archivedSessions: []
+    property bool archiveView: false
+    // 多选：右键菜单「Select」进入；selectedSessions 只存 id，落盘仍走 ShellBridge 的会话服务。
+    property bool selectMode: false
+    property var selectedSessions: []
+    // 重命名：原版是居中输入框（dialog.prompt），不是行内编辑；空串提交 = 恢复自动标题。
+    property bool renameOpen: false
+    property string renameId: ""
+    property string renameOriginalTitle: ""
+    property string renameValue: ""
 
     // 深浅主题：Python 侧把 config.json 的 theme 解析成 bool，QML 用 Binding 写进
     // Theme 单例（单例的 property 不能从 Python 直接 setProperty，实测落不下去）。
@@ -119,6 +130,30 @@ ApplicationWindow {
         }
         return out
     }
+    // 已归档会话同样按搜索词过滤；只有 archiveView 打开时列表才绑定它。
+    readonly property var archivedVisibleSessions: {
+        var all = window.archivedSessions || []
+        var q = window.searchTerm
+        if (!q)
+            return all
+        var out = []
+        for (var i = 0; i < all.length; i++) {
+            var row = all[i]
+            var hay = [row.title, row.personaName, row.focusName]
+            var hit = false
+            for (var k = 0; k < hay.length; k++) {
+                var text = hay[k] ? String(hay[k]).toLowerCase() : ""
+                if (text.indexOf(q) >= 0) {
+                    hit = true
+                    break
+                }
+            }
+            if (hit)
+                out.push(row)
+        }
+        return out
+    }
+    readonly property var listedSessions: window.archiveView ? archivedVisibleSessions : visibleSessions
 
     // 交付卡「复制路径」的短暂反馈：1.2s 后把对勾换回复制图标。
     property string copiedPath: ""
@@ -472,19 +507,63 @@ ApplicationWindow {
             }
         }
 
+        // 已归档对话视图的标题条：点右侧入口进来，左侧返回对话列表。
+        Rectangle {
+            id: archiveHeader
+            objectName: "archiveHeader"
+            visible: window.archiveView
+            x: 8
+            y: 56
+            width: parent.width - 16
+            height: 32
+            color: "transparent"
+
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Archived chats (" + window.archivedSessions.length + ")"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 13
+                font.weight: 600
+            }
+            Rectangle {
+                objectName: "archiveBack"
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                width: 24
+                height: 24
+                radius: Theme.radiusSm
+                color: archiveBackMouse.containsMouse ? Theme.bgHover : "transparent"
+                Text {
+                    anchors.centerIn: parent
+                    text: "←"
+                    color: Theme.fgMuted
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 15
+                }
+                MouseArea {
+                    id: archiveBackMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: window.closeArchiveView()
+                }
+            }
+        }
+
         // 会话列表：行宽 283（x=8，右缘 291），滚动条占右侧 8px（291..298），
         // 刚好落在原版 `.cf-list` 的右内边距里、1px 分隔线左侧。
         ListView {
             id: sessionList
             objectName: "sessionList"
             x: 0
-            y: 56
+            y: window.archiveView ? 92 : 56
             width: 299
-            height: parent.height - 56 - 8
+            height: parent.height - y - 8
             clip: true
             leftMargin: 8
             rightMargin: 8
-            model: window.visibleSessions
+            model: window.listedSessions
             spacing: 0
             boundsBehavior: Flickable.StopAtBounds
 
@@ -511,12 +590,16 @@ ApplicationWindow {
                 ownerName: modelData.personaName || "Deva"
                 active: modelData.id === window.activeId
                 forceHover: index === window.forceHoverRow
+                selectionMode: window.selectMode
+                selected: window.selectedSessions.indexOf(modelData.id) >= 0
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: function (mouse) {
                         if (mouse.button === Qt.RightButton)
                             window.openCtxMenu(modelData.id, modelData.title)
+                        else if (window.selectMode)
+                            window.toggleSelect(modelData.id)
                         else
                             window.activate(modelData.id)
                     }
@@ -530,16 +613,131 @@ ApplicationWindow {
         // 列表区从 x56 起、宽 283，文本水平居中即落在实测位置。
         Text {
             objectName: "listEmpty"
-            visible: window.visibleSessions.length === 0
+            visible: window.listedSessions.length === 0
             x: 8
-            y: 68
+            y: window.archiveView ? 104 : 68
             width: 283
             horizontalAlignment: Text.AlignHCenter
             text: window.searchTerm !== "" ? (window.chatText.noMatches || "No matches")
-                                          : (window.chatText.noSessions || "No conversations")
+                                          : (window.archiveView
+                                             ? "No archived conversations"
+                                             : (window.chatText.noSessions || "No conversations"))
             color: Theme.fgSubtle
             font.family: Theme.sansFamily
             font.pixelSize: 12
+        }
+
+        // 已归档入口：原版在加号菜单里显示 `Archived chats`；这里固定贴在列表底部，
+        // 只在确实有归档项时出现，点击后用同一列表展示已归档会话。
+        Rectangle {
+            id: archiveEntry
+            objectName: "archiveEntry"
+            visible: window.archivedSessions.length > 0 && !window.archiveView && !window.selectMode
+            x: 8
+            y: parent.height - 40
+            width: parent.width - 16
+            height: 30
+            radius: Theme.radius
+            color: archiveEntryMouse.containsMouse ? Theme.bgHover : "transparent"
+
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Archived chats (" + window.archivedSessions.length + ")"
+                color: Theme.fgMuted
+                font.family: Theme.sansFamily
+                font.pixelSize: 12
+            }
+            MouseArea {
+                id: archiveEntryMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: window.openArchiveView()
+            }
+        }
+
+        // 多选操作条：原版 `.cf-railsel` 贴在列表底部；数量、全选、归档、退出都走同一份会话服务。
+        Rectangle {
+            id: selectionBar
+            objectName: "selectionBar"
+            visible: window.selectMode
+            x: 0
+            y: parent.height - 44
+            width: parent.width
+            height: 44
+            color: Theme.bgElevated
+
+            Text {
+                objectName: "selectionCount"
+                x: 12
+                anchors.verticalCenter: parent.verticalCenter
+                text: window.selectedSessions.length + " selected"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 12
+            }
+            Rectangle {
+                objectName: "selectionAll"
+                x: 92
+                anchors.verticalCenter: parent.verticalCenter
+                width: 78
+                height: 28
+                radius: Theme.radiusSm
+                color: selectionAllMouse.containsMouse ? Theme.bgHover : "transparent"
+                Text {
+                    anchors.centerIn: parent
+                    text: window.selectedSessions.length === window.listedSessions.length
+                          && window.listedSessions.length > 0 ? "Deselect all" : "Select all"
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 12
+                }
+                MouseArea {
+                    id: selectionAllMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: window.toggleSelectAll()
+                }
+            }
+            Row {
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 4
+                Rectangle {
+                    objectName: "selectionArchive"
+                    width: 30
+                    height: 28
+                    radius: Theme.radiusSm
+                    color: selectionArchiveMouse.containsMouse ? Theme.bgHover : "transparent"
+                    Icon { anchors.centerIn: parent; name: IconData.archive; size: 15; color: Theme.fg }
+                    MouseArea {
+                        id: selectionArchiveMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: window.archiveSelected()
+                    }
+                }
+                Rectangle {
+                    objectName: "selectionExit"
+                    width: 30
+                    height: 28
+                    radius: Theme.radiusSm
+                    color: selectionExitMouse.containsMouse ? Theme.bgHover : "transparent"
+                    Icon { anchors.centerIn: parent; name: IconData.x; size: 15; color: Theme.fg }
+                    MouseArea {
+                        id: selectionExitMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: window.exitSelect()
+                    }
+                }
+            }
         }
     }
 
@@ -1499,6 +1697,16 @@ ApplicationWindow {
         if (action === "new") {
             window.dismissCtxMenu()
             shellBridge.newSession()
+        } else if (action === "rename") {
+            window.openRenameDialog()
+        } else if (action === "select") {
+            window.startSelect(window.ctxSessionId)
+            window.dismissCtxMenu()
+        } else if (action === "archive") {
+            var archiveId = window.ctxSessionId || window.activeId
+            window.dismissCtxMenu()
+            if (!archiveId || !shellBridge.archiveSession(String(archiveId)))
+                notify("归档对话失败")
         } else if (action === "delete") {
             window.pendingDeleteId = window.ctxSessionId || window.activeId
             window.pendingDeleteTitle = window.ctxTitle || window.activeTitle
@@ -1506,6 +1714,103 @@ ApplicationWindow {
             window.confirmDismissed = false
             window.confirmUserOpen = true
         }
+    }
+
+    // 右键 Rename：原版 `dialog.prompt` 的居中输入框，默认值当前标题；空串提交由
+    // `ChatHost.rename_session` 恢复自动标题（取首条用户消息派生），不是这里另写规则。
+    function openRenameDialog() {
+        var id = window.ctxSessionId || window.activeId
+        if (!id)
+            return
+        window.renameId = String(id)
+        window.renameOriginalTitle = String(window.ctxTitle || window.activeTitle || "")
+        window.renameValue = window.renameOriginalTitle
+        window.dismissCtxMenu()
+        window.renameOpen = true
+    }
+
+    function cancelRename() {
+        window.renameOpen = false
+        window.renameId = ""
+        window.renameOriginalTitle = ""
+        window.renameValue = ""
+    }
+
+    function confirmRename() {
+        var id = window.renameId || window.activeId
+        if (!id || !shellBridge.renameSession(String(id), String(window.renameValue))) {
+            notify("重命名对话失败")
+            return
+        }
+        window.cancelRename()
+    }
+
+    // 右键 Select：原版 `select.start(id)` —— 立即把被右键的会话放进选择集并进入多选；
+    // 底部 `ThreadSelectBar` 显示数量、全选、归档/移回与退出。
+    function startSelect(id) {
+        window.selectMode = true
+        window.selectedSessions = id ? [String(id)] : []
+    }
+
+    function toggleSelect(id) {
+        var key = String(id || "")
+        if (!key)
+            return
+        var next = window.selectedSessions.slice()
+        var at = next.indexOf(key)
+        if (at >= 0)
+            next.splice(at, 1)
+        else
+            next.push(key)
+        window.selectedSessions = next
+    }
+
+    function toggleSelectAll() {
+        var all = window.listedSessions || []
+        if (window.selectedSessions.length === all.length && all.length > 0) {
+            window.selectedSessions = []
+            return
+        }
+        var next = []
+        for (var i = 0; i < all.length; i++)
+            next.push(all[i].id)
+        window.selectedSessions = next
+    }
+
+    function archiveSelected() {
+        var ids = window.selectedSessions.slice()
+        if (ids.length === 0) {
+            window.exitSelect()
+            return
+        }
+        var failed = 0
+        for (var i = 0; i < ids.length; i++) {
+            var ok = window.archiveView
+                     ? shellBridge.unarchiveSession(String(ids[i]))
+                     : shellBridge.archiveSession(String(ids[i]))
+            if (!ok)
+                failed++
+        }
+        window.exitSelect()
+        if (failed > 0)
+            notify("部分对话归档失败")
+    }
+
+    function exitSelect() {
+        window.selectMode = false
+        window.selectedSessions = []
+    }
+
+    function openArchiveView() {
+        window.archiveView = true
+        window.exitSelect()
+        window.dismissCtxMenu()
+    }
+
+    function closeArchiveView() {
+        window.archiveView = false
+        window.exitSelect()
+        window.dismissCtxMenu()
     }
 
     function cancelDelete() {
@@ -1530,6 +1835,10 @@ ApplicationWindow {
         window.confirmDismissed = false
         window.ctxUserOpen = false
         window.confirmUserOpen = false
+        window.renameOpen = false
+        window.selectMode = false
+        window.selectedSessions = []
+        window.archiveView = false
         Qt.callLater(applyPageState)
     }
 
@@ -1825,6 +2134,170 @@ ApplicationWindow {
                     onClicked: window.confirmDelete()
                 }
             }
+        }
+    }
+
+    // 重命名输入框：原版 `dialog.prompt` 的居中卡片（不是行内编辑）。标题默认当前标题，
+    // 留空提交走 ChatHost 的「恢复自动标题」规则；确认按钮只在值真正变化后可用。
+    Item {
+        id: renameLayer
+        objectName: "renameLayer"
+        visible: window.renameOpen
+        anchors.fill: parent
+        z: 55
+
+        Rectangle {
+            objectName: "renameBackdrop"
+            anchors.fill: parent
+            color: Theme.backdrop
+            MouseArea {
+                anchors.fill: parent
+                onClicked: window.cancelRename()
+            }
+        }
+
+        SoftShadow {
+            id: renameDialogShadow
+            target: renameDialog
+        }
+
+        Rectangle {
+            id: renameDialog
+            objectName: "renameDialog"
+            x: 430
+            y: 317
+            width: 420
+            height: 186
+            radius: Theme.radiusLg
+            color: Theme.bgElevated
+            border.width: 1
+            border.color: Theme.border
+            readonly property bool canSubmit: window.renameValue.trim() !== window.renameOriginalTitle.trim()
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {}
+            }
+
+            Text {
+                x: 20
+                y: 20
+                text: "Rename conversation"
+                color: Theme.fg
+                font.family: Theme.sansFamily
+                font.pixelSize: 15
+                font.weight: 700
+            }
+
+            Rectangle {
+                objectName: "renameInputBox"
+                x: 20
+                y: 64
+                width: parent.width - 40
+                height: 40
+                radius: Theme.radius
+                color: Theme.bg
+                border.width: 1
+                border.color: renameInput.activeFocus ? Theme.accent : Theme.borderStrong
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: renameInput.text.length === 0
+                    text: "Leave empty to restore the default title"
+                    color: Theme.fgSubtle
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                }
+
+                TextInput {
+                    id: renameInput
+                    objectName: "renameInput"
+                    x: 12
+                    y: 0
+                    width: parent.width - 24
+                    height: parent.height
+                    text: window.renameValue
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    verticalAlignment: TextInput.AlignVCenter
+                    selectByMouse: true
+                    clip: true
+                    onTextChanged: {
+                        if (window.renameValue !== text)
+                            window.renameValue = text
+                    }
+                    Keys.onReturnPressed: window.confirmRename()
+                    Keys.onEscapePressed: window.cancelRename()
+                }
+            }
+
+            Rectangle {
+                id: renameCancelButton
+                objectName: "renameCancel"
+                x: 253
+                y: 136
+                width: 70
+                height: 30
+                radius: Theme.radiusSm
+                color: renameCancelMouse.containsMouse ? Theme.bgHover : "transparent"
+                Text {
+                    anchors.centerIn: parent
+                    text: "Cancel"
+                    color: Theme.fg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: renameCancelMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: window.cancelRename()
+                }
+            }
+
+            Rectangle {
+                id: renameConfirmButton
+                objectName: "renameConfirm"
+                x: 330
+                y: 135
+                width: 69
+                height: 30
+                radius: Theme.radiusSm
+                opacity: renameDialog.canSubmit ? 1 : 0.45
+                color: renameConfirmMouse.containsMouse && renameDialog.canSubmit
+                       ? Qt.lighter(Theme.accent, 1.08) : Theme.accent
+                Text {
+                    anchors.centerIn: parent
+                    text: "Rename"
+                    color: Theme.accentFg
+                    font.family: Theme.sansFamily
+                    font.pixelSize: 13
+                    font.weight: 500
+                }
+                MouseArea {
+                    id: renameConfirmMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        if (renameDialog.canSubmit)
+                            window.confirmRename()
+                    }
+                }
+            }
+        }
+
+        onVisibleChanged: {
+            if (visible)
+                Qt.callLater(function () {
+                    renameInput.forceActiveFocus()
+                    renameInput.selectAll()
+                })
         }
     }
 
