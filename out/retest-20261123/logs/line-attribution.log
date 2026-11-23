@@ -1,0 +1,10 @@
+chat
+qml raw bands 18 merge<=3px gaps 18 last [600, 614]
+deva raw bands 19 merge<=3px gaps 18 last [602, 619]
+merged band start deltas [-3, -1, -4, -5, -3, -4, -20, -19, -18, -18, -27, -26, -26, -25, -28, -21, -7, -2]
+search-none
+qml raw bands 18 merge<=3px gaps 18 last [600, 614]
+deva raw bands 19 merge<=3px gaps 18 last [602, 619]
+merged band start deltas [-3, -1, -4, -5, -3, -4, -20, -19, -18, -18, -27, -26, -26, -25, -28, -21, -7, -2]
+chat/search-none plain text equal: True
+chat/search-none document block layouts equal: True
