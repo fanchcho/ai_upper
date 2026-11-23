@@ -7,7 +7,9 @@
 3. 重开菜单后点 ``Cancel`` / 点背板 → ``confirm=False``、会话数不变；
 4. 点 ``Rename`` → 输入框出现且可编辑，提交后标题落盘并反映到列表；
 5. 点 ``Select`` → 多选态与底部批量条出现，点行可增减选择数；
-6. 点 ``Archive`` → 会话从普通列表消失、写入 ``archived``，并在归档入口里可查到。
+6. 点 ``Archive`` → 会话从普通列表消失、写入 ``archived``，并在归档入口里可查到；
+7. 从非活动行真实右键 → ``ctxSessionId`` 跟随该行，Rename/Select/Archive 都作用于这一条，
+   并逐项打印会话数、标题、选择集、归档标记与目标文件存在性。
 
 菜单的 5 项名称、顺序、几何与项中心也在第一组里量出来并断言，坐标不是旧截图的常量。
 """
@@ -357,6 +359,104 @@ def test_select_menu_enters_multi_select_with_batch_bar(qapp, tmp_path, monkeypa
         assert bar.property("visible") is False
         assert window.property("selectMode") is False
         assert _as_list(window.property("selectedSessions")) == []
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
+def test_right_click_non_active_row_actions_hit_that_row(qapp, tmp_path, monkeypatch):
+    """第 7 组：从非活动行右键进入，Rename/Select/Archive 都作用于被右键的那一条。
+
+    `ctx-menu` 深链页的 ctxSessionId 为空，旧用例实际都回退到了当前会话；这里从
+    `threadRow1` 真实右键打开菜单，验证 ctxSessionId 传播到三个动作，并逐项打印
+    会话数量、标题、选择集、归档标记与目标文件存在性。
+    """
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        from PySide6.QtCore import Qt
+        from PySide6.QtTest import QTest
+
+        _pump(qapp, 0.6)
+        # `_build_window` 默认停在 ctx-menu 深链页，整窗有菜单遮罩；先回到正常 chat 页，
+        # 才能从列表行真实右键（与用户操作一致）。
+        window.setProperty("page", "chat")
+        _pump(qapp, 0.4)
+        assert len(session_rows(store)) == 120
+        assert bridge._active == "parity-000"
+        print(f"BEFORE sessions={len(session_rows(store))} active={bridge._active!r}")
+
+        # Rename：右键第 2 行，菜单的 ctxSessionId 必须是 parity-001，而不是活动会话。
+        row1 = _find_item(window.contentItem(), "threadRow1")
+        assert row1 is not None
+        _click(window, row1, Qt.RightButton)
+        _pump(qapp, 0.3)
+        assert window.property("ctxOpen") is True
+        assert window.property("ctxSessionId") == "parity-001"
+        _click(window, _menu_items(window)[1])
+        _pump(qapp, 0.4)
+        field = _find_item(window.contentItem(), "renameInput")
+        assert field is not None
+        assert field.property("text") == "会话 001：准备发布说明"
+        _click(window, field)
+        QTest.keyClick(window, Qt.Key_A, Qt.ControlModifier)
+        _type_text(window, "renamed non active")
+        _click(window, _find_item(window.contentItem(), "renameConfirm"))
+        _pump(qapp, 0.5)
+        renamed_title = store.load_session("parity-001").title
+        print(
+            "AFTER_RENAME"
+            f" sessions={len(session_rows(store))}"
+            f" title={renamed_title!r}"
+            f" active={bridge._active!r}"
+            f" file_exists={store.session_path('parity-001').exists()}"
+        )
+        assert renamed_title == "renamed non active"
+        assert len(session_rows(store)) == 120
+        assert bridge._active == "parity-000"
+        assert store.session_path("parity-001").exists()
+
+        # Select：deva 的菜单项是 cf.multiSelect（英文 Select），进入多选并选中被右键行。
+        row1 = _find_item(window.contentItem(), "threadRow1")
+        _click(window, row1, Qt.RightButton)
+        _pump(qapp, 0.3)
+        assert window.property("ctxSessionId") == "parity-001"
+        _click(window, _menu_items(window)[2])
+        _pump(qapp, 0.4)
+        selected = _as_list(window.property("selectedSessions"))
+        print(
+            "AFTER_SELECT"
+            f" selectMode={window.property('selectMode')}"
+            f" selected={selected}"
+            f" active={bridge._active!r}"
+        )
+        assert window.property("selectMode") is True
+        assert selected == ["parity-001"]
+        assert bridge._active == "parity-000", "Select 是多选入口，不切换当前会话（deva UseThreadSelect）"
+        _click(window, _find_item(window.contentItem(), "selectionExit"))
+        _pump(qapp, 0.2)
+
+        # Archive：右键同一非活动行，归档后普通列表 120→119，文件保留且 archived=true。
+        row1 = _find_item(window.contentItem(), "threadRow1")
+        _click(window, row1, Qt.RightButton)
+        _pump(qapp, 0.3)
+        assert window.property("ctxSessionId") == "parity-001"
+        _click(window, _menu_items(window)[3])
+        _pump(qapp, 0.6)
+        archived_meta = store.load_session("parity-001")
+        print(
+            "AFTER_ARCHIVE"
+            f" sessions={len(session_rows(store))}"
+            f" archived={bool(archived_meta.archived)}"
+            f" active={bridge._active!r}"
+            f" file_exists={store.session_path('parity-001').exists()}"
+        )
+        assert len(session_rows(store)) == 119
+        assert archived_meta.archived is True
+        assert store.session_path("parity-001").exists()
+        assert bridge._active == "parity-000"
+        archived = window.property("archivedSessions")
+        assert len(archived) == 1 and archived[0]["id"] == "parity-001"
     finally:
         ticker.stop()
         window.close()
