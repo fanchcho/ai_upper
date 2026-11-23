@@ -1,0 +1,24 @@
+7be5e48 native-integration (windows-2025, windows-x86, false, ["pyserial==3.5"]) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: build.log. No artifacts will be uploaded.
+7be5e48 native-integration (windows-2025, windows-x86_64, true) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+7be5e48 native-integration (windows-11-arm, windows-arm64, true) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+7be5e48 native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySide6-Essentials==6.6.3.1", "... FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+1d1afb8 native-integration (windows-11-arm, windows-arm64, true) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+1d1afb8 native-integration (windows-2025, windows-x86_64, 3.8.10, true, ["PySide6-Essentials==6.6.3.1", "... FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+1d1afb8 native-integration (windows-2025, windows-x86_64, true) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: run.log. No artifacts will be uploaded.
+1d1afb8 native-integration (windows-2025, windows-x86, false, ["pyserial==3.5"]) FAILED_STEPS ['Unit tests']
+ANNOTATION Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ANNOTATION No files were found with the provided path: build.log. No artifacts will be uploaded.

@@ -215,3 +215,31 @@ AI_UPPER_HOME=/tmp/ai-upper-merged-body-2x QT_SCALE_FACTOR=2 .venv/bin/python ou
 证据：[1x原始结果](merged-review/body-1x/results.json)、[2x原始结果](merged-review/body-2x/results.json)、
 [真实操作探针](merged-review/body_probe.py)、[代码横向CSS原文](merged-review/code-source.log)、[列表CSS](merged-review/list-source.log)。
 代码横向滚动、E4图标、E3组合布局尚未实现；这属于明确的实现缺口，没有用“已核对”替代修复完成。
+
+### 并入5：长消息/连续消息性能与 CI — 本地测量完成，CI尚未最终收敛
+
+性能使用上节同一真实QML壳探针：`perf_counter`计时覆盖set_markdown、attach、processEvents和首张grabWindow；
+不把固定sleep算进加载耗时。随后60次不同contentY位置，每次processEvents+同步grabWindow。
+120条使用实际Message对象（user/assistant交替）和生产transcript_markdown拼接，非仅复制标题冒充会话。
+
+| 负载 | 字符数 | 加载/排版/首帧抓取 ms | 文档高度 px | 60次滚动抓取 ms | 每步中位/最大 ms |
+|---|---:|---:|---:|---:|---:|
+| 单条400段超长消息 | 72688 | 132.801 | 23925.5 | 229.677 | 3.775 / 4.435 |
+| 120条连续消息 | 25748 | 64.581 | 19448.375 | 157.961 | 2.638 / 3.028 |
+
+这是本机offscreen软件渲染的一次测量，**不是显示器FPS或用户输入延迟**；未声称跨平台性能结论。
+1x/2x均为独立进程，无截图进入对话上下文。原始值在body-1x/results.json，产品代码未变，无“优化前后”数字可报。
+
+额外既有修复回归：
+`AI_UPPER_HOME=/tmp/ai-upper-merged-existing .venv/bin/python -m pytest app/tests/test_provider_headers.py app/tests/test_qml_shell.py -q -ra > out/merged-review/existing-fixes-tests.log 2>&1; echo rc=$?`。
+**60 passed in 16.82s，0 skipped/failed/error，rc=0**，覆盖403服务商原因文案、壳入口、滚动条真实wheel/drag等现有判据；不重复开发。
+
+CI通过GitHub公开REST API查询 `repos/fanchcho/ai_upper/actions/runs?branch=develop&per_page=15`，
+再读各run jobs_url的job和step状态，命令/查询结果在[ci-query.log](merged-review/ci-query.log)、
+[ci-jobs.log](merged-review/ci-jobs.log)、[失败步骤](merged-review/ci-failed-steps.log)。
+本轮前三个提交的Python3.8–3.13 Build Tool jobs全部success，native jobs仍in_progress/queued，**不能宣称最终全绿**。
+此前7be5e48与其父1d1afb8都已出现Windows x86/x64/py38/arm64的Unit tests失败，
+相同步骤在本轮起点之前存在；只证明不是首次出现，不证明每条失败的根因相同。
+非arm64原始job日志下载返回HTTP403（[原始错误](merged-review/ci-log-fetch.log)），因此确切失败测试名/堆栈**未验证**；
+没有把所有Windows失败统归为已知arm64缺轮子，也没有重复排查该平台阻塞。
+本轮`app/src`、`app/tests`、`.github/workflows`相对起点无最终修改，尚未观察到可归因本轮的新失败，但结论以CI未结束为限。
