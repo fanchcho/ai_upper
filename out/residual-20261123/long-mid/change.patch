@@ -1,0 +1,56 @@
+diff --git a/app/src/qml/Main.qml b/app/src/qml/Main.qml
+index 971980c..c583981 100644
+--- a/app/src/qml/Main.qml
++++ b/app/src/qml/Main.qml
+@@ -64,8 +64,11 @@ ApplicationWindow {
+     // 交互态页面：deva 截图的鼠标停在 (200,700)，落在第 11 行（y=56+54×11=650..703）；
+     // 只有列表页会照原版显示该行 hover，设置页/弹层/确认层不造悬停。
+     // `hover-thread` 原图指针不在任何行上（probe-hover.log 仅 42 px 噪声），因此保持 -1。
+-    property int forceHoverRow: (page === "chat" || page === "search-open"
+-                                 || page === "focus-composer" || page === "long-mid"
++    // long-mid 的截图指针仍在窗口 y700；随 contentY 绑定可见行，不能固定到已滚走的第 11 行。
++    property int forceHoverRow: page === "long-mid"
++                               ? Math.floor((sessionList.contentY + 700 - sessionList.y) / 54)
++                               : (page === "chat" || page === "search-open"
++                                 || page === "focus-composer"
+                                  || page === "long-bottom" || page === "dark-chat") ? 11 : -1
+     // 输入区焦点态：focus-composer 页要让输入卡片真的拿到键盘焦点，
+     // 原版此时边框从 #d5d5db 变 #5b5bd6（CDP 实测 border-color）。
+diff --git a/app/tests/test_qml_sidebar.py b/app/tests/test_qml_sidebar.py
+index 00a4e73..6f8ac61 100644
+--- a/app/tests/test_qml_sidebar.py
++++ b/app/tests/test_qml_sidebar.py
+@@ -99,3 +99,33 @@ def test_sidebar_rows_match_deva_bounds_and_states(qapp, tmp_path, monkeypatch):
+         ticker.stop()
+         window.close()
+         engine.deleteLater()
++
++
++def test_long_mid_hover_tracks_the_visible_row_after_scrolling(qapp, tmp_path, monkeypatch):
++    import test_qml_window_controls as window_test
++
++    sessions = [(f"s-{index:03d}", f"会话 {index:03d}") for index in range(120)]
++    window, _bridge, ticker, engine = window_test._build_window(
++        tmp_path, monkeypatch, sessions=sessions
++    )
++    try:
++        window.setProperty("page", "long-mid")
++        window_test._pump(qapp, 0.8)
++        scroller = window_test._find_item(window.contentItem(), "sessionList")
++        assert scroller.property("contentY") == pytest.approx(1386)
++        # 固定截图指针在窗口 y700；滚动后它落在 y668..721 的可见行。
++        assert _pixel(window.grabWindow(), 70, 680) == (236, 236, 237)
++
++        scroller.setProperty("contentY", 1406)
++        window_test._pump(qapp, 0.2)
++        image = window.grabWindow()
++        assert _pixel(image, 70, 680) == (236, 236, 237)
++        assert _pixel(image, 70, 710) == (247, 247, 248)
++
++        window.setProperty("page", "chat")
++        window_test._pump(qapp, 0.2)
++        assert _pixel(window.grabWindow(), 70, 660) == (236, 236, 237)
++    finally:
++        ticker.stop()
++        window.close()
++        engine.deleteLater()

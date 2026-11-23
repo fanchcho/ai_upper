@@ -1,0 +1,9 @@
+.....................................................                    [100%]
+53 passed in 34.25s
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:1002:17: TypeError: Cannot read property 'width' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:1023:17: TypeError: Cannot read property 'width' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:1024:17: TypeError: Cannot read property 'y' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:351:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:402:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:765:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:764:9: TypeError: Cannot read property 'width' of null

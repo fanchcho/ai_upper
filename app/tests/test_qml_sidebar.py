@@ -99,3 +99,33 @@ def test_sidebar_rows_match_deva_bounds_and_states(qapp, tmp_path, monkeypatch):
         ticker.stop()
         window.close()
         engine.deleteLater()
+
+
+def test_long_mid_hover_tracks_the_visible_row_after_scrolling(qapp, tmp_path, monkeypatch):
+    import test_qml_window_controls as window_test
+
+    sessions = [(f"s-{index:03d}", f"会话 {index:03d}") for index in range(120)]
+    window, _bridge, ticker, engine = window_test._build_window(
+        tmp_path, monkeypatch, sessions=sessions
+    )
+    try:
+        window.setProperty("page", "long-mid")
+        window_test._pump(qapp, 0.8)
+        scroller = window_test._find_item(window.contentItem(), "sessionList")
+        assert scroller.property("contentY") == pytest.approx(1386)
+        # 固定截图指针在窗口 y700；滚动后它落在 y668..721 的可见行。
+        assert _pixel(window.grabWindow(), 70, 680) == (236, 236, 237)
+
+        scroller.setProperty("contentY", 1406)
+        window_test._pump(qapp, 0.2)
+        image = window.grabWindow()
+        assert _pixel(image, 70, 680) == (236, 236, 237)
+        assert _pixel(image, 70, 710) == (247, 247, 248)
+
+        window.setProperty("page", "chat")
+        window_test._pump(qapp, 0.2)
+        assert _pixel(window.grabWindow(), 70, 660) == (236, 236, 237)
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()

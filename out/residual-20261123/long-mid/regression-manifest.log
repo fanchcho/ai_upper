@@ -1,0 +1,6 @@
+2a753b4ec167b07f0c05921373da1f315f9ce04624b476905ed7b14b67b7ce96 app/src/markdown/document.py
+39d2b14670a90d8ee7b307462816a22a9b07b1ba4730ff2a3093cd774a59ad97 app/src/qml/Main.qml
+34d7a5df039408fef062eb881875ecfc2bc99c45f33514d4112085d93e41919f app/tests/test_markdown_body.py
+a155f259f39a3436b30d6e177774dfc844762f1ccb3c720a9a01aaaeefadb9b7 app/tests/test_markdown_document.py
+7da26d787eba7a8e345f608e48dfed31335d378c135663b60a948fc968bd0156 app/tests/test_qml_sidebar.py
+existing detached test checkout only; no new branch, no commits or history rewrites there

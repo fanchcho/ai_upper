@@ -1,0 +1,9 @@
+..                                                                       [100%]
+2 passed in 10.31s
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:999:17: TypeError: Cannot read property 'width' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:1020:17: TypeError: Cannot read property 'width' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:1021:17: TypeError: Cannot read property 'y' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:348:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:399:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:762:9: TypeError: Cannot read property 'height' of null
+file:///home/agent/shared_workspace/ai_upper/.tmp/residual-20261123/baseline-qml/Main.qml:761:9: TypeError: Cannot read property 'width' of null

@@ -1,0 +1,2 @@
+before {'total': 142100, 'percent': 13.538490853658537, 'qml_hover': [0, None], 'deva_hover': [54, [668, 721]]}
+after {'total': 130345, 'percent': 12.418540396341463, 'qml_hover': [54, [668, 721]], 'deva_hover': [54, [668, 721]]}

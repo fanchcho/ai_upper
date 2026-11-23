@@ -1,0 +1,31 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_long_mid_hover_tracks_the_visible_row_after_scrolling __________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x3b7be700) at 0xffffb7378dc0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-47/test_long_mid_hover_tracks_the0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffb7235940>
+
+    def test_long_mid_hover_tracks_the_visible_row_after_scrolling(qapp, tmp_path, monkeypatch):
+        import test_qml_window_controls as window_test
+    
+        sessions = [(f"s-{index:03d}", f"会话 {index:03d}") for index in range(120)]
+        window, _bridge, ticker, engine = window_test._build_window(
+            tmp_path, monkeypatch, sessions=sessions
+        )
+        try:
+            window.setProperty("page", "long-mid")
+            window_test._pump(qapp, 0.8)
+            scroller = window_test._find_item(window.contentItem(), "sessionList")
+            assert scroller.property("contentY") == pytest.approx(1386)
+            # 固定截图指针在窗口 y700；滚动后它落在 y668..721 的可见行。
+>           assert _pixel(window.grabWindow(), 70, 680) == (236, 236, 237)
+E           assert (247, 247, 248) == (236, 236, 237)
+E             
+E             At index 0 diff: 247 != 236
+E             Use -v to get more diff
+
+app/tests/test_qml_sidebar.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_sidebar.py::test_long_mid_hover_tracks_the_visible_row_after_scrolling
+1 failed in 5.20s

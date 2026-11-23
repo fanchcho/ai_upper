@@ -64,8 +64,11 @@ ApplicationWindow {
     // 交互态页面：deva 截图的鼠标停在 (200,700)，落在第 11 行（y=56+54×11=650..703）；
     // 只有列表页会照原版显示该行 hover，设置页/弹层/确认层不造悬停。
     // `hover-thread` 原图指针不在任何行上（probe-hover.log 仅 42 px 噪声），因此保持 -1。
-    property int forceHoverRow: (page === "chat" || page === "search-open"
-                                 || page === "focus-composer" || page === "long-mid"
+    // long-mid 的截图指针仍在窗口 y700；随 contentY 绑定可见行，不能固定到已滚走的第 11 行。
+    property int forceHoverRow: page === "long-mid"
+                               ? Math.floor((sessionList.contentY + 700 - sessionList.y) / 54)
+                               : (page === "chat" || page === "search-open"
+                                 || page === "focus-composer"
                                  || page === "long-bottom" || page === "dark-chat") ? 11 : -1
     // 输入区焦点态：focus-composer 页要让输入卡片真的拿到键盘焦点，
     // 原版此时边框从 #d5d5db 变 #5b5bd6（CDP 实测 border-color）。
