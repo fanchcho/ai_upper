@@ -674,6 +674,15 @@ $ grep -E "passed|failed|skipped|error" /tmp/t2.log
 44 passed in 0.17s
 ```
 
+指定命令双文件同跑（本轮的最终验收命令）：
+
+```
+$ H=$(mktemp -d /tmp/ours-pytest-XXXXXX); AI_UPPER_HOME=$H .venv/bin/python -m pytest app/tests/test_qml_shell.py app/tests/test_qml_settings_models.py -q > /tmp/ours-pytest.log 2>&1; echo rc=$?
+rc=0
+$ tail -1 /tmp/ours-pytest.log
+92 passed in 10.65s
+```
+
 
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
