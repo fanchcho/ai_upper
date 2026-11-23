@@ -1145,7 +1145,7 @@ ghead-8.75pt-y5.png          (13, 69, 11, 23, 220)   # 8.75pt → 12px，但整�
 | 项 | 结果 | 日志 |
 |---|---|---|
 | 单页差异（`page_diff18.py`，只取 model-picker 行） | deva `946b07de…` / QML `0c0c8905…`，**109751 px / 10.46%，max=248** | `logs/d-page-diff18-final.log` |
-| chat / dark-chat 最终回归 | chat `058ddf8d…` / dark-chat `27889675…`；D 轮 105402 / 10.04% 与 103930 / 9.90%，不是 B 轮的 `dc133011…` / `3aa7be54…` | `logs/d-page-diff18-final.log` |
+| chat / dark-chat 最终回归 | chat `058ddf8d…` / dark-chat `27889675…`；最终 `105402 / 10.04%` 与 `103930 / 9.90%`，不是 B 轮的 `dc133011…` / `3aa7be54…` | `logs/d-page-diff18-final.log` |
 | 真实鼠标探针（model + thinking 两模式） | 打开 → 内容正确 → 四边聚焦 → 点行生效并收起 | `logs/c6-model-picker-probe.log`（`.err` 0 字节） |
 | `app/tests/test_qml_model_picker.py` | **3 passed**，rc=0 | `logs/pytest-model-picker-final.log` |
 | 受影响测试（picker + chat-files ×2 + shell + packaging + settings-models） | **169 passed**，rc=0 | `logs/pytest-affected-final.log` |
