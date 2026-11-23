@@ -560,6 +560,48 @@ $ sed -n '$p' /tmp/tp4.log
 `SettingsModal.qml` 的改动 stash 掉后重跑，仍在同一行崩溃（`rc=139`），
 故为环境中既有的 Qt 交互测试问题，与本次改动无关；本轮涉及的三套测试单跑全绿。
 
+#### 4.4.2 settings-models 单页复测（2026-11-23，本轮无代码改动）
+
+本轮只复测 `settings-models` 单页：deva 基线复用 `out/latest-parity/deva/settings-models-deva.png`，QML 侧用 `/tmp` 临时 home 重拍；改前值取本节 §4.4.1 的现有记录 `30.85%`。
+
+```
+$ TMPHOME=$(mktemp -d /tmp/ai-upper-sm-XXXXXX); cp -a /tmp/fx-qml-home/. "$TMPHOME"/
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/settings-models-after.png "$TMPHOME" config.json > /tmp/shot-after.out 2> /tmp/shot-after.err; echo rc=$?
+rc=0
+$ sed -n '1p' /tmp/shot-after.out
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/ai-upper-sm-OMMlnq png=/tmp/settings-models-after.png size=1280x820
+$ wc -c < /tmp/shot-after.err
+0
+$ identify -format '%wx%h %b' /tmp/settings-models-after.png
+1280x820 104913B
+$ md5sum /tmp/settings-models-after.png out/latest-parity/qml/settings-models.png
+487b0f063cec7387802856ebeacdf9d4  /tmp/settings-models-after.png
+487b0f063cec7387802856ebeacdf9d4  out/latest-parity/qml/settings-models.png
+```
+
+```
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/after-diff18.txt 2>&1; echo rc=$?
+rc=0
+$ grep 'settings-models' /tmp/after-diff18.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 487b0f063cec7387802856ebeacdf9d4  132243  104913  323783  30.85% max=237 same=False
+```
+
+改前 `30.85%` → 改后 `30.85%`（0.00pp，0 px）。逐值核对（Providers 标题 / 28×28 加号 / 描边容器 / 52px 行五要素 / 行下钻）后确认结构已与 deva 一致，**本轮无代码改动**。
+
+**受影响测试（本轮）**
+
+```
+$ AI_UPPER_HOME=/tmp/ai-upper-test-shell-nOa4UU .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/test-qml-shell.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-shell.log
+47 passed in 0.49s
+
+$ AI_UPPER_HOME=/tmp/ai-upper-test-settings-VhB34F .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/test-qml-settings-models.log 2>&1; echo rc=$?
+rc=0
+$ sed -n '$p' /tmp/test-qml-settings-models.log
+44 passed in 0.17s
+```
+
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
 **交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的
