@@ -1,0 +1,62 @@
+.model-pick__menu.cf-mp__menu {
+  display: flex;
+  flex-direction: column;
+  max-height: min(460px, 70vh);
+  overflow: hidden;
+}
+/* position 供 ModelMenu 按 offsetTop 定位当前模型 */
+.cf-mp__list {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.cf-mp__ghead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 9px 8px 3px;
+  background: var(--bg-elevated);
+  font-size: 11.5px;
+  color: var(--fg-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cf-mp__group:first-child .cf-mp__ghead {
+  padding-top: 4px;
+}
+/* 勾选位固定宽度，选中与未选中的行宽度一致 */
+.cf-mp__check {
+  display: inline-flex;
+.model-pick__menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  z-index: 50;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Chat：模型选择下拉 ---------- */
+.model-pick {
+  position: relative;
+}
+.model-pick__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+.model-pick__menu {
+  right: 0;
+  /* 菜单宽度按内容自适应（min~max 之间），使最长模型名单行铺开、短名不留空。 */
+  min-width: 248px;
+  max-width: 360px;
+  width: max-content;
+  max-height: 340px;
+  overflow-y: auto;
+}
+82:  --shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+149:  --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);

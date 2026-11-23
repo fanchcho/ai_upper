@@ -120,3 +120,32 @@ c1fdbf1c3e407c5fc42ce3871ecbb50140129f1a	refs/heads/develop
 五项结构在当前HEAD已经实现，本轮新增三种provider状态与真实点击下钻/Wrench回归验证，保留全部既有产品实现与44个投影测试。指定测试：Shell 49 passed/rc0，Models 47 passed/rc0，均0 skipped/failed/error；未再跑全量。
 
 只重拍settings-models，数据仍来自settings_models.py投影。详情与完整源码/命令/像素及测试证据见 [latest-parity报告 §4.4.5](latest-parity/REPORT.md#445-models-开发收口以当前实现和运行态重新验收2026-11-23)。其他原五项未闭环状态不因此关闭。
+
+## 并入项复核（2026-11-23，起点 7be5e480bc7d0d3037d5182ab9f40c8576c27cbe）
+
+起点 develop 与远端一致，tracked 干净；本轮只修实测缺口，已验证项不重做。Models 沿用
+`7be5e48`：历史31.25%→当前28.629668445%，上一轮前后同值；Shell49/Models47 passed，均rc0。
+默认QML入口和打包启动沿用 `out/qwebengine-remove/logs/final-packaged-launch2.log`：
+HEAD=4bea1ba，命令 `AI_UPPER_HEADLESS=1 AI_UPPER_HOME=/tmp/qwe-final-pkg-home AI_UPPER_QML_SHOT=/tmp/qwe-final-pkg2.png dist/ai_upper/ai_upper`，
+原文 `QML OK ...`、`EXIT=0`；这是历史产物证据，本轮不声称重新构建或启动过。
+
+### 并入1：模型弹层、effort、ContextRing — 已具备，旧缺陷已不存在
+
+命令：`AI_UPPER_HOME=/tmp/ai-upper-merged-picker .venv/bin/python -m pytest app/tests/test_qml_model_picker.py app/tests/test_qml_context_ring.py -q -s -ra > out/merged-review/picker-tests.log 2>&1; echo rc=$?`。
+结果 **8 passed in 44.47s，0 skipped/failed/error，rc=0**；真实点击模型、effort、High档位、ContextRing，验证互斥和状态写回。
+额外命令：`AI_UPPER_HOME=/tmp/ai-upper-merged-picker-probe .venv/bin/python out/merged-review/picker_probe.py > out/merged-review/picker-probe.log 2>&1; echo rc=$?`，rc0。
+
+| 核对点 | 实测 | 结论 |
+|---|---|---|
+| 分组/模型/选中 | Anthropic / deepseek-v4.1-flash；activeRef=anthropic:deepseek-v4.1-flash，已有accent勾选渲染 | 一致，数据投影驱动 |
+| effort接线 | 模型菜单与thinking菜单分别打开；选择High后activeEffort=high，菜单关闭 | 旧误接线不存在 |
+| 输入卡片四边 | top/bottom/left/right全为#5b5bd6，即(91,91,214) | 一致 |
+| 面板位置/大小 | x847/y688/w248/h65，row h27；相对chip定位+2px | 与参考图一致 |
+| 阴影 | deva CSS 0 6px 24px；QML offsetY6/blur20 | 原先为补偿Qt与Chrome模糊核不同的已验证实现；参数不相等，不重做既有像素校准 |
+| ContextRing | 几何、tooltip/card切换、无读数隐藏、与菜单互斥均经真实点击通过 | 已具备 |
+
+只重拍model-picker：`AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh model-picker out/merged-review/model-picker.png /tmp/ai-upper-residual-20261123 config.json > out/merged-review/picker-shot.log 2>&1; echo rc=$?`，rc0。
+像素命令：`python3 out/residual-20261123/measure_page.py out/merged-review/model-picker.png model-picker > out/merged-review/picker-metrics.json 2>&1; echo rc=$?`，rc0。
+当前117074px / **11.154153963%**。本项未改产品代码，本轮画面无新增修复收益；旧图差异及MD5记录在
+[图片数值](merged-review/picker-image-summary.log)，不能把历史裸alt修复的降幅算成本项收益。
+源码摘录：[picker-source.log](merged-review/picker-source.log)；操作输出：[picker-probe.log](merged-review/picker-probe.log)。
