@@ -342,21 +342,22 @@ def test_table_body_text_is_not_bold_while_the_header_is(qapp):
     assert body_font.bold() is False
 
 
-def test_table_cells_use_text_indent_and_fixed_row_height(qapp):
+def test_table_cells_use_transparent_indent_and_fixed_row_height(qapp):
     """CSS 的 10×6 padding 由块格式实现，保证 QML 背景铺满整格。
 
     QQuickTextEdit 只画块背景、不画单元格背景；因此单元格 padding 归零，
-    左右 10px 改用 textIndent，行高用 34.45px（13×1.65 + 12 + 1）固定。
+    左右 10px 改用块首透明 NBSP 占位，行高用 34.45px（13×1.65 + 12 + 1）
+    固定，右边距留 1px 给单元格边框。
     """
     document = render("| a |\n| - |\n| 1 |")
     cell = cell_format(tables(document)[0].cellAt(1, 0))
     assert (cell.leftPadding(), cell.rightPadding()) == (0.0, 0.0)
     assert (cell.topPadding(), cell.bottomPadding()) == (0.0, 0.0)
     block = tables(document)[0].cellAt(1, 0).firstCursorPosition().blockFormat()
-    # Qt 的块背景只覆盖行框，不覆盖块边距；10px 左内边距改用 textIndent，
-    # 行高由单元格内一个全透明的 23px 零宽字符撑到约 34px 后再留 1px 边框。
-    assert (block.leftMargin(), block.rightMargin()) == (0.0, 0.0)
-    assert block.textIndent() == 10.0
+    # Qt 的 textIndent 会从块布局宽度里扣掉，块背景右侧会露出白槽；
+    # 左缩进改为块首透明 NBSP，行高由一个全透明的 23px 零宽字符撑到约 34px。
+    assert (block.leftMargin(), block.rightMargin()) == (0.0, 1.0)
+    assert block.textIndent() == 0.0
     assert block.lineHeightType() == QtGui.QTextBlockFormat.LineHeightTypes.FixedHeight.value
     assert block.lineHeight() == 34.45
 
@@ -689,9 +690,9 @@ def test_a_table_with_many_rows_fills_every_row_and_column(qapp):
     for row in range(table.rows()):
         for column in range(table.columns()):
             expected = ("列一", "列二")[column] if row == 0 else "r%d-%s" % (row, "ab"[column])
-            # 每个单元格首字符是撑行高的透明零宽字符，不属于可见文本。
+            # 每个单元格首部是撑行高/缩进的透明字符，不属于可见文本。
             text = table.cellAt(row, column).firstCursorPosition().block().text()
-            assert text.lstrip("\u200b") == expected
+            assert text.lstrip("\u200b\u00a0") == expected
 
 
 def test_every_cell_gets_its_own_border_brush_and_style(qapp):

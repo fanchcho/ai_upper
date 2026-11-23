@@ -478,6 +478,7 @@ class _Renderer:
         self._cell_block_formats = {}
         self._cell_char_formats = {}
         self._row_height_chars = {}
+        self._cell_pad_chars = {}
 
     # ── 基础 ──────────────────────────────────────────────────────────────
     def color(self, value: str) -> Any:
@@ -832,9 +833,9 @@ class _Renderer:
             cell_fmt = QTextTableCellFormat()
             # CSS 的 10×6 padding：单元格内边距全部归零，因为 Qt 的
             # 单元格/块背景都只画在内容矩形上，任何 cell padding 都会留下
-            # 白边。左右 10px 改由块格式的 textIndent 实现（见下），上下
-            # 6px 与行高合并成固定 34.45px，使块背景能铺满整格（deva DOM:
-            # th bg rgb(247,247,248)，even td rgba(0,0,0,0.043)）。
+            # 白边。左右 10px 改用块首 3 个透明 NBSP（13px 字，约 10px）
+            # 占位，上下 6px 与行高合并成固定 34.45px，使块背景能铺满整格
+            # （deva DOM: th bg rgb(247,247,248)，even td rgba(0,0,0,0.043)）。
             cell_fmt.setLeftPadding(0.0)
             cell_fmt.setRightPadding(0.0)
             cell_fmt.setTopPadding(0.0)
@@ -882,22 +883,27 @@ class _Renderer:
                 # CSS: th/td padding 6px + line-height 21.45px + 1px 边框
                 # = 34.45px。Qt 的 ProportionalHeight 对单行块只影响行距，
                 # 不会撑满 cell 高度；用 FixedHeight 才能把背景铺满一行。
+                # 不能用 textIndent 做左缩进：Qt 会把它从块布局宽度里扣掉，
+                # 块背景右侧又露出 10px 白边；改用块首透明 NBSP 占位。
+                # 右边距留 1px 给单元格右边框，避免块背景盖住分隔线。
                 block_fmt.setLineHeight(
                     (13.0 * 1.65 + 12.0 + 1.0) * self.style.scale,
                     QTextBlockFormat.LineHeightTypes.FixedHeight.value)
                 block_fmt.setLeftMargin(0.0)
-                block_fmt.setRightMargin(0.0)
+                block_fmt.setRightMargin(1.0)
                 block_fmt.setTopMargin(0.0)
                 block_fmt.setBottomMargin(0.0)
-                block_fmt.setTextIndent(10.0 * self.style.scale)
+                block_fmt.setTextIndent(0.0)
                 if background is not None:
                     block_fmt.setBackground(background)
                 self._cell_block_formats[block_key] = block_fmt
             cell_cursor.setBlockFormat(block_fmt)
             # Qt 在表格单元格里会忽略 QTextBlockFormat 的固定行高，背景只
-            # 覆盖 13/19px 的内容高度。这里塞一个零宽、全透明的 23px 字符：
+            # 覆盖 13/19px 的内容高度。这里先塞一个零宽、全透明的 23px 字符：
             # 它把单行块的行框撑到 34px（deva DOM 的 tr 高 34.44px），块背景
-            # 因此能铺满整行 301.67×34；字符宽 0 且 alpha=0，不改变可见文本。
+            # 因此能铺满整行；字符宽 0 且 alpha=0，不改变可见文本。
+            # 随后 3 个透明 NBSP 只负责左侧 10px 的视觉缩进，同时让块布局
+            # 达到整格宽度，QML 画出的块背景才不会在右侧留下白槽。
             spacer = self._row_height_chars.get(bool(header_row))
             if spacer is None:
                 spacer = QTextCharFormat()
@@ -905,6 +911,12 @@ class _Renderer:
                 spacer.setForeground(QColor(0, 0, 0, 0))
                 self._row_height_chars[bool(header_row)] = spacer
             cell_cursor.insertText("\u200b", spacer)
+            pad = self._cell_pad_chars.get(bool(header_row))
+            if pad is None:
+                pad = QTextCharFormat(char_fmt)
+                pad.setForeground(QColor(0, 0, 0, 0))
+                self._cell_pad_chars[bool(header_row)] = pad
+            cell_cursor.insertText("\u00a0" * 3, pad)
             self._inline(cell_cursor, cell_nodes or [], char_fmt)
 
     # ── 代码块 ────────────────────────────────────────────────────────────
