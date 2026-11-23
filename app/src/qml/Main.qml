@@ -161,6 +161,26 @@ ApplicationWindow {
         }
     }
 
+    // 滚动条：原版 app.css `::-webkit-scrollbar`（width 8 / thumb 圆角 999 /
+    // border 2px transparent + background-clip: content-box / track 透明）。
+    // 用 QML ScrollBar 附件挂到 Flickable，拖动与滚轮由控件原生处理；
+    // hover 只改滑块颜色，形态与 deva 的 :hover 规则一致（--fg-subtle）。
+    component DevaScrollBar: ScrollBar {
+        id: devaBar
+        width: Theme.scrollbarWidth
+        padding: Theme.scrollbarInset
+        policy: ScrollBar.AsNeeded
+        hoverEnabled: true
+        background: Rectangle { color: "transparent" }
+        contentItem: Rectangle {
+            implicitWidth: Theme.scrollbarWidth - 2 * Theme.scrollbarInset
+            implicitHeight: 26
+            radius: Theme.radiusFull
+            color: (devaBar.pressed || devaBar.hovered) ? Theme.scrollbarHover
+                                                        : Theme.scrollbar
+        }
+    }
+
     // 原版 Electron Linux `titleBarOverlay` 的单按钮：32×40 命中区，透明底，hover 时
     // 叠 18/255 黑（原版实拍量得；遮罩压不暗它，因为原生叠加层画在网页之上）。
     //
@@ -452,18 +472,27 @@ ApplicationWindow {
             }
         }
 
-        // 会话列表：行宽 275（栏 300 - 左右各 8 + 行内 12×2 的视觉边距实测为 64..339）
+        // 会话列表：行宽 283（x=8，右缘 291），滚动条占右侧 8px（291..298），
+        // 刚好落在原版 `.cf-list` 的右内边距里、1px 分隔线左侧。
         ListView {
             id: sessionList
             objectName: "sessionList"
-            x: 8
+            x: 0
             y: 56
-            width: 283
+            width: 299
             height: parent.height - 56 - 8
             clip: true
+            leftMargin: 8
+            rightMargin: 8
             model: window.visibleSessions
             spacing: 0
             boundsBehavior: Flickable.StopAtBounds
+
+            // 原版 ::-webkit-scrollbar：8px 宽，thumb 2px 透明内缩后可见 4px。
+            ScrollBar.vertical: DevaScrollBar {
+                objectName: "sidebar-scrollbar"
+            }
+
             // 长列表两张页面：原版同样是滚动位置，但位置由 applyListScroll() 按实测像素摆。
             // 注意 `Component.onCompleted` 时 Python 还没写 page（_select_page 在 initial() 之后），
             // 所以这里只能靠 page 变化触发；onCompleted 保留给 contentHeight 已就绪的场合。
@@ -474,7 +503,8 @@ ApplicationWindow {
                 objectName: "threadRow" + index
                 required property int index
                 required property var modelData
-                width: ListView.view.width
+                x: 8
+                width: ListView.view.width - 16
                 title: modelData.title || ""
                 time: modelData.time || ""
                 persona: modelData.persona || "general"
@@ -730,14 +760,15 @@ ApplicationWindow {
             }
         }
 
-        // 消息区：780 列居中，正文 696 宽，左头像 32。
+        // 消息区：Flickable 占满正文栏（滚动条贴窗口右缘，同原版 `.cf-msgs`），
+        // 内部仍是 780 列居中、正文 696 宽、左头像 32。
         Flickable {
             id: bodyScroll
             objectName: "bodyScroll"
             visible: window.sessions.length > 0 && !window.settingsOpen
-            x: (parent.width - 780) / 2
+            x: 0
             y: 27
-            width: 780
+            width: parent.width
             height: parent.height - 27 - 175
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -746,11 +777,16 @@ ApplicationWindow {
                             + (cardsCol.visible ? cardsCol.height + 20 : 0)
             topMargin: 20
 
+            // 原版 ::-webkit-scrollbar：8px 宽，thumb 2px 透明内缩后可见 4px，贴正文栏右缘。
+            ScrollBar.vertical: DevaScrollBar {
+                objectName: "body-scrollbar"
+            }
+
             TextEdit {
                 id: bodyView
                 objectName: "bodyView"
-                // 消息头（头像列 32 + gap 12）之外是 696 的正文块
-                x: 56
+                // 消息头（头像列 32 + gap 12）之外是 696 的正文块；列宽 780 在正文栏内居中。
+                x: (bodyScroll.width - Theme.mainWidth) / 2 + 56
                 y: 20
                 width: 696
                 readOnly: true
@@ -771,7 +807,7 @@ ApplicationWindow {
             Column {
                 id: cardsCol
                 objectName: "cardsCol"
-                x: 56
+                x: (bodyScroll.width - Theme.mainWidth) / 2 + 56
                 y: bodyView.y + bodyView.implicitHeight + 16
                 width: 696
                 spacing: 12

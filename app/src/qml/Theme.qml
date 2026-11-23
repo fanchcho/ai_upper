@@ -63,7 +63,13 @@ QtObject {
     // 设置页服务商启用点用 success，缺密钥警告三角用 warning。
     readonly property color success: dark ? "#51cf66" : "#2f9e44"
     readonly property color warning: dark ? "#fcc419" : "#d9860b"
+    // 滚动条：app.css `::-webkit-scrollbar` width 8px；thumb 常态 `--scrollbar`、
+    // hover `--fg-subtle`；`border: 2px solid transparent` + `background-clip: content-box`
+    // 等价于控制宽 8 + 内缩 2，真正可见的滑块宽 4px；轨道未写规则 → 透明。
     readonly property color scrollbar: dark ? Qt.rgba(1, 1, 1, 0.16) : Qt.rgba(0, 0, 0, 0.18)
+    readonly property color scrollbarHover: fgSubtle
+    readonly property int scrollbarWidth: 8
+    readonly property int scrollbarInset: 2
     readonly property color shadow: Qt.rgba(0, 0, 0, dark ? 0.50 : 0.12)
     readonly property color backdrop: Qt.rgba(0, 0, 0, 0.42)
     // 输入区模型 chip 前的状态点：原版实测 #d97757（浅色/深色同值）。

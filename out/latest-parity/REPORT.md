@@ -1584,3 +1584,10 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
 
 **缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。model-picker 的残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。
+### 5.6 chat 滚动条复测（2026-11-23）
+
+- 源码依据：`apps/desktop/src/renderer/src/styles/app.css:45-62`（`::-webkit-scrollbar` width 8px；thumb `border-radius: var(--radius-full)`、`border: 2px solid transparent` + `background-clip: content-box`；hover `background: var(--fg-subtle)`；track 无规则即透明）；`tokens.css:26` `--radius-full: 999px`、`:81` 浅色 `--scrollbar: rgba(0,0,0,0.18)`、`:51` `--fg-subtle: #8a8a94`、`:148` 深色 `--scrollbar: rgba(255,255,255,0.16)`、`:119` `--fg-subtle: #71717a`。
+- 实现：`app/src/qml/Main.qml` 新增内联 `DevaScrollBar`（真 `ScrollBar` 附件，`policy: AsNeeded`，width 8 / padding 2 / contentItem 可见宽 4 / 圆角 999 / 透明轨道 / hover 换色），挂到 `sessionList` 与 `bodyScroll`，objectName 分别为 `sidebar-scrollbar`、`body-scrollbar`；`Theme.qml` 增加 `scrollbarHover`、`scrollbarWidth`、`scrollbarInset`。
+- 测试：`PATH=.venv/bin:$PATH LD_LIBRARY_PATH=/tmp python -m pytest app/tests/test_qml_shell.py -q > /tmp/t.log 2>&1; echo rc=$?` → `rc=0`，`48 passed in 9.59s`（新增 `test_qml_scrollbars_match_deva_and_scroll`，断言两条滚动条存在、尺寸/配色、滚轮与拖动均改变 contentY）。
+- chat 重拍：`mkdir -p /tmp/qml-sb && LD_LIBRARY_PATH=/tmp PYTHON=.venv/bin/python bash scripts/parity/qml_page_shot.sh chat /tmp/qml-sb/chat.png /tmp/ai-upper-sb > /tmp/shot.out 2> /tmp/shot.err; echo rc=$?` → `rc=0`，`1280x820`，`stderr=0 bytes`。
+- 差异：改前 `129807 px / 12.37%`（`ac72cd597ae44377b608777cbd5e2e81` vs `e83c48be95d0a5dde4cdcb6b5b70928f`，158583 vs 142647 bytes）→ 改后 `119799 px / 11.41%`（`ac72cd597ae44377b608777cbd5e2e81` vs `d7ac856efc22a4ce41369baa0be1e75a`，158583 vs 100242 bytes），max=248。

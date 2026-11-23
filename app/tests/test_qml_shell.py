@@ -688,6 +688,18 @@ def test_skill_toggle_survives_a_later_settings_write(qapp, tmp_path, monkeypatc
     assert {row["id"]: row for row in bridge.extensionRows()}["demo"]["enabled"] is False
 
 
+def test_qml_scrollbars_match_deva_and_scroll(qapp, tmp_path, monkeypatch):
+    """侧栏 / 正文使用真实 QML ScrollBar：8px 轨道、2px 内缩、4px 可见 thumb，
+    常态 rgba(0,0,0,0.18)、hover #8a8a94，且滚轮与拖动都真的改变 contentY。"""
+    from test_qml_scrollbars import (
+        test_scrollbars_exist_and_match_deva_tokens as check_tokens,
+        test_scrollbars_scroll_with_wheel_and_drag as check_scroll,
+    )
+
+    check_tokens(tmp_path / "tokens", monkeypatch, qapp)
+    check_scroll(tmp_path / "scroll", monkeypatch, qapp)
+
+
 def test_delete_current_session_removes_file_and_falls_back(tmp_path, monkeypatch):
     """删除当前会话：文件消失、索引同步，当前会话按列表第一行回退。"""
     bridge, store, _host = _bridge(
