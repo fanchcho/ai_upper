@@ -1263,40 +1263,40 @@ ApplicationWindow {
                     objectName: "effortChip"
                     anchors.right: sendBtn.left
                     anchors.rightMargin: 4
-                    width: 94
+                    // 原版 `EffortPicker.tsx:50-62`：`.chip` 内容自适应（padding-left 4 +
+                    // Lightbulb 13 + 可选 gap 5 + 档位名 + padding-right 8），没有箭头；
+                    // 当前档位是「默认」时不写名字（`current !== 'default'` 才渲染 label）。
+                    // `.chip.cf-mp__effort { padding-left: 4px }`（redesign/model-panel.css:15-17）。
+                    width: 4 + 13 + (effortLabelText.visible ? 5 + effortLabelText.implicitWidth : 0) + 8
                     height: 28
                     y: 2
                     radius: Theme.radius
                     readonly property bool open: window.modelPickerOpen && window.pickerMode === "thinking"
-                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
+                    // 原版 `levels.length === 0` 时整个贴片不出现（EffortPicker.tsx:37）。
+                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
+                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有灯泡 + 可选文案。
                     // 展开态 `.chip.is-open { background: var(--bg-active); color: var(--fg) }`
-                    // （styles/app.css:2874-2877），箭头 `.chip.is-open .chip__caret` 转 180°（:2902）。
+                    // （styles/app.css:2874-2877）。
                     color: open ? Theme.bgActive : "transparent"
                     border.width: 0
                     Icon {
-                        x: 5
+                        x: 4
                         anchors.verticalCenter: parent.verticalCenter
-                        name: IconData.sparkles
+                        // 原版 EffortPicker.tsx:60 用 lucide `Lightbulb`，不是 sparkles。
+                        name: IconData.lightbulb
                         size: 13
                         color: effortChip.open ? Theme.fg : Theme.fgMuted
                     }
                     Text {
-                        x: 23
+                        id: effortLabelText
+                        x: 22
                         anchors.verticalCenter: parent.verticalCenter
                         text: window.effortLabel
+                        visible: text !== ""
                         color: effortChip.open ? Theme.fg : Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 12
                         font.weight: 500
-                    }
-                    Icon {
-                        anchors.right: parent.right
-                        anchors.rightMargin: 5
-                        anchors.verticalCenter: parent.verticalCenter
-                        name: IconData.chevronDown
-                        size: 13
-                        rotation: effortChip.open ? 180 : 0
-                        color: effortChip.open ? Theme.fg : Theme.fgMuted
                     }
                     MouseArea {
                         anchors.fill: parent
@@ -1323,36 +1323,36 @@ ApplicationWindow {
                     objectName: "modelChip"
                     anchors.right: effortChip.left
                     anchors.rightMargin: 4
-                    width: 172
+                    // 原版 `ModelPanel.tsx:70-79`：模型贴片只写模型名（不放服务商色点），
+                    // `.chip` 内容自适应：padding-left 8 + label（max-width 168，省略号）+
+                    // gap 5 + caret 13 + padding-right 4（redesign/model-panel.css:12-14）。
+                    // 宽度自适应后，贴片右缘与弹层右缘一起回到 deva 的 x≈1094。
+                    width: 8 + Math.min(modelLabelText.implicitWidth, 168) + 5 + 13 + 4
                     height: 28
                     y: 2
                     radius: Theme.radius
                     readonly property bool open: window.modelPickerOpen && window.pickerMode === "model"
-                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有状态点 + 文案 + 箭头。
+                    // 原版 chip 无边框（CDP 实测 border-width 0）：只有文案 + 箭头。
                     // 展开态同 `.chip.is-open`：底 `--bg-active`、文字转 `--fg`、箭头翻转。
                     color: open ? Theme.bgActive : "transparent"
                     border.width: 0
-                    // 状态点 7px #d97757
-                    Rectangle {
-                        x: 9
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 7
-                        height: 7
-                        radius: 3.5
-                        color: Theme.statusDot
-                    }
                     Text {
-                        x: 21
+                        id: modelLabelText
+                        x: 8
                         anchors.verticalCenter: parent.verticalCenter
+                        // `.chip__label { max-width: 168px; text-overflow: ellipsis }`
+                        // （styles/app.css:2883-2888）。
+                        width: Math.min(implicitWidth, 168)
                         text: window.modelLabel
                         color: modelChip.open ? Theme.fg : Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 12
                         font.weight: 500
+                        elide: Text.ElideRight
                     }
                     Icon {
                         anchors.right: parent.right
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: 4
                         anchors.verticalCenter: parent.verticalCenter
                         name: IconData.chevronDown
                         size: 13

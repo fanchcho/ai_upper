@@ -84,6 +84,12 @@ def test_model_chip_opens_model_menu(qapp, tmp_path, monkeypatch):
         assert _visible(window, "thinkingPicker") is False
         assert _find_item(picker, "modelList").property("visible") is True
         assert _find_item(picker, "thinkingList").property("visible") is False
+        # 模型贴片打开的必须是真实模型列表：模型行在；旧版打包资产硬编码的
+        # "THINKING LEVEL" / Default / Low / High / Max 一个都不能出现。
+        texts = _texts(picker)
+        assert "claude-sonnet-5-5" in texts
+        assert "THINKING LEVEL" not in texts
+        assert not {"Default", "Low", "High", "Max"} & set(texts)
 
         panel = _find_item(picker, "pickerPanel")
         # 原版 min-width 248 / 内容自适应上限 360（styles/app.css:3390-3392）
