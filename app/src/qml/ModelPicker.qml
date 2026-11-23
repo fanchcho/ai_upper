@@ -78,8 +78,9 @@ Item {
     }
 
     readonly property bool empty: mode === "model" && (groups || []).length === 0
-    // 行内容宽 = 8 左内边距 + 文本 + 8 间距 + 14 勾选位 + 8 右内边距；面板再各加 5。
-    readonly property real panelWidth: Math.max(248, Math.min(360, measure.implicitWidth + 38 + 10))
+    // 行内容宽 = 8 左内边距 + 文本 + 8 间距 + 14 勾选位 + 8 右内边距；
+    // 面板再各加 5px padding + 1px border（styles/app.css:3367-3376）＝ +50。
+    readonly property real panelWidth: Math.max(248, Math.min(360, measure.implicitWidth + 38 + 12))
 
     implicitWidth: panel.width
     implicitHeight: panel.height
@@ -97,11 +98,12 @@ Item {
         id: panel
         objectName: "pickerPanel"
         width: root.panelWidth
-        // 模型态：border 2 + padding 10 + 分组标题 26 + 每行 27（或空态 40）。
+        // 模型态：border 2 + padding 10 + 分组标题 26 + 每行 27 + 组间分隔 9（或空态 40）。
         // 思考等级态：border 2 + padding 10 + 每行 44。
         height: root.mode === "thinking"
                 ? 2 + 10 + 44 * (((root.effortMenu && root.effortMenu.options) || []).length || 1)
-                : (root.empty ? 2 + 10 + 40 : 2 + 10 + 26 + 27 * root.visibleRowCount)
+                : (root.empty ? 2 + 10 + 40
+                              : 2 + 10 + 26 + 27 * root.visibleRowCount + 9 * root.groupGapCount)
         radius: Theme.radiusLg
         color: Theme.bgElevated
         border.width: 1
@@ -144,6 +146,20 @@ Item {
                     required property var modelData
                     required property int index
                     width: panel.width - 12
+
+                    // `styles/app.css:3401-3405`：`.model-pick__group + .model-pick__group`
+                    // margin-top 4 + padding-top 4 + border-top 1px = 9px；分隔线画在距组顶 4px 处。
+                    Item {
+                        visible: group.index > 0
+                        width: parent.width
+                        height: visible ? 9 : 0
+                        Rectangle {
+                            y: 4
+                            width: parent.width
+                            height: 1
+                            color: Theme.border
+                        }
+                    }
 
                     // 分组标题（redesign/model-panel.css:111-125）：首组 padding-top 4、其余 9，
                     // 下 padding 3，行盒 26；实测文字墨迹 y 700..712，在盒内基本居中。
@@ -291,7 +307,8 @@ Item {
         }
     }
 
-    // 模型态的行数（面板高度按它算）。分组标题各占 1 块 26。
+    // 模型态的行数（面板高度按它算）。分组标题各占 1 块 26，组间再占 9。
+    readonly property int groupGapCount: Math.max(0, (groups || []).length - 1)
     readonly property int visibleRowCount: {
         var rows = groups || []
         var n = 0
