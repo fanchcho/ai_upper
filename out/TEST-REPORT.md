@@ -385,3 +385,53 @@ VERTICAL bodyY=0.0->70.51579335804627 code_contentX=6638.5
 回归命令：`AI_UPPER_HOME=/tmp/ai-upper-code-regression .venv/bin/python -m pytest app/tests/test_markdown_body.py app/tests/test_markdown_document.py app/tests/test_markdown_chunked.py app/tests/test_qml_code_scroll.py -q -ra > out/ab-closeout/a-regression.log 2>&1; rc=$?`。
 **103 passed in 9.59s，0 skipped/failed/error，rc=0**。跨块复制/双击仍由共享正文文档提供，旧操作探针也复测通过；旧探针检查父级contentX的字段不适用于新增子级视口，A以专用真实事件测试为验收。
 只读deva依据：[.md-code__body overflow-x:auto及white-space:pre](ab-closeout/deva-code-css.log)。本项立即独立提交推送，B另行实现。
+
+
+### B · E4 原生断图图标（本段独立修复）
+
+A 已提交并推送：`88b2de28620e2d4a32b39f0d764e4efae291a513`，push rc=0；原始远端行：
+
+```text
+88b2de28620e2d4a32b39f0d764e4efae291a513	refs/heads/develop
+```
+
+B 起点即上述 A 提交，修改前 `git diff HEAD -- app/src/markdown/document.py` 输出 0 字节，tracked 工作区干净。
+结论：**断图结构已修复**，从只有裸 alt 改成原生图标 + 裸 alt；整页像素一致性并未宣称完成。
+未修改 deva 文件；只读其 `features/chat/Markdown.tsx:120`、`styles/app.css:848` 和 Electron 原生资源。
+ReactMarkdown 没有自定义 img renderer；data URL 经默认转换后为 `src=""`。实时 CDP 输出在 `out/ab-closeout/deva-image-live.json`。
+
+| 对照项 | 原版源码 / 实时测量 | 本轮 QML 实测 / 实现 |
+|---|---|---|
+| 结构 | Chromium 原生断图 + `示意图` | 内联 QTextImage + `示意图`；无括号、无「图片：」前缀 |
+| 图标原图 | `chrome_100_percent.pak` resource 48871，14×16 PNG，448 字节，md5 `6e211e3f7fce75eec8847e5ba76431a5` | 同一 PNG 字节内嵌于 `markdown/broken_image.py`，没有重画或另选图标 |
+| 图标槽 | 占位总宽 58 − alt 41.99981689453125 ≈ 16px；原生图高 16px | 16×16px，QML 游标坐标实测首字符至 alt 为 16px |
+| 文案 | 裸 alt，字号 14px，颜色 rgb(31,31,36)，行高 23.1px | 同一 BodyStyle / 前景色；alt 宽 41.953125px，总宽 57.953125px；Qt 字宽量化差 0.046875px |
+| 容器 | margin/padding/border 均 0；CSS radius 6px | 无额外间距与边框；图标按包含 alt 的原版占位盒裁剪 6px 圆角，而非四角全裁的 16px 小方块 |
+| 圆角实际生效 | CDP 仅将 radius 6→0，区域 (488,602,546,626) 变化 17px | 采用同一 radius 和占位盒尺寸；不把圆角当作无效 CSS 跳过 |
+| 实拍图标证据 | 目标区域绿色像素 43，bbox (489,612,502,616) | 绿色像素 **0→42**，bbox (485,611,498,615)；仍有正文全局坐标和栅格化差，未借此调整本轮排除的 E3 布局 |
+
+QML 实拍首轮发现相对图片资源名被当作文件名，出现 `Cannot open .../md-broken-image`；已经改成内嵌 data URL，最终截图日志没有此错误。
+测试没有删除或放宽旧的文字包装约束：旧断言改为严格检查对象占位符 + 原样 alt，新增图标尺寸、资源搬运、透明圆角和真实 QML 绿色像素断言。
+
+实际命令与结果：
+
+```sh
+AI_UPPER_HOME=/tmp/ai-upper-b-deva DEVA_HOME=/tmp/ai-upper-b-deva DEVA_CONFIG=/tmp/ai-upper-residual-20261123/config.json DEVA_SEED=/tmp/ai-upper-residual-20261123/data/chats CDP_PORT=9334 node .tmp/ab-closeout/deva_icon_probe.mjs chat out/ab-closeout/deva-image-live.json > out/ab-closeout/deva-image-live.log 2>&1; rc=$?
+# rc=0；DOM 数字见 deva-image-live.json；窗口管理器激活不支持的 stderr 原样保留。
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/ab-closeout/b-before/chat.png /tmp/ai-upper-residual-20261123 config.json > out/ab-closeout/b-before-shot.log 2>&1; rc=$?
+# 改前 rc=0
+AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh chat out/ab-closeout/b-after/chat.png /tmp/ai-upper-residual-20261123 config.json > out/ab-closeout/b-after-shot.log 2>&1; rc=$?
+# 改后 rc=0
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/ab-closeout/b-before > out/ab-closeout/b-before-diff.log 2>&1; rc=$?
+python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/ab-closeout/b-after > out/ab-closeout/b-after-diff.log 2>&1; rc=$?
+# 两次 rc=0；chat：112725 / 10.74% → 112844 / 10.75%，增加 119 个严格差异像素。
+python3 out/ab-closeout/measure_b.py > out/ab-closeout/b-image-metrics.log 2>&1; rc=$?
+# rc=0；前后图实际变化 769px，范围 (484,599,541,617)。
+AI_UPPER_HOME=/tmp/ai-upper-b-targeted BROKEN_IMAGE_EVIDENCE=out/ab-closeout/b-probe .venv/bin/python -m pytest app/tests/test_qml_broken_image.py app/tests/test_markdown_document.py app/tests/test_markdown_body.py app/tests/test_markdown_chunked.py app/tests/test_qml_code_scroll.py -q -s -ra > out/ab-closeout/b-tests.log 2>&1; rc=$?
+# rc=0；104 passed in 14.27s；0 skipped、0 failed。
+# BROKEN_IMAGE slot=16.0x16 alt_width=41.953125 total_width=57.953125 green_pixels=42 icon_position=(484.0,67.0)
+```
+
+截图：`out/ab-closeout/b-before/chat.png`（164669 字节，md5 e0a127e4773b01daf6cfddae6b1ad3eb）→ `out/ab-closeout/b-after/chat.png`（165232 字节，md5 783154083938b2b1e76921e486f210e2）。
+原版实时截图 `out/ab-closeout/deva-image-live.png`；细节图 `deva-image-detail.png`、`before-image-detail.png`、`after-image-detail.png` 均在同一证据目录。
+代码改动限于 `markdown/document.py`、新增 `markdown/broken_image.py`；测试涉及 `test_markdown_document.py`、`test_markdown_body.py`、新增 `test_qml_broken_image.py`。

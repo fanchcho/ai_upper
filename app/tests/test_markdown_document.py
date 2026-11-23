@@ -439,9 +439,21 @@ def test_code_body_is_12px_mono_on_both_sides(qapp):
 # ── 图片与占位 ───────────────────────────────────────────────────────────
 def test_missing_image_renders_bare_alt_text(qapp):
     document = render("![说明](missing.png)")
-    assert document.toPlainText() == "说明"
+    assert document.toPlainText() == "\ufffc说明"
     assert "［图片" not in document.toPlainText()
-    assert first_fragment(document.begin()).charFormat().foreground().color().name() == LIGHT.fg
+    fragment = first_fragment(document.begin())
+    assert fragment.charFormat().isImageFormat()
+    fmt = fragment.charFormat().toImageFormat()
+    assert (fmt.width(), fmt.height()) == (16.0, 16.0)
+    resource = document.resource(QTextDocument.ResourceType.ImageResource.value,
+                                 document_module.QUrl(fmt.name()))
+    assert not resource.isNull()
+    assert (resource.width(), resource.height()) == (16, 16)
+    assert resource.pixelColor(0, 0).alpha() == 0  # original 6px corner clipping
+    iterator = document.begin().begin()
+    iterator += 1
+    assert iterator.fragment().text() == "说明"
+    assert iterator.fragment().charFormat().foreground().color().name() == LIGHT.fg
 
 
 def test_resolved_image_is_inserted_at_its_natural_size(qapp):

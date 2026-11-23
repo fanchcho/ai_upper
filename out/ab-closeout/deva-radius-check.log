@@ -1,0 +1,4 @@
+<stdin>:8: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+native_broken_image_radius_6_to_0_changed_pixels 17
+out/ab-closeout/b-probe/broken-image.png bytes 119773 md5 f9a434f6b68aa80121990f334aa23278
+out/ab-closeout/deva-native-broken.png bytes 448 md5 6e211e3f7fce75eec8847e5ba76431a5

@@ -1,0 +1,11 @@
+    <div className={muted ? 'md md--muted' : 'md'}>
+      <ReactMarkdown
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
+        components={components}
+      >
+        {text}
+      </ReactMarkdown>
+    </div>
+  )
+})

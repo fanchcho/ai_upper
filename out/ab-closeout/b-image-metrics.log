@@ -1,0 +1,6 @@
+deva bytes=158066 md5=fa884a918c9f9f8267d689c59a1147d1 green_pixels=43 green_bbox=(489, 612, 502, 616)
+before bytes=164669 md5=e0a127e4773b01daf6cfddae6b1ad3eb green_pixels=0 green_bbox=None
+after bytes=165232 md5=783154083938b2b1e76921e486f210e2 green_pixels=42 green_bbox=(485, 611, 498, 615)
+/home/agent/shared_workspace/ai_upper/out/ab-closeout/measure_b.py:25: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  print("before_after_changed_pixels="+str(sum(1 for c in diff.getdata() if max(c))),
+before_after_changed_pixels=769 bbox=(484, 599, 541, 617)

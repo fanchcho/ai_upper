@@ -1,0 +1,11 @@
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: calc(var(--space-4) * var(--cs, 1)) 0;
+}
+.md img {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+}
+/* GFM 表格：横向可滚，不撑破通栏 */
+.md table {
+  display: block;

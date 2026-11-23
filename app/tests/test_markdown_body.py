@@ -275,14 +275,20 @@ def test_attach_replaces_the_previous_content_in_one_edit_block(qapp):
 
 
 def test_broken_image_renders_bare_alt_text(qapp):
-    """断图只显示 alt 文本，不带「［图片：…］」占位 wrappers。"""
+    """断图图标资源必须搬到 QML 文档，后接裸 alt，没有文字包装。"""
     body = BodyDocument()
     body.set_markdown("![示意图](data:image/png;base64,iVBORw0KGgo=)")
     quick = QuickDocumentStub()
     body.attach(quick)
     text = quick.document.toPlainText()
-    assert text.strip() == "示意图"
+    assert text.strip() == "\ufffc示意图"
     assert "［图片" not in text
+    fmt = quick.document.begin().begin().fragment().charFormat().toImageFormat()
+    resource = quick.document.resource(
+        QtGui.QTextDocument.ResourceType.ImageResource.value, QtCore.QUrl(fmt.name())
+    )
+    assert not resource.isNull()
+    assert (resource.width(), resource.height()) == (16, 16)
 
 
 def test_attach_copies_image_resources_by_name(qapp):

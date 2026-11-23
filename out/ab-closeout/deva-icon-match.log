@@ -1,0 +1,8 @@
+native_resource=chrome_100_percent.pak:48871 (14, 16) md5=6e211e3f7fce75eec8847e5ba76431a5
+resize NEAREST (6469, 488, 602)
+resize BILINEAR (2962, 488, 602)
+resize BICUBIC (4017, 488, 602)
+resize LANCZOS (4920, 488, 602)
+pad 0 (12436, 490, 602)
+pad 1 (13102, 489, 602)
+pad 2 (13786, 487, 602)

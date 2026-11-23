@@ -1107,8 +1107,20 @@ class _Renderer:
         else:
             image = self.image_resolver(src) if self.image_resolver is not None else None
         if image is None:
-            # 与 deva 的 <img> 行为一致：断图只显示 alt 文本本身，不加括号占位。
-            # 空 alt 在浏览器里不产生文字，这里同样什么都不插入。
+            # 原版是 Chromium 的原生断图图标 + 裸 alt；图标为 16px 内联槽。
+            # 与普通图片共用资源复制路径，保证 attach/分块渲染后仍能显示。
+            from markdown.broken_image import broken_image
+            name, placeholder = broken_image(
+                QFontMetricsF(base.font()).horizontalAdvance(alt),
+                self.style.base_px * self.style.line_height)
+            self.doc.addResource(QTextDocument.ResourceType.ImageResource.value,
+                                 QUrl(name), placeholder)
+            fmt = QTextImageFormat()
+            fmt.setName(name)
+            fmt.setWidth(16.0)
+            fmt.setHeight(16.0)
+            fmt.setVerticalAlignment(QTextCharFormat.VerticalAlignment.AlignBaseline)
+            cursor.insertImage(fmt)
             if alt:
                 cursor.insertText(alt, QTextCharFormat(base))
             return
