@@ -634,6 +634,9 @@ settings-models        7f7a6dd835823f50475db7a3c9e727c1 a5bef126890dfc69d10a22c3
    （容器与 `modHead` 的 28px 加号同列，宽度补偿 2px 是早前为对齐错误左缘引入的）。
 3. `.provider-row__aside` `align-items:center`（`app.css:4574-4580`）
    → `:617` 告警三角加 `y: 1`；改前 deva 三角上沿 y=265、QML 264，chevron 的 x 也差 1px。
+4. 同一提交里并存的窗格根因：右窗格 `paneArea` 起点 `x: 169` 比原版 `.cf-modal__body`
+   第二列（导航列 168px）多 1px → `:170-173` 改为 `x: 168 / width: parent.width - 168`。
+   该项影响所有设置页（Models 只是其中一页），改后设置页内容左缘由 x=470 回到 x=469。
 
 **复测**：
 
