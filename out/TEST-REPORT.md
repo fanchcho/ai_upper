@@ -243,3 +243,29 @@ CI通过GitHub公开REST API查询 `repos/fanchcho/ai_upper/actions/runs?branch=
 非arm64原始job日志下载返回HTTP403（[原始错误](merged-review/ci-log-fetch.log)），因此确切失败测试名/堆栈**未验证**；
 没有把所有Windows失败统归为已知arm64缺轮子，也没有重复排查该平台阻塞。
 本轮`app/src`、`app/tests`、`.github/workflows`相对起点无最终修改，尚未观察到可归因本轮的新失败，但结论以CI未结束为限。
+
+### 并入项提交与剩余清单
+
+本轮最终没有保留产品代码改动；真实操作已具备的项没有重写。唯一列表间距候选因视觉回退被否决，实验文件留证，正式代码和所有原测试均与起点一致。
+
+| 项 | 独立commit | push |
+|---|---|---|
+| picker | `796910bbb7ed1d8e06c24f5e760c801776ba7f4d` | rc=0 |
+| menu | `a70b71d6a12667927062dabc0bf2bd02fbfdbb33` | rc=0 |
+| controls | `309fa2e448979745fa0619f7ad894b91ae43c070` | rc=0 |
+| body | `8bd63109c4bbe796da418f7ec0137e6ac7e6a198` | rc=0 |
+| perf | `16357df2bc0bc5375f145743cdc4bc7b376f6989` | rc=0 |
+
+每次push后即时取得的ls-remote原始行：
+
+```text
+796910bbb7ed1d8e06c24f5e760c801776ba7f4d	refs/heads/develop
+a70b71d6a12667927062dabc0bf2bd02fbfdbb33	refs/heads/develop
+309fa2e448979745fa0619f7ad894b91ae43c070	refs/heads/develop
+8bd63109c4bbe796da418f7ec0137e6ac7e6a198	refs/heads/develop
+16357df2bc0bc5375f145743cdc4bc7b376f6989	refs/heads/develop
+```
+
+未完成：代码块缺独立横向滚动承载；E4缺图图标仍缺；E3单独补列表间距会增加裁切，组合布局修复未完成；表格底边与像素级间距仍有残差；🚀/✅本机缺字形；deva 2x参考缺失，未验证2x像素等价；CI仍运行且job日志403，最终归因未完成。原设置内部残差和long-mid非悬停状态差不因本轮复核而关闭。
+
+本轮没有再跑完整app/tests。已跑的五组分别8/6/7/102/60 passed，均0 skipped/failed/error且rc0；不将有重叠覆盖的组相加冒充完整套件。Models沿用上轮49/47 passed，历史全量1352 passed/5 skipped/rc0明确属于先前快照。最终报告随后单独提交，最终远端回执在本地out/merged-review/publish-final.txt。

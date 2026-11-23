@@ -1,0 +1,10 @@
+5 independent commits/push rc0/remote receipts verified
+app/src, app/tests, CI workflows identical to this turn baseline; no validated history reverted
+picker-tests 8 passed rc=0
+menu-tests 6 passed rc=0
+controls-tests 7 passed rc=0
+body-tests 102 passed rc=0
+existing-fixes-tests 60 passed rc=0
+1x/2x body results consistent; failed horizontal scroll retained
+model-picker.png bytes 170480 md5 4ca5e740ba78cca45a0723843a9b6e1e
+chat-list-after.png bytes 159213 md5 456d46765b121bbdbe55ad57415f76bf
