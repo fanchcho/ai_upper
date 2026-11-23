@@ -163,12 +163,13 @@ Item {
                 }
             }
 
-            // 右窗格
+            // 右窗格：原版 `.cf-modal__body` 两列 168px + minmax(0,1fr)，导航列宽 168
+            // 已含右边框；内容列从 x=168 起（实测窗格内容左缘 x=449，padding 20 后 x=469）。
             Item {
                 id: paneArea
-                x: 169
+                x: 168
                 y: 0
-                width: parent.width - 169
+                width: parent.width - 168
                 height: parent.height
 
                 Loader {
@@ -511,11 +512,11 @@ Item {
 
                 Rectangle {
                     id: modRows
-                    // 左缘对齐原版 `.models__rows` 实测：外框从内容区 x=19 起，
-                    // 右缘仍与标题/加号同宽（宽度补偿 2px），不改变右侧对齐。
-                    x: 19
+                    // 与标题/加号同处 `.cf-pane` 内容列（pane x=20、宽 pane-40）：
+                    // 原版 `.models__rows` 实测外框 510×54，左边框 x=469、右边框 x=978。
+                    x: 20
                     y: 60   // 16（上内边距）+ 28（head）+ 16（`.models__head` 下间距）
-                    width: parent.width - 38
+                    width: parent.width - 40
                     height: modPane.rows.length === 0
                             ? modEmpty.implicitHeight + 32
                             : modPane.rows.length * 52 + 2
@@ -598,7 +599,10 @@ Item {
                                     text: providerRow.modelData.detail || ""
                                     color: Theme.fgSubtle
                                     font.family: Theme.sansFamily
-                                    font.pixelSize: 12
+                                    // `.provider-row__sub`（`app.css:4567-4573`）：font-size:11.5px。
+                                    // pixelSize 只收整数，半像素用 pointSize 表达（96dpi 下
+                                    // 11.5px = 8.625pt），与 Main.qml:1351 的 13.5px 同一做法。
+                                    font.pointSize: 8.625
                                     elide: Text.ElideRight
                                 }
                             }
@@ -610,8 +614,13 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 spacing: 8
 
+                                // `.provider-row__aside`（`app.css:4574-4580`）是 `align-items:center`：
+                                // 14px 告警三角在 16px 行高里垂直居中，故下移 1px。QML 的 Row
+                                // 只排 x、不动 y，不加这一行三角会比 chevron 高 1px（实测 deva
+                                // 三角上沿 y=265、改前 QML 为 264）。
                                 Icon {
                                     visible: providerRow.modelData.warn === true
+                                    y: 1
                                     name: IconData.alertTriangle
                                     size: 14
                                     color: Theme.warning

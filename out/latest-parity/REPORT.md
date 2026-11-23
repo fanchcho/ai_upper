@@ -602,6 +602,76 @@ $ sed -n '$p' /tmp/test-qml-settings-models.log
 44 passed in 0.17s
 ```
 
+#### 4.4.3 依实测差异的三处几何修正
+
+本轮不再做结构复核，只按逐像素差异定位三处偏差并改。
+
+**测量**（改前，`/tmp/sm-before.png`）：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/sm-before.png /tmp/fx-qml-home config.json > /tmp/sm-before.log 2>&1; echo rc=$?
+rc=0
+$ cat /tmp/sm-before.log
+QML OK platform=offscreen title='Deva' sessions=120 active='parity-000' plain=False turn_stop='' deltas=0 home=/tmp/fx-qml-home png=/tmp/sm-before.png size=1280x820
+$ wc -c < /tmp/sm-before.log
+165
+$ grep settings-models /tmp/diff18-before.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 a5bef126890dfc69d10a22c33bca9bd1  132243   82175  294675  28.07% max=237 same=False
+```
+
+改前逐像素差异 **28.07%**（294675 / 1049600 px）。差异最大的 3 个 40×40 矩形：
+`x=480 y=200` / `x=480 y=160` / `x=480 y=120`（各 1600/1600 = 100%），全部落在弹窗外背景
+——该页基线是「聊天页 + 设置弹窗」，QML 侧背景是空聊天页，这属既有场景差异（见 §4.4.1）。
+弹窗本体 bbox `(281,131)-(999,690)` 内只有 3857 px（1.0%）。
+
+**三处修正**（`app/src/qml/SettingsModal.qml`）：
+
+1. `.provider-row__sub` `font-size:11.5px`（`app.css:4567-4573`）
+   → `:603` 改前 `font.pixelSize: 12` → 改后 `font.pointSize: 8.625`
+   （pixelSize 只收整数，96dpi 下 11.5px = 8.625pt；同 `Main.qml:1351` 的 13.5px 做法）。
+2. `.models__rows` 边框内缘（`app.css:4509-4515`）实测 deva 左边框 x=469、右边框 x=978
+   → `:517-519` 改前 `x: 19 / width: parent.width - 38` → 改后 `x: 20 / width: parent.width - 40`
+   （容器与 `modHead` 的 28px 加号同列，宽度补偿 2px 是早前为对齐错误左缘引入的）。
+3. `.provider-row__aside` `align-items:center`（`app.css:4574-4580`）
+   → `:617` 告警三角加 `y: 1`；改前 deva 三角上沿 y=265、QML 264，chevron 的 x 也差 1px。
+
+**复测**：
+
+```
+$ bash scripts/parity/qml_page_shot.sh settings-models /tmp/sm-after.png /tmp/fx-qml-home config.json > /tmp/sm-after.log 2>&1; echo rc=$?
+rc=0
+$ cp /tmp/sm-after.png out/latest-parity/qml/settings-models.png
+$ python3 -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml > /tmp/diff18-after.txt 2>&1; echo rc=$?
+rc=0
+$ grep settings-models /tmp/diff18-after.txt
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 92c0f06f8b41707f3e6396e8c1bfe529  132243   81933  294323  28.04% max=216 same=False
+```
+
+**28.07% → 28.04%**（−0.03pp，−352 px）。弹窗内 3857 → 3634 px（−223 px，−5.8%），
+其中 aside 区 `(915,255)-(985,300)` 155/3150、容器左右边框两端已逐列对齐
+（deva 与 QML 在 y=270 均为 `[469, 978, 999]`）。整页百分比几乎不动的原因与 §4.4.1 同：
+294323 px 差异里 99% 在弹窗外。
+
+剩余弹窗内 3634 px 经连通域聚类，最大簇为
+`(517,274)-(558,283)` 279 px（副标题 `1 models` 的亚像素抗锯齿，字号已对齐、
+bbox 仅差下沿 1px）、`(303,270)-(317,284)` 等四簇 15×15 为设置弹窗左侧导航图标字形的
+栅格化差异，无结构性缺口。
+
+**受影响测试**：
+
+```
+$ AI_UPPER_HOME=/tmp/t-sm-XXX .venv/bin/python -m pytest app/tests/test_qml_shell.py -q > /tmp/t1.log 2>&1; echo rc=$?
+rc=0
+$ grep -E "passed|failed|skipped|error" /tmp/t1.log
+48 passed in 10.85s
+
+$ AI_UPPER_HOME=/tmp/t-sm2-XXX .venv/bin/python -m pytest app/tests/test_qml_settings_models.py -q > /tmp/t2.log 2>&1; echo rc=$?
+rc=0
+$ grep -E "passed|failed|skipped|error" /tmp/t2.log
+44 passed in 0.17s
+```
+
+
 ### 4.5 设置 · Models 服务商行 + 详情下钻 + Wrench + 自定义请求头（B2-3）
 
 **交付范围**：provider 列表行改为 52px 高（启用点、名称、`N models` 副标题、告警时的
