@@ -1,0 +1,5 @@
+$ H=$(mktemp -d /tmp/ai-upper-body-XXXXXX); AI_UPPER_HOME=$H PATH=.venv/bin:$PATH LD_LIBRARY_PATH=/tmp QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest app/tests/test_markdown_body.py app/tests/test_markdown_document.py -q
+........................................................................ [ 88%]
+.........                                                                [100%]
+81 passed in 0.43s
+rc=0

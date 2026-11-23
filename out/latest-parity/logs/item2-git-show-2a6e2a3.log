@@ -1,0 +1,11 @@
+$ git show --stat 2a6e2a3
+commit 2a6e2a3f18090242e7460778c18850add7d66c37
+Author: Little Code Sauce <agent@local>
+Date:   Mon Nov 23 16:34:53 2026 +0800
+
+    fix(markdown): 铺满表格整行底色并保留列分隔线
+
+ app/src/markdown/document.py        | 26 +++++++++++++++++++-------
+ app/tests/test_markdown_document.py | 17 +++++++++--------
+ 2 files changed, 28 insertions(+), 15 deletions(-)
+rc=0

@@ -1728,3 +1728,33 @@ rc=0
 
 **最终全量：1349 passed, 5 skipped, 0 failed, rc=0**。前一次 `1 failed` 已按上述根因修复并复跑闭环；
 `0 failed` 不是我改测试期望值得来的——hover 断言仍是 `(236,236,237)`，只补了鼠标先移开再移入。
+
+### 5.8 未闭环项逐条实测结论（当前工作树，交付前核对）
+
+本节把 §5.4 仍列出的项目逐条用当前 `out/latest-parity/qml/*.png` 与 `deva/*-deva.png` 重新读数；若与 §5.4 的旧探针值冲突，以本节实测值为准。统一读数脚本为 `out/latest-parity/probes/open_items_probe.py`，完整输出在 `out/latest-parity/logs/item2-open-items.log`（`rc=0`）。截图链路先用当前代码重拍 `chat`，得到 `md5=00baf46965255434d276905e4e82c978`，与仓库内 `out/latest-parity/qml/chat.png` 完全一致，说明下面比较的是当前代码而非旧图。
+
+**A5 / F3（遮罩灰阶）— 保持结论：合成取整，不改视觉。** `open_items_probe.py` 复读 `delete-confirm (60,120)`：QML `(143,143,144)` vs deva `(144,144,144)`，Δ `(-1,-1,0)`；`delete-confirm (300,700)` 同样 QML `(143,143,144)` vs deva `(144,144,144)`；`settings-general (60,120)` 同样 `(143,143,144)` vs `(144,144,144)`；`settings-general (300,700)` QML `(137,137,138)` vs deva `(138,138,138)`。`logs/d1-mask-attribution.log` 的拆层结果是 `outside_diff=297039`、`outside_d1_2=248842`，`conclusion=mask-compositing-primary`；A5/F3 的 1 个灰阶来自 `rgba(0,0,0,0.42)` 在 QML 与 deva 两条合成路径上的取整，不是控件结构或间距差。**结论：不为了降低百分比去改 QML 视觉。**
+
+**B1（悬停高亮打在错误行）— 当前只在 `long-mid` 留残差。** 精确色 `(236,236,237)`、左侧栏 `x64..338`、按行统计像素 >100 的结果：`chat` QML 54 行 `(650,703)`，deva 54 行 `(650,703)`；`hover-thread` QML 0 行、deva 0 行；`long-mid` QML 0 行、deva 54 行 `(668,721)`。旧报告 `hover-thread bbox=(64,110,339,801)、12573 px` 在当前截图中不再复现。**结论：B1 的全局错行已不存在，仅 `long-mid` 的悬停带仍缺失（该页滚动位置也与基线不同）。**
+
+**B2（悬停时列表底部没有悬停带）— `chat` 已对齐，`long-mid` 同 B1。** `chat` QML 与 deva 均为 54 行，span 都是 `(650,703)`；`hover-thread` 两端都是 0 行；`long-mid` QML 0 行 vs deva 54 行 `(668,721)`。旧 `chat QML n=56 vs deva n=11169` 已不成立。**结论：B2 只剩 `long-mid` 与 B1 共用的悬停带缺失。**
+
+**B3（侧栏选中态纵向范围偏长）— 当前实测已对齐。** 精确选中色 `(228,228,244)`：QML `n=12164`、bbox `(64,56,338,109)`；deva `n=12233`、bbox `(64,56,338,109)`。两者左右/纵向 bbox 完全一致，余下 69 px 是抗锯齿边缘。旧报告 `QML bbox=(64,56,339,715)、n=12542` 与 `deva bbox=(42,48,338,628)、n=12334` 均为过期值。**结论：B3 已闭环，不再作为未闭环项。**
+
+**C2（面板左缘偏右 5 px）— 当前实测已对齐。** `ctx-menu` 白色菜单框在 `x120..339、y70..279` 的精确白像素：QML `n=20829`、bbox `(161,91,306,245)`；deva `n=20911`、bbox `(161,91,306,245)`。左缘同为 `x=161`，旧 `QML x=166 vs deva 161` 不再复现。**结论：C2 已闭环。**
+
+**C3（面板高度差 35 px）— 当前实测已对齐。** 同上读数：QML 白框 `y=91..245`（155 行），deva `y=91..245`（155 行），高度一致；旧 `QML y89–210（121 px）vs deva y91–245（154 px）` 为过期值。**结论：C3 已闭环。**
+
+**E1–E5（正文 Markdown）— 先核对 `2a6e2a3` 的实际覆盖范围。** `git show --stat 2a6e2a3` 的原始输出（`logs/item2-git-show-2a6e2a3.log`，`rc=0`）只有两个文件：`app/src/markdown/document.py` 26 行、`app/tests/test_markdown_document.py` 17 行，合计 `2 files changed, 28 insertions(+), 15 deletions(-)`；diff 内容只涉及表格单元格的透明 NBSP 缩进、`rightMargin=1.0`、`textIndent=0.0` 与表格整行底色/边框，不涉及正文段落行高、块间距、图片占位。直接跑正文测试：`AI_UPPER_HOME=<fresh tmp> .venv/bin/python -m pytest app/tests/test_markdown_body.py app/tests/test_markdown_document.py -q` → `81 passed in 0.43s`，`rc=0`（`logs/item2-body-tests.log`），其中与 `2a6e2a3` 直接对应的是 `test_table_cells_use_transparent_indent_and_fixed_row_height` 和 `test_a_table_with_many_rows_fills_every_row_and_column`，其余测试不足以证明未改动项。
+
+- **E1：未由 `2a6e2a3` 覆盖。** 缺的是正文段落行高/块间距。当前 `chat` 文本带（`x430..1199、y40..639、max<200`）QML 18 带、deva 19 带；QML 首带 `(40,43)`、次带 `(55,67)`，deva 首带 `(43,45)`、次带 `(56,68)`，末带 QML `(600,614)` vs deva `(602,619)`。`2a6e2a3` 没有改 `_paragraph`/`line_height` 路径。
+- **E2：已由 `2a6e2a3` 覆盖。** 证据是上面的 `git show --stat`、两个表格测试通过、以及 `81 passed`。当前 `chat` 表格 `(244,244,244)` 底色 `n=7778`、bbox `(484,138,786,229)`；deva `n=8955`、bbox `(489,138,788,208)`，缺行/缺格已消失，余下是行内代码 pill 与 Qt 光栅的计数差。
+- **E3：未由 `2a6e2a3` 覆盖。** 缺的是正文滚动偏移所需的段落行高/间距；当前 `chat` 首带 `(40,43)` vs deva `(43,45)`，仍有约 3 px 基线差（旧 13 px 线性偏移已缩小），`2a6e2a3` 只改表格。
+- **E4：未由 `2a6e2a3` 覆盖。** 缺的是 broken-image 的 alt 占位语义；当前实现和测试仍输出 `［图片：说明］`（`app/tests/test_markdown_document.py:442`），deva 目标是裸 `示意图`。`2a6e2a3` 没有改 `_image`。
+- **E5：未由 `2a6e2a3` 覆盖。** 缺的是 `search-none` 的正文块间距；当前 `search-none` 文本带 QML 15 带 vs deva 16 带，首带同样 `(40,43)` vs `(43,45)`，`2a6e2a3` 无正文段落改动。
+
+**F3（遮罩灰阶，同 A5）— 同样保持“合成取整、不改视觉”。** `settings-general` 等四页的 `outside_diff=297039`、`outside_d1_2=248842` 四页完全相同，差异集中在同一层 `rgba(0,0,0,0.42)` 遮罩；样本值与 A5 相同（QML `(143,143,144)` vs deva `(144,144,144)`，以及 `(137,137,138)` vs `(138,138,138)`）。**结论：F3 不是独立结构缺口，和 A5 合并归为遮罩合成取整。**
+
+**G1（输入区左侧图标簇左移约 90 px）— 旧 90 px 位移当前不再复现。** 对 `chat` 输入区 `y730..799` 做暗像素列聚类：QML 前几组 `[449-462], [476-488], [500-507], [510-515], [518-522], [525-530]`；deva `[449-462], [484-496], [505-512], [515-520], [523-527], [530-535]`。第一组起点完全一致（449），第二组起点 QML 476 vs deva 484（8 px），第三组 500 vs 505（5 px）。**结论：G1 的 90 px 级别偏移已不存在；当前只剩图标字形内部的 5–8 px 差异，旧 `[860-990]` 数值为过期探针。**
+
+**H1（empty/first-run 1.26% 光栅残差）— 仍开放。** `logs/d-page-diff18-final.log` 的当前值：`empty` 与 `first-run` 都是 `13231 px / 1.26%`，`max=248`，两页像素相同。文本带实测：QML `(412,459)/(471,484)/(492,506)/(508,522)`，deva `(408,459)/(471,484)/(492,506)/(508,522)`；只有第一带左缘差 4 px，其余三带一致，说明残留主要在 quick-start 首行字体度量与头像光栅，不是布局结构。**结论：H1 仍为已知光栅残差，未宣称对齐。**

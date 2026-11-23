@@ -1,0 +1,12 @@
+$ git show --stat dc05e31
+commit dc05e31f11609c28f3830f7603cf1857b2d27291
+Author: Little Code Sauce <agent@local>
+Date:   Mon Nov 23 16:25:34 2026 +0800
+
+    fix(markdown): 对齐正文块间距并修正表格渲染残留
+
+ app/src/markdown/document.py        | 171 +++++++++++++++++++++++++++++++-----
+ app/tests/test_markdown_body.py     |   4 +-
+ app/tests/test_markdown_document.py |  33 +++++--
+ 3 files changed, 178 insertions(+), 30 deletions(-)
+rc=0

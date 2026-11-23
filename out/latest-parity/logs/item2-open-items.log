@@ -1,0 +1,47 @@
+== A5/F3 mask samples (from d1-mask-attribution.log) ==
+delete-confirm (60, 120): QML=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+delete-confirm (300, 700): QML=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+settings-general (60, 120): QML=(143, 143, 144) deva=(144, 144, 144) delta=(-1, -1, 0)
+settings-general (300, 700): QML=(137, 137, 138) deva=(138, 138, 138) delta=(-1, -1, 0)
+
+== B1/B2 hover band (exact rgb(236,236,237), rows with >100 px, x64..338) ==
+chat         qml  rows= 54 span=(650, 703)
+chat         deva rows= 54 span=(650, 703)
+hover-thread qml  rows=  0 span=None
+hover-thread deva rows=  0 span=None
+long-mid     qml  rows=  0 span=None
+long-mid     deva rows= 54 span=(668, 721)
+
+== B3 selected band (exact rgb(228,228,244), x0..359) ==
+chat         qml  n=12164 bbox=(64, 56, 338, 109)
+chat         deva n=12233 bbox=(64, 56, 338, 109)
+hover-thread qml  n=12164 bbox=(64, 56, 338, 109)
+hover-thread deva n=12233 bbox=(64, 56, 338, 109)
+long-mid     qml  n=    0 bbox=None
+long-mid     deva n=    0 bbox=None
+
+== C2/C3 context menu white panel (x120..339, y70..279) ==
+ctx-menu qml  white_px=20829 bbox=(161, 91, 306, 245)
+ctx-menu deva white_px=20911 bbox=(161, 91, 306, 245)
+
+== G1 composer left icon clusters (dark max(r,g,b)<200, y730..799) ==
+chat qml  first_clusters=[(449, 462), (476, 488), (500, 507), (510, 515), (518, 522), (525, 530), (532, 535), (541, 548)] total_groups=35
+chat deva first_clusters=[(449, 462), (484, 496), (505, 512), (515, 520), (523, 527), (530, 535), (537, 540), (546, 554)] total_groups=34
+
+== E1/E3/E5 visible text bands (x430..1199, y40..639, max<200) ==
+chat         qml  E1 n=18 first=[(40, 43), (55, 67)] last=[(565, 578), (600, 614)]
+chat         qml  E5 n=15 last=[(676, 684), (687, 687)]
+chat         deva E1 n=19 first=[(43, 45), (56, 68)] last=[(602, 602), (606, 619)]
+chat         deva E5 n=16 last=[(678, 687), (690, 690)]
+search-none  qml  E1 n=18 first=[(40, 43), (55, 67)] last=[(565, 578), (600, 614)]
+search-none  qml  E5 n=15 last=[(676, 684), (687, 687)]
+search-none  deva E1 n=19 first=[(43, 45), (56, 68)] last=[(602, 602), (606, 619)]
+search-none  deva E5 n=16 last=[(678, 687), (690, 690)]
+
+== E2/E4 table + image placeholder (same screenshot) ==
+chat qml  E2 table_bg_244 n= 7778 bbox=(484, 138, 786, 229); E3/E4 bands y560..699=[(565, 578), (600, 614), (676, 684), (687, 687)]
+chat deva E2 table_bg_244 n= 8955 bbox=(489, 138, 788, 208); E3/E4 bands y560..699=[(572, 584), (602, 602), (606, 619), (678, 687), (690, 690)]
+
+== H1 empty diff (from d-page-diff18-final.log) ==
+empty                  a616eabe08d8c107709b89d699604d13 e56462d7a538be35dae1b166403f4784   40733   40046   13231   1.26% max=248 same=False
+first-run              0e2b5786d552a73525ded72469f224ea e56462d7a538be35dae1b166403f4784   40733   40046   13231   1.26% max=248 same=False

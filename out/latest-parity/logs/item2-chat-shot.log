@@ -1,0 +1,6 @@
+$ H=$(mktemp -d /tmp/ai-upper-chat-XXXXXX); cp -a /tmp/fx-qml-home/. "$H"/; LD_LIBRARY_PATH=/tmp PYTHON=.venv/bin/python bash scripts/parity/qml_page_shot.sh chat /tmp/item2-shot/chat.png "$H" > out/latest-parity/logs/item2-chat-shot.out 2> out/latest-parity/logs/item2-chat-shot.err; echo rc=$?
+rc=0
+stderr_bytes=0
+00baf46965255434d276905e4e82c978  /tmp/item2-shot/chat.png
+00baf46965255434d276905e4e82c978  out/latest-parity/qml/chat.png
+tracked_image_md5_matches=yes
