@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 # 宿主固定的工作区根：工程目录已改名为 ai_upper，但宿主的 workspaceRoot 仍写死这条
@@ -234,11 +235,15 @@ def test_repository_keeps_no_stale_old_name(tmp_path):
         "app/tests/test_app_home.py",
     }
     offenders: list[str] = []
-    for path in root.rglob("*"):
+    # Git's index includes newly staged files while excluding historical scratch
+    # trees and installed dependencies. Scan working-tree contents of those paths.
+    tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=root)
+    for name in tracked.decode("utf-8").split("\0"):
+        path = root / name
         if not path.is_file() or path.suffix not in {".py", ".cpp", ".h", ".md", ".toml", ".yml", ".json", ".js", ".sh"}:
             continue
         relative = path.relative_to(root).as_posix()
-        if relative.startswith(("out/", ".git/", ".cache/", "build/", "dist/", "runtimes/")):
+        if relative.startswith((".tmp/", "out/", ".git/", ".cache/", "build/", "dist/", "runtimes/")):
             continue
         if relative in allowed:
             continue

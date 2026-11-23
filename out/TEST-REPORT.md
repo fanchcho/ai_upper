@@ -480,3 +480,44 @@ AI_UPPER_HOME=/tmp/ai-upper-ab-final-head python3 out/ab-closeout/run_final_head
 
 本轮按用户范围未做：D3 文字/边缘/阴影残差、E3 组合布局、表格底边与间距、🚀/✅ 缺字形、deva 2x 对照、CI 最终归因、旧设置内部残差、long-mid 非悬停差。
 原因均为用户明确延期，未另行尝试或改变已验证结果。A1、A2–A4、D1、D2、G5 没有重做；已消失的 D3 旧「约 16.8k 白像素差」没有按旧结论修改。
+
+
+## 25883ce 之后：真实工作区回归、证据入口与 E3/表格收口
+
+### 第 0 步：只读起点
+
+命令 `git rev-parse HEAD > out/layout-closeout/start-head.log 2>&1; rc=$?`，rc=0。原始 stdout：
+
+```text
+25883cead40d791c006b38f83c5a45ffc13c1df6
+```
+
+命令 `git log --oneline -3 > out/layout-closeout/start-log.log 2>&1; rc=$?`，rc=0。原始 stdout：
+
+```text
+25883ce test: 记录最终代码全量回归及环境归因 / record final regression evidence
+c141d0d fix(markdown): 复用原生断图图标 / render native broken-image placeholder
+88b2de2 fix(markdown): 代码块独立横向滚动 / scroll overflowing code independently
+```
+
+命令 `git status --porcelain --untracked-files=no > out/layout-closeout/start-status.log 2>&1; rc=$?`，rc=0。原始 stdout：
+
+```text
+```
+
+命令 `git ls-remote origin refs/heads/develop > out/layout-closeout/start-remote.log 2>&1; rc=$?`，rc=0。原始 stdout：
+
+```text
+25883cead40d791c006b38f83c5a45ffc13c1df6	refs/heads/develop
+```
+
+status 的代码块为空，表示 tracked 工作区干净。原 A/B/C 三个提交未重做、未回退。
+
+### 第 1 项：真实工作区名称扫描已修复
+
+修改 `app/tests/test_app_home.py`，使用 `git ls-files -z` 枚举 Git index 路径，再读取工作区真实内容；保留显式兼容白名单和旧名断言，排除 `.tmp/`、`out/` 等运行期目录。未清理 `.tmp/`，未导出源码快照来替代真实工作区验收。
+
+- 正常扫描命令：`AI_UPPER_HOME=/tmp/ai-upper-layout-clean .venv/bin/python -m pytest app/tests/test_app_home.py::test_repository_keeps_no_stale_old_name -q > out/layout-closeout/scan-clean.log 2>&1; rc=$?`；**1 passed in 0.09s，rc=0**。
+- 变异：新建 `app/src/brand_mutation_probe.py`，内容 `# py_upper deliberate mutation, removed after verification`，`git add` 后用同一测试（AI_UPPER_HOME=/tmp/ai-upper-layout-mutant）运行；**1 failed in 0.31s，rc=1**，原文 `AssertionError: ['app/src/brand_mutation_probe.py: py_upper']`。随后 `git rm -f` 移除该临时受控文件，未提交变异。
+- 真实工作区全量命令：`AI_UPPER_HOME=/tmp/ai-upper-layout-full .venv/bin/python -m pytest app/tests -q > out/layout-closeout/full-step1.log 2>&1; rc=$?`；**1357 passed, 5 skipped in 211.83s (0:03:31)，0 failed，rc=0**。
+- 改前真实工作区 **1 failed / 1356 passed / 5 skipped / rc=1** → 改后 **0 failed / 1357 passed / 5 skipped / rc=0**。变异证明受控文件中的旧名仍被拒绝。

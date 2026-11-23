@@ -1,0 +1,3 @@
+25883ce test: 记录最终代码全量回归及环境归因 / record final regression evidence
+c141d0d fix(markdown): 复用原生断图图标 / render native broken-image placeholder
+88b2de2 fix(markdown): 代码块独立横向滚动 / scroll overflowing code independently
