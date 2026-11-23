@@ -1,0 +1,285 @@
+{
+  "source": "out/qml-shell/dom/chat.json (historical capture, not a new live DOM)",
+  "mdTop": [
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": -134.64,
+        "w": 696,
+        "h": 23.09
+      },
+      "text": "我先看一下目录，然后把结果整理成表格。",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "div",
+      "cls": "md-code",
+      "rect": {
+        "x": 488,
+        "y": -99.55,
+        "w": 696,
+        "h": 92.75
+      },
+      "text": "python\nCopy\ndef list_dir(path):\n    return sorted(os.listdir",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgb(240, 240, 242)",
+        "border-radius": "8px",
+        "border-width": "1px",
+        "border-color": "rgb(230, 230, 234)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 5.2,
+        "w": 696,
+        "h": 69.28
+      },
+      "text": "const value = [\"item-00\", \"item-01\", \"item-02\", \"item-03\", \"",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "table",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 86.48,
+        "w": 301.67,
+        "h": 138.75
+      },
+      "text": "文件\t类型\t说明\nREADME.md\t文档\t项目用途与运行方式\nsrc/\t目录\t源代码\npackage.json\t配置\t",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "13px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(128, 128, 128)",
+        "line-height": "21.45px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 237.23,
+        "w": 696,
+        "h": 23.09
+      },
+      "text": "要点：",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "ol",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 272.33,
+        "w": 696,
+        "h": 73.28
+      },
+      "text": "先读 README\n再看依赖\n最后跑测试",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px 0px 0px 21px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "ul",
+      "cls": "contains-task-list",
+      "rect": {
+        "x": 488,
+        "y": 357.61,
+        "w": 696,
+        "h": 98.38
+      },
+      "text": "无序项一\n\n无序项二\n\n 已完成\n\n 未完成",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px 0px 0px 21px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "blockquote",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 467.98,
+        "w": 696,
+        "h": 66.19
+      },
+      "text": "引用第一层\n\n嵌套引用第二层",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "2px 0px 2px 12px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(92, 92, 102)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px 0px 0px 3px",
+        "border-color": "rgb(92, 92, 102) rgb(92, 92, 102) rgb(92, 92, 102) rgb(213, 213, 219)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "hr",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 550.17,
+        "w": 696,
+        "h": 1
+      },
+      "text": "",
+      "style": {
+        "margin-top": "16px",
+        "margin-bottom": "16px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "1px 0px 0px",
+        "border-color": "rgb(230, 230, 234) rgb(31, 31, 36) rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 567.17,
+        "w": 696,
+        "h": 23.09
+      },
+      "text": "参见项目说明。",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "12px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    },
+    {
+      "tag": "p",
+      "cls": "",
+      "rect": {
+        "x": 488,
+        "y": 602.27,
+        "w": 696,
+        "h": 23.09
+      },
+      "text": "",
+      "style": {
+        "margin-top": "0px",
+        "margin-bottom": "0px",
+        "padding": "0px",
+        "font-size": "14px",
+        "font-weight": "400",
+        "color": "rgb(31, 31, 36)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-radius": "0px",
+        "border-width": "0px",
+        "border-color": "rgb(31, 31, 36)",
+        "line-height": "23.1px",
+        "white-space": "normal"
+      }
+    }
+  ],
+  "scroll": {
+    "scrollTop": 266,
+    "scrollHeight": 884,
+    "clientHeight": 618
+  }
+}

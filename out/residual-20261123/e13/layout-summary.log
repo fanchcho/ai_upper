@@ -1,0 +1,12 @@
+top-level AST [('paragraph', 0), ('code', 0), ('paragraph', 0), ('table', 0), ('paragraph', 0), ('list', 3), ('list', 4), ('quote', 0), ('hr', 0), ('paragraph', 0), ('paragraph', 0)]
+{'text': '要点：', 'y': 295.6875, 'height': 21.0, 'topMargin': 0.0, 'bottomMargin': 12.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 3}]}
+{'text': '\t1.\t先读 README', 'y': 331.609375, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 13}]}
+{'text': '\t2.\t再看依赖', 'y': 357.53125, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 8}]}
+{'text': '\t3.\t最后跑测试', 'y': 383.453125, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 9}]}
+{'text': '\t•\t无序项一', 'y': 409.375, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 7}]}
+{'text': '\t•\t无序项二', 'y': 435.296875, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 7}]}
+{'text': '\t☑\t已完成', 'y': 461.21875, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 6}]}
+{'text': '\t☐\t未完成', 'y': 487.140625, 'height': 21.0, 'topMargin': 2.0, 'bottomMargin': 2.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 6}]}
+{'text': '引用第一层', 'y': 521.0625, 'height': 21.0, 'topMargin': 0.0, 'bottomMargin': 12.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 5}]}
+{'text': '嵌套引用第二层', 'y': 564.984375, 'height': 21.0, 'topMargin': 0.0, 'bottomMargin': 12.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 7}]}
+{'text': '示意图', 'y': 671.984375, 'height': 21.0, 'topMargin': 0.0, 'bottomMargin': 0.0, 'lineHeight': 113.98612181958366, 'lines': [{'y': 0.0, 'height': 21.0, 'textStart': 0, 'textLength': 3}]}
