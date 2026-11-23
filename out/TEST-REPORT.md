@@ -521,3 +521,7 @@ status 的代码块为空，表示 tracked 工作区干净。原 A/B/C 三个提
 - 变异：新建 `app/src/brand_mutation_probe.py`，内容 `# py_upper deliberate mutation, removed after verification`，`git add` 后用同一测试（AI_UPPER_HOME=/tmp/ai-upper-layout-mutant）运行；**1 failed in 0.31s，rc=1**，原文 `AssertionError: ['app/src/brand_mutation_probe.py: py_upper']`。随后 `git rm -f` 移除该临时受控文件，未提交变异。
 - 真实工作区全量命令：`AI_UPPER_HOME=/tmp/ai-upper-layout-full .venv/bin/python -m pytest app/tests -q > out/layout-closeout/full-step1.log 2>&1; rc=$?`；**1357 passed, 5 skipped in 211.83s (0:03:31)，0 failed，rc=0**。
 - 改前真实工作区 **1 failed / 1356 passed / 5 skipped / rc=1** → 改后 **0 failed / 1357 passed / 5 skipped / rc=0**。变异证明受控文件中的旧名仍被拒绝。
+
+### 第 2 项：A/B/C 证据入口已补齐
+
+新增 `out/ab-closeout/REPORT.md`，按落盘日志逐项列出 A/B/C 命令、rc、真实滚轮值、断图像素和历史最终 HEAD 全量结果；另列本轮真实工作区全量及未闭环项。未重新实现 A/B。第1项提交 `71ff27b`，push rc=0；原始行见 `out/layout-closeout/remote1.log`。
