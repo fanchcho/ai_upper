@@ -13,14 +13,41 @@ Rectangle {
     property bool active: false
     // 交互态：逐页对比里 hover-thread 需要指定某一行处于 hover（原版是真实鼠标悬停）。
     property bool forceHover: false
+    // 多选态：右键「Select」进入后显示左侧勾选框，点击整行即切换选中。
+    property bool selectionMode: false
+    property bool selected: false
 
     height: 54
     radius: Theme.radius
-    color: active ? Theme.bgSelected
-                  : (hover.hovered || forceHover) ? Theme.bgHover
-                                                  : "transparent"
+    color: selected ? Theme.bgSelected
+                    : active ? Theme.bgSelected
+                             : (hover.hovered || forceHover) ? Theme.bgHover
+                                                             : "transparent"
 
     HoverHandler { id: hover }
+
+    // 多选勾选框：原版 `ThreadSelect` 行首的 checkbox；只在 selectionMode 下出现。
+    Rectangle {
+        objectName: "threadCheck"
+        visible: row.selectionMode
+        x: 8
+        y: 19
+        width: 16
+        height: 16
+        radius: 4
+        color: row.selected ? Theme.accent : "transparent"
+        border.width: 1
+        border.color: row.selected ? Theme.accent : Theme.borderStrong
+        Text {
+            anchors.centerIn: parent
+            visible: row.selected
+            text: "✓"
+            color: Theme.accentFg
+            font.family: Theme.sansFamily
+            font.pixelSize: 11
+            font.weight: 700
+        }
+    }
 
     // 头像：原版 `.cf-ava` 是 38×38 的 humation SVG（DOM 实测 x=12/y=8，相对行）。
     Avatar {
@@ -28,16 +55,16 @@ Rectangle {
         objectName: "threadFace"
         persona: row.persona
         size: 38
-        x: 12
+        x: row.selectionMode ? 30 : 12
         y: 8
     }
 
     // 主列：标题行 17px（13/600）+ 角色名 13px（11px）
     Text {
         id: titleText
-        x: 62
+        x: row.selectionMode ? 80 : 62
         y: 8
-        width: row.width - 62 - 12 - timeText.width - 8
+        width: row.width - x - 12 - timeText.width - 8
         text: row.title
         color: Theme.fg
         font.family: Theme.sansFamily
@@ -64,9 +91,9 @@ Rectangle {
     // 角色名：原版 `.cf-thread__owner`，11px、次要色，紧贴标题行下方。
     Text {
         id: ownerText
-        x: 62
+        x: row.selectionMode ? 80 : 62
         y: 27
-        width: row.width - 62 - 12
+        width: row.width - x - 12
         text: row.ownerName
         color: Theme.fgSubtle
         font.family: Theme.sansFamily

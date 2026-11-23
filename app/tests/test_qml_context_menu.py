@@ -1,10 +1,13 @@
 """会话右键菜单与删除确认框：真实 QML 窗口 + ``QTest.mouseClick``。
 
-覆盖三个用户路径（全部走真实事件命中，不直接调槽位）：
+覆盖全部菜单动作（全部走真实事件命中，不直接调槽位）：
 
 1. 点菜单第 5 项 ``Delete`` → 确认框出现（``confirm=True``），会话仍为 120；
 2. 点确认框 ``Delete`` → 会话 120 → 119、会话文件消失、当前会话按 Deva 回退到最近一条；
-3. 重开菜单后点 ``Cancel`` / 点背板 → ``confirm=False``、会话数不变。
+3. 重开菜单后点 ``Cancel`` / 点背板 → ``confirm=False``、会话数不变；
+4. 点 ``Rename`` → 输入框出现且可编辑，提交后标题落盘并反映到列表；
+5. 点 ``Select`` → 多选态与底部批量条出现，点行可增减选择数；
+6. 点 ``Archive`` → 会话从普通列表消失、写入 ``archived``，并在归档入口里可查到。
 
 菜单的 5 项名称、顺序、几何与项中心也在第一组里量出来并断言，坐标不是旧截图的常量。
 """
@@ -264,3 +267,129 @@ def _item_label(item) -> str:
             if isinstance(text, str) and text:
                 return text
     raise AssertionError("菜单项缺少文字")
+
+def _as_list(value):
+    """QML 的 JS 数组属性在 PySide6 里是 QJSValue；转成 Python list 再断言。"""
+    if hasattr(value, "toVariant"):
+        value = value.toVariant()
+    return list(value or [])
+
+
+def _type_text(window, text: str) -> None:
+    """把 ASCII 文本逐键送进当前焦点项；QTest.keyClicks 只接受 QWidget，QQuickWindow 需逐键发送。"""
+    from PySide6.QtCore import Qt
+    from PySide6.QtTest import QTest
+
+    for char in text:
+        if char == " ":
+            QTest.keyClick(window, Qt.Key_Space, Qt.NoModifier)
+        elif char.isupper():
+            QTest.keyClick(window, getattr(Qt, "Key_" + char), Qt.ShiftModifier)
+        else:
+            QTest.keyClick(window, getattr(Qt, "Key_" + char.upper()), Qt.NoModifier)
+
+
+def test_rename_menu_opens_editable_input_and_updates_title(qapp, tmp_path, monkeypatch):
+    """第 4 组：Rename 是居中输入框（不是行内编辑），真实键入后标题落盘并刷新列表。"""
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.6)
+        items = _menu_items(window)
+        assert all(item is not None for item in items)
+
+        _click(window, items[1])
+        _pump(qapp, 0.4)
+        dialog = _find_item(window.contentItem(), "renameDialog")
+        field = _find_item(window.contentItem(), "renameInput")
+        assert dialog is not None and dialog.property("visible") is True
+        assert field is not None
+        assert field.property("readOnly") is False
+        assert field.property("text") == "对比用会话：一条完整回合"
+
+        # 真实鼠标点进输入框，Ctrl+A 后键入新标题，再点确认按钮。
+        _click(window, field)
+        _pump(qapp, 0.2)
+        assert field.property("activeFocus") is True
+        from PySide6.QtCore import Qt
+        from PySide6.QtTest import QTest
+
+        QTest.keyClick(window, Qt.Key_A, Qt.ControlModifier)
+        _type_text(window, "renamed by click")
+        _pump(qapp, 0.2)
+        assert field.property("text") == "renamed by click"
+
+        _click(window, _find_item(window.contentItem(), "renameConfirm"))
+        _pump(qapp, 0.5)
+        assert dialog.property("visible") is False
+        assert window.property("renameOpen") is False
+        assert store.load_session("parity-000").title == "renamed by click"
+        assert window.property("activeTitle") == "renamed by click"
+        row0 = _find_item(window.contentItem(), "threadRow0")
+        assert row0 is not None and row0.property("title") == "renamed by click"
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
+def test_select_menu_enters_multi_select_with_batch_bar(qapp, tmp_path, monkeypatch):
+    """第 5 组：Select 立即选中被右键会话，底部批量条可见；点另一行增加选择数。"""
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.6)
+        _click(window, _menu_items(window)[2])
+        _pump(qapp, 0.4)
+
+        bar = _find_item(window.contentItem(), "selectionBar")
+        count = _find_item(window.contentItem(), "selectionCount")
+        assert bar is not None and bar.property("visible") is True
+        assert count is not None and count.property("text") == "1 selected"
+        assert window.property("selectMode") is True
+        assert _as_list(window.property("selectedSessions")) == ["parity-000"]
+
+        _click(window, _find_item(window.contentItem(), "threadRow1"))
+        _pump(qapp, 0.3)
+        assert count.property("text") == "2 selected"
+        assert _as_list(window.property("selectedSessions")) == ["parity-000", "parity-001"]
+
+        _click(window, _find_item(window.contentItem(), "selectionExit"))
+        _pump(qapp, 0.3)
+        assert bar.property("visible") is False
+        assert window.property("selectMode") is False
+        assert _as_list(window.property("selectedSessions")) == []
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
+def test_archive_menu_moves_session_and_archive_entry_lists_it(qapp, tmp_path, monkeypatch):
+    """第 6 组：Archive 从普通列表移除并落盘，归档入口打开后能查到同一条会话。"""
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.6)
+        _click(window, _menu_items(window)[3])
+        _pump(qapp, 0.6)
+
+        assert len(session_rows(store)) == 119
+        assert len(window.property("sessions")) == 119
+        assert store.load_session("parity-000").archived is True
+        assert bridge._active == "parity-001"
+        assert window.property("activeId") == "parity-001"
+        archived = window.property("archivedSessions")
+        assert len(archived) == 1 and archived[0]["id"] == "parity-000"
+
+        entry = _find_item(window.contentItem(), "archiveEntry")
+        assert entry is not None and entry.property("visible") is True
+        _click(window, entry)
+        _pump(qapp, 0.4)
+        assert window.property("archiveView") is True
+        header = _find_item(window.contentItem(), "archiveHeader")
+        assert header is not None and header.property("visible") is True
+        archived_row = _find_item(window.contentItem(), "threadRow0")
+        assert archived_row is not None
+        assert archived_row.property("title") == "对比用会话：一条完整回合"
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
