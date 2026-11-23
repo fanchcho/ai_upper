@@ -183,7 +183,7 @@ def test_horizontal_rule_is_a_one_pixel_frame_with_spacing_on_the_neighbours(qap
     assert lines[0].frameFormat().height().rawValue() == 1.0
     # 间距写在相邻块上：frame 自己的 margin 会被背景一起涂成色带。
     assert find_block(document, "before").blockFormat().bottomMargin() == 16.0 + 12.0
-    assert find_block(document, "after").blockFormat().topMargin() == 0.0
+    assert find_block(document, "after").blockFormat().topMargin() == 16.0
 
 
 # ── 行内格式 ─────────────────────────────────────────────────────────────
@@ -356,8 +356,8 @@ def test_table_cells_use_transparent_indent_and_fixed_row_height(qapp):
     block = tables(document)[0].cellAt(1, 0).firstCursorPosition().blockFormat()
     # Qt 的 textIndent 会从块布局宽度里扣掉，块背景右侧会露出白槽；
     # 左缩进改为块首透明 NBSP，行高由一个全透明的 23px 零宽字符撑到约 34px。
-    assert (block.leftMargin(), block.rightMargin()) == (0.0, 0.0)
-    assert block.textIndent() == 10.0
+    assert (block.leftMargin(), block.rightMargin()) == (0.0, 1.0)
+    assert block.textIndent() == 0.0
     assert block.lineHeightType() == QtGui.QTextBlockFormat.LineHeightTypes.FixedHeight.value
     assert block.lineHeight() == 34.45
 
@@ -417,7 +417,7 @@ def test_code_block_fills_the_content_width_when_it_is_short(qapp):
     document = render("```\nx\n```", width=600.0)
     table = tables(document)[0]
     assert table.format().width().type() == QtGui.QTextLength.Type.FixedLength
-    assert table.format().width().rawValue() == 576.0  # 600 - 24px 代码块内边距
+    assert table.format().width().rawValue() == 598.0  # 600 - 2px 外框
 
 
 def test_code_block_grows_to_the_longest_line(qapp):
@@ -439,7 +439,7 @@ def test_code_body_is_12px_mono_on_both_sides(qapp):
 # ── 图片与占位 ───────────────────────────────────────────────────────────
 def test_missing_image_renders_an_explicit_placeholder(qapp):
     document = render("![说明](missing.png)")
-    assert document.toPlainText() == "说明"
+    assert document.toPlainText() == "［图片：说明］"
     assert first_fragment(document.begin()).charFormat().foreground().color().name() == LIGHT.fg_subtle
 
 
@@ -662,7 +662,7 @@ def test_a_document_with_every_construct_renders(qapp):
     """全元素文档能渲染、能取纯文本——任何一类元素把排版搞崩都会在这里暴露。"""
     document = render(SEGFAULT_MARKDOWN)
     text = document.toPlainText()
-    for needle in ("标题", "引用", "嵌套", "def f():", "任务", "图"):
+    for needle in ("标题", "引用", "嵌套", "def f():", "任务", "［图片：图］"):
         assert needle in text
     assert len(tables(document)) >= 3  # 引用 + 嵌套引用 + 表格 + 代码块
 

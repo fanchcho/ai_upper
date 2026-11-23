@@ -182,7 +182,7 @@ def test_width_change_recomputes_the_code_block_width(qapp):
         if table is not None:
             tables.append(table)
         block = block.next()
-    assert tables and tables[0].format().width().rawValue() == 576.0
+    assert tables and tables[0].format().width().rawValue() == 598.0
     body.set_width(440.0)
     block = body.document.begin()
     table = None
@@ -192,7 +192,7 @@ def test_width_change_recomputes_the_code_block_width(qapp):
             table = found
             break
         block = block.next()
-    assert table is not None and table.format().width().rawValue() == 440.0 - 24.0
+    assert table is not None and table.format().width().rawValue() == 440.0 - 2.0
 
 
 def test_non_positive_width_is_ignored(qapp):

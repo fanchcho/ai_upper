@@ -1,4 +1,3 @@
-$ .venv/bin/python -I out/latest-parity/probes/c2_c3_search_and_focus.py
 === 判据2：search-results 命中行数（头像列 x70..108 的紫色头像簇）===
   qml 簇数=10  tops=[66, 120, 174, 228, 282, 336, 390, 444, 498, 552]
      每簇像素数=[349, 349, 349, 349, 349, 349, 349, 349, 349, 349]
@@ -23,4 +22,3 @@ $ .venv/bin/python -I out/latest-parity/probes/c2_c3_search_and_focus.py
   deva focus  y=657 紫蓝像素数=0
   deva focus  y=658 紫蓝像素数=764 x=436..1199 首色=(194, 194, 236)
   deva focus  y=659 紫蓝像素数=8 x=434..1201 首色=(179, 179, 233)
-rc=0

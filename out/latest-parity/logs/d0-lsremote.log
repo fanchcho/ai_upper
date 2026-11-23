@@ -1,8 +1,0 @@
-$ git ls-remote origin refs/heads/develop
-4a5c035702be6f4e84d76909de53261fe86e6f52	refs/heads/develop
-rc=0
-$ git rev-parse HEAD
-4a5c035702be6f4e84d76909de53261fe86e6f52
-$ git rev-list --count origin/develop..HEAD
-0
-rc=0

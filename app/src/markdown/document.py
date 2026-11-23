@@ -365,15 +365,12 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
         pending_top = 0.0
         carry = None
         first = True
-        list_fixups = []
         for index in range(0, len(blocks), size):
             scratch = QTextDocument()
             scratch_cursor = QTextCursor(scratch)
+            if carry is not None:
+                scratch_cursor.setBlockFormat(carry)
             renderer = _Renderer(scratch, body, content_width, image_resolver)
-            # 分块起点是一个全新的空块：格式必须从中性正文块起步。把上一分块
-            # 末块格式直接灌进来会让「以列表开头」的分块再叠一层 21px 缩进，
-            # 也会让代码/表格前的接缝空块带上列表制表位。
-            scratch_cursor.setBlockFormat(renderer._block_format(8.0, 12.0))
             renderer._pending_top = pending_top
             renderer.render_blocks(blocks[index:index + size], scratch_cursor)
             pending_top = renderer._pending_top
@@ -388,30 +385,20 @@ def _render_chunked(document: Any, blocks: list, body: Any, content_width: float
                 # 每道接缝都会多一个 21px 空块（turns=30/group=5 实测多 12 块）。
                 # 引用/分隔线仍要分隔块（它们前面本来就有一个继承格式的空块）。
                 first_kind = blocks[index].get("type") if index < len(blocks) else ""
-                if first_kind != "table":
+                if first_kind not in ("table", "code"):
                     cursor.movePosition(QTextCursor.MoveOperation.End)
                     cursor.insertBlock(QTextBlockFormat())
-            start = cursor.position()
+            # 无论是否插分隔块，都必须先移到文末再记片段起点：跳过分隔块时
+            # 光标还停在上一个分块的首块上，拿那个位置回填会把上一块的格式
+            # 改成 scratch 首块（表格场景下是第一个单元格的块格式）。
             cursor.movePosition(QTextCursor.MoveOperation.End)
-            target_start_block = cursor.blockNumber()
+            start = cursor.position()
             cursor.insertFragment(QtGui.QTextDocumentFragment(scratch))
             source_first = scratch.begin().blockFormat()
             cursor.setPosition(start)
             QTextCursor(cursor.block()).setBlockFormat(source_first)
-            if blocks[index].get("type") == "list":
-                source_list = scratch.begin()
-                while source_list.isValid() and not source_list.text().startswith("\t"):
-                    source_list = source_list.next()
-                if source_list.isValid():
-                    list_fixups.append((target_start_block, source_list.blockFormat()))
             _copy_resources(scratch, document)
             first = False
-        # 后续分块插入表格时 Qt 会把上一分块的首块格式重置为默认段落格式；
-        # 列表开头分块要等全部拼装完再回填一次首项格式。
-        for block_number, block_format in list_fixups:
-            block = document.findBlockByNumber(block_number)
-            if block.isValid():
-                QTextCursor(block).setBlockFormat(block_format)
     finally:
         cursor.endEditBlock()
 
@@ -491,6 +478,7 @@ class _Renderer:
         self._cell_block_formats = {}
         self._cell_char_formats = {}
         self._row_height_chars = {}
+        self._cell_pad_chars = {}
 
     # ── 基础 ──────────────────────────────────────────────────────────────
     def color(self, value: str) -> Any:
@@ -612,7 +600,7 @@ class _Renderer:
         self._has_content = True
 
     def _rule(self, cursor: Any) -> None:
-        self._hairline(cursor, gap_before=16.0, gap_after=0.0)
+        self._hairline(cursor, gap_before=16.0, gap_after=16.0)
 
     # ── 段落 ──────────────────────────────────────────────────────────────
     def _paragraph(self, cursor: Any, block: dict, indent: float) -> None:
@@ -711,7 +699,7 @@ class _Renderer:
         column = max(21.0, marker_width + 5.0)
         lead = max(0.0, column - marker_width - 1.0)
 
-        fmt = self._block_format(1.5, 1.5)
+        fmt = self._block_format(2.0, 2.0)
         fmt.setLeftMargin(indent + column)
         fmt.setTextIndent(-column)
         fmt.setTabPositions([
@@ -760,7 +748,7 @@ class _Renderer:
         # 第一个块上（见 ``_table_row`` 的末尾块）。
         table_fmt.setMargin(0.0)
         table_fmt.setTopMargin(0.0)
-        table_fmt.setBottomMargin(8.0)
+        table_fmt.setBottomMargin(0.0)
         table_fmt.setLeftMargin(0.0)
         table_fmt.setRightMargin(0.0)
         table_fmt.setAlignment(ALIGN_LEFT)
@@ -770,9 +758,9 @@ class _Renderer:
         # 形状不变：``parser`` 已把每行补齐到表头列数，所以直接按行数一次建表。
         table = cursor.insertTable(1 + len(rows), len(header), table_fmt)
         # 列宽按 CSS ``table-layout: auto`` 的 max-content 语义计算：每列取
-        # 该列所有单元格（表头+正文）里最宽的内容，加上左右 10px 内边距和
-        # 1px 边框。这样 ``README.md``/``package.json`` 这类行内代码芯片不会
-        # 被压成 87px（deva DOM 实测第一列 115.64px）。
+        # 该列所有单元格（表头+正文）里最宽的内容，加上左右各 10px 的
+        # 文本缩进和 1px 边框。这样 ``README.md``/``package.json`` 这类行内
+        # 代码芯片不会被压成 87px（deva DOM 实测第一列 115.64px）。
         widths = self._table_column_widths(header, rows, align)
         if widths:
             constraints = [QTextLength(QTextLength.Type.FixedLength, width)
@@ -789,7 +777,8 @@ class _Renderer:
         """按 max-content 语义算列宽（CSS ``.md table { width: max-content }``）。
 
         ``QTextDocument.idealWidth()`` 给出内容宽；列宽再加 CSS 的左右
-        ``padding: 10px``（20px）与 1px 边框（QText 的列宽包含边框）。
+        ``padding: 10px`` 对应的文本缩进（20px）与 1px 边框（QText 的列宽
+        包含边框）。
         结果封顶到 ``content_width``，超过时按比例压缩，避免表格撑破正文列。
         """
         if not header:
@@ -842,13 +831,11 @@ class _Renderer:
         cell_fmt = self._cell_formats.get(cell_key)
         if cell_fmt is None:
             cell_fmt = QTextTableCellFormat()
-            # CSS 的 10×6 padding：左右保留在单元格上（文字缩进与 deva 的
-            # x=+11 对齐）；上下归零，由块格式的固定行高 34.44px 撑满整行。
-            # 这样 QTextTableCellFormat 的背景能覆盖整格宽高（deva DOM:
-            # th bg rgb(247,247,248)，even td rgba(0,0,0,0.043)）。
-            # 内边距全部归零：Qt 的单元格/块背景都只画在内容矩形上，任何
-            # cell padding 都会留下白边。文字缩进改由块格式的 textIndent
-            # 实现（见下），块宽因此等于整格宽，背景能铺满。
+            # CSS 的 10×6 padding：单元格内边距全部归零，因为 Qt 的
+            # 单元格/块背景都只画在内容矩形上，任何 cell padding 都会留下
+            # 白边。左右 10px 改用块首 3 个透明 NBSP（13px 字，约 10px）
+            # 占位，上下 6px 与行高合并成固定 34.45px，使块背景能铺满整格
+            # （deva DOM: th bg rgb(247,247,248)，even td rgba(0,0,0,0.043)）。
             cell_fmt.setLeftPadding(0.0)
             cell_fmt.setRightPadding(0.0)
             cell_fmt.setTopPadding(0.0)
@@ -896,29 +883,40 @@ class _Renderer:
                 # CSS: th/td padding 6px + line-height 21.45px + 1px 边框
                 # = 34.45px。Qt 的 ProportionalHeight 对单行块只影响行距，
                 # 不会撑满 cell 高度；用 FixedHeight 才能把背景铺满一行。
+                # 不能用 textIndent 做左缩进：Qt 会把它从块布局宽度里扣掉，
+                # 块背景右侧又露出 10px 白边；改用块首透明 NBSP 占位。
+                # 右边距留 1px 给单元格右边框，避免块背景盖住分隔线。
                 block_fmt.setLineHeight(
                     (13.0 * 1.65 + 12.0 + 1.0) * self.style.scale,
                     QTextBlockFormat.LineHeightTypes.FixedHeight.value)
                 block_fmt.setLeftMargin(0.0)
-                block_fmt.setRightMargin(0.0)
+                block_fmt.setRightMargin(1.0)
                 block_fmt.setTopMargin(0.0)
                 block_fmt.setBottomMargin(0.0)
-                block_fmt.setTextIndent(10.0 * self.style.scale)
+                block_fmt.setTextIndent(0.0)
                 if background is not None:
                     block_fmt.setBackground(background)
                 self._cell_block_formats[block_key] = block_fmt
             cell_cursor.setBlockFormat(block_fmt)
             # Qt 在表格单元格里会忽略 QTextBlockFormat 的固定行高，背景只
-            # 覆盖 13/19px 的内容高度。这里塞一个零宽、全透明的 23px 字符：
+            # 覆盖 13/19px 的内容高度。这里先塞一个零宽、全透明的 23px 字符：
             # 它把单行块的行框撑到 34px（deva DOM 的 tr 高 34.44px），块背景
-            # 因此能铺满整行 301.67×34；字符宽 0 且 alpha=0，不改变可见文本。
+            # 因此能铺满整行；字符宽 0 且 alpha=0，不改变可见文本。
+            # 随后 3 个透明 NBSP 只负责左侧 10px 的视觉缩进，同时让块布局
+            # 达到整格宽度，QML 画出的块背景才不会在右侧留下白槽。
             spacer = self._row_height_chars.get(bool(header_row))
             if spacer is None:
                 spacer = QTextCharFormat()
-                spacer.setFont(self.font(21.3 * self.style.scale, bold=header_row))
+                spacer.setFont(self.font(23.0 * self.style.scale, bold=header_row))
                 spacer.setForeground(QColor(0, 0, 0, 0))
                 self._row_height_chars[bool(header_row)] = spacer
             cell_cursor.insertText("\u200b", spacer)
+            pad = self._cell_pad_chars.get(bool(header_row))
+            if pad is None:
+                pad = QTextCharFormat(char_fmt)
+                pad.setForeground(QColor(0, 0, 0, 0))
+                self._cell_pad_chars[bool(header_row)] = pad
+            cell_cursor.insertText("\u00a0" * 3, pad)
             self._inline(cell_cursor, cell_nodes or [], char_fmt)
 
     # ── 代码块 ────────────────────────────────────────────────────────────
@@ -947,12 +945,13 @@ class _Renderer:
         widest = max([_measure(mono_font, line) for line in lines] + [0.0])
         # 左右各 12px 正文内边距 + 2px 边框；再加 2px 余量，避免最宽行贴边触发无谓滚动。
         natural = widest + 24.0 + 4.0
-        frame_width = max(natural, self.content_width - 24.0)
+        # 代码块是满宽块：``.md-code`` 的左右边框贴正文列，不再额外缩进 12px。
+        # QTextTableFormat 的宽度不含左右边框，故减 2px 后外框正好 content_width。
+        frame_width = max(natural, self.content_width - 2.0)
         rows = 2 if language else 1
         first_code_row = 1 if language else 0
 
-        if self._has_content:
-            cursor.insertBlock()
+        # 与表格同理：不要再 insertBlock，否则代码块前多一个 21px 空块。
         table_fmt = QTextTableFormat()
         table_fmt.setBorder(0.0)
         table_fmt.setCellSpacing(0.0)
@@ -1111,7 +1110,7 @@ class _Renderer:
             # 解析不到时保留 alt 文本并加标记：用户能看出这里有图，而不是被吞掉。
             fmt = QTextCharFormat(base)
             fmt.setForeground(self.color(self.palette.fg_subtle))
-            cursor.insertText(alt or "图片", fmt)
+            cursor.insertText("［图片%s］" % ("：" + alt if alt else ""), fmt)
             return
         name = "md-image:%d" % id(image)
         self.doc.addResource(QTextDocument.ResourceType.ImageResource.value,
