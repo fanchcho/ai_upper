@@ -1,0 +1,10 @@
+commit ab66967621de70b683ef5afd807d4117f6b1852a
+Author: Claude Code <noreply@anthropic.com>
+Date:   Mon Nov 23 22:08:09 2026 +0800
+
+    fix(markdown): 断图按 alt 文本渲染
+
+ app/src/markdown/document.py        |  8 ++++----
+ app/tests/test_markdown_body.py     | 11 +++++++++++
+ app/tests/test_markdown_document.py | 10 ++++++----
+ 3 files changed, 21 insertions(+), 8 deletions(-)
