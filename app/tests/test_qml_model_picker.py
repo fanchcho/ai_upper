@@ -193,5 +193,68 @@ def test_clicking_model_row_activates_it(qapp, tmp_path, monkeypatch):
         engine.deleteLater()
 
 
+def test_model_and_effort_chips_keep_their_own_menus(qapp, tmp_path, monkeypatch):
+    """两个贴片互不串菜单：每次真实点击只切到自己的 pickerMode，不叠开对方菜单。"""
+    window, bridge, store, home, ticker, engine = _build_chat_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.6)
+        model_chip = _find_item(window.contentItem(), "modelChip")
+        effort_chip = _find_item(window.contentItem(), "effortChip")
+        assert model_chip is not None and effort_chip is not None
+
+        assert window.property("modelPickerOpen") is False
+        _click(window, model_chip)
+        _pump(qapp, 0.3)
+        assert window.property("pickerMode") == "model"
+        assert _picker(window, "modelPicker").property("visible") is True
+        assert _picker(window, "thinkingPicker").property("visible") is False
+
+        _click(window, effort_chip)
+        _pump(qapp, 0.3)
+        assert window.property("pickerMode") == "thinking"
+        assert _picker(window, "thinkingPicker").property("visible") is True
+        assert _picker(window, "modelPicker").property("visible") is False
+
+        _click(window, model_chip)
+        _pump(qapp, 0.3)
+        assert window.property("pickerMode") == "model"
+        assert _picker(window, "modelPicker").property("visible") is True
+        assert _picker(window, "thinkingPicker").property("visible") is False
+
+        _click(window, model_chip)
+        _pump(qapp, 0.3)
+        assert window.property("modelPickerOpen") is False
+        assert _picker(window, "modelPicker").property("visible") is False
+        assert _picker(window, "thinkingPicker").property("visible") is False
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
+def test_picker_panel_is_two_px_right_of_chip_left_aligned_panel(qapp, tmp_path, monkeypatch):
+    """面板外框对齐 deva：面板相对贴片容器的 x = width - panelWidth + 2。
+
+    deva 实测 `model-picker-deva.png`: 面板边框 x847..1094（宽 248）；
+    QML 原绑定 `x = parent.width - width` 落成 x845..1092，整体差 2px。
+    """
+    window, bridge, store, home, ticker, engine = _build_chat_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.6)
+        chip = _find_item(window.contentItem(), "modelChip")
+        _click(window, chip)
+        _pump(qapp, 0.3)
+        picker = _picker(window, "modelPicker")
+        panel = _find_item(picker, "pickerPanel")
+        assert panel is not None
+        # ModelPicker 根的 implicitWidth 就是面板宽，Main.qml 把根定位到贴片容器内；
+        # 面板自身 x=0，因此 +2 的落点断言应读根节点的 x。
+        assert picker.property("x") == chip.property("width") - panel.property("width") + 2
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-q"]))

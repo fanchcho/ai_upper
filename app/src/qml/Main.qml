@@ -1517,7 +1517,9 @@ ApplicationWindow {
                         visible: window.modelPickerOpen && window.pickerMode === "thinking"
                         mode: "thinking"
                         effortMenu: window.effortMenu
-                        x: parent.width - width
+                        // deva 实测面板外框 x847..1094（248 宽）；QML 贴片右缘比 deva
+                        // 短 1px，面板本身又按贴片内容宽内缩，统一 +2 后左右边框逐像素对齐。
+                        x: parent.width - width + 2
                         y: -height - 8
                         onEffortPicked: function (level) { window.pickEffort(level) }
                     }
@@ -1577,7 +1579,8 @@ ApplicationWindow {
                         groups: window.modelGroups
                         activeRef: window.activeModelRef
                         emptyText: window.chatText.noModel || ""
-                        x: parent.width - width
+                        // 同 thinking 面板：deva 外框 x847..1094；+2 后两边框逐像素对齐。
+                        x: parent.width - width + 2
                         y: -height - 8
                         onPicked: function (providerId, modelId) { window.pickModel(providerId, modelId) }
                     }
