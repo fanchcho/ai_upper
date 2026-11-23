@@ -1084,12 +1084,13 @@ rc=0
 （5 项几何 → 菜单 Delete → 确认 Delete；Cancel；遮罩），但它直接走 QML 内部事件路径，
 本节探针额外测了 Delete 项的**像素颜色**与「右键入口」这两项。
 
-**未做**：右键菜单的 Rename / Select / Archive 三项只渲染、不接动作（本轮判据只覆盖
-项数与 Delete 颜色 + 删除链路）；菜单阴影按 `0 6 24 / .12` 补齐后与 deva 逐像素相差 ≤1 灰阶，
-未再调参。
+**后续闭环**：右键菜单的 Rename / Select / Archive 三项已先后由 `d4279ad`（Rename → `renameSession`）、
+`9e7d23c`（Select 无 id 时回退当前会话）、`0d2cf84`（session-row/menu 测试）接通；`923f554` 又补了
+从**非活动行**真实右键的端到端探针（标题落盘、选择集与归档持久化），不再有「只渲染、不接动作」的缺口。
+菜单阴影按 `0 6 24 / .12` 补齐后与 deva 逐像素相差 ≤1 灰阶，未再调参。
 
 **提交记录**：`cddf2fb` `fix(qml): align context menu and make delete confirmation interactive`
-（2026-11-22 23:31:37 +0800，父提交 `dd0b38e`，未 push，只在本地 `develop`）。
+（2026-11-22 23:31:37 +0800，父提交 `dd0b38e`，已随 `develop` 分支 push 到 `origin`）。
 `git show --name-only --format='%H %s' cddf2fb` 实测 17 个路径，与本节改动清单逐条对上：
 
 ```
@@ -1114,6 +1115,9 @@ out/latest-parity/qml/delete-confirm.png
 `--name-only` 内；`git status --porcelain` 的「已修改」条目为 **0**（其余全是既有 `out/`
 未跟踪产物，与本批无关）。回归口径复核：`dd0b38e` 提交的 `chat.png` / `dark-chat.png`
 在工作区 md5 仍为 `dc133011…` / `3aa7be54…`，未被本节重写。
+
+**紧随本节之后的本轮提交**：`cddf2fb`（右键菜单 5 项 + Delete 危险色 + 删除确认三处真实点击）
+与 `923f554`（非活动行右键 Rename / Select / Archive 三项动作端到端探针 + `ctx-menu` 重拍）。
 
 ### 4.9 model-picker 弹层内容与聚焦态
 
@@ -1350,64 +1354,68 @@ rc=0
 
 ### 5.2 18 页逐页差异整表
 
-上方命令的原始输出（**已按 §4.7 / §4.8 / §4.9 修复后的当前图重算**，命令与日志：
+上方命令的原始输出（**已按 §4.4 / §4.7 / §4.8 / §4.9 / §4.10 与后续重拍后的当前图复算**：
 `.venv/bin/python -I scripts/parity/page_diff18.py out/latest-parity/deva out/latest-parity/qml`
-→ `out/latest-parity/logs/c6-page-diff18-final.log`，rc=0；每行原样对应一页。
-model-picker 一行在 §4.9 之后重拍过，值为 `137282 / 13.08%`，比 §4.9 之前的同代码 `141550 / 13.49%` 少 4268 px）：
+→ rc=0；每行原样对应一页。历史日志 `out/latest-parity/logs/c6-page-diff18-final.log` 保留修复当时的快照，
+本表下列五行已按当前图值与后续实测日志回填）：
 
 ```
-chat                   ac72cd597ae44377b608777cbd5e2e81 dc1330117d4b7631721a9768fb1f8e12  158583  142346  129909  12.38% max=248 same=False
+chat                   ac72cd597ae44377b608777cbd5e2e81 d7ac856efc22a4ce41369baa0be1e75a  158583  100242  119799  11.41% max=248 same=False
 empty                  a616eabe08d8c107709b89d699604d13 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
 first-run              0e2b5786d552a73525ded72469f224ea 1d26dc8bad6864d49ae706556efca3bc   40733   38553   10214   0.97% max=248 same=False
 search-open            3a5f80988f34cbcccf98281d7697498e 2bf956a8237e685cdf2033ced3c242ae  158824  140997  136170  12.97% max=248 same=False
 search-results         1d1ba8121289fc7b91cdd95938a3ecad 8680485a1ea14fc8eff49a6b8583efa9  130449  115306  113729  10.84% max=248 same=False
 search-none            49503995317b15b2d1806c1c0a99e5b3 478a9e7e0b001dd7215dab3f8074c1d7   64532   53768   93091   8.87% max=224 same=False
-ctx-menu               64c8c33a5c5c5e905288cca4fab37285 3c1fdb4633790aadb495881f2732bd23  158033  143492  127196  12.12% max=248 same=False
+ctx-menu               64c8c33a5c5c5e905288cca4fab37285 670cb0a6175633c7dd4de65db75dc600  158033  160017  115327  10.99% max=248 same=False
 delete-confirm         964c32d139d41a71c3eb2b9026e24f9b 5b8baeb969eb5d8a416be851c24d7dce  162718  147103  384883  36.67% max=224 same=False
-model-picker           946b07def583e696822df943b6935f04 7af296ea76c95baccbdd4c837e0f3159  164258  148495  137282  13.08% max=248 same=False
+model-picker           946b07def583e696822df943b6935f04 91b3f5cc9f9d936fd666892bf4f29535  164258  106996  115579  11.01% max=248 same=False
 hover-thread           16917898b7b5fb7b95a515bee87001d1 bab936657c1f28ce5862c40672d47e8a  158169  140893  136545  13.01% max=248 same=False
 focus-composer         e976e0858fd2d6741c6ffe52ad72a5b4 6a4ff152ff3aacae596c849968cc9cde  158745  140778  136157  12.97% max=248 same=False
 long-mid               147fb156af029f6c57cfb686d6e84c0c 8905296c9f8d7e2b372b7e44acb68623  143456  142304  126160  12.02% max=255 same=False
 long-bottom            be7b7fe814eb8ebcf11369bdec650a68 880b26bdebdb3e10d3afff973460ce37  157770  139668  135084  12.87% max=248 same=False
-settings-general       4d16a5c68b170e998bb4892713b8263e 6a95b886d52ce6695f0463168023b019  142486  111189  340813  32.47% max=224 same=False
-settings-models        7f7a6dd835823f50475db7a3c9e727c1 ddee23d6140c34d38e4b3b07d6b524b7  132243  103282  325672  31.03% max=237 same=False
+settings-general       4d16a5c68b170e998bb4892713b8263e c0f484af63df61817a87a15341e9d212  142486  113127  335142  31.93% max=224 same=False
+settings-models        7f7a6dd835823f50475db7a3c9e727c1 92c0f06f8b41707f3e6396e8c1bfe529  132243   81933  294323  28.04% max=216 same=False
 settings-extensions    15d607e162e2ef874dd6e59a78d0dd5c 4fb02618eea39c43f95d17ae760fee4e  139387  110088  330260  31.47% max=216 same=False
 settings-about         3fac0ec7f4820e99a1bac811de88697f 0c9bfc43f211a89ec8e1f50e556a683a  135693  104052  328222  31.27% max=224 same=False
 dark-chat              252996a52c0b1d02cfb3205ba1798c94 3aa7be544db6effc57214a22b11516ec  158038  141637  128299  12.22% max=230 same=False
 ```
 
-与修复前的旧值对照（只列被修复改动的 5 页）：
+与修复前的旧值对照（只列有修复前后实测的页面）：
 
 | 页 | 修复前 差异像素 / % | 修复后 差异像素 / % | 修复来源 |
 |---|---:|---:|---|
-| chat | 136141 / 12.97% | 129909 / 12.38% | §4.7 dark-chat 那批把输入卡片换成 `SoftShadow` 后重拍了 chat |
-| ctx-menu | 143461 / 13.67% | 127196 / 12.12% | §4.8 菜单 5 项 + Delete 危险色 |
+| chat | 136141 / 12.97% | 119799 / 11.41% | §4.7 输入卡片 + §5.6 侧栏/正文滚动条后重拍 |
+| ctx-menu | 143461 / 13.67% | 115327 / 10.99% | §4.8 菜单 5 项 + Delete 危险色；`923f554` 重拍 |
 | delete-confirm | 401948 / 38.30% | 384883 / 36.67% | §4.8 真可交互的确认层 |
-| model-picker | 149105 / 14.21%（归档图）→ 同代码重拍 141550 / 13.49% | 137282 / 13.08% | §4.9 弹层内容 + 聚焦态；归档图本身过期，口径见 §4.9 |
+| model-picker | 149105 / 14.21%（归档图）→ 同代码重拍 141550 / 13.49% | 115579 / 11.01% | §4.9 弹层内容 + 聚焦态；`342186e` 分组分隔与盒模型 |
+| settings-general | 340813 / 32.47%（旧表基线） | 335142 / 31.93% | §4.10 标题栏窗口控件 |
+| settings-models | 325672 / 31.03% | 294323 / 28.04% | §4.4.5 Models 容器/副标题/行尾图标 |
 | dark-chat | 258651 / 24.64% | 128299 / 12.22% | §4.7 输入卡片 `--bg-elevated` + `--shadow` |
 
 整理成表（差异像素 = 三通道任一非零的像素数；差异% = 差异像素 / (1280×820)；max = 单像素最大通道差）：
 
-| 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 |
-|---|---|---|---|---|---|
-| chat | `ac72cd597ae44377b608777cbd5e2e81` | `dc1330117d4b7631721a9768fb1f8e12` | 129909 | 12.38% | 248 |
-| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
-| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 |
-| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 |
-| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 |
-| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 |
-| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `3c1fdb4633790aadb495881f2732bd23` | 127196 | 12.12% | 248 |
-| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 |
-| model-picker | `946b07def583e696822df943b6935f04` | `7af296ea76c95baccbdd4c837e0f3159` | 137282 | 13.08% | 248 |
-| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 |
-| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 |
-| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 |
-| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 |
-| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `6a95b886d52ce6695f0463168023b019` | 340813 | 32.47% | 224 |
-| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `ddee23d6140c34d38e4b3b07d6b524b7` | 325672 | 31.03% | 237 |
-| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 |
-| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 |
-| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `3aa7be544db6effc57214a22b11516ec` | 128299 | 12.22% | 230 |
+| 页名 | 原版 md5 | QML md5 | 差异像素 | 差异% | max 通道差 | 口径 |
+|---|---|---|---|---|---|---|
+| chat | `ac72cd597ae44377b608777cbd5e2e81` | `d7ac856efc22a4ce41369baa0be1e75a` | 119799 | 11.41% | 248 | 当前实测（§5.6） |
+| empty | `a616eabe08d8c107709b89d699604d13` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍，值为修复前基线 |
+| first-run | `0e2b5786d552a73525ded72469f224ea` | `1d26dc8bad6864d49ae706556efca3bc` | 10214 | 0.97% | 248 | 未重拍，值为修复前基线 |
+| search-open | `3a5f80988f34cbcccf98281d7697498e` | `2bf956a8237e685cdf2033ced3c242ae` | 136170 | 12.97% | 248 | 未重拍，值为修复前基线 |
+| search-results | `1d1ba8121289fc7b91cdd95938a3ecad` | `8680485a1ea14fc8eff49a6b8583efa9` | 113729 | 10.84% | 248 | 未重拍，值为修复前基线 |
+| search-none | `49503995317b15b2d1806c1c0a99e5b3` | `478a9e7e0b001dd7215dab3f8074c1d7` | 93091 | 8.87% | 224 | 未重拍，值为修复前基线 |
+| ctx-menu | `64c8c33a5c5c5e905288cca4fab37285` | `670cb0a6175633c7dd4de65db75dc600` | 115327 | 10.99% | 248 | 当前实测（§4.8 / `923f554`） |
+| delete-confirm | `964c32d139d41a71c3eb2b9026e24f9b` | `5b8baeb969eb5d8a416be851c24d7dce` | 384883 | 36.67% | 224 | 当前实测（§4.8） |
+| model-picker | `946b07def583e696822df943b6935f04` | `91b3f5cc9f9d936fd666892bf4f29535` | 115579 | 11.01% | 248 | 当前实测（§4.9 / `342186e`） |
+| hover-thread | `16917898b7b5fb7b95a515bee87001d1` | `bab936657c1f28ce5862c40672d47e8a` | 136545 | 13.01% | 248 | 未重拍，值为修复前基线 |
+| focus-composer | `e976e0858fd2d6741c6ffe52ad72a5b4` | `6a4ff152ff3aacae596c849968cc9cde` | 136157 | 12.97% | 248 | 未重拍，值为修复前基线 |
+| long-mid | `147fb156af029f6c57cfb686d6e84c0c` | `8905296c9f8d7e2b372b7e44acb68623` | 126160 | 12.02% | 255 | 未重拍，值为修复前基线 |
+| long-bottom | `be7b7fe814eb8ebcf11369bdec650a68` | `880b26bdebdb3e10d3afff973460ce37` | 135084 | 12.87% | 248 | 未重拍，值为修复前基线 |
+| settings-general | `4d16a5c68b170e998bb4892713b8263e` | `c0f484af63df61817a87a15341e9d212` | 335142 | 31.93% | 224 | 当前实测（§4.10） |
+| settings-models | `7f7a6dd835823f50475db7a3c9e727c1` | `92c0f06f8b41707f3e6396e8c1bfe529` | 294323 | 28.04% | 216 | 当前实测（§4.4.5） |
+| settings-extensions | `15d607e162e2ef874dd6e59a78d0dd5c` | `4fb02618eea39c43f95d17ae760fee4e` | 330260 | 31.47% | 216 | 未重拍，值为修复前基线 |
+| settings-about | `3fac0ec7f4820e99a1bac811de88697f` | `0c9bfc43f211a89ec8e1f50e556a683a` | 328222 | 31.27% | 224 | 未重拍，值为修复前基线 |
+| dark-chat | `252996a52c0b1d02cfb3205ba1798c94` | `3aa7be544db6effc57214a22b11516ec` | 128299 | 12.22% | 230 | 当前实测（§4.7） |
+
+口径说明：表中 7 页为当前实测；其余 11 页**未重拍，值为修复前基线**，只用于结构对照，不得当作本轮新值。
 
 注：`empty` 与 `first-run` 两页原版图 md5 不同但像素完全相同（`out/latest-parity/probe-final2.log` 第 1 节："deva 侧 empty/first-run 像素完全相同"），差异仅来自 PNG 编码；QML 侧两页 md5 相同（`1d26dc8bad6864d49ae706556efca3bc`），即 QML 侧两态渲染完全一致。
 
@@ -1672,27 +1680,27 @@ hover-thread / long-mid 仍在 8.55% / 9.10%，是这两页独有的真结构差
 
 | 页 | 差异像素 / % | 主要结构缺口 | 判定 |
 |---|---:|---|---|
-| chat | 129909 / 12.38% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
+| chat | 119799 / 11.41% | A1–A5、B1–B3、E1–E4、G1/G4/G5 | 真结构缺口 |
 | empty | 10214 / 0.97% | H1（头像绘制与字体度量） | 仅光栅差异 |
 | first-run | 10214 / 0.97% | H1；与 empty 像素相同 | 仅光栅差异 |
 | search-open | 136170 / 12.97% | 同 chat；搜索框打开态差异随正文/侧栏缺口 | 真结构缺口 |
 | search-results | 113729 / 10.84% | 同 chat；判据二 10 行已对齐（判据二成立） | 真结构缺口 |
 | search-none | 93091 / 8.87% | E5、A1–A5、B1–B3 | 真结构缺口 |
-| ctx-menu | 127196 / 12.12% | ~~C1~~（已由 §4.8 修复：5 项、Delete 危险色）；C2/C3 小幅几何；A/B/E 共用缺口 | 真结构缺口（C1 已闭环） |
+| ctx-menu | 115327 / 10.99% | ~~C1~~（已由 §4.8 修复：5 项、Delete 危险色）；C2/C3 小幅几何；A/B/E 共用缺口 | 真结构缺口（C1 已闭环） |
 | delete-confirm | 384883 / 36.67% | ~~C4~~（已由 §4.8 修复：三处点击均生效）；A5 遮罩灰阶 | 剩余为遮罩合成差（76.1% 只差 1–2 灰阶） |
-| model-picker | 137282 / 13.08% | ~~D1/D2/D3~~（已由 §4.9 修复：弹层内容、四边聚焦、面板几何）；剩余为 picker 专属 316 px + chat 共用 A/B/E 缺口；面板横向 x 偏移属 G1 | 真结构缺口（D1–D3 已闭环） |
+| model-picker | 115579 / 11.01% | ~~D1/D2/D3~~（已由 §4.9 修复：弹层内容、四边聚焦、面板几何）；剩余为 picker 专属 316 px + chat 共用 A/B/E 缺口；面板横向 x 偏移属 G1 | 真结构缺口（D1–D3 已闭环） |
 | hover-thread | 136545 / 13.01% | B1/B2（悬停行位置错）、A/B/E 共用缺口 | 真结构缺口 |
 | focus-composer | 136157 / 12.97% | 判据三成立；其余同 chat | 真结构缺口 |
 | long-mid | 126160 / 12.02% | A/B/E；滚动位置与已提交基线不同 | 真结构缺口 |
 | long-bottom | 135084 / 12.87% | A/B/E；真底内容仍少 | 真结构缺口 |
-| settings-general | 340813 / 32.47% | F1–F5（窗口控制、面板 bbox、遮罩、背景对话不可见、导航图标） | 真结构缺口 |
-| settings-models | 325672 / 31.03% | F1–F5；Models 内容差异 | 真结构缺口 |
+| settings-general | 335142 / 31.93% | F1–F5（窗口控制、面板 bbox、遮罩、背景对话不可见、导航图标） | 真结构缺口 |
+| settings-models | 294323 / 28.04% | F1–F5；Models 内容差异 | 真结构缺口 |
 | settings-extensions | 330260 / 31.47% | F1–F5；Extensions 内容差异 | 真结构缺口 |
 | settings-about | 328222 / 31.27% | F1–F5；About 版本单一来源已修复，剩余为遮罩/窗口控制/图标 | 真结构缺口 |
 | dark-chat | 128299 / 12.22% | ~~E6~~（已由 §4.7 修复：卡片 `(42,42,46)` 与 deva 同值）；A/B 共用缺口 | 真结构缺口 |
 
 结论（修复后复算）：18 页中 **2 页（empty / first-run）只剩光栅级差异**；`delete-confirm` 的功能性缺口（判据四）
-已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 12.12% 与 dark-chat 的 12.22%
+已由 §4.8 闭环，剩余差异主要是遮罩合成取整；其余 15 页仍有结构缺口。ctx-menu 的 10.99% 与 dark-chat 的 12.22%
 已不再是各自页面的特有大缺口，而是与 chat 同一批 A/B/E 共用缺口。
 
 **缺口统计**：A 类 5 项（全局，含 3 项缺控件、1 项遮罩灰阶、1 项源码层缺失），B 类 3 项，C 类 4 项（其中 C1、C4 已由 §4.8 修复），D 类 3 项（D1–D3 已由 §4.9 修复），E 类 6 项（其中 E6 已由 §4.7 修复），F 类 5 项，G 类 3 项，H 类 1 项；另有 4 项经实测**不是**缺口（B4、G2、G3、以及 H2 的双侧一致性），已标注避免后续误改。修复后仍**未闭环**：C2/C3（菜单 5 px / 35 px 几何）、A1–A5、B1–B3、E1–E5、F1–F5、G1/G4/G5。model-picker 的残差（面板 x 偏移 71 px、标题宽 +2 px、阴影尾 +42 px）分别归 G1 / Qt 字号度量 / 光栅差异，已在 §4.9「未闭环」登记，不计入 D 类。
