@@ -1,6 +1,7 @@
-chat         md5=00baf46965255434d276905e4e82c978  1280x820
-long-mid     md5=f4e1fc4609f18265f80fa8cc6370b12b  1280x820
-long-bottom  md5=a5576a855aa52a9a675be74612f1b58a  1280x820
+$ .venv/bin/python -I out/latest-parity/probes/c1_three_pages.py
+chat         md5=058ddf8dec3e69528d2d939af7f8f217  1280x820
+long-mid     md5=45e73bfaf91fe1afe3d6e141593da779  1280x820
+long-bottom  md5=3902e91d61156b65148156e7dac67874  1280x820
 
 === 判据1：三页 md5 两两不同 + 逐像素差 ===
 比较函数：像素 (r,g,b) 三通道任一不同即计为差异像素；max = 该像素最大通道差。
@@ -12,3 +13,4 @@ long-bottom  md5=a5576a855aa52a9a675be74612f1b58a  1280x820
   chat         会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
   long-mid     会话标题文字带 n=13  首个=(57, 65) 末个=(676, 713)
   long-bottom  会话标题文字带 n=13  首个=(64, 101) 末个=(712, 719)
+rc=0

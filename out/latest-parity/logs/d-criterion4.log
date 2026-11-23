@@ -1,3 +1,4 @@
+$ .venv/bin/python -I out/latest-parity/probes/c5_ctx_confirm.py
 === 判据 1：右键菜单 5 项 + Delete 危险色 ===
   起始页=chat，ctxMenu 可见=False（应为 False）
   对会话行 threadRow0 中心 (201.5, 83.0) 注入右键
@@ -43,3 +44,4 @@
   判据2b（确认关闭并删）= True   [120 -> 119]
   判据2c（遮罩关闭不删）= True   [119 -> 119]
   ALL = True
+rc=0

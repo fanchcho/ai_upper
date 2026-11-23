@@ -1,0 +1,8 @@
+AI_UPPER_HOME=/tmp/ai-upper-body7-v7gaIu
+$ .venv/bin/python -m pytest app/tests/test_markdown_body.py app/tests/test_markdown_chunked.py app/tests/test_markdown_document.py app/tests/test_markdown_highlight.py app/tests/test_markdown_parser.py app/tests/test_deliverables.py app/tests/test_qml_chat_files.py -q
+........................................................................ [ 31%]
+........................................................................ [ 62%]
+........................................................................ [ 94%]
+.............                                                            [100%]
+229 passed in 4.39s
+rc=0

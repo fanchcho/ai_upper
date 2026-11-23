@@ -1,0 +1,47 @@
+=== 2026-11-23 19:03:37 +0800 ===
+$ git log --oneline origin/develop..HEAD
+rc=0
+$ git status --porcelain | grep -v "^??"
+rc=1
+$ git show --stat 12a786a 601137f 3baad36
+commit 12a786afa646a8f5dab2eeaf59e8014cf9ce09c2
+Author: Claude Code <noreply@anthropic.com>
+Date:   Mon Nov 23 17:02:24 2026 +0800
+
+    fix(markdown): 对齐正文行高、表格整行底色与图片占位
+
+ app/src/markdown/document.py        | 85 +++++++++++++++++++------------------
+ app/tests/test_markdown_body.py     |  4 +-
+ app/tests/test_markdown_document.py | 12 +++---
+ 3 files changed, 51 insertions(+), 50 deletions(-)
+
+commit 601137f4028352431c6d375c49ffd8f613b4effa
+Author: Claude Code <noreply@anthropic.com>
+Date:   Mon Nov 23 17:06:37 2026 +0800
+
+    docs(parity): §5.4 E1–E5 正文渲染复核与四页前后差异
+
+ out/latest-parity/REPORT.md | 39 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 7 deletions(-)
+
+commit 3baad36490888b3a058633da5eaa5007fa740ab7
+Author: Claude Code <noreply@anthropic.com>
+Date:   Mon Nov 23 17:13:01 2026 +0800
+
+    docs(parity): 校正 §5.4 E2 表格网格与底色统计口径
+
+ out/latest-parity/REPORT.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+rc=0
+$ cat .git/refs/heads/develop
+a8aa45bb08af6a258455e9d7e58239ea99724acb
+$ cat .git/refs/remotes/origin/develop
+a8aa45bb08af6a258455e9d7e58239ea99724acb
+$ git rev-parse HEAD
+a8aa45bb08af6a258455e9d7e58239ea99724acb
+$ git reflog show develop -5
+a8aa45b develop@{0}: commit: docs(parity): 修正 model-picker 面板外框复核坐标
+4a6f332 develop@{1}: commit: fix(qml): 修复空态阴影并完成 D 轮 18 页对齐收口
+fd7bc28 develop@{2}: commit: feat(qml): 接入上下文容量圆环并修复设置浮层与导航图标
+fc9a4b6 develop@{3}: commit: fix(qml): 模型/思考菜单面板外框右移 2px 对齐 deva
+2a6e2a3 develop@{4}: rebase (finish): refs/heads/develop onto 2a6e2a3f18090242e7460778c18850add7d66c37

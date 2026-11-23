@@ -1,0 +1,20 @@
+$ LD_LIBRARY_PATH=/tmp PYTHON=.venv/bin/python bash scripts/parity/qml_pages_all.sh out/latest-parity/qml /tmp/ai-upper-parity-home-dGoLEg
+ok   empty 1280x820 40046B rc=0
+ok   first-run 1280x820 40046B rc=0
+ok   chat 1280x820 166567B rc=0
+ok   search-open 1280x820 166902B rc=0
+ok   search-results 1280x820 138900B rc=0
+ok   search-none 1280x820 72312B rc=0
+ok   ctx-menu 1280x820 166311B rc=0
+ok   delete-confirm 1280x820 168509B rc=0
+ok   model-picker 1280x820 172350B rc=0
+ok   hover-thread 1280x820 166269B rc=0
+ok   focus-composer 1280x820 166759B rc=0
+ok   long-mid 1280x820 168421B rc=0
+ok   long-bottom 1280x820 165755B rc=0
+ok   settings-general 1280x820 145771B rc=0
+ok   settings-models 1280x820 137664B rc=0
+ok   settings-extensions 1280x820 144503B rc=0
+ok   settings-about 1280x820 138533B rc=0
+ok   dark-chat 1280x820 166179B rc=0
+rc=0
