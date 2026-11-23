@@ -1,0 +1,3 @@
+Your windowmanager claims not to support _NET_ACTIVE_WINDOW, so the attempt to activate the window was aborted.
+xdo_activate_window on window:2097155 reported an error
+{"dpr":1,"width":1280,"height":820}

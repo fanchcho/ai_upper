@@ -650,3 +650,31 @@ B已提交推送 `223274c5b24daac594e2eaf815e0e3a40561168c`，push rc0，回执 
 大差像素在两侧都为平坦色块的计数各为0；但2px邻域双向匹配仅825/1596、2257/4250、835/1773、1907/3122，余项不能自动归为取整。
 具体文字bbox：Models provider_name QML[506,257,576,269] vs deva[506,258,576,274]；extensions row2 QML[483,302,667,313] vs deva[484,301,669,313]，见 modal-regions-summary.log。卡点为字体行盒/字重栅格与控件边缘的剩余差异，仍保留，没有只拿outside_diff下结论或改遮罩颜色。
 测试命令 `AI_UPPER_HOME=/tmp/ai-upper-c-tests .venv/bin/python -m pytest app/tests/test_qml_sidebar.py app/tests/test_qml_settings_overlay.py app/tests/test_qml_settings_models.py -q > out/final-parity/c-tests.log 2>&1; rc=$?`；具体原文见该日志及.rc。
+
+### D：CI 可读但本轮尚无终态；1x/2x 实测已完成
+
+`gh run list --branch develop --limit 6 --json databaseId,headSha,status,conclusion,url > out/final-parity/ci-runs.json 2> out/final-parity/ci-runs.err; rc=$?`，rc127，原文 `/bin/bash: line 1: gh: command not found`。
+后备命令 `curl -fL --max-time 30 -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/fanchcho/ai_upper/actions/runs?branch=develop&per_page=4' > out/final-parity/ci-latest.json 2> out/final-parity/ci-latest.err; rc=$?`，rc0。不是“读不到远端CI”，实际阻塞是本轮run尚queued、conclusion=null，不能报告通过或失败：
+
+```text
+0ebe4f06e67e5e4c97a4ceafb182d68a135e9b77 queued None https://github.com/fanchcho/ai_upper/actions/runs/45216326257
+223274c5b24daac594e2eaf815e0e3a40561168c queued None https://github.com/fanchcho/ai_upper/actions/runs/45214752528
+b752b0e17e5b9e92e17dae8016c0b0168365e063 queued None https://github.com/fanchcho/ai_upper/actions/runs/45213129634
+0617c04ee37315dac11932f74eaa4ba9b1fbd61a completed failure https://github.com/fanchcho/ai_upper/actions/runs/45210222140
+```
+
+旧提交0617c04的failure不代表本轮结果，未据此推测本轮归因。最终报告提交后再查询最终HEAD，回执留out/final-parity/ci-final-*。
+
+2x：deva通过CDP Emulation.setDeviceMetricsOverride(deviceScaleFactor=1/2)，逻辑视口1280×820；每个scale/page均新起Electron进程，QML通过QT_SCALE_FACTOR=1/2各新起进程。没有缩放PNG伪造2x。
+命令循环 `AI_UPPER_HOME=/tmp/ai-upper-scale-deva DEVA_HOME=/tmp/ai-upper-scale-deva DEVA_CONFIG=/tmp/ai-upper-residual-20261123/config.json DEVA_SEED=/tmp/ai-upper-residual-20261123/data/chats PROBE_SCALE=<1或2> CDP_PORT=9338 node out/final-parity/deva_scale_probe.mjs <chat或empty> out/final-parity/scale/deva-<page>-<scale>.json > 对应.log 2>&1; rc=$?`，4次rc0，DOM返回dpr1/2。
+QML命令 `AI_UPPER_HOME=/tmp/ai-upper-qml-scale QT_SCALE_FACTOR=2 bash scripts/parity/qml_page_shot.sh chat out/final-parity/scale/qml-chat-2.png /tmp/ai-upper-residual-20261123 config.json > out/final-parity/scale/qml-chat-2.log 2>&1; rc=$?`；empty用独立无会话home `/tmp/qml-page-empty-empty`，两次rc0。1x沿用本轮全页的独立进程图。
+`python3 out/final-parity/scale_compare.py > out/final-parity/scale-compare.log 2>&1; rc=$?`，rc0，实际输出：
+
+```text
+chat 1 size (1280, 820) AE 102556 pct 9.77096 qml_md5 069142b30b193cd575b485f9ad1ea86f deva_md5 fa884a918c9f9f8267d689c59a1147d1
+empty 1 size (1280, 820) AE 13333 pct 1.27029 qml_md5 e56462d7a538be35dae1b166403f4784 deva_md5 bf92513a0cbecec215621d4b3368bd16
+chat 2 size (2560, 1640) AE 341660 pct 8.13786 qml_md5 e1bfa9009cf2c7fe93d799db7cb7e3ca deva_md5 266fa30e74116fa631210cb367a96292
+empty 2 size (2560, 1640) AE 45299 pct 1.07896 qml_md5 a984d121858334d1aa8fdffc1c2525df deva_md5 054b55b4d8a6d2a87a3e34c6f861d224
+```
+
+两端尺寸同为1x1280×820、2x2560×1640。此为1x/2x已验证有差异，不宣称像素等价；CDP基线与常规X11截图路径不同，不能混用两套百分比。
