@@ -558,3 +558,27 @@ def test_batch_archive_preserves_busy_and_missing_failures(qapp, tmp_path, monke
         ticker.stop()
         window.close()
         engine.deleteLater()
+
+
+def test_all_selection_scroll_and_toggle_preserve_ids(qapp, tmp_path, monkeypatch):
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        window.setProperty('page', 'chat')
+        window.setProperty('selectMode', True)
+        _pump(qapp, .1)
+        _click(window, _find_item(window.contentItem(), 'selectionAll'))
+        assert len(_as_list(window.property('selectedSessions'))) == 120
+        assert window.property('allListedSelected') is True
+        _click(window, _find_item(window.contentItem(), 'threadRow1'))
+        assert len(_as_list(window.property('selectedSessions'))) == 119
+        assert window.property('allListedSelected') is False
+        assert not _find_item(window.contentItem(), 'threadRow1').property('selected')
+        _click(window, _find_item(window.contentItem(), 'selectionAll'))
+        assert len(_as_list(window.property('selectedSessions'))) == 120
+        _click(window, _find_item(window.contentItem(), 'selectionAll'))
+        assert _as_list(window.property('selectedSessions')) == []
+        assert window.property('allListedSelected') is False
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()

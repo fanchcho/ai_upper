@@ -104,6 +104,18 @@ ApplicationWindow {
     // 多选：右键菜单「Select」进入；selectedSessions 只存 id，落盘仍走 ShellBridge 的会话服务。
     property bool selectMode: false
     property var selectedSessions: []
+    // 全选后滚动不逐行扫描整个选择数组；任一集合变化使快路径失效。
+    property bool allListedSelected: false
+    property var listedSessionIds: []
+    onSelectedSessionsChanged: allListedSelected = false
+    onListedSessionsChanged: {
+        allListedSelected = false
+        var rows = listedSessions
+        var ids = []
+        for (var i = 0; i < rows.length; i++)
+            ids.push(rows[i].id)
+        listedSessionIds = ids
+    }
     // 重命名：原版是居中输入框（dialog.prompt），不是行内编辑；空串提交 = 恢复自动标题。
     property bool renameOpen: false
     property string renameId: ""
@@ -658,7 +670,7 @@ ApplicationWindow {
                 active: modelData.id === window.activeId
                 forceHover: index === window.forceHoverRow
                 selectionMode: window.selectMode
-                selected: window.selectedSessions.indexOf(modelData.id) >= 0
+                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -1861,13 +1873,14 @@ ApplicationWindow {
         var key = String(id || "")
         if (!key)
             return
-        var next = window.selectedSessions.slice()
+        // 原地更新，显式通知绑定，避免每次点击复制整个大集合。
+        var next = window.selectedSessions
         var at = next.indexOf(key)
         if (at >= 0)
             next.splice(at, 1)
         else
             next.push(key)
-        window.selectedSessions = next
+        window.selectedSessionsChanged()
     }
 
     function toggleSelectAll() {
@@ -1876,10 +1889,8 @@ ApplicationWindow {
             window.selectedSessions = []
             return
         }
-        var next = []
-        for (var i = 0; i < all.length; i++)
-            next.push(all[i].id)
-        window.selectedSessions = next
+        window.selectedSessions = window.listedSessionIds.slice()
+        window.allListedSelected = true
     }
 
     function archiveSelected() {
