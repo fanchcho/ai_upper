@@ -1,0 +1,28 @@
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:51:  -webkit-app-region: no-drag; /* 图标栏/头部是窗口拖拽区，手柄必须排除，否则按下即拖窗口 */
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:125:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:134:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:139:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:220:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:262:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:539:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:555:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:641:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:717:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:1083:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:1090:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:1119:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:1130:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:3720:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:5335:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:5344:  -webkit-app-region: no-drag !important;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:5653:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/redesign.css:5780:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/app.css:93:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/app.css:121:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/app.css:135:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/styles/app.css:3589:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/redesign/MemberBar.tsx:76:  // 点列表外、按 Esc、窗口失焦都收起。标题栏等窗口拖动区（-webkit-app-region: drag）上的点击页面收不到，
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/features/browser/browser.css:37:  -webkit-app-region: drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/features/browser/browser.css:47:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/features/browser/browser.css:79:  -webkit-app-region: no-drag;
+/home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/features/browser/browser.css:150:  -webkit-app-region: no-drag;

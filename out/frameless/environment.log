@@ -1,0 +1,13 @@
+5e78881 docs(ci): a09b52d 的 CI 终态与逐 job 红因判定
+79218f1 feat(markdown): 表格网格改整像素 overlay 绘制，底边收成单行
+ea865c6 test(qml): 断图 alt 宽度容差 2px，吸收 macOS CJK 回退与度量的差值
+a09b52d docs(closeout): §3 补记提交链（579f40e / dc89438 / 75f20af / 本提交）
+75f20af docs(test-report): 版本戳改为随交付 HEAD 自指，避免再次落后
+5e7888164d706ee495270ef82cd02cc08bd70cf6
+develop
+uid=0(root) gid=0(root) groups=0(root)
+/usr/bin/apt-get
+/opt/hermes/.venv/bin/python
+/opt/hermes/.venv/bin/python3
+ls: cannot access 'app/.venv': No such file or directory
+.venv

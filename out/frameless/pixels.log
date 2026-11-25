@@ -1,0 +1,4 @@
+chat 1280x820 vs deva: 10.449123475609756 -> 10.455792682926829 before vs after: 0.04535060975609757
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+AssertionError

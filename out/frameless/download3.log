@@ -1,0 +1,12 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libimlib2t64 arm64 1.12.4-2 [201 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 libice6 arm64 2:1.1.1-1 [62.1 kB]
+Get:3 http://deb.debian.org/debian trixie/main arm64 libsm6 arm64 2:1.2.6-1 [36.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main arm64 libunwind8 arm64 1.8.1-0.1 [55.2 kB]
+Get:5 http://deb.debian.org/debian trixie/main arm64 libxfont2 arm64 1:2.0.6-1+deb13u1 [125 kB]
+Get:6 http://deb.debian.org/debian trixie/main arm64 libxinerama1 arm64 2:1.1.4-3+b4 [16.0 kB]
+Get:7 http://deb.debian.org/debian trixie/main arm64 libpangoxft-1.0-0 arm64 1.56.3-1 [27.1 kB]
+Get:8 http://deb.debian.org/debian trixie/main arm64 x11-xkb-utils arm64 7.7+9 [149 kB]
+Get:9 http://deb.debian.org/debian trixie/main arm64 libxft2 arm64 2.3.6-1+b4 [51.6 kB]
+Get:10 http://deb.debian.org/debian trixie/main arm64 xkb-data all 2.42-1 [790 kB]
+Fetched 1513 kB in 0s (3832 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/libimlib2t64_1.12.4-2_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

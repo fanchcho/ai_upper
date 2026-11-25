@@ -1,0 +1,82 @@
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=160
+Y=140
+WIDTH=1280
+HEIGHT=820
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1200 20 click 1 
+   rc= 0
+$ xprop -id 4194311 WM_STATE 
+ WM_STATE(WM_STATE):
+		window state: Iconic
+		icon window: 0x0
+  rc= 0
+$ xdotool windowmap 4194311 windowactivate --sync 4194311 
+   rc= 0
+$ xprop -id 4194311 WM_STATE 
+ WM_STATE(WM_STATE):
+		window state: Normal
+		icon window: 0x0
+  rc= 0
+$ xdotool mousemove --window 4194311 700 15 mousedown 1 
+   rc= 0
+$ xdotool mousemove_relative -- 70 50 
+   rc= 0
+$ xdotool mouseup 1 
+   rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1280
+HEIGHT=820
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1278 818 mousedown 1 
+   rc= 0
+$ xdotool mousemove_relative -- 90 60 
+   rc= 0
+$ xdotool mouseup 1 
+   rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1370
+HEIGHT=880
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1322 20 click 1 
+   rc= 0
+$ xprop -id 4194311 _NET_WM_STATE 
+ _NET_WM_STATE(ATOM) = _NET_WM_STATE_MAXIMIZED_VERT, _NET_WM_STATE_MAXIMIZED_HORZ
+  rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=0
+Y=0
+WIDTH=1600
+HEIGHT=1100
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1552 20 click 1 
+   rc= 0
+$ xprop -id 4194311 _NET_WM_STATE 
+ _NET_WM_STATE(ATOM) = 
+  rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1370
+HEIGHT=880
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1354 20 click 1 
+   rc= 0
+$ xprop -root _NET_CLIENT_LIST 
+ _NET_CLIENT_LIST(WINDOW): window id # 
+  rc= 0
+PASS: minimize/restore, move, resize, maximize/restore, close

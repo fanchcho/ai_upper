@@ -1,0 +1,9 @@
+app/src/qml/Main.qml:20:    flags: Qt.Window | Qt.FramelessWindowHint
+app/src/qml/Main.qml:357:            objectName: "windowDragRail"
+app/src/qml/Main.qml:434:            objectName: "windowDragSidebar"
+app/src/qml/Main.qml:805:            objectName: "windowDragHeader"
+app/src/qml/Main.qml:2441:            objectName: "windowResize" + index
+app/tests/test_qml_window_controls.py:265:def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
+app/tests/test_qml_window_controls.py:280:            item = _find_item(root, "windowDrag" + name)
+app/tests/test_qml_window_controls.py:289:            item = _find_item(root, "windowResize" + str(index))
+app/tests/test_qml_window_controls.py:295:        assert _find_item(root, "windowResize7").property("enabled") is False

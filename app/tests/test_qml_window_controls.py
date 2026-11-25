@@ -260,3 +260,41 @@ def test_window_controls_hover_and_real_state_changes(qapp, tmp_path, monkeypatc
         ticker.stop()
         window.close()
         engine.deleteLater()
+
+
+def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
+    from PySide6.QtCore import QMargins, QPointF, Qt
+
+    window, _bridge, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp)
+        assert window.flags() & Qt.FramelessWindowHint
+        assert window.frameMargins() == QMargins(0, 0, 0, 0)
+        assert (window.minimumWidth(), window.minimumHeight()) == (940, 600)
+        root = window.contentItem()
+        for name, accepted, excluded in [
+            ("Rail", (28, 300), (28, 90)),
+            ("Sidebar", (150, 6), (100, 25)),
+            ("Header", (700, 15), (1200, 20)),
+        ]:
+            item = _find_item(root, "windowDrag" + name)
+            assert item.contains(item.mapFromScene(QPointF(*accepted)))
+            assert not item.contains(item.mapFromScene(QPointF(*excluded)))
+        points = [(2, 2), (640, 2), (1278, 2), (2, 410),
+                  (1278, 410), (2, 818), (640, 818), (1278, 818)]
+        edges = [Qt.TopEdge | Qt.LeftEdge, Qt.TopEdge, Qt.TopEdge | Qt.RightEdge,
+                 Qt.LeftEdge, Qt.RightEdge, Qt.BottomEdge | Qt.LeftEdge,
+                 Qt.BottomEdge, Qt.BottomEdge | Qt.RightEdge]
+        for index, (point, edge) in enumerate(zip(points, edges)):
+            item = _find_item(root, "windowResize" + str(index))
+            assert item.property("edges") == edge.value
+            assert item.contains(item.mapFromScene(QPointF(*point)))
+            assert not item.contains(item.mapFromScene(QPointF(640, 410)))
+        window.showMaximized()
+        _pump(qapp)
+        assert _find_item(root, "windowResize7").property("enabled") is False
+    finally:
+        ticker.stop()
+        window.close()
+        _pump(qapp, 0.1)
+        del engine

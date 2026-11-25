@@ -1,0 +1,217 @@
+........................................................................ [ 35%]
+...................FF................................................... [ 71%]
+................................................F.......F                [100%]
+=================================== FAILURES ===================================
+_________________ test_scrollbars_exist_and_match_deva_tokens __________________
+
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/regression/test_scrollbars_exist_and_matc0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff72d33c40>
+qapp = <PySide6.QtGui.QGuiApplication(0x40382ec0) at 0xffff823d6780>
+
+    def test_scrollbars_exist_and_match_deva_tokens(tmp_path, monkeypatch, qapp):
+        window, _bridge, _ticker, _engine = _build_window(tmp_path, monkeypatch)
+        _pump(qapp)
+    
+        sidebar = _find_item(window.contentItem(), "sidebar-scrollbar")
+        body = _find_item(window.contentItem(), "body-scrollbar")
+        assert sidebar is not None, "侧栏必须有真实的 QML ScrollBar（objectName=sidebar-scrollbar）"
+        assert body is not None, "正文区必须有真实的 QML ScrollBar（objectName=body-scrollbar）"
+    
+        for bar in (sidebar, body):
+            assert round(bar.property("width")) == 8
+            assert round(bar.property("padding")) == 2
+            content = bar.property("contentItem")
+            assert round(content.property("width")) == 4, "2px 透明内缩后可见滑块宽必须为 4px"
+            assert _color_name(content) == "#000000", "常态 thumb 是 rgba(0,0,0,0.18)"
+    
+        image = window.grabWindow()
+        # 侧栏：ListView 右侧 8px 轨道 x347..354，2px 内缩后 thumb x349..352。
+        assert _pixel(image, 350, 100) == (202, 202, 203), "侧栏滚动条常态色必须等于 deva 实拍"
+        # 正文：贴窗口右缘，thumb x1274..1277；纵向按当前滚动位置取滑块中心。
+        body_x, body_y = _thumb_center(body)
+        assert body_x in (1275, 1276), "正文 thumb 必须落在 deva 实拍的 x1274..1277 内"
+        assert _pixel(image, body_x, body_y) == (209, 209, 209), "正文滚动条常态色必须等于 deva 实拍"
+    
+        # hover：thumb 色切到 --fg-subtle #8a8a94（两处都测）。
+        from PySide6.QtCore import QPoint
+        from PySide6.QtTest import QTest
+    
+        QTest.mouseMove(window, QPoint(350, 100), 100)
+        _pump(qapp, 0.2)
+        assert _color_name(sidebar.property("contentItem")) == "#8a8a94"
+        image = window.grabWindow()
+        assert _pixel(image, 350, 100) == (138, 138, 148)
+    
+        QTest.mouseMove(window, QPoint(body_x, body_y), 100)
+        _pump(qapp, 0.2)
+>       assert _color_name(body.property("contentItem")) == "#8a8a94"
+E       AssertionError: assert '#000000' == '#8a8a94'
+E         
+E         - #8a8a94
+E         + #000000
+
+app/tests/test_qml_scrollbars.py:235: AssertionError
+__________________ test_scrollbars_scroll_with_wheel_and_drag __________________
+
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/regression/test_scrollbars_scroll_with_wh0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff72bdfe00>
+qapp = <PySide6.QtGui.QGuiApplication(0x40382ec0) at 0xffff823d6780>
+
+    def test_scrollbars_scroll_with_wheel_and_drag(tmp_path, monkeypatch, qapp):
+        window, _bridge, _ticker, _engine = _build_window(tmp_path, monkeypatch)
+        _pump(qapp)
+    
+        sidebar = _find_item(window.contentItem(), "sidebar-scrollbar")
+        body = _find_item(window.contentItem(), "body-scrollbar")
+        session_list = _find_item(window.contentItem(), "sessionList")
+        body_scroll = _find_item(window.contentItem(), "bodyScroll")
+        assert sidebar is not None and body is not None
+    
+        assert session_list.property("contentHeight") > session_list.property("height")
+        assert body_scroll.property("contentHeight") > body_scroll.property("height")
+    
+        # 列表：滚轮向下 → contentY 增加。
+        before = session_list.property("contentY")
+        _wheel(window, 200, 300, -120)
+        _pump(qapp, 0.3)
+        after_wheel = session_list.property("contentY")
+        assert after_wheel > before, "侧栏滚轮必须真的滚动 ListView"
+    
+        # 列表：拖动滚动条滑块向下 → contentY 继续增加。
+        _drag_thumb(window, sidebar, 60)
+        _pump(qapp, 0.3)
+        assert session_list.property("contentY") > after_wheel, "侧栏滚动条拖动必须真的滚动"
+    
+        # 正文：打开会话时已停在底部（最新消息），滚轮向上 → contentY 减小。
+        before_body = body_scroll.property("contentY")
+        _wheel(window, 800, 400, 120)
+        _pump(qapp, 0.3)
+        after_body_wheel = body_scroll.property("contentY")
+        assert after_body_wheel < before_body, "正文滚轮必须真的滚动 Flickable"
+    
+        # 正文：拖动滚动条滑块向上 → contentY 继续减小。
+        _drag_thumb(window, body, -60)
+        _pump(qapp, 0.3)
+>       assert body_scroll.property("contentY") < after_body_wheel, "正文滚动条拖动必须真的滚动"
+E       AssertionError: 正文滚动条拖动必须真的滚动
+E       assert 7585.0 < 7584.596800533682
+E        +  where 7585.0 = <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff80ca7980>('contentY')
+E        +    where <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff80ca7980> = <PySide6.QtQuick.QQuickItem(0x41ceb220, id="bodyScroll", name="bodyScroll", parent=0x41ce5c40, geometry=0,27 924x618 🖼) at 0xffff80ca7980>.property
+
+app/tests/test_qml_scrollbars.py:275: AssertionError
+__________________ test_qml_scrollbars_match_deva_and_scroll ___________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x40382ec0) at 0xffff823d6780>
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/regression/test_qml_scrollbars_match_deva0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff72bdfd90>
+
+    def test_qml_scrollbars_match_deva_and_scroll(qapp, tmp_path, monkeypatch):
+        """侧栏 / 正文使用真实 QML ScrollBar：8px 轨道、2px 内缩、4px 可见 thumb，
+        常态 rgba(0,0,0,0.18)、hover #8a8a94，且滚轮与拖动都真的改变 contentY。"""
+        from test_qml_scrollbars import (
+            test_scrollbars_exist_and_match_deva_tokens as check_tokens,
+            test_scrollbars_scroll_with_wheel_and_drag as check_scroll,
+        )
+    
+>       check_tokens(tmp_path / "tokens", monkeypatch, qapp)
+
+app/tests/test_qml_shell.py:699: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/regression/test_qml_scrollbars_match_deva0/tokens')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff72bdfd90>
+qapp = <PySide6.QtGui.QGuiApplication(0x40382ec0) at 0xffff823d6780>
+
+    def test_scrollbars_exist_and_match_deva_tokens(tmp_path, monkeypatch, qapp):
+        window, _bridge, _ticker, _engine = _build_window(tmp_path, monkeypatch)
+        _pump(qapp)
+    
+        sidebar = _find_item(window.contentItem(), "sidebar-scrollbar")
+        body = _find_item(window.contentItem(), "body-scrollbar")
+        assert sidebar is not None, "侧栏必须有真实的 QML ScrollBar（objectName=sidebar-scrollbar）"
+        assert body is not None, "正文区必须有真实的 QML ScrollBar（objectName=body-scrollbar）"
+    
+        for bar in (sidebar, body):
+            assert round(bar.property("width")) == 8
+            assert round(bar.property("padding")) == 2
+            content = bar.property("contentItem")
+            assert round(content.property("width")) == 4, "2px 透明内缩后可见滑块宽必须为 4px"
+            assert _color_name(content) == "#000000", "常态 thumb 是 rgba(0,0,0,0.18)"
+    
+        image = window.grabWindow()
+        # 侧栏：ListView 右侧 8px 轨道 x347..354，2px 内缩后 thumb x349..352。
+        assert _pixel(image, 350, 100) == (202, 202, 203), "侧栏滚动条常态色必须等于 deva 实拍"
+        # 正文：贴窗口右缘，thumb x1274..1277；纵向按当前滚动位置取滑块中心。
+        body_x, body_y = _thumb_center(body)
+        assert body_x in (1275, 1276), "正文 thumb 必须落在 deva 实拍的 x1274..1277 内"
+        assert _pixel(image, body_x, body_y) == (209, 209, 209), "正文滚动条常态色必须等于 deva 实拍"
+    
+        # hover：thumb 色切到 --fg-subtle #8a8a94（两处都测）。
+        from PySide6.QtCore import QPoint
+        from PySide6.QtTest import QTest
+    
+        QTest.mouseMove(window, QPoint(350, 100), 100)
+        _pump(qapp, 0.2)
+        assert _color_name(sidebar.property("contentItem")) == "#8a8a94"
+        image = window.grabWindow()
+        assert _pixel(image, 350, 100) == (138, 138, 148)
+    
+        QTest.mouseMove(window, QPoint(body_x, body_y), 100)
+        _pump(qapp, 0.2)
+>       assert _color_name(body.property("contentItem")) == "#8a8a94"
+E       AssertionError: assert '#000000' == '#8a8a94'
+E         
+E         - #8a8a94
+E         + #000000
+
+app/tests/test_qml_scrollbars.py:235: AssertionError
+__________________ test_frameless_drag_and_resize_hit_regions __________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x40382ec0) at 0xffff823d6780>
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/regression/test_frameless_drag_and_resize0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff72bf5ef0>
+
+    def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
+        from PySide6.QtCore import QMargins, QPointF, Qt
+    
+        window, _bridge, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            _pump(qapp)
+            assert window.flags() & Qt.FramelessWindowHint
+            assert window.frameMargins() == QMargins(0, 0, 0, 0)
+            assert (window.minimumWidth(), window.minimumHeight()) == (940, 600)
+            root = window.contentItem()
+            for name, accepted, excluded in [
+                ("Rail", (28, 300), (28, 90)),
+                ("Sidebar", (150, 6), (100, 25)),
+                ("Header", (700, 15), (1200, 20)),
+            ]:
+                item = _find_item(root, "windowDrag" + name)
+                assert item.contains(item.mapFromScene(QPointF(*accepted)))
+                assert not item.contains(item.mapFromScene(QPointF(*excluded)))
+            points = [(2, 2), (640, 2), (1278, 2), (2, 410),
+                      (1278, 410), (2, 818), (640, 818), (1278, 818)]
+            edges = [Qt.TopEdge | Qt.LeftEdge, Qt.TopEdge, Qt.TopEdge | Qt.RightEdge,
+                     Qt.LeftEdge, Qt.RightEdge, Qt.BottomEdge | Qt.LeftEdge,
+                     Qt.BottomEdge, Qt.BottomEdge | Qt.RightEdge]
+            for index, (point, edge) in enumerate(zip(points, edges)):
+                item = _find_item(root, "windowResize" + str(index))
+                assert item.property("edges") == edge.value
+                assert item.contains(item.mapFromScene(QPointF(*point)))
+                assert not item.contains(item.mapFromScene(QPointF(640, 410)))
+            window.showMaximized()
+            _pump(qapp)
+>           assert _find_item(root, "windowResize7").property("enabled") is False
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert not True
+E            +  where True = <built-in method isEnabled of PySide6.QtQuick.QQuickItem object at 0xffff80e0a7c0>()
+E            +    where <built-in method isEnabled of PySide6.QtQuick.QQuickItem object at 0xffff80e0a7c0> = <PySide6.QtQuick.QQuickItem(0x4352c9b0, name="windowResize7", parent=0x43e5b160, geometry=795,795 5x5, z=2000) at 0xffff80e0a7c0>.isEnabled
+E            +      where <PySide6.QtQuick.QQuickItem(0x4352c9b0, name="windowResize7", parent=0x43e5b160, geometry=795,795 5x5, z=2000) at 0xffff80e0a7c0> = _find_item(<PySide6.QtQuick.QQuickItem(0x43865030, name="Main", parent=0x0, geometry=0,0 800x800 🖼 ⏿) at 0xffff80e0b680>, 'windowResize7')
+
+app/tests/test_qml_window_controls.py:295: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_scrollbars.py::test_scrollbars_exist_and_match_deva_tokens
+FAILED app/tests/test_qml_scrollbars.py::test_scrollbars_scroll_with_wheel_and_drag
+FAILED app/tests/test_qml_shell.py::test_qml_scrollbars_match_deva_and_scroll
+FAILED app/tests/test_qml_window_controls.py::test_frameless_drag_and_resize_hit_regions
+4 failed, 197 passed in 189.98s (0:03:09)

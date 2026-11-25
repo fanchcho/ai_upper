@@ -1,0 +1,6 @@
+QQuickWindow  5 PySide6.QtCore.QPointF(540.000000, 360.000000)
+QQuickWindow  5 PySide6.QtCore.QPointF(1200.000000, 20.000000)
+QQuickWindow  2 PySide6.QtCore.QPointF(1200.000000, 20.000000)
+QQuickItem  2 PySide6.QtCore.QPointF(16.000000, 20.000000)
+QQuickWindow  3 PySide6.QtCore.QPointF(1200.000000, 20.000000)
+QQuickItem  3 PySide6.QtCore.QPointF(16.000000, 20.000000)

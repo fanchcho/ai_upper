@@ -1,0 +1,48 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+__________________ test_frameless_drag_and_resize_hit_regions __________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x15351f60) at 0xffffb6120ac0>
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/xcb-tests-final/test_frameless_drag_and_resize0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffa814bbf0>
+
+    def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
+        from PySide6.QtCore import QMargins, QPointF, Qt
+    
+        window, _bridge, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            _pump(qapp)
+            assert window.flags() & Qt.FramelessWindowHint
+            assert window.frameMargins() == QMargins(0, 0, 0, 0)
+            assert (window.minimumWidth(), window.minimumHeight()) == (940, 600)
+            root = window.contentItem()
+            for name, accepted, excluded in [
+                ("Rail", (28, 300), (28, 90)),
+                ("Sidebar", (150, 6), (100, 25)),
+                ("Header", (700, 15), (1200, 20)),
+            ]:
+                item = _find_item(root, "windowDrag" + name)
+                assert item.contains(item.mapFromScene(QPointF(*accepted)))
+                assert not item.contains(item.mapFromScene(QPointF(*excluded)))
+            points = [(2, 2), (640, 2), (1278, 2), (2, 410),
+                      (1278, 410), (2, 818), (640, 818), (1278, 818)]
+            edges = [Qt.TopEdge | Qt.LeftEdge, Qt.TopEdge, Qt.TopEdge | Qt.RightEdge,
+                     Qt.LeftEdge, Qt.RightEdge, Qt.BottomEdge | Qt.LeftEdge,
+                     Qt.BottomEdge, Qt.BottomEdge | Qt.RightEdge]
+            for index, (point, edge) in enumerate(zip(points, edges)):
+                item = _find_item(root, "windowResize" + str(index))
+                assert item.property("edges") == edge.value
+                assert item.contains(item.mapFromScene(QPointF(*point)))
+                assert not item.contains(item.mapFromScene(QPointF(640, 410)))
+            window.showMaximized()
+            _pump(qapp)
+>           assert not _find_item(root, "windowResize7").isEnabled()
+E           assert not True
+E            +  where True = <built-in method isEnabled of PySide6.QtQuick.QQuickItem object at 0xffffa8314e80>()
+E            +    where <built-in method isEnabled of PySide6.QtQuick.QQuickItem object at 0xffffa8314e80> = <PySide6.QtQuick.QQuickItem(0x15af0110, name="windowResize7", parent=0x15ce1f00, geometry=1595,1095 5x5, z=2000) at 0xffffa8314e80>.isEnabled
+E            +      where <PySide6.QtQuick.QQuickItem(0x15af0110, name="windowResize7", parent=0x15ce1f00, geometry=1595,1095 5x5, z=2000) at 0xffffa8314e80> = _find_item(<PySide6.QtQuick.QQuickItem(0x161a0370, name="Main", parent=0x0, geometry=0,0 1600x1100 🖼 ⏿) at 0xffffa8314c00>, 'windowResize7')
+
+app/tests/test_qml_window_controls.py:295: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_window_controls.py::test_frameless_drag_and_resize_hit_regions
+1 failed, 2 passed in 17.36s

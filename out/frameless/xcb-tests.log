@@ -1,0 +1,40 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+__________________ test_frameless_drag_and_resize_hit_regions __________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x3ea61450) at 0xffff93742f00>
+tmp_path = PosixPath('/tmp/ai-upper-frameless-20261125/xcb-tests/test_frameless_drag_and_resize0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff8571bbf0>
+
+    def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
+        from PySide6.QtCore import QMargins, QPointF, Qt
+    
+        window, _bridge, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            _pump(qapp)
+            assert window.flags() & Qt.FramelessWindowHint
+            assert window.frameMargins() == QMargins(0, 0, 0, 0)
+            assert (window.minimumWidth(), window.minimumHeight()) == (940, 600)
+            root = window.contentItem()
+            for name, accepted, excluded in [
+                ("Rail", (28, 300), (28, 90)),
+                ("Sidebar", (150, 6), (100, 25)),
+                ("Header", (700, 15), (1200, 20)),
+            ]:
+                item = _find_item(root, "windowDrag" + name)
+                assert item.contains(item.mapFromScene(QPointF(*accepted)))
+>               assert not item.contains(item.mapFromScene(QPointF(*excluded)))
+E               assert not True
+E                +  where True = <built-in method contains of PySide6.QtQuick.QQuickItem object at 0xffff85704f80>(PySide6.QtCore.QPointF(28.000000, 90.000000))
+E                +    where <built-in method contains of PySide6.QtQuick.QQuickItem object at 0xffff85704f80> = <PySide6.QtQuick.QQuickItem(0xffff880060b0, name="windowDragRail", parent=0xffff88006190, geometry=0,0 56x820) at 0xffff85704f80>.contains
+E                +    and   PySide6.QtCore.QPointF(28.000000, 90.000000) = <built-in method mapFromScene of PySide6.QtQuick.QQuickItem object at 0xffff85704f80>(PySide6.QtCore.QPointF(28.000000, 90.000000))
+E                +      where <built-in method mapFromScene of PySide6.QtQuick.QQuickItem object at 0xffff85704f80> = <PySide6.QtQuick.QQuickItem(0xffff880060b0, name="windowDragRail", parent=0xffff88006190, geometry=0,0 56x820) at 0xffff85704f80>.mapFromScene
+E                +      and   PySide6.QtCore.QPointF(28.000000, 90.000000) = <class 'PySide6.QtCore.QPointF'>(*(28, 90))
+
+app/tests/test_qml_window_controls.py:282: AssertionError
+----------------------------- Captured stderr call -----------------------------
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:355:9: QML MouseArea: QQuickItem: Object set as mask does not have an invokable contains method, ignoring it.
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:429:9: QML MouseArea: QQuickItem: Object set as mask does not have an invokable contains method, ignoring it.
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_window_controls.py::test_frameless_drag_and_resize_hit_regions
+1 failed, 2 passed in 16.82s

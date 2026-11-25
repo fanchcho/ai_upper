@@ -1,0 +1,2 @@
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:355:9: QML MouseArea: QQuickItem: Object set as mask does not have an invokable contains method, ignoring it.
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:429:9: QML MouseArea: QQuickItem: Object set as mask does not have an invokable contains method, ignoring it.

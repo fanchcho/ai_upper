@@ -17,6 +17,7 @@ import "."
 ApplicationWindow {
     id: window
     visible: true
+    flags: Qt.Window | Qt.FramelessWindowHint
     width: 1280
     height: 820
     minimumWidth: 940
@@ -351,6 +352,24 @@ ApplicationWindow {
         height: parent.height
         color: Theme.bgInset
 
+        MouseArea {
+            id: railDrag
+            objectName: "windowDragRail"
+            anchors.fill: parent
+            containmentMask: QtObject {
+                function contains(p: point): bool {
+                    if (p.x < 0 || p.y < 0 || p.x >= railDrag.width || p.y >= railDrag.height)
+                        return false
+                    // deva .cf-iconrail: drag; avatar/nav buttons: no-drag.
+                    return !(p.x >= 8 && p.x < 48 &&
+                             ((p.y >= 20 && p.y < 58) ||
+                              (p.y >= 70 && p.y < 198) ||
+                              (p.y >= 724 && p.y < 808)))
+                }
+            }
+            onPressed: window.startSystemMove()
+        }
+
         Rectangle {
             anchors.right: parent.right
             width: 1
@@ -407,6 +426,23 @@ ApplicationWindow {
             width: 1
             height: parent.height
             color: Theme.border
+        }
+
+        // deva .cf-rail__top 的空白可拖动；搜索框、加号在其上接收事件。
+        MouseArea {
+            id: sidebarDrag
+            objectName: "windowDragSidebar"
+            width: parent.width
+            height: 56
+            containmentMask: QtObject {
+                function contains(p: point): bool {
+                    if (p.x < 0 || p.y < 0 || p.x >= sidebarDrag.width || p.y >= sidebarDrag.height)
+                        return false
+                    return !(p.y >= 12 && p.y < 44 &&
+                             ((p.x >= 12 && p.x < 247) || (p.x >= 255 && p.x < 287)))
+                }
+            }
+            onPressed: window.startSystemMove()
         }
 
         // 顶部：搜索框 (68,12,235×32) + 加号按钮 (311,12,32×32)
@@ -764,6 +800,15 @@ ApplicationWindow {
         width: parent.width - x
         height: parent.height
 
+        // deva .cf-conv__head / .cf-dragbar；角色名按钮区域排除。
+        MouseArea {
+            objectName: "windowDragHeader"
+            x: head.visible ? 16 + personaTitle.width + 20 : 0
+            width: parent.width - 96 - x
+            height: head.visible ? 27 : 40
+            onPressed: window.startSystemMove()
+        }
+
         // 顶部 26px 的会话头：下缘 1px 分隔线横贯 x 356–1183（实测 828px 宽）
         Item {
             id: head
@@ -782,6 +827,7 @@ ApplicationWindow {
             }
             // 标题按钮：原版 .cf-idbtn 只有名字，padding 5/10
             Text {
+                id: personaTitle
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.verticalCenter: parent.verticalCenter
@@ -992,6 +1038,7 @@ ApplicationWindow {
 
             // 原版 ::-webkit-scrollbar：8px 宽，thumb 2px 透明内缩后可见 4px，贴正文栏右缘。
             ScrollBar.vertical: DevaScrollBar {
+                id: bodyScrollbar
                 objectName: "body-scrollbar"
             }
 
@@ -2381,6 +2428,44 @@ ApplicationWindow {
                 kind: 2
                 onClicked: window.close()
             }
+        }
+    }
+
+    // 5px 边缘交给 WM 缩放；最大化/全屏时禁用，不覆盖正文。
+    Repeater {
+        model: [Qt.TopEdge | Qt.LeftEdge, Qt.TopEdge, Qt.TopEdge | Qt.RightEdge,
+                Qt.LeftEdge, Qt.RightEdge, Qt.BottomEdge | Qt.LeftEdge,
+                Qt.BottomEdge, Qt.BottomEdge | Qt.RightEdge]
+        MouseArea {
+            id: resizeHit
+            objectName: "windowResize" + index
+            readonly property int edges: modelData
+            readonly property bool edgeLeft: (edges & Qt.LeftEdge) !== 0
+            readonly property bool edgeRight: (edges & Qt.RightEdge) !== 0
+            readonly property bool edgeTop: (edges & Qt.TopEdge) !== 0
+            readonly property bool edgeBottom: (edges & Qt.BottomEdge) !== 0
+            x: edgeLeft ? 0 : edgeRight ? window.width - 5 : 5
+            y: edgeTop ? 0 : edgeBottom ? window.height - 5 : 5
+            width: edgeLeft || edgeRight ? 5 : window.width - 10
+            height: edgeTop || edgeBottom ? 5 : window.height - 10
+            z: 2000
+            // 正文滚动条占右侧 8px：保留其 hover/拖动，贴窗沿 1px 仍可缩放。
+            containmentMask: QtObject {
+                function contains(p: point): bool {
+                    if (p.x < 0 || p.y < 0 || p.x >= resizeHit.width || p.y >= resizeHit.height)
+                        return false
+                    if (index !== 4 || !bodyScrollbar.visible || bodyScrollbar.size >= 1)
+                        return true
+                    var local = bodyScrollbar.mapFromItem(resizeHit, p.x, p.y)
+                    return local.y < 0 || local.y >= bodyScrollbar.height || p.x >= 4
+                }
+            }
+            enabled: window.visibility !== Window.Maximized && window.visibility !== Window.FullScreen
+            hoverEnabled: true
+            cursorShape: (edgeLeft || edgeRight) && (edgeTop || edgeBottom)
+                         ? ((edgeLeft && edgeTop) || (edgeRight && edgeBottom) ? Qt.SizeFDiagCursor : Qt.SizeBDiagCursor)
+                         : (edgeLeft || edgeRight ? Qt.SizeHorCursor : Qt.SizeVerCursor)
+            onPressed: window.startSystemResize(edges)
         }
     }
 
