@@ -235,6 +235,40 @@ runs?branch=develop&per_page=10:
 即 8 个原生集成 job 全部是同一个字体回退断言红；已在 `579f40e` 修复，但**该修复尚未推送，
 所以 CI 仍停在 4a1a023 的红色终态**——本报告不把「已修」写成「CI 已绿」。
 
+### F-2 2026-11-25 延伸：`a09b52d` 的 CI 真实终态
+
+轮询窗口 `2026-11-25T00:38:08Z` → `2026-11-25T00:50:48Z`（约 12 分 40 秒，30s 一次），
+run `45519144976`（head `a09b52d`）在 `2026-11-25T00:50:48Z` 到达 **completed / failure**。
+原始轮询记录：`out/final-closeout/ci/turn2/poll.log`；逐 job：`ci/turn2/jobs.json`；
+注解：`ci/turn2/annotations/*.json`。
+
+| job | 结论 |
+|---|---|
+| Build Tool Python 3.8 / 3.9 / 3.10 / 3.11 / 3.12 / 3.13（6 个） | success |
+| native-integration (ubuntu-24.04, linux-x86_64) | **success**（4a1a023 时是红，字体断言修复生效） |
+| native-integration (ubuntu-24.04-arm, linux-arm64) | **success** |
+| native-integration (macos-15-intel, macos-x86_64) | failure — step 10 Unit tests |
+| native-integration (macos-15, macos-arm64) | failure — step 10 |
+| native-integration (windows-2025, windows-x86_64) | failure — step 10 |
+| native-integration (windows-2025, windows-x86) | failure — step 10 |
+| native-integration (windows-11-arm, windows-arm64) | failure — step 10 |
+| native-integration (windows-2025, windows-x86_64, py3.8.10) | failure — step 10 |
+| aggregate-artifacts | skipped |
+
+**红因判定（逐条，对照 4a1a023 基线注解 `ci/base-annotations/`）：**
+
+| 平台 | 失败测试 | 判定 |
+|---|---|---|
+| macOS x86_64/arm64 | `test_qml_broken_image`：`42.9375 == 41.109375 ± 0.0625`（QFontMetrics 与 CJK 回退差 1.83px） | 字体度量类；基线 4a1a023 同测试也红（`42.9375 == 42 ± 0.0625`）。已在 `ea865c6` 放宽到 2px 容差（仍锁 16px 图标槽与 alt 内联） |
+| macOS x86_64/arm64 | `test_qml_code_scroll`：`contentY` 滚轮后仍 0.0 | 平台/环境类，4a1a023 基线同样失败，非本轮改动引入 |
+| macOS x86_64/arm64 | `test_emoji_font::test_bundled_emoji_glyphs` | 平台/字体类，4a1a023 基线同样失败 |
+| Windows x86/x64/arm64/py3.8 | `test_qml_scrollbars`：`round(bar.property("padding")) == 2`、正文 `body-scrollbar` 找不到 | 平台类（Windows QML 样式差异），4a1a023 基线同样失败 |
+
+结论：**不是产品回归**。Linux 两个 job 由红转绿，说明 `579f40e` 的字体断言修复达到目的；
+剩余的 macOS 断图断言是度量口径问题（`ea865c6` 已修），其余 macOS/Windows 失败在
+`4a1a023` 基线就存在（同一批注解可对照），属平台/环境类，本轮未改动那些路径。
+**因此 a09b52d 的 CI 终态仍是 failure，不能写成绿；本报告不替它下「应该会绿」的结论。**
+
 ### G. 设置 · Models 面板与 provider 细节
 
 **判定：已完成，逐项与 deva 源码值一致；数据面的 provider 数量差是 fixture/config 差异，不是控件缺失。**

@@ -1,0 +1,86 @@
+[
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 3,
+    "start_column": null,
+    "end_line": 3,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 19,
+    "start_column": null,
+    "end_line": 19,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "No files were found with the provided path: run.log. No artifacts will be uploaded.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 19,
+    "start_column": null,
+    "end_line": 19,
+    "end_column": null,
+    "annotation_level": "warning",
+    "title": "",
+    "message": "No files were found with the provided path: build.log. No artifacts will be uploaded.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 65,
+    "start_column": null,
+    "end_line": 65,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 49,
+    "start_column": null,
+    "end_line": 49,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "pytest (exit 1)",
+    "message": "assert round(bar.property(\"padding\")) == 2\n            content = bar.property(\"contentItem\")",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 48,
+    "start_column": null,
+    "end_line": 48,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "pytest (exit 1)",
+    "message": "assert body is not None, \"\\u6b63\\u6587\\u533a\\u5fc5\\u987b\\u6709\\u771f\\u5b9e\\u7684 QML ScrollBar\\uff08objectName=body-scrollbar\\uff09\"",
+    "raw_details": ""
+  },
+  {
+    "path": ".github",
+    "blob_href": "https://github.com/fanchcho/ai_upper/blob/4a1a02328250a7b1234a86c27558fd2afccae7d8/.github",
+    "start_line": 306,
+    "start_column": null,
+    "end_line": 306,
+    "end_column": null,
+    "annotation_level": "failure",
+    "title": "",
+    "message": "Process completed with exit code 1.",
+    "raw_details": ""
+  }
+]
