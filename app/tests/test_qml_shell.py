@@ -443,6 +443,8 @@ def close_test_render_workers(monkeypatch):
 def _tick_until(bridge, predicate, timeout=10.0):
     deadline = time.time() + timeout
     while time.time() < deadline:
+        from PySide6.QtCore import QCoreApplication
+        QCoreApplication.processEvents()
         bridge.tick()
         if predicate():
             return True
