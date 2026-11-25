@@ -1424,21 +1424,10 @@ class ShellBridge(QtCore.QObject):
             self._body._source = source
             self._body._plain = self._plain
             self._body._rendered_width = self._body.content_width
-            steps = self._body.attach_steps(self._document)
-            self._advance_attach(epoch, steps)
-        self._render_jobs = pending
-
-    def _advance_attach(self, epoch, steps) -> None:
-        if epoch != self._render_epoch:
-            steps.close()
-            return
-        try:
-            next(steps)
-        except StopIteration:
+            self._body.attach(self._document)
             self.rendered += 1
             self._scroll_to_bottom()
-            return
-        QtCore.QTimer.singleShot(0, lambda: self._advance_attach(epoch, steps))
+        self._render_jobs = pending
 
     def _render(self) -> None:
         self._render_epoch += 1

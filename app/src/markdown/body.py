@@ -194,12 +194,6 @@ class BodyDocument:
         ``QTextLayout`` 里的着色不能跨文档搬（会把块高打成 0），只能由目标文档自己的
         高亮器重算，见模块文档。
         """
-        for _ in self.attach_steps(quick_document):
-            pass
-        return quick_document.textDocument()
-
-    def attach_steps(self, quick_document: Any):
-        """Yield between target replacement and overlay work on the GUI thread."""
         for viewport in self._viewports:
             viewport.setParentItem(None)
             viewport.deleteLater()
@@ -224,7 +218,6 @@ class BodyDocument:
         finally:
             cursor.endEditBlock()
         self._copy_images(target)
-        yield
         # Test stubs have no QQuickItem owner; actual QML keeps one shared document.
         if isinstance(quick_document, QtCore.QObject):
             from .viewport import attach_code_viewports
