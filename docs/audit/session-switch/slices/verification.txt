@@ -1,0 +1,18 @@
+$ git log --oneline -5
+0037a65 fix(qml): yield between transcript replacement and overlay attachment
+a0eedd3 docs(audit): record selection stress and threaded rendering limits
+bbd3e3f fix(qml): prepare session rich text in a worker with value-only delivery
+67edda7 fix(qml): avoid selection copies and all-selected row scans
+5884c70 docs(audit): record ordinary session switch timings and remaining latency
+exit=0
+$ git status --short
+?? docs/audit/session-switch/slices/
+exit=0
+$ git diff --check
+exit=0
+$ git branch --show-current
+develop
+exit=0
+Final pytest: 199 passed in 74.61s; process exit=0
+B three final RGB pairs: bbox=None
+A five selected scroll RGB pairs: bbox=None

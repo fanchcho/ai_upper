@@ -1,0 +1,447 @@
+[
+  {
+    "n": 120,
+    "samples": [
+      {
+        "action": "selectionAll",
+        "ms": 5.078360001789406
+      },
+      {
+        "action": "threadRow1",
+        "ms": 3.7440799933392555
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.4474799972958863
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.7308400021865964
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 3.3355200139340013
+      },
+      {
+        "action": "scroll",
+        "ms": 10.700599988922477
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.0953599780332297
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.7220399933867157
+      },
+      {
+        "action": "threadRow1",
+        "ms": 4.998079995857552
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.7085200233850628
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.9664400208275765
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 2.8432399849407375
+      },
+      {
+        "action": "scroll",
+        "ms": 10.348159994464368
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.2010399736464024
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.991199988173321
+      },
+      {
+        "action": "threadRow1",
+        "ms": 5.074919987237081
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.4690799871459603
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.995039976667613
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 2.9073200130369514
+      },
+      {
+        "action": "scroll",
+        "ms": 10.701519990107045
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.214480006136
+      }
+    ]
+  },
+  {
+    "n": 1000,
+    "samples": [
+      {
+        "action": "selectionAll",
+        "ms": 4.953600000590086
+      },
+      {
+        "action": "threadRow1",
+        "ms": 2.5692799827083945
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.7622399900574237
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.631719980854541
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 3.5421199863776565
+      },
+      {
+        "action": "scroll",
+        "ms": 10.868399986065924
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.0700000061187893
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.192839998519048
+      },
+      {
+        "action": "threadRow1",
+        "ms": 4.993520007701591
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.5488800127059221
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.0490799981635064
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 3.0220000189729035
+      },
+      {
+        "action": "scroll",
+        "ms": 10.65543998265639
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.3917599939741194
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.2015600008890033
+      },
+      {
+        "action": "threadRow1",
+        "ms": 5.0273200031369925
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.5150399995036423
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.9986799927428365
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 2.946760010672733
+      },
+      {
+        "action": "scroll",
+        "ms": 10.726919979788363
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.342640004120767
+      }
+    ]
+  },
+  {
+    "n": 10000,
+    "samples": [
+      {
+        "action": "selectionAll",
+        "ms": 6.001679983455688
+      },
+      {
+        "action": "threadRow1",
+        "ms": 2.8803200111724436
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.6444399952888489
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.763639990007505
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 4.150160006247461
+      },
+      {
+        "action": "scroll",
+        "ms": 11.028039996745065
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.4035600256174803
+      },
+      {
+        "action": "selectionAll",
+        "ms": 7.145480019971728
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.995160011574626
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.9918400212191045
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.530119993025437
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 3.61183998757042
+      },
+      {
+        "action": "scroll",
+        "ms": 11.274160002358258
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.153439989546314
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.64444000297226
+      },
+      {
+        "action": "threadRow1",
+        "ms": 5.659040005411953
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.569159998325631
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.17799998447299
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 3.6979999858886003
+      },
+      {
+        "action": "scroll",
+        "ms": 11.157680011820048
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.304480022052303
+      }
+    ]
+  },
+  {
+    "n": 100000,
+    "samples": [
+      {
+        "action": "selectionAll",
+        "ms": 8.288799988804385
+      },
+      {
+        "action": "threadRow1",
+        "ms": 4.844120005145669
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.6526399995200336
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.7635199949145317
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 8.418279991019517
+      },
+      {
+        "action": "scroll",
+        "ms": 12.504639977123588
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.3738400088623166
+      },
+      {
+        "action": "selectionAll",
+        "ms": 12.93175999308005
+      },
+      {
+        "action": "threadRow1",
+        "ms": 4.812519997358322
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.6182799881789833
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.7213600114919245
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 9.102720010560006
+      },
+      {
+        "action": "scroll",
+        "ms": 12.170839996542782
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.3253200235776603
+      },
+      {
+        "action": "selectionAll",
+        "ms": 12.710799986962229
+      },
+      {
+        "action": "threadRow1",
+        "ms": 4.8034000210464
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.6906000091694295
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.8407200006768107
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 9.411120001459494
+      },
+      {
+        "action": "scroll",
+        "ms": 12.216559989610687
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.691440011607483
+      }
+    ]
+  },
+  {
+    "n": 300000,
+    "samples": [
+      {
+        "action": "selectionAll",
+        "ms": 23.662639985559508
+      },
+      {
+        "action": "threadRow1",
+        "ms": 10.254599998006597
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.763239997671917
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.0143200128804892
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 27.288479992421344
+      },
+      {
+        "action": "scroll",
+        "ms": 13.004239997826517
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.853159985737875
+      },
+      {
+        "action": "selectionAll",
+        "ms": 34.832839999580756
+      },
+      {
+        "action": "threadRow1",
+        "ms": 10.143759980564937
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.7595599929336458
+      },
+      {
+        "action": "selectionAll",
+        "ms": 2.9261200106702745
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 27.30159999919124
+      },
+      {
+        "action": "scroll",
+        "ms": 13.010760012548417
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 3.9823600091040134
+      },
+      {
+        "action": "selectionAll",
+        "ms": 54.96508002397604
+      },
+      {
+        "action": "threadRow1",
+        "ms": 10.579800000414252
+      },
+      {
+        "action": "threadRow1",
+        "ms": 1.8684800015762448
+      },
+      {
+        "action": "selectionAll",
+        "ms": 3.110040008323267
+      },
+      {
+        "action": "select_before_scroll",
+        "ms": 57.649480004329234
+      },
+      {
+        "action": "scroll",
+        "ms": 13.019559992244467
+      },
+      {
+        "action": "clear_after_scroll",
+        "ms": 4.007479990832508
+      }
+    ]
+  }
+]

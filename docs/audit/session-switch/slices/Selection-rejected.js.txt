@@ -1,0 +1,27 @@
+// Keep lookup tables in native JavaScript, outside QVariant/QML property access.
+function create() {
+    var chosen = Object.create(null)
+    var excluded = Object.create(null)
+    var all = false
+    return {
+        reset: function(ids) {
+            all = false
+            chosen = Object.create(null)
+            excluded = Object.create(null)
+            for (var i = 0; i < ids.length; ++i) chosen[ids[i]] = true
+        },
+        selectAll: function() { all = true; excluded = Object.create(null) },
+        contains: function(id) {
+            return all ? excluded[id] !== true : chosen[id] === true
+        },
+        toggle: function(id, selected) {
+            if (all) {
+                if (selected) delete excluded[id]
+                else excluded[id] = true
+            } else {
+                if (selected) chosen[id] = true
+                else delete chosen[id]
+            }
+        }
+    }
+}

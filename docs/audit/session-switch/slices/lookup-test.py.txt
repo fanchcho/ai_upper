@@ -1,0 +1,26 @@
+
+
+def test_selection_lookup_does_not_rescan_ids_for_membership(qapp):
+    from PySide6.QtQml import QJSEngine
+    engine = QJSEngine()
+    script = (ROOT / 'app/src/qml/Selection.js').read_text()
+    result = engine.evaluate(script + '''
+        var reads = 0;
+        var ids = new Proxy(["a", "b", "c"], {
+            get: function(target, key) { reads++; return target[key]; }
+        });
+        var selection = create();
+        selection.reset(ids);
+        var initial = reads;
+        for (var i = 0; i < 10000; i++) {
+            if (!selection.contains("b") || selection.contains("missing")) throw "membership";
+        }
+        selection.selectAll();
+        selection.toggle("b", false);
+        if (selection.contains("b")) throw "excluded";
+        selection.toggle("b", true);
+        if (!selection.contains("b")) throw "restored";
+        reads === initial;
+    ''')
+    assert not result.isError(), result.toString()
+    assert result.toBool()

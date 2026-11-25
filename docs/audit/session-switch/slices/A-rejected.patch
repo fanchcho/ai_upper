@@ -1,0 +1,73 @@
+--- a/app/src/qml/Main.qml
++++ b/app/src/qml/Main.qml
+@@ -7,6 +7,7 @@
+ //   正文区  x 356–1279         bg #ffffff；正文列 780 居中（x 428–1207），
+ //          消息行 grid 32px + 12px gap + 696px，正文字块 x 488、宽 696
+ // 正文由 Python 渲染进 QTextDocument（markdown 层是唯一真相源），QML 只承载。
++import "Selection.js" as Selection
+ import QtQuick
+ import QtQuick.Controls
+ import QtQuick.Layouts
+@@ -107,14 +108,23 @@
+     // 全选后滚动不逐行扫描整个选择数组；任一集合变化使快路径失效。
+     property bool allListedSelected: false
+     property var listedSessionIds: []
+-    onSelectedSessionsChanged: allListedSelected = false
++    property var selectionLookup: Selection.create()
++    property int selectionRevision: 0
++    property bool selectionInternalChange: false
++    onSelectedSessionsChanged: {
++        allListedSelected = false
++        if (!selectionInternalChange) selectionLookup.reset(selectedSessions)
++        selectionRevision++
++    }
+     onListedSessionsChanged: {
+         allListedSelected = false
++        selectionLookup.reset(selectedSessions)
+         var rows = listedSessions
+         var ids = []
+         for (var i = 0; i < rows.length; i++)
+             ids.push(rows[i].id)
+         listedSessionIds = ids
++        selectionRevision++
+     }
+     // 重命名：原版是居中输入框（dialog.prompt），不是行内编辑；空串提交 = 恢复自动标题。
+     property bool renameOpen: false
+@@ -670,7 +680,7 @@
+                 active: modelData.id === window.activeId
+                 forceHover: index === window.forceHoverRow
+                 selectionMode: window.selectMode
+-                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
++                selected: { var revision = window.selectionRevision; return window.allListedSelected || window.selectionLookup.contains(modelData.id) }
+                 MouseArea {
+                     anchors.fill: parent
+                     acceptedButtons: Qt.LeftButton | Qt.RightButton
+@@ -1875,12 +1885,15 @@
+             return
+         // 原地更新，显式通知绑定，避免每次点击复制整个大集合。
+         var next = window.selectedSessions
+-        var at = next.indexOf(key)
++        var at = window.selectionLookup.contains(key) ? next.indexOf(key) : -1
+         if (at >= 0)
+             next.splice(at, 1)
+         else
+             next.push(key)
++        window.selectionLookup.toggle(key, at < 0)
++        window.selectionInternalChange = true
+         window.selectedSessionsChanged()
++        window.selectionInternalChange = false
+     }
+ 
+     function toggleSelectAll() {
+@@ -1889,8 +1902,11 @@
+             window.selectedSessions = []
+             return
+         }
++        window.selectionInternalChange = true
+         window.selectedSessions = window.listedSessionIds.slice()
++        window.selectionInternalChange = false
+         window.allListedSelected = true
++        window.selectionLookup.selectAll()
+     }
+ 
+     function archiveSelected() {
