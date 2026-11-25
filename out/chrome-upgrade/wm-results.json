@@ -1,0 +1,37 @@
+{
+  "initial": {
+    "WINDOW": 4194311,
+    "X": 160,
+    "Y": 140,
+    "WIDTH": 1280,
+    "HEIGHT": 820,
+    "SCREEN": 0
+  },
+  "moved": {
+    "WINDOW": 4194311,
+    "X": 230,
+    "Y": 190,
+    "WIDTH": 1280,
+    "HEIGHT": 820,
+    "SCREEN": 0
+  },
+  "resized": {
+    "WINDOW": 4194311,
+    "X": 230,
+    "Y": 190,
+    "WIDTH": 1370,
+    "HEIGHT": 880,
+    "SCREEN": 0
+  },
+  "restored": {
+    "WINDOW": 4194311,
+    "X": 230,
+    "Y": 190,
+    "WIDTH": 1370,
+    "HEIGHT": 880,
+    "SCREEN": 0
+  },
+  "minimize": true,
+  "maximize": true,
+  "close": true
+}

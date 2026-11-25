@@ -47,6 +47,7 @@ class SettingsService:
     def __init__(self, home: Optional[Path | str] = None) -> None:
         self._home = Path(home) if home is not None else default_home()
         self._config: Optional[dict[str, Any]] = None
+        self._loaded_raw: Optional[str] = None
 
     @property
     def home(self) -> Path:
@@ -61,7 +62,8 @@ class SettingsService:
         if self._config is not None:
             return self._config
         try:
-            parsed = json.loads(self.path.read_text(encoding="utf-8"))
+            self._loaded_raw = self.path.read_text(encoding="utf-8")
+            parsed = json.loads(self._loaded_raw)
             self._config = parsed if isinstance(parsed, dict) else {}
         except (OSError, ValueError):
             self._config = {}  # 首次运行 / 手改坏了：按空配置继续，不让启动失败
@@ -82,6 +84,14 @@ class SettingsService:
         if not isinstance(patch, dict):
             raise TypeError("config 补丁必须是对象")
         config = self._ensure_loaded()
+        # deva-agent desktop-models.mjs: expectedRaw prevents stale desktop mirrors
+        # from overwriting an external model/configuration edit.
+        try:
+            current_raw = self.path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            current_raw = None
+        if current_raw != self._loaded_raw:
+            raise OSError("Configuration changed externally; reload before saving")
         for key, value in patch.items():
             if value is None:
                 config.pop(key, None)
@@ -93,11 +103,14 @@ class SettingsService:
     def _persist(self) -> None:
         assert self._config is not None
         self._home.mkdir(parents=True, exist_ok=True)
-        write_file_atomic(self.path, json.dumps(self._config, ensure_ascii=False, indent=2))
+        raw = json.dumps(self._config, ensure_ascii=False, indent=2)
+        write_file_atomic(self.path, raw)
+        self._loaded_raw = raw
 
     def reload(self) -> None:
         """丢弃内存态，下次读取重新落盘读（外部工具手改 config.json 时用）。"""
         self._config = None
+        self._loaded_raw = None
 
     # ── 本工程直接消费的强类型读取（值非法一律回落缺省，不抛错）──────────
     def theme(self) -> str:

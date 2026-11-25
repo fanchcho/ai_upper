@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import os
+import sys
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -70,7 +71,7 @@ def _pump(app, seconds: float = 0.4) -> None:
     pump(app, lambda: False, seconds)
 
 
-def _build_window(tmp_path, monkeypatch, sessions=None):
+def _build_window(tmp_path, monkeypatch, sessions=None, mac_chrome=None):
     from PySide6.QtCore import QUrl
     from PySide6.QtQml import QQmlApplicationEngine
 
@@ -130,6 +131,8 @@ def _build_window(tmp_path, monkeypatch, sessions=None):
     box["bridge"] = bridge
 
     engine = QQmlApplicationEngine()
+    if mac_chrome is not None:
+        engine.setInitialProperties({"macChrome": mac_chrome})
     bridge._engine = engine
     engine.rootContext().setContextProperty("shellBridge", bridge)
     engine.load(QUrl.fromLocalFile(str(qml_main())))
@@ -167,6 +170,7 @@ def _dark_bbox(image, x0: int, x1: int, threshold: int = 200):
     )
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="macOS uses native traffic lights")
 def test_window_controls_geometry_and_colors_match_deva(qapp, tmp_path, monkeypatch):
     """96×40 实色块、三个 32×40 命中区、三条字形逐像素落在 deva 实测位置。"""
     window, _bridge, ticker, engine = _build_window(tmp_path, monkeypatch)
@@ -211,6 +215,7 @@ def test_window_controls_geometry_and_colors_match_deva(qapp, tmp_path, monkeypa
         engine.deleteLater()
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="custom chrome is Linux/Windows only")
 def test_window_controls_hover_and_real_state_changes(qapp, tmp_path, monkeypatch):
     """hover 底色 18/255 黑；最小化/最大化切换/关闭都改真实窗口状态。"""
     from PySide6.QtCore import QPoint
@@ -262,6 +267,7 @@ def test_window_controls_hover_and_real_state_changes(qapp, tmp_path, monkeypatc
         engine.deleteLater()
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="custom chrome is Linux/Windows only")
 def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
     from PySide6.QtCore import QMargins, QPointF, Qt
 
@@ -293,6 +299,27 @@ def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
         window.showMaximized()
         _pump(qapp)
         assert _find_item(root, "windowResize7").property("enabled") is False
+    finally:
+        ticker.stop()
+        window.close()
+        _pump(qapp, 0.1)
+        del engine
+
+
+@pytest.mark.parametrize("mac", [False, True])
+def test_platform_chrome_branch(qapp, tmp_path, monkeypatch, mac):
+    from PySide6.QtCore import QPointF, Qt
+    window, bridge, ticker, engine = _build_window(tmp_path, monkeypatch, mac_chrome=mac)
+    try:
+        _pump(qapp)
+        assert bool(window.flags() & Qt.FramelessWindowHint) is (not mac)
+        assert _find_item(window.contentItem(), "windowControls").isVisible() is (not mac)
+        if mac:
+            assert window.flags() & Qt.WindowCloseButtonHint
+            assert window.flags() & Qt.WindowMinMaxButtonsHint
+            assert window.flags() & Qt.ExpandedClientAreaHint
+            assert not _find_item(window.contentItem(), "windowDragRail").contains(QPointF(20, 20))
+            assert _find_item(window.contentItem(), "windowResize0").property("enabled") is False
     finally:
         ticker.stop()
         window.close()

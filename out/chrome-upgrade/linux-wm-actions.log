@@ -1,0 +1,148 @@
+$ xdotool windowactivate --sync 4194311 
+   rc= 0
+$ xprop -id 4194311 _NET_FRAME_EXTENTS 
+ _NET_FRAME_EXTENTS(CARDINAL) = 0, 0, 0, 0
+  rc= 0
+$ xprop -id 4194311 _MOTIF_WM_HINTS 
+ _MOTIF_WM_HINTS(_MOTIF_WM_HINTS) = 0x2, 0x1, 0x0, 0x0, 0x0
+  rc= 0
+$ xwininfo -id 4194311 -frame 
+ 
+xwininfo: Window id: 0x400007 "Deva"
+
+  Absolute upper-left X:  160
+  Absolute upper-left Y:  140
+  Relative upper-left X:  0
+  Relative upper-left Y:  0
+  Width: 1280
+  Height: 820
+  Depth: 24
+  Visual: 0x21
+  Visual Class: TrueColor
+  Border width: 0
+  Class: InputOutput
+  Colormap: 0x400006 (installed)
+  Bit Gravity State: NorthWestGravity
+  Window Gravity State: NorthWestGravity
+  Backing Store State: NotUseful
+  Save Under State: no
+  Map State: IsViewable
+  Override Redirect State: no
+  Corners:  +160+140  -160+140  -160-140  +160-140
+  -geometry 1280x820+160+140
+
+  rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=160
+Y=140
+WIDTH=1280
+HEIGHT=820
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1200 20 
+   rc= 0
+$ xdotool getmouselocation --shell 
+ X=1360
+Y=160
+SCREEN=0
+WINDOW=2097329
+  rc= 0
+$ xdotool click 1 
+   rc= 0
+$ xprop -id 4194311 WM_STATE 
+ WM_STATE(WM_STATE):
+		window state: Iconic
+		icon window: 0x0
+  rc= 0
+$ xdotool windowmap 4194311 windowactivate --sync 4194311 
+   rc= 0
+$ xprop -id 4194311 WM_STATE 
+ WM_STATE(WM_STATE):
+		window state: Normal
+		icon window: 0x0
+  rc= 0
+$ xdotool mousemove --window 4194311 700 15 mousedown 1 
+   rc= 0
+$ xdotool mousemove_relative -- 70 50 
+   rc= 0
+$ xdotool mouseup 1 
+   rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1280
+HEIGHT=820
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1278 818 mousedown 1 
+   rc= 0
+$ xdotool mousemove_relative -- 90 60 
+   rc= 0
+$ xdotool mouseup 1 
+   rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1370
+HEIGHT=880
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1322 20 
+   rc= 0
+$ xdotool getmouselocation --shell 
+ X=1552
+Y=210
+SCREEN=0
+WINDOW=2097329
+  rc= 0
+$ xdotool click 1 
+   rc= 0
+$ xprop -id 4194311 _NET_WM_STATE 
+ _NET_WM_STATE(ATOM) = _NET_WM_STATE_MAXIMIZED_VERT, _NET_WM_STATE_MAXIMIZED_HORZ
+  rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=0
+Y=0
+WIDTH=1600
+HEIGHT=1100
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1552 20 
+   rc= 0
+$ xdotool getmouselocation --shell 
+ X=1552
+Y=20
+SCREEN=0
+WINDOW=2097329
+  rc= 0
+$ xdotool click 1 
+   rc= 0
+$ xprop -id 4194311 _NET_WM_STATE 
+ _NET_WM_STATE(ATOM) = 
+  rc= 0
+$ xdotool getwindowgeometry --shell 4194311 
+ WINDOW=4194311
+X=230
+Y=190
+WIDTH=1370
+HEIGHT=880
+SCREEN=0
+  rc= 0
+$ xdotool mousemove --window 4194311 1354 20 
+   rc= 0
+$ xdotool getmouselocation --shell 
+ X=1584
+Y=210
+SCREEN=0
+WINDOW=2097329
+  rc= 0
+$ xdotool click 1 
+   rc= 0
+$ xprop -root _NET_CLIENT_LIST 
+ _NET_CLIENT_LIST(WINDOW): window id # 
+  rc= 0
+PASS: minimize/restore, move, resize, maximize/restore, close

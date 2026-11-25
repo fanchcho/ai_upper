@@ -1,0 +1,5 @@
+ app/src/mvvm/services/settings_service.py | 17 ++++++++++++++--
+ app/src/qml/Main.qml                      | 34 +++++++++++++++++++++----------
+ app/src/qml_shell.py                      |  8 ++++----
+ app/tests/test_qml_window_controls.py     | 29 +++++++++++++++++++++++++-
+ 4 files changed, 70 insertions(+), 18 deletions(-)

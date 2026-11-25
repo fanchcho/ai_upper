@@ -1,0 +1,30 @@
+out/entry-refactor/REPORT.md:13:| `app/tests/test_web_shell_modules.py` | 两处 `import deva_web` → `import main as entry`；断言（`String(!!(window.deva && window.deva.chat))`、`"true"`、`HEADLESS_ENV`）逐字保留，无删用例。 |
+out/final-close/REPORT.md:35:?? out/final-close/deva-rerun/*.png        （18 页原版基线，未入库）
+out/final-close/REPORT.md:47:| 3 delete-confirm 基线 | `17a8d2f` | `deva_page_shot.sh`、`deva_dom.mjs`、`verify_menu_geometry.mjs`、新基线图、REPORT |
+out/final-close/REPORT.md:54:## 缺口 1：`deva_pages_all.sh` 参数 bug —— 已修复并重拍 18 页基线
+out/final-close/REPORT.md:118:A 用 `git show HEAD:scripts/parity/deva_pages_all.sh` 取 HEAD 版本执行，B 用工作区修复版。同一调用方式，A 静默 0 图、B 正常出图，差异完全由本次修复造成。
+out/final-close/REPORT.md:370:| | 旧基线 `out/final-close/deva/` | 新基线 `out/final-close/deva-rerun/` |
+out/final-close/REPORT.md:439:| `out/final-close/deva-rerun/` | 18 页原版基线（`delete-confirm-deva.png` 例外） | 17 张 PNG 未入库 |
+out/final-close/REPORT.md:532:### 7.3 18 页逐页对照表（QML 重拍 vs `out/final-close/deva-rerun/` 基线）
+out/final-close/REPORT.md:830:（`3b1ddb91be99f2154a9a4a04e55507ce`），deva 基线两页
+out/final-close/REPORT.md:917:全 18 页重拍后与 `out/final-close/deva-rerun/` 基线比对，逐页都变好或持平：
+out/final-closeout/REPORT.md:314:- **原版「不滚动时 thumb 是否隐藏、隐藏后是否占位」实测（deva 1280×820 基线）：**
+out/latest-parity/REPORT.md:13:### 1.1 本地 deva HEAD 与远端 main
+out/latest-parity/REPORT.md:36:**结论：本地 deva HEAD `61f6a35` 不是远端最新。** 远端 `origin/main` 在
+out/latest-parity/REPORT.md:197:逐页把「新拍 deva」与旧对照 `out/final-close/deva-final`（老基线上拍的）做 AE：
+out/latest-parity/REPORT.md:517:# 逐像素比对 deva 基线 vs out/latest-parity/qml/settings-models.png
+out/latest-parity/REPORT.md:527:弹窗内 3875 px 仅占整页差异的 **1.2%**；其余 98.8% 全部在弹窗外——deva 那张基线是
+out/latest-parity/REPORT.md:568:本轮只复测 `settings-models` 单页：deva 基线复用 `out/latest-parity/deva/settings-models-deva.png`，QML 侧用 `/tmp` 临时 home 重拍；改前值取本节 §4.4.1 的现有记录 `30.85%`。
+out/latest-parity/REPORT.md:728:`git status --porcelain --untracked-files=no` 无输出，三个命令均rc0。只读 deva HEAD 为
+out/latest-parity/REPORT.md:896:`app/src/qml/assets/deva-icon.svg`（基线 `apps/desktop/build/icon.svg` 的逐字节副本）。
+out/latest-parity/REPORT.md:1823:- **E3：未由 `2a6e2a3` 覆盖。** 缺的是正文滚动偏移所需的段落行高/间距；当前 `chat` 首带 `(40,43)` vs deva `(43,45)`，仍有约 3 px 基线差（旧 13 px 线性偏移已缩小），`2a6e2a3` 只改表格。
+out/TEST-REPORT.md:636:重拍命令 `AI_UPPER_HOME=/tmp/ai-upper-residual-20261123 bash scripts/parity/qml_page_shot.sh long-mid out/final-parity/c-after/long-mid.png /tmp/ai-upper-residual-20261123 config.json > out/final-parity/c-after-long.log 2>&1; rc=$?`，rc0。page_diff18.py 的 long-mid **130093px/12.39%→124617px/11.87%**（本轮新deva基线）；并非整个页面像素全部一致。
+out/latest-parity/REPORT.before-e1-update.md:13:### 1.1 本地 deva HEAD 与远端 main
+out/latest-parity/REPORT.before-e1-update.md:36:**结论：本地 deva HEAD `61f6a35` 不是远端最新。** 远端 `origin/main` 在
+out/latest-parity/REPORT.before-e1-update.md:197:逐页把「新拍 deva」与旧对照 `out/final-close/deva-final`（老基线上拍的）做 AE：
+out/latest-parity/REPORT.before-e1-update.md:517:# 逐像素比对 deva 基线 vs out/latest-parity/qml/settings-models.png
+out/latest-parity/REPORT.before-e1-update.md:527:弹窗内 3875 px 仅占整页差异的 **1.2%**；其余 98.8% 全部在弹窗外——deva 那张基线是
+out/latest-parity/REPORT.before-e1-update.md:568:本轮只复测 `settings-models` 单页：deva 基线复用 `out/latest-parity/deva/settings-models-deva.png`，QML 侧用 `/tmp` 临时 home 重拍；改前值取本节 §4.4.1 的现有记录 `30.85%`。
+out/latest-parity/REPORT.before-e1-update.md:825:`app/src/qml/assets/deva-icon.svg`（基线 `apps/desktop/build/icon.svg` 的逐字节副本）。
+out/latest-parity/REPORT.before-e1-update.md:1639:`long-mid` 是唯一指标回退，且**不是正文修复造成的真实退步**：该页 deva 基线是「会话 038」的单条短消息页，QML 页却是多会话长正文的中段滚动位，二者内容本身不对应。按 `diff>0` 区域归因：sidebar x0–360 为 `47169 → 45771`，content x360–1280 为 `71924 → 94462`；content y0–60 `4507 → 6675`、y60–640 `38367 → 58737`、y640–820 `29050 → 29050`，其中表格框 (470,80)-(800,200) 单独贡献 `11835 → 24845`（+13010）。修复前页面多数字形是缺字方框、表格未铺底色，反而与空白基线更“像”；修复后字形和表格都正确出现，像素差因此上升。其余三页均下降，`search-none` 降幅最大。
+out/residual-20261123/E4.md:5:只读源码：deva HEAD 065657976c611a462d9844eed3ebab9575233af9，Markdown.tsx 的 components 无 img override，默认 ReactMarkdown URL 转换将 data: 清空；app.css:848 的 .md img 仅 max-width/radius。因此参考是浏览器默认 broken-image 图标与裸 alt，不是自定义［图片］文案。提取原文在 logs/deva-markdown.log、deva-body-css.log、url-source.log。

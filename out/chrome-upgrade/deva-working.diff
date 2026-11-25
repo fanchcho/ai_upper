@@ -1,0 +1,49 @@
+diff --git a/apps/web/build.mjs b/apps/web/build.mjs
+index c87a277..44761c8 100644
+--- a/apps/web/build.mjs
++++ b/apps/web/build.mjs
+@@ -30,6 +30,15 @@ for (const p of [rendererDir, preloadEntry]) {
+ const outDir = path.join(here, 'dist')
+ fs.mkdirSync(outDir, { recursive: true })
+ 
++// Web 自有资源与上游共享图标统一输出到 dist，运行期不依赖上游源码目录。
++const assetsDir = path.join(outDir, 'web')
++fs.mkdirSync(assetsDir, { recursive: true })
++fs.cpSync(path.join(here, 'src', 'web'), assetsDir, { recursive: true })
++fs.copyFileSync(
++  path.join(desktopDir, 'src', 'mobile', 'public', 'favicon.svg'),
++  path.join(assetsDir, 'favicon.svg')
++)
++
+ // 1) 浏览器侧 preload shim
+ await build({
+   entryPoints: [preloadEntry],
+diff --git a/apps/web/package.json b/apps/web/package.json
+index 4212485..880e544 100644
+--- a/apps/web/package.json
++++ b/apps/web/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@deva/web",
+-  "version": "0.1.16",
++  "version": "0.1.17",
+   "private": true,
+   "type": "module",
+   "description": "Deva 纯 Web 运行层：复用 renderer 与 preload API，后端由 Node 服务承担",
+diff --git a/apps/web/server.mjs b/apps/web/server.mjs
+index 3fc5db2..36bd4a1 100644
+--- a/apps/web/server.mjs
++++ b/apps/web/server.mjs
+@@ -421,10 +421,10 @@ function shellScript(username, role) {
+ })` 
+ }
+ 
+-// 静态资源（renderer 产物 + src/web 自有文件）：ETag/304 + 流式读取，见 src/server/static.mjs。
++// 静态资源（renderer 产物 + dist/web 构建资源）：ETag/304 + 流式读取，见 src/server/static.mjs。
+ const serveStatic = createStaticHandler({
+   rendererDir: manifest.rendererDir,
+-  assetsDir: path.join(here, 'src', 'web'),
++  assetsDir: path.join(here, 'dist', 'web'),
+   injectIndex
+ })
+ 

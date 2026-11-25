@@ -17,7 +17,15 @@ import "."
 ApplicationWindow {
     id: window
     visible: true
-    flags: Qt.Window | Qt.FramelessWindowHint
+    property bool macChrome: Qt.platform.os === "osx"
+    readonly property int railWidth: macChrome ? 72 : Theme.railWidth
+    // deva main/index.ts:85-118: macOS uses native traffic lights, no overlay.
+    flags: macChrome
+           ? Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint
+             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+             | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
+           : Qt.Window | Qt.FramelessWindowHint
+    topPadding: 0
     width: 1280
     height: 820
     minimumWidth: 940
@@ -348,7 +356,7 @@ ApplicationWindow {
         id: rail
         x: 0
         y: 0
-        width: Theme.railWidth
+        width: window.railWidth
         height: parent.height
         color: Theme.bgInset
 
@@ -360,10 +368,13 @@ ApplicationWindow {
                 function contains(p: point): bool {
                     if (p.x < 0 || p.y < 0 || p.x >= railDrag.width || p.y >= railDrag.height)
                         return false
+                    if (window.macChrome && p.y < 40)
+                        return false
+                    var shift = window.macChrome ? 40 : 0
                     // deva .cf-iconrail: drag; avatar/nav buttons: no-drag.
                     return !(p.x >= 8 && p.x < 48 &&
-                             ((p.y >= 20 && p.y < 58) ||
-                              (p.y >= 70 && p.y < 198) ||
+                             ((p.y >= 20 + shift && p.y < 58 + shift) ||
+                              (p.y >= 70 + shift && p.y < 198 + shift) ||
                               (p.y >= 724 && p.y < 808)))
                 }
             }
@@ -381,7 +392,7 @@ ApplicationWindow {
         Item {
             id: meBtn
             x: 9
-            y: 20
+            y: window.macChrome ? 60 : 20
             width: 38
             height: 38
             Avatar {
@@ -393,7 +404,7 @@ ApplicationWindow {
 
         Column {
             x: 8
-            y: 70
+            y: window.macChrome ? 110 : 70
             spacing: 4
             RailButton { iconName: IconData.messageCircle; active: true }
             RailButton { iconName: IconData.users }
@@ -415,7 +426,7 @@ ApplicationWindow {
     // ── 会话栏 ────────────────────────────────────────────────────────
     Rectangle {
         id: side
-        x: Theme.railWidth
+        x: window.railWidth
         y: 0
         width: Theme.sideWidth
         height: parent.height
@@ -795,7 +806,7 @@ ApplicationWindow {
     // ── 正文区 ────────────────────────────────────────────────────────
     Item {
         id: conv
-        x: Theme.railWidth + Theme.sideWidth
+        x: window.railWidth + Theme.sideWidth
         y: 0
         width: parent.width - x
         height: parent.height
@@ -804,7 +815,7 @@ ApplicationWindow {
         MouseArea {
             objectName: "windowDragHeader"
             x: head.visible ? 16 + personaTitle.width + 20 : 0
-            width: parent.width - 96 - x
+            width: parent.width - (window.macChrome ? 0 : 96) - x
             height: head.visible ? 27 : 40
             onPressed: window.startSystemMove()
         }
@@ -817,7 +828,7 @@ ApplicationWindow {
             visible: window.sessions.length > 0
             x: 0
             y: 0
-            width: parent.width - 96
+            width: parent.width - (window.macChrome ? 0 : 96)
             height: 27
             Rectangle {
                 anchors.bottom: parent.bottom
@@ -2396,6 +2407,7 @@ ApplicationWindow {
     // 的 minimize / isMaximized ? unmaximize : maximize / close。
     Rectangle {
         id: windowControls
+        visible: !window.macChrome
         objectName: "windowControls"
         x: window.width - width
         y: 0
@@ -2460,7 +2472,7 @@ ApplicationWindow {
                     return local.y < 0 || local.y >= bodyScrollbar.height || p.x >= 4
                 }
             }
-            enabled: window.visibility !== Window.Maximized && window.visibility !== Window.FullScreen
+            enabled: !window.macChrome && window.visibility !== Window.Maximized && window.visibility !== Window.FullScreen
             hoverEnabled: true
             cursorShape: (edgeLeft || edgeRight) && (edgeTop || edgeBottom)
                          ? ((edgeLeft && edgeTop) || (edgeRight && edgeBottom) ? Qt.SizeFDiagCursor : Qt.SizeBDiagCursor)

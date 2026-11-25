@@ -1,0 +1,4 @@
+112:    titleBarStyle: 'hidden',
+116:    titleBarOverlay: overlayOptions(nativeTheme.shouldUseDarkColors),
+118:    trafficLightPosition: { x: 9, y: 13 },
+446:  if (process.platform !== 'darwin') app.quit()

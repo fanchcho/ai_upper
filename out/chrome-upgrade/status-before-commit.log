@@ -1,0 +1,4 @@
+ M app/src/mvvm/services/settings_service.py
+ M app/src/qml/Main.qml
+ M app/src/qml_shell.py
+ M app/tests/test_qml_window_controls.py

@@ -977,12 +977,12 @@ class ShellBridge(QtCore.QObject):
             return False
         models = dict(section)
         models["activeModelId"] = f"{provider_id}:{model_id}"
+        if not self._write_models(models):
+            return False
         if self._active and not self._store.set_model(self._active, f"{provider_id}:{model_id}"):
             # 会话尚未建档（惰性会话）不是错误：原版同样返回 `{ok:false}` 且不建档，
             # 由首发时的覆盖层落库。这里同样只记「最近使用」，不报失败。
             pass
-        if not self._write_models(models):
-            return False
         self._publish()
         return True
 
@@ -993,10 +993,10 @@ class ShellBridge(QtCore.QObject):
             return False
         models = dict(self._models_section())
         models["activeEffort"] = level
-        if self._active:
-            self._store.set_effort(self._active, None if level == "default" else level)
         if not self._write_models(models):
             return False
+        if self._active:
+            self._store.set_effort(self._active, None if level == "default" else level)
         self._publish()
         return True
 

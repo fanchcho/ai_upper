@@ -1,0 +1,17 @@
+74384d0613722633b1be69d8e733f19381d09ba7
+bfbfee7 feat(deva-agent): 发布 0.8.18，模型页读写桌面配置、MCP 页改走 Studio 接口 / release 0.8.18 with desktop-backed model settings and Studio-backed MCP page
+804f367 docs(deva-agent): 撤下宿主标题热修交付 / withdraw the host title hotfix from delivery
+419356c fix(deva-agent): 修复 0.8.15 安装器打包后续接和临时文件忽略 / fix 0.8.15 installer connection reuse and ignore artifacts
+9b0ac29 feat(deva-agent): 发布 0.8.15 并提供跨设备安装更新指南 / release 0.8.15 with cross-device installation and updates
+0656579 test(out): 静态断言扩到 133 项 + 运维说明 + 第四轮报告 / extend checks and docs
+4df2c8e fix(web): 更新提示改为 pull 远程镜像 / hint pull instead of local build
+3157bbc feat(deploy): compose 改为拉远程镜像 + watchtower 自动更新 / pull image + watchtower
+6f5577e ci(image): 新增 ghcr 镜像发布 workflow / publish images to ghcr
+61f6a35 chore(out): 记录文档收尾后的四项快检 / note post-docs re-check
+d02a4b7 docs(out): 日志体积按实测 65 KB 标注 / correct recorded log size
+319ca7a docs(out): 说明 §8.4 的提交表不逐一列举后续文档修订 / note self-referential commits
+c3025d5 chore(out): 补记第四次推送与最终一致性 / record the final push and consistency
+bb560b4 docs(out): 校正 §8.4 的推送序列与实际一致 / align push log with actual pushes
+9370c9b chore(out): 用收尾提交后的 HEAD 重跑整体复跑 / rerun full suite at the final tree
+044005b chore(out): 落盘推送实测日志 / record push evidence log
+bfbfee7aa6a549ce0ead101f2eed8ec093a12d45

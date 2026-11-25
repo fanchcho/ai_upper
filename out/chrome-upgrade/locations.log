@@ -1,0 +1,20 @@
+app/src/mvvm/services/settings_service.py:50:        self._loaded_raw: Optional[str] = None
+app/src/mvvm/services/settings_service.py:65:            self._loaded_raw = self.path.read_text(encoding="utf-8")
+app/src/mvvm/services/settings_service.py:66:            parsed = json.loads(self._loaded_raw)
+app/src/mvvm/services/settings_service.py:93:        if current_raw != self._loaded_raw:
+app/src/mvvm/services/settings_service.py:94:            raise OSError("Configuration changed externally; reload before saving")
+app/src/mvvm/services/settings_service.py:108:        self._loaded_raw = raw
+app/src/mvvm/services/settings_service.py:113:        self._loaded_raw = None
+app/src/qml/Main.qml:20:    property bool macChrome: Qt.platform.os === "osx"
+app/src/qml/Main.qml:21:    readonly property int railWidth: macChrome ? 72 : Theme.railWidth
+app/src/qml/Main.qml:23:    flags: macChrome
+app/src/qml/Main.qml:371:                    if (window.macChrome && p.y < 40)
+app/src/qml/Main.qml:373:                    var shift = window.macChrome ? 40 : 0
+app/src/qml/Main.qml:395:            y: window.macChrome ? 60 : 20
+app/src/qml/Main.qml:407:            y: window.macChrome ? 110 : 70
+app/src/qml/Main.qml:818:            width: parent.width - (window.macChrome ? 0 : 96) - x
+app/src/qml/Main.qml:831:            width: parent.width - (window.macChrome ? 0 : 96)
+app/src/qml/Main.qml:2409:        id: windowControls
+app/src/qml/Main.qml:2410:        visible: !window.macChrome
+app/src/qml/Main.qml:2411:        objectName: "windowControls"
+app/src/qml/Main.qml:2475:            enabled: !window.macChrome && window.visibility !== Window.Maximized && window.visibility !== Window.FullScreen
