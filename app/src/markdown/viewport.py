@@ -75,3 +75,116 @@ def attach_code_viewports(quick_document, document, background):
             visit(child)
     visit(document.rootFrame())
     return overlays
+
+
+class TableGridOverlay(QtQuick.QQuickPaintedItem):
+    """Crisp 1-px grid painted over a QML table at integer device pixels.
+
+    ``QQuickTextEdit`` only paints the *table-level* border (cell borders are not
+    drawn at all, verified with ``setBorder(0)`` → no grid).  That frame border
+    sits on a half-pixel document position, so a 1px border rasterises into two
+    solid rows (measured y217/y218 vs deva's single y224).  This overlay keeps
+    the document layout untouched and repaints the grid with ``fillRect`` on
+    rounded coordinates, one physical row/column per line.
+    """
+
+    def __init__(self, parent, rect, row_lines, col_lines, color):
+        super().__init__(parent)
+        self.setObjectName("tableGrid")
+        self._rect = rect
+        self._row_lines = list(row_lines)
+        self._col_lines = list(col_lines)
+        self._color = color
+        # Integer origin: the table frame itself lands on x.5; drawing from a
+        # rounded origin keeps every line on whole pixels.
+        self.setX(round(rect.x()))
+        self.setY(round(rect.y()))
+        self.setWidth(max(1, round(rect.width())))
+        self.setHeight(max(1, round(rect.height())))
+        self.setZ(0.5)
+        self.setAcceptedMouseButtons(QtCore.Qt.NoButton)
+
+    def paint(self, painter):
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(self._color)
+        ox = self.x()
+        oy = self.y()
+        width = self.width()
+        height = self.height()
+        for y in self._row_lines:
+            local = min(max(round(y) - oy, 0), height - 1)
+            painter.fillRect(QtCore.QRectF(0, local, width, 1), self._color)
+        for x in self._col_lines:
+            local = round(x) - ox
+            if 0 <= local <= width - 1:
+                painter.fillRect(QtCore.QRectF(local, 0, 1, height), self._color)
+
+
+def _iter_tables(frame):
+    for child in frame.childFrames():
+        if isinstance(child, QtGui.QTextTable):
+            yield child
+        yield from _iter_tables(child)
+
+
+def _is_code_table(table):
+    """Code blocks are single-column tables whose last cell carries the language."""
+    if table.columns() != 1:
+        return False
+    block = table.cellAt(table.rows() - 1, 0).firstCursorPosition().block()
+    return block.blockFormat().hasProperty(CODE_LANGUAGE_PROPERTY)
+
+
+def attach_table_grids(quick_document, document, color):
+    """Strip the QML copy's table frame border and paint a pixel-exact grid.
+
+    Only the *attached* copy is touched: the renderer's own document keeps its
+    ``QTextTableFormat`` border for non-QML consumers (tests / drawContents).
+
+    Geometry comes from cell block rects, not ``frameBoundingRect``: the latter
+    includes the table tail block (measured 156px for a 4Ã—35px table), while
+    the rendered grid is exactly ``row_height * rows`` tall.
+    """
+    parent = quick_document.parent()
+    if not isinstance(parent, QtQuick.QQuickItem):
+        return []
+    layout = document.documentLayout()
+    overlays = []
+    for table in _iter_tables(document.rootFrame()):
+        if _is_code_table(table):
+            continue
+        rows = table.rows()
+        columns = table.columns()
+        if rows <= 0 or columns <= 0:
+            continue
+        first = layout.blockBoundingRect(table.cellAt(0, 0).firstCursorPosition().block())
+        if rows > 1:
+            second = layout.blockBoundingRect(table.cellAt(1, 0).firstCursorPosition().block())
+            row_height = second.y() - first.y()
+        else:
+            row_height = first.height()
+        if row_height <= 1:
+            continue
+        top = first.y()
+        bottom = layout.blockBoundingRect(
+            table.cellAt(rows - 1, 0).firstCursorPosition().block()).y() + row_height
+        left = first.x()
+        col_lines = []
+        right = left
+        for column in range(columns):
+            block_rect = layout.blockBoundingRect(
+                table.cellAt(0, column).firstCursorPosition().block())
+            col_lines.append(block_rect.x())
+            right = max(right, block_rect.x() + block_rect.width())
+        if right - left <= 1 or bottom - top <= 1:
+            continue
+        # Remove the engine-drawn frame only in the QML document copy.
+        stripped = QtGui.QTextTableFormat(table.format())
+        stripped.setBorder(0.0)
+        table.setFormat(stripped)
+        row_lines = [top + index * row_height for index in range(rows + 1)]
+        col_lines.append(right)
+        rect = QtCore.QRectF(left, top, right - left, bottom - top)
+        overlays.append(TableGridOverlay(parent, rect, row_lines, col_lines, color))
+    return overlays

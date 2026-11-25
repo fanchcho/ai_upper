@@ -79,6 +79,7 @@ class BodyDocument:
         self.style = style or BodyStyle()
         self.content_width = float(content_width)
         self._viewports = []
+        self._grids = []
         self._source = ""
         self._plain = False
         self._image_resolver: Optional[Callable[[str], Any]] = None
@@ -197,6 +198,10 @@ class BodyDocument:
             viewport.setParentItem(None)
             viewport.deleteLater()
         self._viewports = []
+        for grid in self._grids:
+            grid.setParentItem(None)
+            grid.deleteLater()
+        self._grids = []
         target = quick_document.textDocument()
         # 渲染器把自有文档的页边距设成 0（正文块自己控制留白）。片段不搬运文档级的
         # ``documentMargin``，不显式对齐的话接管后四边会多出 4px 默认内边距，正文
@@ -218,6 +223,11 @@ class BodyDocument:
             from .viewport import attach_code_viewports
             self._viewports = attach_code_viewports(
                 quick_document, target, QtGui.QColor(self.palette.code_bg))
+            from .viewport import attach_table_grids
+            # 表格网格：QQuickTextEdit 只画表格级边框且落在半像素上（1px 被光栅成两行），
+            # 单元格边框根本不画。这里把 QML 副本的表格边框清零，用整像素 overlay 重画网格。
+            self._grids = attach_table_grids(
+                quick_document, target, QtGui.QColor(self.palette.border))
         return target
 
     def _copy_images(self, target: Any) -> None:
@@ -237,6 +247,10 @@ class BodyDocument:
 
     def detach(self) -> None:
         """QML 控件销毁时调用：高亮器回到自有文档，内容重绘一遍。"""
+        for grid in self._grids:
+            grid.setParentItem(None)
+            grid.deleteLater()
+        self._grids = []
         if self._highlighter is not None and self._highlighter.document() is not self.document:
             self._highlighter.setDocument(self.document)
         self.render()

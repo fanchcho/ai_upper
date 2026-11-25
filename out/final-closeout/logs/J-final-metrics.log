@@ -1,0 +1,15 @@
+out/final-closeout/qml/chat.png
+  border runs: [[77, 78], [113, 113], [147, 148], [183, 183], [217, 218]]
+  bottom_edge_rows= 2 bottom_y= 218
+  advances= [36, 34, 36, 34]
+  next_ink_y= 275 gap_px= 57
+out/final-closeout/qml-j/chat.png
+  border runs: [[81, 81], [116, 116], [151, 151], [186, 186], [220, 220]]
+  bottom_edge_rows= 1 bottom_y= 220
+  advances= [35, 35, 35, 34]
+  next_ink_y= 275 gap_px= 55
+out/final-closeout/deva/chat-deva.png
+  border runs: [[86, 86], [121, 121], [155, 155], [190, 190], [224, 224]]
+  bottom_edge_rows= 1 bottom_y= 224
+  advances= [35, 34, 35, 34]
+  next_ink_y= 277 gap_px= 53

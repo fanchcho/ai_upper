@@ -377,3 +377,33 @@ focus-composer 四边 `#5b5bd6`、Delete 确认流程 120→119）。
   后已不需要 shim，最终 pytest 直接在系统库下运行。
 - 旧证据里的 18 页数字与本轮不同，是因为本轮是**两端同时重拍**的新基线（fixture 时间戳也会影响
   「22 hr ago」文案），不是把旧值改小；逐页 md5 与差异见 §2.C。
+
+### J-2 2026-11-25 换机制：整像素 overlay 网格（部分达成，仍未完全达标）
+
+按「关闭 QTextTable 自带边框 + 文档之上 overlay 画网格」实现：新增
+`app/src/markdown/viewport.py::TableGridOverlay`，`BodyDocument.attach()` 在 QML 副本里
+把每张 Markdown 表格的 `QTextTableFormat.border` 清成 0，再按**单元格块几何**
+（`documentLayout().blockBoundingRect(cell.block())`，不是 `frameBoundingRect`——后者含尾块，
+4×35px 的表量到 156px）生成行列线，用 `QPainter.fillRect` 在 round 后的整像素位置画 1px。
+文本、选区、复制路径不变（网格是 `QQuickPaintedItem`，`acceptedMouseButtons=NoButton`；
+代码块的 `CodeViewport` 跳过）。新增回归 `app/tests/test_qml_table_grid.py`。
+
+重拍 `chat`（其余 17 页也重拍确认 rc=0/无报错），像素探针
+（`out/final-closeout/logs/J-final-metrics.log`）：
+
+| 指标（chat 1280×820） | 改前 QML | overlay 后 QML | deva 原版 |
+|---|---:|---:|---:|
+| 表格底边行数 | **2 行**（y217,218） | **1 行**（y220） | 1 行（y224） |
+| 边框行位置 | 77.5 / 113 / 147.5 / 183 / 217.5 | 81 / 116 / 151 / 186 / 220 | 86 / 121 / 155 / 190 / 224 |
+| 行推进（相邻边框差） | 36 / 34 / 36 / 34（均值 35.0） | 35 / 35 / 35 / 34（均值 34.75） | 35 / 34 / 35 / 34（均值 34.5，CSS 34.4375） |
+| 表底边框行 → 下一段首行墨迹 | 57px | **55px** | 53px |
+| 整页 AE（vs deva） | 101645 px / 9.68% | 101979 px / 9.72% | — |
+
+结论：**未达标（部分修复）**。
+- 底边两行已修成 1 行（本项原始诉求达成）；表后间距 57→55px，向 53px 靠近 2px；
+- **行推进仍是 35px，取不到 34.4375px**：QTextTable 行高整数量化（34.0–34.45→35，
+  34.5–35→36，见 `J-rowheight-sweep.log`），overlay 只画线不改布局；要改只能放弃
+  `QTextTable` 走独立渲染，会破坏选区/复制/滚动，超出时间盒；
+- **表后 14.5px（旧 block 口径）vs 12px 未变**：`QTextTable` 尾块行盒导致，`setBottomMargin(12)`
+  已到有效值；overlay 不参与块布局；
+- 代价：整页 AE 增加 334px（9.68%→9.72%），来自网格线相对 deva 的位置差；如实记录，不宣称改善总分。
