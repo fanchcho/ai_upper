@@ -481,6 +481,7 @@ class _Renderer:
         self._cell_char_formats = {}
         self._row_height_chars = {}
         self._cell_pad_chars = {}
+        self._plain_cell_widths = {}
 
     # ── 基础 ──────────────────────────────────────────────────────────────
     def color(self, value: str) -> Any:
@@ -816,6 +817,14 @@ class _Renderer:
 
     def _measure_cell_width(self, nodes: list, char_fmt: Any) -> float:
         """测量一个单元格的 max-content 宽度（含左右块边距）。"""
+        # Repeated plain cells (headers, status values) need one Qt measurement
+        # per renderer/font. Rich cells still resolve images and formatting.
+        key = None
+        if all(node.get("type") == "text" for node in nodes or []):
+            key = (char_fmt.font().toString(),
+                   "".join(str(node.get("text") or "") for node in nodes or []))
+            if key in self._plain_cell_widths:
+                return self._plain_cell_widths[key]
         probe = QTextDocument()
         probe.setDocumentMargin(0.0)
         probe.setTextWidth(self.content_width)
@@ -825,7 +834,10 @@ class _Renderer:
         block_fmt.setRightMargin(0.0)
         cursor.setBlockFormat(block_fmt)
         self._inline(cursor, nodes or [], char_fmt)
-        return float(probe.idealWidth())
+        width = float(probe.idealWidth())
+        if key is not None:
+            self._plain_cell_widths[key] = width
+        return width
 
     def _table_row(self, table: Any, row_index: int, cells: list, align: list[str], *,
                    header_row: bool) -> None:

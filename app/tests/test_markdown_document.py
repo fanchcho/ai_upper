@@ -772,3 +772,22 @@ def test_table_spacing_and_nested_quote_keep_css_boundaries(qapp):
     layout = document.documentLayout()
     assert layout.blockBoundingRect(inner).x()-layout.blockBoundingRect(outer).x() == 15
     assert inner.blockFormat().bottomMargin() == 0
+
+
+def test_repeated_plain_table_cells_share_measurement_without_changing_geometry(qapp, monkeypatch):
+    source = '| Name | Value |\n| --- | --- |\n| item | 42 |\n\n'
+    expected = render(source)
+    expected_widths = [v.rawValue() for v in tables(expected)[0].format().columnWidthConstraints()]
+    probes = []
+    native_document = document_module.QTextDocument
+
+    def new_probe(*args, **kwargs):
+        probes.append(1)
+        return native_document(*args, **kwargs)
+
+    monkeypatch.setattr(document_module, 'QTextDocument', new_probe)
+    actual = render(source * 10)
+    # Four unique (font, plain text) cells; do not perform 40 native layouts.
+    assert len(probes) == 4
+    for table in tables(actual):
+        assert [v.rawValue() for v in table.format().columnWidthConstraints()] == expected_widths
