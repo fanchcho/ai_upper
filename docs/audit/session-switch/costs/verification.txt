@@ -1,0 +1,66 @@
+$ git log --oneline -5
+80bc3b5 docs(audit): record rejected selection lookup and staged attachment results
+0037a65 fix(qml): yield between transcript replacement and overlay attachment
+a0eedd3 docs(audit): record selection stress and threaded rendering limits
+bbd3e3f fix(qml): prepare session rich text in a worker with value-only delivery
+67edda7 fix(qml): avoid selection copies and all-selected row scans
+exit=0
+$ git ls-files docs/audit/session-switch/slices
+docs/audit/session-switch/slices/A-rejected.patch
+docs/audit/session-switch/slices/A.md
+docs/audit/session-switch/slices/B.md
+docs/audit/session-switch/slices/Selection-rejected.js.txt
+docs/audit/session-switch/slices/a-after.json
+docs/audit/session-switch/slices/a-after.log
+docs/audit/session-switch/slices/a-before-selected.png
+docs/audit/session-switch/slices/a-before.json
+docs/audit/session-switch/slices/a-before.log
+docs/audit/session-switch/slices/a-delivery.json
+docs/audit/session-switch/slices/a-delivery.log
+docs/audit/session-switch/slices/a-final.json
+docs/audit/session-switch/slices/a-final.log
+docs/audit/session-switch/slices/a-last-selected.png
+docs/audit/session-switch/slices/a-last.json
+docs/audit/session-switch/slices/a-last.log
+docs/audit/session-switch/slices/a-repeat.json
+docs/audit/session-switch/slices/a-repeat.log
+docs/audit/session-switch/slices/a-runs.log
+docs/audit/session-switch/slices/b-after-1.json
+docs/audit/session-switch/slices/b-after-1.log
+docs/audit/session-switch/slices/b-after-1.png
+docs/audit/session-switch/slices/b-after-2.json
+docs/audit/session-switch/slices/b-after-2.log
+docs/audit/session-switch/slices/b-after-2.png
+docs/audit/session-switch/slices/b-after-3.json
+docs/audit/session-switch/slices/b-after-3.log
+docs/audit/session-switch/slices/b-after-3.png
+docs/audit/session-switch/slices/b-before-1.json
+docs/audit/session-switch/slices/b-before-1.log
+docs/audit/session-switch/slices/b-before-1.png
+docs/audit/session-switch/slices/b-before-2.json
+docs/audit/session-switch/slices/b-before-2.log
+docs/audit/session-switch/slices/b-before-2.png
+docs/audit/session-switch/slices/b-before-3.json
+docs/audit/session-switch/slices/b-before-3.log
+docs/audit/session-switch/slices/b-before-3.png
+docs/audit/session-switch/slices/b-retained-runs.log
+docs/audit/session-switch/slices/b-retained-runs.py
+docs/audit/session-switch/slices/lookup-test.log
+docs/audit/session-switch/slices/lookup-test.py.txt
+docs/audit/session-switch/slices/pytest-retained.log
+docs/audit/session-switch/slices/selection.py
+docs/audit/session-switch/slices/switch.py
+docs/audit/session-switch/slices/verification.txt
+exit=0
+$ git diff --check
+exit=0
+$ git status --short
+ M app/src/markdown/body.py
+ M app/src/qml_shell.py
+?? docs/audit/session-switch/costs/
+exit=0
+$ git branch --show-current
+develop
+exit=0
+Three final RGB comparisons: bbox=None
+Text/title/active ID assertions passed in each measurement subprocess; subprocess exit=0
