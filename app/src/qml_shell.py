@@ -312,6 +312,7 @@ class ShellBridge(QtCore.QObject):
     # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
     # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
     darkModeChanged = QtCore.Signal()
+    _preparedReady = QtCore.Signal()
 
     @QtCore.Property(bool, notify=darkModeChanged)
     def darkMode(self) -> bool:
@@ -358,6 +359,10 @@ class ShellBridge(QtCore.QObject):
             store.home, WorkspaceGuard()
         )
         self._attachments.set_file_dialogs(pick_files=self._pick_files)
+        self._preparedReady.connect(self._finish_prepared_render, QtCore.Qt.QueuedConnection)
+        self._render_epoch = 0
+        self._render_jobs = []
+        self._render_executor = None
         self.rendered = 0
         self.deltas: List[str] = []
         self.stop = ""
@@ -613,8 +618,8 @@ class ShellBridge(QtCore.QObject):
         self._active = str(session_id or "")
         self._turn = None
         self._turn_session = ""
-        self._render()
         self._publish()
+        self._prepare_render()
         return True
 
     @QtCore.Slot(result=str)
@@ -1295,6 +1300,7 @@ class ShellBridge(QtCore.QObject):
     # ── 事件回写（GUI 线程）───────────────────────────────────────────────
     def tick(self) -> bool:
         """GUI 线程周期调用：drain 回合线程的界面写入，再把事件落到正文上。"""
+        self._finish_prepared_render()
         self._host.drain()
         pending = self.pendingInteractions()
         if pending != self._last_interactions:
@@ -1364,7 +1370,67 @@ class ShellBridge(QtCore.QObject):
             return self._turn.markdown()
         return base
 
+    def _prepare_render(self) -> None:
+        if self._document is None:
+            return
+        from concurrent.futures import ThreadPoolExecutor
+        from markdown.prepare import prepare_document
+        if self._render_executor is None:
+            self._render_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="body-render")
+            QtCore.QCoreApplication.instance().aboutToQuit.connect(self._close_render_worker)
+            if self._engine is not None:
+                self._engine.destroyed.connect(self._close_render_worker)
+        self._render_epoch += 1
+        for _, _, job in self._render_jobs:
+            job.cancel()
+        source = self._markdown()
+        job = self._render_executor.submit(
+            prepare_document, source, self._plain, self._body.style,
+            self._body.content_width, _load_image)
+        self._render_jobs.append((self._render_epoch, source, job))
+        job.add_done_callback(lambda _: self._preparedReady.emit())
+
+    def _close_render_worker(self, *args) -> None:
+        self._render_epoch += 1
+        if self._render_executor is not None:
+            self._render_executor.shutdown(wait=True, cancel_futures=True)
+            self._render_executor = None
+        self._render_jobs.clear()
+
+    def _finish_prepared_render(self) -> None:
+        pending = []
+        for epoch, source, job in self._render_jobs:
+            if not job.done():
+                pending.append((epoch, source, job))
+                continue
+            if job.cancelled():
+                continue
+            try:
+                fragment, images = job.result()
+            except Exception as exc:
+                if epoch == self._render_epoch:
+                    print("QML PREPARE FAILED", str(exc), file=sys.stderr)
+                    self._render()
+                continue
+            if epoch != self._render_epoch:
+                continue
+            document = self._body.document
+            document.clear()
+            document.setDocumentMargin(0)
+            QtGui.QTextCursor(document).insertFragment(fragment)
+            kind = QtGui.QTextDocument.ResourceType.ImageResource.value
+            for url, image in images:
+                document.addResource(kind, url, image)
+            self._body._source = source
+            self._body._plain = self._plain
+            self._body._rendered_width = self._body.content_width
+            self._body.attach(self._document)
+            self.rendered += 1
+            self._scroll_to_bottom()
+        self._render_jobs = pending
+
     def _render(self) -> None:
+        self._render_epoch += 1
         if self._document is None:
             return
         # 只渲染一遍：`attach` 会把自有文档的内容整篇搬进 QML 文档，

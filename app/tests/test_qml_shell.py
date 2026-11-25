@@ -422,6 +422,24 @@ class QuickDocumentStub:
         return self._document
 
 
+@pytest.fixture(autouse=True)
+def close_test_render_workers(monkeypatch):
+    # Unit bridges have no engine/application event loop to emit aboutToQuit.
+    # Join workers while Qt is still alive, just as the production shutdown does.
+    original = _bridge
+    bridges = []
+
+    def tracked(*args, **kwargs):
+        result = original(*args, **kwargs)
+        bridges.append(result[0])
+        return result
+
+    monkeypatch.setitem(globals(), "_bridge", tracked)
+    yield
+    for bridge in bridges:
+        bridge._close_render_worker()
+
+
 def _tick_until(bridge, predicate, timeout=10.0):
     deadline = time.time() + timeout
     while time.time() < deadline:
@@ -498,21 +516,15 @@ def test_open_session_renders_once_and_replaces_the_body(qapp, tmp_path, monkeyp
     bridge, _store, _host = _bridge(
         tmp_path, monkeypatch, text_stream(), sessions=[("s-1", "甲会话的问题"), ("s-2", "乙会话的问题")]
     )
-    renders = []
-    original = bridge._body.render
-
-    def counted(document=None):
-        renders.append(document)
-        return original(document)
-
-    bridge._body.render = counted
+    before = bridge.rendered
     assert bridge.openSession("s-1") is True
-    assert len(renders) == 1, "attach 不该再重渲染一次"
+    assert _tick_until(bridge, lambda: bridge.rendered == before + 1)
 
     target = bridge._document.textDocument()
     assert "甲会话的问题" in target.toPlainText()
 
     assert bridge.openSession("s-2") is True
+    assert _tick_until(bridge, lambda: bridge.rendered == before + 2)
     text = target.toPlainText()
     assert "乙会话的问题" in text
     assert "甲会话的问题" not in text, "切会话是整篇替换，不是追加"
@@ -537,7 +549,9 @@ def test_open_session_carries_highlight_formats_into_the_qml_document(qapp, tmp_
     session.messages.append(Message(role="assistant", content="```python\nif x: pass\n```"))
     store.save("s-1")
 
+    before = bridge.rendered
     assert bridge.openSession("s-1") is True
+    assert _tick_until(bridge, lambda: bridge.rendered == before + 1)
     target = bridge._document.textDocument()
     block = target.begin()
     while block.isValid() and block.text() != "if x: pass":
@@ -727,3 +741,34 @@ def test_delete_current_session_removes_file_and_falls_back(tmp_path, monkeypatc
     assert bridge._active == "s-new"
     assert [row["id"] for row in bridge._rows()] == ["s-new"]
     assert bridge.deleteSession("s-old") is False
+
+
+def test_pending_switch_cannot_overwrite_newer_session(qapp, tmp_path, monkeypatch):
+    import markdown.prepare as prepare
+    original = prepare.prepare_document
+    gate = threading.Event()
+    started = threading.Event()
+    gui_thread = threading.get_ident()
+    workers = []
+
+    def delayed(*args):
+        workers.append(threading.get_ident())
+        started.set()
+        assert gate.wait(3)
+        return original(*args)
+
+    monkeypatch.setattr(prepare, 'prepare_document', delayed)
+    bridge, _, _ = _bridge(tmp_path, monkeypatch, text_stream(),
+                           sessions=[('s-1', 'first'), ('s-2', 'latest')])
+    try:
+        bridge.openSession('s-1')
+        assert started.wait(2)
+        bridge.openSession('s-2')
+        gate.set()
+        assert _tick_until(bridge, lambda: not bridge._render_jobs)
+        text = bridge._document.textDocument().toPlainText()
+        assert 'latest' in text and 'first' not in text
+        assert workers and all(worker != gui_thread for worker in workers)
+    finally:
+        gate.set()
+        bridge._close_render_worker()
