@@ -1,0 +1,30 @@
+$ git status --short
+?? docs/audit/session-switch/push-validation/
+exit=0
+$ git branch --show-current
+develop
+exit=0
+$ git rev-parse HEAD
+9b5775a06ae0e0314e9f396773fb91f29da6c760
+exit=0
+$ git remote get-url origin
+git@github.com:fanchcho/ai_upper.git
+exit=0
+$ git ls-remote origin refs/heads/develop
+a27ee635e1ba6219a002c58707cb7c47aab59dc8	refs/heads/develop
+exit=0
+$ git diff --check
+exit=0
+$ git log --oneline a27ee635e1ba6219a002c58707cb7c47aab59dc8..HEAD
+9b5775a docs(audit): quantify render costs and record full-suite verification
+965c385 fix(qml): restore single-pass attachment under full-frame latency policy
+80bc3b5 docs(audit): record rejected selection lookup and staged attachment results
+0037a65 fix(qml): yield between transcript replacement and overlay attachment
+a0eedd3 docs(audit): record selection stress and threaded rendering limits
+bbd3e3f fix(qml): prepare session rich text in a worker with value-only delivery
+67edda7 fix(qml): avoid selection copies and all-selected row scans
+5884c70 docs(audit): record ordinary session switch timings and remaining latency
+11c63f2 fix(markdown): reuse plain table cell measurements during session rendering
+4bb8799 docs(audit): record multi-selection timing and remaining limits
+5f45c28 fix(qml): publish batch archive selection once
+exit=0

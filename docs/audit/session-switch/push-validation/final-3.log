@@ -1,0 +1,4 @@
+$ AI_UPPER_HOME=/tmp/ai-upper-push-final-3 .venv/bin/python docs/audit/session-switch/costs/switch.py /home/agent/shared_workspace/ai_upper/.tmp/push-closeout/final-3
+{"n": 24, "median_ms": 139.28889999806415, "p95_ms": 172.21520000020973}
+
+exit=0
