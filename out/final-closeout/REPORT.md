@@ -324,7 +324,9 @@ QML 只投影 `config.json` 里的 provider 列表（fixture 只有 Anthropic）
 | commit | 内容 |
 |---|---|
 | `579f40e` | test(qml)：断图 alt 宽度改用现场字体度量（修 CI 8 个 native job 的红项） |
-| 本报告提交 | docs(closeout)：A–J 对账、18 页重拍表、四判据、CI 终态、J 未达标证据（交付时 `git log -1 --format=%H` 即此哈希，且是 `develop` 的 HEAD） |
+| `dc89438` | docs(closeout)：A–J 对账、18 页重拍表、四判据、CI 终态、J 未达标证据（主报告） |
+| `75f20af` | docs(test-report)：TEST-REPORT 版本戳改为自指，避免再次落后 |
+| 本提交 | docs(closeout)：§3 补记上述提交链（仅文档；`git log -1` 即此哈希） |
 
 远端对比：交付回执里给出 `git rev-parse HEAD` 与 `git ls-remote origin refs/heads/develop`
 的原始输出；两者必须相同（本报告提交即 `develop` 的 HEAD）。
