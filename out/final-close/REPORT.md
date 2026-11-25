@@ -1078,3 +1078,13 @@ gh: not found
 18 页 QML 重拍（stderr 全 0）、点击进会话的 offscreen 真事件验证、逐区 AE 实测。
 按硬约束，本轮**没有推送、没有新建分支、没有改 remote**，所以「CI 是否绿」
 这一项在本地无法闭合，只能如实标注为未闭合。
+
+---
+
+## 2026-11-25 收口更新（本文件 §10 的 push/CI 结论已过期）
+
+`out/final-closeout/REPORT.md`（A–J 对账）与 `out/TEST-REPORT.md` 末尾「2026-11-25 收口」小节
+是当前权威版本：开工 HEAD `4a1a023` 时 `origin/develop` 已等于 HEAD（§10 写的「26 条未 push」
+是 `610dcbd` 时点的历史值）；HEAD `4a1a023` 的 CI 真实终态是 `completed/failure`（run 45217331247，
+8 个 native-integration job 因 `test_qml_broken_image` 字体回退断言红），
+该断言已在本轮 `579f40e` 修复。旧节的其余测量值仍有效，仅版本戳与 push 状态以新报告为准。

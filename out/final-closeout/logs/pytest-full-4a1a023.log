@@ -1,0 +1,53 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 21%]
+.....................ss................................................. [ 26%]
+........................................................................ [ 31%]
+........................................................................ [ 36%]
+........................................................................ [ 42%]
+............................................s........................... [ 47%]
+........................................................................ [ 52%]
+........................................................................ [ 58%]
+.......F................................................................ [ 63%]
+........................................................................ [ 68%]
+........................................................................ [ 73%]
+........................................................................ [ 79%]
+........................................................................ [ 84%]
+........................................................................ [ 89%]
+........................................................................ [ 94%]
+.....................................................................    [100%]
+=================================== FAILURES ===================================
+______________ test_broken_image_paints_icon_and_keeps_alt_inline ______________
+
+qapp = <PySide6.QtWidgets.QApplication(0x412fc3f0) at 0xffff837464c0>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_broken_image_paints_icon_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff83679fd0>
+
+    def test_broken_image_paints_icon_and_keeps_alt_inline(qapp, tmp_path, monkeypatch):
+        from PySide6 import QtCore as C
+        window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            window.setProperty("page", "chat")
+            view = _find_item(window.contentItem(), "bodyView")
+            bridge._body.set_markdown("![示意图](data:image/png;base64,iVBORw0KGgo=)")
+            bridge._body.attach(view.property("textDocument"))
+            _pump(qapp, .3)
+            document = view.property("textDocument").textDocument()
+            assert document.toPlainText().strip() == "\ufffc示意图"
+            icon = view.positionToRectangle(0)
+            alt = view.positionToRectangle(1)
+            end = view.positionToRectangle(4)
+            assert alt.x() - icon.x() == 16
+>           assert end.x() - alt.x() == pytest.approx(42, abs=1/16)  # Qt 1/64px advances
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert 25.171875 == 42 ± 0.0625
+E             
+E             comparison failed
+E             Obtained: 25.171875
+E             Expected: 42 ± 0.0625
+
+app/tests/test_qml_broken_image.py:29: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_broken_image.py::test_broken_image_paints_icon_and_keeps_alt_inline
+1 failed, 1359 passed, 5 skipped in 214.09s (0:03:34)

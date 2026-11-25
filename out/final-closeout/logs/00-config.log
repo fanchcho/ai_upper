@@ -1,0 +1,2 @@
+config ok theme=light locale=en model=True at /tmp/fx-page-home/config.json
+qml home ok at /tmp/fx-qml-home (chats=121)

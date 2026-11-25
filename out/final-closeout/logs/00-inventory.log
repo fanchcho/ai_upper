@@ -1,0 +1,26 @@
+$ git -C /home/agent/shared_workspace/ai_upper log --oneline -12
+4a1a023 test: 重拍18页并记录硬判据与真实差异 / verify full page parity
+8266faa test: 记录 CI 排队状态及独立进程高分屏对照 / record CI and HiDPI evidence
+0ebe4f0 fix(qml): 对齐侧栏标题行盒并记录模态残差 / align thread line boxes
+223274c fix: 打包 emoji fallback 修复缺字形 / bundle emoji fallback font
+b752b0e fix(markdown): 对齐列表引用组合间距并记录表格残差 / align composed block spacing
+0617c04 docs: 补齐 A/B/C 证据入口 / restore closeout report index
+71ff27b test: 仅扫描受控源码并验证旧名变异 / scope branding scan to tracked paths
+25883ce test: 记录最终代码全量回归及环境归因 / record final regression evidence
+c141d0d fix(markdown): 复用原生断图图标 / render native broken-image placeholder
+88b2de2 fix(markdown): 代码块独立横向滚动 / scroll overflowing code independently
+7f304e9 test(parity): 复核旧结构缺口并重算D3归因 / verify structural fixes and D3 residuals
+8455309 docs(test): 汇总并入项实测和开放缺口 / summarize merged review evidence and gaps
+
+$ git -C ... status --porcelain (tracked only)
+ M app/tests/test_qml_broken_image.py
+(empty = 无 tracked 修改)
+
+$ git rev-parse HEAD
+4a1a02328250a7b1234a86c27558fd2afccae7d8
+
+$ git ls-remote origin refs/heads/develop
+4a1a02328250a7b1234a86c27558fd2afccae7d8	refs/heads/develop
+
+$ git status --porcelain | wc -l
+317

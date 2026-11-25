@@ -753,3 +753,54 @@ python3 -I scripts/parity/page_diff18.py out/final-parity/deva out/final-parity/
 C在最终产品代码再次分区，四页inside_gt8仍3122/1596/4250/1773，outside变为293048；内部未闭环的结论不变，原始值final-regions.log。
 
 本轮完成度：A四判据成立，B缺字形修复，C long-mid行内结构修复但设置内部仍未达到两种要求结论，D两页2x完成但本轮CI排队无终态。上轮表格底边/行高/padding仍为已知未闭环，本轮没有重做它。
+
+## 2026-11-25 收口（版本戳：HEAD 4a1a023 + 579f40e）
+
+> 本节数字全部来自本轮两端同时重拍与真实运行；旧节停留在 `0ebe4f0` 的版本戳已过期，按本节为准。
+> 完整 A–J 对账见 `out/final-closeout/REPORT.md`。
+
+**全量 pytest：1360 passed, 5 skipped, 0 failed in 212.60s，rc=0**
+（`out/final-closeout/logs/pytest-full-final.log` / `.rc`）。
+命名红项 `test_renderer_font_and_line_height_are_stable_across_calls`：1 passed（`logs/pytest-A-named.log`）。
+另修 `test_qml_broken_image` 的字体回退硬编码（42px → 现场 `QFontMetricsF` 度量，`579f40e`），
+CI 注解里无 CJK 字体时旧断言实测 25.171875。
+
+### 18 页逐页数字（QML vs deva，1280×820，差异像素/1,049,600）
+
+| 页 | 原版 md5 | QML md5 | 差异像素 | 差异% |
+|---|---|---|---:|---:|
+| chat | `9c4dc3818ebfe7f924ed0e8fdf5f13aa` | `f2be6eb13555c9169ddac03b00b12dbd` | 101645 | 9.68% |
+| empty | `a844e59207651c1d5cc168679e6bd180` | `e56462d7a538be35dae1b166403f4784` | 13231 | 1.26% |
+| first-run | `caacdfd6b9fcb410c2353634ce4571e5` | `e56462d7a538be35dae1b166403f4784` | 13231 | 1.26% |
+| search-open | `0e5081333e568b1f8dc9cf738b2e023d` | `c7d6a0afee0b0b2607da766a66ebeb83` | 101674 | 9.69% |
+| search-results | `6060a072aa967d1695a188ea8938057c` | `8ae395397ec65c3168b6d3ce125cd588` | 97969 | 9.33% |
+| search-none | `f3ce8014ddd3e090afac62ca206fd3be` | `91453b4433c64e607308cf8bc7c34f19` | 80236 | 7.64% |
+| ctx-menu | `775281f1454332483a79a778d7caf287` | `2f781b594357448527ba567a85da7a15` | 112022 | 10.67% |
+| delete-confirm | `be692372160f073c87faa9a2f645b8d4` | `7d9d228793e2fdc9df887f4b7eb4c47e` | 376592 | 35.88% |
+| model-picker | `a995f021cf98893e99668cea6b650bbb` | `1b3f341e2f2dfb642cd24747fe2f4383` | 106001 | 10.10% |
+| hover-thread | `761a3ffb30f7706e0d7e6bd307ae1019` | `0c585b653775874533df29fb230d36dc` | 101606 | 9.68% |
+| focus-composer | `16b7195e3fcde1d0afa4d2b27f44d075` | `417cb2e5b529df1d1d59bd57f32ef199` | 101661 | 9.69% |
+| long-mid | `e00fa639bd71e6defdc0c23cb376cbbe` | `84c1f302c8c0b2d7bf50f4f340691002` | 123810 | 11.80% |
+| long-bottom | `ed2401581de1b5092c00a61a9e5a43c1` | `86c008488de2d19c6376ea8fc8408c8b` | 113509 | 10.81% |
+| settings-general | `362ac5425c08a297507fe2b1afded788` | `781e621b9d0d996b8e1b73e8563c4f6b` | 307749 | 29.32% |
+| settings-models | `a2da4612ed8512b580a1bef64c449e93` | `cd0fa0efec154bfa0b6b442cf09900ac` | 306596 | 29.21% |
+| settings-extensions | `2b552b719406e6a87bb86a36af2078ff` | `84070ce0e7e722f512d5da336a7ceb7f` | 301405 | 28.72% |
+| settings-about | `3a476f4934fc5939eb109529efb1bc8f` | `284e760ac34641f70ac4455db8fb71b0` | 298179 | 28.41% |
+| dark-chat | `0eaeeea88bdde5b8397f8e74bb6a9ba5` | `98d1cad59184096bd2bce57a3d452b40` | 101022 | 9.62% |
+
+逐页 rc/stderr：两端各 18/18 全部 `rc=0`、`.err` 0 字节（`out/final-closeout/{qml,deva}/<page>.rc|.err`）。
+
+### 四条硬判据（逐条）
+
+1. **成立**：chat/long-mid/long-bottom 三个 md5 互不相同；两两 AE = 81299 / 29711 / 73309，全部 >0
+   （`out/final-closeout/logs/criterion1.log`）。
+2. **成立**：search-results ListView `count == 10`（`logs/hard-probe.log` 原文 `SEARCH_RESULTS count 10`）。
+3. **成立**：focus-composer 卡片 `(428,658,780,146)` 四边中点均 `#5b5bd6`（同日志）。
+4. **成立**：右键 Delete→确认→真删除，120→119，`3 passed in 17.02s, rc=0`（`logs/hard-clicks.log`）。
+
+### CI 真实终态（HEAD 4a1a023）
+
+查询 2026-11-25T00:17:28Z：run `45217331247` = **completed / failure**。
+6 个 Build Tool job success；8 个 native-integration job 全在 step 10「Unit tests」失败，
+根因 check-run 注解：`test_qml_broken_image` 无 CJK 字体时 `assert 25.171875 == 42 ± 0.0625`。
+该断言已由 `579f40e` 修复，但**尚未 push，CI 仍停在红色终态**（不写成「应该会绿」）。
