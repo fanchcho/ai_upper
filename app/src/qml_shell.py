@@ -699,6 +699,30 @@ class ShellBridge(QtCore.QObject):
         self._publish()
         return True
 
+    @QtCore.Slot("QVariantList", bool, result=int)
+    def archiveSessions(self, session_ids: list, archived: bool) -> int:
+        """批量操作只发布最终状态，避免逐条回退、渲染即将归档的正文。"""
+        failed = 0
+        changed = False
+        active_archived = False
+        for session_id in session_ids:
+            key = str(session_id or "")
+            result = self._host.set_archived({"sessionId": key, "archived": archived})
+            if not result or not result.get("ok"):
+                failed += 1
+                continue
+            changed = True
+            active_archived = active_archived or (archived and key == self._active)
+        if active_archived:
+            rows = self._rows()
+            self._active = str(rows[0]["id"]) if rows else ""
+            self._turn = None
+            self._turn_session = ""
+            self._render()
+        if changed:
+            self._publish()
+        return failed
+
     # ── 快速开启（无任何对话时的中列）────────────────────────────────────────
     @QtCore.Slot(result=list)
     def quickStartPersonas(self) -> List[Dict[str, Any]]:

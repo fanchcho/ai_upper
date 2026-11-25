@@ -1888,14 +1888,7 @@ ApplicationWindow {
             window.exitSelect()
             return
         }
-        var failed = 0
-        for (var i = 0; i < ids.length; i++) {
-            var ok = window.archiveView
-                     ? shellBridge.unarchiveSession(String(ids[i]))
-                     : shellBridge.archiveSession(String(ids[i]))
-            if (!ok)
-                failed++
-        }
+        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
         window.exitSelect()
         if (failed > 0)
             notify("部分对话归档失败")

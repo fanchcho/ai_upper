@@ -493,3 +493,68 @@ def test_archive_menu_moves_session_and_archive_entry_lists_it(qapp, tmp_path, m
         ticker.stop()
         window.close()
         engine.deleteLater()
+
+
+def test_batch_selection_publishes_once_and_restores(qapp, tmp_path, monkeypatch):
+    """真实多选点击不重载；批量归档/移回各发布一次最终列表。"""
+    from PySide6.QtCore import Qt
+    from unittest.mock import Mock
+
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        _pump(qapp, 0.3)
+        publish = Mock(wraps=bridge._publish)
+        render = Mock(wraps=bridge._render)
+        rows = Mock(wraps=bridge._rows)
+        monkeypatch.setattr(bridge, "_publish", publish)
+        monkeypatch.setattr(bridge, "_render", render)
+        monkeypatch.setattr(bridge, "_rows", rows)
+        _click(window, _menu_items(window)[2])
+        _click(window, _find_item(window.contentItem(), "threadRow1"))
+        _click(window, _find_item(window.contentItem(), "selectionAll"))
+        assert len(_as_list(window.property("selectedSessions"))) == 120
+        publish.assert_not_called()
+        render.assert_not_called()
+        rows.assert_not_called()
+        _click(window, _find_item(window.contentItem(), "selectionArchive"))
+        assert store.visible_sessions() == []
+        assert bridge._active == ""
+        assert window.property("selectMode") is False
+        assert publish.call_count == 1
+        assert render.call_count == 1
+        _pump(qapp, 0.1)
+        _click(window, _find_item(window.contentItem(), "archiveEntry"))
+        _pump(qapp, 0.1)
+        _click(window, _find_item(window.contentItem(), "threadRow0"), Qt.RightButton)
+        _click(window, _menu_items(window)[2])
+        _click(window, _find_item(window.contentItem(), "selectionAll"))
+        _click(window, _find_item(window.contentItem(), "selectionArchive"))
+        assert len(store.visible_sessions()) == 120
+        assert publish.call_count == 2
+        assert render.call_count == 1
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
+
+
+def test_batch_archive_preserves_busy_and_missing_failures(qapp, tmp_path, monkeypatch):
+    from unittest.mock import Mock
+
+    window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+    try:
+        monkeypatch.setattr(bridge._host, "is_busy", lambda key: key == "parity-001")
+        publish = Mock(wraps=bridge._publish)
+        monkeypatch.setattr(bridge, "_publish", publish)
+        assert bridge.archiveSessions(["parity-000", "parity-001", "missing"], True) == 2
+        assert store.load_session("parity-000").archived
+        assert not store.load_session("parity-001").archived
+        assert bridge._active == "parity-001"
+        assert publish.call_count == 1
+        assert bridge.archiveSessions([], True) == 0
+        assert bridge.archiveSessions(["missing"], False) == 1
+        assert publish.call_count == 1
+    finally:
+        ticker.stop()
+        window.close()
+        engine.deleteLater()
