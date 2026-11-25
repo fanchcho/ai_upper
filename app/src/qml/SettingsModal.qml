@@ -128,7 +128,10 @@ Item {
                             { key: "general", label: "General", icon: IconData.cog },
                             { key: "models", label: "Models", icon: IconData.brain },
                             { key: "extensions", label: "Extensions", icon: IconData.puzzle },
-                            { key: "about", label: "About", icon: IconData.info }
+                            { key: "about", label: "About", icon: IconData.info },
+                            { key: "custom-model", label: "Custom model", icon: IconData.brain },
+                            { key: "mcp", label: "MCP", icon: IconData.puzzle },
+                            { key: "identities", label: "Personas", icon: IconData.users }
                         ]
                         delegate: Rectangle {
                             required property var modelData
@@ -181,7 +184,8 @@ Item {
                 Loader {
                     id: modelsLoader
                     anchors.fill: parent
-                    sourceComponent: root.pane === "about" ? aboutPane
+                    sourceComponent: ["custom-model", "mcp", "identities"].indexOf(root.pane) >= 0 ? pluginPane
+                                   : root.pane === "about" ? aboutPane
                                    : root.pane === "models" ? modelsPane
                                    : root.pane === "extensions" ? extensionsPane
                                    : generalPane
@@ -189,6 +193,8 @@ Item {
             }
         }
     }
+
+    Component { id: pluginPane; PluginSettingsPane { mode: root.pane } }
 
     // ── General：语言 / 主题 / 字号（三行分段控件，实测宽 510 的设置卡）─────
     component SetRow: Item {

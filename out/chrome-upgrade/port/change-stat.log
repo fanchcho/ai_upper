@@ -1,0 +1,6 @@
+ app/src/mvvm/services/provider_setup.py |  4 ++++
+ app/src/mvvm/view_models/chat_vm.py     |  3 +++
+ app/src/qml/Main.qml                    |  7 +++++--
+ app/src/qml/SettingsModal.qml           | 10 ++++++++--
+ app/src/qml_shell.py                    | 22 ++++++++++++++++++++++
+ 5 files changed, 42 insertions(+), 4 deletions(-)

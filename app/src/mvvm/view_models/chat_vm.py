@@ -439,6 +439,9 @@ class ChatViewModel(BaseViewModel):
         self._ui(lambda: self.status_property.set_value("思考中…"))
         try:
             session = self.store.ensure_session(self._session_id)
+            from mvvm.services.checkpoint_recovery import close_pending_tools
+            if close_pending_tools(session):
+                self.store.save(session.id)
             # 模型在回合开头定一次：中途改设置不影响这一轮（与 Deva 一轮内模型不变一致）。
             provider, model = self._provider_for(cancel, session.id, session.model)
             # 待办清单的两条随用户消息带给模型的说明（Deva `chat.ts` 约 6053 行）：

@@ -1,0 +1,26 @@
+.....F                                                                   [100%]
+=================================== FAILURES ===================================
+________________________ test_mcp_and_identity_editors _________________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x3f6b78a0) at 0xffff986b6c40>
+tmp_path = PosixPath('/tmp/ai-upper-plugin-port/ui-final/test_mcp_and_identity_editors0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff8c558f50>
+
+    def test_mcp_and_identity_editors(qapp,tmp_path,monkeypatch):
+        w,bridge,ticker,engine=_build_window(tmp_path,monkeypatch)
+        try:
+            w.setProperty('page','settings-mcp'); _pump(qapp)
+            root=w.contentItem()
+            _find_item(root,'pluginIdentifier').setProperty('text','local')
+            _find_item(root,'pluginBaseUrl').setProperty('text','https://mcp.test')
+            _find_item(root,'pluginEnabled').setProperty('checked',False)
+            _click_item(w,_find_item(root,'pluginSave'));_pump(qapp)
+            result=json.loads(bridge.pluginSettings('read','{}'))
+>           assert result['servers'][0]['id']=='local' and not result['servers'][0]['enabled']
+                   ^^^^^^^^^^^^^^^^^^^^
+E           IndexError: list index out of range
+
+app/tests/test_qml_plugin_settings.py:32: IndexError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_plugin_settings.py::test_mcp_and_identity_editors
+1 failed, 5 passed in 10.51s

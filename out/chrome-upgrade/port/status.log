@@ -1,0 +1,5 @@
+ M app/src/mvvm/services/provider_setup.py
+ M app/src/mvvm/view_models/chat_vm.py
+ M app/src/qml/Main.qml
+ M app/src/qml/SettingsModal.qml
+ M app/src/qml_shell.py

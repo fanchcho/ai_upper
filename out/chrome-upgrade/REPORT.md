@@ -134,3 +134,5 @@ c-before.log 记录改前复现：外部模型变更被覆盖，pytest 1 failed�
 所有测试 AI_UPPER_HOME=/tmp/ai-upper-chrome-upgrade；真实窗口截图使用上一轮专用隔离夹具 /tmp/ai-upper-frameless-20261125。临时工具及捕获脚本位于本仓库 .tmp；未访问真实 ~/.ai_upper。deva 工作区原有3个修改仅取证未写入。
 
 A 代码层交付；macOS 真机与(9,13)原生按钮像素位置未验证。B 未修复，因具体重影未复现；缺少用户具体图标坐标/触发步骤。C 仅配置冲突保护完成并验证，其余插件差异保留在表中，不宣称全量合入完成。
+
+后续插件移植的85行逐项终态、测试及未完成边界见 [port/REPORT.md](port/REPORT.md)。本文件保留为清单基准，后续报告不代表全部已移植完成。

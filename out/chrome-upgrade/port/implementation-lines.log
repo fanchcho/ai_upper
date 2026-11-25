@@ -1,0 +1,15 @@
+app/src/mvvm/services/checkpoint_recovery.py:6:def close_pending_tools(session):
+app/src/mvvm/services/plugin_settings.py:13:def scope_key():
+app/src/mvvm/services/plugin_settings.py:21:    def __init__(self, settings, vault):
+app/src/mvvm/services/plugin_settings.py:25:    def data(self):
+app/src/mvvm/services/plugin_settings.py:28:    def write(self, **patch):
+app/src/mvvm/services/plugin_settings.py:33:    def key_id(self, kind, name):
+app/src/mvvm/services/plugin_settings.py:36:    def custom(self):
+app/src/mvvm/services/plugin_settings.py:41:    def save_custom(self, base, model, key=None):
+app/src/mvvm/services/plugin_settings.py:65:    def route(self):
+app/src/mvvm/services/plugin_settings.py:71:    def servers(self):
+app/src/mvvm/services/plugin_settings.py:75:    def save_server(self, name, config, secret=None):
+app/src/mvvm/services/plugin_settings.py:102:    def delete_server(self, name):
+app/src/mvvm/services/plugin_settings.py:108:    def identity_root(self):
+app/src/mvvm/services/plugin_settings.py:113:    def identities(self):
+app/src/mvvm/services/plugin_settings.py:122:    def save_identity(self, name, text):

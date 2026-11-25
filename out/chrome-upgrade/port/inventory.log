@@ -1,0 +1,14 @@
+c82d564c598dc680750346bf512bcf4efdf1156a
+app/src/mvvm/models/chat_models.py
+app/tests/test_qml_settings_models.py
+app/src/mvvm/models/base_model.py
+app/src/mvvm/models/about_model.py
+app/tests/test_chat_vm_compaction.py
+app/tests/test_model_view_and_todos.py
+app/tests/test_qml_model_picker.py
+app/tests/test_compaction.py
+app/src/mvvm/services/model_view.py
+app/src/mvvm/services/model_resolve.py
+app/src/mvvm/services/compaction.py
+app/src/mvvm/services/settings_models.py
+app/src/mvvm/services/persona_store.py

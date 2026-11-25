@@ -1,0 +1,6 @@
+app/src/qml/SettingsModal.qml:197:    Component { id: pluginPane; PluginSettingsPane { mode: root.pane } }
+app/src/mvvm/view_models/chat_vm.py:442:            from mvvm.services.checkpoint_recovery import close_pending_tools
+app/src/mvvm/view_models/chat_vm.py:443:            if close_pending_tools(session):
+app/src/mvvm/services/provider_setup.py:65:        direct = PluginSettings(self.settings, self.vault).route()
+app/src/qml_shell.py:376:    def pluginSettings(self, operation: str, payload: str) -> str:
+app/src/qml_shell.py:379:        service = PluginSettings(self._settings, self._vault)

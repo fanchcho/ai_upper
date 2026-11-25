@@ -1,0 +1,2 @@
+app/tests/test_deliverables.py
+app/tests/test_skill_store.py

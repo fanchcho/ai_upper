@@ -1,0 +1,7 @@
+ssss                                                                     [100%]
+=========================== short test summary info ============================
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Studio user/profile: authenticated identity and profile namespace injection into the desktop runtime
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Approval/interaction: persisted approval request ID, UI response callback and restart reattachment API
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Attachments: assetId resolver, authorizedRoots, expiresAt, and delivery acknowledgment API
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 SDK/installer: Studio plugin registration, RPC context, plugin lifecycle and signed release distribution
+4 skipped in 0.02s

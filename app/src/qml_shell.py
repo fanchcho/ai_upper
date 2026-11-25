@@ -372,6 +372,28 @@ class ShellBridge(QtCore.QObject):
         self._window = window
         self._sync_theme_singleton()
 
+    @QtCore.Slot(str, str, result=str)
+    def pluginSettings(self, operation: str, payload: str) -> str:
+        from mvvm.services.plugin_settings import PluginSettings
+        import json
+        service = PluginSettings(self._settings, self._vault)
+        try:
+            data = json.loads(payload or "{}")
+            if operation == "saveModel":
+                service.save_custom(data.get("baseUrl", ""), data.get("model", ""), data.get("key"))
+            elif operation == "saveServer":
+                service.save_server(data["id"], data["config"], data.get("key"))
+            elif operation == "deleteServer":
+                service.delete_server(data["id"])
+            elif operation == "saveIdentity":
+                service.save_identity(data["id"], data["text"])
+            elif operation not in ("read", "identities"):
+                raise ValueError("Unknown settings operation")
+            return json.dumps({"ok": True, "model": service.custom(), "servers": service.servers(),
+                               "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
+        except (ValueError, OSError, KeyError) as exc:
+            return json.dumps({"ok": False, "error": str(exc)})
+
     # ── 配置（设置页读写的真实来源：config.json）────────────────────────────
     def _config(self) -> Dict[str, Any]:
         return self._settings.get_config_sync() if self._settings is not None else {}

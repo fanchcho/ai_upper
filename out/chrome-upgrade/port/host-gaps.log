@@ -1,0 +1,2 @@
+6:（`browser`、`ask_user`、`create_skill`、`memory_*`、`propose_agent`、`create_task`、
+640:            return ToolResult(f"仅支持 http/https（收到 {url.split(':', 1)[0]}）", True, "协议不支持")

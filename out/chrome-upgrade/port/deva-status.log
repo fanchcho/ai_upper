@@ -1,0 +1,5 @@
+ M apps/web/README.md
+ M apps/web/build.mjs
+ M apps/web/package.json
+ M apps/web/server.mjs
+D  apps/web/src/web/favicon.svg

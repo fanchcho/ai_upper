@@ -61,6 +61,10 @@ class ModelGateway:
         与 Deva `resolveModelRef(session.model, model)` 同语义——删除的模型自动回落默认，
         而不是让对话带着一个不存在的模型继续跑。
         """
+        from mvvm.services.plugin_settings import PluginSettings
+        direct = PluginSettings(self.settings, self.vault).route()
+        if direct is not None:
+            return direct
         section = self.settings.models_section()
         resolved = resolve_ref(model_ref, section) or resolve_default_model(section)
         if resolved is None:

@@ -52,10 +52,13 @@ ApplicationWindow {
     // 空态快速开启的角色卡片（Python 每次 _publish 现读 PersonaStore 写进来）。
     property var quickStartPersonas: []
     property bool dark: Theme.dark
-    property bool settingsOpen: page === "settings-general" || page === "settings-models"
+    property bool settingsOpen: page === "settings-custom-model" || page === "settings-mcp" || page === "settings-identities" || page === "settings-general" || page === "settings-models"
                               || page === "settings-models-provider" || page === "settings-models-advanced"
                               || page === "settings-extensions" || page === "settings-about"
-    property string settingsPane: page === "settings-about" ? "about"
+    property string settingsPane: page === "settings-custom-model" ? "custom-model"
+                                : page === "settings-mcp" ? "mcp"
+                                : page === "settings-identities" ? "identities"
+                                : page === "settings-about" ? "about"
                                 : (page === "settings-models" || page === "settings-models-provider"
                                    || page === "settings-models-advanced") ? "models"
                                 : page === "settings-extensions" ? "extensions" : "general"

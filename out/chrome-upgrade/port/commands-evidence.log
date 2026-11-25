@@ -1,0 +1,8 @@
+436:    # ── chat:compact ──────────────────────────────────────────────────────
+437:    def compact(self, request: Any) -> dict[str, str]:
+438:        """`chat:compact`：立即返回 turnId，压缩在后台跑（原版同语义）。
+440:        `compacting` / `compacted` 由 ViewModel 推；这里在收尾时补 `done{stopReason:'end_turn'}`，
+446:            raise BridgeError("chat:compact 缺少 sessionId")
+465:                asyncio.run(vm.compact_now())
+494:        thread = threading.Thread(target=run, name="chat-compact", daemon=True)
+554:        # text_delta / thinking_delta / todos / todo_done / compacting / compacted 形状一致。
