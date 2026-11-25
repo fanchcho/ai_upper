@@ -1,0 +1,4 @@
+85/85 original rows present in order; all terminal states; referenced evidence files exist
+final-all 1390 passed, 9 skipped in 254.23s (0:04:14) rc=0
+final-qml 207 passed in 225.15s (0:03:45) rc=0
+runtime-target-final 24 passed in 22.48s rc=0

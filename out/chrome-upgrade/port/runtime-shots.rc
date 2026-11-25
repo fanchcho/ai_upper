@@ -1,0 +1,6 @@
+chat rc=0
+settings-general rc=0
+settings-models rc=0
+settings-custom-model rc=0
+settings-mcp rc=0
+settings-identities rc=0

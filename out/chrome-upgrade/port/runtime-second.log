@@ -1,0 +1,79 @@
+............F.........................................FF......           [100%]
+=================================== FAILURES ===================================
+_________________ test_actual_qml_approval_and_answer_buttons __________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x1974d840) at 0xffff7ea9f700>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/runtime-tests-2/test_actual_qml_approval_and_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff7eb17350>
+
+    def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
+        w,bridge,ticker,engine=_build_window(tmp_path,monkeypatch)
+        workers=[]
+        try:
+            sid=bridge.newSession()
+            controller=bridge._host.interactions
+            for kind,outcome,button in [('approval','approved','interactionAccept'),('approval','denied','interactionReject'),('question','answered','interactionAccept'),('question','dismissed','interactionReject')]:
+                results=[]
+                worker=threading.Thread(target=lambda:results.append(controller.request(sid,kind+outcome,kind,'Test question',cancelled=None)))
+                workers.append(worker);worker.start()
+                _pump(qapp,.5)
+>               assert _find_item(w.contentItem(),'interactionPrompt').property('visible')
+E               assert False
+E                +  where False = <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff62a84300>('visible')
+E                +    where <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff62a84300> = <PySide6.QtQuick.QQuickItem(0x1a7ec6b0, name="interactionPrompt", parent=0x1b0e0720, geometry=380,365 520x90, z=2000) at 0xffff62a84300>.property
+E                +      where <PySide6.QtQuick.QQuickItem(0x1a7ec6b0, name="interactionPrompt", parent=0x1b0e0720, geometry=380,365 520x90, z=2000) at 0xffff62a84300> = _find_item(<PySide6.QtQuick.QQuickItem(0x1b0df950, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffff62a7d500>, 'interactionPrompt')
+E                +        where <PySide6.QtQuick.QQuickItem(0x1b0df950, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffff62a7d500> = <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffff62a7de80>()
+E                +          where <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffff62a7de80> = <PySide6.QtQuick.QQuickWindow(0x1b10d6e0 active exposed, visibility=QWindow::Windowed, flags=QFlags<Qt::WindowType>(Window|FramelessWindowHint), title="Deva", geometry=0,0 1280x820) at 0xffff62a7de80>.contentItem
+
+app/tests/test_qml_plugin_settings.py:54: AssertionError
+_____________ test_quick_start_personas_project_the_persona_store ______________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x1974d840) at 0xffff7ea9f700>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/runtime-tests-2/test_quick_start_personas_proj0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff62af3e30>
+
+    def test_quick_start_personas_project_the_persona_store(qapp, tmp_path, monkeypatch):
+        """空态卡片吃的是真实花名册，不是写死的占位文案。
+    
+        QML 的 `quickStartPersonas` 直接绑这个列表（`id` 决定头像文件、`name`/`desc`
+        画在卡片里）。判据锁在投影上：改了角色文件，下次重绘就必须是新值。
+        """
+        bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+        home = tmp_path / "home"
+        _seed_personas(home)
+        monkeypatch.setenv("AI_UPPER_HOME", str(home))
+    
+        rows = bridge.quickStartPersonas()
+>       assert [row["id"] for row in rows] == ["general", "xiaomajiang"]
+E       AssertionError: assert [] == ['general', 'xiaomajiang']
+E         
+E         Right contains 2 more items, first extra item: 'general'
+E         Use -v to get more diff
+
+app/tests/test_qml_shell.py:617: AssertionError
+________ test_start_quick_start_creates_a_session_bound_to_that_persona ________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x1974d840) at 0xffff7ea9f700>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/runtime-tests-2/test_start_quick_start_creates0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff5a510ec0>
+
+    def test_start_quick_start_creates_a_session_bound_to_that_persona(qapp, tmp_path, monkeypatch):
+        """点头像 = 原版 `startWith`：建一条绑定该角色的空会话并切进去。"""
+        bridge, store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+        home = tmp_path / "home"
+        _seed_personas(home)
+        monkeypatch.setenv("AI_UPPER_HOME", str(home))
+        assert session_rows(store) == []
+    
+        session_id = bridge.startQuickStart("xiaomajiang")
+>       assert session_id.startswith("qml-")
+E       AssertionError: assert False
+E        +  where False = <built-in method startswith of str object at 0xa30080>('qml-')
+E        +    where <built-in method startswith of str object at 0xa30080> = ''.startswith
+
+app/tests/test_qml_shell.py:639: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_plugin_settings.py::test_actual_qml_approval_and_answer_buttons
+FAILED app/tests/test_qml_shell.py::test_quick_start_personas_project_the_persona_store
+FAILED app/tests/test_qml_shell.py::test_start_quick_start_creates_a_session_bound_to_that_persona
+3 failed, 59 passed in 33.52s

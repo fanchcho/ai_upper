@@ -33,6 +33,8 @@ ApplicationWindow {
     title: "Deva"
     color: Theme.bg
 
+    InteractionPrompt { }
+
     // ── Python 注入的状态 ─────────────────────────────────────────────
     property var sessions: []
     property string activeId: ""

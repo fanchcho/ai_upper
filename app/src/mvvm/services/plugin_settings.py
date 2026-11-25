@@ -75,6 +75,10 @@ class PluginSettings:
     def save_server(self, name, config, secret=None):
         if not is_safe_id(name):
             raise ValueError('Invalid server ID')
+        if 'command' in config and not isinstance(config['command'], str):
+            raise ValueError('command must be a string')
+        if 'url' in config and not isinstance(config['url'], str):
+            raise ValueError('url must be a string')
         # Executable environment/headers are credentials and must not enter the view.
         allowed = {'url', 'command', 'args', 'enabled'}
         if set(config) - allowed:
@@ -91,6 +95,8 @@ class PluginSettings:
         old = servers.get(name, {})
         servers[name] = dict(config, enabled=bool(config.get('enabled', True)))
         self.write(mcp=servers)
+        from mvvm.services.mcp_runtime import stop_server
+        stop_server(self.scope, name)
         if (old.get('url'), old.get('command')) != (config.get('url'), config.get('command')):
             self.vault.delete_secret(self.key_id('mcp', name))
         if secret is not None:
@@ -103,26 +109,40 @@ class PluginSettings:
         servers = self.data().get('mcp', {})
         servers.pop(name, None)
         self.write(mcp=servers)
+        from mvvm.services.mcp_runtime import stop_server
+        stop_server(self.scope, name)
         self.vault.delete_secret(self.key_id('mcp', name))
 
     def identity_root(self):
-        # Test/home isolation always wins; production source is ~/.deva, never old plugin values.
-        isolated = os.environ.get('AI_UPPER_HOME')
-        return Path(isolated) / 'deva' if isolated else Path.home() / '.deva'
+        from mvvm.services.plugin_identity import identity_home
+        return identity_home()
 
     def identities(self):
-        root = self.identity_root() / 'personas'
-        root.mkdir(parents=True, exist_ok=True)
+        from mvvm.services.plugin_identity import shared_store, check_owned
+        root = shared_store().dir
+        root.mkdir(mode=0o700, parents=True, exist_ok=True)
         if not any(root.glob('*.md')):
             path = root / 'general.md'
             if not path.exists():
                 write_file_atomic(path, '---\nname: Assistant\n---\nYou are a helpful assistant.\n')
-        return [{'id': p.stem, 'text': p.read_text(encoding='utf-8')} for p in sorted(root.glob('*.md')) if is_safe_id(p.stem) and not p.is_symlink()]
+        rows = []
+        for p in sorted(root.glob('*.md')):
+            if is_safe_id(p.stem):
+                check_owned(p)
+                rows.append({'id': p.stem, 'text': p.read_text(encoding='utf-8')})
+        return rows
+
+    def identity_prompt(self, identity_id):
+        from mvvm.services.plugin_identity import shared_store, selected
+        identity_id = selected(self, identity_id)
+        record = shared_store().get(identity_id)
+        return record['prompt'] if record else ''
 
     def save_identity(self, name, text):
         if not is_safe_id(name): raise ValueError('Invalid identity ID')
-        root = self.identity_root() / 'personas'
-        root.mkdir(parents=True, exist_ok=True)
+        from mvvm.services.plugin_identity import shared_store, check_owned
+        root = shared_store().dir
+        root.mkdir(mode=0o700, parents=True, exist_ok=True)
         path = root / (name + '.md')
-        if path.is_symlink(): raise ValueError('Identity file must not be a symlink')
+        check_owned(path)
         write_file_atomic(path, text)

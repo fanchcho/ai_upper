@@ -50,6 +50,7 @@ from mvvm.services.effort import (
 )
 from mvvm.services.model_resolve import resolve_default_model, resolve_ref
 from mvvm.services.persona_store import PersonaStore
+from mvvm.services.plugin_identity import shared_store
 from mvvm.services.provider_registry import app_version
 from mvvm.services.secrets_vault import SecretsVault
 from mvvm.services import settings_models
@@ -304,6 +305,7 @@ class ShellBridge(QtCore.QObject):
 
     # 关于页检查更新：worker 线程算完发一次状态，QML 的 Connections 接收。
     updateStateChanged = QtCore.Signal("QVariantMap")
+    interactionsChanged = QtCore.Signal('QVariantList')
 
     # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
     # 为什么不写 Theme 单例的 property：`QQmlApplicationEngine.singletonInstance()`
@@ -339,6 +341,7 @@ class ShellBridge(QtCore.QObject):
         self._events: "queue.Queue[Dict[str, Any]]" = queue.Queue()
         self._persona_names: Dict[str, str] = {}
         self._active = ""
+        self._last_interactions = []
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
@@ -387,12 +390,26 @@ class ShellBridge(QtCore.QObject):
                 service.delete_server(data["id"])
             elif operation == "saveIdentity":
                 service.save_identity(data["id"], data["text"])
+                self._persona_names = {}
+                self._publish()
+            elif operation == "saveApproval":
+                service.write(approvalEnabled=data.get('enabled') is True)
             elif operation not in ("read", "identities"):
                 raise ValueError("Unknown settings operation")
-            return json.dumps({"ok": True, "model": service.custom(), "servers": service.servers(),
+            return json.dumps({"ok": True, "model": service.custom(), "servers": service.servers(), "approvalEnabled": service.data().get('approvalEnabled') is True,
                                "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
         except (ValueError, OSError, KeyError) as exc:
             return json.dumps({"ok": False, "error": str(exc)})
+
+    @QtCore.Slot(result='QVariantList')
+    def pendingInteractions(self):
+        controller = getattr(self._host, 'interactions', None)
+        return controller.pending(self._active) if controller else []
+
+    @QtCore.Slot(str, str, str, result=bool)
+    def answerInteraction(self, request_id, outcome, answer):
+        controller = getattr(self._host, 'interactions', None)
+        return bool(controller and controller.answer(self._active, request_id, outcome, answer))
 
     # ── 配置（设置页读写的真实来源：config.json）────────────────────────────
     def _config(self) -> Dict[str, Any]:
@@ -693,7 +710,7 @@ class ShellBridge(QtCore.QObject):
         下次重绘就是新的，空态不会停在开机那一刻的旧列表。
         """
         try:
-            records = PersonaStore(app_home()).list_personas()
+            records = shared_store().list_personas()
         except OSError:
             return []
         return [
@@ -717,7 +734,7 @@ class ShellBridge(QtCore.QObject):
         或不存在时什么都不做、返回空串——原版这时 `newSession` 拿到的是一个查不到的角色，
         宁可停在原地也不建一条绑定未知角色的空对话。
         """
-        record = PersonaStore(app_home()).get(str(persona_id or ""))
+        record = shared_store().get(str(persona_id or ""))
         if record is None:
             return ""
         session_id = new_session_id()
@@ -1255,6 +1272,10 @@ class ShellBridge(QtCore.QObject):
     def tick(self) -> bool:
         """GUI 线程周期调用：drain 回合线程的界面写入，再把事件落到正文上。"""
         self._host.drain()
+        pending = self.pendingInteractions()
+        if pending != self._last_interactions:
+            self._last_interactions = pending
+            self.interactionsChanged.emit(pending)
         changed = False
         while True:
             try:
@@ -1360,7 +1381,7 @@ class ShellBridge(QtCore.QObject):
         """会话行副标题显示的角色名（原版 `.cf-thread__owner`）。未知 id 回落默认角色。"""
         if not self._persona_names:
             try:
-                for item in PersonaStore(app_home()).list_personas():
+                for item in shared_store().list_personas():
                     self._persona_names[str(item.get("id"))] = str(item.get("name") or "")
             except OSError:
                 self._persona_names = {}
@@ -1488,7 +1509,7 @@ def run(headless: bool) -> int:
     settings = SettingsService(home)
     vault = SecretsVault(home)
     store = ChatSessionStore(home)
-    personas = PersonaStore(home)
+    personas = shared_store()
     personas.ensure_seeded()
     guard = WorkspaceGuard()
     workspace = trusted_workspace_from_env()
@@ -1527,6 +1548,7 @@ def run(headless: bool) -> int:
         skills=SkillStore(home),
     )
     bridge_box["bridge"] = bridge
+    app.aboutToQuit.connect(host.shutdown)
 
     engine = QtQml.QQmlApplicationEngine()
     bridge._engine = engine

@@ -116,6 +116,7 @@ class ChatViewModel(BaseViewModel):
         compaction_config_provider: Optional[Callable[[], CompactionConfig]] = None,
         effort_provider: Optional[Callable[[Optional[str]], Any]] = None,
         notifier: Optional[Callable[[], None]] = None,
+        identity_service: Any = None,
     ) -> None:
         self.store = store
         self.provider = provider
@@ -141,6 +142,7 @@ class ChatViewModel(BaseViewModel):
         # 回合结束时唤醒界面的回调（如把 QTimer 的下一次 drain 提前）。
         self._notifier = notifier
         self.locale = locale
+        self.identity_service = identity_service
         self._session_id = session_id
         self._tool_results: list[ToolResult] = []
         self._cancel: Optional[CancelToken] = None
@@ -440,8 +442,27 @@ class ChatViewModel(BaseViewModel):
         try:
             session = self.store.ensure_session(self._session_id)
             from mvvm.services.checkpoint_recovery import close_pending_tools
-            if close_pending_tools(session):
+            resume = None
+            if body.strip() == '/resume' and self.tools.interactions is not None:
+                self.tools.cancel_check = (lambda: False) if cancel is None else (lambda: cancel.cancelled)
+                # Only a persisted pre-execution interaction may be reattached. A
+                # started operation is resolved from its journal and never rerun.
+                resume = lambda call: self.tools.execute(call.name, call.input, tool_use_id=call.id) if self.tools.interactions.has_operation(session.id, call.id) else None
+                body = '继续上次中断的回合。'
+            if close_pending_tools(session, self.tools.checkpoint, resume):
                 self.store.save(session.id)
+            if self.identity_service is not None:
+                from mvvm.services.plugin_identity import apply_input
+                body, reply = apply_input(self.identity_service, session, body)
+                self.store.save(session.id)
+                if reply:
+                    self.store.append_message(session.id, Message(role='user', content=[TextPart(text=text)]))
+                    self.store.append_message(session.id, Message(role='assistant', content=[TextPart(text=reply)]))
+                    self._append_display('user', text)
+                    self._append_display('assistant', reply)
+                    self._ui(lambda: self.status_property.set_value('就绪'))
+                    self.emit({'type': 'done', 'stop': 'end_turn', 'text': reply})
+                    return TurnOutcome(reply, 'end_turn')
             # 模型在回合开头定一次：中途改设置不影响这一轮（与 Deva 一轮内模型不变一致）。
             provider, model = self._provider_for(cancel, session.id, session.model)
             # 待办清单的两条随用户消息带给模型的说明（Deva `chat.ts` 约 6053 行）：
@@ -461,7 +482,7 @@ class ChatViewModel(BaseViewModel):
             user_message = Message(role="user", content=user_parts)
             self.store.append_message(session.id, user_message, title_seed=text)
             # 取消标记要能掐断正在执行的 `run_command`：把「本轮是否已取消」交给工具层。
-            self.tools.cancel_check = (lambda: True) if cancel is None else (
+            self.tools.cancel_check = (lambda: False) if cancel is None else (
                 lambda: cancel.cancelled
             )
             self._append_display("user", body)
@@ -493,6 +514,7 @@ class ChatViewModel(BaseViewModel):
             self._fail(f"回合失败：{exc}")
             return TurnOutcome("", "error")
         finally:
+            self.tools.close()
             self._ui(lambda: self.busy_property.set_value(False))
             # 通知界面「回合结束」也要回到 UI 线程：本方法跑在工作线程，直接调回调会让
             # 界面在自己的线程之外改控件（Qt 会拒绝创建子对象，进程随后崩溃）。
@@ -525,6 +547,7 @@ class ChatViewModel(BaseViewModel):
                 effort = self._effort_provider(session.effort)
             request = GenerateRequest(
                 model=model,
+                system=self.identity_service.identity_prompt(session.personaId) if self.identity_service else None,
                 messages=model_messages(session.messages),
                 tools=[_spec_dict(s) for s in self.tools.specs()],
                 cache=True,

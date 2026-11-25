@@ -3,7 +3,7 @@ import pytest
 
 @pytest.mark.parametrize('contract', [
     'Studio user/profile: authenticated identity and profile namespace injection into the desktop runtime',
-    'Approval/interaction: persisted approval request ID, UI response callback and restart reattachment API',
+    'Studio approval/interaction RPC envelopes and cross-runtime resume callbacks (local QML controller is implemented and tested separately)',
     'Attachments: assetId resolver, authorizedRoots, expiresAt, and delivery acknowledgment API',
     'SDK/installer: Studio plugin registration, RPC context, plugin lifecycle and signed release distribution',
 ])

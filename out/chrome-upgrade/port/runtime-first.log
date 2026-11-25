@@ -1,0 +1,38 @@
+....F.............                                                       [100%]
+=================================== FAILURES ===================================
+_____________ test_authoritative_persona_prompt_and_local_command ______________
+
+service = <mvvm.services.plugin_settings.PluginSettings object at 0xffffa3244190>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/runtime-tests/test_authoritative_persona_pro0')
+
+    def test_authoritative_persona_prompt_and_local_command(service, tmp_path):
+        from test_chat_vm import make_vm
+        from mvvm.services.chat_session_store import ChatSessionStore
+        requests=[]
+        class Provider:
+            async def stream(self, request):
+                requests.append(request)
+                yield TextDelta('done');yield Done('end_turn')
+        service.save_identity('general', 'disk general')
+        service.save_identity('coder', '---\nname: Coder\n---\nUse the authoritative disk prompt.')
+        vm=make_vm(tmp_path/'chat',tmp_path,provider=Provider());vm.identity_service=service;vm.open_session('one')
+        assert asyncio.run(vm.run_turn('/deva:identity coder')).stop=='end_turn'
+        assert requests==[]
+        assert ChatSessionStore(tmp_path/'chat').load_session('one').personaId=='coder'
+        assert asyncio.run(vm.run_turn('hello')).stop=='end_turn'
+        assert requests[-1].system=='Use the authoritative disk prompt.'
+        service.save_identity('coder','new external content')
+        asyncio.run(vm.run_turn('again'))
+        assert requests[-1].system=='new external content'
+        asyncio.run(vm.run_turn('@deva:general next'))
+        assert requests[-1].system=='disk general'
+>       assert requests[-1].messages[-1].text()=='next'
+E       AssertionError: assert 'done' == 'next'
+E         
+E         - next
+E         + done
+
+app/tests/test_plugin_runtime.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_plugin_runtime.py::test_authoritative_persona_prompt_and_local_command
+1 failed, 17 passed in 13.14s

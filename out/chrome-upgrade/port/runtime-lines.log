@@ -1,0 +1,54 @@
+app/src/mvvm/services/plugin_identity.py:10:def identity_home():
+app/src/mvvm/services/plugin_identity.py:15:def check_owned(path):
+app/src/mvvm/services/plugin_identity.py:25:def shared_store():
+app/src/mvvm/services/plugin_identity.py:35:def selected(service, session_id=None):
+app/src/mvvm/services/plugin_identity.py:44:def apply_input(service, session, text):
+app/src/mvvm/services/checkpoint_recovery.py:6:def close_pending_tools(session, checkpoint=None):
+app/src/mvvm/services/tool_checkpoint.py:12:class ToolCheckpoint:
+app/src/mvvm/services/tool_checkpoint.py:13:    def __init__(self, root):
+app/src/mvvm/services/tool_checkpoint.py:17:    def path(self, session, operation):
+app/src/mvvm/services/tool_checkpoint.py:20:    def result(self, session, operation):
+app/src/mvvm/services/tool_checkpoint.py:31:    def execute(self, session, operation, name, args, invoke):
+app/src/mvvm/services/plugin_settings.py:13:def scope_key():
+app/src/mvvm/services/plugin_settings.py:20:class PluginSettings:
+app/src/mvvm/services/plugin_settings.py:21:    def __init__(self, settings, vault):
+app/src/mvvm/services/plugin_settings.py:25:    def data(self):
+app/src/mvvm/services/plugin_settings.py:28:    def write(self, **patch):
+app/src/mvvm/services/plugin_settings.py:33:    def key_id(self, kind, name):
+app/src/mvvm/services/plugin_settings.py:36:    def custom(self):
+app/src/mvvm/services/plugin_settings.py:41:    def save_custom(self, base, model, key=None):
+app/src/mvvm/services/plugin_settings.py:65:    def route(self):
+app/src/mvvm/services/plugin_settings.py:71:    def servers(self):
+app/src/mvvm/services/plugin_settings.py:75:    def save_server(self, name, config, secret=None):
+app/src/mvvm/services/plugin_settings.py:108:    def delete_server(self, name):
+app/src/mvvm/services/plugin_settings.py:116:    def identity_root(self):
+app/src/mvvm/services/plugin_settings.py:120:    def identities(self):
+app/src/mvvm/services/plugin_settings.py:135:    def identity_prompt(self, identity_id):
+app/src/mvvm/services/plugin_settings.py:141:    def save_identity(self, name, text):
+app/src/mvvm/services/mcp_runtime.py:24:def stop_server(scope, name):
+app/src/mvvm/services/mcp_runtime.py:30:class McpConnection:
+app/src/mvvm/services/mcp_runtime.py:31:    def __init__(self, config, secret="", cancelled=lambda: False, timeout=60):
+app/src/mvvm/services/mcp_runtime.py:64:    def _read_stdio(self):
+app/src/mvvm/services/mcp_runtime.py:73:    def _http(self, payload, responses):
+app/src/mvvm/services/mcp_runtime.py:100:    def send(self, payload, responses=None):
+app/src/mvvm/services/mcp_runtime.py:109:    def notify(self, method, params=None):
+app/src/mvvm/services/mcp_runtime.py:122:    def request(self, method, params=None):
+app/src/mvvm/services/mcp_runtime.py:154:    def initialize(self):
+app/src/mvvm/services/mcp_runtime.py:162:    def close(self):
+app/src/mvvm/services/mcp_runtime.py:179:class McpTools:
+app/src/mvvm/services/mcp_runtime.py:180:    def __init__(self, service, runtime):
+app/src/mvvm/services/mcp_runtime.py:185:    def stop(self, name):
+app/src/mvvm/services/mcp_runtime.py:190:    def close(self):
+app/src/mvvm/services/mcp_runtime.py:193:    def specs(self):
+app/src/mvvm/services/mcp_runtime.py:221:    def execute(self, name, arguments):
+app/src/mvvm/services/plugin_layout.py:10:def migrate_legacy(root):
+app/src/mvvm/services/plugin_layout.py:17:    def read(path):
+app/src/mvvm/services/plugin_interactions.py:15:class Interactions:
+app/src/mvvm/services/plugin_interactions.py:16:    def __init__(self, directory, timeout=300):
+app/src/mvvm/services/plugin_interactions.py:20:    def _path(self, request_id):
+app/src/mvvm/services/plugin_interactions.py:23:    def _write(self, row):
+app/src/mvvm/services/plugin_interactions.py:27:    def pending(self, session):
+app/src/mvvm/services/plugin_interactions.py:38:    def answer(self, session, request_id, outcome, text=''):
+app/src/mvvm/services/plugin_interactions.py:50:    def request(self, session, operation, kind, question, choices=(), cancelled=None):
+app/src/mvvm/services/plugin_interactions.py:73:    def approve(self, session, operation, tool, args, cancelled):
+app/src/mvvm/services/plugin_interactions.py:78:    def ask(self, session, operation, args, cancelled):

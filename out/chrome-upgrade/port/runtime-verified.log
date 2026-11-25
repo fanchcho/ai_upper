@@ -1,0 +1,23 @@
+............F..........................................................  [100%]
+=================================== FAILURES ===================================
+_ test_recovery_restores_completed_tool_result_and_delivery_without_side_effect _
+
+tmp_path = PosixPath('/tmp/ai-upper-plugin-port/runtime-verified/test_recovery_restores_complet0')
+
+    def test_recovery_restores_completed_tool_result_and_delivery_without_side_effect(tmp_path):
+        from mvvm.models.chat_models import Message,ToolUsePart,ToolResultPart,StoredSession
+        from mvvm.services.checkpoint_recovery import close_pending_tools
+        checkpoint=ToolCheckpoint(tmp_path/'journal')
+        checkpoint.execute('s','op','write_file',{},lambda:ToolResult('persisted result'))
+        session=StoredSession(id='s',messages=[Message(role='assistant',content=[ToolUsePart(id='op',name='write_file',input={})])])
+        assert close_pending_tools(session,checkpoint)
+        assert session.messages[-1].content[0].content=='persisted result'
+        assert not session.messages[-1].content[0].isError
+>       assert restarted.execute('s','op','write_file',{'path':'b'},execute).is_error
+               ^^^^^^^^^
+E       NameError: name 'restarted' is not defined
+
+app/tests/test_plugin_runtime.py:203: NameError
+=========================== short test summary info ============================
+FAILED app/tests/test_plugin_runtime.py::test_recovery_restores_completed_tool_result_and_delivery_without_side_effect
+1 failed, 70 passed in 38.47s

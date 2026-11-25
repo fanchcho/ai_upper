@@ -1,0 +1,9 @@
+<stdin>:7: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+{"page": "chat", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 4480, "percent": 0.4268292682926829, "bbox": [126, 8, 579, 797]}
+{"page": "settings-general", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 5383, "percent": 0.5128620426829268, "bbox": [126, 8, 440, 797]}
+{"page": "settings-models", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 7623, "percent": 0.7262766768292683, "bbox": [126, 8, 943, 797]}
+runtime-settings-models.png (1280, 820)
+runtime-settings-general.png (1280, 820)
+runtime-settings-identities.png (1280, 820)
+runtime-settings-mcp.png (1280, 820)
+runtime-settings-custom-model.png (1280, 820)

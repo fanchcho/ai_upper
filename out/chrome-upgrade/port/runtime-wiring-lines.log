@@ -1,0 +1,21 @@
+app/src/mvvm/webui/assembly.py:46:    from mvvm.services.tool_checkpoint import ToolCheckpoint
+app/src/mvvm/webui/assembly.py:64:        runtime.checkpoint = ToolCheckpoint(home / 'data' / 'checkpoints' / plugins.scope)
+app/src/mvvm/webui/assembly.py:84:            identity_service=plugins,
+app/src/mvvm/services/tool_runtime.py:420:        self.checkpoint = None
+app/src/mvvm/services/tool_runtime.py:441:    def specs(self) -> list[ToolSpec]:
+app/src/mvvm/services/tool_runtime.py:450:    def close(self) -> None:
+app/src/mvvm/services/tool_runtime.py:460:    def execute(self, name: str, arguments: Any, tool_use_id: str = "") -> ToolResult:
+app/src/mvvm/services/tool_runtime.py:493:            if self.checkpoint is not None:
+app/src/mvvm/services/tool_runtime.py:494:                return self.checkpoint.execute(self.session_id, tool_use_id, name, arguments, invoke)
+app/src/qml/SettingsModal.qml:533:                        objectName: "modelsCustomNetwork"
+app/src/mvvm/view_models/chat_vm.py:119:        identity_service: Any = None,
+app/src/mvvm/view_models/chat_vm.py:145:        self.identity_service = identity_service
+app/src/mvvm/view_models/chat_vm.py:444:            from mvvm.services.checkpoint_recovery import close_pending_tools
+app/src/mvvm/view_models/chat_vm.py:452:            if close_pending_tools(session, self.tools.checkpoint, resume):
+app/src/mvvm/view_models/chat_vm.py:454:            if self.identity_service is not None:
+app/src/mvvm/view_models/chat_vm.py:456:                body, reply = apply_input(self.identity_service, session, body)
+app/src/mvvm/view_models/chat_vm.py:550:                system=self.identity_service.identity_prompt(session.personaId) if self.identity_service else None,
+app/src/qml_shell.py:379:    def pluginSettings(self, operation: str, payload: str) -> str:
+app/src/qml_shell.py:405:    def pendingInteractions(self):
+app/src/qml_shell.py:704:    def quickStartPersonas(self) -> List[Dict[str, Any]]:
+app/src/mvvm/webui/host.py:297:    def shutdown(self) -> None:

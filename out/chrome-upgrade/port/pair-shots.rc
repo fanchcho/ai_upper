@@ -1,0 +1,6 @@
+before chat rc=0
+before settings-general rc=0
+before settings-models rc=0
+after chat rc=0
+after settings-general rc=0
+after settings-models rc=0

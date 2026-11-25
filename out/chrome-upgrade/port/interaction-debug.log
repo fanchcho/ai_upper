@@ -1,0 +1,32 @@
+F
+=================================== FAILURES ===================================
+_________________ test_actual_qml_approval_and_answer_buttons __________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x3b9ff980) at 0xffffb1d71780>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/interaction-test/test_actual_qml_approval_and_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffb1d79a70>
+
+    def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
+        w,bridge,ticker,engine=_build_window(tmp_path,monkeypatch)
+        workers=[]
+        try:
+            sid=bridge.newSession()
+            controller=bridge._host.interactions
+            for kind,outcome,button in [('approval','approved','interactionAccept'),('approval','denied','interactionReject'),('question','answered','interactionAccept'),('question','dismissed','interactionReject')]:
+                results=[]
+                worker=threading.Thread(target=lambda:results.append(controller.request(sid,kind+outcome,kind,'Test question',cancelled=None)))
+                workers.append(worker);worker.start()
+                _pump(qapp,1)
+                assert bridge.pendingInteractions(), (sid, bridge._active)
+>               assert _find_item(w.contentItem(),'interactionPrompt').property('visible')
+E               assert False
+E                +  where False = <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffffa8928d40>('visible')
+E                +    where <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffffa8928d40> = <PySide6.QtQuick.QQuickItem(0x3bb48850, name="interactionPrompt", parent=0x3c14fac0, geometry=380,365 520x90, z=2000) at 0xffffa8928d40>.property
+E                +      where <PySide6.QtQuick.QQuickItem(0x3bb48850, name="interactionPrompt", parent=0x3c14fac0, geometry=380,365 520x90, z=2000) at 0xffffa8928d40> = _find_item(<PySide6.QtQuick.QQuickItem(0x3c14e000, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffffa893fa40>, 'interactionPrompt')
+E                +        where <PySide6.QtQuick.QQuickItem(0x3c14e000, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffffa893fa40> = <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffffa891ca00>()
+E                +          where <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffffa891ca00> = <PySide6.QtQuick.QQuickWindow(0x3bf67d60 active exposed, visibility=QWindow::Windowed, flags=QFlags<Qt::WindowType>(Window|FramelessWindowHint), title="Deva", geometry=0,0 1280x820) at 0xffffa891ca00>.contentItem
+
+app/tests/test_qml_plugin_settings.py:55: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_plugin_settings.py::test_actual_qml_approval_and_answer_buttons
+1 failed in 5.28s

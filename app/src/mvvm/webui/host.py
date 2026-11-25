@@ -294,6 +294,14 @@ class ChatHost:
         return turn.thread is not None and turn.thread.is_alive()
 
     # ── chat:abort ────────────────────────────────────────────────────────
+    def shutdown(self) -> None:
+        with self._turns_lock:
+            turns = list(self._turns)
+        for turn_id in turns:
+            self.abort(turn_id)
+        for vm in list(self._vms.values()):
+            vm.tools.close()
+
     def abort(self, turn_id: Any) -> dict[str, bool]:
         """`chat:abort`：按 turnId 取消对应回合；未知 turnId 无副作用（原版恒回 ok:true）。"""
         key = _as_str(turn_id)

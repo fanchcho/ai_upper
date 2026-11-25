@@ -3,7 +3,7 @@ import json
 from mvvm.models.chat_models import Message, ToolUsePart, ToolResultPart
 
 
-def close_pending_tools(session):
+def close_pending_tools(session, checkpoint=None, resume=None):
     recovered = []
     changed = False
     messages = session.messages
@@ -24,10 +24,22 @@ def close_pending_tools(session):
                 end += 1
             missing = [c for c in calls if c.id not in results]
             if missing:
-                recovered.append(Message(role='user', content=[ToolResultPart(toolUseId=c.id, isError=True, content=json.dumps({
-                    'status':'interrupted_unknown', 'executed':'unknown', 'retry':False,
-                    'reason':'中断时结果未知，未自动重试；先核对实际状态再决定新操作'
-                }, ensure_ascii=False)) for c in missing]))
+                parts = []
+                for call in missing:
+                    saved = checkpoint.result(session.id, call.id) if checkpoint else None
+                    if saved is None and resume is not None:
+                        saved = resume(call)
+                    if saved is not None:
+                        parts.append(ToolResultPart(toolUseId=call.id, isError=saved.is_error, content=saved.content, images=saved.images))
+                        if saved.delivered:
+                            from mvvm.services.deliverables import record_delivered
+                            session.delivered = record_delivered(session.delivered, call.id, saved)
+                    else:
+                        parts.append(ToolResultPart(toolUseId=call.id, isError=True, content=json.dumps({
+                            'status':'interrupted_unknown', 'executed':'unknown', 'retry':False,
+                            'reason':'中断时结果未知，未自动重试；先核对实际状态再决定新操作'
+                        }, ensure_ascii=False)))
+                recovered.append(Message(role='user', content=parts))
                 changed = True
             index = end
         else:

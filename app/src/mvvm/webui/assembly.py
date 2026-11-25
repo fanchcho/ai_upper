@@ -40,6 +40,12 @@ def build_chat_host(
     `transport` 只在测试里给（脚本化响应）；生产路径留空 = 真实 httpx 传输。
     """
     gateway = ModelGateway(settings, vault, transport)
+    from mvvm.services.plugin_settings import PluginSettings
+    from mvvm.services.mcp_runtime import McpTools
+    from mvvm.services.plugin_interactions import Interactions
+    from mvvm.services.tool_checkpoint import ToolCheckpoint
+    plugins = PluginSettings(settings, vault)
+    interactions = Interactions(home / 'data' / 'interactions' / plugins.scope)
 
     def session_model(session_id: str) -> Optional[str]:
         """会话里定格的模型引用；会话不存在时 None（回落全局默认）。"""
@@ -52,7 +58,12 @@ def build_chat_host(
         return Path(focus) if focus else None
 
     def tool_factory(session_id: str) -> ToolRuntime:
-        return ToolRuntime(guard, session_root(session_id), home=home, session_id=session_id)
+        runtime = ToolRuntime(guard, session_root(session_id), home=home, session_id=session_id)
+        runtime.mcp = McpTools(plugins, runtime)
+        runtime.interactions = interactions
+        runtime.checkpoint = ToolCheckpoint(home / 'data' / 'checkpoints' / plugins.scope)
+        runtime.approval_enabled = lambda: plugins.data().get('approvalEnabled') is True
+        return runtime
 
     def vm_factory(session_id: str) -> ChatViewModel:
         return ChatViewModel(
@@ -70,6 +81,7 @@ def build_chat_host(
             effort_provider=lambda level, sid=session_id: gateway.effort_parameter(
                 level, session_model(sid)
             ),
+            identity_service=plugins,
         )
 
     host = ChatHost(
@@ -81,6 +93,7 @@ def build_chat_host(
         tool_factory=tool_factory,
         vm_factory=vm_factory,
     )
+    host.interactions = interactions
     return host, gateway
 
 

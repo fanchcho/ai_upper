@@ -1,0 +1,13 @@
+ app/src/mvvm/services/checkpoint_recovery.py | 20 +++++++++++----
+ app/src/mvvm/services/plugin_settings.py     | 38 +++++++++++++++++++++-------
+ app/src/mvvm/services/tool_runtime.py        | 36 +++++++++++++++++++++++---
+ app/src/mvvm/view_models/chat_vm.py          | 19 ++++++++++++--
+ app/src/mvvm/webui/assembly.py               | 15 ++++++++++-
+ app/src/qml/Main.qml                         |  2 ++
+ app/src/qml/PluginSettingsPane.qml           |  1 +
+ app/src/qml/SettingsModal.qml                |  8 ++++++
+ app/src/qml_shell.py                         | 31 +++++++++++++++++++----
+ app/tests/test_plugin_host_requirements.py   |  2 +-
+ app/tests/test_qml_plugin_settings.py        | 25 ++++++++++++++++++
+ app/tests/test_qml_shell.py                  |  4 +--
+ 12 files changed, 172 insertions(+), 29 deletions(-)

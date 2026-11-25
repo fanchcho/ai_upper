@@ -415,6 +415,10 @@ class ToolRuntime:
         self.can_request_mount = False
         # 最近一次判定的决策记录（界面 / 测试可查「为什么允许 / 为什么拒绝」）。
         self.last_decision: Optional[Decision] = None
+        self.mcp = None
+        self.interactions = None
+        self.checkpoint = None
+        self.approval_enabled: Callable[[], bool] = lambda: False
         self._tools: dict[str, tuple[ToolSpec, Callable[..., ToolResult]]] = dict(tools or {})
         for spec, handler in (
             (READ_FILE_SPEC, self._read_file),
@@ -435,7 +439,17 @@ class ToolRuntime:
         self._tools[spec.name] = (spec, handler)
 
     def specs(self) -> list[ToolSpec]:
-        return [spec for spec, _ in self._tools.values()]
+        specs = [spec for spec, _ in self._tools.values()]
+        if self.mcp is not None:
+            specs.extend(self.mcp.specs())
+        if self.interactions is not None:
+            from mvvm.services.plugin_interactions import ASK_SPEC
+            specs.append(ASK_SPEC)
+        return specs
+
+    def close(self) -> None:
+        if self.mcp is not None:
+            self.mcp.close()
 
     def resolve_path(self, raw: Any) -> Path:
         return resolve_tool_path(self.guard, self.root, raw)
@@ -445,7 +459,13 @@ class ToolRuntime:
 
     def execute(self, name: str, arguments: Any, tool_use_id: str = "") -> ToolResult:
         """执行一个工具。未知工具、参数错误、越界都返回 is_error=True 的结果（不抛给上层）。"""
+        if name == 'ask_user' and self.interactions is not None:
+            if not self.interactive:
+                return ToolResult('密封执行不能向用户提问', True)
+            return self.interactions.ask(self.session_id, tool_use_id, arguments, self.cancel_check)
         entry = self._tools.get(name)
+        if name.startswith('mcp__') and self.mcp is not None:
+            entry = (None, lambda args: self.mcp.execute(name, args))
         if entry is None:
             return ToolResult(f"（未知工具：{name}）", True, "未知工具")
         _, handler = entry
@@ -456,15 +476,23 @@ class ToolRuntime:
             arguments,
             self.root,
             interactive=self.interactive,
+            is_mcp_tool=name.startswith('mcp__'),
             can_request_mount=self.can_request_mount,
         )
         self.last_decision = decision
         if not decision.allowed:
             return ToolResult(decision.content, True, decision.summary)
+        risky = name in ('run_command', 'write_file', 'edit_file', 'memory_write', 'memory_delete', 'skill_manage', 'browser') or name.startswith('mcp__')
+        if risky and self.approval_enabled():
+            if self.interactions is None:
+                return ToolResult('审批已启用但交互控制器不可用；未执行', True)
+            if not self.interactions.approve(self.session_id, tool_use_id, name, arguments, self.cancel_check):
+                return ToolResult('审批未通过；未执行', True)
         try:
-            if name == "todo_write":
-                return self._todo_write(arguments, tool_use_id)
-            return handler(arguments)
+            invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
+            if self.checkpoint is not None:
+                return self.checkpoint.execute(self.session_id, tool_use_id, name, arguments, invoke)
+            return invoke()
         except PermissionError as exc:
             return ToolResult(str(exc), True, "越界拒绝")
         except ValueError as exc:

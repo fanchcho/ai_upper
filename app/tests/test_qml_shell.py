@@ -592,7 +592,7 @@ def test_extension_rows_honor_disk_skill_and_config_enabled(qapp, tmp_path, monk
 # ── 空态快速开启（QuickStart：真实角色 + 点击建会话）─────────────────────
 def _seed_personas(home):
     """在测试数据目录里落两条角色文件（与首启种子同格式）。"""
-    folder = home / "personas"
+    folder = home / "deva" / "personas"
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "general.md").write_text(
         "---\nname: Deva\ndescription: 全能型工作助手。\n---\n\n# Deva\n", encoding="utf-8"
@@ -620,7 +620,7 @@ def test_quick_start_personas_project_the_persona_store(qapp, tmp_path, monkeypa
     assert all(row["avatarImage"] == "" for row in rows)  # 无自定义头像 → QML 用预生成 SVG
 
     # 角色文件改了，重绘就是新值（不缓存开机那一刻的列表）。
-    (home / "personas" / "general.md").write_text(
+    (home / "deva" / "personas" / "general.md").write_text(
         "---\nname: 新名字\ndescription: 新描述\n---\n", encoding="utf-8"
     )
     by_id = {row["id"]: row for row in bridge.quickStartPersonas()}

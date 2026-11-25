@@ -54,6 +54,7 @@ Item {
         TextField { id: command; visible: pane.mode === "mcp"; placeholderText: "Command (stdio)"; Layout.fillWidth: true }
         TextField { id: argsInput; visible: pane.mode === "mcp"; text: "[]"; placeholderText: "Arguments (JSON array)"; Layout.fillWidth: true }
         CheckBox { id: enabledBox; objectName: "pluginEnabled"; visible: pane.mode === "mcp"; text: "Enabled"; checked: true }
+        CheckBox { objectName: "pluginApprovalEnabled"; visible: pane.mode === "mcp"; text: "执行命令、写文件和 MCP 调用前审批"; checked: pane.state.approvalEnabled === true; onClicked: pane.invoke("saveApproval", {enabled: checked}) }
         Text { id: keyStatus; visible: pane.mode !== "identities"; text: (pane.mode === "mcp" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? "已设置" : "未设置"; color: Theme.fgMuted }
         TextField { id: secret; objectName: "pluginSecret"; visible: pane.mode !== "identities"; placeholderText: "New API key / credential (empty keeps current)"; echoMode: TextInput.Password; Layout.fillWidth: true }
         ScrollView { visible: pane.mode === "identities"; Layout.fillWidth: true; Layout.fillHeight: true; TextArea { id: body; objectName: "pluginPersonaBody"; wrapMode: TextEdit.Wrap; placeholderText: "Persona Markdown" } }

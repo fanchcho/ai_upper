@@ -529,6 +529,14 @@ Item {
                             }
                         }
                     }
+                    Button {
+                        objectName: "modelsCustomNetwork"
+                        anchors.right: addBtn.left
+                        anchors.rightMargin: 8
+                        height: 28
+                        text: "自定义模型网络"
+                        onClicked: root.pane = "custom-model"
+                    }
                 }
 
                 Rectangle {

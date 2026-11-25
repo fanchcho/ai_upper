@@ -1,0 +1,8 @@
+<stdin>:7: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+{"page": "chat", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 0, "percent": 0.0, "bbox": null}
+<stdin>:14: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+outside_added_controls chat 0
+{"page": "settings-general", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 1266, "percent": 0.12061737804878049, "bbox": [303, 336, 420, 416]}
+outside_added_controls settings-general 0
+{"page": "settings-models", "before": [1280, 820], "after": [1280, 820], "changed_pixels": 3506, "percent": 0.33403201219512196, "bbox": [303, 200, 943, 416]}
+outside_added_controls settings-models 0
