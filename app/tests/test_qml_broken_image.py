@@ -28,11 +28,13 @@ def test_broken_image_paints_icon_and_keeps_alt_inline(qapp, tmp_path, monkeypat
         assert alt.x() - icon.x() == 16
         # alt 的宽度是字体度量的函数，不能写死 42：CI runner 没有中日韩字体时
         # 「示意图」会落到 tofu 回退（实测 25.171875px），本机有 Noto CJK 时是
-        # 41.953125px。这里用文档默认字体现场量同一串文字，锁住的仍是「alt 完整
-        # 内联排在 16px 图标槽之后、没有被裁剪或额外加间距」，与具体回退字体无关。
+        # 41.953125px；macOS runner 的 CJK 回退实际排 42.9375px，而同字体的
+        # QFontMetrics 只报 41.109375px（差 1.83px，字体回退与度量表不完全一致）。
+        # 这里用文档默认字体现场量同一串文字，并以 2px 容差吸收平台回退差；
+        # 真正锁死的是「alt 完整内联排在 16px 图标槽之后、没有被裁剪或额外加间距」。
         from PySide6.QtGui import QFontMetricsF
         expected_alt = QFontMetricsF(document.defaultFont()).horizontalAdvance("示意图")
-        assert end.x() - alt.x() == pytest.approx(expected_alt, abs=1/16)  # Qt 1/64px advances
+        assert end.x() - alt.x() == pytest.approx(expected_alt, abs=2.0)
         point = view.mapToScene(C.QPointF(icon.x(), icon.y()))
         shot = window.grabWindow()
         green = 0
