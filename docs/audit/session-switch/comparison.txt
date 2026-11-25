@@ -1,0 +1,2 @@
+{'before': (121.94021999312099, 128.7380400171969), 'delivered': (107.5313800101867, 112.22783999983221)}
+Three paired final RGB screenshots: identical (bbox=None).

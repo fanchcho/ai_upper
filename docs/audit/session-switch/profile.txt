@@ -1,0 +1,55 @@
+Thu Nov 26 00:03:47 2026    .tmp/session-switch/profile.pstats
+
+         2714916 function calls (2674352 primitive calls) in 10.570 seconds
+
+   Ordered by: cumulative time
+   List reduced from 3457 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    584/1    0.041    0.000   10.571   10.571 {built-in method builtins.exec}
+        1    0.008    0.008   10.571   10.571 measure.py:1(<module>)
+       25    0.001    0.000    5.537    0.221 test_qml_context_menu.py:160(_pump)
+       25    0.001    0.000    5.537    0.221 qml_shell.py:1504(_pump)
+       74    4.519    0.061    4.533    0.061 {built-in method processEvents}
+       24    0.431    0.018    3.744    0.156 {built-in method mouseClick}
+       24    0.000    0.000    3.260    0.136 qml_shell.py:610(openSession)
+   864/48    0.003    0.000    3.260    0.068 measure.py:27(wrapped)
+       26    0.000    0.000    3.084    0.119 qml_shell.py:1367(_render)
+       26    0.056    0.002    1.580    0.061 body.py:172(attach)
+       27    0.004    0.000    1.492    0.055 body.py:119(render)
+       26    0.000    0.000    1.492    0.057 body.py:113(set_markdown)
+       26    0.000    0.000    1.492    0.057 body.py:107(set_source)
+       27    0.001    0.000    1.488    0.055 document.py:314(render_markdown)
+       27    0.017    0.001    1.222    0.045 document.py:540(render_blocks)
+       50    1.003    0.020    1.003    0.020 {built-in method time.sleep}
+       63    0.003    0.000    0.895    0.014 __init__.py:1(<module>)
+   493/19    0.003    0.000    0.781    0.041 <frozen importlib._bootstrap>:1349(_find_and_load)
+   487/19    0.002    0.000    0.780    0.041 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+   467/22    0.002    0.000    0.778    0.035 <frozen importlib._bootstrap>:911(_load_unlocked)
+  1056/53    0.001    0.000    0.776    0.015 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+       26    0.051    0.002    0.756    0.029 viewport.py:139(attach_table_grids)
+   409/19    0.001    0.000    0.711    0.037 <frozen importlib._bootstrap_external>:1020(exec_module)
+      750    0.038    0.000    0.676    0.001 document.py:742(_table)
+       26    0.429    0.016    0.558    0.021 {method 'endEditBlock' of 'PySide6.QtGui.QTextCursor' objects}
+     1500    0.446    0.000    0.483    0.000 {method 'setFormat' of 'PySide6.QtGui.QTextTable' objects}
+        1    0.003    0.003    0.409    0.409 test_qml_context_menu.py:67(_build_window)
+      750    0.059    0.000    0.407    0.001 document.py:791(_table_column_widths)
+        1    0.000    0.000    0.367    0.367 test_qml_context_menu.py:1(<module>)
+       25    0.003    0.000    0.347    0.014 qml_shell.py:1435(_publish)
+     3000    0.115    0.000    0.325    0.000 document.py:817(_measure_cell_width)
+    91/35    0.000    0.000    0.301    0.009 {built-in method builtins.__import__}
+      750    0.048    0.000    0.294    0.000 document.py:938(_code)
+       27    0.000    0.000    0.248    0.009 parser.py:42(parse_markdown)
+  425/230    0.001    0.000    0.245    0.001 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+       27    0.010    0.000    0.244    0.009 parser.py:50(_parse_blocks)
+       26    0.003    0.000    0.181    0.007 qml_shell.py:1414(_rows)
+        1    0.000    0.000    0.174    0.174 qml_shell.py:1485(initial)
+    13531    0.061    0.000    0.166    0.000 highlight.py:264(highlightBlock)
+6750/5250    0.082    0.000    0.157    0.000 parser.py:372(parse_inline)
+      409    0.003    0.000    0.153    0.000 <frozen importlib._bootstrap_external>:1093(get_code)
+        1    0.000    0.000    0.152    0.152 assembly.py:1(<module>)
+        1    0.000    0.000    0.145    0.145 chat_models.py:1(<module>)
+1347/1334    0.017    0.000    0.140    0.000 {built-in method builtins.__build_class__}
+     1500    0.035    0.000    0.138    0.000 document.py:830(_table_row)
+
+

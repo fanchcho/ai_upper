@@ -1,0 +1,5 @@
+Linux-5.10.0-16-arm64-aarch64-with-glibc2.41
+Python 3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]
+PySide6 6.11.2
+QT_QPA_PLATFORM=offscreen
+QT_QUICK_BACKEND=software
