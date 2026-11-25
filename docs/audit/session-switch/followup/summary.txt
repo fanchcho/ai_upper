@@ -1,0 +1,2 @@
+before: N=72, final frame median=119.303 ms, P95=124.912 ms, max GUI event=103.601 ms, dispatch median=118.483 ms
+after: N=72, final frame median=137.946 ms, P95=148.193 ms, max GUI event=68.652 ms, dispatch median=11.225 ms

@@ -1,0 +1,21 @@
+$ git log --oneline -8
+bbd3e3f fix(qml): prepare session rich text in a worker with value-only delivery
+67edda7 fix(qml): avoid selection copies and all-selected row scans
+5884c70 docs(audit): record ordinary session switch timings and remaining latency
+11c63f2 fix(markdown): reuse plain table cell measurements during session rendering
+4bb8799 docs(audit): record multi-selection timing and remaining limits
+5f45c28 fix(qml): publish batch archive selection once
+a27ee63 feat(plugins): connect MCP, shared personas, approval UI and durable recovery
+8de00f0 feat(qml): add plugin settings, direct model routing and interrupted-tool recovery
+exit=0
+$ git diff --check
+exit=0
+$ git status --short
+?? docs/audit/session-switch/followup/
+exit=0
+$ git branch --show-current
+develop
+exit=0
+Final pytest process exit=0; stdout in pytest.log
+A selected screenshots at 120/1000/10000/100000/300000: RGB bbox=None
+B final screenshots 3 pairs: RGB bbox=None

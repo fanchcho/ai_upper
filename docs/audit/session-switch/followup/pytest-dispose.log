@@ -1,0 +1,40 @@
+..................................................                       [100%]
+=============================== warnings summary ===============================
+tests/test_qml_shell.py::test_shell_send_without_active_session_creates_one
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0xffff98002c30) at 0xffff9f52e180>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_extension_rows_project_builtin_skills_with_badge_and_note
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21ca8120) at 0xffff9f57f400>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_extension_rows_honor_disk_skill_and_config_enabled
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21ca7f50) at 0xffff9f58fd80>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_quick_start_personas_project_the_persona_store
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21d05be0) at 0xffff9f59b880>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_start_quick_start_creates_a_session_bound_to_that_persona
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21d15fa0) at 0xffff9f5acac0>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_quick_start_labels_follow_the_shell_language
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21cced80) at 0xffff9f5aeb00>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_set_skill_enabled_leaves_builtin_rows_untouched
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21c14390) at 0xffff9f5b80c0>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_skill_toggle_survives_a_later_settings_write
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x21cc8910) at 0xffff9f5b96c0>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+tests/test_qml_shell.py::test_pending_switch_cannot_overwrite_newer_session
+  /home/agent/shared_workspace/ai_upper/app/src/qml_shell.py:1403: RuntimeWarning: libpyside: Failed to disconnect (<bound method ShellBridge._close_render_worker of <qml_shell.ShellBridge(0x22d18950) at 0xffff8e75a000>>) from signal "aboutToQuit()".
+    app.aboutToQuit.disconnect(self._close_render_worker)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+50 passed, 9 warnings in 17.13s
