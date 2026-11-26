@@ -182,7 +182,12 @@ class ChatPane(ViewBase):
 
     def _render_transcript(self, entries: Any) -> None:
         self._register_images(entries)
-        self._transcript.setHtml(transcript_html(entries))
+        from markdown.document import LIGHT, DARK
+        palette = LIGHT
+        if hasattr(self._transcript, 'palette'):
+            palette = DARK if self._transcript.palette().base().color().lightness() < 128 else LIGHT
+            self._transcript.setStyleSheet('QTextBrowser { color: %s; background: %s; }' % (palette.fg, palette.bg))
+        self._transcript.setHtml(transcript_html(entries, palette=palette))
 
     def _register_images(self, entries: Any) -> None:
         """把内联图片注册成文档资源（占位 URL 与正文里的 `<img src>` 对应）。"""

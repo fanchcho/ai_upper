@@ -40,3 +40,18 @@ def test_tool_summary_translates_without_mutating_protocol(monkeypatch):
     assert entry==original
     monkeypatch.setenv('AI_UPPER_LANG','zh-CN')
     assert '读取失败' in tool_card_title(entry)
+
+
+def test_tool_body_translates_preserving_bytes(monkeypatch):
+    from mvvm.views.transcript_render import transcript_html
+    from markdown.document import LIGHT, DARK
+    entry={'role':'tool','name':'read_file','text':'读取失败：example.txt','summary':'读取失败','is_error':True}
+    before=json.dumps(entry,ensure_ascii=False,sort_keys=True).encode()
+    monkeypatch.setenv('AI_UPPER_LANG','en')
+    english=transcript_html([entry],DARK)
+    assert '读取失败' not in english
+    assert 'example.txt' in english and DARK.fg in english
+    monkeypatch.setenv('AI_UPPER_LANG','zh-CN')
+    chinese=transcript_html([entry],LIGHT)
+    assert '读取失败' in chinese and english!=chinese
+    assert json.dumps(entry,ensure_ascii=False,sort_keys=True).encode()==before

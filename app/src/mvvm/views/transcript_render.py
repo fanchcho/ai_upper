@@ -86,12 +86,12 @@ def decode_images(entries: Iterable[dict[str, Any]]) -> list[tuple[str, bytes]]:
     return out
 
 
-def _tool_card(entry: dict[str, Any], image_index: list[int]) -> str:
+def _tool_card(entry: dict[str, Any], image_index: list[int], palette) -> str:
     error = bool(entry.get("is_error"))
-    color = "#b42318" if error else "#475467"
-    background = "#fef3f2" if error else "#f8fafc"
+    color = palette.error_fg if error else palette.fg
+    background = palette.error_bg if error else palette.bg_panel
     title = _escape(tool_card_title(entry))
-    body = _preserve(str(entry.get("text") or ""))
+    body = _preserve(display_text(entry.get("text") or ""))
     images: list[str] = []
     for image in entry.get("images") or []:
         if not isinstance(image, dict):
@@ -103,36 +103,39 @@ def _tool_card(entry: dict[str, Any], image_index: list[int]) -> str:
         name = _escape(image.get("name") or tr('legacy.be8da62ea113'))
         images.append(
             f'<p><img src="{image_placeholder(index)}" width="{IMAGE_MAX_WIDTH}"/></p>'
-            f"<p style='color:#667085;'>［{tr('legacy.be8da62ea113')}］{name}</p>"
+            f"<p style='color:{palette.fg_muted};'>［{tr('legacy.be8da62ea113')}］{name}</p>"
         )
     return (
         f'<table width="100%" cellspacing="0" cellpadding="8" '
-        f'style="background-color:{background}; border:1px solid #e4e7ec;">'
+        f'style="background-color:{background}; border:1px solid {palette.border};">'
         f'<tr><td>'
         f'<p style="color:{color};"><b>{title}</b>（{(tr('legacy.3e3c8068bb0e')) if error else (tr('legacy.51991a5d111a'))}）</p>'
-        f'<p style="color:#344054;">{body}</p>'
+        f'<p style="color:{palette.fg};">{body}</p>'
         f"{''.join(images)}"
         f"</td></tr></table>"
     )
 
 
-def _message(role: str, text: str, *, is_error: bool = False) -> str:
+def _message(role: str, text: str, *, is_error: bool = False, palette=None) -> str:
     head = ({'user': tr('legacy.5630b886f9cd'), 'assistant': tr('legacy.9b0519a157ee'), 'tool': tr('legacy.a72ef18d9a0e'), 'error': tr('legacy.b859c7be7501'), 'compaction': tr('legacy.ed4240ed1fd4'), 'notice': tr('legacy.ab3656a956f5')}).get(role, role)
     if is_error:
         head = tr('legacy.1c9f086d2b88' ,p0=head)
-    color = "#b42318" if is_error or role == "error" else "#101828"
+    color = palette.error_fg if is_error or role == "error" else palette.fg
     return (
         f'<p style="color:{color};"><b>［{_escape(head)}］</b></p>'
-        f'<p style="color:#344054;">{_preserve(text)}</p>'
+        f'<p style="color:{palette.fg};">{_preserve(text)}</p>'
     )
 
 
-def transcript_html(entries: Any) -> str:
+def transcript_html(entries: Any, palette=None) -> str:
     """展示条目 → 富文本正文。
 
     工具条目画成卡片；其余角色是「角色 + 正文」两段。空正文也保留角色行：压缩摘要、
     失败原因之类有时正文很短，丢掉角色会看不出是谁说的。
     """
+    if palette is None:
+        from markdown.document import LIGHT
+        palette = LIGHT
     images_left = [0]
     blocks: list[str] = []
     for entry in entries or []:
@@ -140,10 +143,10 @@ def transcript_html(entries: Any) -> str:
             continue
         role = str(entry.get("role") or "")
         if role == "tool":
-            blocks.append(_tool_card(entry, images_left))
+            blocks.append(_tool_card(entry, images_left, palette))
         else:
             blocks.append(
-                _message(role, str(entry.get("text") or ""), is_error=bool(entry.get("is_error")))
+                _message(role, str(entry.get("text") or ""), is_error=bool(entry.get("is_error")), palette=palette)
             )
     return "".join(blocks) if blocks else ""
 

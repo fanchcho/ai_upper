@@ -1,0 +1,86 @@
+[
+  {
+    "locale": "en",
+    "theme": "light",
+    "foreground": "#1f1f24",
+    "background": "#ffffff",
+    "contrast": 16.409700712545998
+  },
+  {
+    "locale": "en",
+    "theme": "light",
+    "foreground": "#1f1f24",
+    "background": "#fef3f2",
+    "contrast": 15.094239661096507
+  },
+  {
+    "locale": "en",
+    "theme": "light",
+    "foreground": "#b42318",
+    "background": "#fef3f2",
+    "contrast": 6.04726982551666
+  },
+  {
+    "locale": "en",
+    "theme": "dark",
+    "foreground": "#e4e4e7",
+    "background": "#1e1e20",
+    "contrast": 13.11654316727579
+  },
+  {
+    "locale": "en",
+    "theme": "dark",
+    "foreground": "#e4e4e7",
+    "background": "#3a1d1c",
+    "contrast": 12.059016742424795
+  },
+  {
+    "locale": "en",
+    "theme": "dark",
+    "foreground": "#f2a7a0",
+    "background": "#3a1d1c",
+    "contrast": 7.87698519265599
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "light",
+    "foreground": "#1f1f24",
+    "background": "#ffffff",
+    "contrast": 16.409700712545998
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "light",
+    "foreground": "#1f1f24",
+    "background": "#fef3f2",
+    "contrast": 15.094239661096507
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "light",
+    "foreground": "#b42318",
+    "background": "#fef3f2",
+    "contrast": 6.04726982551666
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "dark",
+    "foreground": "#e4e4e7",
+    "background": "#1e1e20",
+    "contrast": 13.11654316727579
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "dark",
+    "foreground": "#e4e4e7",
+    "background": "#3a1d1c",
+    "contrast": 12.059016742424795
+  },
+  {
+    "locale": "zh-CN",
+    "theme": "dark",
+    "foreground": "#f2a7a0",
+    "background": "#3a1d1c",
+    "contrast": 7.87698519265599
+  }
+]
