@@ -21,7 +21,7 @@ ApplicationWindow {
     Dialogs.FolderDialog {
         id: workspaceDialog
         objectName: "workspaceDialog"
-        title: "Mount workspace"
+        title: I18n.t("cf.mountWorkspace")
         onAccepted: {
             window.actionNotice = shellBridge.acceptWorkspace(selectedFolder)
         }
@@ -532,7 +532,7 @@ ApplicationWindow {
                 visible: searchInput.text.length === 0
                 x: 35
                 anchors.verticalCenter: parent.verticalCenter
-                text: window.chatText.searchChats || "Search chats"
+                text: window.chatText.searchChats || I18n.t("cf.searchChats")
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
@@ -609,7 +609,7 @@ ApplicationWindow {
 
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Archived chats (" + window.archivedSessions.length + ")"
+                text: I18n.t("native.message2") + window.archivedSessions.length + ")"
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 13
@@ -709,10 +709,10 @@ ApplicationWindow {
             y: window.archiveView ? 104 : 68
             width: 283
             horizontalAlignment: Text.AlignHCenter
-            text: window.searchTerm !== "" ? (window.chatText.noMatches || "No matches")
+            text: window.searchTerm !== "" ? (window.chatText.noMatches || I18n.t("cf.searchNoResults"))
                                           : (window.archiveView
-                                             ? "No archived conversations"
-                                             : (window.chatText.noSessions || "No conversations"))
+                                             ? I18n.t("native.message15")
+                                             : (window.chatText.noSessions || I18n.t("chat.noSessions")))
             color: Theme.fgSubtle
             font.family: Theme.sansFamily
             font.pixelSize: 12
@@ -735,7 +735,7 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Archived chats (" + window.archivedSessions.length + ")"
+                text: I18n.t("native.message2") + window.archivedSessions.length + ")"
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
@@ -764,7 +764,7 @@ ApplicationWindow {
                 objectName: "selectionCount"
                 x: 12
                 anchors.verticalCenter: parent.verticalCenter
-                text: window.selectedSessions.length + " selected"
+                text: window.selectedSessions.length + I18n.t("native.message0")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
@@ -780,7 +780,7 @@ ApplicationWindow {
                 Text {
                     anchors.centerIn: parent
                     text: window.selectedSessions.length === window.listedSessions.length
-                          && window.listedSessions.length > 0 ? "Deselect all" : "Select all"
+                          && window.listedSessions.length > 0 ? I18n.t("cf.selectNone") : I18n.t("cf.selectAll")
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 12
@@ -910,7 +910,7 @@ ApplicationWindow {
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: window.chatText.quickStartTitle || "Start a conversation"
+                    text: window.chatText.quickStartTitle || I18n.t("cf.quickStartTitle")
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 20
@@ -932,7 +932,7 @@ ApplicationWindow {
                     // 高度仍锁 25.5，网格位置不动。
                     topPadding: 8
                     height: 25.5
-                    text: window.chatText.quickStartHint || "Pick a persona — tap its avatar to begin"
+                    text: window.chatText.quickStartHint || I18n.t("cf.quickStartHint")
                     color: Theme.fgMuted
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -1207,7 +1207,7 @@ ApplicationWindow {
                             Text {
                                 x: 34
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: "交付文件"
+                                text: I18n.t("chat.deliver.title")
                                 color: Theme.fg
                                 font.family: Theme.sansFamily
                                 font.pixelSize: 12
@@ -1217,7 +1217,7 @@ ApplicationWindow {
                                 anchors.right: parent.right
                                 anchors.rightMargin: 12
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: window.deliveries.length + " 个文件"
+                                text: window.deliveries.length + I18n.t("native.message1")
                                 color: Theme.fgMuted
                                 font.family: Theme.sansFamily
                                 font.pixelSize: 11
@@ -1274,7 +1274,7 @@ ApplicationWindow {
                                     y: 31
                                     width: parent.width - 68 - 100
                                     text: modelData.missing
-                                          ? "文件已不存在"
+                                          ? I18n.t("chat.deliver.missing")
                                           : ((modelData.sizeText || "") + " · " + (modelData.dir || ""))
                                     elide: Text.ElideMiddle
                                     color: Theme.fgMuted
@@ -1447,7 +1447,7 @@ ApplicationWindow {
                 width: parent.width - 26
                 height: 80
                 padding: 2
-                placeholderText: "Message " + (window.activePersonaName || "Assistant") + "…"
+                placeholderText: I18n.t("native.message13") + (window.activePersonaName || I18n.t("cf.assistant")) + "…"
                 placeholderTextColor: Theme.fgSubtle
                 color: Theme.fg
                 font.family: Theme.sansFamily
@@ -1522,7 +1522,7 @@ ApplicationWindow {
                         }
                     }
                     Text {
-                        text: window.focusRoot ? (window.focusRoot.split("/").pop() || window.focusRoot) : "Mount workspace"
+                        text: window.focusRoot ? (window.focusRoot.split("/").pop() || window.focusRoot) : I18n.t("cf.mountWorkspace")
                         width: Math.min(180, implicitWidth)
                         elide: Text.ElideMiddle
                         anchors.verticalCenter: undefined
@@ -1558,7 +1558,7 @@ ApplicationWindow {
                            : Theme.accent
                     Text {
                         anchors.centerIn: parent
-                        text: "Send"
+                        text: I18n.t("cf.send")
                         color: Theme.accentFg
                         font.family: Theme.sansFamily
                         font.pixelSize: 13
@@ -1802,21 +1802,21 @@ ApplicationWindow {
     function deliverableOpen(item) {
         var ok = shellBridge.openDeliverable(item.toolUseId, item.path)
         if (!ok)
-            notify("无法打开该文件，可在文件夹中查看")
+            notify(I18n.t("chat.deliver.openFailed"))
         return ok
     }
 
     function deliverableReveal(item) {
         var ok = shellBridge.revealDeliverable(item.toolUseId, item.path)
         if (!ok)
-            notify("无法在文件夹中显示该文件")
+            notify(I18n.t("native.message26"))
         return ok
     }
 
     function deliverableCopy(item) {
         var ok = shellBridge.copyDeliverablePath(item.path)
         if (!ok)
-            notify("无法复制该路径")
+            notify(I18n.t("native.message27"))
         return ok
     }
 
@@ -1848,7 +1848,7 @@ ApplicationWindow {
             var archiveId = window.ctxSessionId || window.activeId
             window.dismissCtxMenu()
             if (!archiveId || !shellBridge.archiveSession(String(archiveId)))
-                notify("归档对话失败")
+                notify(I18n.t("native.message24"))
         } else if (action === "delete") {
             window.pendingDeleteId = window.ctxSessionId || window.activeId
             window.pendingDeleteTitle = window.ctxTitle || window.activeTitle
@@ -1881,7 +1881,7 @@ ApplicationWindow {
     function confirmRename() {
         var id = window.renameId || window.activeId
         if (!id || !shellBridge.renameSession(String(id), String(window.renameValue))) {
-            notify("重命名对话失败")
+            notify(I18n.t("native.message31"))
             return
         }
         window.cancelRename()
@@ -1927,7 +1927,7 @@ ApplicationWindow {
         var failed = shellBridge.archiveSessions(ids, !window.archiveView)
         window.exitSelect()
         if (failed > 0)
-            notify("部分对话归档失败")
+            notify(I18n.t("native.message30"))
     }
 
     function exitSelect() {
@@ -1957,7 +1957,7 @@ ApplicationWindow {
     function confirmDelete() {
         var id = window.pendingDeleteId || window.activeId
         if (!id || !shellBridge.deleteSession(id)) {
-            notify("删除对话失败")
+            notify(I18n.t("native.message21"))
             return
         }
         window.cancelDelete()
@@ -1989,7 +1989,7 @@ ApplicationWindow {
     // 成功才更新贴片与勾选，失败显式提示，不做「点了就有反应」的假成功。
     function pickModel(providerId, modelId) {
         if (!shellBridge.setActiveModel(String(providerId), String(modelId))) {
-            notify("切换模型失败")
+            notify(I18n.t("native.message20"))
             return
         }
         window.modelLabel = findModelName(providerId, modelId)
@@ -2000,7 +2000,7 @@ ApplicationWindow {
 
     function pickEffort(level) {
         if (!shellBridge.setActiveEffort(String(level))) {
-            notify("切换思考等级失败")
+            notify(I18n.t("native.message19"))
             return
         }
         window.activeEffort = String(level)
@@ -2094,11 +2094,11 @@ ApplicationWindow {
                 spacing: 0
                 Repeater {
                     model: [
-                        { label: "New chat", icon: IconData.plus, danger: false, action: "new" },
-                        { label: "Rename", icon: IconData.pencil, danger: false, action: "rename" },
-                        { label: "Select", icon: IconData.listChecks, danger: false, action: "select" },
-                        { label: "Archive", icon: IconData.archive, danger: false, action: "archive" },
-                        { label: "Delete", icon: IconData.trash2, danger: true, action: "delete" }
+                        { label: I18n.t("cf.newChat"), icon: IconData.plus, danger: false, action: "new" },
+                        { label: I18n.t("cf.renameChat"), icon: IconData.pencil, danger: false, action: "rename" },
+                        { label: I18n.t("cf.multiSelect"), icon: IconData.listChecks, danger: false, action: "select" },
+                        { label: I18n.t("cf.archive"), icon: IconData.archive, danger: false, action: "archive" },
+                        { label: I18n.t("common.delete"), icon: IconData.trash2, danger: true, action: "delete" }
                     ]
                     delegate: Rectangle {
                         required property int index
@@ -2196,7 +2196,7 @@ ApplicationWindow {
                 wrapMode: Text.WordWrap
                 lineHeight: 22
                 lineHeightMode: Text.FixedHeight
-                text: "Delete conversation “" + (window.pendingDeleteTitle || window.activeTitle) + "”?"
+                text: I18n.t("native.message8") + (window.pendingDeleteTitle || window.activeTitle) + "”?"
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -2209,7 +2209,7 @@ ApplicationWindow {
                 wrapMode: Text.WordWrap
                 lineHeight: 21
                 lineHeightMode: Text.FixedHeight
-                text: "This conversation and all its messages will be permanently removed. This cannot be undone."
+                text: I18n.t("cf.deleteChatConfirm")
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 13
@@ -2226,7 +2226,7 @@ ApplicationWindow {
                 color: cancelMouse.containsMouse ? Theme.bgHover : "transparent"
                 Text {
                     anchors.centerIn: parent
-                    text: "Cancel"
+                    text: I18n.t("common.cancel")
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -2254,7 +2254,7 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     anchors.horizontalCenterOffset: -1
                     anchors.verticalCenterOffset: 1
-                    text: "Delete"
+                    text: I18n.t("common.delete")
                     color: "#ffffff"
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -2316,7 +2316,7 @@ ApplicationWindow {
             Text {
                 x: 20
                 y: 20
-                text: "Rename conversation"
+                text: I18n.t("cf.renameChatTitle")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -2339,7 +2339,7 @@ ApplicationWindow {
                     anchors.leftMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
                     visible: renameInput.text.length === 0
-                    text: "Leave empty to restore the default title"
+                    text: I18n.t("cf.renamePlaceholder")
                     color: Theme.fgSubtle
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -2379,7 +2379,7 @@ ApplicationWindow {
                 color: renameCancelMouse.containsMouse ? Theme.bgHover : "transparent"
                 Text {
                     anchors.centerIn: parent
-                    text: "Cancel"
+                    text: I18n.t("common.cancel")
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -2407,7 +2407,7 @@ ApplicationWindow {
                        ? Qt.lighter(Theme.accent, 1.08) : Theme.accent
                 Text {
                     anchors.centerIn: parent
-                    text: "Rename"
+                    text: I18n.t("cf.renameChat")
                     color: Theme.accentFg
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
@@ -2519,7 +2519,7 @@ ApplicationWindow {
     readonly property string activePersonaName: {
         for (var i = 0; i < sessions.length; i++)
             if (sessions[i].id === activeId)
-                return sessions[i].personaName || "Assistant"
-        return "Assistant"
+                return sessions[i].personaName || I18n.t("cf.assistant")
+        return I18n.t("cf.assistant")
     }
 }

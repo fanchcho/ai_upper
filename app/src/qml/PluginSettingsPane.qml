@@ -12,7 +12,7 @@ Item {
         var result = JSON.parse(shellBridge.pluginSettings(op, JSON.stringify(payload || {})))
         if (!result.ok) { notice = result.error; return false }
         state = result
-        notice = "Saved"
+        notice = I18n.t("models.keySaved")
         return true
     }
     function refresh() {
@@ -29,8 +29,8 @@ Item {
         anchors.fill: parent
         anchors.margins: 20
         spacing: 10
-        Text { text: pane.mode === "custom-model" ? "Custom model" : pane.mode === "mcp" ? "MCP servers" : "Personas"; color: Theme.fg; font.pixelSize: 18 }
-        Text { visible: pane.mode === "custom-model"; text: "Empty address follows the current session model."; color: Theme.fgMuted }
+        Text { text: pane.mode === "custom-model" ? I18n.t("native.message7") : pane.mode === "mcp" ? I18n.t("native.message12") : I18n.t("cf.filterRoles"); color: Theme.fg; font.pixelSize: 18 }
+        Text { visible: pane.mode === "custom-model"; text: I18n.t("native.message9"); color: Theme.fgMuted }
         ComboBox {
             id: chooser
             palette.text: Theme.fg
@@ -39,7 +39,7 @@ Item {
             palette.button: Theme.bg
             palette.highlight: Theme.accent
             palette.highlightedText: Theme.accentFg
-            contentItem: Text { text: chooser.displayText || "Select an entry"; color: Theme.fg; verticalAlignment: Text.AlignVCenter; leftPadding: 8 }
+            contentItem: Text { text: chooser.displayText || I18n.t("native.message17"); color: Theme.fg; verticalAlignment: Text.AlignVCenter; leftPadding: 8 }
             background: Rectangle { implicitHeight: 34; color: Theme.bgElevated; radius: Theme.radiusSm; border.color: Theme.borderStrong }
 
             visible: pane.mode !== "custom-model"
@@ -80,15 +80,15 @@ Item {
                 secret.text = ""
             }
         }
-        SettingsField { id: identifier; objectName: "pluginIdentifier"; visible: pane.mode !== "custom-model"; placeholderText: "ID (new ID creates an entry)"; Layout.fillWidth: true }
-        SettingsField { id: address; objectName: "pluginBaseUrl"; visible: pane.mode !== "identities"; placeholderText: "Base URL"; Layout.fillWidth: true }
-        SettingsField { id: modelName; objectName: "pluginModelName"; visible: pane.mode === "custom-model"; placeholderText: "Model name"; Layout.fillWidth: true }
-        SettingsField { id: command; visible: pane.mode === "mcp"; placeholderText: "Command (stdio)"; Layout.fillWidth: true }
-        SettingsField { id: argsInput; visible: pane.mode === "mcp"; text: "[]"; placeholderText: "Arguments (JSON array)"; Layout.fillWidth: true }
-        SettingsCheck { id: enabledBox; objectName: "pluginEnabled"; visible: pane.mode === "mcp"; text: "Enabled"; checked: true }
-        SettingsCheck { objectName: "pluginApprovalEnabled"; visible: pane.mode === "mcp"; text: "执行命令、写文件和 MCP 调用前审批"; checked: pane.state.approvalEnabled === true; onClicked: pane.invoke("saveApproval", {enabled: checked}) }
-        Text { id: keyStatus; visible: pane.mode !== "identities"; text: (pane.mode === "mcp" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? "已设置" : "未设置"; color: Theme.fgMuted }
-        SettingsField { id: secret; objectName: "pluginSecret"; visible: pane.mode !== "identities"; placeholderText: "New API key / credential (empty keeps current)"; echoMode: TextInput.Password; Layout.fillWidth: true }
+        SettingsField { id: identifier; objectName: "pluginIdentifier"; visible: pane.mode !== "custom-model"; placeholderText: I18n.t("native.message10"); Layout.fillWidth: true }
+        SettingsField { id: address; objectName: "pluginBaseUrl"; visible: pane.mode !== "identities"; placeholderText: I18n.t("native.message4"); Layout.fillWidth: true }
+        SettingsField { id: modelName; objectName: "pluginModelName"; visible: pane.mode === "custom-model"; placeholderText: I18n.t("models.displayName"); Layout.fillWidth: true }
+        SettingsField { id: command; visible: pane.mode === "mcp"; placeholderText: I18n.t("native.message6"); Layout.fillWidth: true }
+        SettingsField { id: argsInput; visible: pane.mode === "mcp"; text: "[]"; placeholderText: I18n.t("native.message3"); Layout.fillWidth: true }
+        SettingsCheck { id: enabledBox; objectName: "pluginEnabled"; visible: pane.mode === "mcp"; text: I18n.t("models.enabled"); checked: true }
+        SettingsCheck { objectName: "pluginApprovalEnabled"; visible: pane.mode === "mcp"; text: I18n.t("native.message25"); checked: pane.state.approvalEnabled === true; onClicked: pane.invoke("saveApproval", {enabled: checked}) }
+        Text { id: keyStatus; visible: pane.mode !== "identities"; text: (pane.mode === "mcp" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? I18n.t("native.message23") : I18n.t("native.message28"); color: Theme.fgMuted }
+        SettingsField { id: secret; objectName: "pluginSecret"; visible: pane.mode !== "identities"; placeholderText: I18n.t("native.message14"); echoMode: TextInput.Password; Layout.fillWidth: true }
         ScrollView {
             visible: pane.mode === "identities"
             Layout.fillWidth: true
@@ -102,7 +102,7 @@ Item {
                 selectionColor: Theme.accent
                 selectedTextColor: Theme.accentFg
                 wrapMode: TextEdit.Wrap
-                placeholderText: "Persona Markdown"
+                placeholderText: I18n.t("native.message16")
                 background: Rectangle { color: Theme.bgElevated; border.color: Theme.borderStrong; radius: Theme.radiusSm }
             }
         }
@@ -110,7 +110,7 @@ Item {
             SettingsButton {
                 primary: true
                 objectName: "pluginSave"
-                text: "Save"
+                text: I18n.t("cf.save")
                 onClicked: {
                     var value = {key: secret.text.length ? secret.text : undefined}
                     var op
@@ -118,20 +118,20 @@ Item {
                     else if (pane.mode === "mcp") {
                         op = "saveServer"; value.id = identifier.text
                         try { value.config = {url: address.text, command: command.text, args: JSON.parse(argsInput.text), enabled: enabledBox.checked} }
-                        catch (e) { pane.notice = "Invalid JSON arguments"; return }
+                        catch (e) { pane.notice = I18n.t("native.message11"); return }
                     } else { op = "saveIdentity"; value = {id: identifier.text, text: body.text} }
                     if (pane.invoke(op, value)) secret.text = ""
                 }
             }
-            SettingsButton { visible: pane.mode === "mcp"; destructive: true; text: "Delete"; onClicked: pane.invoke("deleteServer", {id: identifier.text}) }
+            SettingsButton { visible: pane.mode === "mcp"; destructive: true; text: I18n.t("common.delete"); onClicked: pane.invoke("deleteServer", {id: identifier.text}) }
             SettingsButton {
                 visible: pane.mode !== "identities"
-                text: "Clear credential"
+                text: I18n.t("native.message5")
                 onClicked: {
                     if (pane.mode === "custom-model") pane.invoke("saveModel", {baseUrl: address.text, model: modelName.text, key: ""})
                     else {
                         try { pane.invoke("saveServer", {id: identifier.text, config: {url: address.text, command: command.text, args: JSON.parse(argsInput.text), enabled: enabledBox.checked}, key: ""}) }
-                        catch(e) { pane.notice = "Invalid JSON arguments" }
+                        catch(e) { pane.notice = I18n.t("native.message11") }
                     }
                     secret.text = ""
                 }

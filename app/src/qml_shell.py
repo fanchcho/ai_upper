@@ -311,6 +311,7 @@ class ShellBridge(QtCore.QObject):
     # 为什么不写 Theme 单例的 property：`QQmlApplicationEngine.singletonInstance()`
     # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
     # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
+    localeChanged = QtCore.Signal()
     darkModeChanged = QtCore.Signal()
     themeChoiceChanged = QtCore.Signal()
     _preparedReady = QtCore.Signal()
@@ -416,7 +417,8 @@ class ShellBridge(QtCore.QObject):
             return json.dumps({"ok": True, "model": service.custom(), "servers": service.servers(), "approvalEnabled": service.data().get('approvalEnabled') is True,
                                "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
         except (ValueError, OSError, KeyError) as exc:
-            return json.dumps({"ok": False, "error": str(exc)})
+            from native_i18n import translate_error
+            return json.dumps({"ok": False, "error": translate_error(self.locale, str(exc))})
 
     @QtCore.Slot(result='QVariantList')
     def pendingInteractions(self):
@@ -457,7 +459,16 @@ class ShellBridge(QtCore.QObject):
         legacy = config.get("language")
         if legacy in ("zh", "en"):
             return str(legacy)
-        return "en"
+        return "zh" if QtCore.QLocale.system().name().lower().startswith("zh") else "en"
+
+    @QtCore.Property(str, notify=localeChanged)
+    def locale(self):
+        return "zh-CN" if self.language() == "zh" else "en"
+
+    @QtCore.Slot(str, result=str)
+    def translate(self, key):
+        from native_i18n import translate
+        return translate(self.locale, key)
 
     @QtCore.Slot(result="QVariantMap")
     def labels(self) -> Dict[str, str]:
@@ -540,10 +551,14 @@ class ShellBridge(QtCore.QObject):
     @QtCore.Slot(str, result=bool)
     def setLanguage(self, value: str) -> bool:
         """写 `locale`（原版键名）。zh → zh-CN，en → en。"""
+        if value not in ("zh", "zh-CN", "en"):
+            return False
         target = "zh-CN" if value in ("zh", "zh-CN") else "en"
         if not self._write_config({"locale": target}):
             return False
+        self.localeChanged.emit()
         self._publish()
+        self._render()
         return True
 
     @QtCore.Slot(str, result=bool)
@@ -1209,9 +1224,9 @@ class ShellBridge(QtCore.QObject):
     @QtCore.Slot(result=str)
     def beginWorkspace(self) -> str:
         if self._mount_session:
-            return "目录选择框已打开"
+            return self.translate('native.message32')
         if not self._active or self._session() is None:
-            return "请先创建或选择会话，再挂载工作区"
+            return self.translate('native.message33')
         self._mount_session = self._active
         return ""
 
@@ -1226,22 +1241,22 @@ class ShellBridge(QtCore.QObject):
         session_id = self._mount_session
         self._mount_session = ""
         if not session_id:
-            return "没有待确认的目录选择"
+            return self.translate('native.message34')
         if session_id != self._active:
-            return "会话已切换，请重新选择工作区"
+            return self.translate('native.message35')
         try:
             if not url.isLocalFile() or url.host():
-                return "请选择本地目录"
+                return self.translate('native.message36')
             root = Path(url.toLocalFile()).resolve(strict=True)
             if not root.is_dir():
-                return "工作区必须是目录"
+                return self.translate('native.message37')
             if not os.access(root, os.R_OK | os.X_OK):
-                return "无权访问该目录"
+                return self.translate('native.message38')
             if not self._store.set_focus(session_id, str(root)):
-                return "会话已不存在，请重新选择会话"
+                return self.translate('native.message39')
             self._host.guard.trust_root(root)
         except (OSError, RuntimeError, ValueError) as exc:
-            return "无法挂载目录：" + str(exc)
+            return self.translate('native.message40') + str(exc)
         self._publish()
         return ""
 
@@ -1346,15 +1361,15 @@ class ShellBridge(QtCore.QObject):
 
         paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self._dialog_parent(),
-            "选择附加文件",
+            self.translate("native.pickFiles"),
             "",
-            "支持的文件 (*.png *.jpg *.jpeg *.gif *.webp *.pdf *.docx *.xlsx *.pptx *.doc "
+            self.translate("native.supportedFiles") + " (*.png *.jpg *.jpeg *.gif *.webp *.pdf *.docx *.xlsx *.pptx *.doc "
             "*.xls *.ppt *.txt *.md *.markdown *.json *.yaml *.yml *.toml *.csv *.log "
             "*.js *.jsx *.ts *.tsx *.vue *.svelte *.html *.css *.scss *.xml *.py *.go "
             "*.rs *.java *.kt *.c *.h *.cpp *.cs *.php *.sh *.sql);;"
-            "图片 (*.png *.jpg *.jpeg *.gif *.webp);;"
+            + self.translate("native.images") + " (*.png *.jpg *.jpeg *.gif *.webp);;"
             "PDF (*.pdf);;"
-            "所有文件 (*)",
+            + self.translate("native.allFiles") + " (*)",
         )
         return [str(path) for path in paths]
 
@@ -1422,13 +1437,13 @@ class ShellBridge(QtCore.QObject):
     # ── 渲染与属性 ────────────────────────────────────────────────────────
     def _markdown_base(self) -> str:
         session = self._store.load_session(self._active) if self._active else None
-        return transcript_markdown(session.messages) if session is not None else ""
+        return transcript_markdown(session.messages, lang=self.language()) if session is not None else ""
 
     def _markdown(self) -> str:
         base = self._markdown_base()
         if self._turn is not None:
             # 回合中的「基础正文」在发送时已经取过；落盘会追加本轮消息，不能再拼一遍。
-            return self._turn.markdown()
+            return self._turn.markdown(lang=self.language())
         return base
 
     def _prepare_render(self) -> None:
@@ -1620,7 +1635,7 @@ class ShellBridge(QtCore.QObject):
         )
         busy = bool(active) and self._host.is_busy(active)
         window.setProperty("busy", busy)
-        window.setProperty("status", "输出中…" if busy else "就绪")
+        window.setProperty("status", self.translate("native.streaming") if busy else self.translate("native.ready"))
         # 附件贴片与交付卡：每次重绘都按当前会话现算（落盘为唯一真相源）。
         session = self._session() if active else None
         window.setProperty("focusRoot", str(session.focusRoot or "") if session else "")

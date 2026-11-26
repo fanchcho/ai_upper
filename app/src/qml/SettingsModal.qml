@@ -21,7 +21,7 @@ Item {
     property string providerDeleteName: ""
     // 确认卡片的按钮/正文文案也取自同一份投影（`mvvm.services.settings_models`），
     // 卡片挂在 root 上，因此在这里取一份 labels，不在 QML 写字面量。
-    readonly property var modelsLabels: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+    readonly property var modelsLabels: shellBridge ? (I18n.locale, shellBridge.modelsPaneLabels()) : ({})
     signal close()
     signal paneRequested(string name)
 
@@ -66,7 +66,7 @@ Item {
             Text {
                 x: 16
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Settings"
+                text: I18n.t("cf.settings")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 14
@@ -125,13 +125,13 @@ Item {
                         //   general=Cog、models=Brain、extensions=Puzzle、about=Info（size=15）。
                         // QML 旧版把前三个错写成 settings2 / blocks / cog，字形与语义都不对。
                         model: [
-                            { key: "general", label: "General", icon: IconData.cog },
-                            { key: "models", label: "Models", icon: IconData.brain },
-                            { key: "extensions", label: "Extensions", icon: IconData.puzzle },
-                            { key: "about", label: "About", icon: IconData.info },
-                            { key: "custom-model", label: "Custom model", icon: IconData.brain },
+                            { key: "general", label: I18n.t("settings.general"), icon: IconData.cog },
+                            { key: "models", label: I18n.t("settings.models"), icon: IconData.brain },
+                            { key: "extensions", label: I18n.t("extensions.title"), icon: IconData.puzzle },
+                            { key: "about", label: I18n.t("settings.about"), icon: IconData.info },
+                            { key: "custom-model", label: I18n.t("native.message7"), icon: IconData.brain },
                             { key: "mcp", label: "MCP", icon: IconData.puzzle },
-                            { key: "identities", label: "Personas", icon: IconData.users }
+                            { key: "identities", label: I18n.t("cf.filterRoles"), icon: IconData.users }
                         ]
                         delegate: Rectangle {
                             required property var modelData
@@ -294,7 +294,7 @@ Item {
             Text {
                 x: 20
                 y: 18
-                text: "General"
+                text: I18n.t("settings.general")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -308,23 +308,24 @@ Item {
                 SetRow {
                     width: parent.width
                     rowHeight: 57
-                    label: "Language"
+                    objectName: "settingsLanguageChoice"
+                    label: I18n.t("settings.language")
                     options: ["简体中文", "English"]
-                    current: shellBridge ? shellBridge.language() === "zh" ? 0 : 1 : 1
+                    current: shellBridge ? (I18n.locale, shellBridge.language()) === "zh" ? 0 : 1 : 1
                     onPicked: function (i) { shellBridge.setLanguage(i === 0 ? "zh" : "en") }
                 }
                 SetRow {
                     width: parent.width
                     objectName: "settingsThemeChoice"
-                    label: "Theme"
-                    options: ["System", "Light", "Dark"]
+                    label: I18n.t("settings.theme")
+                    options: [I18n.t("settings.themeSystem"), I18n.t("settings.themeLight"), I18n.t("settings.themeDark")]
                     current: shellBridge ? ["system", "light", "dark"].indexOf(shellBridge.themeChoice) : 1
                     onPicked: function (i) { shellBridge.setTheme(["system", "light", "dark"][i]) }
                 }
                 SetRow {
                     width: parent.width
-                    label: "Text size"
-                    options: ["Small", "Default", "Large", "Extra large"]
+                    label: I18n.t("settings.chatFontSize")
+                    options: [I18n.t("settings.chatFontSm"), I18n.t("settings.chatFontMd"), I18n.t("settings.chatFontLg"), I18n.t("settings.chatFontXl")]
                     current: shellBridge ? shellBridge.textSizeIndex() : 1
                     onPicked: function (i) { shellBridge.setTextSize(i) }
                 }
@@ -349,8 +350,8 @@ Item {
         id: modelsPane
         Item {
             id: modPane
-            property var rows: shellBridge ? shellBridge.modelRows() : []
-            property var text: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+            property var rows: shellBridge ? (I18n.locale, shellBridge.modelRows()) : []
+            property var text: shellBridge ? (I18n.locale, shellBridge.modelsPaneLabels()) : ({})
             // 列表 / 详情 / 高级设置三态；page=settings-models-* 时由 Main.qml 指定初始态。
             property string view: "list"
             property string selectedId: ""
@@ -378,8 +379,13 @@ Item {
                 function onModelsViewChanged() { modPane.applyInitialView() }
             }
 
+            Connections {
+                target: shellBridge
+                function onLocaleChanged() { modPane.refreshRows(); modPane.reloadDetail() }
+            }
+
             function refreshRows() {
-                rows = shellBridge ? shellBridge.modelRows() : []
+                rows = shellBridge ? (I18n.locale, shellBridge.modelRows()) : []
             }
 
             function openProvider(providerId) {
@@ -535,7 +541,7 @@ Item {
                         anchors.right: addBtn.left
                         anchors.rightMargin: 8
                         height: 28
-                        text: "自定义模型网络"
+                        text: I18n.t("native.message29")
                         onClicked: root.pane = "custom-model"
                     }
                 }
@@ -1275,13 +1281,13 @@ Item {
             Component.onCompleted: refresh()
 
             function refresh() {
-                rows = shellBridge ? shellBridge.extensionRows() : []
+                rows = shellBridge ? (I18n.locale, shellBridge.extensionRows()) : []
             }
 
             Text {
                 x: 20
                 y: 18
-                text: "Extensions"
+                text: I18n.t("extensions.title")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -1295,7 +1301,7 @@ Item {
                 y: 55
                 width: parent.width - 40
                 horizontalAlignment: Text.AlignHCenter
-                text: shellBridge ? shellBridge.labels().extEmpty : ""
+                text: shellBridge ? (I18n.locale, shellBridge.labels()).extEmpty : ""
                 color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
@@ -1440,7 +1446,7 @@ Item {
             id: aboutPaneRoot
             objectName: "aboutPaneRoot"
             // 文案与状态都从 Python 投影取；QML 只画。
-            property var labels: shellBridge ? shellBridge.modelsPaneLabels() : ({})
+            property var labels: shellBridge ? (I18n.locale, shellBridge.modelsPaneLabels()) : ({})
             property var updateState: ({phase: "idle"})
             property string updatePhase: "idle"
             property bool checking: updatePhase === "checking"
@@ -1474,7 +1480,7 @@ Item {
                 x: 20
                 // CSS h2 的 22.5px 行盒比 Qt 字形盒多出的 leading，实测基线需补 2px。
                 y: 18
-                text: "About"
+                text: I18n.t("settings.about")
                 color: Theme.fg
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
@@ -1508,7 +1514,7 @@ Item {
                 Item { width: parent.width; height: 6 }
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: (labels.version || "Version") + " " + root.appVersion
+                    text: (labels.version || I18n.t("settings.version")) + " " + root.appVersion
                     color: Theme.fgMuted
                     font.family: Theme.sansFamily
                     font.pixelSize: 12
@@ -1561,8 +1567,8 @@ Item {
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: aboutPaneRoot.checking
-                                      ? (aboutPaneRoot.labels.checkingUpdates || "Checking…")
-                                      : (aboutPaneRoot.labels.checkForUpdates || "Check for updates")
+                                      ? (aboutPaneRoot.labels.checkingUpdates || I18n.t("settings.update.checking"))
+                                      : (aboutPaneRoot.labels.checkForUpdates || I18n.t("settings.update.check"))
                                 color: Theme.fg
                                 font.family: Theme.sansFamily
                                 font.pixelSize: 12

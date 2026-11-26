@@ -41,10 +41,10 @@ Rectangle {
             model: prompt.request ? prompt.request.choices : []
             Button { required property string modelData; text: modelData; Layout.fillWidth: true; onClicked: prompt.respond("answered", modelData) }
         }
-        TextField { id: answer; objectName: "interactionAnswer"; visible: prompt.request && prompt.request.kind === "question"; placeholderText: "回答"; Layout.fillWidth: true }
+        TextField { id: answer; objectName: "interactionAnswer"; visible: prompt.request && prompt.request.kind === "question"; placeholderText: I18n.t("native.message22"); Layout.fillWidth: true }
         RowLayout {
-            Button { objectName: "interactionAccept"; text: prompt.request && prompt.request.kind === "approval" ? "允许" : "提交"; onClicked: prompt.respond(prompt.request.kind === "approval" ? "approved" : "answered", answer.text) }
-            Button { objectName: "interactionReject"; text: prompt.request && prompt.request.kind === "approval" ? "拒绝" : "关闭"; onClicked: prompt.respond(prompt.request.kind === "approval" ? "denied" : "dismissed", "") }
+            Button { objectName: "interactionAccept"; text: prompt.request && prompt.request.kind === "approval" ? I18n.t("native.message18") : I18n.t("native.submit"); onClicked: prompt.respond(prompt.request.kind === "approval" ? "approved" : "answered", answer.text) }
+            Button { objectName: "interactionReject"; text: prompt.request && prompt.request.kind === "approval" ? I18n.t("cf.reject") : I18n.t("cf.close"); onClicked: prompt.respond(prompt.request.kind === "approval" ? "denied" : "dismissed", "") }
         }
     }
 }

@@ -142,7 +142,7 @@ def session_row(
     title = str(getattr(meta, "title", "") or "").strip()
     preview = preview_text(session) if session is not None else ""
     if not title:
-        title = preview or "未命名会话"
+        title = preview or ("Untitled conversation" if lang == "en" else "未命名会话")
     return {
         "id": str(getattr(meta, "id", "")),
         "title": title,
@@ -171,11 +171,13 @@ def session_rows(
     ]
 
 
-def _role_heading(role: str) -> str:
+def _role_heading(role: str, lang: str = "zh") -> str:
+    if lang == "en":
+        return "## You" if role == "user" else "## Assistant"
     return USER_HEADING if role == "user" else ASSISTANT_HEADING
 
 
-def _attachment_lines(parts: List[Any], msg_index: int) -> List[str]:
+def _attachment_lines(parts: List[Any], msg_index: int, lang: str = "zh") -> List[str]:
     """用户消息里的附件 → 正文行（图片内联成 Markdown 图，其余列一行「附件：名 · 体积」）。
 
     图片直接内联 `data:` URI：`markdown.body` 的 image_resolver 会解码成 QTextDocument
@@ -183,30 +185,33 @@ def _attachment_lines(parts: List[Any], msg_index: int) -> List[str]:
     位置也与原版一致（附件排在提问正文之前）。非图片附件没有可画的内容，按原版贴片的
     信息量给一行文字（名称 + 真实体积），并且**不把正文塞进来**。
     """
+    from native_i18n import translate
+    def t(key):
+        return translate("zh-CN" if lang == "zh" else "en", "native." + key)
     lines: List[str] = []
     for part in parts:
         kind = str(getattr(part, "type", "") or "")
         if kind == "image":
             data = str(getattr(part, "data", "") or "")
-            name = str(getattr(part, "name", "") or "图片")
+            name = str(getattr(part, "name", "") or t('image'))
             mime = str(getattr(part, "mediaType", "") or "image/png")
             if data:
                 lines.append("![%s](data:%s;base64,%s)" % (name, mime, data))
             else:
-                lines.append("- 附件图片：%s（数据缺失）" % name)
+                lines.append(t('missingImage') % name)
         elif kind == "document":
-            name = str(getattr(part, "name", "") or "文档")
+            name = str(getattr(part, "name", "") or t('document'))
             # 体积是 base64 解码后的字节数（与贴片同一算法），不是 base64 串长度。
             size = base64_bytes(str(getattr(part, "data", "") or ""))
-            lines.append("- 附件文档：%s（%s）" % (name, format_bytes(size)))
+            lines.append(t('attachedDocument') % (name, format_bytes(size)))
     for chip in attachment_chips(parts, msg_index):
         if chip.get("kind") in ("image", "document"):
             continue  # 上面已按内容块输出
         label = {
-            "text": "附件文件",
-            "folder": "附件文件夹",
-            "file": "附件文件路径",
-        }.get(str(chip.get("kind")), "附件")
+            "text": t('attachedText'),
+            "folder": t('attachedFolder'),
+            "file": t('attachedPath'),
+        }.get(str(chip.get("kind")), t('attachment'))
         size = format_bytes(chip.get("size")) if chip.get("size") is not None else ""
         suffix = "（%s）" % size if size else ""
         lines.append("- %s：%s%s" % (label, chip.get("name", ""), suffix))
@@ -217,6 +222,7 @@ def transcript_markdown(
     messages: List[Any],
     pending_user: Optional[str] = None,
     streaming: Optional[str] = None,
+    lang: str = "zh",
 ) -> str:
     """落盘消息（+ 本轮进行中的用户消息与流式增量）→ 一份正文 Markdown。
 
@@ -233,18 +239,18 @@ def transcript_markdown(
         attachment_lines: List[str] = []
         content = getattr(message, "content", None)
         if str(getattr(message, "role", "")) == "user" and not isinstance(content, str):
-            attachment_lines = _attachment_lines(list(content or []), msg_index)
+            attachment_lines = _attachment_lines(list(content or []), msg_index, lang)
         if not text.strip() and not attachment_lines:
             continue
         pieces = list(attachment_lines)
         if text.strip():
             pieces.append(text.strip())
-        blocks.append("%s\n\n%s" % (_role_heading(str(getattr(message, "role", ""))), "\n\n".join(pieces)))
+        blocks.append("%s\n\n%s" % (_role_heading(str(getattr(message, "role", "")), lang), "\n\n".join(pieces)))
     if pending_user and pending_user.strip():
-        blocks.append("%s\n\n%s" % (USER_HEADING, pending_user.strip()))
+        blocks.append("%s\n\n%s" % (_role_heading("user", lang), pending_user.strip()))
     if streaming is not None:
         # 空增量也起标题：界面上先出现「助手」，随后正文一段段长出来。
-        blocks.append(("%s\n\n%s" % (ASSISTANT_HEADING, (streaming or "").strip())).rstrip())
+        blocks.append(("%s\n\n%s" % (_role_heading("assistant", lang), (streaming or "").strip())).rstrip())
     return "\n\n".join(blocks)
 
 
@@ -351,9 +357,9 @@ class TurnState:
             return True
         return False
 
-    def markdown(self) -> str:
+    def markdown(self, lang: str = "zh") -> str:
         """整篇正文：落盘历史（已是 Markdown）+ 本轮用户消息 + 已收到的增量。"""
-        tail = transcript_markdown([], pending_user=self.pending_user, streaming=self.stream)
+        tail = transcript_markdown([], pending_user=self.pending_user, streaming=self.stream, lang=lang)
         pieces = [self.base] if self.base.strip() else []
         if tail.strip():
             pieces.append(tail)

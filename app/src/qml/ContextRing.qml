@@ -85,13 +85,13 @@ Item {
     readonly property string usageText: {
         if (!available)
             return ""
-        var text = label("usage", "{used}/{window} ({pct})")
+        var text = label("usage", I18n.t("chat.panel.usage"))
             .replace("{used}", approxTokens(u.used || 0))
             .replace("{window}", formatTokens(u.window || 0))
             .replace("{pct}", usagePercent())
-        return u.estimated ? label("approx", "~{n}").replace("{n}", text) : text
+        return u.estimated ? label("approx", I18n.t("chat.panel.approx")).replace("{n}", text) : text
     }
-    readonly property string titleText: label("context", "Context") + " " + usageText
+    readonly property string titleText: label("context", I18n.t("chat.panel.context")) + " " + usageText
     readonly property real tickRatio: (u.trigger !== undefined && u.trigger !== null && u.window > 0)
                                       ? Math.min(1, u.trigger / u.window) : -1
 
@@ -174,7 +174,7 @@ Item {
             id: cardTitle
             x: 13
             y: 11
-            text: root.label("context", "Context")
+            text: root.label("context", I18n.t("chat.panel.context"))
             color: Theme.fgMuted
             font.family: Theme.sansFamily
             font.pixelSize: 12
