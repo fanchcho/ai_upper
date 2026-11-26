@@ -342,6 +342,12 @@ class ShellBridge(QtCore.QObject):
         self._events: "queue.Queue[Dict[str, Any]]" = queue.Queue()
         self._persona_names: Dict[str, str] = {}
         self._active = ""
+        self._mount_session = ""
+        # Persisted, user-selected roots retain trust across application restarts.
+        for meta in store.list_sessions():
+            root = getattr(meta, "focusRoot", None)
+            if root and Path(root).is_dir() and str(Path(root).resolve()) == root:
+                self._host.guard.trust_root(root)
         self._last_interactions = []
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
@@ -1187,6 +1193,45 @@ class ShellBridge(QtCore.QObject):
         return True
 
     # ── 附件与交付卡（宿主与服务共用同一套判定）────────────────────────────
+    @QtCore.Slot(result=str)
+    def beginWorkspace(self) -> str:
+        if self._mount_session:
+            return "目录选择框已打开"
+        if not self._active or self._session() is None:
+            return "请先创建或选择会话，再挂载工作区"
+        self._mount_session = self._active
+        return ""
+
+    @QtCore.Slot()
+    def cancelWorkspace(self) -> None:
+        self._mount_session = ""
+
+    @QtCore.Slot(QtCore.QUrl, result=str)
+    def acceptWorkspace(self, url: Any) -> str:
+        # Only a pending user picker may grant a new root; never trust a raw
+        # focusRoot supplied by a message/tool. Bind to the opening session.
+        session_id = self._mount_session
+        self._mount_session = ""
+        if not session_id:
+            return "没有待确认的目录选择"
+        if session_id != self._active:
+            return "会话已切换，请重新选择工作区"
+        try:
+            if not url.isLocalFile() or url.host():
+                return "请选择本地目录"
+            root = Path(url.toLocalFile()).resolve(strict=True)
+            if not root.is_dir():
+                return "工作区必须是目录"
+            if not os.access(root, os.R_OK | os.X_OK):
+                return "无权访问该目录"
+            if not self._store.set_focus(session_id, str(root)):
+                return "会话已不存在，请重新选择会话"
+            self._host.guard.trust_root(root)
+        except (OSError, RuntimeError, ValueError) as exc:
+            return "无法挂载目录：" + str(exc)
+        self._publish()
+        return ""
+
     @QtCore.Slot(result="QVariantList")
     def pickAttachments(self) -> List[str]:
         """回形针：真弹 `QFileDialog`，选中的路径登记白名单后回给 QML 待发列表。
@@ -1565,6 +1610,7 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("status", "输出中…" if busy else "就绪")
         # 附件贴片与交付卡：每次重绘都按当前会话现算（落盘为唯一真相源）。
         session = self._session() if active else None
+        window.setProperty("focusRoot", str(session.focusRoot or "") if session else "")
         window.setProperty("attachments", attachment_rows(session))
         window.setProperty("deliveries", delivery_rows(session))
         # 输入区两个贴片：文案与勾选都按「本对话生效 → 最近使用」现算，不缓存成另一份真相。

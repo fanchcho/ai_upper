@@ -12,10 +12,22 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQuick.Window
+import QtQuick.Dialogs as Dialogs
 import "."
 
 ApplicationWindow {
     id: window
+    property string focusRoot: ""
+    Dialogs.FolderDialog {
+        id: workspaceDialog
+        objectName: "workspaceDialog"
+        title: "Mount workspace"
+        onAccepted: {
+            window.actionNotice = shellBridge.acceptWorkspace(selectedFolder)
+        }
+        onRejected: shellBridge.cancelWorkspace()
+    }
+
     visible: true
     property bool macChrome: Qt.platform.os === "osx"
     readonly property int railWidth: macChrome ? 72 : Theme.railWidth
@@ -1494,6 +1506,7 @@ ApplicationWindow {
                 // 挂载工作区 chip
                 Row {
                     id: mountChip
+                    objectName: "mountChip"
                     x: 34
                     y: (parent.height - 30) / 2
                     height: 30
@@ -1509,7 +1522,9 @@ ApplicationWindow {
                         }
                     }
                     Text {
-                        text: "Mount workspace"
+                        text: window.focusRoot ? (window.focusRoot.split("/").pop() || window.focusRoot) : "Mount workspace"
+                        width: Math.min(180, implicitWidth)
+                        elide: Text.ElideMiddle
                         anchors.verticalCenter: undefined
                         y: (30 - height) / 2
                         color: Theme.fgSubtle
@@ -1517,6 +1532,16 @@ ApplicationWindow {
                         font.pixelSize: 12
                         rightPadding: 8
                         leftPadding: 9
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: mountChip
+                    onClicked: {
+                        if (workspaceDialog.visible) return
+                        var error = shellBridge.beginWorkspace()
+                        window.actionNotice = error
+                        if (!error) workspaceDialog.open()
                     }
                 }
 

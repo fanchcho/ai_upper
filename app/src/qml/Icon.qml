@@ -28,6 +28,9 @@ Item {
     function part(i) { return i < parts.length ? parts[i] : "" }
 
     Shape {
+        // Contain software Shape painting before ancestor Flickable clipping.
+        // Keep the layer inside Icon so it cannot add siblings to a Row.
+        layer.enabled: true
         width: 24
         height: 24
         scale: icon.size / 24
