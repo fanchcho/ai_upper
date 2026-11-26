@@ -1063,7 +1063,9 @@ class ShellBridge(QtCore.QObject):
             cursor = QtGui.QTextCursor(block)
             fmt = block.blockFormat()
             level = fmt.headingLevel()
-            fmt.setTopMargin(0 if block == document.begin() else (8 if previous_heading else 12))
+            # Qt HTML line metrics add 2px after the heading; compensate here,
+            # without moving the QML text container (see extensions-calibration audit).
+            fmt.setTopMargin(0 if block == document.begin() else (6 if previous_heading else 12))
             fmt.setBottomMargin(0)
             fmt.setLineHeight(21.125 if level else 20.625, QtGui.QTextBlockFormat.FixedHeight.value)
             fmt.setHeadingLevel(0)

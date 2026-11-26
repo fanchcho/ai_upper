@@ -11,6 +11,15 @@ Item {
         color: Theme.fgSubtle; font.pixelSize: 11; font.bold: true
         font.capitalization: Font.AllUppercase; topPadding: 4
     }
+    // app.css .ext-field: label line box 16.5 + margin 6, field margin 16.
+    component McpField: Item {
+        property string label
+        property real afterControl: 0
+        default property alias controls: body.data
+        width: parent.width; height: 22.5 + body.height + afterControl + 16
+        FieldLabel { text: parent.label; width: parent.width; height: 16.5; topPadding: 0; verticalAlignment: Text.AlignVCenter }
+        Column { id: body; y: 22.5; width: parent.width }
+    }
     component ExtensionScrollBar: ScrollBar {
         id: bar
         visible: size < 1
@@ -82,8 +91,8 @@ Item {
         Binding { target: scroll.contentItem; property: "boundsBehavior"; value: Flickable.StopAtBounds }
         Column {
             id: fields; y: root.item.kind === "mcp" ? 60 : 0
-            width: scroll.availableWidth; spacing: 12
-            Item { width: parent.width; height: 42
+            width: scroll.availableWidth; spacing: root.item.kind === "mcp" ? 0 : 12
+            Item { width: parent.width; height: root.item.kind === "mcp" ? 61 : 42
                 Icon { y: 6; name: root.item.kind === "mcp" ? "M12 22v-5M9 8V2M15 8V2M7 8h10v4a5 5 0 0 1-10 0V8Z" : IconData.puzzle; size: 18; color: Theme.accent }
                 Text { x: 34; y: 6; text: root.item.name || ""; color: Theme.fg; font.pixelSize: 14; font.family: Theme.monoFamily; font.bold: true }
                 Row { visible: root.item.kind === "mcp"; anchors.right: parent.right; y: 6; spacing: 8
@@ -96,12 +105,15 @@ Item {
                         MouseArea { anchors.fill: parent; onClicked: root.call("retry", {}) }
                     }
                 }
-                Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.border }
+                Rectangle { y: 40; width: parent.width; height: 1; color: Theme.border }
             }
             Text { visible: root.item.enabled && !!root.item.lastError; text: root.item.lastError || ""; width: parent.width; wrapMode: Text.Wrap; color: Theme.warning }
             Text { visible: root.error.length > 0; text: root.error; color: Theme.danger; width: parent.width; wrapMode: Text.Wrap }
-            FieldLabel { text: I18n.t("extensions.roles") }
+            Item {
+                width: parent.width; height: root.item.kind === "mcp" ? 70.5 : 61
+                FieldLabel { text: I18n.t("extensions.roles"); height: root.item.kind === "mcp" ? 16.5 : 17; topPadding: root.item.kind === "mcp" ? 0 : 4; verticalAlignment: Text.AlignVCenter }
             SettingsButton {
+                y: root.item.kind === "mcp" ? 22.5 : 29
                 width: parent.width; height: 32
                 contentItem: Row { spacing: 8
                     Icon { visible: !root.item.roles || !root.item.roles.length; name: IconData.users; size: 20; color: Theme.accent }
@@ -140,10 +152,11 @@ Item {
                     }
                 }
             }
+            }
             FieldLabel { visible: root.item.kind === "skill"; text: I18n.t("extensions.instructions") }
             Column {
-                visible: root.item.kind === "mcp"; width: parent.width; spacing: 10
-                FieldLabel { text: I18n.t("extensions.transport") }
+                visible: root.item.kind === "mcp"; width: parent.width; spacing: 0
+                McpField { label: I18n.t("extensions.transport")
                 ComboBox {
                     id: transportChoice
                     width: parent.width; height: 32; leftPadding: 12; rightPadding: 28
@@ -159,13 +172,16 @@ Item {
                     currentIndex: Math.max(0, model.indexOf(root.item.transport || "stdio"))
                     onActivated: root.save("transport", currentText)
                 }
-                FieldLabel { text: I18n.t(root.item.transport === "stdio" ? "extensions.command" : "extensions.url") }
+                }
+                McpField { label: I18n.t(root.item.transport === "stdio" ? "extensions.command" : "extensions.url")
                 SettingsField {
                     width: parent.width; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12
                     text: root.item.transport === "stdio" ? (root.item.command || "") : (root.item.url || "")
                     onEditingFinished: root.save(root.item.transport === "stdio" ? "command" : "url", text)
                 }
-                FieldLabel { visible: root.item.transport === "stdio"; text: I18n.t("extensions.args") }
+                }
+                // The inline HTML textarea reserves 5.5px below its baseline.
+                McpField { visible: root.item.transport === "stdio"; label: I18n.t("extensions.args"); afterControl: 5.5
                 TextArea {
                     visible: root.item.transport === "stdio"; width: parent.width; height: Math.max(72, contentHeight + 16)
                     font.family: Theme.monoFamily; font.pixelSize: 12; padding: 10; wrapMode: TextEdit.Wrap
@@ -173,7 +189,9 @@ Item {
                     background: Rectangle { radius: Theme.radiusSm; color: Theme.bgElevated; border.color: Theme.borderStrong }
                     onActiveFocusChanged: if (!activeFocus && root.item.kind === "mcp") root.save("args", text.split("\n").filter(function(v) { return v.trim().length > 0 }))
                 }
-                FieldLabel { text: I18n.t(root.item.transport === "stdio" ? "extensions.env" : "extensions.headers") }
+                }
+                McpField { label: I18n.t(root.item.transport === "stdio" ? "extensions.env" : "extensions.headers")
+                Column { width: parent.width; spacing: 8
                 Repeater {
                     model: root.item[root.item.transport === "stdio" ? "env" : "headers"] || []
                     Row {
@@ -212,9 +230,9 @@ Item {
                                 color: Theme.fgSubtle; font.pixelSize: 11
                             }
                         }
-                        Item { width: 24; height: kv.modelData.secret ? 50 : 32
-                            Icon { anchors.horizontalCenter: parent.horizontalCenter; y: 9; size: 13; color: kv.modelData.secret ? Theme.accent : Theme.fgMuted
-                                name: "M5 11h14v10H5Z|M8 11V7a4 4 0 0 1 8 0" + (kv.modelData.secret ? "v4" : "") }
+                        Item { width: 24; height: kv.modelData.secret && (!!kv.saveState || kv.modelData.configured) ? 51.5 : 32
+                            Icon { anchors.horizontalCenter: parent.horizontalCenter; y: 9.5; size: 13; color: kv.modelData.secret ? Theme.accent : Theme.fgMuted
+                                name: "M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z|" + (kv.modelData.secret ? "M7 11V7a5 5 0 0 1 10 0v4" : "M7 11V7a5 5 0 0 1 9.9-1") }
                             MouseArea { anchors.fill: parent; onClicked: {
                                 var wasSecret = kv.modelData.secret; var key = kv.modelData.key
                                 kv.patch("secret", !wasSecret)
@@ -236,15 +254,18 @@ Item {
                         var copy = JSON.parse(JSON.stringify(root.item)); copy[group].push({key:"",value:"",secret:false,configured:false}); root.item = copy
                     }
                 }
-                FieldLabel { text: I18n.t("extensions.discoveredTools") }
-                Text { visible: !(root.item.tools || []).length; text: I18n.t("extensions.noToolsYet"); color: Theme.fgSubtle }
+                }
+                }
+                McpField { label: I18n.t("extensions.discoveredTools")
+                Text { visible: !(root.item.tools || []).length; text: I18n.t("extensions.noToolsYet"); color: Theme.fgSubtle; font.pixelSize: 13; lineHeightMode: Text.FixedHeight; lineHeight: 19.5 }
                 Repeater { model: root.item.tools || []; Item {
                     required property var modelData; required property int index
-                    width: parent.width; height: Math.max(toolName.height, toolDesc.height) + 16
-                    Text { id: toolName; y: 8; width: parent.width * 0.34; text: modelData.name; wrapMode: Text.Wrap; color: Theme.accent; font.family: Theme.monoFamily; font.pixelSize: 12 }
-                    Text { id: toolDesc; x: toolName.width + 12; y: 8; text: modelData.description; width: parent.width - x; wrapMode: Text.Wrap; color: Theme.fgSubtle; font.pixelSize: 12; lineHeight: 1.5 }
+                    width: parent.width; height: Math.max(toolName.height, toolDesc.height) + 16 + (index < root.item.tools.length - 1 ? 1 : 0)
+                    Text { id: toolName; y: 8; width: parent.width * 0.34; text: modelData.name; wrapMode: Text.Wrap; color: Theme.accent; font.family: Theme.monoFamily; font.pixelSize: 12; lineHeightMode: Text.FixedHeight; lineHeight: 18 }
+                    Text { id: toolDesc; x: toolName.width + 12; y: 8; text: modelData.description; width: parent.width - x; wrapMode: Text.Wrap; color: Theme.fgSubtle; font.pixelSize: 12; lineHeightMode: Text.FixedHeight; lineHeight: 18 }
                     Rectangle { visible: index < root.item.tools.length - 1; anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.border }
                 } }
+                }
             }
         }
     }
