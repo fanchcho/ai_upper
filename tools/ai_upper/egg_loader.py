@@ -39,6 +39,26 @@ import tempfile
 import threading
 import zipfile
 
+
+_BOOT_MESSAGES = {'finish.d0f213d4d48e': ['egg key must be a hexadecimal string', 'egg \u5bc6\u94a5\u5fc5\u987b\u662f\u5341\u516d\u8fdb\u5236\u5b57\u7b26\u4e32'], 'finish.eca7bbe94e37': ['egg key must contain at least 16 bytes', 'egg \u5bc6\u94a5\u81f3\u5c11\u9700\u8981 16 \u5b57\u8282'], 'finish.ca7cddd39e0f': ['unsafe egg member: ', '\u4e0d\u5b89\u5168\u7684 egg \u6761\u76ee\uff1a'], 'finish.c42939261359': ['egg backend must be one of: ', 'egg \u540e\u7aef\u5fc5\u987b\u662f\u4ee5\u4e0b\u4e4b\u4e00\uff1a'], 'finish.de9bc463d564': ['egg is empty: ', 'egg \u6587\u4ef6\u4e3a\u7a7a\uff1a'], 'finish.a6b09feb2038': ['bad egg, not a zip or wrong key: ', 'egg \u65e0\u6548\u3001\u4e0d\u662f ZIP \u6216\u5bc6\u94a5\u9519\u8bef\uff1a'], 'finish.c3313b89e277': ['egg backend memory requires _memimporter in the bundle', 'memory \u540e\u7aef\u8981\u6c42\u5305\u5185\u5305\u542b _memimporter'], 'finish.6e897424f1dc': ['cannot publish egg cache: ', '\u65e0\u6cd5\u53d1\u5e03 egg \u7f13\u5b58\uff1a']}
+
+def _boot_tr(key):
+    value = os.environ.get('AI_UPPER_LANG', '')
+    for i, arg in enumerate(sys.argv[1:]):
+        if arg.startswith('--lang='):
+            value = arg.split('=', 1)[1]
+        elif arg == '--lang' and i + 2 < len(sys.argv):
+            value = sys.argv[i + 2]
+    if not value and os.environ.get('AI_UPPER_HOME'):
+        try:
+            import json
+            with open(os.path.join(os.environ['AI_UPPER_HOME'], 'config.json'), encoding='utf-8') as f:
+                value = json.load(f).get('locale', '')
+        except (OSError, ValueError):
+            pass
+    value = value or os.environ.get('LC_ALL') or os.environ.get('LC_MESSAGES') or os.environ.get('LANG', 'en')
+    return _BOOT_MESSAGES[key][1 if value.lower().startswith('zh') else 0]
+
 MAGIC = b'WBEGG01!'
 DEFAULT_KEY_HEX = '047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d'
 BACKENDS = ('auto', 'memory', 'extract')
@@ -69,9 +89,9 @@ def _key_bytes(key_hex):
     try:
         key = bytes.fromhex(text)
     except ValueError:
-        raise ValueError('egg key must be a hexadecimal string')
+        raise ValueError(_boot_tr('finish.d0f213d4d48e'))
     if len(key) < 16:
-        raise ValueError('egg key must contain at least 16 bytes')
+        raise ValueError(_boot_tr('finish.eca7bbe94e37'))
     return key
 
 
@@ -79,7 +99,7 @@ def _safe_member(name):
     text = name.replace('\\', '/')
     parts = text.split('/')
     if not text or text.startswith('/') or any(part in ('', '.', '..') for part in parts):
-        raise ValueError('unsafe egg member: ' + name)
+        raise ValueError(_boot_tr('finish.ca7cddd39e0f') + name)
     return '/'.join(parts)
 
 
@@ -160,7 +180,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
     def __init__(self, egg_path, key, backend='auto'):
         backend = str(backend or 'auto').strip().lower()
         if backend not in BACKENDS:
-            raise ValueError('egg backend must be one of: ' + ', '.join(BACKENDS))
+            raise ValueError(_boot_tr('finish.c42939261359') + ', '.join(BACKENDS))
         self.egg_path = os.path.abspath(egg_path)
         self.key = key
         self.requested_backend = backend
@@ -168,14 +188,14 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         with open(self.egg_path, 'rb') as handle:
             raw = handle.read()
         if not raw:
-            raise ValueError('egg is empty: ' + self.egg_path)
+            raise ValueError(_boot_tr('finish.de9bc463d564') + self.egg_path)
         try:
             payload = decrypt_if_needed(raw, key)
             self.archive = zipfile.ZipFile(io.BytesIO(payload))
             self.names = frozenset(self.archive.namelist())
             self.payload = payload
         except Exception as exc:
-            raise ValueError('bad egg, not a zip or wrong key: ' + self.egg_path + ': ' + str(exc))
+            raise ValueError(_boot_tr('finish.a6b09feb2038') + self.egg_path + ': ' + str(exc))
         self.extensions = tuple(importlib.machinery.EXTENSION_SUFFIXES)
         self.memimporter = None
         self.extract_root = None
@@ -183,7 +203,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         if backend == 'memory':
             self.memimporter = _memimporter_module()
             if self.memimporter is None:
-                raise RuntimeError('egg backend memory requires _memimporter in the bundle')
+                raise RuntimeError(_boot_tr('finish.c3313b89e277'))
         elif backend == 'auto':
             self.memimporter = _memimporter_module() if os.name == 'nt' else None
         if self.memimporter is None:
@@ -220,7 +240,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
                     return
                 shutil.rmtree(final, ignore_errors=True)
         shutil.rmtree(staging, ignore_errors=True)
-        raise RuntimeError('cannot publish egg cache: ' + final)
+        raise RuntimeError(_boot_tr('finish.6e897424f1dc') + final)
 
     def _extract(self):
         digest = hashlib.sha256(self.payload).hexdigest()

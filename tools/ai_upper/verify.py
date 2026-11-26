@@ -80,16 +80,16 @@ def _verify_egg_bundle(
     try:
         method, data = _egg_member(egg_path, key_hex, member)
     except Exception as exc:
-        return [(False, f"merged bundle in egg: {exc}")]
-    checks = [(method == zipfile.ZIP_STORED, f"merged bundle stored {member}")]
+        return [(False, f"{tr('finish.756c506bd035')}{exc}")]
+    checks = [(method == zipfile.ZIP_STORED, f"{tr('finish.eed5590d26b3')}{member}")]
     with tempfile.TemporaryDirectory(prefix="ai_upper-verify-") as tmp:
         probe = Path(tmp) / Path(member).name
         probe.write_bytes(data)
         try:
             verify_arch(probe, target)
-            checks.append((True, f"arch bundle {member}={target.arch}"))
+            checks.append((True, f"{tr('finish.6f35b2715c74')}{member}={target.arch}"))
         except Exception as exc:
-            checks.append((False, f"arch bundle {member}: {exc}"))
+            checks.append((False, f"{tr('finish.6f35b2715c74')}{member}: {exc}"))
     return checks
 
 
@@ -134,10 +134,9 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
                 if target.os == "windows" and name.lower() in preloaded:
                     continue
                 checks.append((False,
-                    f"egg native dependency {binary.relative_to(root)}: {name}; "
-                    "use --no-egg for application extensions with custom linked libraries"))
+                    f"{tr('finish.4f73c9b99fc6')}{binary.relative_to(root)}: {name}{tr('finish.98a25e187c3d')}"))
     if not checks:
-        checks.append((True, "egg native dependencies portable"))
+        checks.append((True, tr('finish.6e4f7eaa50ca')))
     return checks
 
 
@@ -165,18 +164,18 @@ def _application_source_checks(
             expected = _expected_extension(site, source, target)
             name = module_name(source)
             if egg_members is None:
-                checks.append((expected.is_file(), f"{prefix}extension {name}"))
+                checks.append((expected.is_file(), f"{prefix}{tr('finish.extension')}{name}"))
                 if expected.is_file():
                     try:
                         verify_arch(expected, target)
-                        checks.append((True, f"{prefix}arch {name}={target.arch}"))
+                        checks.append((True, f"{prefix}{tr('finish.e2c14515e16c')}{name}={target.arch}"))
                     except Exception as exc:
-                        checks.append((False, f"{prefix}arch {name}: {exc}"))
+                        checks.append((False, f"{prefix}{tr('finish.e2c14515e16c')}{name}: {exc}"))
             else:
                 member = expected.relative_to(site).as_posix()
-                checks.append((member in egg_members, f"{prefix}egg extension {name}"))
-                checks.append((not expected.is_file(), f"{prefix}extension not loose {name}"))
-            checks.append((not (site / source.relative_to(APP / "src")).exists(), f"{prefix}source removed {name}"))
+                checks.append((member in egg_members, f"{prefix}{tr('finish.3d2b4eda5262')}{name}"))
+                checks.append((not expected.is_file(), f"{prefix}{tr('finish.9416e5a44614')}{name}"))
+            checks.append((not (site / source.relative_to(APP / "src")).exists(), f"{prefix}{tr('finish.89673a15fa13')}{name}"))
         return checks
 
     leaves = [source for source in sources if source.name != "__init__.py"]
@@ -184,20 +183,20 @@ def _application_source_checks(
         relative = merged_bundle_relative(group, suffix)
         bundle = site / relative
         if egg_members is None:
-            checks.append((bundle.is_file(), f"{prefix}merged bundle {group}"))
+            checks.append((bundle.is_file(), f"{prefix}{tr('finish.db80890e22e9')}{group}"))
             if bundle.is_file():
                 try:
                     verify_arch(bundle, target)
-                    checks.append((True, f"{prefix}arch bundle {group}={target.arch}"))
+                    checks.append((True, f"{prefix}{tr('finish.6f35b2715c74')}{group}={target.arch}"))
                 except Exception as exc:
-                    checks.append((False, f"{prefix}arch bundle {group}: {exc}"))
+                    checks.append((False, f"{prefix}{tr('finish.6f35b2715c74')}{group}: {exc}"))
         else:
             present = relative in egg_members
-            checks.append((present, f"{prefix}egg merged bundle {group}"))
-            checks.append((not bundle.is_file(), f"{prefix}merged bundle not loose {group}"))
+            checks.append((present, f"{prefix}{tr('finish.27fe35231f0f')}{group}"))
+            checks.append((not bundle.is_file(), f"{prefix}{tr('finish.aaefed52979d')}{group}"))
             if present and egg_path is not None and egg_key is not None:
                 checks.extend(_verify_egg_bundle(egg_path, egg_key, relative, target))
-        checks.append((bool(grouped), f"{prefix}merged bundle modules {group}={len(grouped)}"))
+        checks.append((bool(grouped), f"{prefix}{tr('finish.ab8e262a571e')}{group}={len(grouped)}"))
 
     for source in sources:
         name = module_name(source)
@@ -205,14 +204,14 @@ def _application_source_checks(
         expected = _expected_extension(site, source, target)
         if source.name == "__init__.py":
             if egg_members is None:
-                checks.append(((site / relative).is_file(), f"{prefix}package marker {name}"))
+                checks.append(((site / relative).is_file(), f"{prefix}{tr('finish.dbb3305214d8')}{name}"))
             else:
-                checks.append((relative.as_posix() in egg_members, f"{prefix}egg package marker {name}"))
-                checks.append((not (site / relative).exists(), f"{prefix}package marker not loose {name}"))
-            checks.append((not expected.is_file(), f"{prefix}package marker not compiled {name}"))
+                checks.append((relative.as_posix() in egg_members, f"{prefix}{tr('finish.ce45c20ea47b')}{name}"))
+                checks.append((not (site / relative).exists(), f"{prefix}{tr('finish.2a900d0a96b7')}{name}"))
+            checks.append((not expected.is_file(), f"{prefix}{tr('finish.cf96fbe6ebae')}{name}"))
         else:
-            checks.append((not (site / relative).exists(), f"{prefix}source removed {name}"))
-            checks.append((not expected.is_file(), f"{prefix}no per-module extension {name}"))
+            checks.append((not (site / relative).exists(), f"{prefix}{tr('finish.89673a15fa13')}{name}"))
+            checks.append((not expected.is_file(), f"{prefix}{tr('finish.f55fb70c59ae')}{name}"))
     return checks
 
 
@@ -220,35 +219,35 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
     stage = staging_dir(target)
     site = stage / "site-packages"
     checks: list[tuple[bool, str]] = [
-        (stage.is_dir(), "staging"),
-        (site.is_dir(), "application site-packages"),
+        (stage.is_dir(), tr('finish.d9390b2c4011')),
+        (site.is_dir(), tr('finish.4609dc153bc1')),
     ]
     try:
         manifest = read_manifest(runtime_spec(target).root)
         validate_manifest(manifest, target, runtime_spec(target))
-        checks.append((True, f"runtime manifest format={manifest['format']}"))
+        checks.append((True, f"{tr('finish.38a680b8552c')}{manifest['format']}"))
     except Exception as exc:
-        checks.append((False, f"runtime manifest: {exc}"))
+        checks.append((False, f"{tr('finish.290d206dd411')}{exc}"))
 
     sources = selected_sources()
     selected_modules = {module_name(source) for source in sources}
-    checks.append((entry_module() in selected_modules, f"entry module Cythonized: {entry_module()}"))
+    checks.append((entry_module() in selected_modules, f"{tr('finish.94f48ce275cf')}{entry_module()}"))
 
     egg = _stage_egg_config(stage)
     egg_members = None
     if egg.enabled:
         egg_path = stage / EGG_DIR / EGG_NAME
-        checks.append((egg_path.is_file(), f"encrypted egg {EGG_NAME}"))
+        checks.append((egg_path.is_file(), f"{tr('finish.8c41ffd40536')}{EGG_NAME}"))
         if egg_path.is_file():
             try:
-                checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, "encrypted egg magic"))
+                checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, tr('finish.586a0dde0363')))
                 egg_members = set(read_egg_members(egg_path, egg.key_hex))
-                checks.append((bool(egg_members), f"encrypted egg members={len(egg_members)}"))
+                checks.append((bool(egg_members), f"{tr('finish.4d9bf18c6aef')}{len(egg_members)}"))
             except Exception as exc:
-                checks.append((False, f"encrypted egg members: {exc}"))
+                checks.append((False, f"{tr('finish.1805ede89806')}{exc}"))
         if target.os == "windows" and egg.backend == "memory":
             checks.append(((site / "_memimporter.pyd").is_file(),
-                           "egg memory backend helper _memimporter"))
+                           tr('finish.22e436ea8985')))
 
     checks.extend(_application_source_checks(
         site, sources, target, egg_members, "",
@@ -257,19 +256,19 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
     ))
 
     leftovers = [path for path in site.rglob("*") if path.is_file() and path.suffix.lower() in {".c", ".cpp", ".pyc", ".pyo"}]
-    checks.append((not leftovers, "no generated source/cache files in site-packages"))
+    checks.append((not leftovers, tr('finish.536daa89f7ef')))
 
     if dependency_specs():
         manifest_path = wheel_dir(target) / WHEEL_MANIFEST
-        checks.append((manifest_path.is_file(), "third-party wheel manifest"))
+        checks.append((manifest_path.is_file(), tr('finish.861680b2ac09')))
         if manifest_path.is_file():
             try:
                 data = json.loads(manifest_path.read_text(encoding="utf-8"))
-                checks.append((data.get("requirements") == dependency_specs(), "third-party requirements match"))
+                checks.append((data.get("requirements") == dependency_specs(), tr('finish.d558604830e1')))
                 imports = data.get("imports", [])
-                checks.append((bool(imports), "third-party direct imports recorded"))
+                checks.append((bool(imports), tr('finish.7808b40e6537')))
             except Exception as exc:
-                checks.append((False, f"third-party manifest: {exc}"))
+                checks.append((False, f"{tr('finish.d6107655c8f5')}{exc}"))
     return checks
 
 
@@ -293,11 +292,11 @@ def _launcher_subsystem_check(executable: Path) -> tuple[bool, str]:
     try:
         subsystem = inspect(executable).subsystem
     except Exception as exc:
-        return False, f"launcher subsystem: {exc}"
+        return False, f"{tr('finish.0b1b5d7e2551')}{exc}"
     if subsystem == expected:
-        return True, f"launcher subsystem={PE_SUBSYSTEM[expected]}"
+        return True, f"{tr('finish.bb2c6147f5a8')}{PE_SUBSYSTEM[expected]}"
     actual = PE_SUBSYSTEM.get(subsystem, subsystem)
-    return False, f"launcher subsystem: {actual}, expected {PE_SUBSYSTEM[expected]}"
+    return False, f"{tr('finish.0b1b5d7e2551')}{actual}, expected {PE_SUBSYSTEM[expected]}"
 
 
 def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
@@ -313,8 +312,8 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         site = root / "site-packages"
         entry_dir = root
     checks: list[tuple[bool, str]] = [
-        (root.is_dir(), "package"),
-        (executable.is_file(), "launcher"),
+        (root.is_dir(), tr('finish.package')),
+        (executable.is_file(), tr('finish.5b4cc0d40c32')),
     ]
 
     # The launcher carries the entry programs, so the bundle ships no script
@@ -323,7 +322,7 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     # saying so here is what keeps the package from growing a second, unread
     # copy of the entry.
     sidecars = sorted(path.relative_to(root).as_posix() for path in entry_dir.glob("*.int"))
-    checks.append((not sidecars, "no entry sidecar next to the launcher" + (f": {', '.join(sidecars)}" if sidecars else "")))
+    checks.append((not sidecars, tr('finish.abd5da15a2c7') + (f": {', '.join(sidecars)}" if sidecars else "")))
     if executable.is_file():
         # The entry is the one thing the launcher cannot get from anywhere else,
         # and the packaging step compiles it in: reading the bytes back out
@@ -331,7 +330,7 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         # names, which a file-based check silently stopped doing the moment the
         # two sides could disagree.
         embedded = entry_source().encode("utf-8")
-        checks.append((embedded in executable.read_bytes(), f"embedded entry {entry_module()}"))
+        checks.append((embedded in executable.read_bytes(), f"{tr('finish.1a36d35f7eb6')}{entry_module()}"))
 
     # The package is the contract: an egg that is present must be readable with
     # the key of the build that produced it. Stage verification is what proves
@@ -342,38 +341,38 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     egg_members = None
     if egg_path.is_file():
         try:
-            checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, "packaged egg magic"))
+            checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, tr('finish.651c2b9b6f74')))
             egg_members = set(read_egg_members(egg_path, egg.key_hex))
-            checks.append((bool(egg_members), f"packaged egg members={len(egg_members)}"))
+            checks.append((bool(egg_members), f"{tr('finish.6a068a8ced05')}{len(egg_members)}"))
         except Exception as exc:
-            checks.append((False, f"packaged egg members: {exc}"))
+            checks.append((False, f"{tr('finish.9b109bf87d47')}{exc}"))
         if executable.is_file():
             # The archive is useless without the loader, and the loader is only
             # reachable when it was compiled into this launcher.
             loader = egg_loader_source().encode("utf-8")
-            checks.append((loader in executable.read_bytes(), "embedded egg loader"))
+            checks.append((loader in executable.read_bytes(), tr('finish.25b3b55fb48f')))
     runtime_root = resources / "runtime" if target.os == "macos" else root / "runtime"
     if egg_members is not None:
         checks.extend(_verify_egg_native_dependencies(egg_path, egg.key_hex, target, runtime_root))
     if bool(optimize_config().get("remove_runtime_pip", True)):
-        checks.append((not runtime_pip_payloads(runtime_root), "runtime pip/ensurepip removed"))
+        checks.append((not runtime_pip_payloads(runtime_root), tr('finish.b39d925643b5')))
     if target.os == "windows" and runtime_spec(target).provider == "pbs":
         digits = runtime_spec(target).major_minor.replace(".", "")
         for filename in ("python3.dll", f"python{digits}.dll", f"python{digits}.zip", f"python{digits}._pth"):
-            checks.append(((runtime_root / filename).is_file(), f"Windows embed runtime {filename}"))
+            checks.append(((runtime_root / filename).is_file(), f"{tr('finish.c4b1b459eefe')}{filename}"))
         checks.append((not (runtime_root / "Lib").exists() and not (runtime_root / "DLLs").exists(),
-                       "Windows embed runtime is flat"))
+                       tr('finish.a7873cf0b3a7')))
     if executable.is_file():
         try:
             verify_arch(executable, target)
-            checks.append((True, f"launcher arch={target.arch}"))
+            checks.append((True, f"{tr('finish.69b479d901dc')}{target.arch}"))
         except Exception as exc:
-            checks.append((False, f"launcher arch: {exc}"))
+            checks.append((False, f"{tr('finish.70d585af8101')}{exc}"))
         if target.os == "windows":
             checks.append(_launcher_subsystem_check(executable))
 
     checks.extend(_application_source_checks(
-        site, selected_sources(), target, egg_members, "packaged ",
+        site, selected_sources(), target, egg_members, tr('finish.packaged'),
         egg_path=egg_path,
         egg_key=egg.key_hex,
     ))
@@ -405,8 +404,8 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         try:
             verify_arch(path, target)
         except Exception as exc:
-            checks.append((False, f"native arch {path.relative_to(root)}: {exc}"))
-    checks.append((True, f"native binaries checked={checked}"))
+            checks.append((False, f"{tr('finish.ff887beb2c03')}{path.relative_to(root)}: {exc}"))
+    checks.append((True, f"{tr('finish.d194f2a552f8')}{checked}"))
     return checks
 
 
@@ -414,7 +413,7 @@ def verify(target: Target) -> int:
     checks = _checks_for_stage(target) + _checks_for_package(target)
     failures = 0
     for ok, label in checks:
-        print("PASS" if ok else "FAIL", label)
+        print(tr('finish.bd564db5d5cc') if ok else tr('finish.fd6a5ecb0c6d'), label)
         failures += int(not ok)
     return int(bool(failures))
 
@@ -480,7 +479,7 @@ def run_target_python_smoke(target: Target) -> None:
     if target != host_target():
         print(tr('legacy.6a69710b0c43'))
         return
-    stage_root = BUILD / "staging" / target.key
+    stage_root = BUILD / tr('finish.d9390b2c4011') / target.key
     site = stage_root / "site-packages"
     script = write_smoke_script(target, BUILD / "smoke" / target.key / "target.py")
     env = dict(os.environ)

@@ -240,10 +240,7 @@ def expected_arch(target) -> str:
 # ucrtbase.dll). The guard is the right answer for that too, but the reader of
 # the error has to be told which door leads out of it, or the tempting move is
 # to weaken the guard instead.
-_ARCH_MISMATCH_REMEDY = (
-    " A foreign payload that no bundled image loads can be dropped with"
-    " [tool.ai_upper.native].exclude in app/pyproject.toml."
-)
+
 
 
 def compatible_with(arch: str, target_arch: str) -> bool:
@@ -259,12 +256,12 @@ def verify_arch(path: Path, target) -> BinaryInfo:
         arches = _fat_arches(data, magic)
         if expected_arch(target) not in arches:
             raise RuntimeError(
-                tr('legacy.625a84f22f1f' ,p1=path.name, p3=', '.join(sorted(arches)), p5=target.arch) + _ARCH_MISMATCH_REMEDY
+                tr('legacy.625a84f22f1f' ,p1=path.name, p3=', '.join(sorted(arches)), p5=target.arch) + tr('finish.arch_remedy')
             )
         return info
     if not compatible_with(info.arch, expected_arch(target)):
         raise RuntimeError(
             tr('legacy.57ccc8dc3c32' ,p1=path.name, p3=info.arch, p5=target.arch)
-            + _ARCH_MISMATCH_REMEDY
+            + tr('finish.arch_remedy')
         )
     return info

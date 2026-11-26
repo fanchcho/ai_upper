@@ -255,7 +255,7 @@ def last_non_empty(lines):
     for line in reversed(lines):
         if line.strip():
             return line.strip()
-    return "(empty log)"
+    return tr('finish.8449fcd7b609')
 
 
 if __name__ == "__main__":

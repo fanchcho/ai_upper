@@ -112,7 +112,7 @@ def _parse_windows_environment(text: str) -> dict[str, str]:
 def _output_tail(*streams: str, limit: int = 40) -> str:
     """Last ``limit`` non-empty lines of the captured output, for diagnostics."""
     lines = [line for stream in streams for line in stream.splitlines() if line.strip()]
-    return "\n".join(lines[-limit:]) or "(no output)"
+    return "\n".join(lines[-limit:]) or tr('finish.800c9b197e97')
 
 
 def _msvc_environment(bat: Path, vc_target: str) -> dict[str, str]:

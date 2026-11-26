@@ -1,0 +1,54 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', 'tools/build.py', '--help']
+LANG=en_US.UTF-8
+stdout:
+usage: build.py [-h] [--doctor | --run | --verify | --lock | --release |
+                --clean]
+                [--target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}]
+                [--locked] [--identity IDENTITY]
+                [--notary-profile NOTARY_PROFILE] [--trim-preset NAME]
+                [--trim-site GLOB] [--trim-site-keep GLOB]
+                [--trim-runtime GLOB] [--trim-runtime-keep GLOB] [--egg |
+                --no-egg] [--egg-key HEX] [--egg-backend NAME]
+                [--egg-compression NAME] [--lang {zh-CN,en}]
+                [{doctor,build,run,verify,lock,release,clean}]
+
+ai_upper - standalone Python application builder
+
+positional arguments:
+  {doctor,build,run,verify,lock,release,clean}
+
+options:
+  -h, --help            show this help message and exit
+  --doctor
+  --run
+  --verify
+  --lock
+  --release
+  --clean
+  --target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}
+  --locked
+  --identity IDENTITY
+  --notary-profile NOTARY_PROFILE
+  --trim-preset NAME    add a named trim rule set for this build: safe,
+                        release, minimal
+  --trim-site GLOB      remove paths from site-packages; repeatable (relative
+                        glob)
+  --trim-site-keep GLOB
+                        never remove matching site-packages paths; repeatable
+  --trim-runtime GLOB   remove paths from the bundled runtime; repeatable
+  --trim-runtime-keep GLOB
+                        never remove matching runtime paths; repeatable
+  --egg                 pack application code into an encrypted bundle archive
+                        for this build
+  --no-egg              ship loose application files even when the project
+                        enables the egg
+  --egg-key HEX         override [tool.ai_upper.egg].key_hex (at least 16 hex
+                        bytes)
+  --egg-backend NAME    egg extension loader: auto, memory or extract
+  --egg-compression NAME
+                        egg archive compression: deflated, stored, lzma
+  --lang {zh-CN,en}     Language: zh-CN or en
+
+stderr:
+
+exit=0

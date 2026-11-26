@@ -894,7 +894,7 @@ def _runtime_closure(site: Path, target: Target, modules: set[str], optional=())
     probe = subprocess.run([str(python), "-c", script], capture_output=True, text=True, check=False, env=env)
     requested = ", ".join(sorted(modules)) or "(none)"
     if probe.returncode != 0:
-        detail = probe.stderr.strip() or probe.stdout.strip() or "(no output)"
+        detail = probe.stderr.strip() or probe.stdout.strip() or tr('finish.800c9b197e97')
         raise RuntimeError(tr('legacy.c9f5c2499d84' ,p1=python, p3=requested, p5=detail))
     try:
         result = json.loads(probe.stdout.strip().splitlines()[-1])

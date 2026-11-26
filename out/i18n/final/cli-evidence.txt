@@ -1,0 +1,122 @@
+[
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--help"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-0.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--invalid-option"
+    ],
+    "exit": 2,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-1.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--verify"
+    ],
+    "exit": 1,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-2.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "-c",
+      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
+    ],
+    "exit": 2,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-3.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "-c",
+      "import sys;sys.path.insert(0,'app/src');from mvvm.services.greeting import GreetingService;print(GreetingService().message())"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-4.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/ci_tail.py",
+      "--help"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-5.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--help"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-0.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--invalid-option"
+    ],
+    "exit": 2,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-1.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/build.py",
+      "--verify"
+    ],
+    "exit": 1,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-2.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "-c",
+      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
+    ],
+    "exit": 2,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-3.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "-c",
+      "import sys;sys.path.insert(0,'app/src');from mvvm.services.greeting import GreetingService;print(GreetingService().message())"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-4.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/ci_tail.py",
+      "--help"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-5.txt"
+  }
+]

@@ -1,0 +1,494 @@
+[
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 74,
+    "source": "egg key must contain at least 16 bytes",
+    "key": "finish.eca7bbe94e37"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 72,
+    "source": "egg key must be a hexadecimal string",
+    "key": "finish.d0f213d4d48e"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 82,
+    "source": "unsafe egg member: ",
+    "key": "finish.ca7cddd39e0f"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 223,
+    "source": "cannot publish egg cache: ",
+    "key": "finish.6e897424f1dc"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 163,
+    "source": "egg backend must be one of: ",
+    "key": "finish.c42939261359"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 171,
+    "source": "egg is empty: ",
+    "key": "finish.de9bc463d564"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 186,
+    "source": "egg backend memory requires _memimporter in the bundle",
+    "key": "finish.c3313b89e277"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 178,
+    "source": "bad egg, not a zip or wrong key: ",
+    "key": "finish.a6b09feb2038"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 223,
+    "source": "staging",
+    "key": "finish.d9390b2c4011"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 224,
+    "source": "application site-packages",
+    "key": "finish.4609dc153bc1"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 260,
+    "source": "no generated source/cache files in site-packages",
+    "key": "finish.536daa89f7ef"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 317,
+    "source": "launcher",
+    "key": "finish.5b4cc0d40c32"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 483,
+    "source": "staging",
+    "key": "finish.d9390b2c4011"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 140,
+    "source": "egg native dependencies portable",
+    "key": "finish.6e4f7eaa50ca"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 264,
+    "source": "third-party wheel manifest",
+    "key": "finish.861680b2ac09"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 326,
+    "source": "no entry sidecar next to the launcher",
+    "key": "finish.abd5da15a2c7"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 359,
+    "source": "runtime pip/ensurepip removed",
+    "key": "finish.b39d925643b5"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 365,
+    "source": "Windows embed runtime is flat",
+    "key": "finish.a7873cf0b3a7"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 417,
+    "source": "PASS",
+    "key": "finish.bd564db5d5cc"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 417,
+    "source": "FAIL",
+    "key": "finish.fd6a5ecb0c6d"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 251,
+    "source": "egg memory backend helper _memimporter",
+    "key": "finish.22e436ea8985"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 345,
+    "source": "packaged egg magic",
+    "key": "finish.651c2b9b6f74"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 354,
+    "source": "embedded egg loader",
+    "key": "finish.25b3b55fb48f"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 244,
+    "source": "encrypted egg magic",
+    "key": "finish.586a0dde0363"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 268,
+    "source": "third-party requirements match",
+    "key": "finish.d558604830e1"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 270,
+    "source": "third-party direct imports recorded",
+    "key": "finish.7808b40e6537"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 300,
+    "source": "launcher subsystem: ",
+    "key": "finish.0b1b5d7e2551"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 84,
+    "source": "merged bundle stored ",
+    "key": "finish.eed5590d26b3"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 235,
+    "source": "entry module Cythonized: ",
+    "key": "finish.94f48ce275cf"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 298,
+    "source": "launcher subsystem=",
+    "key": "finish.bb2c6147f5a8"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 409,
+    "source": "native binaries checked=",
+    "key": "finish.d194f2a552f8"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 200,
+    "source": "merged bundle modules ",
+    "key": "finish.ab8e262a571e"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 229,
+    "source": "runtime manifest format=",
+    "key": "finish.38a680b8552c"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 241,
+    "source": "encrypted egg ",
+    "key": "finish.8c41ffd40536"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 296,
+    "source": "launcher subsystem: ",
+    "key": "finish.0b1b5d7e2551"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 334,
+    "source": "embedded entry ",
+    "key": "finish.1a36d35f7eb6"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 83,
+    "source": "merged bundle in egg: ",
+    "key": "finish.756c506bd035"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 90,
+    "source": "arch bundle ",
+    "key": "finish.6f35b2715c74"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 179,
+    "source": "source removed ",
+    "key": "finish.89673a15fa13"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 187,
+    "source": "merged bundle ",
+    "key": "finish.db80890e22e9"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 196,
+    "source": "egg merged bundle ",
+    "key": "finish.27fe35231f0f"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 197,
+    "source": "merged bundle not loose ",
+    "key": "finish.aaefed52979d"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 212,
+    "source": "package marker not compiled ",
+    "key": "finish.cf96fbe6ebae"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 214,
+    "source": "source removed ",
+    "key": "finish.89673a15fa13"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 215,
+    "source": "no per-module extension ",
+    "key": "finish.f55fb70c59ae"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 231,
+    "source": "runtime manifest: ",
+    "key": "finish.290d206dd411"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 347,
+    "source": "packaged egg members=",
+    "key": "finish.6a068a8ced05"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 363,
+    "source": "Windows embed runtime ",
+    "key": "finish.c4b1b459eefe"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 369,
+    "source": "launcher arch=",
+    "key": "finish.69b479d901dc"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 92,
+    "source": "arch bundle ",
+    "key": "finish.6f35b2715c74"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 137,
+    "source": "egg native dependency ",
+    "key": "finish.4f73c9b99fc6"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 137,
+    "source": "; use --no-egg for application extensions with custom linked libraries",
+    "key": "finish.98a25e187c3d"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 177,
+    "source": "egg extension ",
+    "key": "finish.3d2b4eda5262"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 178,
+    "source": "extension not loose ",
+    "key": "finish.9416e5a44614"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 208,
+    "source": "package marker ",
+    "key": "finish.dbb3305214d8"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 210,
+    "source": "egg package marker ",
+    "key": "finish.ce45c20ea47b"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 211,
+    "source": "package marker not loose ",
+    "key": "finish.2a900d0a96b7"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 246,
+    "source": "encrypted egg members=",
+    "key": "finish.4d9bf18c6aef"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 349,
+    "source": "packaged egg members: ",
+    "key": "finish.9b109bf87d47"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 371,
+    "source": "launcher arch: ",
+    "key": "finish.70d585af8101"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 408,
+    "source": "native arch ",
+    "key": "finish.ff887beb2c03"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 191,
+    "source": "arch bundle ",
+    "key": "finish.6f35b2715c74"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 248,
+    "source": "encrypted egg members: ",
+    "key": "finish.1805ede89806"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 272,
+    "source": "third-party manifest: ",
+    "key": "finish.d6107655c8f5"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 172,
+    "source": "arch ",
+    "key": "finish.e2c14515e16c"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 193,
+    "source": "arch bundle ",
+    "key": "finish.6f35b2715c74"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 174,
+    "source": "arch ",
+    "key": "finish.e2c14515e16c"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 135,
+    "source": "add a named trim rule set for this build: ",
+    "key": "finish.756641af3a9d"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 154,
+    "source": "egg archive compression: ",
+    "key": "finish.bd68c71b08fa"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 258,
+    "source": "(empty log)",
+    "key": "finish.8449fcd7b609"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 20,
+    "source": "launcher",
+    "key": "finish.5b4cc0d40c32"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 515,
+    "source": "staging",
+    "key": "finish.d9390b2c4011"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 328,
+    "source": "Unknown target: ",
+    "key": "finish.1af880421a65"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 115,
+    "source": "(no output)",
+    "key": "finish.800c9b197e97"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 897,
+    "source": "(no output)",
+    "key": "finish.800c9b197e97"
+  },
+  {
+    "file": "app/src/mvvm/services/greeting.py",
+    "line": 12,
+    "source": "Hello from ai_upper",
+    "key": "finish.319b50d563a2"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 154,
+    "source": ": expected a JSON object, got ",
+    "key": "finish.68a479484598"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 237,
+    "source": "install_only_stripped runtime",
+    "key": "finish.c7f8169c093b"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 239,
+    "source": "full SDK",
+    "key": "finish.15cfe8717e5a"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 174,
+    "source": "the application entry",
+    "key": "finish.d2a62be17e2a"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 175,
+    "source": "the launcher smoke program",
+    "key": "finish.f6042ff55d14"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 177,
+    "source": "the egg loader",
+    "key": "finish.1b0be85b692b"
+  }
+]

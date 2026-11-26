@@ -132,7 +132,7 @@ def main(argv=None) -> int:
     parser.add_argument("--identity")
     parser.add_argument("--notary-profile")
     parser.add_argument("--trim-preset", choices=tuple(PRESETS), metavar="NAME",
-                        help="add a named trim rule set for this build: " + ", ".join(PRESETS))
+                        help=tr('finish.756641af3a9d') + ", ".join(PRESETS))
     parser.add_argument("--trim-site", action="append", default=[], metavar="GLOB",
                         help=tr('legacy.99c42b87afe8'))
     parser.add_argument("--trim-site-keep", action="append", default=[], metavar="GLOB",
@@ -151,7 +151,7 @@ def main(argv=None) -> int:
     parser.add_argument("--egg-backend", choices=BACKENDS, metavar="NAME",
                         help=tr('legacy.57e54def59d6'))
     parser.add_argument("--egg-compression", choices=COMPRESSIONS, metavar="NAME",
-                        help="egg archive compression: " + ", ".join(COMPRESSIONS))
+                        help=tr('finish.bd68c71b08fa') + ", ".join(COMPRESSIONS))
     parser.add_argument("--lang", choices=("zh-CN", "en"), help=tr('cli.d7fa6622c296'))
     args = parser.parse_args(argv)
 

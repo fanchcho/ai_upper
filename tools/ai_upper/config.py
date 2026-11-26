@@ -17,7 +17,7 @@ CACHE = ROOT / ".cache"
 BUILD = ROOT / "build"
 DIST = ROOT / "dist"
 RUNTIMES = ROOT / "runtimes"
-LAUNCHER = ROOT / "launcher"
+LAUNCHER = ROOT / tr('finish.5b4cc0d40c32')
 LOCK = ROOT / "ai_upper.lock.json"
 # Pre-rename lock file. Reads fall back to it, writes always go to LOCK, so an
 # existing checkout keeps a `--locked` build working without a forced re-lock.
@@ -325,7 +325,7 @@ def validate_target(name: str | None) -> Target:
         return host_target()
     target = TARGETS.get(name)
     if target is None:
-        raise SystemExit(f"Unknown target: {name}; available: {', '.join(TARGETS)}")
+        raise SystemExit(f"{tr('finish.1af880421a65')}{name}; available: {', '.join(TARGETS)}")
     return target
 
 
@@ -512,7 +512,7 @@ def target_runtime_dir(target: Target) -> Path:
 
 
 def staging_dir(target: Target) -> Path:
-    return BUILD / "staging" / target.key
+    return BUILD / tr('finish.d9390b2c4011') / target.key
 
 
 def publish_dir(target: Target) -> Path:

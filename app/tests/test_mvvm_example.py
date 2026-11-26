@@ -252,7 +252,7 @@ def test_the_viewmodel_reads_its_model_and_service():
     viewmodel = MainViewModel(model, GreetingService(), AboutModel())
 
     assert viewmodel.title == "Demo"
-    assert viewmodel.message == "Hello from ai_upper"
+    assert viewmodel.message == "来自 ai_upper 的问候"
     assert viewmodel.about_visible is False
 
     changed: list[str] = []
@@ -311,7 +311,7 @@ def test_the_about_button_opens_and_closes_the_window(fake_qt):
 
     # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
     assert window.title == viewmodel.title != ""
-    assert fake_qt["labels"][0].text == "Hello from ai_upper"
+    assert fake_qt["labels"][0].text == "来自 ai_upper 的问候"
     assert dialog.title == ABOUT_BUTTON
     assert fake_qt["browsers"][0].plain_text == viewmodel.about_body
 

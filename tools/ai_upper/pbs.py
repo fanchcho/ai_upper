@@ -151,7 +151,7 @@ def _fetch_metadata_index(fetch_json: Callable[[str], Any]) -> dict[str, Any]:
             continue
         if isinstance(value, dict):
             return value
-        failures.append(f"{url}: expected a JSON object, got {type(value).__name__}")
+        failures.append(f"{url}{tr('finish.68a479484598')}{type(value).__name__}")
     raise RuntimeError(
         tr('legacy.c6e636ea6cdc')
         + "\n".join(failures)
@@ -234,9 +234,9 @@ def _best_sdk(assets: list[PBSAsset], runtime_name: str) -> PBSAsset:
 def no_asset_error(release_tag: str, target: Target, pyver: str, assets: list[PBSAsset], *, missing_runtime: bool, missing_sdk: bool) -> RuntimeError:
     missing = []
     if missing_runtime:
-        missing.append("install_only_stripped runtime")
+        missing.append(tr('finish.c7f8169c093b'))
     if missing_sdk:
-        missing.append("full SDK")
+        missing.append(tr('finish.15cfe8717e5a'))
     return RuntimeError(
         tr('legacy.b56d9089d8c7' ,p1=' / '.join(missing), p3=pyver, p5=target.triple, p7=release_tag, p9=pyver, p11=release_tag, p13=target.triple, p15=', '.join(available_python_versions(assets, target, kind='runtime')) or 'none', p17=', '.join(available_python_versions(assets, target, kind='sdk')) or 'none')
     )

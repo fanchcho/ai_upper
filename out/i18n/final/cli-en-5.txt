@@ -1,0 +1,26 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', 'tools/ci_tail.py', '--help']
+LANG=en_US.UTF-8
+stdout:
+usage: ci_tail.py [-h] --log LOG --title TITLE
+                  [--exit-code-file EXIT_CODE_FILE] [--label LABEL]
+                  [--level {error,warning,notice}] [--lang {zh-CN,en}]
+
+CI log annotations
+
+options:
+  -h, --help            show this help message and exit
+  --log LOG             path to the log file
+  --title TITLE         annotation title
+  --exit-code-file EXIT_CODE_FILE
+                        file holding the step's exit code; exit 0 downgrades
+                        to a notice
+  --label LABEL         what to call the log when it is missing (e.g.
+                        'build.log')
+  --level {error,warning,notice}
+                        force the annotation level instead of deriving it from
+                        the exit code
+  --lang {zh-CN,en}     Language: zh-CN or en
+
+stderr:
+
+exit=0

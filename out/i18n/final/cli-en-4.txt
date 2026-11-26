@@ -1,0 +1,8 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', '-c', "import sys;sys.path.insert(0,'app/src');from mvvm.services.greeting import GreetingService;print(GreetingService().message())"]
+LANG=en_US.UTF-8
+stdout:
+Hello from ai_upper
+
+stderr:
+
+exit=0

@@ -171,10 +171,10 @@ def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
     the same way. The key is obfuscation material, not a secret: it has to be
     present in the binary for the loader to decrypt anything at all.
     """
-    entry = _embedded_literal(entry_source(), "the application entry")
-    smoke = _embedded_literal(smoke_source(target), "the launcher smoke program")
+    entry = _embedded_literal(entry_source(), tr('finish.d2a62be17e2a'))
+    smoke = _embedded_literal(smoke_source(target), tr('finish.f6042ff55d14'))
     if egg is not None and egg.enabled:
-        loader = _embedded_literal(egg_loader_source(), "the egg loader")
+        loader = _embedded_literal(egg_loader_source(), tr('finish.1b0be85b692b'))
         loader_definition = f"const char* const kEggLoader = {loader};\n"
         key_definition = f"const char* const kEggKey = {_rc_literal(egg.key_hex)};\n"
         backend_definition = f"const char* const kEggBackend = {_rc_literal(egg.backend)};\n"

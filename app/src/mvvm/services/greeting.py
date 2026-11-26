@@ -1,4 +1,5 @@
 """Greeting service: an injected capability, not a global."""
+from locale_runtime import tr
 
 
 class GreetingService:
@@ -9,4 +10,4 @@ class GreetingService:
     """
 
     def message(self) -> str:
-        return "Hello from ai_upper"
+        return tr('finish.319b50d563a2')

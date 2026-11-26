@@ -1,0 +1,18 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', 'tools/build.py', '--invalid-option']
+LANG=en_US.UTF-8
+stdout:
+
+stderr:
+usage: build.py [-h] [--doctor | --run | --verify | --lock | --release |
+                --clean]
+                [--target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}]
+                [--locked] [--identity IDENTITY]
+                [--notary-profile NOTARY_PROFILE] [--trim-preset NAME]
+                [--trim-site GLOB] [--trim-site-keep GLOB]
+                [--trim-runtime GLOB] [--trim-runtime-keep GLOB] [--egg |
+                --no-egg] [--egg-key HEX] [--egg-backend NAME]
+                [--egg-compression NAME] [--lang {zh-CN,en}]
+                [{doctor,build,run,verify,lock,release,clean}]
+build.py: error: unrecognized arguments: --invalid-option
+
+exit=2
