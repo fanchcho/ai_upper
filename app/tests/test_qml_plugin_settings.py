@@ -51,9 +51,12 @@ def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
             results=[]
             worker=threading.Thread(target=lambda:results.append(controller.request(sid,kind+outcome,kind,'Test question',cancelled=None)))
             workers.append(worker);worker.start()
-            _pump(qapp,1)
-            assert bridge.pendingInteractions(), (sid, bridge._active)
-            assert _find_item(w.contentItem(),'interactionPrompt').property('visible')
+            # Wait for both the worker request and the next 30 ms bridge tick.
+            # A fixed sleep can finish between these two independent events.
+            from qml_shell import _pump as pump_until
+            assert pump_until(qapp, lambda: bool(bridge.pendingInteractions()) and
+                              _find_item(w.contentItem(), 'interactionPrompt').property('visible'), 5), (
+                                  sid, bridge._active, bridge.pendingInteractions())
             if kind=='question': _find_item(w.contentItem(),'interactionAnswer').setProperty('text','Actual QML answer')
             _click_item(w,_find_item(w.contentItem(),button));_pump(qapp,.3)
             worker.join(1);assert not worker.is_alive()
