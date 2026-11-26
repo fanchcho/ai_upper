@@ -1,0 +1,12 @@
+|accepted-before|1|cold|24|138.024|145.923|65.891|
+|accepted-before|1|hot|24|144.327|149.795|67.236|
+|accepted-before|2|cold|24|135.734|142.962|65.054|
+|accepted-before|2|hot|24|140.981|145.889|69.685|
+|accepted-before|3|cold|24|134.807|151.171|64.270|
+|accepted-before|3|hot|24|139.290|144.333|67.485|
+|accepted-after|1|cold|24|127.087|133.689|55.406|
+|accepted-after|1|hot|24|21.504|23.240|13.929|
+|accepted-after|2|cold|24|124.455|134.716|55.204|
+|accepted-after|2|hot|24|22.352|23.300|14.293|
+|accepted-after|3|cold|24|124.863|129.546|53.879|
+|accepted-after|3|hot|24|21.700|22.418|13.689|

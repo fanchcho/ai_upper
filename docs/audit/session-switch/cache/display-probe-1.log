@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/ai_upper/app/src/qml_shell.py", line 626, in openSession
+    self._prepare_render()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/agent/shared_workspace/ai_upper/app/src/qml_shell.py", line 1406, in _prepare_render
+    self._body = BodyDocument(style=old.style, content_width=old.content_width)
+                 ^^^^^^^^^^^^
+NameError: name 'BodyDocument' is not defined
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:1727: Error: name 'BodyDocument' is not defined
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/ai_upper/.tmp/hot-cache/measure.py", line 63, in <module>
+    assert time.perf_counter()<deadline
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,12 @@
+before 1 {"n": 48, "median_ms": 135.5542599922046, "p95_ms": 139.26703998004086, "cache": null, "rss_peak_kib": 209744}
+
+cache 1 {"n": 48, "median_ms": 141.19347999803722, "p95_ms": 146.4140000171028, "cache": {"hits": 0, "misses": 48, "entries": 15, "charged_bytes": 32494770}, "rss_peak_kib": 212536}
+
+before 2 {"n": 48, "median_ms": 141.3757600093959, "p95_ms": 146.40399999916553, "cache": null, "rss_peak_kib": 204240}
+
+cache 2 {"n": 48, "median_ms": 140.4892000136897, "p95_ms": 171.50972000672482, "cache": {"hits": 0, "misses": 48, "entries": 15, "charged_bytes": 32494770}, "rss_peak_kib": 213616}
+
+before 3 {"n": 48, "median_ms": 142.8919399913866, "p95_ms": 150.59100001235493, "cache": null, "rss_peak_kib": 205416}
+
+cache 3 {"n": 48, "median_ms": 142.22129998961464, "p95_ms": 149.9109199794475, "cache": {"hits": 0, "misses": 48, "entries": 15, "charged_bytes": 32494770}, "rss_peak_kib": 212640}
+

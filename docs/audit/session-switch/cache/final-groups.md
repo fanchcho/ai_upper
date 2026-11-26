@@ -1,0 +1,12 @@
+|accepted-before|1|cold|24|138.024|145.923|65.891|
+|accepted-before|1|hot|24|144.327|149.795|67.236|
+|accepted-before|2|cold|24|135.734|142.962|65.054|
+|accepted-before|2|hot|24|140.981|145.889|69.685|
+|accepted-before|3|cold|24|134.807|151.171|64.270|
+|accepted-before|3|hot|24|139.290|144.333|67.485|
+|release-after|1|cold|24|122.518|131.127|54.674|
+|release-after|1|hot|24|21.345|22.044|13.591|
+|release-after|2|cold|24|128.681|138.209|60.050|
+|release-after|2|hot|24|21.646|23.547|14.601|
+|release-after|3|cold|24|128.458|134.217|58.050|
+|release-after|3|hot|24|22.163|22.472|14.215|

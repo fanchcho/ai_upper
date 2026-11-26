@@ -1,0 +1,51 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................ss.............................................. [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+................................................s....................... [ 46%]
+........................................................................ [ 51%]
+....ssss................................................................ [ 56%]
+........................................................................ [ 61%]
+.............................................................F.......... [ 66%]
+........................................................................ [ 71%]
+........................................................................ [ 76%]
+........................................................................ [ 81%]
+........................................................................ [ 86%]
+........................................................................ [ 92%]
+........................................................................ [ 97%]
+........................................                                 [100%]
+=================================== FAILURES ===================================
+_________________ test_actual_qml_approval_and_answer_buttons __________________
+
+qapp = <PySide6.QtWidgets.QApplication(0x360db140) at 0xffff87330780>
+tmp_path = PosixPath('/tmp/ai-upper-cache-release-full-base/test_actual_qml_approval_and_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff82b69fd0>
+
+    def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
+        w,bridge,ticker,engine=_build_window(tmp_path,monkeypatch)
+        workers=[]
+        try:
+            sid=bridge.newSession()
+            controller=bridge._host.interactions
+            for kind,outcome,button in [('approval','approved','interactionAccept'),('approval','denied','interactionReject'),('question','answered','interactionAccept'),('question','dismissed','interactionReject')]:
+                results=[]
+                worker=threading.Thread(target=lambda:results.append(controller.request(sid,kind+outcome,kind,'Test question',cancelled=None)))
+                workers.append(worker);worker.start()
+                _pump(qapp,1)
+                assert bridge.pendingInteractions(), (sid, bridge._active)
+>               assert _find_item(w.contentItem(),'interactionPrompt').property('visible')
+E               assert False
+E                +  where False = <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff78d4f440>('visible')
+E                +    where <built-in method property of PySide6.QtQuick.QQuickItem object at 0xffff78d4f440> = <PySide6.QtQuick.QQuickItem(0x381b1260, name="interactionPrompt", parent=0x38ea3240, geometry=380,365 520x90, z=2000) at 0xffff78d4f440>.property
+E                +      where <PySide6.QtQuick.QQuickItem(0x381b1260, name="interactionPrompt", parent=0x38ea3240, geometry=380,365 520x90, z=2000) at 0xffff78d4f440> = _find_item(<PySide6.QtQuick.QQuickItem(0x38ea2420, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffff78d77940>, 'interactionPrompt')
+E                +        where <PySide6.QtQuick.QQuickItem(0x38ea2420, name="Main", parent=0x0, geometry=0,0 1280x820 🖼 ⏿) at 0xffff78d77940> = <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffff78d4d680>()
+E                +          where <built-in method contentItem of PySide6.QtQuick.QQuickWindow object at 0xffff78d4d680> = <PySide6.QtQuick.QQuickWindow(0x38e8edb0 active exposed, visibility=QWindow::Windowed, flags=QFlags<Qt::WindowType>(Window|FramelessWindowHint), title="Deva", geometry=0,0 1280x820) at 0xffff78d4d680>.contentItem
+
+app/tests/test_qml_plugin_settings.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_plugin_settings.py::test_actual_qml_approval_and_answer_buttons
+1 failed, 1398 passed, 9 skipped in 271.64s (0:04:31)

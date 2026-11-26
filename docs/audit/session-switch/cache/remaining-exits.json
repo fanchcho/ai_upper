@@ -1,0 +1,10 @@
+[
+  {
+    "name": "profile",
+    "exit_code": 0
+  },
+  {
+    "name": "stress",
+    "exit_code": 0
+  }
+]

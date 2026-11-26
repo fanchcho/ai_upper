@@ -1,0 +1,12 @@
+accepted-before 1 {"n": 48, "median_ms": 141.20028000616003, "p95_ms": 147.7197200001683, "cache": null, "session_list_signals": 0, "rss_peak_kib": 205716}
+
+accepted-after 1 {"n": 48, "median_ms": 73.88615999661852, "p95_ms": 131.8123600212857, "cache": {"hits": 24, "misses": 24, "entries": 24, "charged_bytes": 74526720}, "session_list_signals": 0, "rss_peak_kib": 284636}
+
+accepted-before 2 {"n": 48, "median_ms": 139.3710600095801, "p95_ms": 145.88851999724284, "cache": null, "session_list_signals": 0, "rss_peak_kib": 205432}
+
+accepted-after 2 {"n": 48, "median_ms": 72.05497998802457, "p95_ms": 128.52195999585092, "cache": {"hits": 24, "misses": 24, "entries": 24, "charged_bytes": 74526720}, "session_list_signals": 0, "rss_peak_kib": 282548}
+
+accepted-before 3 {"n": 48, "median_ms": 137.09047999873292, "p95_ms": 145.21295999293216, "cache": null, "session_list_signals": 0, "rss_peak_kib": 205400}
+
+accepted-after 3 {"n": 48, "median_ms": 72.71847999072634, "p95_ms": 128.60128001193516, "cache": {"hits": 24, "misses": 24, "entries": 24, "charged_bytes": 74526720}, "session_list_signals": 0, "rss_peak_kib": 284660}
+

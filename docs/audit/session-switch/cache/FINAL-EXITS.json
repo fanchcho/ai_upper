@@ -1,0 +1,18 @@
+[
+  {
+    "name": "release-after-1",
+    "exit_code": 0
+  },
+  {
+    "name": "release-after-2",
+    "exit_code": 0
+  },
+  {
+    "name": "release-after-3",
+    "exit_code": 0
+  },
+  {
+    "name": "pytest-final",
+    "exit_code": 0
+  }
+]

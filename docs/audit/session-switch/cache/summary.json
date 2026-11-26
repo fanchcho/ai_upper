@@ -1,0 +1,31 @@
+{
+  "accepted-before-cold": {
+    "n": 72,
+    "median_ms": 136.10509999853093,
+    "p95_ms": 146.8047599773854,
+    "max_gui_ms": 65.89088001055643,
+    "dispatch_median_ms": 11.231939992285334
+  },
+  "accepted-before-hot": {
+    "n": 72,
+    "median_ms": 140.99273999454454,
+    "p95_ms": 147.7197200001683,
+    "max_gui_ms": 69.68463998055086,
+    "dispatch_median_ms": 11.189599987119436
+  },
+  "accepted-after-cold": {
+    "n": 72,
+    "median_ms": 125.70562001201324,
+    "p95_ms": 134.7162800084334,
+    "max_gui_ms": 55.406439991202205,
+    "dispatch_median_ms": 11.398180009564385
+  },
+  "accepted-after-hot": {
+    "n": 72,
+    "median_ms": 21.73212000343483,
+    "p95_ms": 23.30031999736093,
+    "max_gui_ms": 14.293079992057756,
+    "dispatch_median_ms": 20.819680008571595
+  },
+  "verification": "12 final PNG RGB equal to committed baseline; 144 full text hashes equal; per click title/active ID/last turn assertions passed; all six subprocesses exit 0 (runner check=True)"
+}
