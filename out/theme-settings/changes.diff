@@ -1,0 +1,382 @@
+diff --git a/app/src/qml/PluginSettingsPane.qml b/app/src/qml/PluginSettingsPane.qml
+index fbafb83..a61edd0 100644
+--- a/app/src/qml/PluginSettingsPane.qml
++++ b/app/src/qml/PluginSettingsPane.qml
+@@ -1,5 +1,5 @@
+ import QtQuick
+-import QtQuick.Controls
++import QtQuick.Controls.Basic
+ import QtQuick.Layouts
+ import "."
+
+@@ -32,10 +32,42 @@ Item {
+         Text { text: pane.mode === "custom-model" ? "Custom model" : pane.mode === "mcp" ? "MCP servers" : "Personas"; color: Theme.fg; font.pixelSize: 18 }
+         Text { visible: pane.mode === "custom-model"; text: "Empty address follows the current session model."; color: Theme.fgMuted }
+         ComboBox {
++            id: chooser
++            palette.text: Theme.fg
++            palette.buttonText: Theme.fg
++            palette.base: Theme.bg
++            palette.button: Theme.bg
++            palette.highlight: Theme.accent
++            palette.highlightedText: Theme.accentFg
++            contentItem: Text { text: chooser.displayText || "Select an entry"; color: Theme.fg; verticalAlignment: Text.AlignVCenter; leftPadding: 8 }
++            background: Rectangle { implicitHeight: 34; color: Theme.bgElevated; radius: Theme.radiusSm; border.color: Theme.borderStrong }
++
+             visible: pane.mode !== "custom-model"
+             Layout.fillWidth: true
+             model: pane.mode === "mcp" ? pane.state.servers : pane.state.identities
+             textRole: "id"
++            indicator: Text { x: chooser.width - width - 10; anchors.verticalCenter: parent.verticalCenter; text: "⌄"; color: Theme.fgMuted }
++            delegate: ItemDelegate {
++                width: chooser.width
++                text: modelData.id
++                contentItem: Text { text: modelData.id; color: Theme.fg; font.pixelSize: 13 }
++                background: Rectangle { color: highlighted ? Theme.bgActive : Theme.bg }
++                highlighted: chooser.highlightedIndex === index
++            }
++            popup: Popup {
++                y: chooser.height
++                width: chooser.width
++                implicitHeight: Math.min(contentItem.implicitHeight + 8, 240)
++                padding: 4
++                background: Rectangle { color: Theme.bgElevated; border.color: Theme.borderStrong; radius: Theme.radiusSm }
++                contentItem: ListView {
++                    clip: true
++                    implicitHeight: contentHeight
++                    model: chooser.popup.visible ? chooser.delegateModel : null
++                    currentIndex: chooser.highlightedIndex
++                    ScrollBar.vertical: SettingsScrollBar {}
++                }
++            }
+             onActivated: {
+                 var row = model[currentIndex]
+                 identifier.text = row.id
+@@ -48,18 +80,35 @@ Item {
+                 secret.text = ""
+             }
+         }
+-        TextField { id: identifier; objectName: "pluginIdentifier"; visible: pane.mode !== "custom-model"; placeholderText: "ID (new ID creates an entry)"; Layout.fillWidth: true }
+-        TextField { id: address; objectName: "pluginBaseUrl"; visible: pane.mode !== "identities"; placeholderText: "Base URL"; Layout.fillWidth: true }
+-        TextField { id: modelName; objectName: "pluginModelName"; visible: pane.mode === "custom-model"; placeholderText: "Model name"; Layout.fillWidth: true }
+-        TextField { id: command; visible: pane.mode === "mcp"; placeholderText: "Command (stdio)"; Layout.fillWidth: true }
+-        TextField { id: argsInput; visible: pane.mode === "mcp"; text: "[]"; placeholderText: "Arguments (JSON array)"; Layout.fillWidth: true }
+-        CheckBox { id: enabledBox; objectName: "pluginEnabled"; visible: pane.mode === "mcp"; text: "Enabled"; checked: true }
+-        CheckBox { objectName: "pluginApprovalEnabled"; visible: pane.mode === "mcp"; text: "执行命令、写文件和 MCP 调用前审批"; checked: pane.state.approvalEnabled === true; onClicked: pane.invoke("saveApproval", {enabled: checked}) }
++        SettingsField { id: identifier; objectName: "pluginIdentifier"; visible: pane.mode !== "custom-model"; placeholderText: "ID (new ID creates an entry)"; Layout.fillWidth: true }
++        SettingsField { id: address; objectName: "pluginBaseUrl"; visible: pane.mode !== "identities"; placeholderText: "Base URL"; Layout.fillWidth: true }
++        SettingsField { id: modelName; objectName: "pluginModelName"; visible: pane.mode === "custom-model"; placeholderText: "Model name"; Layout.fillWidth: true }
++        SettingsField { id: command; visible: pane.mode === "mcp"; placeholderText: "Command (stdio)"; Layout.fillWidth: true }
++        SettingsField { id: argsInput; visible: pane.mode === "mcp"; text: "[]"; placeholderText: "Arguments (JSON array)"; Layout.fillWidth: true }
++        SettingsCheck { id: enabledBox; objectName: "pluginEnabled"; visible: pane.mode === "mcp"; text: "Enabled"; checked: true }
++        SettingsCheck { objectName: "pluginApprovalEnabled"; visible: pane.mode === "mcp"; text: "执行命令、写文件和 MCP 调用前审批"; checked: pane.state.approvalEnabled === true; onClicked: pane.invoke("saveApproval", {enabled: checked}) }
+         Text { id: keyStatus; visible: pane.mode !== "identities"; text: (pane.mode === "mcp" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? "已设置" : "未设置"; color: Theme.fgMuted }
+-        TextField { id: secret; objectName: "pluginSecret"; visible: pane.mode !== "identities"; placeholderText: "New API key / credential (empty keeps current)"; echoMode: TextInput.Password; Layout.fillWidth: true }
+-        ScrollView { visible: pane.mode === "identities"; Layout.fillWidth: true; Layout.fillHeight: true; TextArea { id: body; objectName: "pluginPersonaBody"; wrapMode: TextEdit.Wrap; placeholderText: "Persona Markdown" } }
++        SettingsField { id: secret; objectName: "pluginSecret"; visible: pane.mode !== "identities"; placeholderText: "New API key / credential (empty keeps current)"; echoMode: TextInput.Password; Layout.fillWidth: true }
++        ScrollView {
++            visible: pane.mode === "identities"
++            Layout.fillWidth: true
++            Layout.fillHeight: true
++            ScrollBar.vertical: SettingsScrollBar {}
++            TextArea {
++                id: body
++                objectName: "pluginPersonaBody"
++                color: Theme.fg
++                placeholderTextColor: Theme.fgMuted
++                selectionColor: Theme.accent
++                selectedTextColor: Theme.accentFg
++                wrapMode: TextEdit.Wrap
++                placeholderText: "Persona Markdown"
++                background: Rectangle { color: Theme.bgElevated; border.color: Theme.borderStrong; radius: Theme.radiusSm }
++            }
++        }
+         RowLayout {
+-            Button {
++            SettingsButton {
++                primary: true
+                 objectName: "pluginSave"
+                 text: "Save"
+                 onClicked: {
+@@ -74,8 +123,8 @@ Item {
+                     if (pane.invoke(op, value)) secret.text = ""
+                 }
+             }
+-            Button { visible: pane.mode === "mcp"; text: "Delete"; onClicked: pane.invoke("deleteServer", {id: identifier.text}) }
+-            Button {
++            SettingsButton { visible: pane.mode === "mcp"; destructive: true; text: "Delete"; onClicked: pane.invoke("deleteServer", {id: identifier.text}) }
++            SettingsButton {
+                 visible: pane.mode !== "identities"
+                 text: "Clear credential"
+                 onClicked: {
+diff --git a/app/src/qml/SettingsModal.qml b/app/src/qml/SettingsModal.qml
+index 3bc983b..396de23 100644
+--- a/app/src/qml/SettingsModal.qml
++++ b/app/src/qml/SettingsModal.qml
+@@ -315,9 +315,10 @@ Item {
+                 }
+                 SetRow {
+                     width: parent.width
++                    objectName: "settingsThemeChoice"
+                     label: "Theme"
+                     options: ["System", "Light", "Dark"]
+-                    current: shellBridge ? shellBridge.themeIndex() : 1
++                    current: shellBridge ? ["system", "light", "dark"].indexOf(shellBridge.themeChoice) : 1
+                     onPicked: function (i) { shellBridge.setTheme(["system", "light", "dark"][i]) }
+                 }
+                 SetRow {
+@@ -529,7 +530,7 @@ Item {
+                             }
+                         }
+                     }
+-                    Button {
++                    SettingsButton {
+                         objectName: "modelsCustomNetwork"
+                         anchors.right: addBtn.left
+                         anchors.rightMargin: 8
+@@ -563,7 +564,7 @@ Item {
+                         width: parent.width - 2
+                         horizontalAlignment: Text.AlignHCenter
+                         text: modPane.text.noProvidersYet || ""
+-                        color: Theme.fgSubtle
++                        color: Theme.fgMuted
+                         font.family: Theme.sansFamily
+                         font.pixelSize: 13
+                     }
+@@ -626,7 +627,7 @@ Item {
+                                 Text {
+                                     width: parent.width
+                                     text: providerRow.modelData.detail || ""
+-                                    color: Theme.fgSubtle
++                                    color: Theme.fgMuted
+                                     font.family: Theme.sansFamily
+                                     // `.provider-row__sub`（`app.css:4567-4573`）：font-size:11.5px。
+                                     // pixelSize 只收整数，半像素用 pointSize 表达（96dpi 下
+@@ -804,7 +805,7 @@ Item {
+                                 width: 16
+                                 height: 16
+                                 radius: 8
+-                                color: "#ffffff"
++                                color: Theme.switchThumb
+                             }
+                             MouseArea {
+                                 anchors.fill: parent
+@@ -868,7 +869,7 @@ Item {
+                         }
+                         Text {
+                             text: modPane.text.keyMissingWarn || ""
+-                            color: Theme.warning
++                            color: Theme.fgMuted
+                             font.family: Theme.sansFamily
+                             font.pixelSize: 12
+                         }
+@@ -913,7 +914,7 @@ Item {
+                             width: parent.width - 2
+                             horizontalAlignment: Text.AlignHCenter
+                             text: modPane.text.noModels || ""
+-                            color: Theme.fgSubtle
++                            color: Theme.fgMuted
+                             font.family: Theme.sansFamily
+                             font.pixelSize: 13
+                         }
+@@ -954,7 +955,7 @@ Item {
+                                         Text {
+                                             visible: detailModelRow.modelData.showId === true
+                                             text: detailModelRow.modelData.id || ""
+-                                            color: Theme.fgSubtle
++                                            color: Theme.fgMuted
+                                             font.family: Theme.monoFamily
+                                             font.pixelSize: 11
+                                         }
+@@ -1102,7 +1103,7 @@ Item {
+                             width: parent.width - 2
+                             horizontalAlignment: Text.AlignHCenter
+                             text: modPane.text.noHeaders || ""
+-                            color: Theme.fgSubtle
++                            color: Theme.fgMuted
+                             font.family: Theme.sansFamily
+                             font.pixelSize: 13
+                         }
+@@ -1145,7 +1146,7 @@ Item {
+                                             x: 12
+                                             anchors.verticalCenter: parent.verticalCenter
+                                             text: modPane.text.headerName || ""
+-                                            color: Theme.fgSubtle
++                                            color: Theme.fgMuted
+                                             font.family: Theme.sansFamily
+                                             font.pixelSize: 13
+                                             enabled: false
+@@ -1182,7 +1183,7 @@ Item {
+                                             x: 12
+                                             anchors.verticalCenter: parent.verticalCenter
+                                             text: modPane.text.headerValue || ""
+-                                            color: Theme.fgSubtle
++                                            color: Theme.fgMuted
+                                             font.family: Theme.sansFamily
+                                             font.pixelSize: 13
+                                             enabled: false
+@@ -1234,7 +1235,7 @@ Item {
+                                         y: 40 + (headerRow.index > 0 ? 1 : 0)
+                                         width: headerRow.width - 24
+                                         text: headerRow.modelData.issueText || ""
+-                                        color: Theme.warning
++                                        color: Theme.fgMuted
+                                         font.family: Theme.sansFamily
+                                         font.pixelSize: 12
+                                     }
+@@ -1248,7 +1249,7 @@ Item {
+                         y: headerListBox.y + headerListBox.height + 8
+                         width: parent.width
+                         text: modPane.text.headersHint || ""
+-                        color: Theme.fgSubtle
++                        color: Theme.fgMuted
+                         font.family: Theme.sansFamily
+                         font.pixelSize: 12
+                         wrapMode: Text.WordWrap
+@@ -1295,7 +1296,7 @@ Item {
+                 width: parent.width - 40
+                 horizontalAlignment: Text.AlignHCenter
+                 text: shellBridge ? shellBridge.labels().extEmpty : ""
+-                color: Theme.fgSubtle
++                color: Theme.fgMuted
+                 font.family: Theme.sansFamily
+                 font.pixelSize: 12
+             }
+@@ -1378,7 +1379,7 @@ Item {
+                                     visible: extRow.modelData.note !== ""
+                                     anchors.verticalCenter: parent.verticalCenter
+                                     text: extRow.modelData.note
+-                                    color: Theme.fgSubtle
++                                    color: Theme.fgMuted
+                                     font.family: Theme.sansFamily
+                                     font.pixelSize: 11
+                                 }
+@@ -1411,7 +1412,7 @@ Item {
+                                     width: 18
+                                     height: 18
+                                     radius: Theme.radiusFull
+-                                    color: "#ffffff"
++                                    color: Theme.switchThumb
+                                 }
+                                 MouseArea {
+                                     anchors.fill: parent
+@@ -1508,7 +1509,7 @@ Item {
+                 Text {
+                     anchors.horizontalCenter: parent.horizontalCenter
+                     text: (labels.version || "Version") + " " + root.appVersion
+-                    color: Theme.fgSubtle
++                    color: Theme.fgMuted
+                     font.family: Theme.sansFamily
+                     font.pixelSize: 12
+                 }
+@@ -1530,7 +1531,7 @@ Item {
+                                ? Theme.bgHover : Theme.bgElevated
+                         border.width: 1
+                         border.color: Theme.borderStrong
+-                        opacity: aboutPaneRoot.checking ? 0.45 : 1
++                        opacity: 1
+
+                         Row {
+                             id: updateButtonRow
+@@ -1591,7 +1592,7 @@ Item {
+                         Text {
+                             anchors.verticalCenter: parent.verticalCenter
+                             text: aboutPaneRoot.labels.latestVersion || ""
+-                            color: Theme.success
++                            color: Theme.fgMuted
+                             font.family: Theme.sansFamily
+                             font.pixelSize: 13
+                         }
+@@ -1609,7 +1610,7 @@ Item {
+                         Text {
+                             anchors.verticalCenter: parent.verticalCenter
+                             text: aboutPaneRoot.labels.updateCheckFailed || ""
+-                            color: Theme.danger
++                            color: Theme.fgMuted
+                             font.family: Theme.sansFamily
+                             font.pixelSize: 13
+                         }
+@@ -1709,11 +1710,13 @@ Item {
+                 width: 69
+                 height: 30
+                 radius: Theme.radiusSm
+-                color: providerConfirmMouse.containsMouse ? Qt.lighter(Theme.danger, 1.07) : Theme.danger
++                color: providerConfirmMouse.containsMouse ? Theme.bgHover : Theme.bgElevated
++                border.color: Theme.danger
++                border.width: 2
+                 Text {
+                     anchors.centerIn: parent
+                     text: root.modelsLabels.delete || ""
+-                    color: "#ffffff"
++                    color: Theme.fg
+                     font.family: Theme.sansFamily
+                     font.pixelSize: 13
+                     font.weight: 500
+diff --git a/app/src/qml/Theme.qml b/app/src/qml/Theme.qml
+index 6324c13..d7fdbce 100644
+--- a/app/src/qml/Theme.qml
++++ b/app/src/qml/Theme.qml
+@@ -56,6 +56,9 @@ QtObject {
+     readonly property color border: dark ? _borderDark : _borderLight
+     readonly property color borderStrong: dark ? _borderStrongDark : _borderStrongLight
+     readonly property color accent: dark ? _accentDark : _accentLight
++    // deva app.css .switch__knob / redesign.css .cf-switch__dot: white in both schemes.
++    readonly property color switchThumb: "#ffffff"
++    readonly property color accentHover: dark ? "#9090f5" : "#4c4cc4"
+     readonly property color accentFg: dark ? "#14141a" : "#ffffff"
+     readonly property color chatUserBubble: dark ? _bubbleDark : _bubbleLight
+     readonly property color danger: dark ? "#ff6b6b" : "#e5484d"
+diff --git a/app/src/qml_shell.py b/app/src/qml_shell.py
+index 267e9c1..3e34902 100644
+--- a/app/src/qml_shell.py
++++ b/app/src/qml_shell.py
+@@ -312,6 +312,7 @@ class ShellBridge(QtCore.QObject):
+     # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
+     # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
+     darkModeChanged = QtCore.Signal()
++    themeChoiceChanged = QtCore.Signal()
+     _preparedReady = QtCore.Signal()
+
+     @QtCore.Property(bool, notify=darkModeChanged)
+@@ -382,6 +383,8 @@ class ShellBridge(QtCore.QObject):
+         self._body.set_image_resolver(_load_image)
+         # 首帧之前就把深浅算好：QML 的 Theme.dark 绑在 darkMode 上，晚一拍会闪白。
+         self._dark = self._resolve_dark()
++        hints = QtGui.QGuiApplication.styleHints()
++        hints.colorSchemeChanged.connect(self._system_theme_changed)
+         self._sync_body_style()
+
+     # ── 装配 ──────────────────────────────────────────────────────────────
+@@ -521,6 +524,10 @@ class ShellBridge(QtCore.QObject):
+         value = self._config().get("theme")
+         return value if value in THEME_ORDER else "system"
+
++    @QtCore.Property(str, notify=themeChoiceChanged)
++    def themeChoice(self) -> str:
++        return self.theme()
++
+     @QtCore.Slot(result=int)
+     def themeIndex(self) -> int:
+         return THEME_ORDER.index(self.theme())
+@@ -545,6 +552,7 @@ class ShellBridge(QtCore.QObject):
+             return False
+         if not self._write_config({"theme": value}):
+             return False
++        self.themeChoiceChanged.emit()
+         self._apply_theme()
+         return True
+
+@@ -568,7 +576,12 @@ class ShellBridge(QtCore.QObject):
+             return False
+         hints = QtGui.QGuiApplication.styleHints() if QtGui.QGuiApplication.instance() else None
+         scheme = getattr(hints, "colorScheme", None) if hints is not None else None
+-        return scheme == QtCore.Qt.ColorScheme.Dark
++        return (scheme() if callable(scheme) else scheme) == QtCore.Qt.ColorScheme.Dark
++
++    @QtCore.Slot()
++    def _system_theme_changed(self) -> None:
++        if self.theme() == "system":
++            self._apply_theme()
+
+     def _theme_singleton(self) -> Any:
+         engine = self._engine

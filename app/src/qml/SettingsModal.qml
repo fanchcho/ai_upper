@@ -315,9 +315,10 @@ Item {
                 }
                 SetRow {
                     width: parent.width
+                    objectName: "settingsThemeChoice"
                     label: "Theme"
                     options: ["System", "Light", "Dark"]
-                    current: shellBridge ? shellBridge.themeIndex() : 1
+                    current: shellBridge ? ["system", "light", "dark"].indexOf(shellBridge.themeChoice) : 1
                     onPicked: function (i) { shellBridge.setTheme(["system", "light", "dark"][i]) }
                 }
                 SetRow {
@@ -529,7 +530,7 @@ Item {
                             }
                         }
                     }
-                    Button {
+                    SettingsButton {
                         objectName: "modelsCustomNetwork"
                         anchors.right: addBtn.left
                         anchors.rightMargin: 8
@@ -563,7 +564,7 @@ Item {
                         width: parent.width - 2
                         horizontalAlignment: Text.AlignHCenter
                         text: modPane.text.noProvidersYet || ""
-                        color: Theme.fgSubtle
+                        color: Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 13
                     }
@@ -626,7 +627,7 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: providerRow.modelData.detail || ""
-                                    color: Theme.fgSubtle
+                                    color: Theme.fgMuted
                                     font.family: Theme.sansFamily
                                     // `.provider-row__sub`（`app.css:4567-4573`）：font-size:11.5px。
                                     // pixelSize 只收整数，半像素用 pointSize 表达（96dpi 下
@@ -804,7 +805,7 @@ Item {
                                 width: 16
                                 height: 16
                                 radius: 8
-                                color: "#ffffff"
+                                color: Theme.switchThumb
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -868,7 +869,7 @@ Item {
                         }
                         Text {
                             text: modPane.text.keyMissingWarn || ""
-                            color: Theme.warning
+                            color: Theme.fgMuted
                             font.family: Theme.sansFamily
                             font.pixelSize: 12
                         }
@@ -913,7 +914,7 @@ Item {
                             width: parent.width - 2
                             horizontalAlignment: Text.AlignHCenter
                             text: modPane.text.noModels || ""
-                            color: Theme.fgSubtle
+                            color: Theme.fgMuted
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                         }
@@ -954,7 +955,7 @@ Item {
                                         Text {
                                             visible: detailModelRow.modelData.showId === true
                                             text: detailModelRow.modelData.id || ""
-                                            color: Theme.fgSubtle
+                                            color: Theme.fgMuted
                                             font.family: Theme.monoFamily
                                             font.pixelSize: 11
                                         }
@@ -1102,7 +1103,7 @@ Item {
                             width: parent.width - 2
                             horizontalAlignment: Text.AlignHCenter
                             text: modPane.text.noHeaders || ""
-                            color: Theme.fgSubtle
+                            color: Theme.fgMuted
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                         }
@@ -1145,7 +1146,7 @@ Item {
                                             x: 12
                                             anchors.verticalCenter: parent.verticalCenter
                                             text: modPane.text.headerName || ""
-                                            color: Theme.fgSubtle
+                                            color: Theme.fgMuted
                                             font.family: Theme.sansFamily
                                             font.pixelSize: 13
                                             enabled: false
@@ -1182,7 +1183,7 @@ Item {
                                             x: 12
                                             anchors.verticalCenter: parent.verticalCenter
                                             text: modPane.text.headerValue || ""
-                                            color: Theme.fgSubtle
+                                            color: Theme.fgMuted
                                             font.family: Theme.sansFamily
                                             font.pixelSize: 13
                                             enabled: false
@@ -1234,7 +1235,7 @@ Item {
                                         y: 40 + (headerRow.index > 0 ? 1 : 0)
                                         width: headerRow.width - 24
                                         text: headerRow.modelData.issueText || ""
-                                        color: Theme.warning
+                                        color: Theme.fgMuted
                                         font.family: Theme.sansFamily
                                         font.pixelSize: 12
                                     }
@@ -1248,7 +1249,7 @@ Item {
                         y: headerListBox.y + headerListBox.height + 8
                         width: parent.width
                         text: modPane.text.headersHint || ""
-                        color: Theme.fgSubtle
+                        color: Theme.fgMuted
                         font.family: Theme.sansFamily
                         font.pixelSize: 12
                         wrapMode: Text.WordWrap
@@ -1295,7 +1296,7 @@ Item {
                 width: parent.width - 40
                 horizontalAlignment: Text.AlignHCenter
                 text: shellBridge ? shellBridge.labels().extEmpty : ""
-                color: Theme.fgSubtle
+                color: Theme.fgMuted
                 font.family: Theme.sansFamily
                 font.pixelSize: 12
             }
@@ -1378,7 +1379,7 @@ Item {
                                     visible: extRow.modelData.note !== ""
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: extRow.modelData.note
-                                    color: Theme.fgSubtle
+                                    color: Theme.fgMuted
                                     font.family: Theme.sansFamily
                                     font.pixelSize: 11
                                 }
@@ -1411,7 +1412,7 @@ Item {
                                     width: 18
                                     height: 18
                                     radius: Theme.radiusFull
-                                    color: "#ffffff"
+                                    color: Theme.switchThumb
                                 }
                                 MouseArea {
                                     anchors.fill: parent
@@ -1508,7 +1509,7 @@ Item {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: (labels.version || "Version") + " " + root.appVersion
-                    color: Theme.fgSubtle
+                    color: Theme.fgMuted
                     font.family: Theme.sansFamily
                     font.pixelSize: 12
                 }
@@ -1530,7 +1531,7 @@ Item {
                                ? Theme.bgHover : Theme.bgElevated
                         border.width: 1
                         border.color: Theme.borderStrong
-                        opacity: aboutPaneRoot.checking ? 0.45 : 1
+                        opacity: 1
 
                         Row {
                             id: updateButtonRow
@@ -1591,7 +1592,7 @@ Item {
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             text: aboutPaneRoot.labels.latestVersion || ""
-                            color: Theme.success
+                            color: Theme.fgMuted
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                         }
@@ -1609,7 +1610,7 @@ Item {
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             text: aboutPaneRoot.labels.updateCheckFailed || ""
-                            color: Theme.danger
+                            color: Theme.fgMuted
                             font.family: Theme.sansFamily
                             font.pixelSize: 13
                         }
@@ -1709,11 +1710,13 @@ Item {
                 width: 69
                 height: 30
                 radius: Theme.radiusSm
-                color: providerConfirmMouse.containsMouse ? Qt.lighter(Theme.danger, 1.07) : Theme.danger
+                color: providerConfirmMouse.containsMouse ? Theme.bgHover : Theme.bgElevated
+                border.color: Theme.danger
+                border.width: 2
                 Text {
                     anchors.centerIn: parent
                     text: root.modelsLabels.delete || ""
-                    color: "#ffffff"
+                    color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 13
                     font.weight: 500

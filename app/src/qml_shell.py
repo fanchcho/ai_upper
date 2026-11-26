@@ -312,6 +312,7 @@ class ShellBridge(QtCore.QObject):
     # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
     # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
     darkModeChanged = QtCore.Signal()
+    themeChoiceChanged = QtCore.Signal()
     _preparedReady = QtCore.Signal()
 
     @QtCore.Property(bool, notify=darkModeChanged)
@@ -382,6 +383,8 @@ class ShellBridge(QtCore.QObject):
         self._body.set_image_resolver(_load_image)
         # 首帧之前就把深浅算好：QML 的 Theme.dark 绑在 darkMode 上，晚一拍会闪白。
         self._dark = self._resolve_dark()
+        hints = QtGui.QGuiApplication.styleHints()
+        hints.colorSchemeChanged.connect(self._system_theme_changed)
         self._sync_body_style()
 
     # ── 装配 ──────────────────────────────────────────────────────────────
@@ -521,6 +524,10 @@ class ShellBridge(QtCore.QObject):
         value = self._config().get("theme")
         return value if value in THEME_ORDER else "system"
 
+    @QtCore.Property(str, notify=themeChoiceChanged)
+    def themeChoice(self) -> str:
+        return self.theme()
+
     @QtCore.Slot(result=int)
     def themeIndex(self) -> int:
         return THEME_ORDER.index(self.theme())
@@ -545,6 +552,7 @@ class ShellBridge(QtCore.QObject):
             return False
         if not self._write_config({"theme": value}):
             return False
+        self.themeChoiceChanged.emit()
         self._apply_theme()
         return True
 
@@ -568,7 +576,12 @@ class ShellBridge(QtCore.QObject):
             return False
         hints = QtGui.QGuiApplication.styleHints() if QtGui.QGuiApplication.instance() else None
         scheme = getattr(hints, "colorScheme", None) if hints is not None else None
-        return scheme == QtCore.Qt.ColorScheme.Dark
+        return (scheme() if callable(scheme) else scheme) == QtCore.Qt.ColorScheme.Dark
+
+    @QtCore.Slot()
+    def _system_theme_changed(self) -> None:
+        if self.theme() == "system":
+            self._apply_theme()
 
     def _theme_singleton(self) -> Any:
         engine = self._engine

@@ -1,0 +1,56 @@
+315e407 docs(audit): record workspace mount screenshots and full verification
+6e59c78 fix(qml): contain file icons and persist picked workspaces
+b011b65 docs(audit): record three rejected cold rendering candidates
+055db71 docs(audit): close rejected idle prefetch investigation
+cf960b8 docs(audit): reject cold attachment regressions with measured evidence
+e1fbf80 docs(audit): verify cold and cached session frames and bounded memory
+b2de19d test(qml): await interaction prompt readiness
+b11ed32 perf(qml): reuse bounded session display documents
+468f5b7 docs(audit): verify retained develop before authorized push
+9b5775a docs(audit): quantify render costs and record full-suite verification
+965c385 fix(qml): restore single-pass attachment under full-frame latency policy
+80bc3b5 docs(audit): record rejected selection lookup and staged attachment results
+ M app/src/qml/PluginSettingsPane.qml
+ M app/src/qml/SettingsModal.qml
+ M app/src/qml/Theme.qml
+ M app/src/qml_shell.py
+?? app/src/qml/SettingsButton.qml
+?? app/src/qml/SettingsCheck.qml
+?? app/src/qml/SettingsField.qml
+?? app/src/qml/SettingsScrollBar.qml
+?? app/tests/test_qml_settings_theme.py
+b011b653515a51f3b3cf68eef8123e48e8536f83	refs/heads/develop
+2
+315e407 docs(audit): record workspace mount screenshots and full verification
+out/workspace-mount/REPORT.md
+out/workspace-mount/after.log
+out/workspace-mount/after.png
+out/workspace-mount/baseline-ui.log
+out/workspace-mount/before.log
+out/workspace-mount/before.png
+out/workspace-mount/dialog-mouse.log
+out/workspace-mount/dialog-selection.png
+out/workspace-mount/dialog-tree.log
+out/workspace-mount/dialog.png
+out/workspace-mount/dialog_mouse.py
+out/workspace-mount/failure-targeted.log
+out/workspace-mount/fix.diff
+out/workspace-mount/git-start.log
+out/workspace-mount/inspection.log
+out/workspace-mount/layer-targeted.log
+out/workspace-mount/mouse.log
+out/workspace-mount/pixels.log
+out/workspace-mount/pytest-final.exit
+out/workspace-mount/pytest-final.log
+out/workspace-mount/pytest-full.log
+out/workspace-mount/regression-before.log
+out/workspace-mount/repro_mount.py
+out/workspace-mount/run_full.py
+out/workspace-mount/screenshots.json
+out/workspace-mount/targeted.log
+out/workspace-mount/user.png
+6e59c78 fix(qml): contain file icons and persist picked workspaces
+app/src/qml/Icon.qml
+app/src/qml/Main.qml
+app/src/qml_shell.py
+app/tests/test_qml_workspace_mount.py

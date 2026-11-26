@@ -56,6 +56,9 @@ QtObject {
     readonly property color border: dark ? _borderDark : _borderLight
     readonly property color borderStrong: dark ? _borderStrongDark : _borderStrongLight
     readonly property color accent: dark ? _accentDark : _accentLight
+    // deva app.css .switch__knob / redesign.css .cf-switch__dot: white in both schemes.
+    readonly property color switchThumb: "#ffffff"
+    readonly property color accentHover: dark ? "#9090f5" : "#4c4cc4"
     readonly property color accentFg: dark ? "#14141a" : "#ffffff"
     readonly property color chatUserBubble: dark ? _bubbleDark : _bubbleLight
     readonly property color danger: dark ? "#ff6b6b" : "#e5484d"
