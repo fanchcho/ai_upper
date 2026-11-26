@@ -7,78 +7,137 @@ Item {
     property var item: ({})
     property string error: ""
     signal back()
+    component FieldLabel: Text {
+        color: Theme.fgSubtle; font.pixelSize: 11; font.bold: true
+        font.capitalization: Font.AllUppercase; topPadding: 4
+    }
     function call(action, payload) {
         var result = JSON.parse(shellBridge.extensionAction(action, item.kind, item.id, JSON.stringify(payload || {})))
         error = result.ok ? "" : result.error
         if (result.item) item = result.item
         return result.ok
     }
+    function personaRecord(id) { return (root.item.personas || []).find(function(p) { return p.id === id }) || {id:id, name:id, avatarImage:""} }
+    function rolesSummary() {
+        var names = (root.item.roles || []).map(function(id) { return root.personaRecord(id).name })
+        if (!names.length) return I18n.t("extensions.rolesGeneral")
+        if (names.length <= 2) return names.join(I18n.locale === "en" ? ", " : "、")
+        return I18n.t("extensions.rolesSummary").replace("{names}", names.slice(0,2).join(", ")).replace("{rest}",names.length-2).replace("{n}",names.length)
+    }
     function save(field, value) { var patch = {}; patch[field] = value; call("update", patch) }
-    Row {
-        id: toolbar
-        x: 20; y: 12; spacing: 12
-        SettingsButton { text: I18n.t("common.back"); onClicked: root.back() }
-        SettingsButton { text: I18n.t("common.delete"); onClicked: confirm.open() }
-        SettingsCheck {
-            text: I18n.t("extensions.enable"); checked: root.item.enabled || false
-            palette.windowText: Theme.fg
-            onClicked: {
-                root.save("enabled", checked)
+    Connections {
+        target: shellBridge
+        function onExtensionsChanged() {
+            if (root.item.kind === "mcp") {
+                var result = JSON.parse(shellBridge.extensionAction("detail", "mcp", root.item.id, "{}"))
+                if (result.ok) { var copy = Object.assign({}, root.item); copy.status = result.item.status; copy.tools = result.item.tools; copy.lastError = result.item.lastError; root.item = copy }
             }
+        }
+    }
+    Item {
+        id: toolbar; x: 20; y: 11; width: parent.width - (root.item.kind === "mcp" ? 48 : 40); height: 40
+        Icon { x: 6; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronLeft; size: 16; color: Theme.fgMuted }
+        Text { x: 26; anchors.verticalCenter: parent.verticalCenter; text: I18n.t("common.back"); color: Theme.fgMuted; font.pixelSize: 13 }
+        MouseArea { width: 80; height: parent.height; onClicked: root.back() }
+        Icon { anchors.right: parent.right; anchors.rightMargin: 118; anchors.verticalCenter: parent.verticalCenter; name: IconData.trash2; size: 15; color: Theme.fgSubtle }
+        MouseArea { anchors.right: parent.right; anchors.rightMargin: 110; width: 30; height: parent.height; onClicked: confirm.open() }
+        Text { anchors.right: parent.right; anchors.rightMargin: 50; anchors.verticalCenter: parent.verticalCenter; text: I18n.t("extensions.enable"); color: Theme.fgMuted; font.pixelSize: 12 }
+        Rectangle {
+            anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+            width: 38; height: 22; radius: 11; color: root.item.enabled ? Theme.accent : Theme.bgActive
+            Rectangle { x: root.item.enabled ? 18 : 2; y: 2; width: 18; height: 18; radius: 9; color: Theme.switchThumb }
+            MouseArea { anchors.fill: parent; onClicked: root.save("enabled", !root.item.enabled) }
         }
     }
     Dialog {
         id: confirm
         title: I18n.t("common.delete") + " " + (root.item.name || "")
         modal: true; width: 360; anchors.centerIn: parent
+        palette.window: Theme.bgPanel; palette.windowText: Theme.fg
+        palette.button: Theme.bgElevated; palette.buttonText: Theme.fg
+        palette.text: Theme.fg; palette.base: Theme.bgPanel
+        background: Rectangle { color: Theme.bgPanel; radius: Theme.radiusLg; border.color: Theme.border }
         standardButtons: Dialog.Ok | Dialog.Cancel
-        Label { text: I18n.t(root.item.kind === "skill" ? "cf.skillDeleteConfirm" : "cf.mcpDeleteConfirm"); wrapMode: Text.Wrap; width: 320 }
+        Label { color: Theme.fg; text: I18n.t(root.item.kind === "skill" ? "cf.skillDeleteConfirm" : "cf.mcpDeleteConfirm"); wrapMode: Text.Wrap; width: 320 }
         onAccepted: if (root.call("remove", {})) root.back()
     }
     ScrollView {
-        id: scroll
+        id: scroll; objectName: "extensionDetailScroll"
         contentWidth: availableWidth
-        anchors { top: toolbar.bottom; topMargin: 12; left: parent.left; right: parent.right; bottom: parent.bottom; margins: 20 }
+        x: 20; y: 60; width: parent.width - (root.item.kind === "mcp" ? 48 : 40); height: parent.height - 60
+        bottomPadding: 16
         clip: true
+        Binding { target: scroll.contentItem; property: "boundsBehavior"; value: Flickable.StopAtBounds }
         Column {
             width: scroll.availableWidth; spacing: 12
-            Text { text: root.item.name || ""; color: Theme.fg; font.pixelSize: 17; font.bold: true }
-            Text { visible: root.error.length > 0; text: root.error; color: Theme.danger; width: parent.width; wrapMode: Text.Wrap }
-            Text { text: I18n.t("extensions.roles"); color: Theme.fgMuted; font.pixelSize: 12 }
-            Flow {
-                width: parent.width; spacing: 6
-                SettingsCheck {
-                    text: I18n.t("extensions.rolesGeneral"); checked: !root.item.roles || root.item.roles.length === 0
-                    palette.windowText: Theme.fg
-                    onClicked: root.save("roles", null)
+            Item { width: parent.width; height: 42
+                Icon { y: 6; name: root.item.kind === "mcp" ? "M12 22v-5M9 8V2M15 8V2M7 8h10v4a5 5 0 0 1-10 0V8Z" : IconData.puzzle; size: 18; color: Theme.accent }
+                Text { x: 34; y: 6; text: root.item.name || ""; color: Theme.fg; font.pixelSize: 14; font.family: Theme.monoFamily; font.bold: true }
+                Row { visible: root.item.kind === "mcp"; anchors.right: parent.right; y: 6; spacing: 8
+                    Text {
+                        font.family: Theme.monoFamily; font.pixelSize: 12
+                        text: (root.item.enabled ? (root.item.status === "connected" || root.item.status === "connecting" ? "● " : root.item.status === "disconnected" ? "○ " : "! ") : "○ ") + I18n.t("extensions.status." + (root.item.enabled ? root.item.status || "disconnected" : "off")) + (root.item.enabled && root.item.status === "connected" ? " · " + (root.item.tools || []).length + " " + I18n.t("extensions.tools") : "")
+                        color: !root.item.enabled ? Theme.fgSubtle : root.item.status === "connected" ? Theme.success : root.item.status === "error" ? Theme.danger : Theme.fgMuted
+                    }
+                    Text { visible: root.item.enabled && root.item.status === "error"; text: I18n.t("extensions.retry"); color: Theme.accent; font.pixelSize: 12
+                        MouseArea { anchors.fill: parent; onClicked: root.call("retry", {}) }
+                    }
                 }
-                Repeater {
-                    model: root.item.personas || []
-                    SettingsCheck {
-                        required property var modelData
-                        text: modelData.name; palette.windowText: Theme.fg
-                        checked: (root.item.roles || []).indexOf(modelData.id) >= 0
-                        onClicked: {
-                            var roles = (root.item.roles || []).slice()
-                            var index = roles.indexOf(modelData.id)
-                            if (index >= 0) roles.splice(index, 1); else roles.push(modelData.id)
-                            root.save("roles", roles.length ? roles : null)
+                Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.border }
+            }
+            Text { visible: root.item.enabled && !!root.item.lastError; text: root.item.lastError || ""; width: parent.width; wrapMode: Text.Wrap; color: Theme.warning }
+            Text { visible: root.error.length > 0; text: root.error; color: Theme.danger; width: parent.width; wrapMode: Text.Wrap }
+            FieldLabel { text: I18n.t("extensions.roles") }
+            SettingsButton {
+                width: parent.width; height: 32
+                contentItem: Row { spacing: 8
+                    Icon { visible: !root.item.roles || !root.item.roles.length; name: IconData.users; size: 20; color: Theme.accent }
+                    Row { spacing: -6; Repeater { model: root.item.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: root.personaRecord(modelData).avatarImage || ""; size: 20 } } }
+                    Text { text: root.rolesSummary(); color: Theme.fg; font.pixelSize: 13 }
+                }
+                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; size: 12; color: Theme.fgSubtle }
+                onClicked: rolesPopup.open()
+                Popup {
+                    id: rolesPopup; focus: true; y: parent.height; width: parent.width
+                    background: Rectangle { color: Theme.bgElevated; border.color: Theme.border; radius: 8 }
+                    contentItem: Column {
+                        Item { width: parent.width; height: 52
+                            Icon { x: 12; y: 16; name: IconData.users; size: 18; color: Theme.accent }
+                            Text { x: 44; y: 8; text: I18n.t("extensions.rolesGeneral"); color: Theme.fg; font.pixelSize: 13 }
+                            Text { x: 44; y: 26; text: I18n.t("extensions.rolesGeneralHint"); color: Theme.fgSubtle; font.pixelSize: 12 }
+                            MouseArea { anchors.fill: parent; onClicked: { root.save("roles", null); rolesPopup.close() } }
+                        }
+                        Rectangle { width: parent.width; height: 1; color: Theme.border }
+                        Text { text: I18n.t("extensions.rolesOnly"); color: Theme.fgSubtle; font.pixelSize: 11; padding: 10 }
+                        Repeater {
+                            model: root.item.personas || []
+                            Item {
+                                required property var modelData
+                                width: parent.width; height: 38
+                                Avatar { x: 8; anchors.verticalCenter: parent.verticalCenter; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 24 }
+                                Text { x: 42; anchors.verticalCenter: parent.verticalCenter; text: modelData.name; color: Theme.fg; font.pixelSize: 13 }
+                                Text { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; text: (root.item.roles || []).indexOf(modelData.id) >= 0 ? "✓" : ""; color: Theme.accent }
+                                MouseArea { anchors.fill: parent; onClicked: {
+                                    var roles = (root.item.roles || []).slice(); var i = roles.indexOf(modelData.id)
+                                    if (i >= 0) roles.splice(i,1); else roles.push(modelData.id)
+                                    root.save("roles", roles.length ? roles : null)
+                                } }
+                            }
                         }
                     }
                 }
             }
-            Text { visible: root.item.kind === "skill"; text: I18n.t("extensions.instructions"); color: Theme.fgMuted }
-            TextEdit {
-                visible: root.item.kind === "skill"; width: parent.width
-                text: root.item.instructions || I18n.t("extensions.instructionsEmpty")
-                textFormat: TextEdit.MarkdownText; readOnly: true; selectByMouse: true
-                wrapMode: TextEdit.Wrap; color: Theme.fg; font.pixelSize: 13
-            }
+            FieldLabel { visible: root.item.kind === "skill"; text: I18n.t("extensions.instructions") }
             Column {
-                visible: root.item.kind === "mcp"; width: parent.width; spacing: 12
-                Text { text: I18n.t("extensions.transport"); color: Theme.fgMuted }
+                visible: root.item.kind === "mcp"; width: parent.width; spacing: 10
+                FieldLabel { text: I18n.t("extensions.transport") }
                 ComboBox {
                     id: transportChoice
+                    width: parent.width; height: 32; leftPadding: 12; rightPadding: 28
+                    font.family: Theme.monoFamily; font.pixelSize: 12
+                    contentItem: Text { text: transportChoice.displayText; font: transportChoice.font; color: Theme.fg; verticalAlignment: Text.AlignVCenter }
+                    background: Rectangle { radius: Theme.radiusSm; color: Theme.bgElevated; border.color: Theme.borderStrong }
+                    indicator: Icon { x: transportChoice.width - 24; y: 10; name: IconData.chevronDown; size: 12; color: Theme.fgSubtle }
                     palette.button: Theme.bgElevated
                     palette.buttonText: Theme.fg
                     palette.base: Theme.bgPanel
@@ -87,59 +146,110 @@ Item {
                     currentIndex: Math.max(0, model.indexOf(root.item.transport || "stdio"))
                     onActivated: root.save("transport", currentText)
                 }
-                Text { text: I18n.t(root.item.transport === "stdio" ? "extensions.command" : "extensions.url"); color: Theme.fgMuted }
+                FieldLabel { text: I18n.t(root.item.transport === "stdio" ? "extensions.command" : "extensions.url") }
                 SettingsField {
-                    width: parent.width
+                    width: parent.width; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12
                     text: root.item.transport === "stdio" ? (root.item.command || "") : (root.item.url || "")
                     onEditingFinished: root.save(root.item.transport === "stdio" ? "command" : "url", text)
                 }
-                Text { visible: root.item.transport === "stdio"; text: I18n.t("extensions.args"); color: Theme.fgMuted }
+                FieldLabel { visible: root.item.transport === "stdio"; text: I18n.t("extensions.args") }
                 TextArea {
-                    visible: root.item.transport === "stdio"; width: parent.width
+                    visible: root.item.transport === "stdio"; width: parent.width; height: Math.max(72, contentHeight + 16)
+                    font.family: Theme.monoFamily; font.pixelSize: 12; padding: 10; wrapMode: TextEdit.Wrap
                     text: (root.item.args || []).join("\n"); color: Theme.fg
-                    background: Rectangle { color: Theme.bgElevated; border.color: Theme.border }
+                    background: Rectangle { radius: Theme.radiusSm; color: Theme.bgElevated; border.color: Theme.borderStrong }
                     onActiveFocusChanged: if (!activeFocus && root.item.kind === "mcp") root.save("args", text.split("\n").filter(function(v) { return v.trim().length > 0 }))
                 }
-                Text { text: I18n.t(root.item.transport === "stdio" ? "extensions.env" : "extensions.headers"); color: Theme.fgMuted }
+                FieldLabel { text: I18n.t(root.item.transport === "stdio" ? "extensions.env" : "extensions.headers") }
                 Repeater {
                     model: root.item[root.item.transport === "stdio" ? "env" : "headers"] || []
                     Row {
                         id: kv
                         required property var modelData
                         required property int index
-                        spacing: 4
+                        spacing: 6; width: parent.width
+                        property string secretDraft: ""
+                        property string saveState: ""
+                        function saveSecret() {
+                            if (!modelData.key || !secretDraft) return
+                            secretTimer.stop(); saveState = "saving"
+                            var result = JSON.parse(shellBridge.extensionAction("secret", "mcp", root.item.id, JSON.stringify({field:modelData.key,value:secretDraft})))
+                            root.error = result.ok ? "" : result.error
+                            saveState = result.ok ? "saved" : ""
+                        }
+                        Timer { id: secretTimer; interval: 600; onTriggered: kv.saveSecret() }
                         function patch(field, value) {
                             var group = root.item.transport === "stdio" ? "env" : "headers"
                             var rows = JSON.parse(JSON.stringify(root.item[group] || []))
                             rows[index][field] = value; root.save(group, rows)
                         }
-                        SettingsField { width: 115; text: kv.modelData.key; placeholderText: I18n.t("extensions.kvKey"); onEditingFinished: kv.patch("key", text) }
+                        SettingsField { width: parent.width * 0.3; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12; text: kv.modelData.key; placeholderText: I18n.t("extensions.kvKey"); onEditingFinished: kv.patch("key", text) }
                         SettingsField {
-                            width: 160; text: kv.modelData.value
+                            width: parent.width * 0.7 - 74; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12
+                            text: kv.modelData.secret ? kv.secretDraft : kv.modelData.value
                             echoMode: kv.modelData.secret ? TextInput.Password : TextInput.Normal
-                            placeholderText: kv.modelData.configured ? I18n.t("extensions.secretConfigured") : I18n.t("extensions.kvValue")
+                            placeholderText: kv.modelData.secret ? I18n.t(kv.modelData.configured ? "extensions.secretPlaceholder" : "extensions.secretValuePlaceholder") : I18n.t("extensions.kvValue")
+                            onTextEdited: if (kv.modelData.secret) { kv.secretDraft = text; kv.saveState = ""; secretTimer.restart() }
                             onEditingFinished: {
-                                if (kv.modelData.secret) { if (text.length) root.call("secret", {field: kv.modelData.key, value: text}) }
+                                if (kv.modelData.secret) kv.saveSecret()
                                 else kv.patch("value", text)
                             }
+                            Text { y: parent.height + 3; visible: kv.modelData.secret && (!!kv.saveState || kv.modelData.configured)
+                                text: I18n.t(kv.saveState === "saved" ? "extensions.secretSaved" : kv.saveState === "saving" ? "extensions.secretSaving" : "extensions.secretConfigured")
+                                color: Theme.fgSubtle; font.pixelSize: 11
+                            }
                         }
-                        SettingsCheck { text: I18n.t("extensions.markSecret"); checked: kv.modelData.secret; onClicked: kv.patch("secret", checked) }
+                        Item { width: 24; height: kv.modelData.secret ? 50 : 32
+                            Icon { anchors.horizontalCenter: parent.horizontalCenter; y: 9; size: 13; color: kv.modelData.secret ? Theme.accent : Theme.fgMuted
+                                name: "M5 11h14v10H5Z|M8 11V7a4 4 0 0 1 8 0" + (kv.modelData.secret ? "v4" : "") }
+                            MouseArea { anchors.fill: parent; onClicked: {
+                                var wasSecret = kv.modelData.secret; var key = kv.modelData.key
+                                kv.patch("secret", !wasSecret)
+                                if (wasSecret) shellBridge.extensionAction("secret", "mcp", root.item.id, JSON.stringify({field:key,value:""}))
+                            } }
+                        }
                         SettingsButton {
-                            text: "×"
+                            text: "×"; width: 24; height: 32
+                            background: Rectangle { color: parent.hovered ? Theme.bgHover : "transparent" }
                             onClicked: { var group = root.item.transport === "stdio" ? "env" : "headers"; var rows = root.item[group].slice(); rows.splice(kv.index,1); root.save(group,rows) }
                         }
                     }
                 }
                 SettingsButton {
-                    text: I18n.t("extensions.addRow")
+                    text: "+  " + I18n.t("extensions.addRow"); height: 26
+                    background: Rectangle { color: parent.hovered ? Theme.bgHover : "transparent"; radius: Theme.radiusSm }
                     onClicked: {
                         var group = root.item.transport === "stdio" ? "env" : "headers"
                         var copy = JSON.parse(JSON.stringify(root.item)); copy[group].push({key:"",value:"",secret:false,configured:false}); root.item = copy
                     }
                 }
-                Text { text: I18n.t("extensions.discoveredTools"); color: Theme.fgMuted }
-                Text { text: I18n.t("extensions.noToolsYet"); color: Theme.fgSubtle }
+                FieldLabel { text: I18n.t("extensions.discoveredTools") }
+                Text { visible: !(root.item.tools || []).length; text: I18n.t("extensions.noToolsYet"); color: Theme.fgSubtle }
+                Repeater { model: root.item.tools || []; Column {
+                    required property var modelData; width: parent.width; spacing: 4
+                    Text { text: modelData.name; color: Theme.fg; font.family: Theme.monoFamily; font.pixelSize: 12 }
+                    Text { text: modelData.description; width: parent.width; wrapMode: Text.Wrap; color: Theme.fgMuted; font.pixelSize: 12 }
+                } }
             }
         }
     }
+    Rectangle {
+        visible: root.item.kind === "skill"
+        x: 20; y: 215; width: parent.width - 40; height: parent.height - y - 18
+        radius: 6; color: Theme.bgElevated
+        Flickable {
+            id: instructionsScroll; objectName: "extensionInstructionsScroll"
+            anchors.fill: parent; anchors.leftMargin: 16; anchors.rightMargin: 16; anchors.topMargin: 12; anchors.bottomMargin: 12; clip: true; contentWidth: width
+            contentHeight: instructionsText.height; boundsBehavior: Flickable.StopAtBounds
+            ScrollBar.vertical: SettingsScrollBar { visible: size < 1 }
+            TextEdit {
+                id: instructionsText
+                width: instructionsScroll.width; height: contentHeight
+                text: shellBridge ? shellBridge.extensionInstructions(root.item.instructions || I18n.t("extensions.instructionsEmpty"), width, Theme.dark) : ""
+                textFormat: TextEdit.RichText; readOnly: true; selectByMouse: true; wrapMode: TextEdit.Wrap
+                color: Theme.fg; font.pixelSize: 13
+            }
+        }
+    }
+
 }

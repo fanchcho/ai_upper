@@ -14,6 +14,7 @@ import subprocess
 import threading
 import time
 import weakref
+from urllib.parse import urljoin, urlsplit
 
 import httpx
 
@@ -62,6 +63,36 @@ class McpConnection:
             )
             threading.Thread(target=self._read_stdio, daemon=True).start()
 
+    def _read_sse(self):
+        # Legacy MCP SSE: GET announces a same-origin POST endpoint.
+        # specification/2024-11-05/basic/transports; SDK client/sse.ts.
+        try:
+            with self.client.stream("GET", self.config["url"], headers=self.headers) as response:
+                response.raise_for_status()
+                if "text/event-stream" not in response.headers.get("content-type", ""):
+                    raise ValueError("Expected an SSE stream")
+                event, data = "message", []
+                for line in response.iter_lines():
+                    if self.closed or self.cancelled(): break
+                    if line.startswith("event:"): event = line[6:].strip()
+                    elif line.startswith("data:"): data.append(line[5:].lstrip())
+                    elif not line and data:
+                        value = "\n".join(data)
+                        if event == "endpoint":
+                            endpoint = urljoin(self.config["url"], value)
+                            original, target = urlsplit(self.config["url"]), urlsplit(endpoint)
+                            if (original.scheme, original.netloc) != (target.scheme, target.netloc):
+                                raise ValueError("SSE endpoint origin mismatch")
+                            self.sse_endpoint = endpoint
+                            self.sse_ready.set()
+                        elif event == "message": self.messages.put(json.loads(value))
+                        event, data = "message", []
+        except Exception as exc:
+            self.sse_error = type(exc).__name__
+        finally:
+            self.sse_ready.set()
+            self.messages.put({"transportClosed": True})
+
     def _read_stdio(self):
         try:
             for line in self.process.stdout:
@@ -104,6 +135,11 @@ class McpConnection:
         if self.process:
             self.process.stdin.write(json.dumps(payload) + "\n")
             self.process.stdin.flush()
+        elif self.config.get("transport") == "sse":
+            response = self.client.post(self.sse_endpoint, json=payload, headers=self.headers)
+            response.raise_for_status()
+            if "id" not in payload and responses is not None:
+                responses.put({"notificationAccepted": True})
         else:
             threading.Thread(target=self._http, args=(payload, responses or queue.Queue()), daemon=True).start()
 
@@ -123,7 +159,7 @@ class McpConnection:
     def request(self, method, params=None):
         self.serial += 1
         request_id = self.serial
-        messages = self.messages if self.process else queue.Queue()
+        messages = self.messages if self.process or self.config.get("transport") == "sse" else queue.Queue()
         self.send({"jsonrpc": "2.0", "id": request_id, "method": method, "params": params or {}}, messages)
         deadline = time.monotonic() + self.timeout
         while True:
@@ -153,6 +189,12 @@ class McpConnection:
             return message.get("result", {})
 
     def initialize(self):
+        if self.config.get("transport") == "sse":
+            self.sse_ready = threading.Event()
+            self.sse_endpoint, self.sse_error = None, None
+            threading.Thread(target=self._read_sse, daemon=True).start()
+            if not self.sse_ready.wait(self.timeout) or self.sse_error or not self.sse_endpoint:
+                raise OSError("SSE connection failed: " + (self.sse_error or "no endpoint"))
         result = self.request("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "ai_upper", "version": "1"}})
         version = result.get("protocolVersion")
         if version not in ("2025-06-18", "2025-03-26", "2024-11-05"):

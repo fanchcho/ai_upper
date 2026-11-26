@@ -242,6 +242,7 @@ class ShellBridge(QtCore.QObject):
     # 为什么不写 Theme 单例的 property：`QQmlApplicationEngine.singletonInstance()`
     # 对 qmldir 里声明 `singleton` 的 QML 文件单例返回的是 QJSValue，`.setProperty()`
     # 落不到 QObject 上（实测 value 不变），主题切了个寂寞。走 context property 才可靠。
+    extensionsChanged = QtCore.Signal()
     localeChanged = QtCore.Signal()
     darkModeChanged = QtCore.Signal()
     themeChoiceChanged = QtCore.Signal()
@@ -1041,20 +1042,80 @@ class ShellBridge(QtCore.QObject):
         cleaned = {key: value for key, value in models.items() if value is not None}
         return self._write_config({"models": cleaned})
 
+    @QtCore.Slot(str, float, bool, result=str)
+    def extensionInstructions(self, source, width, dark):
+        # Settings skill preview: app.css:5344-5356, smaller than chat Markdown.
+        document = QtGui.QTextDocument()
+        font = QtGui.QFont(); font.setPixelSize(13)
+        document.setDefaultFont(font)
+        document.setMarkdown(source)
+        document.setTextWidth(width)
+        block = document.begin()
+        while block.isValid():
+            cursor = QtGui.QTextCursor(block)
+            fmt = block.blockFormat()
+            level = fmt.headingLevel()
+            fmt.setTopMargin(0 if block == document.begin() else 12)
+            fmt.setBottomMargin(0)
+            fmt.setLineHeight(21, QtGui.QTextBlockFormat.FixedHeight.value)
+            fmt.setHeadingLevel(0)
+            cursor.setBlockFormat(fmt)
+            if level:
+                cursor.select(QtGui.QTextCursor.BlockUnderCursor)
+                chars = cursor.charFormat()
+                chars.clearProperty(QtGui.QTextFormat.FontSizeAdjustment)
+                chars.setFontPointSize({1:16, 2:14, 3:13}.get(level,13) * 72 / 96)
+                cursor.setCharFormat(chars)
+            block = block.next()
+        return document.toHtml()
+
+    def _extension_runtime(self):
+        if not hasattr(self, '_ext_runtime'):
+            from mvvm.services.extension_runtime import ExtensionRuntime
+            from mvvm.services.extension_settings import ExtensionSettings
+            self._ext_runtime = ExtensionRuntime(ExtensionSettings(self._settings, self._vault), self.extensionsChanged.emit)
+            QtGui.QGuiApplication.instance().aboutToQuit.connect(self._ext_runtime.close)
+            if self._window is not None: self._window.destroyed.connect(self._ext_runtime.close)
+            self._ext_fingerprint = None
+            self._ext_timer = QtCore.QTimer(self)
+            self._ext_timer.setInterval(500)
+            self._ext_timer.timeout.connect(self._check_extensions)
+            self._ext_timer.start()
+        return self._ext_runtime
+
+    def _check_extensions(self):
+        home = self._settings.home
+        paths = [home / 'config.json', home / 'mcp.json', home / 'skills']
+        if (home / 'skills').exists(): paths += list((home / 'skills').glob('*/SKILL.md'))
+        try:
+            fingerprint = [(str(p), p.stat().st_mtime_ns, p.stat().st_size) for p in paths if p.exists()]
+            if fingerprint != self._ext_fingerprint:
+                self._ext_fingerprint = fingerprint
+                self._ext_runtime.reconcile()
+                self.extensionsChanged.emit()
+        except (OSError, ValueError): self.extensionsChanged.emit()
+
     @QtCore.Slot(str, str, str, str, result=str)
     def extensionAction(self, action, kind, key, payload):
         from mvvm.services.extension_settings import ExtensionSettings
         service = ExtensionSettings(self._settings, self._vault)
         try:
             data = json.loads(payload or '{}')
-            if action == 'errors': return json.dumps({'ok': True, 'errors': service.errors()})
+            if action == 'errors':
+                self._extension_runtime()
+                return json.dumps({'ok': True, 'errors': service.errors()})
+            if action == 'retry': self._extension_runtime().retry(key)
             if action == 'update': service.update(kind, key, data)
             elif action == 'remove':
                 service.remove(kind, key)
                 return json.dumps({'ok': True})
-            elif action == 'secret': service.secret(key, data['field'], data['value'])
-            elif action != 'detail': raise ValueError('Unknown extension operation')
-            return json.dumps({'ok': True, 'item': service.detail(kind, key)})
+            elif action == 'secret':
+                service.secret(key, data['field'], data['value'])
+                self._extension_runtime().retry(key)
+            elif action not in ('detail', 'retry'): raise ValueError('Unknown extension operation')
+            item = service.detail(kind, key)
+            if kind == 'mcp': item.update(self._extension_runtime().view(key))
+            return json.dumps({'ok': True, 'item': item})
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return json.dumps({'ok': False, 'error': str(exc)})
 
@@ -1078,6 +1139,7 @@ class ShellBridge(QtCore.QObject):
                     "name": str(skill.get("name") or skill.get("id") or ""),
                     "enabled": skill.get("enabled") is not False,
                     "builtin": builtin,
+                    "roles": skill.get("roles"),
                     "badge": labels["kindSkill"],
                     "note": labels["builtIn"] if builtin else "",
                 }
@@ -1100,10 +1162,15 @@ class ShellBridge(QtCore.QObject):
                     "id": server["id"], "kind": "mcp",
                     "name": server.get("name") or server["id"],
                     "enabled": server.get("enabled") is True, "builtin": False,
+                    "roles": config.get("mcp", {}).get("roles", {}).get(key),
+                    "warning": self._extension_runtime().view(key)["status"] in ('error','needs_config','needs_secret'),
                     "badge": translate(self.locale, "cf.kindMcp"),
-                    "note": translate(self.locale, "extensions.status.disconnected")
+                    "note": translate(self.locale, "extensions.status." + self._extension_runtime().view(key)["status"])
                         if server.get("enabled") is True else "",
                 })
+        personas = {p['id']: p for p in shared_store().list_personas()}
+        for row in rows:
+            row['roleAvatars'] = {key: personas.get(key, {}).get('avatarImage','') for key in row.get('roles') or []}
         return rows
 
     @QtCore.Slot(str, str, result=bool)

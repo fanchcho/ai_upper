@@ -9,6 +9,7 @@ Item {
     id: ava
     // 文件名（不含 .svg）：user / general / xiaomajiang
     property string persona: "general"
+    property string imageSource: ""
     // 框内构图（原版 `shell-common.tsx:313` 的 `compact`）。原版是 `compact ?? size <= 20`：
     // 不传时按尺寸自动判定，所以 34/38/48 的头像默认都是「探出」构图
     // （`humation.tsx:817` `pop = !compact && !!parts.head`，box 换成 `POP_BOX`），
@@ -19,9 +20,16 @@ Item {
     implicitWidth: size
     implicitHeight: size
 
+    Rectangle {
+        anchors.fill: parent; radius: width / 2
+        visible: avatarImage.status === Image.Error
+        color: Theme.accent
+        Text { anchors.centerIn: parent; text: ava.persona.slice(0, 1).toUpperCase(); color: Theme.accentFg; font.pixelSize: ava.size * 0.5 }
+    }
     Image {
+        id: avatarImage
         anchors.fill: parent
-        source: "avatars/" + ava.persona + (ava.pop ? "-pop" : "") + ".svg"
+        source: ava.imageSource || ("avatars/" + ava.persona + (ava.pop ? "-pop" : "") + ".svg")
         sourceSize: Qt.size(ava.size, ava.size)
         fillMode: Image.PreserveAspectFit
         smooth: true

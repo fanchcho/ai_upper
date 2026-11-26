@@ -240,7 +240,10 @@ class SkillStore:
             )
         # 原版是 `a.name.localeCompare(b.name)`：默认（ICU en-US）按基字母排、大小写只作末位。
         # ASCII 名与 casefold 排序等价；中文等非 ASCII 名在终端默认排序下可能与此不同（已记入台账）。
-        out.sort(key=lambda s: s["name"].casefold())
+        from functools import cmp_to_key
+        from utils.qt_compat import QtCore
+        collator = QtCore.QCollator(QtCore.QLocale('en_US'))
+        out.sort(key=cmp_to_key(lambda a, b: collator.compare(a['name'], b['name'])))
         return [dict(skill) for skill in BUILTIN_SKILLS] + out
 
     def get(self, skill_id: str) -> dict[str, Any] | None:

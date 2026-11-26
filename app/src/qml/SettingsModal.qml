@@ -1281,6 +1281,7 @@ Item {
             property string loadError: ""
 
             Component.onCompleted: refresh()
+            Connections { target: shellBridge; function onExtensionsChanged() { extPane.refresh() } }
 
             function refresh() {
                 try { rows = shellBridge ? (I18n.locale, shellBridge.extensionRows()) : [] }
@@ -1342,11 +1343,15 @@ Item {
             }
 
             // 行列表：卡片自带 1px 外框，行间用 1px 分隔线（原版 .cf-rows + .cf-setrow）。
+            Flickable {
+                objectName: "extensionListScroll"; boundsBehavior: Flickable.StopAtBounds
+                x: 20; y: extPane.loadError.length ? 100 : 55
+                width: parent.width - 40; height: parent.height - y - 20
+                clip: true; contentHeight: extColumn.height + 2
+                ScrollBar.vertical: SettingsScrollBar { visible: size < 1 }
             Rectangle {
                 visible: extPane.rows.length > 0
-                x: 20
-                y: extPane.loadError.length ? 100 : 55
-                width: parent.width - 40
+                width: parent.width
                 height: extColumn.height + 2
                 radius: Theme.radiusLg
                 color: "transparent"
@@ -1419,12 +1424,16 @@ Item {
                                     visible: extRow.modelData.note !== ""
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: extRow.modelData.note
-                                    color: Theme.fgMuted
+                                    color: extRow.modelData.warning ? Theme.warning : Theme.fgSubtle
                                     font.family: Theme.sansFamily
                                     font.pixelSize: 11
                                 }
                             }
 
+                            Row {
+                                anchors.right: parent.right; anchors.rightMargin: 86; anchors.verticalCenter: parent.verticalCenter; spacing: -6
+                                Repeater { model: extRow.modelData.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: (extRow.modelData.roleAvatars || {})[modelData] || ""; size: 20 } }
+                            }
                             Icon {
                                 visible: !extRow.modelData.builtin
                                 anchors.right: parent.right; anchors.rightMargin: 66
@@ -1485,6 +1494,7 @@ Item {
                 }
             }
         }
+    }
     }
 
     // ── About：56px 图标 + 名称 + 版本 + 检查更新 ─────────────────────────

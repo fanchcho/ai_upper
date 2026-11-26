@@ -68,7 +68,7 @@ class ExtensionSettings:
         else: raise ValueError('Invalid extension kind')
         record['kind'] = kind
         from mvvm.services.plugin_identity import shared_store
-        record['personas'] = [{'id': p['id'], 'name': p['name']} for p in shared_store().list_personas()]
+        record['personas'] = [{'id': p['id'], 'name': p['name'], 'desc': p.get('description',''), 'avatarImage': p.get('avatarImage','')} for p in shared_store().list_personas()]
         return record
 
     def update(self, kind, key, patch):
@@ -93,7 +93,7 @@ class ExtensionSettings:
         for field in fields:
             value = patch[field]
             if field in ('env', 'headers'):
-                value = {r['key']: {'secretRef': f'mcp:{key}:{r["key"]}'} if r.get('secret') else r.get('value', '')
+                value = {r['key']: {'secretRef': r['key']} if r.get('secret') else r.get('value', '')
                          for r in value if r.get('key', '').strip()}
             if field == 'transport' and value not in ['stdio', 'sse', 'http']: raise ValueError('Invalid transport')
             if field == 'args' and (not isinstance(value, list) or any(not isinstance(a, str) for a in value)): raise ValueError('Invalid arguments')
@@ -111,8 +111,9 @@ class ExtensionSettings:
         self.detail(kind, key)
         if kind == 'skill':
             from utils.qt_compat import QtCore
-            result = QtCore.QFile.moveToTrash(str(self.home / 'skills' / key))
-            if not (result[0] if isinstance(result, tuple) else result): raise OSError('Cannot move skill to trash')
+            file = QtCore.QFile(str(self.home / 'skills' / key))
+            if not file.moveToTrash(): raise OSError('Cannot move skill to trash: ' + file.errorString())
+            trash_path = file.fileName()
         else:
             data = self.read('mcp.json'); record = data['mcpServers'].pop(key)
             write_file_atomic(self.home / 'mcp.json', json.dumps(data, ensure_ascii=False, indent=2))
@@ -125,3 +126,4 @@ class ExtensionSettings:
         for field in ['enabled', 'roles']:
             section[field] = {k:v for k,v in section.get(field, {}).items() if k != key}
         self.settings.set_config({section_name: section})
+        return trash_path if kind == 'skill' else None
