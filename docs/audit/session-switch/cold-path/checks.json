@@ -1,0 +1,46 @@
+[
+  {
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exit_code": 0,
+    "stdout": "?? docs/audit/session-switch/cold-path/\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "log",
+      "--oneline",
+      "-4"
+    ],
+    "exit_code": 0,
+    "stdout": "e1fbf80 docs(audit): verify cold and cached session frames and bounded memory\nb2de19d test(qml): await interaction prompt readiness\nb11ed32 perf(qml): reuse bounded session display documents\n468f5b7 docs(audit): verify retained develop before authorized push\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "--",
+      "app/src",
+      "app/tests"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,27 @@
+--- 
++++ 
+@@ -1440,7 +1440,12 @@
+                 previous = self._document.textDocument()
+                 target.setDefaultFont(previous.defaultFont())
+                 target.setDefaultTextOption(previous.defaultTextOption())
+-                self._display_cache.activate(Display(self._body, target), self._document)
++                target.setTextWidth(previous.textWidth())
++                display = Display(self._body, target)
++                class PendingDocument(QtCore.QObject):
++                    def textDocument(inner):
++                        return target
++                pending_document = PendingDocument(self._document.parent())
+             if self._display_key is None:
+                 document = self._body.document
+                 document.clear()
+@@ -1455,7 +1460,9 @@
+             if self._display_key is None:
+                 self._body.attach(self._document)
+             else:
+-                self._body.attach(self._document, fragment=fragment, images=images)
++                self._body.attach(pending_document, fragment=fragment, images=images)
++                self._display_cache.activate(display, self._document)
++                pending_document.deleteLater()
+             if self._display_key is not None and not images and "![" not in source:
+                 # External image files can change without changing Markdown.
+                 self._display_cache.put(self._display_key, self._display_cache.current)

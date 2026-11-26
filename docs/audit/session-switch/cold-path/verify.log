@@ -1,0 +1,4 @@
+{'name': 'retained-1', 'exit_code': 0}
+{'name': 'retained-2', 'exit_code': 0}
+{'name': 'retained-3', 'exit_code': 0}
+{'name': 'pytest', 'exit_code': 0}

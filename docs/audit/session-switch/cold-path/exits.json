@@ -1,0 +1,47 @@
+[
+  {
+    "mode": "baseline",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "deferred",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "batch",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "baseline",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "deferred",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "batch",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "baseline",
+    "group": 3,
+    "exit_code": 0
+  },
+  {
+    "mode": "deferred",
+    "group": 3,
+    "exit_code": 0
+  },
+  {
+    "mode": "batch",
+    "group": 3,
+    "exit_code": 0
+  }
+]

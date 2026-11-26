@@ -1,0 +1,17 @@
+--- 
++++ 
+@@ -151,6 +151,8 @@
+         return []
+     layout = document.documentLayout()
+     overlays = []
++    transaction = QtGui.QTextCursor(document)
++    transaction.beginEditBlock()
+     for table in _iter_tables(document.rootFrame()):
+         if _is_code_table(table):
+             continue
+@@ -187,4 +189,5 @@
+         col_lines.append(right)
+         rect = QtCore.QRectF(left, top, right - left, bottom - top)
+         overlays.append(TableGridOverlay(parent, rect, row_lines, col_lines, color))
++    transaction.endEditBlock()
+     return overlays
