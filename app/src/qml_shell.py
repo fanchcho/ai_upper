@@ -1042,30 +1042,39 @@ class ShellBridge(QtCore.QObject):
         cleaned = {key: value for key, value in models.items() if value is not None}
         return self._write_config({"models": cleaned})
 
+    @QtCore.Slot(str, bool, result=str)
+    def personaAvatar(self, key, pop):
+        from mvvm.services.humation import Humation
+        if not hasattr(self, '_humation'): self._humation = Humation()
+        record = shared_store().get(key) or {}
+        return self._humation.image(key, record.get('avatar', ''), pop)
+
     @QtCore.Slot(str, float, bool, result=str)
     def extensionInstructions(self, source, width, dark):
         # Settings skill preview: app.css:5344-5356, smaller than chat Markdown.
         document = QtGui.QTextDocument()
-        font = QtGui.QFont(); font.setPixelSize(13)
+        font = QtGui.QFont("DejaVu Sans"); font.setPointSizeF(12.5 * 72 / 96)
         document.setDefaultFont(font)
         document.setMarkdown(source)
         document.setTextWidth(width)
         block = document.begin()
+        previous_heading = False
         while block.isValid():
             cursor = QtGui.QTextCursor(block)
             fmt = block.blockFormat()
             level = fmt.headingLevel()
-            fmt.setTopMargin(0 if block == document.begin() else 12)
+            fmt.setTopMargin(0 if block == document.begin() else (8 if previous_heading else 12))
             fmt.setBottomMargin(0)
-            fmt.setLineHeight(21, QtGui.QTextBlockFormat.FixedHeight.value)
+            fmt.setLineHeight(21.125 if level else 20.625, QtGui.QTextBlockFormat.FixedHeight.value)
             fmt.setHeadingLevel(0)
             cursor.setBlockFormat(fmt)
             if level:
                 cursor.select(QtGui.QTextCursor.BlockUnderCursor)
                 chars = cursor.charFormat()
                 chars.clearProperty(QtGui.QTextFormat.FontSizeAdjustment)
-                chars.setFontPointSize({1:16, 2:14, 3:13}.get(level,13) * 72 / 96)
+                chars.setFontPointSize({1:16.25, 2:14.375, 3:13.125}.get(level,12.5) * 72 / 96)
                 cursor.setCharFormat(chars)
+            previous_heading = bool(level)
             block = block.next()
         return document.toHtml()
 

@@ -1,7 +1,4 @@
-// 头像：直接显示预生成的原版 humation SVG（见 scripts/parity/gen_avatars.mjs）。
-//
-// 原版头像不是图片而是渲染期生成的 SVG，形状/配色由 persona 的 seed 或显式 spec 决定。
-// 这里用的是同一个引擎、同一份 spec 预生成的产物，运行时只做缩放，不再二次创作。
+// Avatar images take priority; otherwise render the original Humation seed/spec in Qt.
 import QtQuick
 import "."
 
@@ -29,7 +26,7 @@ Item {
     Image {
         id: avatarImage
         anchors.fill: parent
-        source: ava.imageSource || ("avatars/" + ava.persona + (ava.pop ? "-pop" : "") + ".svg")
+        source: ava.imageSource || (ava.persona === "user" || typeof shellBridge === "undefined" || !shellBridge ? "avatars/" + ava.persona + (ava.pop ? "-pop" : "") + ".svg" : shellBridge.personaAvatar(ava.persona, ava.pop))
         sourceSize: Qt.size(ava.size, ava.size)
         fillMode: Image.PreserveAspectFit
         smooth: true

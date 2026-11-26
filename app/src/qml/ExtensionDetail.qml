@@ -11,6 +11,15 @@ Item {
         color: Theme.fgSubtle; font.pixelSize: 11; font.bold: true
         font.capitalization: Font.AllUppercase; topPadding: 4
     }
+    component ExtensionScrollBar: ScrollBar {
+        id: bar
+        visible: size < 1
+        contentItem: Item {
+            implicitWidth: 8; implicitHeight: 8
+            Rectangle { anchors.fill: parent; anchors.margins: 2; radius: 6; color: bar.hovered || bar.pressed ? Theme.scrollbarHover : Theme.scrollbar }
+        }
+        background: Item {}
+    }
     function call(action, payload) {
         var result = JSON.parse(shellBridge.extensionAction(action, item.kind, item.id, JSON.stringify(payload || {})))
         error = result.ok ? "" : result.error
@@ -35,7 +44,8 @@ Item {
         }
     }
     Item {
-        id: toolbar; x: 20; y: 11; width: parent.width - (root.item.kind === "mcp" ? 48 : 40); height: 40
+        id: toolbar; parent: root.item.kind === "mcp" ? scroll.contentItem.contentItem : root
+        x: root.item.kind === "mcp" ? 0 : 20; y: 11; width: root.width - (root.item.kind === "mcp" ? 48 : 40); height: 40
         Icon { x: 6; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronLeft; size: 16; color: Theme.fgMuted }
         Text { x: 26; anchors.verticalCenter: parent.verticalCenter; text: I18n.t("common.back"); color: Theme.fgMuted; font.pixelSize: 13 }
         MouseArea { width: 80; height: parent.height; onClicked: root.back() }
@@ -64,11 +74,14 @@ Item {
     ScrollView {
         id: scroll; objectName: "extensionDetailScroll"
         contentWidth: availableWidth
-        x: 20; y: 60; width: parent.width - (root.item.kind === "mcp" ? 48 : 40); height: parent.height - 60
+        x: 20; y: root.item.kind === "mcp" ? 0 : 60; width: parent.width - (root.item.kind === "mcp" ? 48 : 40); height: parent.height - y
+        contentHeight: fields.height + fields.y
+        ScrollBar.vertical: ExtensionScrollBar {}
         bottomPadding: 16
         clip: true
         Binding { target: scroll.contentItem; property: "boundsBehavior"; value: Flickable.StopAtBounds }
         Column {
+            id: fields; y: root.item.kind === "mcp" ? 60 : 0
             width: scroll.availableWidth; spacing: 12
             Item { width: parent.width; height: 42
                 Icon { y: 6; name: root.item.kind === "mcp" ? "M12 22v-5M9 8V2M15 8V2M7 8h10v4a5 5 0 0 1-10 0V8Z" : IconData.puzzle; size: 18; color: Theme.accent }
@@ -167,7 +180,7 @@ Item {
                         id: kv
                         required property var modelData
                         required property int index
-                        spacing: 6; width: parent.width
+                        spacing: 8; width: parent.width
                         property string secretDraft: ""
                         property string saveState: ""
                         function saveSecret() {
@@ -183,9 +196,9 @@ Item {
                             var rows = JSON.parse(JSON.stringify(root.item[group] || []))
                             rows[index][field] = value; root.save(group, rows)
                         }
-                        SettingsField { width: parent.width * 0.3; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12; text: kv.modelData.key; placeholderText: I18n.t("extensions.kvKey"); onEditingFinished: kv.patch("key", text) }
+                        SettingsField { width: parent.width * 0.34; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12; text: kv.modelData.key; placeholderText: I18n.t("extensions.kvKey"); onEditingFinished: kv.patch("key", text) }
                         SettingsField {
-                            width: parent.width * 0.7 - 74; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12
+                            width: parent.width * 0.66 - 72; height: 32; font.family: Theme.monoFamily; font.pixelSize: 12
                             text: kv.modelData.secret ? kv.secretDraft : kv.modelData.value
                             echoMode: kv.modelData.secret ? TextInput.Password : TextInput.Normal
                             placeholderText: kv.modelData.secret ? I18n.t(kv.modelData.configured ? "extensions.secretPlaceholder" : "extensions.secretValuePlaceholder") : I18n.t("extensions.kvValue")
@@ -225,26 +238,28 @@ Item {
                 }
                 FieldLabel { text: I18n.t("extensions.discoveredTools") }
                 Text { visible: !(root.item.tools || []).length; text: I18n.t("extensions.noToolsYet"); color: Theme.fgSubtle }
-                Repeater { model: root.item.tools || []; Column {
-                    required property var modelData; width: parent.width; spacing: 4
-                    Text { text: modelData.name; color: Theme.fg; font.family: Theme.monoFamily; font.pixelSize: 12 }
-                    Text { text: modelData.description; width: parent.width; wrapMode: Text.Wrap; color: Theme.fgMuted; font.pixelSize: 12 }
+                Repeater { model: root.item.tools || []; Item {
+                    required property var modelData; required property int index
+                    width: parent.width; height: Math.max(toolName.height, toolDesc.height) + 16
+                    Text { id: toolName; y: 8; width: parent.width * 0.34; text: modelData.name; wrapMode: Text.Wrap; color: Theme.accent; font.family: Theme.monoFamily; font.pixelSize: 12 }
+                    Text { id: toolDesc; x: toolName.width + 12; y: 8; text: modelData.description; width: parent.width - x; wrapMode: Text.Wrap; color: Theme.fgSubtle; font.pixelSize: 12; lineHeight: 1.5 }
+                    Rectangle { visible: index < root.item.tools.length - 1; anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.border }
                 } }
             }
         }
     }
     Rectangle {
         visible: root.item.kind === "skill"
-        x: 20; y: 215; width: parent.width - 40; height: parent.height - y - 18
-        radius: 6; color: Theme.bgElevated
+        x: 20; y: 214; width: parent.width - 40; height: parent.height - y - 18
+        radius: 6; color: Theme.bgElevated; border.color: Theme.border
         Flickable {
             id: instructionsScroll; objectName: "extensionInstructionsScroll"
-            anchors.fill: parent; anchors.leftMargin: 16; anchors.rightMargin: 16; anchors.topMargin: 12; anchors.bottomMargin: 12; clip: true; contentWidth: width
+            anchors.fill: parent; anchors.leftMargin: 17; anchors.rightMargin: 3; anchors.topMargin: 13; anchors.bottomMargin: 13; clip: true; contentWidth: width
             contentHeight: instructionsText.height; boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: SettingsScrollBar { visible: size < 1 }
+            ScrollBar.vertical: ExtensionScrollBar {}
             TextEdit {
                 id: instructionsText
-                width: instructionsScroll.width; height: contentHeight
+                width: instructionsScroll.width - 14; height: contentHeight
                 text: shellBridge ? shellBridge.extensionInstructions(root.item.instructions || I18n.t("extensions.instructionsEmpty"), width, Theme.dark) : ""
                 textFormat: TextEdit.RichText; readOnly: true; selectByMouse: true; wrapMode: TextEdit.Wrap
                 color: Theme.fg; font.pixelSize: 13
