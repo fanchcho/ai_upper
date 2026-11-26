@@ -1,0 +1,170 @@
+[
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 110,
+    "text": "; border:1px solid ",
+    "status": "out_of_scope",
+    "reason": "QTextDocument HTML 标签/样式语法，动态颜色引用主题 token，没有用户自然语言文案",
+    "category": "machine_output"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 110,
+    "text": ";\"><tr><td><p style=\"color:",
+    "status": "out_of_scope",
+    "reason": "QTextDocument HTML 标签/样式语法，动态颜色引用主题 token，没有用户自然语言文案",
+    "category": "machine_output"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 112,
+    "text": "）</p><p style=\"color:",
+    "status": "out_of_scope",
+    "reason": "QTextDocument HTML 标签/样式语法，动态颜色引用主题 token，没有用户自然语言文案",
+    "category": "machine_output"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 125,
+    "text": "］</b></p><p style=\"color:",
+    "status": "out_of_scope",
+    "reason": "QTextDocument HTML 标签/样式语法，动态颜色引用主题 token，没有用户自然语言文案",
+    "category": "machine_output"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 105,
+    "text": "\"/></p><p style='color:",
+    "status": "out_of_scope",
+    "reason": "QTextDocument HTML 标签/样式语法，动态颜色引用主题 token，没有用户自然语言文案",
+    "category": "machine_output"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg key must be a hexadecimal string",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.d0f213d4d48e",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg 密钥必须是十六进制字符串",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.d0f213d4d48e",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg key must contain at least 16 bytes",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.eca7bbe94e37",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg 密钥至少需要 16 字节",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.eca7bbe94e37",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "unsafe egg member: ",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.ca7cddd39e0f",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "不安全的 egg 条目：",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.ca7cddd39e0f",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg backend must be one of: ",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.c42939261359",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg 后端必须是以下之一：",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.c42939261359",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg is empty: ",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.de9bc463d564",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg 文件为空：",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.de9bc463d564",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "bad egg, not a zip or wrong key: ",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.a6b09feb2038",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg 无效、不是 ZIP 或密钥错误：",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.a6b09feb2038",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "egg backend memory requires _memimporter in the bundle",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.c3313b89e277",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "memory 后端要求包内包含 _memimporter",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.c3313b89e277",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "cannot publish egg cache: ",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.6e897424f1dc",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "text": "无法发布 egg 缓存：",
+    "status": "resolved",
+    "category": "catalogue",
+    "key": "finish.6e897424f1dc",
+    "reason": "仅在 app 加载之前用的 bootstrap 最小双语 catalog；8 项与共享资源逐键测试一致"
+  }
+]

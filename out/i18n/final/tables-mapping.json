@@ -1,0 +1,653 @@
+[
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "语言",
+    "english": "Language",
+    "key": "settings.language"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "主题",
+    "english": "Theme",
+    "key": "settings.theme"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "文字大小",
+    "english": "Text size",
+    "key": "settings.chatFontSize"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "跟随系统",
+    "english": "System",
+    "key": "settings.themeSystem"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "浅色",
+    "english": "Light",
+    "key": "settings.themeLight"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "深色",
+    "english": "Dark",
+    "key": "settings.themeDark"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "小",
+    "english": "Small",
+    "key": "settings.chatFontSm"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "标准",
+    "english": "Default",
+    "key": "settings.chatFontMd"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "大",
+    "english": "Large",
+    "key": "settings.chatFontLg"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "特大",
+    "english": "Extra large",
+    "key": "settings.chatFontXl"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "模型服务商",
+    "english": "Providers",
+    "key": "models.providers"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "还没有可用的服务商，点右上角 + 添加",
+    "english": "No providers yet — click + to add one",
+    "key": "models.noProvidersYet"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "{count} 个模型",
+    "english": "{count} models",
+    "key": "models.modelCount"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "扩展",
+    "english": "Extensions",
+    "key": "activity.extensions"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "内置",
+    "english": "Built-in",
+    "key": "extensions.builtin"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "技能",
+    "english": "Skill",
+    "key": "cf.kindSkill"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 93,
+    "source": "暂无扩展",
+    "english": "No extensions",
+    "key": "cf.extEmpty"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "思考等级",
+    "english": "Thinking level",
+    "key": "chat.effort.title"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "开启",
+    "english": "On",
+    "key": "chat.effort.on"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "开启思考（该模型无法设置思考等级）",
+    "english": "Turn thinking on (this model has no thinking levels)",
+    "key": "chat.effort.onHint"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "默认",
+    "english": "Default",
+    "key": "chat.effort.levels.default"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "低",
+    "english": "Low",
+    "key": "chat.effort.levels.low"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "中",
+    "english": "Medium",
+    "key": "chat.effort.levels.medium"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "高",
+    "english": "High",
+    "key": "chat.effort.levels.high"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "极高",
+    "english": "Extra high",
+    "key": "chat.effort.levels.xhigh"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "最高",
+    "english": "Max",
+    "key": "chat.effort.levels.max"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "不额外设置，交给模型自己决定",
+    "english": "No extra setting; let the model decide",
+    "key": "chat.effort.hints.default"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "想得少、回得快，适合简单问答",
+    "english": "Thinks less, answers faster; good for simple Q&A",
+    "key": "chat.effort.hints.low"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "速度与质量兼顾",
+    "english": "Balances speed and quality",
+    "key": "chat.effort.hints.medium"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "多想一步，适合编码与多步任务",
+    "english": "Thinks further; good for coding and multi-step tasks",
+    "key": "chat.effort.hints.high"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "更深入，适合复杂的编码与长任务",
+    "english": "Goes deeper; for complex coding and long tasks",
+    "key": "chat.effort.hints.xhigh"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 114,
+    "source": "不计成本地深想，最慢最贵",
+    "english": "Thinks as hard as it can; slowest and most expensive",
+    "key": "chat.effort.hints.max"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "source": "搜索对话",
+    "english": "Search chats",
+    "key": "cf.searchChats"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "source": "未找到匹配项",
+    "english": "No matches",
+    "key": "cf.searchNoResults"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "source": "暂无对话",
+    "english": "No conversations",
+    "key": "chat.noSessions"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 150,
+    "source": "快速开启对话",
+    "english": "Start a conversation",
+    "key": "cf.quickStartTitle"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 150,
+    "source": "选择一个角色，点头像即可直接开始",
+    "english": "Pick a persona — tap its avatar to begin",
+    "key": "cf.quickStartHint"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "选择模型",
+    "english": "Select model",
+    "key": "chat.selectModel"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "选择模型",
+    "english": "Select model",
+    "key": "chat.selectModel"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "上下文容量",
+    "english": "Context",
+    "key": "chat.panel.context"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "约 {n}",
+    "english": "~{n}",
+    "key": "chat.panel.approx"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "{used}/{window} ({pct})",
+    "english": "{used} / {window} ({pct})",
+    "key": "chat.panel.usage"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 155,
+    "source": "自动压缩",
+    "english": "Auto-compact",
+    "key": "chat.panel.autoCompact"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "模型服务商",
+    "english": "Providers",
+    "key": "models.providers"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "添加提供方",
+    "english": "Add provider",
+    "key": "models.addProvider"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "还没有可用的服务商，点右上角 + 添加",
+    "english": "No providers yet — click + to add one",
+    "key": "models.noProvidersYet"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "{count} 个模型",
+    "english": "{count} models",
+    "key": "models.modelCount"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已启用",
+    "english": "Enabled",
+    "key": "models.enabled"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "未启用",
+    "english": "Disabled",
+    "key": "models.disabled"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "返回",
+    "english": "Back",
+    "key": "chat.plan.back"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "返回 {name}",
+    "english": "Back to {name}",
+    "key": "models.backTo"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "删除服务商",
+    "english": "Delete provider",
+    "key": "models.deleteProvider"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "删除该服务商及其密钥？此操作不可撤销。",
+    "english": "Delete this provider and its key? This cannot be undone.",
+    "key": "models.deleteProviderConfirm"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "启用",
+    "english": "Enabled",
+    "key": "extensions.enable"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "高级设置",
+    "english": "Advanced settings",
+    "key": "models.advanced"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "API 密钥",
+    "english": "API Key",
+    "key": "models.apiKey"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "在此填写 API Key",
+    "english": "Enter your API key",
+    "key": "models.apiKeyPlaceholder"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已配置密钥（如需更换请重新输入）",
+    "english": "Key configured (re-enter to replace)",
+    "key": "models.keyReplaceHint"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已配置",
+    "english": "Configured",
+    "key": "extensions.secretConfigured"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "保存中…",
+    "english": "Saving…",
+    "key": "extensions.secretSaving"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已保存",
+    "english": "Saved",
+    "key": "extensions.secretSaved"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "当前系统不支持安全加密存储，暂无法保存密钥",
+    "english": "Secure encrypted storage is unavailable on this system; keys cannot be saved",
+    "key": "models.secretsUnavailable"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "API 地址",
+    "english": "API Host",
+    "key": "models.apiHost"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "模型",
+    "english": "Models",
+    "key": "settings.models"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "添加模型",
+    "english": "Add model",
+    "key": "models.addModel"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "模型 ID，如 gpt-4o",
+    "english": "Model ID, e.g. gpt-4o",
+    "key": "models.modelIdPlaceholder"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "添加",
+    "english": "Add",
+    "key": "bots.add"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "移除",
+    "english": "Remove",
+    "key": "chat.attachRemove"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "暂无模型，点击「添加模型」新增",
+    "english": "No models yet — click \"Add model\"",
+    "key": "models.noModels"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "自定义服务商",
+    "english": "Custom Provider",
+    "key": "models.newProviderName"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "点击修改名称",
+    "english": "Click to rename",
+    "key": "models.renameHint"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "服务商名称",
+    "english": "Provider name",
+    "key": "models.providerNamePlaceholder"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已启用但未配置密钥，对话将失败",
+    "english": "Enabled but no API key set — chat will fail",
+    "key": "models.keyMissingWarn"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "自定义请求头",
+    "english": "Custom headers",
+    "key": "models.headers"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "随每个请求发送，同名时覆盖默认值（如 User-Agent）。",
+    "english": "Sent with every request; same-name headers replace the defaults (e.g. User-Agent).",
+    "key": "models.headersHint"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "暂无请求头，点击「添加请求头」新增",
+    "english": "No headers yet — click \"Add header\"",
+    "key": "models.noHeaders"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "名称，如 originator",
+    "english": "Name, e.g. originator",
+    "key": "models.headerName"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "值",
+    "english": "Value",
+    "key": "extensions.kvValue"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "添加请求头",
+    "english": "Add header",
+    "key": "models.addHeader"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "移除",
+    "english": "Remove",
+    "key": "chat.attachRemove"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "名称含不支持的字符，不会发送。",
+    "english": "Unsupported characters in the name. Not sent.",
+    "key": "models.headerIssue.name"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "该请求头由应用管理，不会发送。",
+    "english": "This header is managed by the app. Not sent.",
+    "key": "models.headerIssue.reserved"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "值仅支持英文、数字和符号，不会发送。",
+    "english": "Only ASCII letters, digits and symbols are supported. Not sent.",
+    "key": "models.headerIssue.value"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "删除",
+    "english": "Delete",
+    "key": "extensions.remove"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "取消",
+    "english": "Cancel",
+    "key": "git.cancel"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "确定",
+    "english": "OK",
+    "key": "common.confirm"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "版本",
+    "english": "Version",
+    "key": "settings.version"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "关于",
+    "english": "About",
+    "key": "settings.about"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "检查更新",
+    "english": "Check for updates",
+    "key": "settings.update.check"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "正在检查…",
+    "english": "Checking…",
+    "key": "settings.update.checking"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "已是最新版本",
+    "english": "You’re on the latest version",
+    "key": "settings.update.latest"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "检查更新失败",
+    "english": "Couldn’t check for updates",
+    "key": "settings.update.checkFailed"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 26,
+    "source": "发现新版本 {version}",
+    "english": "New version {version} available",
+    "key": "settings.update.available"
+  }
+]

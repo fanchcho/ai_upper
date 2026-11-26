@@ -16,6 +16,7 @@ QML 壳重建历史、`turn_start` 增量与交付卡都要回答同样三个问
 """
 from __future__ import annotations
 
+from locale_runtime import tr
 import os
 from typing import Any, Dict, List, Optional
 
@@ -69,7 +70,7 @@ def attachment_chips(parts: List[Any], msg_index: int) -> List[Dict[str, Any]]:
             data = str(getattr(part, "data", "") or "")
             chips.append(
                 {
-                    "name": str(getattr(part, "name", "") or "图片"),
+                    "name": str(getattr(part, "name", "") or tr('finish.ui.be8da62ea113')),
                     "kind": "image",
                     "size": base64_bytes(data),
                     "ref": image_ref(msg_index, part_index, data),
@@ -80,7 +81,7 @@ def attachment_chips(parts: List[Any], msg_index: int) -> List[Dict[str, Any]]:
             data = str(getattr(part, "data", "") or "")
             chips.append(
                 {
-                    "name": str(getattr(part, "name", "") or "文档"),
+                    "name": str(getattr(part, "name", "") or tr('finish.ui.1069127253fa')),
                     "kind": "document",
                     "size": base64_bytes(data),
                     "partIndex": part_index,

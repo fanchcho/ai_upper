@@ -209,7 +209,7 @@ def _forbidden_error(body: str) -> NormalizedError:
     「凭据 / 权限问题」处理的地方照旧。
     """
     hint = _forbidden_reason(body)
-    advice = "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。"
+    advice = tr('finish.ui.2f53303b5093')
     return NormalizedError(
         "auth",
         tr('legacy.b6b969217faf' ,p1=hint or advice),

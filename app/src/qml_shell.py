@@ -18,6 +18,7 @@ frame，但段错误无法在进程内捕获，所以这里保留 ``AI_UPPER_QML
 时正文退化为纯文本（``render_plain_text``，不建表格），壳与列表照旧。
 """
 from __future__ import annotations
+from native_i18n import translate
 from locale_runtime import tr
 
 import base64
@@ -90,88 +91,17 @@ CHAT_SCALES = {"sm": 13.0 / 14.0, "md": 1.0, "lg": 15.5 / 14.0, "xl": 17.0 / 14.
 CHAT_SIZE_ORDER = ("sm", "md", "lg", "xl")
 THEME_ORDER = ("system", "light", "dark")
 # 界面文案：壳里只有设置页的行标签需要本地化（其余来自数据或图标）。
-SETTINGS_LABELS = {
-    "zh": {
-        "language": "语言", "theme": "主题", "textSize": "文字大小",
-        "themeSystem": "跟随系统", "themeLight": "浅色", "themeDark": "深色",
-        "fontSm": "小", "fontMd": "标准", "fontLg": "大", "fontXl": "特大",
-        "providers": "模型服务商", "noProviders": "还没有可用的服务商，点右上角 + 添加",
-        "modelCount": "{count} 个模型", "extensions": "扩展", "builtIn": "内置",
-        "kindSkill": "技能", "extEmpty": "暂无扩展",
-    },
-    "en": {
-        "language": "Language", "theme": "Theme", "textSize": "Text size",
-        "themeSystem": "System", "themeLight": "Light", "themeDark": "Dark",
-        "fontSm": "Small", "fontMd": "Default", "fontLg": "Large", "fontXl": "Extra large",
-        "providers": "Providers", "noProviders": "No providers yet — click + to add one",
-        "modelCount": "{count} models", "extensions": "Extensions", "builtIn": "Built-in",
-        "kindSkill": "Skill", "extEmpty": "No extensions",
-    },
-}
+SETTINGS_LABELS = {lang: {'language': translate(locale, 'settings.language'), 'theme': translate(locale, 'settings.theme'), 'textSize': translate(locale, 'settings.chatFontSize'), 'themeSystem': translate(locale, 'settings.themeSystem'), 'themeLight': translate(locale, 'settings.themeLight'), 'themeDark': translate(locale, 'settings.themeDark'), 'fontSm': translate(locale, 'settings.chatFontSm'), 'fontMd': translate(locale, 'settings.chatFontMd'), 'fontLg': translate(locale, 'settings.chatFontLg'), 'fontXl': translate(locale, 'settings.chatFontXl'), 'providers': translate(locale, 'models.providers'), 'noProviders': translate(locale, 'models.noProvidersYet'), 'modelCount': translate(locale, 'models.modelCount'), 'extensions': translate(locale, 'activity.extensions'), 'builtIn': translate(locale, 'extensions.builtin'), 'kindSkill': translate(locale, 'cf.kindSkill'), 'extEmpty': translate(locale, 'cf.extEmpty')} for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))}
 
 # 思考等级文案：逐字取自原版 `i18n/messages.ts` 的 `chat.effort.*`（zh 216-236 / en 1749-1772）。
 # 名字与说明分开：菜单每档一行为「名字 + 说明」，贴片只写名字。
-EFFORT_TEXT = {
-    "zh": {
-        "title": "思考等级",
-        "on": "开启",
-        "onHint": "开启思考（该模型无法设置思考等级）",
-        "levels": {"default": "默认", "low": "低", "medium": "中", "high": "高", "xhigh": "极高", "max": "最高"},
-        "hints": {
-            "default": "不额外设置，交给模型自己决定",
-            "low": "想得少、回得快，适合简单问答",
-            "medium": "速度与质量兼顾",
-            "high": "多想一步，适合编码与多步任务",
-            "xhigh": "更深入，适合复杂的编码与长任务",
-            "max": "不计成本地深想，最慢最贵",
-        },
-    },
-    "en": {
-        "title": "Thinking level",
-        "on": "On",
-        "onHint": "Turn thinking on (this model has no thinking levels)",
-        "levels": {"default": "Default", "low": "Low", "medium": "Medium", "high": "High", "xhigh": "Extra high", "max": "Max"},
-        "hints": {
-            "default": "No extra setting; let the model decide",
-            "low": "Thinks less, answers faster; good for simple Q&A",
-            "medium": "Balances speed and quality",
-            "high": "Thinks further; good for coding and multi-step tasks",
-            "xhigh": "Goes deeper; for complex coding and long tasks",
-            "max": "Thinks as hard as it can; slowest and most expensive",
-        },
-    },
-}
+EFFORT_TEXT = {lang: {'title': translate(locale, 'chat.effort.title'), 'on': translate(locale, 'chat.effort.on'), 'onHint': translate(locale, 'chat.effort.onHint'), 'levels': {'default': translate(locale, 'chat.effort.levels.default'), 'low': translate(locale, 'chat.effort.levels.low'), 'medium': translate(locale, 'chat.effort.levels.medium'), 'high': translate(locale, 'chat.effort.levels.high'), 'xhigh': translate(locale, 'chat.effort.levels.xhigh'), 'max': translate(locale, 'chat.effort.levels.max')}, 'hints': {'default': translate(locale, 'chat.effort.hints.default'), 'low': translate(locale, 'chat.effort.hints.low'), 'medium': translate(locale, 'chat.effort.hints.medium'), 'high': translate(locale, 'chat.effort.hints.high'), 'xhigh': translate(locale, 'chat.effort.hints.xhigh'), 'max': translate(locale, 'chat.effort.hints.max')}} for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))}
 # 列表筛选与空态文案（原版 `cf.searchChats` / `cf.searchNoResults` / `chat.noSessions`）。
-LIST_TEXT = {
-    "zh": {"searchChats": "搜索对话", "noMatches": "未找到匹配项", "noSessions": "暂无对话"},
-    "en": {"searchChats": "Search chats", "noMatches": "No matches", "noSessions": "No conversations"},
-}
+LIST_TEXT = {lang: {'searchChats': translate(locale, 'cf.searchChats'), 'noMatches': translate(locale, 'cf.searchNoResults'), 'noSessions': translate(locale, 'chat.noSessions')} for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))}
 # 无任何对话时的快速开启（原版 `i18n/messages.ts:1368-1369` 中文 / `:2883-2884` 英文）。
-QUICK_TEXT = {
-    "zh": {"quickStartTitle": "快速开启对话", "quickStartHint": "选择一个角色，点头像即可直接开始"},
-    "en": {"quickStartTitle": "Start a conversation", "quickStartHint": "Pick a persona — tap its avatar to begin"},
-}
+QUICK_TEXT = {lang: {'quickStartTitle': translate(locale, 'cf.quickStartTitle'), 'quickStartHint': translate(locale, 'cf.quickStartHint')} for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))}
 # 输入区贴片的兜底文案（没有可选模型时，原版显示 `chat.selectModel`）。
-CHAT_TEXT = {
-    "zh": {
-        "selectModel": "选择模型",
-        "selectModelTitle": "选择模型",
-        # 输入框上下文圆环与卡片（原版 messages.ts:238-242 `chat.panel.*`）。
-        "context": "上下文容量",
-        "approx": "约 {n}",
-        "usage": "{used}/{window} ({pct})",
-        "autoCompact": "自动压缩",
-    },
-    "en": {
-        "selectModel": "Select model",
-        "selectModelTitle": "Select model",
-        # 原版 messages.ts:1770-1774 `chat.panel.*`（英文 usage 的斜杠两侧有空格）。
-        "context": "Context",
-        "approx": "~{n}",
-        "usage": "{used} / {window} ({pct})",
-        "autoCompact": "Auto-compact",
-    },
-}
+CHAT_TEXT = {lang: {'selectModel': translate(locale, 'chat.selectModel'), 'selectModelTitle': translate(locale, 'chat.selectModel'), 'context': translate(locale, 'chat.panel.context'), 'approx': translate(locale, 'chat.panel.approx'), 'usage': translate(locale, 'chat.panel.usage'), 'autoCompact': translate(locale, 'chat.panel.autoCompact')} for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))}
 
 # 页面名 → 让壳呈现该状态的标识；18 页对比清单见 scripts/parity/qml_pages_all.sh，
 # 末尾两项是本轮详情/高级设置截图用的单页状态，不加入 18 页全量清单。

@@ -1,0 +1,624 @@
+[
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 313,
+    "end_line": 313,
+    "start": 106,
+    "end": 120,
+    "source": "流式错误",
+    "kwargs": {},
+    "key": "finish.ui.df9f1fb37552"
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 313,
+    "end_line": 313,
+    "start": 58,
+    "end": 72,
+    "source": "流式错误",
+    "kwargs": {},
+    "key": "finish.ui.df9f1fb37552"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 131,
+    "end_line": 131,
+    "start": 21,
+    "end": 50,
+    "source": "暂不支持的文件类型",
+    "kwargs": {},
+    "key": "finish.ui.a81f40acbcd6"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 156,
+    "end_line": 156,
+    "start": 51,
+    "end": 74,
+    "source": "选择附件对话框",
+    "kwargs": {},
+    "key": "finish.ui.b4c1e7281076"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 133,
+    "end_line": 133,
+    "start": 21,
+    "end": 45,
+    "source": "图片过大（>5MB）",
+    "kwargs": {},
+    "key": "finish.ui.dc46a77cd3d8"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 135,
+    "end_line": 135,
+    "start": 21,
+    "end": 44,
+    "source": "PDF 过大（>20MB）",
+    "kwargs": {},
+    "key": "finish.ui.e013e1157839"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 174,
+    "end_line": 174,
+    "start": 39,
+    "end": 68,
+    "source": "已忽略未授权文件：",
+    "kwargs": {},
+    "key": "finish.ui.70d381485ba0"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 222,
+    "end_line": 222,
+    "start": 35,
+    "end": 74,
+    "source": "已忽略不支持的文件：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.6d37bc7c627f"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 137,
+    "end_line": 137,
+    "start": 21,
+    "end": 47,
+    "source": "文本过大（>512KB）",
+    "kwargs": {},
+    "key": "finish.ui.e6b9ac0fd560"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 198,
+    "end_line": 198,
+    "start": 39,
+    "end": 75,
+    "source": "已忽略未授权文件：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.50fa80996275"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 188,
+    "end_line": 188,
+    "start": 43,
+    "end": 73,
+    "source": "文件已不存在：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.86e8239967ef"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 203,
+    "end_line": 203,
+    "start": 39,
+    "end": 72,
+    "source": "读取失败已忽略：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.387e6ae04941"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 206,
+    "end_line": 206,
+    "start": 43,
+    "end": 76,
+    "source": "图片过大已忽略：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.5d898d336750"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 209,
+    "end_line": 209,
+    "start": 43,
+    "end": 82,
+    "source": "已忽略不支持的文件：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.6d37bc7c627f"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 213,
+    "end_line": 213,
+    "start": 43,
+    "end": 147,
+    "source": "PDF「{p1}」需使用 Anthropic 或 OpenAI Responses 协议的模型才能读取，本次已跳过",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.d4499a08ad89"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 215,
+    "end_line": 215,
+    "start": 43,
+    "end": 74,
+    "source": "PDF 过大已忽略：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.d7dcf6183175"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 219,
+    "end_line": 219,
+    "start": 43,
+    "end": 76,
+    "source": "文本过大已忽略：{p1}",
+    "kwargs": {
+      "p1": "name"
+    },
+    "key": "finish.ui.6a4181f0488d"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 604,
+    "end_line": 604,
+    "start": 18,
+    "end": 44,
+    "source": "摘要请求未能完成",
+    "kwargs": {},
+    "key": "finish.ui.a1049b2e7b3f"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 738,
+    "end_line": 738,
+    "start": 39,
+    "end": 50,
+    "source": "已中止",
+    "kwargs": {},
+    "key": "finish.ui.5c174784ba7d"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 740,
+    "end_line": 740,
+    "start": 39,
+    "end": 71,
+    "source": "模型没有返回摘要正文",
+    "kwargs": {},
+    "key": "finish.ui.a884e912bce3"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 608,
+    "end_line": 608,
+    "start": 33,
+    "end": 44,
+    "source": "已中止",
+    "kwargs": {},
+    "key": "finish.ui.5c174784ba7d"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 639,
+    "end_line": 639,
+    "start": 33,
+    "end": 44,
+    "source": "已中止",
+    "kwargs": {},
+    "key": "finish.ui.5c174784ba7d"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 650,
+    "end_line": 650,
+    "start": 12,
+    "end": 74,
+    "source": "摘要请求超过 {p1}s 仍未完成",
+    "kwargs": {
+      "p1": "round(timeout_ms / 1000)"
+    },
+    "key": "finish.ui.d4bd7def0049"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 652,
+    "end_line": 652,
+    "start": 41,
+    "end": 55,
+    "source": "连接中断",
+    "kwargs": {},
+    "key": "finish.ui.3eb19ee7c923"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 733,
+    "end_line": 733,
+    "start": 39,
+    "end": 50,
+    "source": "已中止",
+    "kwargs": {},
+    "key": "finish.ui.5c174784ba7d"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 747,
+    "end_line": 747,
+    "start": 12,
+    "end": 71,
+    "source": "摘要里有大段重复内容，模型输出可能异常",
+    "kwargs": {},
+    "key": "finish.ui.54932b3a82c7"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 749,
+    "end_line": 749,
+    "start": 17,
+    "end": 94,
+    "source": "The summary contains long repeated text; the model output may be degenerate",
+    "kwargs": {},
+    "key": "finish.ui.d6bf0718cb96"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 776,
+    "end_line": 776,
+    "start": 12,
+    "end": 47,
+    "source": "摘要不比被压缩的内容短",
+    "kwargs": {},
+    "key": "finish.ui.9ef986ca46a9"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 778,
+    "end_line": 778,
+    "start": 17,
+    "end": 74,
+    "source": "The summary is not shorter than the content it replaces",
+    "kwargs": {},
+    "key": "finish.ui.5756cb7defad"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 74,
+    "end_line": 74,
+    "start": 25,
+    "end": 117,
+    "source": "连接失败：目标地址不可达或拒绝连接（设置了代理环境变量吗？）",
+    "kwargs": {},
+    "key": "finish.ui.6a00c431066f"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 75,
+    "end_line": 75,
+    "start": 23,
+    "end": 79,
+    "source": "经代理连接失败：请检查代理是否在运行",
+    "kwargs": {},
+    "key": "finish.ui.02a423cd11bd"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 76,
+    "end_line": 76,
+    "start": 27,
+    "end": 41,
+    "source": "连接超时",
+    "kwargs": {},
+    "key": "finish.ui.7a97266a720d"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 77,
+    "end_line": 77,
+    "start": 24,
+    "end": 68,
+    "source": "读取超时：连接长时间没有数据",
+    "kwargs": {},
+    "key": "finish.ui.e94846149523"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 78,
+    "end_line": 78,
+    "start": 25,
+    "end": 39,
+    "source": "发送超时",
+    "kwargs": {},
+    "key": "finish.ui.0fa5b76d9d84"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 79,
+    "end_line": 79,
+    "start": 24,
+    "end": 47,
+    "source": "等待连接池超时",
+    "kwargs": {},
+    "key": "finish.ui.2d69275b940e"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 80,
+    "end_line": 80,
+    "start": 32,
+    "end": 76,
+    "source": "服务端返回了不符合协议的响应",
+    "kwargs": {},
+    "key": "finish.ui.a6fd227e62e4"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 81,
+    "end_line": 81,
+    "start": 22,
+    "end": 39,
+    "source": "连接被中断",
+    "kwargs": {},
+    "key": "finish.ui.a920e1ba4e83"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 82,
+    "end_line": 82,
+    "start": 23,
+    "end": 40,
+    "source": "连接被中断",
+    "kwargs": {},
+    "key": "finish.ui.a920e1ba4e83"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 83,
+    "end_line": 83,
+    "start": 22,
+    "end": 42,
+    "source": "网络请求失败",
+    "kwargs": {},
+    "key": "finish.ui.b915a774849b"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 95,
+    "end_line": 95,
+    "start": 15,
+    "end": 147,
+    "source": "证书校验失败：服务器证书不受信任，常见于公司网络在检查 HTTPS 流量（可用 SSL_CERT_FILE 指定 CA）",
+    "kwargs": {},
+    "key": "finish.ui.6b910528b203"
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 163,
+    "end_line": 163,
+    "start": 32,
+    "end": 105,
+    "source": "图片压缩后仍超过 {p1}，无法发送",
+    "kwargs": {
+      "p1": "format_bytes(MAX_SEND_BYTES)"
+    },
+    "key": "finish.ui.20ca61eeebc0"
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 114,
+    "end_line": 115,
+    "start": 20,
+    "end": 60,
+    "source": "图片过大（{p1}），且该格式无法在本地压缩；上限 {p3}",
+    "kwargs": {
+      "p1": "format_bytes(len(buf))",
+      "p3": "format_bytes(MAX_SEND_BYTES)"
+    },
+    "key": "finish.ui.5f70b938f64d"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 264,
+    "end_line": 264,
+    "start": 27,
+    "end": 65,
+    "source": "服务端返回了未说明的错误",
+    "kwargs": {},
+    "key": "finish.ui.ccdc946c5ec6"
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 302,
+    "end_line": 302,
+    "start": 22,
+    "end": 87,
+    "source": "角色写入（upsert / remove / 排序 / 头像）尚未接入",
+    "kwargs": {},
+    "key": "finish.ui.b576598f3c1b"
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 215,
+    "end_line": 215,
+    "start": 64,
+    "end": 84,
+    "source": "未命名提示词",
+    "kwargs": {},
+    "key": "finish.ui.b14041ee4f58"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 61,
+    "end_line": 61,
+    "start": 21,
+    "end": 119,
+    "source": "本会话身份：{p1}；可选 {p3}；/deva:identity default 回到默认。",
+    "kwargs": {
+      "p1": "current",
+      "p3": "' / '.join(ids)"
+    },
+    "key": "finish.ui.da1ca2e55582"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 79,
+    "end_line": 79,
+    "start": 59,
+    "end": 74,
+    "source": "允许执行 ",
+    "kwargs": {},
+    "key": "finish.ui.6e11d504e6e0"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 212,
+    "end_line": 212,
+    "start": 13,
+    "end": 128,
+    "source": "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。",
+    "kwargs": {},
+    "key": "finish.ui.2f53303b5093"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 247,
+    "end_line": 247,
+    "start": 42,
+    "end": 59,
+    "source": "模型服务商",
+    "kwargs": {},
+    "key": "finish.ui.9f15b2487201"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 229,
+    "end_line": 229,
+    "start": 24,
+    "end": 120,
+    "source": "模型清单不是合法 JSON：请确认服务地址（部分服务商需填到 /v1 为止）",
+    "kwargs": {},
+    "key": "finish.ui.977293a3a21a"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_setup.py",
+    "line": 71,
+    "end_line": 71,
+    "start": 58,
+    "end": 114,
+    "source": "可用的模型（请在设置中选定默认模型）",
+    "kwargs": {},
+    "key": "finish.ui.837a0179c5aa"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 288,
+    "end_line": 288,
+    "start": 25,
+    "end": 39,
+    "source": "生成失败",
+    "kwargs": {},
+    "key": "finish.ui.64ba75d9d600"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 299,
+    "end_line": 299,
+    "start": 101,
+    "end": 115,
+    "source": "流式错误",
+    "kwargs": {},
+    "key": "finish.ui.df9f1fb37552"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 287,
+    "end_line": 287,
+    "start": 56,
+    "end": 70,
+    "source": "生成失败",
+    "kwargs": {},
+    "key": "finish.ui.64ba75d9d600"
+  },
+  {
+    "file": "app/src/mvvm/services/sse.py",
+    "line": 28,
+    "end_line": 28,
+    "start": 25,
+    "end": 75,
+    "source": "连接空闲超过 {p1}s，判定为中断",
+    "kwargs": {
+      "p1": "seconds"
+    },
+    "key": "finish.ui.2a1c2d4484c4"
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 72,
+    "end_line": 72,
+    "start": 61,
+    "end": 69,
+    "source": "图片",
+    "kwargs": {},
+    "key": "finish.ui.be8da62ea113"
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 83,
+    "end_line": 83,
+    "start": 61,
+    "end": 69,
+    "source": "文档",
+    "kwargs": {},
+    "key": "finish.ui.1069127253fa"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 53,
+    "end_line": 53,
+    "start": 15,
+    "end": 119,
+    "source": "这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。",
+    "kwargs": {},
+    "key": "finish.ui.03c306922c8f"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 480,
+    "end_line": 480,
+    "start": 80,
+    "end": 103,
+    "source": "压缩失败：{p1}",
+    "kwargs": {
+      "p1": "exc"
+    },
+    "key": "finish.ui.0397d985c3b2"
+  }
+]

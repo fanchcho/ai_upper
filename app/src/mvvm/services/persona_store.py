@@ -212,7 +212,7 @@ class PersonaStore:
         - `enabled` 为布尔才写启用位；新建且未传 → 不写（缺省关闭）。
         """
         data = payload if isinstance(payload, dict) else {}
-        name = " ".join(str(data.get("name") or "").split()) or "未命名提示词"
+        name = " ".join(str(data.get("name") or "").split()) or tr('finish.ui.b14041ee4f58')
         requested = str(data.get("id") or "")
         existing = requested if is_safe_id(requested) and (self.dir / f"{requested}.md").exists() else ""
         persona_id = existing or make_id(name, set(self._existing_ids()))
@@ -299,7 +299,7 @@ class PersonaStore:
         return dict(section) if isinstance(section, dict) else {}
 
 
-ALLOWED_WRITES_NOTE = "角色写入（upsert / remove / 排序 / 头像）尚未接入"
+ALLOWED_WRITES_NOTE = tr('finish.ui.b576598f3c1b')
 
 
 def not_implemented(what: str) -> None:

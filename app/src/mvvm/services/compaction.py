@@ -601,11 +601,11 @@ async def summarize(
             return
         await asyncio.sleep(seconds)
 
-    last_reason = "摘要请求未能完成"
+    last_reason = tr('finish.ui.a1049b2e7b3f')
 
     for attempt in range(SUMMARY_MAX_RETRY + 1):
         if cancel is not None and cancel.cancelled:
-            raise SummaryAborted("已中止")
+            raise SummaryAborted(tr('finish.ui.5c174784ba7d'))
 
         attempt_cancel = CancelToken()
         provider = provider_factory(attempt_cancel)
@@ -636,7 +636,7 @@ async def summarize(
                 pass
 
         if cancel is not None and cancel.cancelled:
-            raise SummaryAborted("已中止")
+            raise SummaryAborted(tr('finish.ui.5c174784ba7d'))
         if collected.fatal:
             raise SummaryError(collected.fatal)
 
@@ -647,9 +647,9 @@ async def summarize(
             raise SummaryError(tr('legacy.e5da8854b1c8'))
 
         last_reason = (
-            f"摘要请求超过 {round(timeout_ms / 1000)}s 仍未完成"
+            tr('finish.ui.d4bd7def0049', p1=round(timeout_ms / 1000))
             if timed_out
-            else (collected.retryable or "连接中断")
+            else (collected.retryable or tr('finish.ui.3eb19ee7c923'))
         )
         if attempt >= SUMMARY_MAX_RETRY:
             raise SummaryError(tr('legacy.dfa494073473' ,p0=last_reason, p2=SUMMARY_MAX_RETRY))
@@ -730,23 +730,23 @@ async def compact_session(
             sleep=sleep,
         )
     except SummaryAborted:
-        return CompactResult("failed", "已中止")
+        return CompactResult("failed", tr('finish.ui.5c174784ba7d'))
     except SummaryError as exc:
         # 失败原因原样带回（鉴权 / 断流 / 超时 / 无正文）。历史在此之前一个字都没动。
         return CompactResult("failed", str(exc))
     if cancel is not None and cancel.cancelled:
-        return CompactResult("failed", "已中止")
+        return CompactResult("failed", tr('finish.ui.5c174784ba7d'))
     if not summary:
-        return CompactResult("failed", "模型没有返回摘要正文")
+        return CompactResult("failed", tr('finish.ui.a884e912bce3'))
 
     zh = locale != "en"
     # 摘要把关①：模型退化时摘要也会复读，采信就会用垃圾顶替真实历史，此后每一轮都被它带偏。
     if find_repetition(summary):
         return CompactResult(
             "failed",
-            "摘要里有大段重复内容，模型输出可能异常"
+            tr('finish.ui.54932b3a82c7')
             if zh
-            else "The summary contains long repeated text; the model output may be degenerate",
+            else tr('finish.ui.d6bf0718cb96'),
         )
     if keep_head >= 0:
         header = (
@@ -773,9 +773,9 @@ async def compact_session(
     if estimate_tokens([*head_messages, summary_msg, *tail]) >= estimate_tokens(view):
         return CompactResult(
             "failed",
-            "摘要不比被压缩的内容短"
+            tr('finish.ui.9ef986ca46a9')
             if zh
-            else "The summary is not shorter than the content it replaces",
+            else tr('finish.ui.5756cb7defad'),
         )
 
     # 插在保留部分的第一条消息前；记录里的消息一条不删，检查点、各边车都不受影响。

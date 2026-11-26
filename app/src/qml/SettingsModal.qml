@@ -130,7 +130,7 @@ Item {
                             { key: "extensions", label: I18n.t("extensions.title"), icon: IconData.puzzle },
                             { key: "about", label: I18n.t("settings.about"), icon: IconData.info },
                             { key: "custom-model", label: I18n.t("native.message7"), icon: IconData.brain },
-                            { key: "mcp", label: "MCP", icon: IconData.puzzle },
+                            { key: "mcp", label: I18n.t("finish.mcp"), icon: IconData.puzzle },
                             { key: "identities", label: I18n.t("cf.filterRoles"), icon: IconData.users }
                         ]
                         delegate: Rectangle {
@@ -310,7 +310,7 @@ Item {
                     rowHeight: 57
                     objectName: "settingsLanguageChoice"
                     label: I18n.t("settings.language")
-                    options: ["简体中文", "English"]
+                    options: [I18n.t("finish.language.chinese"), I18n.t("finish.language.english")]
                     current: shellBridge ? (I18n.locale, shellBridge.language()) === "zh" ? 0 : 1 : 1
                     onPicked: function (i) { shellBridge.setLanguage(i === 0 ? "zh" : "en") }
                 }
@@ -1504,7 +1504,7 @@ Item {
                 Item { width: parent.width; height: 15 }
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Deva"
+                    text: I18n.t("finish.brand")
                     color: Theme.fg
                     font.family: Theme.sansFamily
                     font.pixelSize: 20

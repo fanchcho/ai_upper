@@ -15,6 +15,7 @@ Qt 由调用方在真正需要时 import：本模块在无 Qt 的测试环境里
 """
 from __future__ import annotations
 
+from locale_runtime import tr
 import base64
 from dataclasses import dataclass
 from typing import Optional
@@ -111,8 +112,7 @@ def prepare_image(buf: bytes, mime: str, name: Optional[str] = None) -> Prepared
         if len(buf) > MAX_SEND_BYTES:
             return PreparedImage(
                 reason=(
-                    f"图片过大（{format_bytes(len(buf))}），且该格式无法在本地压缩；"
-                    f"上限 {format_bytes(MAX_SEND_BYTES)}"
+                    tr('finish.ui.5f70b938f64d', p1=format_bytes(len(buf)), p3=format_bytes(MAX_SEND_BYTES))
                 )
             )
         return PreparedImage(part=make(buf, mime), sent_bytes=len(buf))
@@ -160,7 +160,7 @@ def prepare_image(buf: bytes, mime: str, name: Optional[str] = None) -> Prepared
         jpg = _encode_qt_image(scaled, "JPEG", quality)
         if len(jpg) <= MAX_SEND_BYTES:
             return done(jpg, "image/jpeg")
-    return PreparedImage(reason=f"图片压缩后仍超过 {format_bytes(MAX_SEND_BYTES)}，无法发送")
+    return PreparedImage(reason=tr('finish.ui.20ca61eeebc0', p1=format_bytes(MAX_SEND_BYTES)))
 
 
 __all__ = [

@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
+from native_i18n import translate
 
 from mvvm.services.attachments import (
     ATTACH_FOLDER_PREFIX,
@@ -27,8 +28,8 @@ from mvvm.services.deliverables import delivered_paths
 from mvvm.services.transcript_parts import attachment_chips, base64_bytes, delivery_row
 
 PREVIEW_MAX = 60
-USER_HEADING = "## 你"
-ASSISTANT_HEADING = "## 助手"
+USER_HEADING = "## " + translate("zh-CN", "legacy.5630b886f9cd")
+ASSISTANT_HEADING = "## " + translate("zh-CN", "cf.assistant")
 
 
 def format_bytes(size: Any) -> str:
@@ -43,12 +44,12 @@ def format_bytes(size: Any) -> str:
     if value < 0:
         return ""
     if value < 1024:
-        return "%d B" % value
+        return translate("en", "finish.size.bytes") % value
     if value < 1024 * 1024:
-        return "%d KB" % round(value / 1024)
+        return translate("en", "finish.size.kilobytes") % round(value / 1024)
     if value < 1024 * 1024 * 1024:
-        return "%.1f MB" % (value / 1024 / 1024)
-    return "%.1f GB" % (value / 1024 / 1024 / 1024)
+        return translate("en", "finish.size.megabytes") % (value / 1024 / 1024)
+    return translate("en", "finish.size.gigabytes") % (value / 1024 / 1024 / 1024)
 
 
 
@@ -97,8 +98,9 @@ def preview_text(session: Any) -> str:
 # 相对时间词表：逐字对齐原版 i18n/messages.ts 的 chat.time（zh 见 :269，en 见 :1733）。
 # 原版拼法是 `${n} ${word}`（数字与词之间一个空格），中文也不例外。
 _TIME_WORDS = {
-    "zh": ("刚刚", "分钟前", "小时前", "昨天", "天前"),
-    "en": ("just now", "min ago", "hr ago", "yesterday", "days ago"),
+    lang: tuple(translate(locale, 'chat.time.' + name)
+                for name in ('now', 'min', 'hr', 'yesterday', 'day'))
+    for lang, locale in (('zh', 'zh-CN'), ('en', 'en'))
 }
 
 
@@ -142,7 +144,7 @@ def session_row(
     title = str(getattr(meta, "title", "") or "").strip()
     preview = preview_text(session) if session is not None else ""
     if not title:
-        title = preview or ("Untitled conversation" if lang == "en" else "未命名会话")
+        title = preview or translate("en" if lang == "en" else "zh-CN", "finish.session.untitled")
     return {
         "id": str(getattr(meta, "id", "")),
         "title": title,
@@ -173,7 +175,7 @@ def session_rows(
 
 def _role_heading(role: str, lang: str = "zh") -> str:
     if lang == "en":
-        return "## You" if role == "user" else "## Assistant"
+        return "## " + translate("en", "chat.role.user" if role == "user" else "cf.assistant")
     return USER_HEADING if role == "user" else ASSISTANT_HEADING
 
 

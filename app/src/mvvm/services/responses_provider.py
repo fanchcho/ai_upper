@@ -284,8 +284,8 @@ class ResponsesProvider(Provider):
                     payload = event.get("response") or {}
                     error = payload.get("error") if isinstance(payload, dict) else None
                     message = str(
-                        (error or {}).get("message") or "生成失败" if isinstance(error, dict) else ""
-                    ) or "生成失败"
+                        (error or {}).get("message") or tr('finish.ui.64ba75d9d600') if isinstance(error, dict) else ""
+                    ) or tr('finish.ui.64ba75d9d600')
                     code = str((error or {}).get("code") or "") if isinstance(error, dict) else ""
                     yield StreamError(
                         inband_error(f"{message} {code}", NormalizedError("server", message, False))
@@ -296,7 +296,7 @@ class ResponsesProvider(Provider):
                     raw_message = event.get("message")
                     if not isinstance(raw_message, str):
                         error = event.get("error") or {}
-                        raw_message = (error.get("message") if isinstance(error, dict) else None) or "流式错误"
+                        raw_message = (error.get("message") if isinstance(error, dict) else None) or tr('finish.ui.df9f1fb37552')
                     message = str(raw_message)
                     yield StreamError(
                         inband_error(message, NormalizedError("server", message, False))

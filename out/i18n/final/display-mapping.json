@@ -1,0 +1,86 @@
+[
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 71,
+    "source": "缺少有效的 path 参数",
+    "key": "display.d6c5fe5faeed"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 72,
+    "source": "未挂载工作区，相对路径没有基准：请改用绝对路径（~/ 开头的主目录路径亦可）。",
+    "key": "display.9b864334b911"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 73,
+    "source": "未打开项目，且未提供 path",
+    "key": "display.f12d1d2ccc16"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 25,
+    "source": "interrupted_unknown: 工具可能已执行，不自动重放，请核查结果。",
+    "key": "display.b7babc5deccd"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 39,
+    "source": "工具调用 ID 已用于不同参数；拒绝重放",
+    "key": "display.3e3ead168ce8"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 51,
+    "source": "工具正在执行或执行状态未知；未重复执行",
+    "key": "display.a4d7424d94e5"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 85,
+    "source": "questions 必须包含 1–5 个问题",
+    "key": "display.2402a14ace83"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 89,
+    "source": "问题文本不能为空",
+    "key": "display.1f55393c222e"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 92,
+    "source": "choices 必须是最多 6 个字符串",
+    "key": "display.ea815dd121c3"
+  },
+  {
+    "file": "app/src/mvvm/services/checkpoint_recovery.py",
+    "line": 40,
+    "source": "中断时结果未知，未自动重试；先核对实际状态再决定新操作",
+    "key": "display.90c4e83cdf1b"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 231,
+    "source": "（每行开头是表格的行号，其后各列以制表符分隔）\n\n",
+    "key": "display.22ba7257d962"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 230,
+    "source": "## 工作表：{p1}\n",
+    "key": "display.40c21df8a46e"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 131,
+    "source": "## 第 {p1} 页\n{p3}",
+    "key": "display.a456e90a12c6"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 230,
+    "source": "（空）",
+    "key": "display.c6db27374652"
+  }
+]

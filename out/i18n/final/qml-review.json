@@ -1,0 +1,4818 @@
+[
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 12,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string pane: \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 14,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string modelsView: \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 44,
+    "text": "settingsModal",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"settingsModal\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 69,
+    "text": "cf.settings",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 83,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: closeHover.hovered ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 128,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"general\", label: I18n.t(\"settings.general\"), icon: IconData.cog },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 128,
+    "text": "settings.general",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 129,
+    "text": "models",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"models\", label: I18n.t(\"settings.models\"), icon: IconData.brain },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 129,
+    "text": "settings.models",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 130,
+    "text": "extensions",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"extensions\", label: I18n.t(\"extensions.title\"), icon: IconData.puzzle },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 130,
+    "text": "extensions.title",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 131,
+    "text": "about",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"about\", label: I18n.t(\"settings.about\"), icon: IconData.info },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 131,
+    "text": "settings.about",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 132,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"custom-model\", label: I18n.t(\"native.message7\"), icon: IconData.brain },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 132,
+    "text": "native.message7",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 133,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"mcp\", label: I18n.t(\"finish.mcp\"), icon: IconData.puzzle },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 133,
+    "text": "finish.mcp",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 134,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ key: \"identities\", label: I18n.t(\"cf.filterRoles\"), icon: IconData.users }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 134,
+    "text": "cf.filterRoles",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 138,
+    "text": "settingsNav_",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"settingsNav_\" + modelData.key",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 144,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 150,
+    "text": "settingsNavIcon_",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"settingsNavIcon_\" + modelData.key",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 187,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：sourceComponent: [\"custom-model\", \"mcp\", \"identities\"].indexOf(root.pane) >= 0 ? pluginPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 187,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：sourceComponent: [\"custom-model\", \"mcp\", \"identities\"].indexOf(root.pane) >= 0 ? pluginPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 187,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：sourceComponent: [\"custom-model\", \"mcp\", \"identities\"].indexOf(root.pane) >= 0 ? pluginPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 188,
+    "text": "about",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: root.pane === \"about\" ? aboutPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 189,
+    "text": "models",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: root.pane === \"models\" ? modelsPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 190,
+    "text": "extensions",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: root.pane === \"extensions\" ? extensionsPane",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 252,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: index === row.current ? Theme.bg : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 290,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 297,
+    "text": "settings.general",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 311,
+    "text": "settingsLanguageChoice",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"settingsLanguageChoice\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 312,
+    "text": "settings.language",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 313,
+    "text": "finish.language.chinese",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 313,
+    "text": "finish.language.english",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 314,
+    "text": "zh",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：current: shellBridge ? (I18n.locale, shellBridge.language()) === \"zh\" ? 0 : 1 : 1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 315,
+    "text": "zh",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPicked: function (i) { shellBridge.setLanguage(i === 0 ? \"zh\" : \"en\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 315,
+    "text": "en",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPicked: function (i) { shellBridge.setLanguage(i === 0 ? \"zh\" : \"en\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 319,
+    "text": "settingsThemeChoice",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"settingsThemeChoice\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 320,
+    "text": "settings.theme",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "text": "settings.themeSystem",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "text": "settings.themeLight",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "text": "settings.themeDark",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 322,
+    "text": "system",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：current: shellBridge ? [\"system\", \"light\", \"dark\"].indexOf(shellBridge.themeChoice) : 1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 322,
+    "text": "light",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：current: shellBridge ? [\"system\", \"light\", \"dark\"].indexOf(shellBridge.themeChoice) : 1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 322,
+    "text": "dark",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：current: shellBridge ? [\"system\", \"light\", \"dark\"].indexOf(shellBridge.themeChoice) : 1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 323,
+    "text": "system",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPicked: function (i) { shellBridge.setTheme([\"system\", \"light\", \"dark\"][i]) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 323,
+    "text": "light",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPicked: function (i) { shellBridge.setTheme([\"system\", \"light\", \"dark\"][i]) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 323,
+    "text": "dark",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPicked: function (i) { shellBridge.setTheme([\"system\", \"light\", \"dark\"][i]) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "text": "settings.chatFontSize",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "text": "settings.chatFontSm",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "text": "settings.chatFontMd",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "text": "settings.chatFontLg",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "text": "settings.chatFontXl",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 356,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string view: \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 363,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (root.modelsView === \"list\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 364,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：view = \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 369,
+    "text": "advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (root.modelsView === \"advanced\") view = \"advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 369,
+    "text": "advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (root.modelsView === \"advanced\") view = \"advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 394,
+    "text": "detail",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：view = \"detail\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 429,
+    "text": "advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：view = \"advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 433,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：view = \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 489,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: modPane.view === \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 510,
+    "text": "modelsAddProvider",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelsAddProvider\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 540,
+    "text": "modelsCustomNetwork",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelsCustomNetwork\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 544,
+    "text": "native.message29",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 545,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClicked: root.pane = \"custom-model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 560,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 594,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: providerMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 690,
+    "text": "detail",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: modPane.view === \"detail\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 706,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: detailBackMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 744,
+    "text": "providerDelete",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerDelete\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 749,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: deleteMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 767,
+    "text": "providerWrench",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerWrench\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 772,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: wrenchMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 821,
+    "text": "enabled",
+    "category": "machine_output",
+    "reason": "配置/JSON 字段名与 textRole 数据查询键，保持解析兼容；原调用：shellBridge.setProviderField(modPane.selectedId, \"enabled\",",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 911,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 940,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 983,
+    "text": "advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: modPane.view === \"advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 999,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: advancedBackMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1012,
+    "text": "{name}",
+    "category": "machine_output",
+    "reason": "replace 的插值标记，匹配翻译模板参数名；原调用：text: (modPane.text.backTo || \"\").replace(\"{name}\", modPane.detail.name || \"\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1023,
+    "text": "detail",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClicked: modPane.view = \"detail\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1056,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: addHeaderMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1100,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1172,
+    "text": "name",
+    "category": "machine_output",
+    "reason": "配置/JSON 字段名与 textRole 数据查询键，保持解析兼容；原调用：onTextEdited: modPane.editHeader(headerRow.index, \"name\", text)",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1209,
+    "text": "value",
+    "category": "machine_output",
+    "reason": "配置/JSON 字段名与 textRole 数据查询键，保持解析兼容；原调用：onTextEdited: modPane.editHeader(headerRow.index, \"value\", text)",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1221,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: headerDeleteMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1290,
+    "text": "extensions.title",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1318,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1447,
+    "text": "aboutPaneRoot",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"aboutPaneRoot\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1450,
+    "text": "idle",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property var updateState: ({phase: \"idle\"})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1451,
+    "text": "idle",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string updatePhase: \"idle\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1452,
+    "text": "checking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool checking: updatePhase === \"checking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1455,
+    "text": "idle",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：updateState = state || {phase: \"idle\"}",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1456,
+    "text": "phase",
+    "category": "machine_output",
+    "reason": "配置/JSON 字段名与 textRole 数据查询键，保持解析兼容；原调用：var phase = state ? (state[\"phase\"] || state.phase || \"idle\") : \"idle\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1456,
+    "text": "idle",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：var phase = state ? (state[\"phase\"] || state.phase || \"idle\") : \"idle\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1456,
+    "text": "idle",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：var phase = state ? (state[\"phase\"] || state.phase || \"idle\") : \"idle\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1463,
+    "text": "checking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：applyUpdateState({phase: \"checking\"})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1479,
+    "text": "aboutPaneHeading",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"aboutPaneHeading\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1483,
+    "text": "settings.about",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1500,
+    "text": "assets/deva-icon.svg",
+    "category": "machine_output",
+    "reason": "图像资源路径/文件后缀，不能翻译；原调用：source: \"assets/deva-icon.svg\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1507,
+    "text": "finish.brand",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1517,
+    "text": "settings.version",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1570,
+    "text": "settings.update.checking",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1571,
+    "text": "settings.update.check",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1591,
+    "text": "latest",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: aboutPaneRoot.updatePhase === \"latest\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1609,
+    "text": "error",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: aboutPaneRoot.updatePhase === \"error\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1633,
+    "text": "providerDeleteLayer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerDeleteLayer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1649,
+    "text": "providerDeleteCard",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerDeleteCard\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1687,
+    "text": "providerDeleteCancel",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerDeleteCancel\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1693,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: providerCancelMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1713,
+    "text": "providerDeleteConfirm",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"providerDeleteConfirm\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ThreadRow.qml",
+    "line": 18,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string persona: \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ThreadRow.qml",
+    "line": 32,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ThreadRow.qml",
+    "line": 38,
+    "text": "threadCheck",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"threadCheck\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ThreadRow.qml",
+    "line": 45,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: row.selected ? Theme.accent : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ThreadRow.qml",
+    "line": 62,
+    "text": "threadFace",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"threadFace\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 8,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string mode: \"custom-model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 15,
+    "text": "models.keySaved",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 19,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：invoke(mode === \"identities\" ? \"identities\" : \"read\", {})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 19,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：invoke(mode === \"identities\" ? \"identities\" : \"read\", {})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 19,
+    "text": "read",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：invoke(mode === \"identities\" ? \"identities\" : \"read\", {})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 21,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (mode === \"custom-model\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Text { text: pane.mode === \"custom-model\" ? I18n.t(\"native.message7\") : pane.mode === \"mcp\" ? I18n.t(\"native.message12\") : I18n.t(\"cf.filterRoles\"); color: Theme.fg; font.pixelSize: 18 }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "native.message7",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Text { text: pane.mode === \"custom-model\" ? I18n.t(\"native.message7\") : pane.mode === \"mcp\" ? I18n.t(\"native.message12\") : I18n.t(\"cf.filterRoles\"); color: Theme.fg; font.pixelSize: 18 }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "native.message12",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "cf.filterRoles",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 33,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Text { visible: pane.mode === \"custom-model\"; text: I18n.t(\"native.message9\"); color: Theme.fgMuted }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 33,
+    "text": "native.message9",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 42,
+    "text": "native.message17",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 45,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: pane.mode !== \"custom-model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 47,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：model: pane.mode === \"mcp\" ? pane.state.servers : pane.state.identities",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 48,
+    "text": "id",
+    "category": "machine_output",
+    "reason": "配置/JSON 字段名与 textRole 数据查询键，保持解析兼容；原调用：textRole: \"id\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 74,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (pane.mode === \"mcp\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 83,
+    "text": "pluginIdentifier",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsField { id: identifier; objectName: \"pluginIdentifier\"; visible: pane.mode !== \"custom-model\"; placeholderText: I18n.t(\"native.message10\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 83,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: identifier; objectName: \"pluginIdentifier\"; visible: pane.mode !== \"custom-model\"; placeholderText: I18n.t(\"native.message10\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 83,
+    "text": "native.message10",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 84,
+    "text": "pluginBaseUrl",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsField { id: address; objectName: \"pluginBaseUrl\"; visible: pane.mode !== \"identities\"; placeholderText: I18n.t(\"native.message4\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 84,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: address; objectName: \"pluginBaseUrl\"; visible: pane.mode !== \"identities\"; placeholderText: I18n.t(\"native.message4\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 84,
+    "text": "native.message4",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 85,
+    "text": "pluginModelName",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsField { id: modelName; objectName: \"pluginModelName\"; visible: pane.mode === \"custom-model\"; placeholderText: I18n.t(\"models.displayName\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 85,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: modelName; objectName: \"pluginModelName\"; visible: pane.mode === \"custom-model\"; placeholderText: I18n.t(\"models.displayName\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 85,
+    "text": "models.displayName",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 86,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: command; visible: pane.mode === \"mcp\"; placeholderText: I18n.t(\"native.message6\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 86,
+    "text": "native.message6",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 87,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: argsInput; visible: pane.mode === \"mcp\"; text: \"[]\"; placeholderText: I18n.t(\"native.message3\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 87,
+    "text": "native.message3",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 88,
+    "text": "pluginEnabled",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsCheck { id: enabledBox; objectName: \"pluginEnabled\"; visible: pane.mode === \"mcp\"; text: I18n.t(\"models.enabled\"); checked: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 88,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsCheck { id: enabledBox; objectName: \"pluginEnabled\"; visible: pane.mode === \"mcp\"; text: I18n.t(\"models.enabled\"); checked: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 88,
+    "text": "models.enabled",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "text": "pluginApprovalEnabled",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsCheck { objectName: \"pluginApprovalEnabled\"; visible: pane.mode === \"mcp\"; text: I18n.t(\"native.message25\"); checked: pane.state.approvalEnabled === true; onClicked: pane.invoke(\"saveApproval\", {enabled: checked}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsCheck { objectName: \"pluginApprovalEnabled\"; visible: pane.mode === \"mcp\"; text: I18n.t(\"native.message25\"); checked: pane.state.approvalEnabled === true; onClicked: pane.invoke(\"saveApproval\", {enabled: checked}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "text": "native.message25",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "text": "saveApproval",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsCheck { objectName: \"pluginApprovalEnabled\"; visible: pane.mode === \"mcp\"; text: I18n.t(\"native.message25\"); checked: pane.state.approvalEnabled === true; onClicked: pane.invoke(\"saveApproval\", {enabled: checked}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Text { id: keyStatus; visible: pane.mode !== \"identities\"; text: (pane.mode === \"mcp\" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? I18n.t(\"native.message23\") : I18n.t(\"native.message28\"); color: Theme.fgMuted }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Text { id: keyStatus; visible: pane.mode !== \"identities\"; text: (pane.mode === \"mcp\" ? pane.state.servers.some(function(row) { return row.id === identifier.text && row.hasKey }) : pane.state.model.hasKey) ? I18n.t(\"native.message23\") : I18n.t(\"native.message28\"); color: Theme.fgMuted }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "native.message23",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "native.message28",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 91,
+    "text": "pluginSecret",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：SettingsField { id: secret; objectName: \"pluginSecret\"; visible: pane.mode !== \"identities\"; placeholderText: I18n.t(\"native.message14\"); echoMode: TextInput.Password; Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 91,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsField { id: secret; objectName: \"pluginSecret\"; visible: pane.mode !== \"identities\"; placeholderText: I18n.t(\"native.message14\"); echoMode: TextInput.Password; Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 91,
+    "text": "native.message14",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 93,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: pane.mode === \"identities\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 99,
+    "text": "pluginPersonaBody",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"pluginPersonaBody\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 105,
+    "text": "native.message16",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 112,
+    "text": "pluginSave",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"pluginSave\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 113,
+    "text": "cf.save",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 117,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (pane.mode === \"custom-model\") { op = \"saveModel\"; value.baseUrl = address.text; value.model = modelName.text }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 117,
+    "text": "saveModel",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (pane.mode === \"custom-model\") { op = \"saveModel\"; value.baseUrl = address.text; value.model = modelName.text }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 118,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：else if (pane.mode === \"mcp\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 119,
+    "text": "saveServer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：op = \"saveServer\"; value.id = identifier.text",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 121,
+    "text": "native.message11",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 122,
+    "text": "saveIdentity",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else { op = \"saveIdentity\"; value = {id: identifier.text, text: body.text} }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 126,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsButton { visible: pane.mode === \"mcp\"; destructive: true; text: I18n.t(\"common.delete\"); onClicked: pane.invoke(\"deleteServer\", {id: identifier.text}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 126,
+    "text": "common.delete",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 126,
+    "text": "deleteServer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：SettingsButton { visible: pane.mode === \"mcp\"; destructive: true; text: I18n.t(\"common.delete\"); onClicked: pane.invoke(\"deleteServer\", {id: identifier.text}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 128,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: pane.mode !== \"identities\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 129,
+    "text": "native.message5",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 131,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (pane.mode === \"custom-model\") pane.invoke(\"saveModel\", {baseUrl: address.text, model: modelName.text, key: \"\"})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 131,
+    "text": "saveModel",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (pane.mode === \"custom-model\") pane.invoke(\"saveModel\", {baseUrl: address.text, model: modelName.text, key: \"\"})",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 133,
+    "text": "saveServer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：try { pane.invoke(\"saveServer\", {id: identifier.text, config: {url: address.text, command: command.text, args: JSON.parse(argsInput.text), enabled: enabledBox.checked}, key: \"\"}) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 134,
+    "text": "native.message11",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 141,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Item { Layout.fillHeight: true; visible: pane.mode !== \"identities\" }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 44,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(0) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 44,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(0) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 45,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(1) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 45,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(1) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 46,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(2) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 46,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(2) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 47,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(3) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 47,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(3) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 48,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(4) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 48,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(4) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 49,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(5) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 49,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(5) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 50,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(6) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 50,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(6) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 51,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(7) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 51,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(7) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 52,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(8) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 52,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(8) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 53,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(9) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 53,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(9) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 54,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(10) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 54,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(10) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 55,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(11) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 55,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(11) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 56,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(12) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 56,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(12) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 57,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(13) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 57,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(13) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 58,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(14) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 58,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(14) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 59,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(15) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Icon.qml",
+    "line": 59,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：ShapePath { strokeColor: icon.filled ? \"transparent\" : icon.color; fillColor: icon.filled ? icon.color : \"transparent\"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(15) } }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 14,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgLight: \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 15,
+    "text": "#f7f7f8",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgPanelLight: \"#f7f7f8\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 16,
+    "text": "#f0f0f2",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgInsetLight: \"#f0f0f2\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 18,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgElevatedLight: \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 22,
+    "text": "#1f1f24",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgLight: \"#1f1f24\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 23,
+    "text": "#5c5c66",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgMutedLight: \"#5c5c66\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 24,
+    "text": "#8a8a94",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgSubtleLight: \"#8a8a94\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 25,
+    "text": "#e6e6ea",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _borderLight: \"#e6e6ea\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 26,
+    "text": "#d5d5db",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _borderStrongLight: \"#d5d5db\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 27,
+    "text": "#5b5bd6",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _accentLight: \"#5b5bd6\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 28,
+    "text": "#edeffb",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bubbleLight: \"#edeffb\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 31,
+    "text": "#1e1e20",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgDark: \"#1e1e20\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 34,
+    "text": "#2a2a2e",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _bgElevatedDark: \"#2a2a2e\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 38,
+    "text": "#e4e4e7",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgDark: \"#e4e4e7\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 39,
+    "text": "#a1a1aa",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgMutedDark: \"#a1a1aa\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 40,
+    "text": "#71717a",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _fgSubtleDark: \"#71717a\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 41,
+    "text": "#2f2f33",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _borderDark: \"#2f2f33\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 42,
+    "text": "#3d3d42",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _borderStrongDark: \"#3d3d42\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 43,
+    "text": "#7c7cf0",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color _accentDark: \"#7c7cf0\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 60,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color switchThumb: \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 61,
+    "text": "#9090f5",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color accentHover: dark ? \"#9090f5\" : \"#4c4cc4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 61,
+    "text": "#4c4cc4",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color accentHover: dark ? \"#9090f5\" : \"#4c4cc4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 62,
+    "text": "#14141a",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color accentFg: dark ? \"#14141a\" : \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 62,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color accentFg: dark ? \"#14141a\" : \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 64,
+    "text": "#ff6b6b",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color danger: dark ? \"#ff6b6b\" : \"#e5484d\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 64,
+    "text": "#e5484d",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color danger: dark ? \"#ff6b6b\" : \"#e5484d\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 67,
+    "text": "#51cf66",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color success: dark ? \"#51cf66\" : \"#2f9e44\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 67,
+    "text": "#2f9e44",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color success: dark ? \"#51cf66\" : \"#2f9e44\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 68,
+    "text": "#fcc419",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color warning: dark ? \"#fcc419\" : \"#d9860b\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 68,
+    "text": "#d9860b",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color warning: dark ? \"#fcc419\" : \"#d9860b\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 79,
+    "text": "#d97757",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color statusDot: \"#d97757\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 108,
+    "text": "DejaVu Sans",
+    "category": "machine_output",
+    "reason": "Qt 字体族查找名，操作系统匹配参数；原调用：readonly property string sansFamily: \"DejaVu Sans\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Theme.qml",
+    "line": 109,
+    "text": "DejaVu Sans Mono",
+    "category": "machine_output",
+    "reason": "Qt 字体族查找名，操作系统匹配参数；原调用：readonly property string monoFamily: \"DejaVu Sans Mono\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SoftShadow.qml",
+    "line": 45,
+    "text": "2d",
+    "category": "machine_output",
+    "reason": "Canvas API 上下文/剪裁/颜色/线帽协议参数；原调用：var ctx = getContext(\"2d\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SoftShadow.qml",
+    "line": 62,
+    "text": "evenodd",
+    "category": "machine_output",
+    "reason": "Canvas API 上下文/剪裁/颜色/线帽协议参数；原调用：ctx.clip(\"evenodd\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/SoftShadow.qml",
+    "line": 66,
+    "text": "rgba(0,0,0,1)",
+    "category": "machine_output",
+    "reason": "Canvas API 上下文/剪裁/颜色/线帽协议参数；原调用：ctx.fillStyle = \"rgba(0,0,0,1)\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 49,
+    "text": "K",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(Math.round(n / 1000)) + \"K\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 50,
+    "text": "M",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(Number((n / 1000000).toFixed(2))) + \"M\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 57,
+    "text": "M",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(n / 1000000) + \"M\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 59,
+    "text": "M",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(n / 1048576) + \"M\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 60,
+    "text": "M",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(Number((n / 1000000).toFixed(2))) + \"M\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 64,
+    "text": "K",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(n / 1000) + \"K\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 66,
+    "text": "K",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(n / 1024) + \"K\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 67,
+    "text": "K",
+    "category": "machine_output",
+    "reason": "上下文容量的数值 SI 倍率符号，双语约定相同（非英文词）；原调用：return String(Number((n / 1000).toFixed(1))) + \"K\"",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 88,
+    "text": "usage",
+    "category": "machine_output",
+    "reason": "root.label 查询键，显示文案来自 I18n.t / bridge catalog；原调用：var text = label(\"usage\", I18n.t(\"chat.panel.usage\"))",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 88,
+    "text": "chat.panel.usage",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 89,
+    "text": "{used}",
+    "category": "machine_output",
+    "reason": "replace 的插值标记，匹配翻译模板参数名；原调用：.replace(\"{used}\", approxTokens(u.used || 0))",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 90,
+    "text": "{window}",
+    "category": "machine_output",
+    "reason": "replace 的插值标记，匹配翻译模板参数名；原调用：.replace(\"{window}\", formatTokens(u.window || 0))",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 91,
+    "text": "{pct}",
+    "category": "machine_output",
+    "reason": "replace 的插值标记，匹配翻译模板参数名；原调用：.replace(\"{pct}\", usagePercent())",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 92,
+    "text": "approx",
+    "category": "machine_output",
+    "reason": "root.label 查询键，显示文案来自 I18n.t / bridge catalog；原调用：return u.estimated ? label(\"approx\", I18n.t(\"chat.panel.approx\")).replace(\"{n}\", text) : text",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 92,
+    "text": "chat.panel.approx",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 92,
+    "text": "{n}",
+    "category": "machine_output",
+    "reason": "replace 的插值标记，匹配翻译模板参数名；原调用：return u.estimated ? label(\"approx\", I18n.t(\"chat.panel.approx\")).replace(\"{n}\", text) : text",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 94,
+    "text": "context",
+    "category": "machine_output",
+    "reason": "root.label 查询键，显示文案来自 I18n.t / bridge catalog；原调用：readonly property string titleText: label(\"context\", I18n.t(\"chat.panel.context\")) + \" \" + usageText",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 94,
+    "text": "chat.panel.context",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 120,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: root.open ? Theme.bgActive : (ringHover.hovered ? Theme.bgHover : \"transparent\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 134,
+    "text": "2d",
+    "category": "machine_output",
+    "reason": "Canvas API 上下文/剪裁/颜色/线帽协议参数；原调用：var ctx = getContext(\"2d\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 144,
+    "text": "round",
+    "category": "machine_output",
+    "reason": "Canvas API 上下文/剪裁/颜色/线帽协议参数；原调用：ctx.lineCap = \"round\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 161,
+    "text": "contextCard",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"contextCard\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 177,
+    "text": "context",
+    "category": "machine_output",
+    "reason": "root.label 查询键，显示文案来自 I18n.t / bridge catalog；原调用：text: root.label(\"context\", I18n.t(\"chat.panel.context\"))",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 177,
+    "text": "chat.panel.context",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 34,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string mode: \"model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 53,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (root.mode === \"thinking\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 80,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property bool empty: mode === \"model\" && (groups || []).length === 0",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 99,
+    "text": "pickerPanel",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"pickerPanel\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 103,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：height: root.mode === \"thinking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 114,
+    "text": "pickerEmpty",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"pickerEmpty\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 134,
+    "text": "modelList",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelList\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 135,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: root.mode === \"model\" && !root.empty",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 170,
+    "text": "groupHead",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"groupHead\" + group.index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 199,
+    "text": "modelRow",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelRow\" + group.index + \"_\" + index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 203,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: rowHover.hovered ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 246,
+    "text": "thinkingList",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"thinkingList\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 247,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: root.mode === \"thinking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 253,
+    "text": "default",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：? String(root.effortMenu.current) : \"default\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 262,
+    "text": "efRow",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"efRow\" + index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/ModelPicker.qml",
+    "line": 266,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: efHover.hovered ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 9,
+    "text": "M7.9 20A9 9 0 1 0 4 16.1L2 22Z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string messageCircle: \"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 11,
+    "text": "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2|M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z|M22 21v-2a4 4 0 0 0-3-3.87|M16 3.13a4 4 0 0 1 0 7.75",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string users: \"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2|M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z|M22 21v-2a4 4 0 0 0-3-3.87|M16 3.13a4 4 0 0 1 0 7.75\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 13,
+    "text": "M4 13a8 8 0 1 0 16 0a8 8 0 1 0 -16 0Z|M12 9v4l2 2|M5 3 2 6|m22 6-3-3|M6.38 18.7 4 21|M17.64 18.67 20 21",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string alarmClock: \"M4 13a8 8 0 1 0 16 0a8 8 0 1 0 -16 0Z|M12 9v4l2 2|M5 3 2 6|m22 6-3-3|M6.38 18.7 4 21|M17.64 18.67 20 21\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 15,
+    "text": "M12 8V4H8|M6 8H18A2 2 0 0 1 20 10V18A2 2 0 0 1 18 20H6A2 2 0 0 1 4 18V10A2 2 0 0 1 6 8Z|M2 14h2|M20 14h2|M15 13v2|M9 13v2",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string bot: \"M12 8V4H8|M6 8H18A2 2 0 0 1 20 10V18A2 2 0 0 1 18 20H6A2 2 0 0 1 4 18V10A2 2 0 0 1 6 8Z|M2 14h2|M20 14h2|M15 13v2|M9 13v2\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 17,
+    "text": "M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z|M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z|M12 2v2|M12 22v-2|m17 20.66-1-1.73|M11 10.27 7 3.34|m20.66 17-1.73-1|m3.34 7 1.73 1|M14 12h8|M2 12h2|m20.66 7-1.73 1|m3.34 17 1.73-1|m17 3.34-1 1.73|m11 13.73-4 6.93",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string cog: \"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z|M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z|M12 2v2|M12 22v-2|m17 20.66-1-1.73|M11 10.27 7 3.34|m20.66 17-1.73-1|m3.34 7 1.73 1|M14 12h8|M2 12h2|m20.66 7-1.73 1|m3.34 17 1.73-1|m17 3.34-1 1.73|m11 13.73-4 6.93\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 19,
+    "text": "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z|M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z|M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4|M17.599 6.5a3 3 0 0 0 .399-1.375|M6.003 5.125A3 3 0 0 0 6.401 6.5|M3.477 10.896a4 4 0 0 1 .585-.396|M19.938 10.5a4 4 0 0 1 .585.396|M6 18a4 4 0 0 1-1.967-.516|M19.967 17.484A4 4 0 0 1 18 18",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string brain: \"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z|M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z|M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4|M17.599 6.5a3 3 0 0 0 .399-1.375|M6.003 5.125A3 3 0 0 0 6.401 6.5|M3.477 10.896a4 4 0 0 1 .585-.396|M19.938 10.5a4 4 0 0 1 .585.396|M6 18a4 4 0 0 1-1.967-.516|M19.967 17.484A4 4 0 0 1 18 18\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 21,
+    "text": "M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string puzzle: \"M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 23,
+    "text": "M3 11a8 8 0 1 0 16 0a8 8 0 1 0 -16 0Z|m21 21-4.3-4.3",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string search: \"M3 11a8 8 0 1 0 16 0a8 8 0 1 0 -16 0Z|m21 21-4.3-4.3\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 25,
+    "text": "M5 12h14|M12 5v14",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string plus: \"M5 12h14|M12 5v14\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 27,
+    "text": "m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string paperclip: \"m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 29,
+    "text": "M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string folder: \"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 31,
+    "text": "m6 9 6 6 6-6",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string chevronDown: \"m6 9 6 6 6-6\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 33,
+    "text": "m5 12 7-7 7 7|M12 19V5",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string arrowUp: \"m5 12 7-7 7 7|M12 19V5\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 35,
+    "text": "M10 8H20A2 2 0 0 1 22 10V20A2 2 0 0 1 20 22H10A2 2 0 0 1 8 20V10A2 2 0 0 1 10 8Z|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string copy: \"M10 8H20A2 2 0 0 1 22 10V20A2 2 0 0 1 20 22H10A2 2 0 0 1 8 20V10A2 2 0 0 1 10 8Z|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 37,
+    "text": "M18 6 6 18|m6 6 12 12",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string x: \"M18 6 6 18|m6 6 12 12\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 39,
+    "text": "M20 7h-9|M14 17H5|M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0Z|M4 7a3 3 0 1 0 6 0a3 3 0 1 0 -6 0Z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string settings2: \"M20 7h-9|M14 17H5|M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0Z|M4 7a3 3 0 1 0 6 0a3 3 0 1 0 -6 0Z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 41,
+    "text": "M15 3H20A1 1 0 0 1 21 4V9A1 1 0 0 1 20 10H15A1 1 0 0 1 14 9V4A1 1 0 0 1 15 3Z|M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string blocks: \"M15 3H20A1 1 0 0 1 21 4V9A1 1 0 0 1 20 10H15A1 1 0 0 1 14 9V4A1 1 0 0 1 15 3Z|M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 43,
+    "text": "M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0Z|M12 16v-4|M12 8h.01",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string info: \"M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0Z|M12 16v-4|M12 8h.01\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 45,
+    "text": "M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z|M20 3v4|M22 5h-4|M4 17v2|M5 18H3",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string sparkles: \"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z|M20 3v4|M22 5h-4|M4 17v2|M5 18H3\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 47,
+    "text": "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7|M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string squarePen: \"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7|M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 49,
+    "text": "M20 6 9 17l-5-5",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string check: \"M20 6 9 17l-5-5\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 51,
+    "text": "M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z|M9 3v18",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string panelLeft: \"M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z|M9 3v18\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 53,
+    "text": "M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z|M15 3v18",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string panelRight: \"M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z|M15 3v18\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 55,
+    "text": "M3 6h18|M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6|M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2|M10 11L10 17|M14 11L14 17",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string trash2: \"M3 6h18|M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6|M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2|M10 11L10 17|M14 11L14 17\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 57,
+    "text": "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z|m15 5 4 4",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string pencil: \"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z|m15 5 4 4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 59,
+    "text": "M3 3H21A1 1 0 0 1 22 4V7A1 1 0 0 1 21 8H3A1 1 0 0 1 2 7V4A1 1 0 0 1 3 3Z|M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8|M10 12h4",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string archive: \"M3 3H21A1 1 0 0 1 22 4V7A1 1 0 0 1 21 8H3A1 1 0 0 1 2 7V4A1 1 0 0 1 3 3Z|M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8|M10 12h4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 61,
+    "text": "m3 17 2 2 4-4|m3 7 2 2 4-4|M13 6h8|M13 12h8|M13 18h8",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string listChecks: \"m3 17 2 2 4-4|m3 7 2 2 4-4|M13 6h8|M13 12h8|M13 18h8\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 63,
+    "text": "M15 3h6v6|M10 14 21 3|M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string externalLink: \"M15 3h6v6|M10 14 21 3|M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 65,
+    "text": "M3 6h18|M7 12h10|M10 18h4",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string listFilter: \"M3 6h18|M7 12h10|M10 18h4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 67,
+    "text": "M9 13h6|M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string folderMinus: \"M9 13h6|M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 69,
+    "text": "M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5|M9 18h6|M10 22h4",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string lightbulb: \"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5|M9 18h6|M10 22h4\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 71,
+    "text": "m9 18 6-6-6-6",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string chevronRight: \"m9 18 6-6-6-6\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 73,
+    "text": "m15 18-6-6 6-6",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string chevronLeft: \"m15 18-6-6 6-6\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 75,
+    "text": "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3|M12 9v4|M12 17h.01",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string alertTriangle: \"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3|M12 9v4|M12 17h.01\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 77,
+    "text": "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string wrench: \"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 79,
+    "text": "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8|M21 3v5h-5|M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16|M8 16H3v5",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：readonly property string refreshCw: \"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8|M21 3v5h-5|M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16|M8 16H3v5\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 82,
+    "text": "messageCircle",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"messageCircle\") return messageCircle",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 83,
+    "text": "users",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"users\") return users",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 84,
+    "text": "alarmClock",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"alarmClock\") return alarmClock",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 85,
+    "text": "bot",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"bot\") return bot",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 86,
+    "text": "cog",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"cog\") return cog",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 87,
+    "text": "brain",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"brain\") return brain",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 88,
+    "text": "puzzle",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"puzzle\") return puzzle",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 89,
+    "text": "search",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"search\") return search",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 90,
+    "text": "plus",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"plus\") return plus",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 91,
+    "text": "paperclip",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"paperclip\") return paperclip",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 92,
+    "text": "folder",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"folder\") return folder",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 93,
+    "text": "chevronDown",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"chevronDown\") return chevronDown",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 94,
+    "text": "arrowUp",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"arrowUp\") return arrowUp",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 95,
+    "text": "copy",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"copy\") return copy",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 96,
+    "text": "x",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"x\") return x",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 97,
+    "text": "settings2",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"settings2\") return settings2",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 98,
+    "text": "blocks",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"blocks\") return blocks",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 99,
+    "text": "info",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"info\") return info",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 100,
+    "text": "sparkles",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"sparkles\") return sparkles",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 101,
+    "text": "squarePen",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"squarePen\") return squarePen",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 102,
+    "text": "check",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"check\") return check",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 103,
+    "text": "panelLeft",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"panelLeft\") return panelLeft",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 104,
+    "text": "panelRight",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"panelRight\") return panelRight",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 105,
+    "text": "trash2",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"trash2\") return trash2",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 106,
+    "text": "pencil",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"pencil\") return pencil",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 107,
+    "text": "archive",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"archive\") return archive",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 108,
+    "text": "listChecks",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"listChecks\") return listChecks",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 109,
+    "text": "externalLink",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"externalLink\") return externalLink",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 110,
+    "text": "listFilter",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"listFilter\") return listFilter",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 111,
+    "text": "folderMinus",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"folderMinus\") return folderMinus",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 112,
+    "text": "lightbulb",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"lightbulb\") return lightbulb",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 113,
+    "text": "chevronRight",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"chevronRight\") return chevronRight",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 114,
+    "text": "chevronLeft",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"chevronLeft\") return chevronLeft",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 115,
+    "text": "alertTriangle",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"alertTriangle\") return alertTriangle",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 116,
+    "text": "wrench",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"wrench\") return wrench",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/IconData.qml",
+    "line": 117,
+    "text": "refreshCw",
+    "category": "machine_output",
+    "reason": "SVG pathData 或图标查找 key，机器绘图协议，不翻译；原调用：if (key === \"refreshCw\") return refreshCw",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/I18n.qml",
+    "line": 5,
+    "text": "en",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property string locale: shellBridge ? shellBridge.locale : \"en\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 23,
+    "text": "workspaceDialog",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"workspaceDialog\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 24,
+    "text": "cf.mountWorkspace",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 32,
+    "text": "osx",
+    "category": "machine_output",
+    "reason": "Qt.platform.os 平台枚举值；原调用：property bool macChrome: Qt.platform.os === \"osx\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 45,
+    "text": "finish.brand",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 54,
+    "text": "finish.brand",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 65,
+    "text": "chat",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string page: \"chat\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 69,
+    "text": "settings-custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool settingsOpen: page === \"settings-custom-model\" || page === \"settings-mcp\" || page === \"settings-identities\" || page === \"settings-general\" || page === \"settings-models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 69,
+    "text": "settings-mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool settingsOpen: page === \"settings-custom-model\" || page === \"settings-mcp\" || page === \"settings-identities\" || page === \"settings-general\" || page === \"settings-models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 69,
+    "text": "settings-identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool settingsOpen: page === \"settings-custom-model\" || page === \"settings-mcp\" || page === \"settings-identities\" || page === \"settings-general\" || page === \"settings-models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 69,
+    "text": "settings-general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool settingsOpen: page === \"settings-custom-model\" || page === \"settings-mcp\" || page === \"settings-identities\" || page === \"settings-general\" || page === \"settings-models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 69,
+    "text": "settings-models",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool settingsOpen: page === \"settings-custom-model\" || page === \"settings-mcp\" || page === \"settings-identities\" || page === \"settings-general\" || page === \"settings-models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 70,
+    "text": "settings-models-provider",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-models-provider\" || page === \"settings-models-advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 70,
+    "text": "settings-models-advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-models-provider\" || page === \"settings-models-advanced\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 71,
+    "text": "settings-extensions",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-extensions\" || page === \"settings-about\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 71,
+    "text": "settings-about",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-extensions\" || page === \"settings-about\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 72,
+    "text": "settings-custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string settingsPane: page === \"settings-custom-model\" ? \"custom-model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 72,
+    "text": "custom-model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string settingsPane: page === \"settings-custom-model\" ? \"custom-model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 73,
+    "text": "settings-mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-mcp\" ? \"mcp\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 73,
+    "text": "mcp",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-mcp\" ? \"mcp\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 74,
+    "text": "settings-identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-identities\" ? \"identities\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 74,
+    "text": "identities",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-identities\" ? \"identities\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 75,
+    "text": "settings-about",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-about\" ? \"about\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 75,
+    "text": "about",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-about\" ? \"about\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 76,
+    "text": "settings-models",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: (page === \"settings-models\" || page === \"settings-models-provider\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 76,
+    "text": "settings-models-provider",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: (page === \"settings-models\" || page === \"settings-models-provider\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 77,
+    "text": "settings-models-advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-models-advanced\") ? \"models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 77,
+    "text": "models",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"settings-models-advanced\") ? \"models\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 78,
+    "text": "settings-extensions",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-extensions\" ? \"extensions\" : \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 78,
+    "text": "extensions",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-extensions\" ? \"extensions\" : \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 78,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-extensions\" ? \"extensions\" : \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 79,
+    "text": "settings-models-provider",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string settingsModelsView: page === \"settings-models-provider\" ? \"provider\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 79,
+    "text": "provider",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string settingsModelsView: page === \"settings-models-provider\" ? \"provider\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 80,
+    "text": "settings-models-advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-models-advanced\" ? \"advanced\" : \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 80,
+    "text": "advanced",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-models-advanced\" ? \"advanced\" : \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 80,
+    "text": "list",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"settings-models-advanced\" ? \"advanced\" : \"list\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 81,
+    "text": "search-open",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool searchActive: page === \"search-open\" || page === \"search-results\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 81,
+    "text": "search-results",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool searchActive: page === \"search-open\" || page === \"search-results\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 82,
+    "text": "search-none",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"search-none\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 83,
+    "text": "search-results",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string searchQuery: page === \"search-results\" ? \"00\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 84,
+    "text": "search-none",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: page === \"search-none\" ? \"zzz\" : \"\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 84,
+    "text": "zzz",
+    "category": "log_debug",
+    "reason": "search-none 截图调试场景的模拟用户搜索输入；原调用：: page === \"search-none\" ? \"zzz\" : \"\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 85,
+    "text": "model-picker",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool modelPickerOpen: page === \"model-picker\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 87,
+    "text": "model-picker",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string pickerMode: page === \"model-picker\" ? \"model\" : \"\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 87,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string pickerMode: page === \"model-picker\" ? \"model\" : \"\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 94,
+    "text": "long-mid",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property int forceHoverRow: page === \"long-mid\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 96,
+    "text": "chat",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: (page === \"chat\" || page === \"search-open\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 96,
+    "text": "search-open",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：: (page === \"chat\" || page === \"search-open\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 97,
+    "text": "focus-composer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"focus-composer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 98,
+    "text": "long-bottom",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"long-bottom\" || page === \"dark-chat\") ? 11 : -1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 98,
+    "text": "dark-chat",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：|| page === \"long-bottom\" || page === \"dark-chat\") ? 11 : -1",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 101,
+    "text": "focus-composer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property bool composerFocused: page === \"focus-composer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 107,
+    "text": "ctx-menu",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property bool ctxOpen: (page === \"ctx-menu\" && !ctxDismissed) || ctxUserOpen",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 108,
+    "text": "delete-confirm",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property bool confirmOpen: (page === \"delete-confirm\" && !confirmDismissed) || confirmUserOpen",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 139,
+    "text": "dark",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Binding { target: Theme; property: \"dark\"; value: shellBridge ? shellBridge.darkMode : false }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 143,
+    "text": "deepseek-v4.1-flash",
+    "category": "machine_output",
+    "reason": "模型标识示例值，保持供应商模型 ID，非自然语言提示；原调用：property string modelLabel: \"deepseek-v4.1-flash\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 147,
+    "text": "default",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string activeEffort: \"default\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 232,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: (actMouse.containsMouse && act.enabled) ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 259,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：background: Rectangle { color: \"transparent\" }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 287,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: winMouse.containsMouse ? Qt.rgba(0, 0, 0, 18 / 255) : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 288,
+    "text": "#E8EAED",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color glyphColor: Theme.dark ? \"#E8EAED\" : \"#5F6368\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 288,
+    "text": "#5F6368",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：readonly property color glyphColor: Theme.dark ? \"#E8EAED\" : \"#5F6368\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 321,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：fillColor: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 330,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：fillColor: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 358,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 394,
+    "text": "windowDragRail",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowDragRail\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 429,
+    "text": "user",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：persona: \"user\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 450,
+    "text": "settings-general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClicked: window.page = \"settings-general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 474,
+    "text": "windowDragSidebar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowDragSidebar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 516,
+    "text": "searchInput",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"searchInput\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 535,
+    "text": "cf.searchChats",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 543,
+    "text": "searchClear",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"searchClear\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 551,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: clearHover.hovered ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 602,
+    "text": "archiveHeader",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"archiveHeader\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 608,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 612,
+    "text": "native.message2",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 619,
+    "text": "archiveBack",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"archiveBack\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 625,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: archiveBackMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 648,
+    "text": "sessionList",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"sessionList\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 662,
+    "text": "sidebar-scrollbar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"sidebar-scrollbar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 672,
+    "text": "threadRow",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"threadRow\" + index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 680,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：persona: modelData.persona || \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 681,
+    "text": "finish.brand",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 706,
+    "text": "listEmpty",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"listEmpty\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 712,
+    "text": "cf.searchNoResults",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 714,
+    "text": "native.message15",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 715,
+    "text": "chat.noSessions",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 725,
+    "text": "archiveEntry",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"archiveEntry\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 732,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: archiveEntryMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 738,
+    "text": "native.message2",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 755,
+    "text": "selectionBar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"selectionBar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 764,
+    "text": "selectionCount",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"selectionCount\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 767,
+    "text": "native.message0",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 773,
+    "text": "selectionAll",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"selectionAll\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 779,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: selectionAllMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "text": "cf.selectNone",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "text": "cf.selectAll",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 802,
+    "text": "selectionArchive",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"selectionArchive\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 806,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: selectionArchiveMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 817,
+    "text": "selectionExit",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"selectionExit\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 821,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: selectionExitMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 845,
+    "text": "windowDragHeader",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowDragHeader\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 893,
+    "text": "quickStart",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"quickStart\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 913,
+    "text": "cf.quickStartTitle",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 935,
+    "text": "cf.quickStartHint",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1009,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：persona: modelData.id || \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1066,
+    "text": "bodyScroll",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"bodyScroll\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1082,
+    "text": "body-scrollbar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"body-scrollbar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1087,
+    "text": "bodyView",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"bodyView\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1110,
+    "text": "cardsCol",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"cardsCol\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1120,
+    "text": "attachFlow",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"attachFlow\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1149,
+    "text": "image",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：name: modelData.kind === \"image\" ? IconData.paperclip : IconData.folder",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1159,
+    "text": "attachName",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"attachName\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1169,
+    "text": "attachSize",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"attachSize\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1184,
+    "text": "deliveryCard",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"deliveryCard\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1210,
+    "text": "chat.deliver.title",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1220,
+    "text": "native.message1",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1260,
+    "text": "delivName",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"delivName\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1272,
+    "text": "delivSub",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"delivSub\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1277,
+    "text": "chat.deliver.missing",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1293,
+    "text": "delivOpen",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"delivOpen\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1301,
+    "text": "delivReveal",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"delivReveal\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1309,
+    "text": "delivCopy",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"delivCopy\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1332,
+    "text": "noticeBar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"noticeBar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1345,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1354,
+    "text": "pendingBar",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"pendingBar\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1424,
+    "text": "composer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"composer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1444,
+    "text": "inputField",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"inputField\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "text": "native.message13",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "text": "cf.assistant",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1483,
+    "text": "clipBtn",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"clipBtn\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1489,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: (clipHover.hovered || clipMouse.containsMouse) ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1509,
+    "text": "mountChip",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"mountChip\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1525,
+    "text": "cf.mountWorkspace",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1561,
+    "text": "cf.send",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1577,
+    "text": "effortChip",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"effortChip\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1588,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property bool open: window.modelPickerOpen && window.pickerMode === \"thinking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1594,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: open ? Theme.bgActive : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1617,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClicked: window.openPicker(\"thinking\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1625,
+    "text": "thinkingPicker",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"thinkingPicker\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1626,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: window.modelPickerOpen && window.pickerMode === \"thinking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1627,
+    "text": "thinking",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：mode: \"thinking\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1640,
+    "text": "contextRing",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"contextRing\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1652,
+    "text": "modelChip",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelChip\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1663,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：readonly property bool open: window.modelPickerOpen && window.pickerMode === \"model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1666,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: open ? Theme.bgActive : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1693,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClicked: window.openPicker(\"model\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1698,
+    "text": "modelPicker",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"modelPicker\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1699,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：visible: window.modelPickerOpen && window.pickerMode === \"model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1700,
+    "text": "model",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：mode: \"model\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1720,
+    "text": "chat",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onClose: window.page = \"chat\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1721,
+    "text": "settings-",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：onPaneRequested: function (name) { window.page = \"settings-\" + name }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1805,
+    "text": "chat.deliver.openFailed",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1812,
+    "text": "native.message26",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1819,
+    "text": "native.message27",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1839,
+    "text": "new",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (action === \"new\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1842,
+    "text": "rename",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else if (action === \"rename\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1844,
+    "text": "select",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else if (action === \"select\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1847,
+    "text": "archive",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else if (action === \"archive\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1851,
+    "text": "native.message24",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1852,
+    "text": "delete",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else if (action === \"delete\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1884,
+    "text": "native.message31",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1930,
+    "text": "native.message30",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1960,
+    "text": "native.message21",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1981,
+    "text": "focus-composer",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (window.page === \"focus-composer\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1992,
+    "text": "native.message20",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2003,
+    "text": "native.message19",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2007,
+    "text": "default",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：window.effortLabel = level === \"default\" ? \"\" : effortName(level)",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2039,
+    "text": "long-bottom",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：if (window.page === \"long-bottom\") {",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2044,
+    "text": "long-mid",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：} else if (window.page === \"long-mid\")",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2055,
+    "text": "ctxLayer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"ctxLayer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2075,
+    "text": "ctxMenu",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"ctxMenu\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2097,
+    "text": "cf.newChat",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2097,
+    "text": "new",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ label: I18n.t(\"cf.newChat\"), icon: IconData.plus, danger: false, action: \"new\" },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2098,
+    "text": "cf.renameChat",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2098,
+    "text": "rename",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ label: I18n.t(\"cf.renameChat\"), icon: IconData.pencil, danger: false, action: \"rename\" },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2099,
+    "text": "cf.multiSelect",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2099,
+    "text": "select",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ label: I18n.t(\"cf.multiSelect\"), icon: IconData.listChecks, danger: false, action: \"select\" },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2100,
+    "text": "cf.archive",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2100,
+    "text": "archive",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ label: I18n.t(\"cf.archive\"), icon: IconData.archive, danger: false, action: \"archive\" },",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2101,
+    "text": "common.delete",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2101,
+    "text": "delete",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：{ label: I18n.t(\"common.delete\"), icon: IconData.trash2, danger: true, action: \"delete\" }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2106,
+    "text": "ctxMenuItem",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"ctxMenuItem\" + index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2114,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：: \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2150,
+    "text": "confirmLayer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"confirmLayer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2157,
+    "text": "confirmBackdrop",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"confirmBackdrop\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2176,
+    "text": "confirmDialog",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"confirmDialog\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2199,
+    "text": "native.message8",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2212,
+    "text": "cf.deleteChatConfirm",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2220,
+    "text": "confirmCancel",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"confirmCancel\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2226,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: cancelMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2229,
+    "text": "common.cancel",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2246,
+    "text": "confirmDelete",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"confirmDelete\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2257,
+    "text": "common.delete",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2258,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2278,
+    "text": "renameLayer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameLayer\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2284,
+    "text": "renameBackdrop",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameBackdrop\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2300,
+    "text": "renameDialog",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameDialog\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2319,
+    "text": "cf.renameChatTitle",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2327,
+    "text": "renameInputBox",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameInputBox\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2342,
+    "text": "cf.renamePlaceholder",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2350,
+    "text": "renameInput",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameInput\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2373,
+    "text": "renameCancel",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameCancel\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2379,
+    "text": "transparent",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: renameCancelMouse.containsMouse ? Theme.bgHover : \"transparent\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2382,
+    "text": "common.cancel",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2399,
+    "text": "renameConfirm",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"renameConfirm\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2410,
+    "text": "cf.renameChat",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2445,
+    "text": "windowControls",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowControls\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2451,
+    "text": "#1e1e20",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: Theme.dark ? \"#1e1e20\" : \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2451,
+    "text": "#ffffff",
+    "category": "machine_output",
+    "reason": "Qt color / ShapePath 颜色参数，不是展示文案；原调用：color: Theme.dark ? \"#1e1e20\" : \"#ffffff\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2458,
+    "text": "windowControlMinimize",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowControlMinimize\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2463,
+    "text": "windowControlMaximize",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowControlMaximize\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2473,
+    "text": "windowControlClose",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowControlClose\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2487,
+    "text": "windowResize",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"windowResize\" + index",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2522,
+    "text": "cf.assistant",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2523,
+    "text": "cf.assistant",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 9,
+    "text": "interactionPrompt",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：objectName: \"interactionPrompt\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 42,
+    "text": "answered",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { required property string modelData; text: modelData; Layout.fillWidth: true; onClicked: prompt.respond(\"answered\", modelData) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 44,
+    "text": "interactionAnswer",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：TextField { id: answer; objectName: \"interactionAnswer\"; visible: prompt.request && prompt.request.kind === \"question\"; placeholderText: I18n.t(\"native.message22\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 44,
+    "text": "question",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：TextField { id: answer; objectName: \"interactionAnswer\"; visible: prompt.request && prompt.request.kind === \"question\"; placeholderText: I18n.t(\"native.message22\"); Layout.fillWidth: true }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 44,
+    "text": "native.message22",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "interactionAccept",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：Button { objectName: \"interactionAccept\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"native.message18\") : I18n.t(\"native.submit\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"approved\" : \"answered\", answer.text) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "approval",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionAccept\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"native.message18\") : I18n.t(\"native.submit\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"approved\" : \"answered\", answer.text) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "native.message18",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "native.submit",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "approval",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionAccept\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"native.message18\") : I18n.t(\"native.submit\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"approved\" : \"answered\", answer.text) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "approved",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionAccept\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"native.message18\") : I18n.t(\"native.submit\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"approved\" : \"answered\", answer.text) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "answered",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionAccept\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"native.message18\") : I18n.t(\"native.submit\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"approved\" : \"answered\", answer.text) }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "interactionReject",
+    "category": "machine_output",
+    "reason": "Qt 对象测试定位标识 objectName，不显示给用户；原调用：Button { objectName: \"interactionReject\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"cf.reject\") : I18n.t(\"cf.close\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"denied\" : \"dismissed\", \"\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "approval",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionReject\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"cf.reject\") : I18n.t(\"cf.close\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"denied\" : \"dismissed\", \"\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "cf.reject",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "cf.close",
+    "category": "catalogue",
+    "reason": "I18n.t 翻译键绑定；缺键单独校验；原调用：I18n.t 的资源键",
+    "status": "resolved"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "approval",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionReject\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"cf.reject\") : I18n.t(\"cf.close\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"denied\" : \"dismissed\", \"\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "denied",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionReject\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"cf.reject\") : I18n.t(\"cf.close\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"denied\" : \"dismissed\", \"\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "dismissed",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：Button { objectName: \"interactionReject\"; text: prompt.request && prompt.request.kind === \"approval\" ? I18n.t(\"cf.reject\") : I18n.t(\"cf.close\"); onClicked: prompt.respond(prompt.request.kind === \"approval\" ? \"denied\" : \"dismissed\", \"\") }",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Avatar.qml",
+    "line": 11,
+    "text": "general",
+    "category": "machine_output",
+    "reason": "界面路由/枚举状态或桥接动作协议值；对应标签单独从 catalog 获取；原调用：property string persona: \"general\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Avatar.qml",
+    "line": 24,
+    "text": "avatars/",
+    "category": "machine_output",
+    "reason": "图像资源路径/文件后缀，不能翻译；原调用：source: \"avatars/\" + ava.persona + (ava.pop ? \"-pop\" : \"\") + \".svg\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Avatar.qml",
+    "line": 24,
+    "text": "-pop",
+    "category": "machine_output",
+    "reason": "图像资源路径/文件后缀，不能翻译；原调用：source: \"avatars/\" + ava.persona + (ava.pop ? \"-pop\" : \"\") + \".svg\"",
+    "status": "out_of_scope"
+  },
+  {
+    "file": "app/src/qml/Avatar.qml",
+    "line": 24,
+    "text": ".svg",
+    "category": "machine_output",
+    "reason": "图像资源路径/文件后缀，不能翻译；原调用：source: \"avatars/\" + ava.persona + (ava.pop ? \"-pop\" : \"\") + \".svg\"",
+    "status": "out_of_scope"
+  }
+]

@@ -1,0 +1,5917 @@
+[
+  {
+    "file": "app/src/main.py",
+    "line": 69,
+    "key": "cli.ade5abfa0abe",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/main.py",
+    "line": 70,
+    "key": "cli.d7fa6622c296",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/markdown/body.py",
+    "line": 77,
+    "key": "legacy.368997cd00d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/markdown/body.py",
+    "line": 154,
+    "key": "legacy.53f6e22fc48f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/markdown/highlight.py",
+    "line": 238,
+    "key": "legacy.f528c08df47d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/base_view_model.py",
+    "line": 62,
+    "key": "legacy.29a1c43bfb79",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 36,
+    "key": "legacy.01df9871a51a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 45,
+    "key": "legacy.f1a2432836b9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 97,
+    "key": "legacy.01df9871a51a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 110,
+    "key": "legacy.a510aadb09e1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 129,
+    "key": "legacy.a510aadb09e1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 61,
+    "key": "legacy.1a5854cb0837",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 142,
+    "key": "legacy.1a5854cb0837",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/factory.py",
+    "line": 34,
+    "key": "legacy.1f9a9cd036ba",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/core/observable.py",
+    "line": 61,
+    "key": "legacy.29a1c43bfb79",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 8,
+    "key": "legacy.4f2c9a32be62",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 24,
+    "key": "legacy.8d570ae295b7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 13,
+    "key": "legacy.966cb0e44ce5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 14,
+    "key": "legacy.2d023774e562",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 15,
+    "key": "legacy.905315dd0159",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 16,
+    "key": "legacy.01a6030677d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 33,
+    "key": "legacy.4f2c9a32be62",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 43,
+    "key": "legacy.4f2c9a32be62",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 22,
+    "key": "legacy.966cb0e44ce5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 22,
+    "key": "legacy.2d023774e562",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 22,
+    "key": "legacy.905315dd0159",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 22,
+    "key": "legacy.01a6030677d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 208,
+    "key": "legacy.f3be68b5b69e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 313,
+    "key": "finish.ui.df9f1fb37552",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 313,
+    "key": "finish.ui.df9f1fb37552",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 131,
+    "key": "finish.ui.a81f40acbcd6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 156,
+    "key": "finish.ui.b4c1e7281076",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 119,
+    "key": "legacy.c85587c0bd2b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 133,
+    "key": "finish.ui.dc46a77cd3d8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 222,
+    "key": "finish.ui.6d37bc7c627f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 135,
+    "key": "finish.ui.e013e1157839",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 174,
+    "key": "finish.ui.70d381485ba0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 198,
+    "key": "finish.ui.50fa80996275",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 137,
+    "key": "finish.ui.e6b9ac0fd560",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 188,
+    "key": "finish.ui.86e8239967ef",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 203,
+    "key": "finish.ui.387e6ae04941",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 206,
+    "key": "finish.ui.5d898d336750",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 209,
+    "key": "finish.ui.6d37bc7c627f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 213,
+    "key": "finish.ui.d4499a08ad89",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 215,
+    "key": "finish.ui.d7dcf6183175",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 219,
+    "key": "finish.ui.6a4181f0488d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/chat_session_store.py",
+    "line": 55,
+    "key": "legacy.66b637d4b6c5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/chat_session_store.py",
+    "line": 352,
+    "key": "legacy.c74e5394b8d9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 604,
+    "key": "finish.ui.a1049b2e7b3f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 650,
+    "key": "finish.ui.d4bd7def0049",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 738,
+    "key": "finish.ui.5c174784ba7d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 740,
+    "key": "finish.ui.a884e912bce3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 608,
+    "key": "finish.ui.5c174784ba7d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 639,
+    "key": "finish.ui.5c174784ba7d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 647,
+    "key": "legacy.e5da8854b1c8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 652,
+    "key": "finish.ui.3eb19ee7c923",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 655,
+    "key": "legacy.dfa494073473",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 733,
+    "key": "finish.ui.5c174784ba7d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 747,
+    "key": "finish.ui.54932b3a82c7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 749,
+    "key": "finish.ui.d6bf0718cb96",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 776,
+    "key": "finish.ui.9ef986ca46a9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 778,
+    "key": "finish.ui.5756cb7defad",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/greeting.py",
+    "line": 13,
+    "key": "finish.319b50d563a2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 96,
+    "key": "finish.ui.6b910528b203",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 163,
+    "key": "finish.ui.20ca61eeebc0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 115,
+    "key": "finish.ui.5f70b938f64d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 103,
+    "key": "legacy.61b329a7034e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 159,
+    "key": "legacy.53bf4abaee00",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 121,
+    "key": "legacy.82c3b1a4e695",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 135,
+    "key": "legacy.be14f46f4f53",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 141,
+    "key": "legacy.8a3104d19976",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 56,
+    "key": "legacy.c2f59ad62975",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 120,
+    "key": "legacy.4cf3b8682862",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 152,
+    "key": "legacy.8d2569bcebf5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 45,
+    "key": "legacy.ff8404a7dd4c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 215,
+    "key": "legacy.8e0969d8814e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 203,
+    "key": "legacy.7ed0ee3ebcac",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 264,
+    "key": "finish.ui.ccdc946c5ec6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 331,
+    "key": "legacy.642b4f69c121",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 302,
+    "key": "finish.ui.b576598f3c1b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 307,
+    "key": "legacy.b2fd20806334",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 319,
+    "key": "legacy.251ab7ed8779",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 215,
+    "key": "finish.ui.b14041ee4f58",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 19,
+    "key": "legacy.c5005f5e3dd5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 61,
+    "key": "finish.ui.da1ca2e55582",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 23,
+    "key": "legacy.22b834dec0d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 57,
+    "key": "legacy.6c25f767e352",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 57,
+    "key": "legacy.6ca210224ee2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 62,
+    "key": "legacy.929ee7b311bd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 79,
+    "key": "finish.ui.6e11d504e6e0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 26,
+    "key": "legacy.be87a578f3c0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 53,
+    "key": "legacy.2753c19af247",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 21,
+    "key": "legacy.9b7597b1735e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 48,
+    "key": "legacy.c2cf5eb4a8e7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 78,
+    "key": "legacy.323e8e83e31a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 80,
+    "key": "legacy.4d6a21518529",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 82,
+    "key": "legacy.e7bb1ea0d448",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 86,
+    "key": "legacy.a5ee1c446f3b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 88,
+    "key": "legacy.811be24fda82",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 94,
+    "key": "legacy.7d624bb12924",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 143,
+    "key": "legacy.92b863511f20",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 47,
+    "key": "legacy.6c5e0b628b08",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 49,
+    "key": "legacy.b24ab84171d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 92,
+    "key": "legacy.2d8ed86e82ea",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 61,
+    "key": "legacy.e8d364844a4f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 106,
+    "key": "legacy.e8d364844a4f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 212,
+    "key": "finish.ui.2f53303b5093",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 215,
+    "key": "legacy.b6b969217faf",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 276,
+    "key": "legacy.3bd0091cb608",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 231,
+    "key": "legacy.306bf6b480ba",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 238,
+    "key": "legacy.07afcb53677a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 244,
+    "key": "legacy.0c524ed6f364",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 253,
+    "key": "legacy.124ad8199b36",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 260,
+    "key": "legacy.f482a35f434f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 269,
+    "key": "legacy.bd9dd413b087",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 473,
+    "key": "legacy.8bc8382346d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 247,
+    "key": "finish.ui.9f15b2487201",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 184,
+    "key": "legacy.e9e8b9094c5b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 249,
+    "key": "legacy.f08c47e70238",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 229,
+    "key": "finish.ui.977293a3a21a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/provider_setup.py",
+    "line": 72,
+    "key": "finish.ui.837a0179c5aa",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 166,
+    "key": "legacy.c9abf9e85d10",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 288,
+    "key": "finish.ui.64ba75d9d600",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 299,
+    "key": "finish.ui.df9f1fb37552",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 287,
+    "key": "finish.ui.64ba75d9d600",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_crypto.py",
+    "line": 19,
+    "key": "legacy.e72e78003988",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 132,
+    "key": "legacy.de9a7de2fedc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 141,
+    "key": "legacy.4afdeab944c5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 144,
+    "key": "legacy.555328042b45",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 185,
+    "key": "legacy.f0f186a9e977",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 194,
+    "key": "legacy.976390a41ffc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.providers",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.addProvider",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.noProvidersYet",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.modelCount",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.enabled",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.disabled",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "chat.plan.back",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.backTo",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.deleteProvider",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.deleteProviderConfirm",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.enable",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.advanced",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.apiKey",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.apiKeyPlaceholder",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.keyReplaceHint",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.secretConfigured",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.secretSaving",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.secretSaved",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.secretsUnavailable",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.apiHost",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.models",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.addModel",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.modelIdPlaceholder",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "bots.add",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "chat.attachRemove",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.noModels",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.newProviderName",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.renameHint",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.providerNamePlaceholder",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.keyMissingWarn",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headers",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headersHint",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.noHeaders",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headerName",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.kvValue",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.addHeader",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "chat.attachRemove",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "extensions.remove",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "git.cancel",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "common.confirm",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.version",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.about",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.update.check",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.update.checking",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.update.latest",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.update.checkFailed",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "settings.update.available",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headerIssue.name",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headerIssue.reserved",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 27,
+    "key": "models.headerIssue.value",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_service.py",
+    "line": 86,
+    "key": "legacy.2512eb63b237",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/settings_service.py",
+    "line": 95,
+    "key": "legacy.fc014981cacf",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/sse.py",
+    "line": 29,
+    "key": "finish.ui.2a1c2d4484c4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 73,
+    "key": "finish.ui.be8da62ea113",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 84,
+    "key": "finish.ui.1069127253fa",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/transport.py",
+    "line": 146,
+    "key": "legacy.f2187b0114d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/services/transport.py",
+    "line": 158,
+    "key": "legacy.f2187b0114d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 27,
+    "key": "legacy.9e636642d6d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 29,
+    "key": "legacy.cca145fe6835",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 31,
+    "key": "legacy.f43f266bd07f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 33,
+    "key": "legacy.9c439091a115",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 40,
+    "key": "legacy.8200c3d50b95",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 173,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 289,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 240,
+    "key": "legacy.03e273ff3b25",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 240,
+    "key": "legacy.946734eab024",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 382,
+    "key": "legacy.a6dd18c3f246",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 405,
+    "key": "legacy.aa91387b01cf",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 438,
+    "key": "legacy.43738492f456",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 453,
+    "key": "legacy.a1e0818aab10",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 538,
+    "key": "legacy.969a2eb8d325",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 736,
+    "key": "legacy.eb50f4416300",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 778,
+    "key": "legacy.3e3c8068bb0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 443,
+    "key": "legacy.29653ff32b4f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 516,
+    "key": "legacy.eb4efbaeb4ad",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 671,
+    "key": "legacy.008906a3e267",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 674,
+    "key": "legacy.72f60ab7b3ba",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 332,
+    "key": "legacy.eb4efbaeb4ad",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 665,
+    "key": "legacy.34564c43784d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 507,
+    "key": "legacy.75dddf524e4c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 509,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 465,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 616,
+    "key": "legacy.e1c6be578222",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/demo_vm.py",
+    "line": 13,
+    "key": "legacy.6e197a7dbb31",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/demo_vm.py",
+    "line": 51,
+    "key": "legacy.20b2427a0aa7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/demo_vm.py",
+    "line": 51,
+    "key": "legacy.6e197a7dbb31",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 28,
+    "key": "legacy.7a82315e72bb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 29,
+    "key": "legacy.92caa3d06c03",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 30,
+    "key": "legacy.3bcbadec45fd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 66,
+    "key": "legacy.7a82315e72bb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 66,
+    "key": "legacy.92caa3d06c03",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 66,
+    "key": "legacy.3bcbadec45fd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 229,
+    "key": "legacy.7c6e601ea4ce",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 352,
+    "key": "legacy.6cbda0c09c93",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 363,
+    "key": "legacy.7f830163a197",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 366,
+    "key": "legacy.91228ba66bac",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/about_window.py",
+    "line": 8,
+    "key": "legacy.6c14bd7f6f9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/about_window.py",
+    "line": 23,
+    "key": "legacy.6c14bd7f6f9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 75,
+    "key": "legacy.9258fd0eb3ac",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 129,
+    "key": "legacy.2137be04a7dc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 139,
+    "key": "legacy.2137be04a7dc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 104,
+    "key": "legacy.59db7ca1fe5e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 41,
+    "key": "legacy.1214d633a448",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 42,
+    "key": "legacy.a17f70a8d3d6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 43,
+    "key": "legacy.fc4f2f83ab0b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 46,
+    "key": "legacy.2a9ab4d435e8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 47,
+    "key": "legacy.e453ed23f866",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 48,
+    "key": "legacy.d37451998387",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 273,
+    "key": "legacy.957dc00c1d47",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 73,
+    "key": "legacy.2a9ab4d435e8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 74,
+    "key": "legacy.d37451998387",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 87,
+    "key": "legacy.fc4f2f83ab0b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 89,
+    "key": "legacy.1214d633a448",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 90,
+    "key": "legacy.a17f70a8d3d6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 221,
+    "key": "legacy.2a9ab4d435e8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 233,
+    "key": "legacy.e453ed23f866",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 233,
+    "key": "legacy.2a9ab4d435e8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 247,
+    "key": "legacy.e453ed23f866",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 247,
+    "key": "legacy.2a9ab4d435e8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/demo_window.py",
+    "line": 14,
+    "key": "legacy.3d81345303ab",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/demo_window.py",
+    "line": 31,
+    "key": "legacy.d6c39c5ceb4c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/demo_window.py",
+    "line": 36,
+    "key": "legacy.3d81345303ab",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 30,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 38,
+    "key": "legacy.01dd57ee1fb5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 71,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 142,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 149,
+    "key": "legacy.7debf9cb0372",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 166,
+    "key": "legacy.b796f2d4ca85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 175,
+    "key": "legacy.1b7abf96f8bc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 182,
+    "key": "legacy.23543b7d1ae2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 182,
+    "key": "legacy.65234c1d4f77",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 194,
+    "key": "legacy.dc9fe43fb71e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 205,
+    "key": "legacy.f5bc1155fbff",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 213,
+    "key": "legacy.3559dc2da370",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 213,
+    "key": "legacy.6279db526363",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 155,
+    "key": "legacy.f6a9dcdaa966",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 188,
+    "key": "legacy.f2d8d992fe5c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 225,
+    "key": "legacy.fb5fe1e266c6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 225,
+    "key": "legacy.a597340b1005",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 230,
+    "key": "legacy.ca9f571a40a9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 233,
+    "key": "legacy.bb113e28a86b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 240,
+    "key": "legacy.a19c2d6d29e3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 246,
+    "key": "legacy.4f27d4a2784d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 242,
+    "key": "legacy.70c9d64d3c44",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 244,
+    "key": "legacy.4f27d4a2784d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/main_window.py",
+    "line": 12,
+    "key": "legacy.4f2c9a32be62",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/main_window.py",
+    "line": 28,
+    "key": "legacy.4f2c9a32be62",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 18,
+    "key": "legacy.b3e55858d9d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 19,
+    "key": "legacy.1cd80fd7a8b3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 20,
+    "key": "legacy.ddfde75bec38",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 21,
+    "key": "legacy.3755f56f2f83",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 22,
+    "key": "legacy.7debf9cb0372",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 23,
+    "key": "legacy.46b23a5ba88a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 56,
+    "key": "legacy.46b23a5ba88a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 59,
+    "key": "legacy.b3e55858d9d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 60,
+    "key": "legacy.1cd80fd7a8b3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 61,
+    "key": "legacy.ddfde75bec38",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 62,
+    "key": "legacy.3755f56f2f83",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 63,
+    "key": "legacy.7debf9cb0372",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 19,
+    "key": "legacy.7debf9cb0372",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 20,
+    "key": "legacy.11d024154013",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 21,
+    "key": "legacy.1db8fdda7b26",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 22,
+    "key": "legacy.2f38a9068f4b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 23,
+    "key": "legacy.fadf24dbc5a9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 24,
+    "key": "legacy.23ad2816f6cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 25,
+    "key": "legacy.532a64e19cd2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 26,
+    "key": "legacy.cf24da5745f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 27,
+    "key": "legacy.29e31e4ff1c1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 28,
+    "key": "legacy.536a009a9b59",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 29,
+    "key": "legacy.d4e9ca3dd494",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 30,
+    "key": "legacy.d989e55188c9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 31,
+    "key": "legacy.484821eb0713",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 32,
+    "key": "legacy.cdfb82b464c9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 33,
+    "key": "legacy.b96554478025",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 34,
+    "key": "legacy.a1fd4bfa5d44",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 35,
+    "key": "legacy.a3e7368ec053",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 36,
+    "key": "legacy.e9de2f963c09",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 37,
+    "key": "legacy.8d4e1e385eb6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 39,
+    "key": "legacy.c8d09cf955f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 40,
+    "key": "legacy.b9ee259b7f6c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 41,
+    "key": "legacy.0869071c92c0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 42,
+    "key": "legacy.b096b3f5acd6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 43,
+    "key": "legacy.1cb58b7bf00f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 44,
+    "key": "legacy.2cd489b0a572",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 49,
+    "key": "legacy.a1fd4bfa5d44",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 49,
+    "key": "legacy.a3e7368ec053",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 89,
+    "key": "legacy.11d024154013",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 90,
+    "key": "legacy.7debf9cb0372",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 135,
+    "key": "legacy.d7d7ce790b9a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 136,
+    "key": "legacy.1db8fdda7b26",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 158,
+    "key": "legacy.20fcc553227f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 159,
+    "key": "legacy.1be7ae4fc257",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 160,
+    "key": "legacy.86e118291ed4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 161,
+    "key": "legacy.b0c431675bce",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 167,
+    "key": "legacy.484821eb0713",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 169,
+    "key": "legacy.cdfb82b464c9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 170,
+    "key": "legacy.b96554478025",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 180,
+    "key": "legacy.23ad2816f6cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 182,
+    "key": "legacy.c41734a4cc66",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 183,
+    "key": "legacy.532a64e19cd2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 190,
+    "key": "legacy.29e31e4ff1c1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 191,
+    "key": "legacy.d4e9ca3dd494",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 192,
+    "key": "legacy.536a009a9b59",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 193,
+    "key": "legacy.cf24da5745f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 194,
+    "key": "legacy.2f38a9068f4b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 195,
+    "key": "legacy.fadf24dbc5a9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 226,
+    "key": "legacy.4afad877551a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 229,
+    "key": "legacy.4afad877551a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 230,
+    "key": "legacy.c10bbf5ddd2d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 231,
+    "key": "legacy.9a1fbe0bb901",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 232,
+    "key": "legacy.880c22952280",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 235,
+    "key": "legacy.8d4e1e385eb6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 236,
+    "key": "legacy.fadf24dbc5a9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 312,
+    "key": "legacy.a74a5f436597",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 408,
+    "key": "legacy.251ea23e6514",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 411,
+    "key": "legacy.ac92decf7344",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 425,
+    "key": "legacy.769ee76de92e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 450,
+    "key": "legacy.8de8c7493bfb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 466,
+    "key": "legacy.f6f756c66755",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 517,
+    "key": "legacy.5a6ca3d8cdb6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 102,
+    "key": "legacy.4713153f38d2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 309,
+    "key": "legacy.11d024154013",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 309,
+    "key": "legacy.6c14bd7f6f9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 329,
+    "key": "legacy.25d284315063",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 329,
+    "key": "legacy.8bb38ef00ccc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 332,
+    "key": "legacy.e59e3786cb63",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 362,
+    "key": "legacy.b98bde85a892",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 434,
+    "key": "legacy.51b989540f6c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 434,
+    "key": "legacy.6b15373cad3b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 443,
+    "key": "legacy.8216e0e26e90",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 443,
+    "key": "legacy.cc150360fc59",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 459,
+    "key": "legacy.db5ac3f8f154",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 459,
+    "key": "legacy.5f1ea7e18069",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 488,
+    "key": "legacy.e31be7e56e3f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 495,
+    "key": "legacy.b16386c8a910",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 523,
+    "key": "legacy.cff333d4e3f9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 535,
+    "key": "legacy.d989e55188c9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 535,
+    "key": "legacy.d4e9ca3dd494",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.c8d09cf955f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.b9ee259b7f6c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.0869071c92c0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.b096b3f5acd6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.1cb58b7bf00f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 54,
+    "key": "legacy.2cd489b0a572",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 386,
+    "key": "legacy.64028da77b65",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 312,
+    "key": "legacy.53e2db70167f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 28,
+    "key": "legacy.51991a5d111a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 29,
+    "key": "legacy.3e3c8068bb0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 20,
+    "key": "legacy.5630b886f9cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 21,
+    "key": "legacy.9b0519a157ee",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 22,
+    "key": "legacy.a72ef18d9a0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 23,
+    "key": "legacy.b859c7be7501",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 24,
+    "key": "legacy.ed4240ed1fd4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 25,
+    "key": "legacy.ab3656a956f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 200,
+    "key": "legacy.b496542da6af",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 55,
+    "key": "legacy.3e3c8068bb0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 55,
+    "key": "legacy.51991a5d111a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 122,
+    "key": "legacy.1c9f086d2b88",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 197,
+    "key": "legacy.3be3bbe2d941",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 197,
+    "key": "legacy.f38aef0f951a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 199,
+    "key": "legacy.1d91e5140320",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 60,
+    "key": "legacy.a72ef18d9a0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 163,
+    "key": "legacy.1c9f086d2b88",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 103,
+    "key": "legacy.be8da62ea113",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 112,
+    "key": "legacy.3e3c8068bb0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 112,
+    "key": "legacy.51991a5d111a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.5630b886f9cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.9b0519a157ee",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.a72ef18d9a0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.b859c7be7501",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.ed4240ed1fd4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 120,
+    "key": "legacy.ab3656a956f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 106,
+    "key": "legacy.be8da62ea113",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.5630b886f9cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.9b0519a157ee",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.a72ef18d9a0e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.b859c7be7501",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.ed4240ed1fd4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 161,
+    "key": "legacy.ab3656a956f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 169,
+    "key": "legacy.a728e87a8a99",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 172,
+    "key": "legacy.264bbac62499",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 207,
+    "key": "legacy.455eb564fc42",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 326,
+    "key": "legacy.b2e079b9ad36",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 455,
+    "key": "legacy.105260295be9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 457,
+    "key": "legacy.c93accfa32ee",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 480,
+    "key": "finish.ui.0397d985c3b2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.language",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.theme",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.chatFontSize",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.themeSystem",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.themeLight",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.themeDark",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.chatFontSm",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.chatFontMd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.chatFontLg",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "settings.chatFontXl",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "models.providers",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "models.noProvidersYet",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "models.modelCount",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "activity.extensions",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "extensions.builtin",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "cf.kindSkill",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "key": "cf.extEmpty",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.title",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.on",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.onHint",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 100,
+    "key": "cf.searchChats",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 100,
+    "key": "cf.searchNoResults",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 100,
+    "key": "chat.noSessions",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 102,
+    "key": "cf.quickStartTitle",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 102,
+    "key": "cf.quickStartHint",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.selectModel",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.selectModel",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.panel.context",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.panel.approx",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.panel.usage",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "key": "chat.panel.autoCompact",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.default",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.low",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.medium",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.high",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.xhigh",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.levels.max",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.default",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.low",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.medium",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.high",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.xhigh",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "key": "chat.effort.hints.max",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 447,
+    "key": "legacy.3682234e64de",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 347,
+    "key": "legacy.e33129d04c41",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 31,
+    "key": "legacy.5630b886f9cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 32,
+    "key": "cf.assistant",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 52,
+    "key": "finish.size.gigabytes",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 47,
+    "key": "finish.size.bytes",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 49,
+    "key": "finish.size.kilobytes",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 51,
+    "key": "finish.size.megabytes",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 147,
+    "key": "finish.session.untitled",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 78,
+    "key": "legacy.60b5f3f7e216",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 140,
+    "key": "legacy.102f95aabbc6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 156,
+    "key": "legacy.ab8bbfc0513e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 176,
+    "key": "legacy.3e4a29f8ba1d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 211,
+    "key": "legacy.3630ff484185",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 89,
+    "key": "legacy.998a243fc8e7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 115,
+    "key": "legacy.7f00bfbf3768",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 20,
+    "key": "finish.5b4cc0d40c32",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 569,
+    "key": "legacy.c1f82cf5b3c6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 617,
+    "key": "legacy.cf175ca0ebbb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 632,
+    "key": "legacy.77cdbe3f52f8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 83,
+    "key": "legacy.a3ba010a0f39",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 181,
+    "key": "legacy.c3520b7c688c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 211,
+    "key": "legacy.8f84890cf58c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 243,
+    "key": "legacy.410a72fda1c3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 255,
+    "key": "legacy.6575fb740b4e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 262,
+    "key": "legacy.c504bd9f5b3b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 275,
+    "key": "legacy.7019cc030ef5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 319,
+    "key": "legacy.220b02653296",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 341,
+    "key": "legacy.93d49673235a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 348,
+    "key": "legacy.bea8934666f1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 367,
+    "key": "legacy.f1d167fd5278",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 374,
+    "key": "legacy.6e7cdb15e2f4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 421,
+    "key": "legacy.be1ae9054874",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 465,
+    "key": "legacy.584f8fd421ae",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 486,
+    "key": "legacy.375d1d68d230",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 515,
+    "key": "finish.d9390b2c4011",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 551,
+    "key": "legacy.d8ae625700b7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 575,
+    "key": "legacy.f1864334de3e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 581,
+    "key": "legacy.2f6c22c0f6ec",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 584,
+    "key": "legacy.9677611c241a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 652,
+    "key": "legacy.a991916500fc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 681,
+    "key": "legacy.c177f3598735",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 689,
+    "key": "legacy.15e5a91d4672",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 177,
+    "key": "legacy.1e57affe7d3b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 184,
+    "key": "legacy.5909d01df413",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 273,
+    "key": "legacy.5a24a4ab1787",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 484,
+    "key": "legacy.07caf65db32a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 594,
+    "key": "legacy.3d6b8cbf7c40",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 677,
+    "key": "legacy.bf88c3b7a31c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 328,
+    "key": "finish.1af880421a65",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 103,
+    "key": "legacy.2d899cdb2de9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 293,
+    "key": "legacy.4a50531fe7c0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 295,
+    "key": "legacy.69fe978c3b34",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 333,
+    "key": "legacy.8890cde6248b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 341,
+    "key": "legacy.8e9148b1af70",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 75,
+    "key": "legacy.a12b8b11db79",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 77,
+    "key": "legacy.274b02be0ae8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 259,
+    "key": "legacy.b34db3c46ea0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 350,
+    "key": "legacy.861585b33c07",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 375,
+    "key": "legacy.88286986a0af",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 80,
+    "key": "legacy.e5ed12c721d9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 83,
+    "key": "legacy.7128dc053518",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 291,
+    "key": "legacy.6a1df78be92a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 312,
+    "key": "legacy.42ed6dbd054e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 316,
+    "key": "legacy.38b5c2cb691b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 196,
+    "key": "legacy.66baac4d0116",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 311,
+    "key": "legacy.0e70298886b9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 94,
+    "key": "finish.eca7bbe94e37",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 92,
+    "key": "finish.d0f213d4d48e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 102,
+    "key": "finish.ca7cddd39e0f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 243,
+    "key": "finish.6e897424f1dc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 183,
+    "key": "finish.c42939261359",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 191,
+    "key": "finish.de9bc463d564",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 206,
+    "key": "finish.c3313b89e277",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 198,
+    "key": "finish.a6b09feb2038",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 60,
+    "key": "legacy.c0c95248a392",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 75,
+    "key": "legacy.08300c05c265",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 127,
+    "key": "legacy.3090d43f0646",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 52,
+    "key": "legacy.1de5811077bb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 83,
+    "key": "legacy.c0c95248a392",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 92,
+    "key": "legacy.c0c95248a392",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 93,
+    "key": "legacy.7fa7f36a712d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 96,
+    "key": "legacy.73915115af15",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 98,
+    "key": "legacy.b505dee94c09",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 101,
+    "key": "legacy.2adbbe8ac2c6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 103,
+    "key": "legacy.15f4dcb61026",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 109,
+    "key": "legacy.8d965fcc31e7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 130,
+    "key": "legacy.1a73f42b3189",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 115,
+    "key": "legacy.06c62855273f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 133,
+    "key": "legacy.685561550505",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 122,
+    "key": "legacy.b31d726c4c2d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 125,
+    "key": "legacy.af704404e11e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 33,
+    "key": "legacy.413b64ddff8a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 36,
+    "key": "legacy.394fadce7e01",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 97,
+    "key": "legacy.2a64f7584057",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 46,
+    "key": "legacy.516e7adbf6d4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 51,
+    "key": "legacy.f2710f322222",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 95,
+    "key": "legacy.05d57bbbb8a7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 101,
+    "key": "legacy.f82705683352",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 103,
+    "key": "legacy.d12f56ca114a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 83,
+    "key": "legacy.62d533f30c44",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 129,
+    "key": "legacy.3ef36a1dba43",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 139,
+    "key": "legacy.04b645207320",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 69,
+    "key": "legacy.853feb29e080",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 120,
+    "key": "legacy.49ba3263160b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 125,
+    "key": "legacy.fb475f06cbad",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 251,
+    "key": "legacy.197c601e8c93",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 250,
+    "key": "legacy.774e102d6548",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 223,
+    "key": "legacy.dec2bd3c00b5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 219,
+    "key": "legacy.cfb2cee62d29",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 159,
+    "key": "legacy.95f2a6b1f342",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 138,
+    "key": "legacy.76ad0c335006",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 197,
+    "key": "legacy.f78cb8f15d64",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 99,
+    "key": "legacy.5952334a238d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 109,
+    "key": "legacy.6c1b360b6c21",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 114,
+    "key": "legacy.855aa6fe0dee",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 208,
+    "key": "legacy.c3e2d9bde7f6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 264,
+    "key": "legacy.57ccc8dc3c32",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 265,
+    "key": "finish.arch_remedy",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 135,
+    "key": "legacy.59239d67e656",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 187,
+    "key": "legacy.c630b0165f2b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 259,
+    "key": "legacy.625a84f22f1f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 259,
+    "key": "finish.arch_remedy",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 58,
+    "key": "legacy.fed1ac0d22f9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 67,
+    "key": "legacy.2de0313fff42",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 174,
+    "key": "finish.d2a62be17e2a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 175,
+    "key": "finish.f6042ff55d14",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 130,
+    "key": "legacy.4350f4feba9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 154,
+    "key": "legacy.61f34b311f82",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 156,
+    "key": "legacy.e4438317757c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 177,
+    "key": "finish.1b0be85b692b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 266,
+    "key": "legacy.8e3b52759c27",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 318,
+    "key": "legacy.59e5ad53205a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 320,
+    "key": "legacy.78a3fe1d6db1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 373,
+    "key": "legacy.6074bda83d51",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 111,
+    "key": "legacy.e58f13a64356",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 241,
+    "key": "legacy.b56d9089d8c7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 66,
+    "key": "legacy.439dcd8da297",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 92,
+    "key": "legacy.90ccff1e8e67",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 158,
+    "key": "legacy.6569969659e6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 237,
+    "key": "finish.c7f8169c093b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 239,
+    "key": "finish.15cfe8717e5a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 283,
+    "key": "legacy.4930db3b40d6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 288,
+    "key": "legacy.dc7832017530",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 342,
+    "key": "legacy.2b8d631eafff",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 348,
+    "key": "legacy.d722543719b0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 361,
+    "key": "legacy.aa9ec5e138ef",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 388,
+    "key": "legacy.3e237050c5ea",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 428,
+    "key": "legacy.20e7e19f4bbe",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 461,
+    "key": "legacy.8cfb269f86ec",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 489,
+    "key": "legacy.129e557d8985",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 86,
+    "key": "legacy.f46539ab8683",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 89,
+    "key": "legacy.77e3f31bd766",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 156,
+    "key": "legacy.c6e636ea6cdc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 229,
+    "key": "legacy.42da2e780bcb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 278,
+    "key": "legacy.8486ae0f78fe",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 391,
+    "key": "legacy.53c6f4889476",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 419,
+    "key": "legacy.64d2f058b2c6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 154,
+    "key": "finish.68a479484598",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 262,
+    "key": "legacy.0acc26c43917",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 300,
+    "key": "legacy.51226f70634a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 419,
+    "key": "legacy.a35163b0cc16",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 346,
+    "key": "legacy.45324af0c4af",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 514,
+    "key": "legacy.fb1934e28e20",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 553,
+    "key": "legacy.2930059b0b61",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 641,
+    "key": "legacy.2930059b0b61",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 689,
+    "key": "legacy.2930059b0b61",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 877,
+    "key": "legacy.209e67204934",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 932,
+    "key": "legacy.209e67204934",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1059,
+    "key": "legacy.c606b03e13f7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1083,
+    "key": "legacy.73fac91ed892",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1116,
+    "key": "legacy.209e67204934",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 343,
+    "key": "legacy.ca21df0af7c6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 446,
+    "key": "legacy.55dbaf79a553",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 450,
+    "key": "legacy.fed55d51d64d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 551,
+    "key": "legacy.e0fbcbcaf6f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 639,
+    "key": "legacy.e0fbcbcaf6f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 686,
+    "key": "legacy.e0fbcbcaf6f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 811,
+    "key": "legacy.5696297ed39c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 815,
+    "key": "legacy.cf3b9d84fe6b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 874,
+    "key": "legacy.641eff7b3855",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 929,
+    "key": "legacy.641eff7b3855",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1058,
+    "key": "legacy.ee5b699ae493",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1113,
+    "key": "legacy.641eff7b3855",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 45,
+    "key": "legacy.50671cb4e6e2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 190,
+    "key": "legacy.bb3cb1499963",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 354,
+    "key": "legacy.61103cf571d0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 475,
+    "key": "legacy.c370a4ed66c5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 524,
+    "key": "legacy.50671cb4e6e2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 557,
+    "key": "legacy.d81c65d46f03",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 645,
+    "key": "legacy.d979166c33c3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 706,
+    "key": "legacy.cfd1ef35515b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 882,
+    "key": "legacy.4c0297829765",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 950,
+    "key": "legacy.9cab9f10ed0c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1057,
+    "key": "legacy.2d0c3ae81446",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 701,
+    "key": "legacy.decc0a5f7f83",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 710,
+    "key": "legacy.5f69d8458995",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 897,
+    "key": "finish.800c9b197e97",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 898,
+    "key": "legacy.c9f5c2499d84",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 958,
+    "key": "legacy.471e2108ced0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 98,
+    "key": "legacy.a7875ab1e9ac",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 692,
+    "key": "legacy.ee8528dfbfe1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 697,
+    "key": "legacy.aee1968a3569",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 904,
+    "key": "legacy.e1544ee4193a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 909,
+    "key": "legacy.0c9f0048b2f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 938,
+    "key": "legacy.a296306fb20e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 941,
+    "key": "legacy.9316d9bf336f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 951,
+    "key": "legacy.a296306fb20e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 949,
+    "key": "legacy.785b2b29a882",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 81,
+    "key": "legacy.6e3c433b1a5c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 88,
+    "key": "legacy.b4edb331ca3d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 107,
+    "key": "legacy.439dcd8da297",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 166,
+    "key": "legacy.99d695cd4d94",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 66,
+    "key": "legacy.676eb9d79c00",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 141,
+    "key": "legacy.44915258dc64",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 149,
+    "key": "legacy.32bf51040eea",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 33,
+    "key": "legacy.e1a96e9e350b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 130,
+    "key": "legacy.489e6a4e14ce",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 147,
+    "key": "legacy.a659e1639515",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 278,
+    "key": "legacy.289586e82c85",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 23,
+    "key": "legacy.1a8690616c5d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 32,
+    "key": "legacy.b934d5e06a48",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 157,
+    "key": "legacy.60ec31793db3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 245,
+    "key": "legacy.4446d2641a99",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 267,
+    "key": "legacy.f6c295981d4f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 408,
+    "key": "legacy.e71a487890f2",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 420,
+    "key": "legacy.966a7239c972",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 484,
+    "key": "legacy.444fb7db34a5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 135,
+    "key": "legacy.f3aac04142e4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 254,
+    "key": "legacy.63a35d43bd39",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 264,
+    "key": "legacy.f6c295981d4f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 378,
+    "key": "legacy.0388a8a6a156",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 381,
+    "key": "legacy.1a73f42b3189",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 455,
+    "key": "legacy.b8531fb62cf4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 119,
+    "key": "legacy.bf86d52e07d1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 366,
+    "key": "legacy.ff03cbc3fdb9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 368,
+    "key": "legacy.0b49e185468b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 385,
+    "key": "legacy.ed895988e213",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 300,
+    "key": "legacy.e96ebc94319e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 375,
+    "key": "legacy.0b49e185468b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 115,
+    "key": "finish.800c9b197e97",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 401,
+    "key": "legacy.a3ba010a0f39",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 89,
+    "key": "legacy.0cb21e440411",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 147,
+    "key": "legacy.a3edb902baa3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 169,
+    "key": "legacy.cbd683727246",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 177,
+    "key": "legacy.da02ea9274be",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 188,
+    "key": "legacy.fe22e896ddda",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 240,
+    "key": "legacy.edfba1584a23",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 290,
+    "key": "legacy.ecfe905f1d9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 185,
+    "key": "legacy.9d666e56e9b1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 301,
+    "key": "legacy.463c30c045cd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 356,
+    "key": "legacy.68aa690cb751",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 362,
+    "key": "legacy.bc37f85a104f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 365,
+    "key": "legacy.956824395f3d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 371,
+    "key": "legacy.bd5994d44ec4",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 375,
+    "key": "legacy.84b3b06a90ac",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 385,
+    "key": "legacy.6bf0ef199ff7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 397,
+    "key": "legacy.fe0d2496594b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 205,
+    "key": "legacy.8ac281a2da14",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 223,
+    "key": "legacy.8ac281a2da14",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 229,
+    "key": "legacy.3869c017edd9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 213,
+    "key": "legacy.3869c017edd9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 148,
+    "key": "legacy.987f64d06d3e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 150,
+    "key": "legacy.6a968a5bd748",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 153,
+    "key": "legacy.d207338c2cfb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 213,
+    "key": "legacy.03e7db5f4363",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 386,
+    "key": "legacy.6a847c542ec6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 130,
+    "key": "legacy.4d5a927039ed",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 134,
+    "key": "legacy.32b457b4bc7a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 549,
+    "key": "legacy.03923e5ebf5b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 222,
+    "key": "finish.d9390b2c4011",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 223,
+    "key": "finish.4609dc153bc1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 259,
+    "key": "finish.536daa89f7ef",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 315,
+    "key": "finish.package",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 316,
+    "key": "finish.5b4cc0d40c32",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 375,
+    "key": "finish.packaged",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 480,
+    "key": "legacy.6a69710b0c43",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 482,
+    "key": "finish.d9390b2c4011",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 540,
+    "key": "legacy.b9a558abb667",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 139,
+    "key": "finish.6e4f7eaa50ca",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 263,
+    "key": "finish.861680b2ac09",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 299,
+    "key": "finish.0b1b5d7e2551",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 325,
+    "key": "finish.abd5da15a2c7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 358,
+    "key": "finish.b39d925643b5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 364,
+    "key": "finish.a7873cf0b3a7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 416,
+    "key": "finish.bd564db5d5cc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 416,
+    "key": "finish.fd6a5ecb0c6d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 84,
+    "key": "finish.eed5590d26b3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 234,
+    "key": "finish.94f48ce275cf",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 250,
+    "key": "finish.22e436ea8985",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 297,
+    "key": "finish.bb2c6147f5a8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 344,
+    "key": "finish.651c2b9b6f74",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 353,
+    "key": "finish.25b3b55fb48f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 408,
+    "key": "finish.d194f2a552f8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 199,
+    "key": "finish.ab8e262a571e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 228,
+    "key": "finish.38a680b8552c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 240,
+    "key": "finish.8c41ffd40536",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 243,
+    "key": "finish.586a0dde0363",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 267,
+    "key": "finish.d558604830e1",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 269,
+    "key": "finish.7808b40e6537",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 295,
+    "key": "finish.0b1b5d7e2551",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 333,
+    "key": "finish.1a36d35f7eb6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 83,
+    "key": "finish.756c506bd035",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 90,
+    "key": "finish.6f35b2715c74",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 178,
+    "key": "finish.89673a15fa13",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 186,
+    "key": "finish.db80890e22e9",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 195,
+    "key": "finish.27fe35231f0f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 196,
+    "key": "finish.aaefed52979d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 211,
+    "key": "finish.cf96fbe6ebae",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 213,
+    "key": "finish.89673a15fa13",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 214,
+    "key": "finish.f55fb70c59ae",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 230,
+    "key": "finish.290d206dd411",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 346,
+    "key": "finish.6a068a8ced05",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 362,
+    "key": "finish.c4b1b459eefe",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 368,
+    "key": "finish.69b479d901dc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 92,
+    "key": "finish.6f35b2715c74",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 137,
+    "key": "finish.4f73c9b99fc6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 137,
+    "key": "finish.98a25e187c3d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 167,
+    "key": "finish.extension",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 176,
+    "key": "finish.3d2b4eda5262",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 177,
+    "key": "finish.9416e5a44614",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 207,
+    "key": "finish.dbb3305214d8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 209,
+    "key": "finish.ce45c20ea47b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 210,
+    "key": "finish.2a900d0a96b7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 245,
+    "key": "finish.4d9bf18c6aef",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 348,
+    "key": "finish.9b109bf87d47",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 370,
+    "key": "finish.70d585af8101",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 407,
+    "key": "finish.ff887beb2c03",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 190,
+    "key": "finish.6f35b2715c74",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 247,
+    "key": "finish.1805ede89806",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 271,
+    "key": "finish.d6107655c8f5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 171,
+    "key": "finish.e2c14515e16c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 192,
+    "key": "finish.6f35b2715c74",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 173,
+    "key": "finish.e2c14515e16c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 38,
+    "key": "legacy.bfec4ce35310",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 48,
+    "key": "legacy.ab0d461476e3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 53,
+    "key": "legacy.b5b379cb878c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 54,
+    "key": "legacy.83e75b7fd519",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 55,
+    "key": "legacy.bca299ecf9c5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 56,
+    "key": "legacy.35d5d317b79a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 57,
+    "key": "legacy.36ef05bdfea0",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 62,
+    "key": "legacy.b206933d1c87",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 63,
+    "key": "legacy.8529e3e5bcef",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 36,
+    "key": "legacy.7d146fdd72cc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 59,
+    "key": "legacy.ea97c9af6812",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 71,
+    "key": "legacy.635ce45cfa9c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 78,
+    "key": "legacy.fd0c36279915",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 121,
+    "key": "legacy.9e8a12d793eb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 137,
+    "key": "legacy.99c42b87afe8",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 139,
+    "key": "legacy.821af90ca8fc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 141,
+    "key": "legacy.8be52bec09f6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 143,
+    "key": "legacy.f29fab35580f",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 146,
+    "key": "legacy.c6fd2cda2739",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 148,
+    "key": "legacy.5490f2c8bbcd",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 150,
+    "key": "legacy.3b421fff22d3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 152,
+    "key": "legacy.57e54def59d6",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 155,
+    "key": "cli.d7fa6622c296",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 204,
+    "key": "legacy.4213af8a9ae5",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 207,
+    "key": "legacy.d297eedc8c9e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 209,
+    "key": "legacy.cdde33d8c30a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 211,
+    "key": "legacy.8cf42e666d61",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 213,
+    "key": "legacy.b0a4b0aceabb",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 216,
+    "key": "legacy.821bd0b25b7e",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 240,
+    "key": "legacy.56dad428204b",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 256,
+    "key": "legacy.68114bd60220",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 61,
+    "key": "legacy.90d30a83f58c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 73,
+    "key": "legacy.7ba3bdcb4c48",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 135,
+    "key": "finish.756641af3a9d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 154,
+    "key": "finish.bd68c71b08fa",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 184,
+    "key": "legacy.e3ec3573f9b3",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 189,
+    "key": "legacy.8fc0da44b55c",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 224,
+    "key": "legacy.7b9b2ee07a29",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 226,
+    "key": "legacy.2db9a748ad8a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 229,
+    "key": "legacy.d59a5b3f12e7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 232,
+    "key": "legacy.82862f1bf8bc",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/build.py",
+    "line": 246,
+    "key": "legacy.bc120a8a2434",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 258,
+    "key": "finish.8449fcd7b609",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 175,
+    "key": "cli.550fb411462d",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 176,
+    "key": "legacy.39c18e099daf",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 177,
+    "key": "legacy.1ade049df091",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 180,
+    "key": "legacy.4681048c9e29",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 185,
+    "key": "legacy.b3928325349a",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 191,
+    "key": "legacy.fa8e373674f7",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 193,
+    "key": "cli.d7fa6622c296",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 214,
+    "key": "cli.3464dbfca280",
+    "missing_key": false,
+    "missing_params": []
+  }
+]

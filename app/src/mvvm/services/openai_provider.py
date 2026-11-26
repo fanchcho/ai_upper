@@ -261,7 +261,7 @@ class OpenAIProvider(Provider):
                 if isinstance(inband, dict) and not isinstance(chunk.get("choices"), list):
                     message = str(
                         inband.get("message") or inband.get("code") or inband.get("type")
-                        or "服务端返回了未说明的错误"
+                        or tr('finish.ui.ccdc946c5ec6')
                     )
                     yield StreamError(
                         inband_error(

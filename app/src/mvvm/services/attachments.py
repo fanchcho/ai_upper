@@ -128,13 +128,13 @@ class AttachmentService:
         kind = classify(ext)
         reason: Optional[str] = None
         if kind == "unsupported":
-            reason = "暂不支持的文件类型"
+            reason = tr('finish.ui.a81f40acbcd6')
         elif kind == "image" and size > MAX_IMAGE:
-            reason = "图片过大（>5MB）"
+            reason = tr('finish.ui.dc46a77cd3d8')
         elif kind == "document" and size > MAX_PDF:
-            reason = "PDF 过大（>20MB）"
+            reason = tr('finish.ui.e013e1157839')
         elif kind == "text" and size > MAX_TEXT:
-            reason = "文本过大（>512KB）"
+            reason = tr('finish.ui.e6b9ac0fd560')
         if reason is None:
             self.allowed.add(abspath)
             return {"path": abspath, "name": name, "ext": ext, "size": size, "kind": kind, "supported": True}
@@ -153,7 +153,7 @@ class AttachmentService:
 
     # ── 选择附件 ──────────────────────────────────────────────────────────
     def pick_attachments(self) -> list[dict[str, Any]]:
-        picker = self._require(self._dialog_files, "选择附件对话框")
+        picker = self._require(self._dialog_files, tr('finish.ui.b4c1e7281076'))
         picked = picker() or []
         out: list[dict[str, Any]] = []
         for raw in picked:
@@ -171,7 +171,7 @@ class AttachmentService:
     def build_attachment_part(self, path: Any, adapter: str = "anthropic") -> AttachmentPart:
         """附件 → 内容块（图 / PDF / 文本注入 / 只给位置）；读不进时回一条 note 拼进正文。"""
         if not isinstance(path, str) or not path:
-            return AttachmentPart(note="已忽略未授权文件：")
+            return AttachmentPart(note=tr('finish.ui.70d381485ba0'))
         absolute = os.path.abspath(path)
         name = os.path.basename(absolute)
         if absolute in self.allowed_dirs:
@@ -185,7 +185,7 @@ class AttachmentService:
         if absolute in self.allowed_files:
             target = Path(absolute)
             if not target.is_file():
-                return AttachmentPart(note=f"文件已不存在：{name}")
+                return AttachmentPart(note=tr('finish.ui.86e8239967ef', p1=name))
             return AttachmentPart(
                 part=_text_part(
                     f"{ATTACH_PATH_PREFIX}{absolute}\n"
@@ -195,31 +195,31 @@ class AttachmentService:
                 )
             )
         if absolute not in self.allowed:
-            return AttachmentPart(note=f"已忽略未授权文件：{name}")
+            return AttachmentPart(note=tr('finish.ui.50fa80996275', p1=name))
         kind = classify(os.path.splitext(absolute)[1])
         try:
             data = Path(absolute).read_bytes()
         except OSError:
-            return AttachmentPart(note=f"读取失败已忽略：{name}")
+            return AttachmentPart(note=tr('finish.ui.387e6ae04941', p1=name))
         if kind == "image":
             if len(data) > MAX_IMAGE:
-                return AttachmentPart(note=f"图片过大已忽略：{name}")
+                return AttachmentPart(note=tr('finish.ui.5d898d336750', p1=name))
             mime = IMAGE_MIME.get(os.path.splitext(absolute)[1].lower()) or sniff_image_mime(data)
             if not mime:
-                return AttachmentPart(note=f"已忽略不支持的文件：{name}")
+                return AttachmentPart(note=tr('finish.ui.6d37bc7c627f', p1=name))
             return AttachmentPart(part=_image_part(mime, data, name))
         if kind == "document":
             if adapter == "openai":
-                return AttachmentPart(note=f"PDF「{name}」需使用 Anthropic 或 OpenAI Responses 协议的模型才能读取，本次已跳过")
+                return AttachmentPart(note=tr('finish.ui.d4499a08ad89', p1=name))
             if len(data) > MAX_PDF:
-                return AttachmentPart(note=f"PDF 过大已忽略：{name}")
+                return AttachmentPart(note=tr('finish.ui.d7dcf6183175', p1=name))
             return AttachmentPart(part=_document_part("application/pdf", data, name))
         if kind == "text":
             if len(data) > MAX_TEXT:
-                return AttachmentPart(note=f"文本过大已忽略：{name}")
+                return AttachmentPart(note=tr('finish.ui.6a4181f0488d', p1=name))
             body = data.decode("utf-8", errors="replace")
             return AttachmentPart(part=_text_part(f"{ATTACH_TEXT_PREFIX}{name}\n```\n{body}\n```"))
-        return AttachmentPart(note=f"已忽略不支持的文件：{name}")
+        return AttachmentPart(note=tr('finish.ui.6d37bc7c627f', p1=name))
 
 
 def _text_part(text: str) -> Any:

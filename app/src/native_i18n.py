@@ -3,7 +3,6 @@ import json
 from importlib.resources import files
 
 SUPPORTED = ('zh-CN', 'en')
-LANGUAGE_NAMES = ('简体中文', 'English')
 def load_messages():
     import locales
     loader = locales.__loader__
@@ -16,6 +15,7 @@ def load_messages():
 
 
 MESSAGES = load_messages()
+LANGUAGE_NAMES = (MESSAGES['zh-CN']['finish.language.chinese'], MESSAGES['en']['finish.language.english'])
 
 
 def translate(locale, key, **values):

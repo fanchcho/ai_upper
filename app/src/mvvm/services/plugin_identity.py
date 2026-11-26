@@ -58,5 +58,5 @@ def apply_input(service, session, text):
         session.personaId = token
     if command:
         current = selected(service, session.personaId)
-        return text, f'本会话身份：{current}；可选 {" / ".join(ids)}；/deva:identity default 回到默认。'
+        return text, tr('finish.ui.da1ca2e55582', p1=current, p3=' / '.join(ids))
     return text[prefix.end():].strip() or '继续', None

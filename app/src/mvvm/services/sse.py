@@ -12,6 +12,7 @@
 """
 from __future__ import annotations
 
+from locale_runtime import tr
 import asyncio
 import codecs
 from dataclasses import dataclass
@@ -25,7 +26,7 @@ class StreamIdleError(RuntimeError):
 
     def __init__(self, ms: int) -> None:
         seconds = round(ms / 1000)
-        super().__init__(f"连接空闲超过 {seconds}s，判定为中断")
+        super().__init__(tr('finish.ui.2a1c2d4484c4', p1=seconds))
         self.name = "StreamIdleError"
 
 

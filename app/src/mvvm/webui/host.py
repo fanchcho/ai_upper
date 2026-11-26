@@ -50,7 +50,7 @@ from mvvm.webui.bridge import BridgeError, display_messages
 EFFORT_LEVELS = ("default", "low", "medium", "high", "xhigh", "max")
 
 # 原版忙碌冲突文案（Deva `chat.ts` startTurn 的 busyError）
-BUSY_MESSAGE = "这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。"
+BUSY_MESSAGE = 'finish.ui.03c306922c8f'
 
 # 附件读不进时的问题正文回落（Deva startTurn 的 question 回落）
 ATTACHMENT_ONLY_QUESTION = "请理解并处理上述附件。"
@@ -172,7 +172,7 @@ class ChatHost:
             raise BridgeError(tr('legacy.264bbac62499'))
         text = _as_str(request.get("text"))
         if self.is_busy(session_id):
-            raise BridgeError(BUSY_MESSAGE)
+            raise BridgeError(tr(BUSY_MESSAGE))
 
         session = self.store.ensure_session(
             session_id,
@@ -456,7 +456,7 @@ class ChatHost:
         if self.store.load_session(session_id) is None:
             raise BridgeError(tr('legacy.c93accfa32ee' ,p1=session_id))
         if self.is_busy(session_id):
-            raise BridgeError(BUSY_MESSAGE)
+            raise BridgeError(tr(BUSY_MESSAGE))
         vm = self.vm_for(session_id)
         turn_id = uuid.uuid4().hex
         turn = _Turn(
@@ -477,7 +477,7 @@ class ChatHost:
                     {
                         "turnId": turn_id,
                         "sessionId": session_id,
-                        "event": {"type": "error", "kind": "server", "message": f"压缩失败：{exc}"},
+                        "event": {"type": "error", "kind": "server", "message": tr('finish.ui.0397d985c3b2', p1=exc)},
                     }
                 )
             finally:

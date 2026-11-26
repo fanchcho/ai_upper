@@ -68,7 +68,7 @@ def _legacy_text_language(request, monkeypatch):
     their own locale and verify both languages and selection precedence.
     """
     name = request.node.fspath.basename
-    chinese = ('test_compaction.py', 'test_host_write.py', 'test_provider_headers.py', 'test_chat_vm_compaction.py', 'test_chat_vm_todos.py', 'test_chat_streaming.py', 'test_mvvm_example.py', 'test_chat_vm.py', 'test_chat_sessions_vm.py', 'test_transcript_render.py',
+    chinese = ('test_qml_chat_files.py', 'test_settings_write.py', 'test_compaction.py', 'test_host_write.py', 'test_provider_headers.py', 'test_chat_vm_compaction.py', 'test_chat_vm_todos.py', 'test_chat_streaming.py', 'test_mvvm_example.py', 'test_chat_vm.py', 'test_chat_sessions_vm.py', 'test_transcript_render.py',
                'test_deva_panes.py', 'test_settings_vm.py', 'test_provider_gateway.py',
                'test_provider_setup.py', 'test_demo.py', 'test_mvvm.py')
     if name in chinese:

@@ -183,7 +183,8 @@ def test_send_raises_busy_message_when_turn_running(tmp_path, monkeypatch):
     assert wait_for(lambda: rig.host.is_busy("h-busy"))
     with pytest.raises(Exception) as excinfo:
         rig.host.send({"sessionId": "h-busy", "text": "第二句"})
-    assert BUSY_MESSAGE in str(excinfo.value)
+    from locale_runtime import tr
+    assert tr(BUSY_MESSAGE) in str(excinfo.value)
     gate.set()
     assert wait_for(lambda: not rig.host.is_busy("h-busy"))
 

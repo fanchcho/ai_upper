@@ -76,7 +76,7 @@ class Interactions:
 
     def approve(self, session, operation, tool, args, cancelled):
         preview = {key: str(args[key])[:2000] for key in ('path', 'cwd', 'command', 'url', 'action') if key in args}
-        row = self.request(session, operation, 'approval', '允许执行 ' + tool + '？\n' + json.dumps(preview, ensure_ascii=False), cancelled=cancelled)
+        row = self.request(session, operation, 'approval', tr('finish.ui.6e11d504e6e0') + tool + '？\n' + json.dumps(preview, ensure_ascii=False), cancelled=cancelled)
         return row['outcome'] == 'approved'
 
     def ask(self, session, operation, args, cancelled):

@@ -11,6 +11,7 @@ Deva 走 Electron 的 `session.fetch` 以获得系统证书库与系统代理；
 """
 from __future__ import annotations
 
+from locale_runtime import tr
 import os
 import ssl
 from dataclasses import dataclass
@@ -71,16 +72,16 @@ def _matches_no_proxy(host: str, no_proxy: Optional[str]) -> bool:
 
 
 _EXPLAIN: tuple[tuple[type[BaseException], str], ...] = (
-    (httpx.ConnectError, "连接失败：目标地址不可达或拒绝连接（设置了代理环境变量吗？）"),
-    (httpx.ProxyError, "经代理连接失败：请检查代理是否在运行"),
-    (httpx.ConnectTimeout, "连接超时"),
-    (httpx.ReadTimeout, "读取超时：连接长时间没有数据"),
-    (httpx.WriteTimeout, "发送超时"),
-    (httpx.PoolTimeout, "等待连接池超时"),
-    (httpx.RemoteProtocolError, "服务端返回了不符合协议的响应"),
-    (httpx.ReadError, "连接被中断"),
-    (httpx.WriteError, "连接被中断"),
-    (httpx.HTTPError, "网络请求失败"),
+    (httpx.ConnectError, 'finish.ui.6a00c431066f'),
+    (httpx.ProxyError, 'finish.ui.02a423cd11bd'),
+    (httpx.ConnectTimeout, 'finish.ui.7a97266a720d'),
+    (httpx.ReadTimeout, 'finish.ui.e94846149523'),
+    (httpx.WriteTimeout, 'finish.ui.0fa5b76d9d84'),
+    (httpx.PoolTimeout, 'finish.ui.2d69275b940e'),
+    (httpx.RemoteProtocolError, 'finish.ui.a6fd227e62e4'),
+    (httpx.ReadError, 'finish.ui.a920e1ba4e83'),
+    (httpx.WriteError, 'finish.ui.a920e1ba4e83'),
+    (httpx.HTTPError, 'finish.ui.b915a774849b'),
 )
 
 _SSL_ERRORS: tuple[type[BaseException], ...] = (ssl.SSLError, httpx.ConnectError)
@@ -92,10 +93,11 @@ def describe_net_error(exc: BaseException) -> str:
     if isinstance(exc, ssl.SSLError) or (
         isinstance(exc, httpx.ConnectError) and "CERTIFICATE" in detail.upper()
     ):
-        base = "证书校验失败：服务器证书不受信任，常见于公司网络在检查 HTTPS 流量（可用 SSL_CERT_FILE 指定 CA）"
+        base = tr('finish.ui.6b910528b203')
         return f"{base}（{detail[:160]}）" if detail else base
     for exc_type, text in _EXPLAIN:
         if isinstance(exc, exc_type):
+            text = tr(text)
             return f"{text}（{detail[:160]}）" if detail else text
     return detail or exc.__class__.__name__
 

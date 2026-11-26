@@ -1,0 +1,31 @@
+{
+  "baseline_review": {
+    "resolved": 298,
+    "out_of_scope": 444
+  },
+  "current_scan": {
+    "out_of_scope": 1949,
+    "resolved": 129,
+    "needs_review": 0
+  },
+  "coverage": {
+    "en": {
+      "keys": 2250,
+      "missing": [],
+      "empty": [],
+      "intentional_empty": {
+        "app.tagline": "沿用原版两种语言的空副标题，不显示文案"
+      }
+    },
+    "zh-CN": {
+      "keys": 2250,
+      "missing": [],
+      "empty": [],
+      "intentional_empty": {
+        "app.tagline": "沿用原版两种语言的空副标题，不显示文案"
+      }
+    }
+  },
+  "python_translation_calls": 845,
+  "translation_call_errors": []
+}

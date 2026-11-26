@@ -57,14 +57,29 @@ def configure_cli(argv=None):
 
 
 def display_text(text):
-    """Localize app-owned tool summaries at presentation, never persisted payloads."""
+    """Localize known tool templates in a display copy, preserving protocol data.
+
+    Matching is against complete templates or complete lines, never arbitrary
+    substrings in file contents. Unknown upstream text and numbered source lines
+    remain verbatim. Structured recovery results retain their JSON field names.
+    """
     import re
     value = str(text)
+    if selected_locale() == 'zh-CN':
+        return value
+    if value.startswith('{'):
+        try:
+            record = json.loads(value)
+        except ValueError:
+            record = None
+        if isinstance(record, dict) and record.get('status') == 'interrupted_unknown' and isinstance(record.get('reason'), str):
+            record['reason'] = display_text(record['reason'])
+            return json.dumps(record, ensure_ascii=False)
     for key, source in catalogues()['zh-CN'].items():
         if not key.startswith('display.'):
             continue
-        names = re.findall(r'\{(p\d+)\}', source)
-        parts = re.split(r'\{p\d+\}', source)
+        names = re.findall(r'\{([a-zA-Z][a-zA-Z0-9_]*)\}', source)
+        parts = re.split(r'\{[a-zA-Z][a-zA-Z0-9_]*\}', source)
         if not names:
             if source == value:
                 return tr(key)
@@ -72,5 +87,9 @@ def display_text(text):
         pattern = '(.*?)'.join(re.escape(part) for part in parts)
         match = re.fullmatch(pattern, value, re.DOTALL)
         if match:
-            return tr(key, **dict(zip(names, match.groups())))
+            fields = {name: display_text(part) if part and part != value else part
+                      for name, part in zip(names, match.groups())}
+            return tr(key, **fields)
+    if '\n' in value:
+        return '\n'.join(display_text(line) for line in value.split('\n'))
     return value

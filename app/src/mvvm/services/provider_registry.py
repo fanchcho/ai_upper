@@ -226,7 +226,7 @@ async def list_models(
             return ListModelsResult(
                 False,
                 kind="invalid_request",
-                message="模型清单不是合法 JSON：请确认服务地址（部分服务商需填到 /v1 为止）",
+                message=tr('finish.ui.977293a3a21a'),
             )
     return ListModelsResult(True, models=tuple(extract_model_ids(payload)))
 
@@ -244,7 +244,7 @@ class _closing:  # noqa: N801 - 与上下文管理器习惯一致
         await self._response.aclose()
 
 
-def normalized_not_configured(what: str = "模型服务商") -> NormalizedError:
+def normalized_not_configured(what: str = tr('finish.ui.9f15b2487201')) -> NormalizedError:
     """统一的「没配置」错误，界面据此显示设置入口而不是技术栈堆栈。"""
     return NormalizedError("invalid_request", tr('legacy.f08c47e70238' ,p1=what))
 

@@ -42,7 +42,7 @@ ApplicationWindow {
     height: 820
     minimumWidth: 940
     minimumHeight: 600
-    title: "Deva"
+    title: I18n.t("finish.brand")
     color: Theme.bg
 
     InteractionPrompt { }
@@ -51,7 +51,7 @@ ApplicationWindow {
     property var sessions: []
     property string activeId: ""
     property string activeTitle: ""
-    property string activePersona: "Deva"
+    property string activePersona: I18n.t("finish.brand")
     property bool busy: false
     property string status: ""
     // 附件与交付卡（Python 每次 _publish 按当前会话现算）：
@@ -678,7 +678,7 @@ ApplicationWindow {
                 title: modelData.title || ""
                 time: modelData.time || ""
                 persona: modelData.persona || "general"
-                ownerName: modelData.personaName || "Deva"
+                ownerName: modelData.personaName || I18n.t("finish.brand")
                 active: modelData.id === window.activeId
                 forceHover: index === window.forceHoverRow
                 selectionMode: window.selectMode

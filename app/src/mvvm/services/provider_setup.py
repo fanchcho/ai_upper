@@ -11,6 +11,7 @@
 """
 from __future__ import annotations
 
+from locale_runtime import tr
 from typing import Any, Optional
 
 from mvvm.services.compaction import CompactModel, compaction_config
@@ -68,7 +69,7 @@ class ModelGateway:
         section = self.settings.models_section()
         resolved = resolve_ref(model_ref, section) or resolve_default_model(section)
         if resolved is None:
-            raise ProviderError(normalized_not_configured("可用的模型（请在设置中选定默认模型）"))
+            raise ProviderError(normalized_not_configured(tr('finish.ui.837a0179c5aa')))
         return resolved
 
     def compact_model(self, model_ref: Optional[str] = None) -> Optional[CompactModel]:

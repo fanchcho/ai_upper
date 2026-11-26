@@ -310,7 +310,7 @@ class AnthropicProvider(Provider):
                         stop_reason = map_stop_reason(str(delta["stop_reason"]))
                 elif kind == "error":
                     error = event.get("error") or {}
-                    message = str(error.get("message") or "流式错误") if isinstance(error, dict) else "流式错误"
+                    message = str(error.get("message") or tr('finish.ui.df9f1fb37552')) if isinstance(error, dict) else tr('finish.ui.df9f1fb37552')
                     code = str(error.get("type") or "") if isinstance(error, dict) else ""
                     yield StreamError(
                         inband_error(f"{message} {code}", NormalizedError("server", message, True))
