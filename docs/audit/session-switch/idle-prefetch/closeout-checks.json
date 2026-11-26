@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "stdout": "?? docs/audit/session-switch/idle-prefetch/\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "cf960b8",
+      "--",
+      "app/src",
+      "app/tests"
+    ],
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  }
+]

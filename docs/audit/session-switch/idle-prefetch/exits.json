@@ -1,0 +1,47 @@
+[
+  {
+    "mode": "control2",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "idle2",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "input2",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "control2",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "idle2",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "input2",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "control2",
+    "group": 3,
+    "exit_code": 0
+  },
+  {
+    "mode": "idle2",
+    "group": 3,
+    "exit_code": 0
+  },
+  {
+    "mode": "input2",
+    "group": 3,
+    "exit_code": 0
+  }
+]

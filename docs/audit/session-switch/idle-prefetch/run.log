@@ -1,0 +1,6 @@
+{'mode': 'baseline', 'group': 1, 'exit_code': 0}
+{'mode': 'prefetch', 'group': 1, 'exit_code': 1}
+{'mode': 'baseline', 'group': 2, 'exit_code': 0}
+{'mode': 'prefetch', 'group': 2, 'exit_code': 1}
+{'mode': 'baseline', 'group': 3, 'exit_code': 0}
+{'mode': 'prefetch', 'group': 3, 'exit_code': 0}

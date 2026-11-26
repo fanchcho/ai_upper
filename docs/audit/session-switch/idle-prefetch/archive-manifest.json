@@ -1,0 +1,452 @@
+[
+  {
+    "source": ".tmp/idle-prefetch/cancel.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/cancel.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-2.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-2.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-2-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-2-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-1.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-1.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-1.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-1.json",
+    "bytes": 1268,
+    "sha256": "e4d87511f3a9d7e2a316d33e4c73019314a1b87e58bb2af0ff5857ed9a79f006"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-1-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-1-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-1.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-1.log",
+    "bytes": 826,
+    "sha256": "e030e8895c5f72df0ded61be5fadbb975816606e7d8b603d859057ca91f1c96a"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-3.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-3.json",
+    "bytes": 1263,
+    "sha256": "ee45df9c5ba7bd28aaeecaf9bc8b6d78e04a8d1a4462dd1e58b9c2476d34be2a"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-3.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-3.json",
+    "bytes": 1082,
+    "sha256": "f910d55d2cf3fc3374c55c4a1a66e874a04114049da27725e2c6a7046ce82562"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-2.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-2.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-2.log",
+    "bytes": 203,
+    "sha256": "3aa40893c73e91790b118e21142137f00bf67eafd2f02d4dfcad7a9466f322eb"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-3.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-3.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-2.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-2.json",
+    "bytes": 1241,
+    "sha256": "b101196e4cb41d5d48eaa9bf094e288741da1cd01f7a1af75f7af340a2ab1e37"
+  },
+  {
+    "source": ".tmp/idle-prefetch/pytest.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/pytest-interrupted.log",
+    "bytes": 994,
+    "sha256": "3325e8fc74f68e275df16a13ba4da36f5eba62bc4f9a740220fe5e71ab0615bb"
+  },
+  {
+    "source": ".tmp/idle-prefetch/cancel.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/cancel.log",
+    "bytes": 512,
+    "sha256": "7b89e010aa940f5999d7037c185e35bb56e02fc691e65bf6559ee2082995f3f1"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-2.log",
+    "bytes": 966,
+    "sha256": "50348227f479e4b83fc8b5d50dd4d60410c0e609e591328adc4e8a1c3fbb6948"
+  },
+  {
+    "source": ".tmp/idle-prefetch/finish.py",
+    "archive": "docs/audit/session-switch/idle-prefetch/finish.py",
+    "bytes": 845,
+    "sha256": "361c5cf4e231f560348eccac5f1f1c8d2dd14816de1c915666f4c346c4748315"
+  },
+  {
+    "source": ".tmp/idle-prefetch/finish.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/finish.log",
+    "bytes": 35,
+    "sha256": "94e7d85027b8839173e770e5b2c009c037455ea8eeeaa91f2f5c74b465ac7dd1"
+  },
+  {
+    "source": ".tmp/idle-prefetch/run.py",
+    "archive": "docs/audit/session-switch/idle-prefetch/run.py",
+    "bytes": 640,
+    "sha256": "fcf7400530e06fd2a0c3fc0894ca640fe519f2954e4c82e7cc4abca255103e57"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-3-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-3-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-2.log",
+    "bytes": 829,
+    "sha256": "453bda0ed056dd8efc8e38de567bcf10e81e995c7d416f7855feb7821240d1da"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-2.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-2.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/summary.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/summary.json",
+    "bytes": 9117,
+    "sha256": "b2e5712905d93571f840d1a9f3daa14193cd99de8322e4fe5c03413da60ba31f"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-3.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-3.log",
+    "bytes": 831,
+    "sha256": "7a1302860ec98cc0cc674bc1a1909c96649e9311959701003cd5cc50d0128637"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-2-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-2-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-2.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-2.json",
+    "bytes": 1271,
+    "sha256": "7e6cb40f0b5482c792cb808975e229e775974fadc0b6550d8eb675b9363ca3ab"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-3.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-3.json",
+    "bytes": 176,
+    "sha256": "4c7ea37166042f5779ce0dc594f1ec95ecc9d4a8eef74a713233d73a2659a6ef"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-3.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-3.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-1.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-1.json",
+    "bytes": 1245,
+    "sha256": "89189b657358c3b66175df02335faf60010a45294075e7aec6b0e155056f4072"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-1.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-1.log",
+    "bytes": 163,
+    "sha256": "168810658a8aabe18319ad01a214c0919d7d869888758c1d7338a7abedd156c6"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-1.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-1.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-3.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-3.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-1.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-1.log",
+    "bytes": 963,
+    "sha256": "278914e001627d666e201637659bf1d4f5b6fdf218ac5f1856a4d96f04ada9a5"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-1.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-1.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-1.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-1.log",
+    "bytes": 1286,
+    "sha256": "16f52615a8d44380162bbe184bc3723ada066d1c09c6144b9ab0343fbef57732"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-2.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-2.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/probe.py",
+    "archive": "docs/audit/session-switch/idle-prefetch/probe.py",
+    "bytes": 7347,
+    "sha256": "274242ca8abd6d70aee34f3272539ae0a0d9e9ccb204c775a82356adda6b9163"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-3.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-3.json",
+    "bytes": 1269,
+    "sha256": "d574fbe0d6cbebda8dc4df3c66d7a50ec676dc0cce50a50084da2c420922d642"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-1-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-1-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/exits.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/exits.json",
+    "bytes": 599,
+    "sha256": "2e3522a9bc7d8bd798b323af70a269cd69ee71169340af62a9dd066ef43ce96f"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-3.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-3.json",
+    "bytes": 221,
+    "sha256": "2c5765fefd09b0290ba76a6dbcd261f0c705beb2ba5c1b025b3a93d069b4aa93"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-2.log",
+    "bytes": 1282,
+    "sha256": "c3c72436c21531d73cf87e6bc4baf669193f9bb2b7bd45cb4b49267936a0595e"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-3.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-3.log",
+    "bytes": 163,
+    "sha256": "fe50b50150b871490a00ca582273048a1c9fc85bb866135c155adf9b0f67644b"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-2-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-2-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-3-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-3-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/run2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/run2.log",
+    "bytes": 426,
+    "sha256": "7e8d65f7e6e655d8c2e94776224510b8d7c189378a2d2c51ea32f71db03b2acd"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-2.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-2.json",
+    "bytes": 220,
+    "sha256": "712dcca7eb1ed3edb6fed87cace79a3acf4b105a0caf29cbcf89ff620fdc97c7"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-3-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-3-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-1-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-1-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/cancel.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/cancel.json",
+    "bytes": 631,
+    "sha256": "95cdb21d152bfed4b40078b35248ad8aac31d53d27f9e29c1f4be4aad58d4da4"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-3-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-3-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-2.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-2.json",
+    "bytes": 1080,
+    "sha256": "565a6b53d758a3a34c0aa8fab3b2facf2c7687a138a16521837e914ed974cced"
+  },
+  {
+    "source": ".tmp/idle-prefetch/run2.py",
+    "archive": "docs/audit/session-switch/idle-prefetch/run2.py",
+    "bytes": 731,
+    "sha256": "60918f00533b1b957237fe30049ebe50c2f341e18f60d76369a0ff935845818c"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-1.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-1.json",
+    "bytes": 176,
+    "sha256": "dfe721bfabc6ebe942a6ef3b77060aaac967f036bffa0a7b85e6760df5f0a7bd"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-3.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-3.log",
+    "bytes": 958,
+    "sha256": "fbe36be4fd744706374a279d0a5e9cc9f660cd771d6852155afe472ee0cf0f8c"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-3.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-3.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-3.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-3.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/cancel-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/cancel-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-1.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-1.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/run.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/run.log",
+    "bytes": 294,
+    "sha256": "8ada7bb8f62d867637fbcc7bfd7704b21b98c228542f615909cd0aebefd2456f"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-3.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-3.log",
+    "bytes": 204,
+    "sha256": "d425d2fc8d018bcf8ebbf7eab042a805ce3fbcffb844320570e13c59ddcd65ff"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-2.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-2.json",
+    "bytes": 176,
+    "sha256": "e525de80bd194c7b42dc738a7ef8e389100535db36b5da9f2d504b087b34addd"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-2-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-2-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-1-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-1-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/cancel-probe.py",
+    "archive": "docs/audit/session-switch/idle-prefetch/cancel-probe.py",
+    "bytes": 7348,
+    "sha256": "1c1a762845188d50776a563324f3068babe7dbd4864bb4203a28299d6709e897"
+  },
+  {
+    "source": ".tmp/idle-prefetch/input2-1.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/input2-1.json",
+    "bytes": 1077,
+    "sha256": "aafa66170d49564499690329591e48c183cf701144cc958ea34f017df53a5302"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-3.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-3.log",
+    "bytes": 964,
+    "sha256": "6993421f1a9025adff45315f2e02228b707f74aea5c4d40fa7f959bd5d4936b0"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-1.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-1.log",
+    "bytes": 203,
+    "sha256": "c71c37ffb8d40be11dae939e7428d8205f581265e44e9f3a42f16d555a80ed1d"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-2.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-2.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/idle2-2-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/idle2-2-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-1-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-1-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/baseline-2.log",
+    "archive": "docs/audit/session-switch/idle-prefetch/baseline-2.log",
+    "bytes": 163,
+    "sha256": "0ca6bdde5cc1fe8f2a7852132e238923c103ca13868fb6c5dbd2a9963caffeb2"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-3-initial.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-3-initial.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/prefetch-1.png",
+    "archive": "docs/audit/session-switch/idle-prefetch/prefetch-1.png",
+    "bytes": 101892,
+    "sha256": "f565dd401b28c32e8e5a7757e4cbb836a5d17458aef3f686729a3d50ed17b847"
+  },
+  {
+    "source": ".tmp/idle-prefetch/control2-1.json",
+    "archive": "docs/audit/session-switch/idle-prefetch/control2-1.json",
+    "bytes": 220,
+    "sha256": "00f744f2acb7e017ecdd79839ab8d4d74aaee3af65a396ba53d26a407143cc54"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "startup_first_frame_ms": 4769.593119999627,
+  "max_gui_event_ms": 0.5047199956607074,
+  "stages": [],
+  "timer_delay_ms": [],
+  "cancelled": 0,
+  "click_dispatch_ms": [],
+  "completed": 0,
+  "rss_peak_kib": 177064
+}

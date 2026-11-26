@@ -1,0 +1,62 @@
+{
+  "startup_first_frame_ms": 4788.527400000021,
+  "max_gui_event_ms": 2.525399992009625,
+  "stages": [
+    {
+      "stage": "fragment_commit_highlight",
+      "ms": 0.10852000559680164
+    },
+    {
+      "stage": "code_viewports",
+      "ms": 0.05748000694438815
+    },
+    {
+      "stage": "table_grids",
+      "ms": 0.012680015061050653
+    },
+    {
+      "stage": "fragment_commit_highlight",
+      "ms": 0.102680001873523
+    },
+    {
+      "stage": "code_viewports",
+      "ms": 0.063000014051795
+    },
+    {
+      "stage": "table_grids",
+      "ms": 0.011440017260611057
+    },
+    {
+      "stage": "fragment_commit_highlight",
+      "ms": 0.14916001236997545
+    },
+    {
+      "stage": "code_viewports",
+      "ms": 0.06111999391578138
+    },
+    {
+      "stage": "table_grids",
+      "ms": 0.011199997970834374
+    },
+    {
+      "stage": "fragment_commit_highlight",
+      "ms": 0.10835999273695052
+    },
+    {
+      "stage": "code_viewports",
+      "ms": 0.06796000525355339
+    },
+    {
+      "stage": "table_grids",
+      "ms": 0.0114399881567806
+    }
+  ],
+  "timer_delay_ms": [
+    0.6885199982207268,
+    0.48747999244369566,
+    0.5312400171533227,
+    0.5913999921176583
+  ],
+  "completed": 4,
+  "rss_peak_kib": 177028
+}

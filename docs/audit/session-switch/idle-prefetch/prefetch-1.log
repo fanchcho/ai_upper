@@ -1,0 +1,6 @@
+{"startup_first_frame_ms": 4764.2350000096485, "max_gui_event_ms": 2.587240014690906, "stages": [{"stage": "fragment_commit_highlight", "ms": 0.16160000814124942}, {"stage": "code_viewports", "ms": 0.06576001760549843}, {"stage": "table_grids", "ms": 0.013840006431564689}, {"stage": "fragment_commit_highlight", "ms": 0.10704001761041582}, {"stage": "code_viewports", "ms": 0.06859999848529696}, {"stage": "table_grids", "ms": 0.012880016583949327}, {"stage": "fragment_commit_highlight", "ms": 0.1091199810616672}, {"stage": "code_viewports", "ms": 0.0662800157442689}, {"stage": "table_grids", "ms": 0.013360026059672236}, {"stage": "fragment_commit_highlight", "ms": 0.11295999865978956}, {"stage": "code_viewports", "ms": 0.06907997885718942}, {"stage": "table_grids", "ms": 0.013760000001639128}], "timer_delay_ms": [0.7568800065200776, 0.5102800205349922, 0.5660000024363399, 0.5222799954935908], "completed": 4, "rss_peak_kib": 177012}
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/ai_upper/.tmp/idle-prefetch/probe.py", line 121, in <module>
+    body.highlighter.setDocument(None);item.deleteLater()
+                                       ~~~~~~~~~~~~~~~~^^
+RuntimeError: libshiboken: Internal C++ object (PySide6.QtQuick.QQuickItem) already deleted.
