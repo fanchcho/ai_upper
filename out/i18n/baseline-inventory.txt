@@ -1,0 +1,756 @@
+$ git ls-tree -r --name-only ccca79e app/src tools
+app/src/application.py
+app/src/demo_application.py
+app/src/main.py
+app/src/markdown/__init__.py
+app/src/markdown/body.py
+app/src/markdown/broken_image.py
+app/src/markdown/cache.py
+app/src/markdown/document.py
+app/src/markdown/highlight.py
+app/src/markdown/parser.py
+app/src/markdown/prepare.py
+app/src/markdown/viewport.py
+app/src/mvvm/__init__.py
+app/src/mvvm/core/__init__.py
+app/src/mvvm/core/base_view_model.py
+app/src/mvvm/core/command.py
+app/src/mvvm/core/factory.py
+app/src/mvvm/core/observable.py
+app/src/mvvm/models/__init__.py
+app/src/mvvm/models/about_model.py
+app/src/mvvm/models/base_model.py
+app/src/mvvm/models/chat_models.py
+app/src/mvvm/mvvm_application.py
+app/src/mvvm/mvvm_bootstrap.py
+app/src/mvvm/services/__init__.py
+app/src/mvvm/services/anthropic_provider.py
+app/src/mvvm/services/attachments.py
+app/src/mvvm/services/avatar_image.py
+app/src/mvvm/services/chat_session_store.py
+app/src/mvvm/services/checkpoint_recovery.py
+app/src/mvvm/services/compaction.py
+app/src/mvvm/services/context_window.py
+app/src/mvvm/services/deliverables.py
+app/src/mvvm/services/effort.py
+app/src/mvvm/services/fake_provider.py
+app/src/mvvm/services/glob_match.py
+app/src/mvvm/services/greeting.py
+app/src/mvvm/services/http_client.py
+app/src/mvvm/services/image_prep.py
+app/src/mvvm/services/mcp_runtime.py
+app/src/mvvm/services/model_resolve.py
+app/src/mvvm/services/model_view.py
+app/src/mvvm/services/office_text.py
+app/src/mvvm/services/openai_provider.py
+app/src/mvvm/services/persona_store.py
+app/src/mvvm/services/plugin_identity.py
+app/src/mvvm/services/plugin_interactions.py
+app/src/mvvm/services/plugin_layout.py
+app/src/mvvm/services/plugin_settings.py
+app/src/mvvm/services/provider_gateway.py
+app/src/mvvm/services/provider_headers.py
+app/src/mvvm/services/provider_registry.py
+app/src/mvvm/services/provider_setup.py
+app/src/mvvm/services/repetition.py
+app/src/mvvm/services/responses_provider.py
+app/src/mvvm/services/secrets_crypto.py
+app/src/mvvm/services/secrets_vault.py
+app/src/mvvm/services/settings_models.py
+app/src/mvvm/services/settings_service.py
+app/src/mvvm/services/skill_store.py
+app/src/mvvm/services/sse.py
+app/src/mvvm/services/todos.py
+app/src/mvvm/services/tool_checkpoint.py
+app/src/mvvm/services/tool_policy.py
+app/src/mvvm/services/tool_results.py
+app/src/mvvm/services/tool_runtime.py
+app/src/mvvm/services/transcript_parts.py
+app/src/mvvm/services/transport.py
+app/src/mvvm/services/workspace_guard.py
+app/src/mvvm/view_models/__init__.py
+app/src/mvvm/view_models/chat_sessions_vm.py
+app/src/mvvm/view_models/chat_vm.py
+app/src/mvvm/view_models/demo_vm.py
+app/src/mvvm/view_models/main_vm.py
+app/src/mvvm/view_models/settings_vm.py
+app/src/mvvm/views/__init__.py
+app/src/mvvm/views/about_window.py
+app/src/mvvm/views/base_view.py
+app/src/mvvm/views/chat_pane.py
+app/src/mvvm/views/chat_window.py
+app/src/mvvm/views/demo_window.py
+app/src/mvvm/views/deva_main_window.py
+app/src/mvvm/views/main_window.py
+app/src/mvvm/views/session_list.py
+app/src/mvvm/views/settings_pane.py
+app/src/mvvm/views/transcript_render.py
+app/src/mvvm/webui/__init__.py
+app/src/mvvm/webui/assembly.py
+app/src/mvvm/webui/bridge.py
+app/src/mvvm/webui/host.py
+app/src/qml/Avatar.qml
+app/src/qml/ContextRing.qml
+app/src/qml/Icon.qml
+app/src/qml/IconData.qml
+app/src/qml/InteractionPrompt.qml
+app/src/qml/Main.qml
+app/src/qml/ModelPicker.qml
+app/src/qml/PluginSettingsPane.qml
+app/src/qml/SettingsButton.qml
+app/src/qml/SettingsCheck.qml
+app/src/qml/SettingsField.qml
+app/src/qml/SettingsModal.qml
+app/src/qml/SettingsScrollBar.qml
+app/src/qml/SoftShadow.qml
+app/src/qml/Theme.qml
+app/src/qml/ThreadRow.qml
+app/src/qml/assets/deva-icon.svg
+app/src/qml/avatars/general-pop.svg
+app/src/qml/avatars/general.svg
+app/src/qml/avatars/user-pop.svg
+app/src/qml/avatars/user.svg
+app/src/qml/avatars/xiaomajiang-pop.svg
+app/src/qml/avatars/xiaomajiang.svg
+app/src/qml/qmldir
+app/src/qml_shell.py
+app/src/qml_shell_sessions.py
+app/src/utils/__init__.py
+app/src/utils/app_home.py
+app/src/utils/emoji_font.py
+app/src/utils/paths.py
+app/src/utils/qt_compat.py
+tools/__init__.py
+tools/ai_upper/__init__.py
+tools/ai_upper/_vendor/__init__.py
+tools/ai_upper/_vendor/tomli/__init__.py
+tools/ai_upper/_vendor/tomli/_parser.py
+tools/ai_upper/_vendor/tomli/_re.py
+tools/ai_upper/_vendor/tomli/_types.py
+tools/ai_upper/_vendor/tomli/py.typed
+tools/ai_upper/compat.py
+tools/ai_upper/config.py
+tools/ai_upper/egg.py
+tools/ai_upper/egg_loader.py
+tools/ai_upper/fs.py
+tools/ai_upper/lock.py
+tools/ai_upper/manifest.py
+tools/ai_upper/native/__init__.py
+tools/ai_upper/native/bundle.py
+tools/ai_upper/native/deps.py
+tools/ai_upper/native/inspect.py
+tools/ai_upper/net.py
+tools/ai_upper/package.py
+tools/ai_upper/pbs.py
+tools/ai_upper/python_build.py
+tools/ai_upper/qt_prune.py
+tools/ai_upper/runtime.py
+tools/ai_upper/third_party.py
+tools/ai_upper/toolchain.py
+tools/ai_upper/trim.py
+tools/ai_upper/vendor/memimporter/MIT-License.txt
+tools/ai_upper/vendor/memimporter/MPL2-License.txt
+tools/ai_upper/vendor/memimporter/MemoryModule.c
+tools/ai_upper/vendor/memimporter/MemoryModule.h
+tools/ai_upper/vendor/memimporter/MyLoadLibrary.c
+tools/ai_upper/vendor/memimporter/MyLoadLibrary.h
+tools/ai_upper/vendor/memimporter/_memimporter.c
+tools/ai_upper/vendor/memimporter/actctx.c
+tools/ai_upper/vendor/memimporter/actctx.h
+tools/ai_upper/verify.py
+tools/build.py
+tools/ci_tail.py
+tools/requirements.txt
+
+exit=0
+$ git show ccca79e:app/src/mvvm/services/settings_models.py
+"""设置页「模型 / 关于」两页的数据投影（QML 只负责画，判据都在这里）。
+
+对应 Deva `features/settings/ModelSettings.tsx` + `ProviderAdvanced.tsx` +
+`redesign/SettingsPane.tsx` 的 AboutPane。壳（`qml_shell.ShellBridge`）只做三件事：
+读 `config.json` 的 `models` 段、把行整理成 QML 能直接绑的字典、把界面的改动整段写回。
+纯 Python，不认识 Qt——单测（`app/tests/test_qml_settings_models.py`）直接调这里。
+
+**为什么不在 QML 里算**：行里要判「已启用但没密钥」（`enabled && !hasKey`）、要按
+`purpose`/`kind` 过滤、要把 `headers` 里的坏行标出原因。这些规则上游写在一个文件里
+（`ModelSettings.tsx` 的 `visibleProviders` / `renderProviderRow`、`provider-headers.ts` 的
+`headerIssue`），这里逐条对位，界面不再各写一份。
+"""
+from __future__ import annotations
+
+import copy
+from typing import Any, Callable, Dict, List, Optional
+
+from mvvm.services.provider_headers import (
+    MAX_CUSTOM_HEADERS,
+    header_issue,
+    sanitize_headers,
+)
+
+
+# ── 文案（逐字取自 Deva `i18n/messages.ts` 的 `models.*` / `common.*` / `settings.*`）──
+MODELS_TEXT: Dict[str, Dict[str, Any]] = {
+    "zh": {
+        "providers": "模型服务商",
+        "addProvider": "添加提供方",
+        "noProvidersYet": "还没有可用的服务商，点右上角 + 添加",
+        "modelCount": "{count} 个模型",
+        "enabled": "已启用",
+        "disabled": "未启用",
+        "back": "返回",
+        "backTo": "返回 {name}",
+        "deleteProvider": "删除服务商",
+        "deleteProviderConfirm": "删除该服务商及其密钥？此操作不可撤销。",
+        "enableProvider": "启用",
+        "advanced": "高级设置",
+        "apiKey": "API 密钥",
+        "apiKeyPlaceholder": "在此填写 API Key",
+        "keyReplaceHint": "已配置密钥（如需更换请重新输入）",
+        "keyConfigured": "已配置",
+        "keySaving": "保存中…",
+        "keySaved": "已保存",
+        "secretsUnavailable": "当前系统不支持安全加密存储，暂无法保存密钥",
+        "apiHost": "API 地址",
+        "modelList": "模型",
+        "addModel": "添加模型",
+        "newModelPlaceholder": "模型 ID，如 gpt-4o",
+        "add": "添加",
+        "remove": "移除",
+        "noModels": "暂无模型，点击「添加模型」新增",
+        "newProviderName": "自定义服务商",
+        "renameHint": "点击修改名称",
+        "providerNamePlaceholder": "服务商名称",
+        "keyMissingWarn": "已启用但未配置密钥，对话将失败",
+        "headers": "自定义请求头",
+        "headersHint": "随每个请求发送，同名时覆盖默认值（如 User-Agent）。",
+        "noHeaders": "暂无请求头，点击「添加请求头」新增",
+        "headerName": "名称，如 originator",
+        "headerValue": "值",
+        "addHeader": "添加请求头",
+        "removeHeader": "移除",
+        "headerIssue": {
+            "name": "名称含不支持的字符，不会发送。",
+            "reserved": "该请求头由应用管理，不会发送。",
+            "value": "值仅支持英文、数字和符号，不会发送。",
+        },
+        "delete": "删除",
+        "cancel": "取消",
+        "confirm": "确定",
+        "version": "版本",
+        "about": "关于",
+        "checkForUpdates": "检查更新",
+        "checkingUpdates": "正在检查…",
+        "latestVersion": "已是最新版本",
+        "updateCheckFailed": "检查更新失败",
+        "newVersion": "发现新版本 {version}",
+    },
+    "en": {
+        "providers": "Providers",
+        "addProvider": "Add provider",
+        "noProvidersYet": "No providers yet — click + to add one",
+        "modelCount": "{count} models",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "back": "Back",
+        "backTo": "Back to {name}",
+        "deleteProvider": "Delete provider",
+        "deleteProviderConfirm": "Delete this provider and its key? This cannot be undone.",
+        "enableProvider": "Enabled",
+        "advanced": "Advanced settings",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Enter your API key",
+        "keyReplaceHint": "Key configured (re-enter to replace)",
+        "keyConfigured": "Configured",
+        "keySaving": "Saving…",
+        "keySaved": "Saved",
+        "secretsUnavailable": "Secure encrypted storage is unavailable on this system; keys cannot be saved",
+        "apiHost": "API Host",
+        "modelList": "Models",
+        "addModel": "Add model",
+        "newModelPlaceholder": "Model ID, e.g. gpt-4o",
+        "add": "Add",
+        "remove": "Remove",
+        "noModels": 'No models yet — click "Add model"',
+        "newProviderName": "Custom Provider",
+        "renameHint": "Click to rename",
+        "providerNamePlaceholder": "Provider name",
+        "keyMissingWarn": "Enabled but no API key set — chat will fail",
+        "headers": "Custom headers",
+        "headersHint": "Sent with every request; same-name headers replace the defaults (e.g. User-Agent).",
+        "noHeaders": 'No headers yet — click "Add header"',
+        "headerName": "Name, e.g. originator",
+        "headerValue": "Value",
+        "addHeader": "Add header",
+        "removeHeader": "Remove",
+        "headerIssue": {
+            "name": "Unsupported characters in the name. Not sent.",
+            "reserved": "This header is managed by the app. Not sent.",
+            "value": "Only ASCII letters, digits and symbols are supported. Not sent.",
+        },
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "confirm": "OK",
+        "version": "Version",
+        "about": "About",
+        "checkForUpdates": "Check for updates",
+        "checkingUpdates": "Checking…",
+        "latestVersion": "You’re on the latest version",
+        "updateCheckFailed": "Couldn’t check for updates",
+        "newVersion": "New version {version} available",
+    },
+}
+
+
+def models_text(language: str) -> Dict[str, Any]:
+    return copy.deepcopy(MODELS_TEXT.get(language, MODELS_TEXT["en"]))
+
+
+# ── 读 ────────────────────────────────────────────────────────────────────
+def provider_entries(models_section: Any) -> List[Dict[str, Any]]:
+    """`models.providers` 里形状合法的条目（原样引用，调用方要改请先 deepcopy）。"""
+    providers = models_section.get("providers") if isinstance(models_section, dict) else None
+    if not isinstance(providers, list):
+        return []
+    return [p for p in providers if isinstance(p, dict) and p.get("id")]
+
+
+def visible_providers(models_section: Any, has_key: Callable[[str], bool]) -> List[Dict[str, Any]]:
+    """列表态只列「在用」的服务商：已启用 / 已配密钥 / 自定义（上游 `visibleProviders` 同）。
+
+    决策模型（`purpose == 'decision'`）整体隐藏：它不生成文本，当前也没有新建入口。
+    """
+    rows: List[Dict[str, Any]] = []
+    for provider in provider_entries(models_section):
+        if (provider.get("purpose") or "llm") != "llm":
+            continue
+        provider_id = str(provider.get("id"))
+        enabled = provider.get("enabled") is True
+        if not (enabled or has_key(provider_id) or provider.get("kind") == "custom"):
+            continue
+        rows.append(provider)
+    return rows
+
+
+def provider_row(provider: Dict[str, Any], has_key: Callable[[str], bool], language: str) -> Dict[str, Any]:
+    """一条服务商行（原版 `renderProviderRow`）：启用点 / 名称 / `N models` / 警告 / 箭头。"""
+    text = MODELS_TEXT.get(language, MODELS_TEXT["en"])
+    provider_id = str(provider.get("id"))
+    enabled = provider.get("enabled") is True
+    models = provider.get("models")
+    count = len(models) if isinstance(models, list) else 0
+    return {
+        "id": provider_id,
+        "name": str(provider.get("name") or provider_id),
+        "enabled": enabled,
+        "detail": text["modelCount"].replace("{count}", str(count)),
+        # 已启用却还没配密钥：行尾给告警三角（本地 Ollama 之类可无钥，只提示不阻断）。
+        "warn": enabled and not has_key(provider_id),
+    }
+
+
+def provider_rows(models_section: Any, has_key: Callable[[str], bool], language: str) -> List[Dict[str, Any]]:
+    return [provider_row(p, has_key, language) for p in visible_providers(models_section, has_key)]
+
+
+def has_provider(models_section: Any, provider_id: str) -> bool:
+    return any(str(p.get("id")) == provider_id for p in provider_entries(models_section))
+
+
+def find_provider(models_section: Any, provider_id: str) -> Optional[Dict[str, Any]]:
+    for provider in provider_entries(models_section):
+        if str(provider.get("id")) == provider_id:
+            return provider
+    return None
+
+
+def provider_detail(
+    models_section: Any,
+    provider_id: str,
+    language: str,
+    has_key: Callable[[str], bool] = lambda _provider_id: False,
+) -> Optional[Dict[str, Any]]:
+    """详情页的整页投影（原版 `selectedProvider` 直接读 store，这里在桥里拼好）。
+
+    名字 / 协议 / 地址 / 模型清单 / 请求头都取自配置原文；`warn` 与列表行同一条判定；
+    `advanced` 是否给扳手入口 = `purpose !== 'decision'`（决策模型不经 providerHeaders）。
+    """
+    provider = find_provider(models_section, provider_id)
+    if provider is None:
+        return None
+    text = MODELS_TEXT.get(language, MODELS_TEXT["en"])
+    purpose = provider.get("purpose") or "llm"
+    models = provider.get("models")
+    model_rows: List[Dict[str, Any]] = []
+    for model in models if isinstance(models, list) else []:
+        if not isinstance(model, dict) or not model.get("id"):
+            continue
+        model_id = str(model.get("id"))
+        model_rows.append(
+            {
+                "id": model_id,
+                "name": str(model.get("name") or model_id),
+                # 改过显示名时行内附真实 ID（原版 `mo.name !== mo.id`）。
+                "showId": bool(model.get("name")) and str(model.get("name")) != model_id,
+                "enabled": model.get("enabled") is True,
+            }
+        )
+    return {
+        "id": str(provider.get("id")),
+        "name": str(provider.get("name") or provider.get("id")),
+        "kind": str(provider.get("kind") or ""),
+        "purpose": purpose,
+        "adapter": str(provider.get("adapter") or ""),
+        "apiHost": str(provider.get("apiHost") or ""),
+        "enabled": provider.get("enabled") is True,
+        "models": model_rows,
+        "headers": header_rows(provider.get("headers"), language),
+        "advanced": purpose != "decision",
+        # 详情页的「已启用但未配置密钥」提醒；与列表行同一条判定，界面不另算。
+        "warn": provider.get("enabled") is True and not has_key(str(provider.get("id"))),
+        "canRename": str(provider.get("kind") or "") == "custom",
+        "modelList": text["modelList"],
+    }
+
+
+def header_rows(raw: Any, language: str) -> List[Dict[str, str]]:
+    """请求头的行投影：`{name, value, issue}`；`issue` 非空 = 该行不会发出（行下注明原因）。
+
+    只列配置里真实存着的条目（上游 `Object.entries(headers)` 同口径：存的是已整理过的表）。
+    """
+    text = MODELS_TEXT.get(language, MODELS_TEXT["en"])
+    issues = text["headerIssue"]
+    rows: List[Dict[str, str]] = []
+    if not isinstance(raw, dict):
+        return rows
+    for name, value in raw.items():
+        row_name = str(name)
+        row_value = "" if value is None else str(value)
+        issue = header_issue(row_name, row_value) or ""
+        rows.append(
+            {
+                "name": row_name,
+                "value": row_value,
+                "issue": issue,
+                # QML 直接显示这个字符串，不在界面里拼 i18n 键。
+                "issueText": issues.get(issue, "") if issue else "",
+            }
+        )
+    return rows
+
+
+def max_headers() -> int:
+    return MAX_CUSTOM_HEADERS
+
+
+# ── 写（整段回写 `models` 段；`config:set` 只做顶层浅合并）────────────────────
+def _clone(models_section: Any) -> Dict[str, Any]:
+    return copy.deepcopy(models_section) if isinstance(models_section, dict) else {}
+
+
+def _write_provider(models: Dict[str, Any], provider: Dict[str, Any]) -> None:
+    providers = models.get("providers")
+    if not isinstance(providers, list):
+        providers = []
+        models["providers"] = providers
+    for index, current in enumerate(providers):
+        if isinstance(current, dict) and str(current.get("id")) == str(provider.get("id")):
+            providers[index] = provider
+            return
+    providers.append(provider)
+
+
+def update_provider(models_section: Any, provider_id: str, patch: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """改一个服务商的字段，返回新的 `models` 段；provider 不存在返回 None（不伪造）。"""
+    models = _clone(models_section)
+    provider = find_provider(models, provider_id)
+    if provider is None:
+        return None
+    for key, value in patch.items():
+        if value is None:
+            provider.pop(key, None)
+        else:
+            provider[key] = copy.deepcopy(value)
+    return models
+
+
+def remove_provider(models_section: Any, provider_id: str) -> Optional[Dict[str, Any]]:
+    """删服务商（原版 `removeProvider`：连同 `activeModelId` 指向它时的清理一起做）。"""
+    models = _clone(models_section)
+    providers = models.get("providers")
+    if not isinstance(providers, list) or not any(
+        isinstance(p, dict) and str(p.get("id")) == provider_id for p in providers
+    ):
+        return None
+    models["providers"] = [
+        p for p in providers if not (isinstance(p, dict) and str(p.get("id")) == provider_id)
+    ]
+    active = models.get("activeModelId")
+    if isinstance(active, str) and active.split(":", 1)[0] == provider_id:
+        models.pop("activeModelId", None)
+    return models
+
+
+def add_provider(models_section: Any, provider: Dict[str, Any]) -> Dict[str, Any]:
+    """追加一个自定义服务商（调用方负责生成唯一 id / 默认名）。"""
+    models = _clone(models_section)
+    _write_provider(models, copy.deepcopy(provider))
+    return models
+
+
+def set_headers(models_section: Any, provider_id: str, raw: Any) -> Optional[Dict[str, Any]]:
+    """写入自定义请求头：先按上游规则整理；整理后为空则删掉 `headers` 键（上游传 undefined）。"""
+    providers = (models_section or {}).get("providers") if isinstance(models_section, dict) else None
+    if not isinstance(providers, list):
+        return None
+    cleaned = sanitize_headers(raw)
+    return update_provider(models_section, provider_id, {"headers": cleaned or None})
+
+
+def set_model_enabled(
+    models_section: Any, provider_id: str, model_id: str, enabled: bool
+) -> Optional[Dict[str, Any]]:
+    models = _clone(models_section)
+    provider = find_provider(models, provider_id)
+    if provider is None:
+        return None
+    models_list = provider.get("models")
+    if not isinstance(models_list, list):
+        return None
+    for model in models_list:
+        if isinstance(model, dict) and str(model.get("id")) == model_id:
+            model["enabled"] = bool(enabled)
+            return models
+    return None
+
+
+def add_model(models_section: Any, provider_id: str, model_id: str, name: str = "") -> Optional[Dict[str, Any]]:
+    """加一个模型（原版 `addModel`）：同名去重、默认启用。模型 id 为空返回 None。"""
+    model_id = (model_id or "").strip()
+    if not model_id:
+        return None
+    models = _clone(models_section)
+    provider = find_provider(models, provider_id)
+    if provider is None:
+        return None
+    models_list = provider.get("models")
+    if not isinstance(models_list, list):
+        models_list = []
+        provider["models"] = models_list
+    if any(isinstance(m, dict) and str(m.get("id")) == model_id for m in models_list):
+        return None
+    models_list.append({"id": model_id, "name": (name or model_id), "enabled": True})
+    return models
+
+
+def remove_model(models_section: Any, provider_id: str, model_id: str) -> Optional[Dict[str, Any]]:
+    models = _clone(models_section)
+    provider = find_provider(models, provider_id)
+    if provider is None:
+        return None
+    models_list = provider.get("models")
+    if not isinstance(models_list, list):
+        return None
+    kept = [m for m in models_list if not (isinstance(m, dict) and str(m.get("id")) == model_id)]
+    if len(kept) == len(models_list):
+        return None
+    provider["models"] = kept
+    active = models.get("activeModelId")
+    if isinstance(active, str) and active == f"{provider_id}:{model_id}":
+        models.pop("activeModelId", None)
+    return models
+
+
+def new_provider(models_section: Any, provider_id: str, name: str, accent: str = "#8a8a94") -> Dict[str, Any]:
+    """新建自定义服务商的最小形状（原版 `addCustomProvider`）；id 由调用方保证唯一。"""
+    return {
+        "id": provider_id,
+        "name": name,
+        "kind": "custom",
+        "purpose": "llm",
+        "accent": accent,
+        "adapter": "openai",
+        "apiHost": "",
+        "enabled": True,
+        "models": [],
+    }
+
+
+__all__ = [
+    "MAX_CUSTOM_HEADERS",
+    "MODELS_TEXT",
+    "add_model",
+    "add_provider",
+    "find_provider",
+    "has_provider",
+    "header_rows",
+    "max_headers",
+    "models_text",
+    "new_provider",
+    "provider_detail",
+    "provider_entries",
+    "provider_row",
+    "provider_rows",
+    "remove_model",
+    "remove_provider",
+    "set_headers",
+    "set_model_enabled",
+    "update_provider",
+    "visible_providers",
+]
+
+exit=0
+$ git show ccca79e:app/src/mvvm/services/settings_service.py
+"""应用配置：明文 `config.json`，顶层浅合并。
+
+对应 Deva `apps/desktop/src/main/services/config.ts` 的 `config:get-sync` / `config:get` / `config:set`。
+语义逐条对齐：
+
+- 根目录 `AI_UPPER_HOME` 优先，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 兼容）；
+- 整个文件是一份 JSON 对象，**顶层浅合并**：`set({"models": {...}})` 整段替换 `models`，
+  不是深层合并。这条必须照搬——渲染层依赖它整段写回模型配置（Deva `store/models.tsx:195`）；
+- 值写成 `None` 等于删除该键（Deva 的 `undefined` 语义在 Python 里没有对应物，用 `None`）；
+- 文件不存在 / 解析失败视为空配置，不阻断启动；但**写失败不静默**——Deva 的 `persist()`
+  吞掉异常，本工程改为抛出，由界面显示「保存失败」，否则用户以为改的设置生效了。
+
+敏感信息绝不进这里：API 密钥走 `secrets_vault`。
+"""
+from __future__ import annotations
+
+import copy
+import json
+import os
+from pathlib import Path
+from typing import Any, Optional
+
+from mvvm.models.chat_models import now_ms
+from mvvm.services.chat_session_store import write_file_atomic
+
+CONFIG_FILE = "config.json"
+
+# 本工程真正读取的配置键（其余键原样保留，供 Deva 两侧共用同一个数据目录）。
+THEME_KEY = "theme"
+LANGUAGE_KEY = "language"
+LAYOUT_KEY = "layout"
+MODELS_KEY = "models"
+DATA_DIR_KEY = "dataDir"
+PROXY_KEY = "proxy"
+
+
+def default_home() -> Path:
+    """`AI_UPPER_HOME` 优先，缺省 `~/.ai_upper`（旧 `DEVA_HOME` / `~/.deva` 仍被读取）。"""
+    from utils.app_home import app_home
+
+    return app_home()
+
+
+class SettingsService:
+    """读/写 `config.json`。纯 Python，不认识 Qt。"""
+
+    def __init__(self, home: Optional[Path | str] = None) -> None:
+        self._home = Path(home) if home is not None else default_home()
+        self._config: Optional[dict[str, Any]] = None
+        self._loaded_raw: Optional[str] = None
+
+    @property
+    def home(self) -> Path:
+        return self._home
+
+    @property
+    def path(self) -> Path:
+        return self._home / CONFIG_FILE
+
+    # ── 读 ────────────────────────────────────────────────────────────────
+    def _ensure_loaded(self) -> dict[str, Any]:
+        if self._config is not None:
+            return self._config
+        try:
+            self._loaded_raw = self.path.read_text(encoding="utf-8")
+            parsed = json.loads(self._loaded_raw)
+            self._config = parsed if isinstance(parsed, dict) else {}
+        except (OSError, ValueError):
+            self._config = {}  # 首次运行 / 手改坏了：按空配置继续，不让启动失败
+        return self._config
+
+    def get_config_sync(self) -> dict[str, Any]:
+        """整份配置的**只读快照**（深拷贝：调用方改不动内存态）。"""
+        return copy.deepcopy(self._ensure_loaded())
+
+    get_config = get_config_sync
+
+    def get(self, key: str, default: Any = None) -> Any:
+        return copy.deepcopy(self._ensure_loaded().get(key, default))
+
+    # ── 写 ────────────────────────────────────────────────────────────────
+    def set_config(self, patch: dict[str, Any]) -> dict[str, bool]:
+        """顶层浅合并；值 `None` 删除该键。落盘失败抛 OSError（不静默）。"""
+        if not isinstance(patch, dict):
+            raise TypeError("config 补丁必须是对象")
+        config = self._ensure_loaded()
+        # deva-agent desktop-models.mjs: expectedRaw prevents stale desktop mirrors
+        # from overwriting an external model/configuration edit.
+        try:
+            current_raw = self.path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            current_raw = None
+        if current_raw != self._loaded_raw:
+            raise OSError("Configuration changed externally; reload before saving")
+        for key, value in patch.items():
+            if value is None:
+                config.pop(key, None)
+            else:
+                config[key] = copy.deepcopy(value)
+        self._persist()
+        return {"ok": True}
+
+    def _persist(self) -> None:
+        assert self._config is not None
+        self._home.mkdir(parents=True, exist_ok=True)
+        raw = json.dumps(self._config, ensure_ascii=False, indent=2)
+        write_file_atomic(self.path, raw)
+        self._loaded_raw = raw
+
+    def reload(self) -> None:
+        """丢弃内存态，下次读取重新落盘读（外部工具手改 config.json 时用）。"""
+        self._config = None
+        self._loaded_raw = None
+
+    # ── 本工程直接消费的强类型读取（值非法一律回落缺省，不抛错）──────────
+    def theme(self) -> str:
+        value = self._ensure_loaded().get(THEME_KEY)
+        return value if value in ("light", "dark", "system") else "system"
+
+    def language(self) -> str:
+        value = self._ensure_loaded().get(LANGUAGE_KEY)
+        return value if value in ("zh", "en") else "zh"
+
+    def layout(self) -> dict[str, Any]:
+        value = self._ensure_loaded().get(LAYOUT_KEY)
+        return dict(value) if isinstance(value, dict) else {}
+
+    def data_dir(self) -> Optional[str]:
+        value = self._ensure_loaded().get(DATA_DIR_KEY)
+        return value if isinstance(value, str) and value.strip() else None
+
+    def proxy(self) -> Optional[str]:
+        value = self._ensure_loaded().get(PROXY_KEY)
+        return value if isinstance(value, str) and value.strip() else None
+
+    def models_section(self) -> dict[str, Any]:
+        value = self._ensure_loaded().get(MODELS_KEY)
+        return copy.deepcopy(value) if isinstance(value, dict) else {}
+
+
+__all__ = [
+    "CONFIG_FILE",
+    "DATA_DIR_KEY",
+    "LANGUAGE_KEY",
+    "LAYOUT_KEY",
+    "MODELS_KEY",
+    "PROXY_KEY",
+    "THEME_KEY",
+    "SettingsService",
+    "default_home",
+    "now_ms",
+]
+
+exit=0

@@ -1,0 +1,24 @@
+{
+  "coverage": {
+    "zh-CN": {
+      "keys": 1453,
+      "missing": [],
+      "missing_used": [],
+      "empty": [
+        "app.tagline"
+      ]
+    },
+    "en": {
+      "keys": 1453,
+      "missing": [],
+      "missing_used": [],
+      "empty": [
+        "app.tagline"
+      ]
+    }
+  },
+  "qml_bindings": 98,
+  "qml_files": 5,
+  "python_candidate_literals": 1338,
+  "python_candidate_files": 86
+}

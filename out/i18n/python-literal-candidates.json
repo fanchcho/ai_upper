@@ -1,0 +1,6692 @@
+[
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 30,
+    "text": "## 你"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 31,
+    "text": "## 助手"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 51,
+    "text": "%.1f GB"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 100,
+    "text": "刚刚"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 100,
+    "text": "分钟前"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 100,
+    "text": "小时前"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 100,
+    "text": "昨天"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 100,
+    "text": "天前"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 101,
+    "text": "just now"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 101,
+    "text": "min ago"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 101,
+    "text": "hr ago"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 101,
+    "text": "days ago"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 46,
+    "text": "%d B"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 48,
+    "text": "%d KB"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 50,
+    "text": "%.1f MB"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 145,
+    "text": "Untitled conversation"
+  },
+  {
+    "file": "app/src/qml_shell_sessions.py",
+    "line": 145,
+    "text": "未命名会话"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "text": "语言"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "text": "主题"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 94,
+    "text": "文字大小"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 95,
+    "text": "跟随系统"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 95,
+    "text": "浅色"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 95,
+    "text": "深色"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 96,
+    "text": "小"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 96,
+    "text": "标准"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 96,
+    "text": "大"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 96,
+    "text": "特大"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 97,
+    "text": "模型服务商"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 97,
+    "text": "还没有可用的服务商，点右上角 + 添加"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "text": "{count} 个模型"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "text": "扩展"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 98,
+    "text": "内置"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 99,
+    "text": "技能"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 99,
+    "text": "暂无扩展"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 102,
+    "text": "Text size"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 104,
+    "text": "Extra large"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 105,
+    "text": "No providers yet — click + to add one"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 107,
+    "text": "No extensions"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 115,
+    "text": "思考等级"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 116,
+    "text": "开启"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 117,
+    "text": "开启思考（该模型无法设置思考等级）"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 129,
+    "text": "Thinking level"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 131,
+    "text": "Turn thinking on (this model has no thinking levels)"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "text": "搜索对话"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "text": "未找到匹配项"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 145,
+    "text": "暂无对话"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 146,
+    "text": "Search chats"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 146,
+    "text": "No matches"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 146,
+    "text": "No conversations"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 150,
+    "text": "快速开启对话"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 150,
+    "text": "选择一个角色，点头像即可直接开始"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 151,
+    "text": "Start a conversation"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 151,
+    "text": "Pick a persona — tap its avatar to begin"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 156,
+    "text": "选择模型"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 157,
+    "text": "选择模型"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 159,
+    "text": "上下文容量"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 160,
+    "text": "约 {n}"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 162,
+    "text": "自动压缩"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 165,
+    "text": "Select model"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 166,
+    "text": "Select model"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1849,
+    "text": "QML OK"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "默认"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "低"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "中"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "高"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "极高"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 118,
+    "text": "最高"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 120,
+    "text": "不额外设置，交给模型自己决定"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 121,
+    "text": "想得少、回得快，适合简单问答"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 122,
+    "text": "速度与质量兼顾"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 123,
+    "text": "多想一步，适合编码与多步任务"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 124,
+    "text": "更深入，适合复杂的编码与长任务"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 125,
+    "text": "不计成本地深想，最慢最贵"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 132,
+    "text": "Extra high"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 134,
+    "text": "No extra setting; let the model decide"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 135,
+    "text": "Thinks less, answers faster; good for simple Q&A"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 136,
+    "text": "Balances speed and quality"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 137,
+    "text": "Thinks further; good for coding and multi-step tasks"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 138,
+    "text": "Goes deeper; for complex coding and long tasks"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 139,
+    "text": "Thinks as hard as it can; slowest and most expensive"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1203,
+    "text": "QML SEND"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1218,
+    "text": "QML TURN"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1287,
+    "text": "QML PICK"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1673,
+    "text": "QML PAGE UNKNOWN"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1704,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1758,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1758,
+    "text": "reason=engine loaded no root object"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1822,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1836,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1836,
+    "text": "reason=grabWindow returned a null image"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1843,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1314,
+    "text": "QML COPY REJECTED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1406,
+    "text": "QML STREAM"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1410,
+    "text": "QML TURN ERROR"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1421,
+    "text": "QML TURN DONE"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1792,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1792,
+    "text": "reason=send rejected"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1798,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1808,
+    "text": "QML FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1843,
+    "text": "reason=could not save "
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 443,
+    "text": "QML CONFIG FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 516,
+    "text": "release tag missing"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1160,
+    "text": "QML CONFIG FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1216,
+    "text": "QML SEND FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1274,
+    "text": "QML PICK FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1282,
+    "text": "QML PICK REJECTED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1799,
+    "text": "reason=turn did not finish in "
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1809,
+    "text": "reason=turn ended with stop="
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 885,
+    "text": "QML SECRET FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 1502,
+    "text": "QML PREPARE FAILED"
+  },
+  {
+    "file": "app/src/qml_shell.py",
+    "line": 416,
+    "text": "Unknown settings operation"
+  },
+  {
+    "file": "app/src/application.py",
+    "line": 74,
+    "text": "GUI OK"
+  },
+  {
+    "file": "app/src/native_i18n.py",
+    "line": 6,
+    "text": "简体中文"
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 77,
+    "text": "No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip install PySide6)"
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 141,
+    "text": " has no attribute "
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 157,
+    "text": ".QtCore provides none of "
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 177,
+    "text": " has no enum member "
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 212,
+    "text": " has neither exec nor exec_ (binding "
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 89,
+    "text": " has no submodule "
+  },
+  {
+    "file": "app/src/utils/qt_compat.py",
+    "line": 115,
+    "text": " has no "
+  },
+  {
+    "file": "app/src/markdown/highlight.py",
+    "line": 237,
+    "text": "CodeHighlighter requires a Qt binding"
+  },
+  {
+    "file": "app/src/markdown/body.py",
+    "line": 76,
+    "text": "BodyDocument requires a Qt binding"
+  },
+  {
+    "file": "app/src/markdown/body.py",
+    "line": 153,
+    "text": "text scale must be positive"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 81,
+    "text": "Segoe UI"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 81,
+    "text": "Microsoft YaHei"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 82,
+    "text": "Noto Sans CJK SC"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 85,
+    "text": "Cascadia Code"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 85,
+    "text": "JetBrains Mono"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 85,
+    "text": "DejaVu Sans Mono"
+  },
+  {
+    "file": "app/src/markdown/document.py",
+    "line": 86,
+    "text": "Courier New"
+  },
+  {
+    "file": "app/src/mvvm/services/workspace_guard.py",
+    "line": 19,
+    "text": "拒绝访问：路径不在已打开的项目内"
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 301,
+    "text": "角色写入（upsert / remove / 排序 / 头像）尚未接入"
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 318,
+    "text": "无法生成不冲突的角色 id"
+  },
+  {
+    "file": "app/src/mvvm/services/persona_store.py",
+    "line": 214,
+    "text": "未命名提示词"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 10,
+    "text": "向用户提问并等待回答；关闭、取消、超时都不是同意。"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 84,
+    "text": "questions 必须包含 1–5 个问题"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 88,
+    "text": "问题文本不能为空"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 91,
+    "text": "choices 必须是最多 6 个字符串"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 61,
+    "text": "Interaction operation ID reused with different input"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_interactions.py",
+    "line": 78,
+    "text": "允许执行 "
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 140,
+    "text": "条目表不是对象"
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 131,
+    "text": "读取密钥文件失败："
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 143,
+    "text": "密钥文件无法解密（主密钥 "
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 143,
+    "text": " 可能已被替换）："
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 184,
+    "text": "读取主密钥失败："
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_vault.py",
+    "line": 193,
+    "text": "主密钥文件长度异常："
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 163,
+    "text": "图片压缩后仍超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 163,
+    "text": "，无法发送"
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 114,
+    "text": "图片过大（"
+  },
+  {
+    "file": "app/src/mvvm/services/image_prep.py",
+    "line": 114,
+    "text": "），且该格式无法在本地压缩；上限 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 71,
+    "text": "缺少有效的 path 参数"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 72,
+    "text": "未挂载工作区，相对路径没有基准：请改用绝对路径（~/ 开头的主目录路径亦可）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 73,
+    "text": "未打开项目，且未提供 path"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 97,
+    "text": "读取工作区内一个文本文件，返回带行号的内容（便于定位与后续精确编辑）。默认从第 1 行起最多读 2000 行，超过 2000 字符的行会被截断；可用 offset（起始行，1 起）/ limit（行数）分段读取大文件，已知目标位置时建议只读相关片段。单次返回内容过大会报错，届时请缩小范围或先用 grep 定位。path 可相对项目根或绝对。注意：用 edit_file 时 old_string 应为「去掉行号前缀」的原文。也可读取图片（png / jpg / gif / webp）：图片会随结果直接附给你查看（过大时自动缩放），offset / limit 对图片无效。Word / Excel / PowerPoint 文件（.docx / .xlsx / .pptx）返回从中提取的纯文字（不含格式与图片），同样带行号、可分段读取，但不能用 edit_file 修改。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 119,
+    "text": "列出工作区内某个目录的直接子项（目录在前）。用于探索项目结构。不传 path 时默认列项目根。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 131,
+    "text": "按 glob 模式匹配工作区内的文件路径（支持 ** 任意层级、* 单层任意、? 单字符、{a,b} 分支，如 **/*.ts、src/**/*.{ts,tsx}），按最近修改时间倒序返回。默认忽略 node_modules/.git/dist 等目录。用于按名字/类型快速定位文件。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 148,
+    "text": "在工作区内按正则搜索文件内容，返回匹配行（格式 路径:行号: 内容）。可选 glob 限定文件范围（如 *.ts）、ignore_case 忽略大小写。默认忽略 node_modules/.git/dist 等目录及 .gitignore 忽略的文件（path 直接指向被忽略的目录时照常搜索），跳过二进制与超大文件。用于快速定位代码。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 167,
+    "text": "获取一个网页 / HTTP(S) 资源并转为可读文本：HTML 自动去标签、解码实体、保留正文；JSON / 纯文本原样返回。用于查在线文档、读网页、取 API 响应。仅支持 http/https，有超时与大小上限；正文超过 100000 字符时完整内容存到文件，只返回开头、结尾与文件路径。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 183,
+    "text": "把内容写入文件（覆盖式，不存在则创建；父目录不存在会自动创建）。多用于新建文件；改动既有文件请优先用 edit_file。单次写入内容较多（约 300 行以上）时请分段：先写入开头一部分，再用 append: true 分次追加其余部分。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 201,
+    "text": "对工作区内「已存在」的文件做精确替换：把 old_string 匹配到的片段替换为 new_string。默认要求 old_string 在文件中唯一出现（否则报错——请多带上下文使其唯一）；replace_all=true 时替换所有匹配。这是修改代码的首选（优于覆盖式 write_file）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 220,
+    "text": "执行一条 shell 命令并返回标准输出/错误与退出码（非交互、一次性）。用于构建、测试、git、脚本等。查找文件、搜索内容、阅读文件请用专用工具 glob / grep / read_file / list_dir，不要用 find、grep、cat、ls、head 之类的 shell 命令代替。修改文件请用 edit_file，写文件请用 write_file。命令在 bash/sh 中运行，请写 POSIX/bash 命令。工作目录：已挂载工作区时为项目根，未挂载时为用户主目录。非交互运行（已禁用分页器/凭据提示/颜色）；默认超时 600000ms（可用 timeout 调整，最长 1800000ms）；输出超过 30000 字符时完整内容存到文件，只返回开头、结尾与文件路径。命令本身不受路径守卫约束，破坏性操作（删除、覆盖、强推等）请先确认目标无误。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 242,
+    "text": "把本次任务产出的成品文件交付给用户：用户会看到一张交付卡。适用：生成的网页、文档、表格、演示稿、图片、音视频、数据导出等需要用户查看或使用的成品。不适用：中间产物、临时脚本，以及只是修改项目源码的编程任务。在文件全部写好后调用一次（调用时会核对文件是否存在），列出全部成品（最多 20 个）；网站等多文件产物只交付入口文件（如 index.html）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 263,
+    "text": "创建并维护当前任务的待办清单，界面会实时显示进度。适用：需要 3 步及以上的多步骤任务、用户一次交代了多件事。不适用：单步或琐碎的任务、纯答疑。每次调用都传**完整**清单（整表覆盖，不是增量）；同一时刻只保留一项 in_progress；做完立即标为 completed；执行中发现新步骤随时补进清单。任务被暂停、用户转向别的事而不再进行当前清单时，传 cancel: true 取消它（无需 todos）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 983,
+    "text": "（空文件）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1003,
+    "text": "[图片] "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1003,
+    "text": "）。图片内容已随本结果附上。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1064,
+    "text": "连接失败：目标地址不可达或拒绝连接（设置了代理环境变量吗？）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1065,
+    "text": "经代理连接失败：请检查代理是否在运行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1066,
+    "text": "连接超时"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1067,
+    "text": "读取超时：连接长时间没有数据"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1068,
+    "text": "重定向次数过多"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1069,
+    "text": "URL 无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 718,
+    "text": "（无可读文本内容）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 757,
+    "text": "已写入"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 815,
+    "text": "（已按换行规范匹配）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 885,
+    "text": "（重复的路径已合并为一个。）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 918,
+    "text": "输出过长（共 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 918,
+    "text": " 字符），完整内容已保存到："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 918,
+    "text": "\n需要细看时用 read_file 分段读取，或用 grep 搜索。\n\n预览（开头和结尾）：\n"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 920,
+    "text": "\n[……中间省略 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 920,
+    "text": " 字符……]\n"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 974,
+    "text": "读取范围过大"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 987,
+    "text": "第 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 987,
+    "text": " 行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 987,
+    "text": " 行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 995,
+    "text": "图片无法发送"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 998,
+    "text": "，已缩放为 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 998,
+    "text": "）发送"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1009,
+    "text": "图片"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 470,
+    "text": "未知工具"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 473,
+    "text": "参数错误"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 552,
+    "text": "图片过大"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 554,
+    "text": "（文件超过 2MB，未加载；请用 grep 定位所需内容）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 554,
+    "text": "文件过大"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 565,
+    "text": "（文件超过 2MB，未加载）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 565,
+    "text": "文件过大"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 567,
+    "text": "（疑似二进制文件，未加载）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 567,
+    "text": "二进制"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 569,
+    "text": "（空文件）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 569,
+    "text": "0 行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 586,
+    "text": "（空目录）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 586,
+    "text": " 项"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 593,
+    "text": "缺少 pattern 参数"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 593,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 610,
+    "text": "\n…（共 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 610,
+    "text": " 个，仅列前 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 611,
+    "text": "（无匹配文件）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 611,
+    "text": " 个文件"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 618,
+    "text": "缺少 pattern 参数"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 618,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 622,
+    "text": "路径不存在"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 653,
+    "text": "\n…（匹配过多，仅列前 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 653,
+    "text": " 处）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 654,
+    "text": "（无匹配）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 655,
+    "text": "+ 处"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 655,
+    "text": "无匹配"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 665,
+    "text": "缺少 url 参数"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 665,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 668,
+    "text": "协议不支持"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 710,
+    "text": "非文本"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 717,
+    "text": "类型: "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 748,
+    "text": "已追加"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 757,
+    "text": "已写入 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 757,
+    "text": " 字节"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 767,
+    "text": "old_string 不能为空；新建文件请用 write_file"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 767,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 769,
+    "text": "old_string 与 new_string 相同，无需编辑"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 769,
+    "text": "无变化"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 775,
+    "text": "（疑似二进制文件，拒绝编辑）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 775,
+    "text": "二进制"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 792,
+    "text": "未找到 old_string（需与文件内容逐字符一致，含缩进/换行）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 792,
+    "text": "未找到"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 798,
+    "text": "不唯一"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 806,
+    "text": "old_string 与 new_string 仅换行符不同；换行符跟随文件原有风格，文件无变化"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 808,
+    "text": "无变化"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 816,
+    "text": "已替换 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 816,
+    "text": " 处"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 816,
+    "text": "已编辑"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 823,
+    "text": "缺少有效的 command 参数"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 823,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 829,
+    "text": "无法执行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 845,
+    "text": "\n（提示：当前未挂载工作区，命令在用户主目录 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 845,
+    "text": " 下执行。如需在某个项目下运行，请在命令里用绝对路径或先 cd，或请用户挂载该项目为工作区。）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 856,
+    "text": "缺少 paths 参数：请列出要交付的文件路径。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 856,
+    "text": "参数无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 858,
+    "text": "文件过多"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 887,
+    "text": "已交付 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 887,
+    "text": " 个文件，交付卡将在本轮回复结束后显示在回复末尾。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 889,
+    "text": " 个文件"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 896,
+    "text": "当前环境不提供待办清单；请直接完成任务。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 896,
+    "text": "不可用"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 910,
+    "text": "输出过长（共 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 910,
+    "text": " 字符），且未能保存完整内容，以下只保留开头和结尾，其余已丢弃。如果工具能筛选或分页，请重新执行取需要的部分。\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 911,
+    "text": "\n[……中间省略 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 912,
+    "text": " 字符……]\n"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 966,
+    "text": "…（本行共 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 966,
+    "text": " 字符，已截断）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 971,
+    "text": "（第 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 971,
+    "text": " 行共约 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 971,
+    "text": " 字符，超过单次读取上限 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 972,
+    "text": " 字符，未返回；请用 offset/limit 缩小范围）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 978,
+    "text": "仅显示第 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 978,
+    "text": " 行（共 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 978,
+    "text": " 行）；如需后续内容，用 offset="
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 978,
+    "text": " 继续读取。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 980,
+    "text": "有 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 980,
+    "text": " 行超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 980,
+    "text": " 字符，已截断显示。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1009,
+    "text": "图片 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 109,
+    "text": "文件路径，相对项目根或绝对路径"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 110,
+    "text": "起始行号（1 起，含）。默认从第 1 行。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 111,
+    "text": "读取行数。默认 2000 行。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 123,
+    "text": "目录路径，相对项目根或绝对路径。省略则默认项目根。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 138,
+    "text": "glob 模式，如 **/*.ts、src/**/*.{ts,tsx}"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 139,
+    "text": "搜索根目录，相对项目根或绝对路径。默认项目根。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 155,
+    "text": "正则表达式；搜字面量时转义元字符，如 foo\\(；非法正则会退化为纯文本搜索。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 156,
+    "text": "搜索根目录，相对项目根或绝对路径。默认项目根。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 157,
+    "text": "仅搜索匹配该 glob 的文件。不含 / 时只匹配文件名（*.ts 匹配任意层级的 .ts）；含 / 时匹配相对路径。可选。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 158,
+    "text": "忽略大小写。默认 false。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 174,
+    "text": "要获取的完整 URL（以 http:// 或 https:// 开头）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 190,
+    "text": "文件路径，相对项目根或绝对路径"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 191,
+    "text": "要写入的文本内容（覆盖时为完整内容，追加时为本段内容）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 192,
+    "text": "为 true 时把 content 追加到文件末尾（不存在则创建），用于分段写入大文件。默认 false（覆盖）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 208,
+    "text": "文件路径，相对项目根或绝对路径"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 209,
+    "text": "要被替换的原文（需与文件内容逐字符一致，含缩进/换行；去掉 read_file 的行号前缀）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 210,
+    "text": "替换后的新内容"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 211,
+    "text": "替换所有匹配（默认 false，仅当 old_string 唯一时替换）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 231,
+    "text": "要执行的完整命令（可含参数）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 232,
+    "text": "对该命令用途的简短说明（可选，用于界面展示）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 233,
+    "text": "超时毫秒数（可选，默认 600000，最长 1800000）。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 253,
+    "text": "成品文件路径列表：绝对路径，或相对已挂载工作区的路径。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 273,
+    "text": "完整的待办清单，按执行顺序排列。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 287,
+    "text": "清单标题，概括这件事。新开清单时给出，更新时可省略。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 288,
+    "text": "当前清单尚未完成、却要放下它另起一件新事时传 true。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 289,
+    "text": "取消当前清单时传 true，此时省略 todos。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 464,
+    "text": "密封执行不能向用户提问"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 470,
+    "text": "（未知工具："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 473,
+    "text": " 的参数必须是对象）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 488,
+    "text": "审批已启用但交互控制器不可用；未执行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 490,
+    "text": "审批未通过；未执行"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 497,
+    "text": "越界拒绝"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 499,
+    "text": "参数错误"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 501,
+    "text": "执行失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 526,
+    "text": "读取失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 531,
+    "text": "文件过大"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 539,
+    "text": "（无法解析这个文件：可能已加密、已损坏，或其实是旧版格式）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 539,
+    "text": "无法解析"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 552,
+    "text": "（图片超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 552,
+    "text": "，未加载）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 558,
+    "text": "读取失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 578,
+    "text": "列出失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 622,
+    "text": "路径不存在："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 655,
+    "text": " 处"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 668,
+    "text": "仅支持 http/https（收到 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 699,
+    "text": "超时"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 701,
+    "text": "获取失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 710,
+    "text": "（非文本内容："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 710,
+    "text": "，未加载）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 712,
+    "text": "^\\s*(?:<!doctype html|<html)"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 720,
+    "text": " 字符"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 730,
+    "text": "写入失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 748,
+    "text": "已追加 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 748,
+    "text": " 字节"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 756,
+    "text": "写入失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 773,
+    "text": "不存在"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 796,
+    "text": "old_string 匹配到 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 796,
+    "text": " 处，不唯一。请多带上下文使其唯一，或传 replace_all。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 813,
+    "text": "写入失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 816,
+    "text": "已替换 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 816,
+    "text": " 处"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 829,
+    "text": "（无法执行："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 831,
+    "text": "输出过多"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 858,
+    "text": "一次最多交付 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 858,
+    "text": " 个文件，请只列出最主要的成品。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 881,
+    "text": "以下路径无法交付，请修正后重新调用（本次未向用户展示任何文件）：\n"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 883,
+    "text": " 个路径无效"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1030,
+    "text": "（pattern 不是合法的正则："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 1030,
+    "text": "；已按纯文本搜索）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 501,
+    "text": "执行失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 526,
+    "text": "读取失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 531,
+    "text": "（文件超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 531,
+    "text": "，未加载）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 535,
+    "text": "读取失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 545,
+    "text": "以上是从 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 545,
+    "text": " 文件中提取的纯文字（不含格式与图片），不能用 edit_file 修改原文件。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 558,
+    "text": "读取失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 578,
+    "text": "列出失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 699,
+    "text": "请求超时（>"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 701,
+    "text": "获取失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 717,
+    "text": "标题: "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 717,
+    "text": "未知"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 730,
+    "text": "写入失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 747,
+    "text": "写入失败"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 756,
+    "text": "写入失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 773,
+    "text": "文件不存在或无法读取："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 813,
+    "text": "写入失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 831,
+    "text": "（输出超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 831,
+    "text": "MB，已停止命令）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 833,
+    "text": "（已中止）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 833,
+    "text": "已中止"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 873,
+    "text": "：文件不存在"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 535,
+    "text": "读取失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 710,
+    "text": "未知类型"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 747,
+    "text": "写入失败："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 835,
+    "text": "超时"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 875,
+    "text": "：不是文件（目录请改为交付其中的入口文件，如 index.html）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 277,
+    "text": "这一项要做的事：简短的祈使句。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 281,
+    "text": "pending=待办 / in_progress=进行中（同一时刻只一项）/ completed=已完成。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 835,
+    "text": "（超时 >"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 835,
+    "text": "ms，已强制结束）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 837,
+    "text": "（退出码："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_runtime.py",
+    "line": 837,
+    "text": "退出码 "
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 25,
+    "text": "Configuration changed while starting migration"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 52,
+    "text": "MCP configuration changed externally; migration stopped"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 20,
+    "text": "Legacy file must contain a JSON object"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_layout.py",
+    "line": 47,
+    "text": "Invalid legacy MCP entry"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 211,
+    "text": "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 282,
+    "text": "context[ _-]?(length|window)|prompt is too long|too many (input )?tokens|exceeds? (the )?(maximum )?context"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 78,
+    "text": "prompt is too long:\\s*\\d+\\s*tokens?\\s*>\\s*(\\d+)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 79,
+    "text": "exceeds? (?:the )?context limit:\\s*\\d+\\s*\\+\\s*\\d+\\s*>\\s*(\\d+)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 80,
+    "text": "maximum context length is\\s*(\\d+)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 81,
+    "text": "maximum number of tokens allowed\\s*\\((\\d+)\\)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 82,
+    "text": "input length should be\\s*\\[\\s*\\d+\\s*,\\s*(\\d+)\\s*\\]"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 83,
+    "text": "model token limit:?\\s*(\\d+)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 118,
+    "text": "maximum context length is\\s*(\\d+)[\\s\\S]*?requested\\s*(\\d+)\\s*output tokens[\\s\\S]*?prompt contains\\s*(?:at least\\s*)?(\\d+)\\s*input tokens"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 127,
+    "text": "maximum context length is\\s*(\\d+)[\\s\\S]*?\\((\\d+) in the messages,\\s*(\\d+) in the completion\\)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 134,
+    "text": "exceeds? (?:the )?context limit:\\s*(\\d+)\\s*\\+\\s*(\\d+)\\s*>\\s*(\\d+)"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 424,
+    "text": "[以下 "
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 424,
+    "text": " 张图片是上方工具结果的附件"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 214,
+    "text": "服务商拒绝了请求（403）"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 259,
+    "text": "对话长度已超出该模型的上下文上限，无法继续。请新建对话，或换用上下文更大的模型后重试。"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 275,
+    "text": "请求失败（"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 230,
+    "text": "请求的输出上限超出该模型允许范围（"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 237,
+    "text": "鉴权失败（"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 237,
+    "text": "）：请检查 API 密钥。"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 243,
+    "text": "触发限流（429），请稍后重试"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 252,
+    "text": "该模型不支持所选思考等级（"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 268,
+    "text": "服务端错误（"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_gateway.py",
+    "line": 472,
+    "text": " 尚未实现："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 60,
+    "text": "该操作被安全策略拒绝。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 62,
+    "text": "定时任务在自动执行中，无法使用「{name}」（不支持交互/创建类操作）。请改用只读或写入/执行工具完成本次任务，或在结论中说明受限之处。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 65,
+    "text": "工具「{name}」当前不可用，已拒绝。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 67,
+    "text": "未挂载工作区，无法确定相对路径「{path}」的落点，本次调用未执行。请改用**绝对路径**重试（必要时先问清用户目标目录），不要再请求挂载工作区。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 71,
+    "text": "未挂载工作区，{name} 省略 path 时没有默认根可用，本次调用未执行。请显式传入**绝对路径** path 重试，不要再请求挂载工作区。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 147,
+    "text": "已拒绝"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 136,
+    "text": "已拒绝（安全策略）"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_policy.py",
+    "line": 185,
+    "text": "未挂载工作区"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_setup.py",
+    "line": 71,
+    "text": "可用的模型（请在设置中选定默认模型）"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 18,
+    "text": "Identity path must not be a symlink"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 61,
+    "text": "继续"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 22,
+    "text": "Identity path must be owned by current user and not group/world writable"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 51,
+    "text": "默认"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 60,
+    "text": "本会话身份："
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 60,
+    "text": "；可选 "
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 60,
+    "text": "；/deva:identity default 回到默认。"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 53,
+    "text": "查看"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 56,
+    "text": "（可选："
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_identity.py",
+    "line": 56,
+    "text": "未知身份："
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 161,
+    "text": "当前没有进行中的项：开始下一项前先把它标为 in_progress。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 166,
+    "text": "已更新待办清单（已完成 "
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 209,
+    "text": "【待办清单提醒】此前留有一个未完成的待办清单"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 209,
+    "text": "（已完成 "
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 210,
+    "text": "\n若本轮继续这项任务，请照常用 todo_write 更新它；若用户已转向别的事、不再进行它，请调用 todo_write 并传 cancel: true 取消。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 220,
+    "text": "【待办清单】用户已手动取消待办清单"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 220,
+    "text": "，不要再继续更新它；之后若要开始新的多步骤任务，请用 todo_write 传 new_list: true 另建清单。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 88,
+    "text": "todos 必须是数组：[{ content, status }]（取消清单请传 cancel: true）。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 100,
+    "text": "todos 不能为空：至少给出一项 { content, status }（取消清单请传 cancel: true）。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 158,
+    "text": "清单已全部完成（"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 163,
+    "text": "同一时刻只应有一项 in_progress，请收敛为一项。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 165,
+    "text": "继续推进：完成一项立即标为 completed，再开始下一项。"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 188,
+    "text": "【当前待办清单"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 188,
+    "text": "】（[x] 已完成 / [~] 进行中 / [ ] 待办；继续用 todo_write 更新）"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 191,
+    "text": "[Current todo list"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 191,
+    "text": "] ([x] done / [~] in progress / [ ] pending; keep updating it with todo_write)"
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 102,
+    "text": "清单最多 "
+  },
+  {
+    "file": "app/src/mvvm/services/todos.py",
+    "line": 102,
+    "text": " 项，请合并为更粗粒度的步骤后重写。"
+  },
+  {
+    "file": "app/src/mvvm/services/transport.py",
+    "line": 145,
+    "text": "请求已取消"
+  },
+  {
+    "file": "app/src/mvvm/services/transport.py",
+    "line": 157,
+    "text": "请求已取消"
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 88,
+    "text": "我先看一下工作区里的文件。"
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 78,
+    "text": "已经读取 "
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 78,
+    "text": "，内容是："
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 80,
+    "text": "读取 "
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 80,
+    "text": " 失败："
+  },
+  {
+    "file": "app/src/mvvm/services/fake_provider.py",
+    "line": 80,
+    "text": "没有工具结果"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 28,
+    "text": "模型服务商"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 29,
+    "text": "添加提供方"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 30,
+    "text": "还没有可用的服务商，点右上角 + 添加"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 31,
+    "text": "{count} 个模型"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 32,
+    "text": "已启用"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 33,
+    "text": "未启用"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 34,
+    "text": "返回"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 35,
+    "text": "返回 {name}"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 36,
+    "text": "删除服务商"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 37,
+    "text": "删除该服务商及其密钥？此操作不可撤销。"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 38,
+    "text": "启用"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 39,
+    "text": "高级设置"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 40,
+    "text": "API 密钥"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 41,
+    "text": "在此填写 API Key"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 42,
+    "text": "已配置密钥（如需更换请重新输入）"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 43,
+    "text": "已配置"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 44,
+    "text": "保存中…"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 45,
+    "text": "已保存"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 46,
+    "text": "当前系统不支持安全加密存储，暂无法保存密钥"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 47,
+    "text": "API 地址"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 48,
+    "text": "模型"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 49,
+    "text": "添加模型"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 50,
+    "text": "模型 ID，如 gpt-4o"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 51,
+    "text": "添加"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 52,
+    "text": "移除"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 53,
+    "text": "暂无模型，点击「添加模型」新增"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 54,
+    "text": "自定义服务商"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 55,
+    "text": "点击修改名称"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 56,
+    "text": "服务商名称"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 57,
+    "text": "已启用但未配置密钥，对话将失败"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 58,
+    "text": "自定义请求头"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 59,
+    "text": "随每个请求发送，同名时覆盖默认值（如 User-Agent）。"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 60,
+    "text": "暂无请求头，点击「添加请求头」新增"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 61,
+    "text": "名称，如 originator"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 62,
+    "text": "值"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 63,
+    "text": "添加请求头"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 64,
+    "text": "移除"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 70,
+    "text": "删除"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 71,
+    "text": "取消"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 72,
+    "text": "确定"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 73,
+    "text": "版本"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 74,
+    "text": "关于"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 75,
+    "text": "检查更新"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 76,
+    "text": "正在检查…"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 77,
+    "text": "已是最新版本"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 78,
+    "text": "检查更新失败"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 79,
+    "text": "发现新版本 {version}"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 83,
+    "text": "Add provider"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 84,
+    "text": "No providers yet — click + to add one"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 89,
+    "text": "Back to {name}"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 90,
+    "text": "Delete provider"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 91,
+    "text": "Delete this provider and its key? This cannot be undone."
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 93,
+    "text": "Advanced settings"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 94,
+    "text": "API Key"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 95,
+    "text": "Enter your API key"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 96,
+    "text": "Key configured (re-enter to replace)"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 100,
+    "text": "Secure encrypted storage is unavailable on this system; keys cannot be saved"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 101,
+    "text": "API Host"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 103,
+    "text": "Add model"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 104,
+    "text": "Model ID, e.g. gpt-4o"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 107,
+    "text": "No models yet — click \"Add model\""
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 108,
+    "text": "Custom Provider"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 109,
+    "text": "Click to rename"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 110,
+    "text": "Provider name"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 111,
+    "text": "Enabled but no API key set — chat will fail"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 112,
+    "text": "Custom headers"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 113,
+    "text": "Sent with every request; same-name headers replace the defaults (e.g. User-Agent)."
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 114,
+    "text": "No headers yet — click \"Add header\""
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 117,
+    "text": "Add header"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 129,
+    "text": "Check for updates"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 131,
+    "text": "You’re on the latest version"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 132,
+    "text": "Couldn’t check for updates"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 133,
+    "text": "New version {version} available"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 66,
+    "text": "名称含不支持的字符，不会发送。"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 67,
+    "text": "该请求头由应用管理，不会发送。"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 68,
+    "text": "值仅支持英文、数字和符号，不会发送。"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 120,
+    "text": "Unsupported characters in the name. Not sent."
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 121,
+    "text": "This header is managed by the app. Not sent."
+  },
+  {
+    "file": "app/src/mvvm/services/settings_models.py",
+    "line": 122,
+    "text": "Only ASCII letters, digits and symbols are supported. Not sent."
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 72,
+    "text": "图片"
+  },
+  {
+    "file": "app/src/mvvm/services/transcript_parts.py",
+    "line": 83,
+    "text": "文档"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 126,
+    "text": "已更新"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 98,
+    "text": "参数错误"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 110,
+    "text": "已取消当前待办清单。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 110,
+    "text": "已取消"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 104,
+    "text": "当前没有进行中的待办清单，无需取消。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_results.py",
+    "line": 104,
+    "text": "无需取消"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 603,
+    "text": "摘要请求未能完成"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 421,
+    "text": "用户"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 422,
+    "text": "助手"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 488,
+    "text": "你是一个对话压缩器。请把以下开发者与 AI 助手的对话，压缩成一份简洁但信息完整的摘要，供后续对话继续参考。"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 489,
+    "text": "必须保留："
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 490,
+    "text": "1. 用户的核心目标与明确指令（尤其是尚未完成的要求）；"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 491,
+    "text": "2. 关键决定、结论与已达成的共识；"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 492,
+    "text": "3. 已完成的改动：涉及的文件、函数、命令及其结果；"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 493,
+    "text": "4. 尚未完成的任务与下一步计划；"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 494,
+    "text": "5. 重要的事实、约束、报错与踩过的坑。"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 495,
+    "text": "要求：用要点式罗列；代码片段、文件路径、命令、标识符一律保留原文；不要臆造未发生的内容；只输出摘要正文，不要客套或额外解释。"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 501,
+    "text": "You are a conversation compactor. Compress the following developer–AI conversation into a concise but complete summary for the conversation to continue from."
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 502,
+    "text": "You must preserve:"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 503,
+    "text": "1. The user's core goals and explicit instructions (especially unfinished requests);"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 504,
+    "text": "2. Key decisions, conclusions, and agreements reached;"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 505,
+    "text": "3. Completed changes: files, functions, and commands involved and their results;"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 506,
+    "text": "4. Outstanding tasks and next steps;"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 507,
+    "text": "5. Important facts, constraints, errors, and pitfalls encountered."
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 508,
+    "text": "Rules: use bullet points; keep code snippets, file paths, commands, and identifiers verbatim; do not invent anything; output only the summary body, no pleasantries or extra explanation."
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 472,
+    "text": "…（更早内容已省略）\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 472,
+    "text": "…(earlier content omitted)\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 579,
+    "text": "注意：记录里最后一条用户请求仍在执行中。请重点保留围绕它已经完成的步骤、查到的关键信息、改过的文件与下一步要做什么。\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 581,
+    "text": "Note: the last user request in this transcript is still being worked on. Focus on the steps already completed for it, key findings, files changed, and what to do next.\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 586,
+    "text": "以下是需要压缩的对话记录，请据此产出摘要：\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 588,
+    "text": "Here is the conversation to compact. Produce the summary accordingly:\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 737,
+    "text": "已中止"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 739,
+    "text": "模型没有返回摘要正文"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 752,
+    "text": "以下是此前对话以及本轮任务已完成部分的摘要（为节省上下文，较早的消息已压缩）。上面那条是用户本轮的原始请求，任务仍在进行中：请在此基础上接着做，不要从头再来，也不要重复已经完成的步骤。"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 755,
+    "text": "The following summarizes the earlier conversation and the work already done on the current task (older messages were compacted to save context). The message above is the user's original request for this turn, and the task is still in progress: continue from here — do not start over or repeat steps already completed."
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 759,
+    "text": "以下是此前对话的摘要（为节省上下文，较早的消息已压缩）。请在此基础上继续。"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 761,
+    "text": "The following is a summary of the earlier conversation (older messages were compacted to save context). Continue from here."
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 607,
+    "text": "已中止"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 638,
+    "text": "已中止"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 646,
+    "text": "模型没有返回摘要正文（可能只输出了思维链，或被内容策略拦截）"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 649,
+    "text": "摘要请求超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 649,
+    "text": "s 仍未完成"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 651,
+    "text": "连接中断"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 732,
+    "text": "已中止"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 746,
+    "text": "摘要里有大段重复内容，模型输出可能异常"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 748,
+    "text": "The summary contains long repeated text; the model output may be degenerate"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 775,
+    "text": "摘要不比被压缩的内容短"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 777,
+    "text": "The summary is not shorter than the content it replaces"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 654,
+    "text": "（已重试 "
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 654,
+    "text": " 次）"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 435,
+    "text": "系统通知"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 435,
+    "text": "system notice"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 461,
+    "text": "工具结果·错误"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 461,
+    "text": "工具结果"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 463,
+    "text": "tool result·error"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 463,
+    "text": "tool result"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 458,
+    "text": "调用工具"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 466,
+    "text": "图片"
+  },
+  {
+    "file": "app/src/mvvm/services/compaction.py",
+    "line": 468,
+    "text": "文档"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 165,
+    "text": "ResponsesProvider 未配置传输层：请传入 transport"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 287,
+    "text": "生成失败"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 298,
+    "text": "流式错误"
+  },
+  {
+    "file": "app/src/mvvm/services/responses_provider.py",
+    "line": 286,
+    "text": "生成失败"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_service.py",
+    "line": 85,
+    "text": "config 补丁必须是对象"
+  },
+  {
+    "file": "app/src/mvvm/services/settings_service.py",
+    "line": 94,
+    "text": "Configuration changed externally; reload before saving"
+  },
+  {
+    "file": "app/src/mvvm/services/sse.py",
+    "line": 28,
+    "text": "连接空闲超过 "
+  },
+  {
+    "file": "app/src/mvvm/services/sse.py",
+    "line": 28,
+    "text": "s，判定为中断"
+  },
+  {
+    "file": "app/src/mvvm/services/chat_session_store.py",
+    "line": 54,
+    "text": "非法会话 id："
+  },
+  {
+    "file": "app/src/mvvm/services/chat_session_store.py",
+    "line": 351,
+    "text": "会话不在内存中，未加载过："
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 25,
+    "text": "interrupted_unknown: 工具可能已执行，不自动重放，请核查结果。"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 39,
+    "text": "工具调用 ID 已用于不同参数；拒绝重放"
+  },
+  {
+    "file": "app/src/mvvm/services/tool_checkpoint.py",
+    "line": 51,
+    "text": "工具正在执行或执行状态未知；未重复执行"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 202,
+    "text": "OpenAIProvider 未配置传输层：请传入 transport"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 263,
+    "text": "服务端返回了未说明的错误"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 91,
+    "text": "[附加文档："
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 91,
+    "text": "（当前模型不支持直接读取其内容）]"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 330,
+    "text": "服务端推理异常（finish_reason: network_error）"
+  },
+  {
+    "file": "app/src/mvvm/services/openai_provider.py",
+    "line": 91,
+    "text": "未命名"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 246,
+    "text": "模型服务商"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 183,
+    "text": "未知的 provider adapter："
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 248,
+    "text": "尚未配置"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 248,
+    "text": "：请到设置页填写服务地址、模型与 API 密钥"
+  },
+  {
+    "file": "app/src/mvvm/services/provider_registry.py",
+    "line": 228,
+    "text": "模型清单不是合法 JSON：请确认服务地址（部分服务商需填到 /v1 为止）"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 102,
+    "text": "MCP connection is closed"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 158,
+    "text": "Unsupported MCP protocol version"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 223,
+    "text": "MCP server was disabled or tool is unavailable"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 226,
+    "text": "MCP server stopped"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 120,
+    "text": "MCP notification failed"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 134,
+    "text": "MCP cancelled or timed out; execution outcome may be unknown"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 140,
+    "text": "MCP transport failed"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 55,
+    "text": "stdio credential must be a JSON environment map"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 119,
+    "text": "MCP notification timed out"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 151,
+    "text": "MCP request rejected: "
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 44,
+    "text": "HTTP credential must be a JSON header map or bearer token"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 131,
+    "text": "cancelled or timed out"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 145,
+    "text": "Unsupported client capability"
+  },
+  {
+    "file": "app/src/mvvm/services/mcp_runtime.py",
+    "line": 214,
+    "text": "MCP pagination loop"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 77,
+    "text": "Invalid server ID"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 79,
+    "text": "command must be a string"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 81,
+    "text": "url must be a string"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 85,
+    "text": "Only url, command, args, enabled are public fields"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 87,
+    "text": "Server requires url or command"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 93,
+    "text": "args must be an array of strings"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 142,
+    "text": "Invalid identity ID"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 46,
+    "text": "Base URL must be an HTTP(S) address without credentials, query or fragment"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 48,
+    "text": "Model name is required"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 91,
+    "text": "Invalid server URL"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 127,
+    "text": "---\nname: Assistant\n---\nYou are a helpful assistant.\n"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 60,
+    "text": "Credential store is unavailable"
+  },
+  {
+    "file": "app/src/mvvm/services/plugin_settings.py",
+    "line": 105,
+    "text": "Credential store is unavailable"
+  },
+  {
+    "file": "app/src/mvvm/services/greeting.py",
+    "line": 12,
+    "text": "Hello from ai_upper"
+  },
+  {
+    "file": "app/src/mvvm/services/checkpoint_recovery.py",
+    "line": 40,
+    "text": "中断时结果未知，未自动重试；先核对实际状态再决定新操作"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 74,
+    "text": "连接失败：目标地址不可达或拒绝连接（设置了代理环境变量吗？）"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 75,
+    "text": "经代理连接失败：请检查代理是否在运行"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 76,
+    "text": "连接超时"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 77,
+    "text": "读取超时：连接长时间没有数据"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 78,
+    "text": "发送超时"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 79,
+    "text": "等待连接池超时"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 80,
+    "text": "服务端返回了不符合协议的响应"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 81,
+    "text": "连接被中断"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 82,
+    "text": "连接被中断"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 83,
+    "text": "网络请求失败"
+  },
+  {
+    "file": "app/src/mvvm/services/http_client.py",
+    "line": 95,
+    "text": "证书校验失败：服务器证书不受信任，常见于公司网络在检查 HTTPS 流量（可用 SSL_CERT_FILE 指定 CA）"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 26,
+    "text": "你正在帮助用户创建一个新的**技能（Skill）**。技能是技能目录（绝对路径见系统提示词【技能】段）下的一个文件夹：入口 `SKILL.md` 说明「何时用、怎么做」，复杂的技能再附带脚本、参考文档、模板等资源。启用后只有 name 与 description 常驻模型看到的技能清单；命中场景或用户输入 `/技能名` 时才加载 SKILL.md 正文；附带资源在执行中按需读取或运行。\n\n## 原则\n\n- **精简**：上下文是所有内容共用的。只写模型本身不知道的东西（流程、约定、专有知识、易错点），不解释常识；示例优于长篇说明。\n- **约束程度随任务的容错度而定**：多种做法都可行时，写原则与判断要点；有推荐做法时，给伪代码或带参数的脚本；操作容易出错、必须严格按顺序执行时，写成固定脚本，少留参数。\n- **渐进式披露**：SKILL.md 正文控制在 500 行以内；大段参考资料拆到 `references/`，并在正文里写明「什么情况下读哪个文件」；上万字的大文件再附上可供 grep 的关键词。\n\n## 目录结构\n\n```\n<技能名>/\n├── SKILL.md       （必需）frontmatter + 正文\n├── scripts/       （可选）可执行脚本：每次都要重写的代码，或要求结果确定的操作\n├── references/    （可选）参考文档：接口说明、数据结构、业务规则等，执行时按需 read_file\n└── assets/        （可选）产出中要用到的文件：模板、图标、示例文件等，不读进上下文\n```\n\n只建用得上的子目录，不要建空目录；不要写 README、CHANGELOG、安装说明之类的附属文件。\n\n## 步骤\n\n1. **从具体用例弄清用途**：技能要解决什么问题、用户会怎么说来触发它、期望的产出是什么。用户已经说清楚就直接往下做；不清楚时一次只问一两个关键问题，能先提出一份具体的功能草案让用户修改，就不要连环追问。\n2. **规划可复用资源**：逐个用例想一遍：哪些代码每次都会重写（放 `scripts/`），哪些资料执行时需要查阅（放 `references/`），哪些文件要用进产出（放 `assets/`）。用户手头的文档、模板等素材，请用户提供后放进对应目录。规划下来没有任何附带资源，就是单文件技能。\n3. **确定名称**：只用小写字母、数字和短横线，宜用动词短语（如「Plan Mode」写成 `plan-mode`）；文件夹名与 `name` 一致。先用 list_dir 查看技能目录，避开已有的文件夹和内置技能名（create-skill、create-agent、create-mcp）。\n4. **落盘**：不必先向用户复述草案、等待确认，按技能形态二选一直接写入：\n   - **单文件技能**：调用 `create_skill` 工具（参数：name、description、trigger、allowedTools、instructions）。\n   - **多文件技能**：在技能目录下建 `<技能名>/`，先用 write_file 写各资源文件，脚本写完**必须用 run_command 实际运行一次**确认可用，最后写 SKILL.md。用户给了现成的压缩包或仓库时，也可以用 run_command 下载并解压到该文件夹。\n   - 只在技能目录内写入，不要改配置目录里的其他文件（config.json、secrets.json 等）。\n5. **校验**（多文件技能逐项检查，单文件技能由 create_skill 负责）：\n   - SKILL.md 位于文件夹根目录，第一行是 `---`，frontmatter 以 `---` 结束；\n   - `name` 存在且与文件夹名一致；`description` 存在且只占一行；\n   - 正文不超过 500 行，引用的每个相对路径都真实存在，没有残留的 TODO；\n   - 没有多余文件。发现问题先修好，再告知用户。\n6. **告知结果**：技能落盘即自动启用，下一轮对话起进入技能清单。向用户列出 description 原文（它决定技能何时被调用）和文件清单（每个文件一句话说明），告诉用户可以用 `/技能名` 触发，也可以在「扩展」页查看或关闭；有不合意之处或实际用下来发现不足，再据此修改。\n\n## SKILL.md 写法\n\n```\n---\nname: pdf-tools\ndescription: 处理 PDF 文件：旋转、合并、拆分、提取文字。用户要编辑或转换 PDF 时使用。\ntrigger: （可选）触发方式的补充说明\nallowed-tools: run_command, read_file\n---\n\n# PDF 工具\n\n（一两句话说明这个技能能做什么）\n\n## 用法\n\n（操作步骤，用祈使句写）\n\n## 资源\n\n- `scripts/rotate.py`：旋转页面，用法 `python <技能文件夹>/scripts/rotate.py <输入文件> <角度>`\n- `references/forms.md`：处理表单字段时读取\n```\n\n- **description 决定何时触发**：只有它常驻技能清单，模型靠它判断要不要加载技能。写清做什么、什么时候用（场景、文件类型、用户的典型说法）。**必须写在一行内**，不支持 YAML 的多行写法（`|`、`>`）。\n- `trigger`、`allowed-tools` 可选；`allowed-tools` 只是建议，不授予任何权限。\n- 正文写给执行任务的模型看，用祈使句，不必重复 description。\n- 引用文件写**相对技能文件夹**的路径；加载技能时会给出文件夹的绝对路径，届时用 read_file 读取、用 run_command 运行。\n- 脚本的输出要便于模型阅读：成功或失败信息明确，长输出截断或分页，不要输出整屏的错误堆栈。脚本语言优先选用户机器上已有的（先用 run_command 查 `python --version` 或 `node -v`），并兼顾 Windows 与 macOS。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 92,
+    "text": "你正在帮助用户创建一个新的**角色（Agent / 性格身份）**。角色是一个带专属系统提示词的对话身份——它决定助手的性格、语气、专长与行为准则；创建并启用后，用户可在角色列表里选它发起对话。\n\n请按以下步骤引导用户：\n\n1. **弄清用途（最多问一次）**：用一次 ask_user 问清这个角色是干什么的——面向什么任务/领域、期望怎样的性格与语气，名字和该做/不该做的准则可设为选填。用户的话里已说清用途和性格时不必再问。\n2. **拟定要素**：据用户的回答拟定，用户没给的按用途合理补全：\n   - `name`：角色显示名（如「代码审查员」「产品经理小美」）。\n   - `description`：一句话专长/定位，会显示在名片与角色资料上。\n   - `prompt`：**系统提示词**——角色的核心。用 Markdown 写清性格、语气、专长、行为准则；这决定角色「是谁、怎么说话、怎么做事」。\n   - ⚠️ **不要设置 model**：你无法可靠得知可用的模型 id，留空即可（角色跟随默认模型，用户可在编辑器里自己选）。\n   - ⚠️ **不要设置头像**：头像由系统按角色名自动生成，用户接受名片后可在编辑器里挑部件与配色。\n3. **生成名片**：拿到回答后**直接调用 `propose_agent` 工具**（参数：name、description、prompt）。**不要先复述草案、也不要再用 ask_user 确认**——名片本身就是给用户确认的草案，用户可点开查看、在编辑器里微调后再接受。\n   - ⚠️ 该工具**只是生成一张「角色名片」供用户确认，并不会真正创建角色**；不要用 `create_skill`/`write_file` 等去创建角色。\n4. **告知结果**：调用后**不要声称角色已创建**。应告诉用户：「角色名片已生成，请点开名片查看——你还能在里面微调，满意后点『接受』即可加入角色列表。」\n\n保持简洁友好，一次问清关键信息即可，不要连环追问。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 109,
+    "text": "你正在帮助用户接入一个新的 **MCP 服务（Model Context Protocol server）**。MCP 服务对外暴露一组工具/资源；接入并连接后，其工具会自动出现在助手的可用工具里。\n\n请按以下步骤引导用户：\n\n1. **弄清用途**：先问清用户想接入哪个 MCP 服务、它提供什么能力、从哪里获取（官方文档 / npm 包名 / 服务地址）。\n2. **确定传输方式**（这是关键分叉）：\n   - `stdio`（本地子进程，最常见）：需要 `command`（如 `npx`、`uvx`、`node`）与 `args`（参数清单，如 `[\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/some/path\"]`）。\n   - `sse` / `http`（远程服务）：需要 `url`（服务地址）。\n3. **收集要素**（逐项与用户确认，不要臆造包名/命令）：\n   - stdio：`command`、`args`、非敏感环境变量 `env`（明文键值）。\n   - sse/http：`url`、非敏感请求头 `headers`（明文键值）。\n   - **密钥（API Key / Token 等）**：⚠️ **绝不要向用户索要、也绝不要把真实密钥值写进工具参数或对话**。你只需问清「有哪些字段是密钥」，把这些**字段名**放进 `secretEnv`（环境变量名，如 `GITHUB_TOKEN`）或 `secretHeaders`（请求头名，如 `Authorization`）。工具只写占位符，真实值由用户稍后在「扩展」页加密填入。\n4. **复述草案**：先在回复正文里完整列出整理好的要素（传输方式、命令/地址、参数、哪些字段是密钥），再用 ask_user 请用户确认或修改——问题卡片里看不到你没写出来的内容。\n5. **落盘**：用户确认后，**调用 `create_mcp` 工具**写入。\n   - ⚠️ **不要用 `write_file` 或 `run_command` 直接写 mcp.json**——`create_mcp` 会校验配置并写入密钥占位符，直接写会绕过这些。\n6. **告知结果**：创建成功后服务会**自动启用并在后台连接**，连上后其工具从用户的**下一条消息**起可用。若存在密钥占位字段，务必提醒用户：**去「扩展」页为该服务填写这些密钥（加密存储）**，填好后会自动连接，无需其他操作。\n\n保持简洁友好，一次问清关键信息即可，不要连环追问。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 133,
+    "text": "引导用户从零创建一个新技能：从用例规划脚本、参考文档、模板等资源，落盘、校验并启用（单文件调 create_skill，多文件直接写进技能目录）。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 136,
+    "text": "输入 /create-skill，或表达「帮我做/创建一个技能」时触发。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 149,
+    "text": "引导用户用对话创建一个新角色：最多问一次厘清用途，随即调 propose_agent 生成名片供确认。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 150,
+    "text": "输入 /create-agent，或表达「帮我做/创建一个角色/性格/身份」时触发。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 164,
+    "text": "引导用户用对话接入一个 MCP 服务：厘清用途与传输方式、收集要素（密钥仅收字段名）、确认后调 create_mcp 工具落盘并启用。"
+  },
+  {
+    "file": "app/src/mvvm/services/skill_store.py",
+    "line": 167,
+    "text": "输入 /create-mcp，或表达「帮我接入/添加/创建一个 MCP（服务）」时触发。"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 59,
+    "text": "[附件文件] "
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 60,
+    "text": "[附件文件夹] "
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 61,
+    "text": "[附件文件路径] "
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 130,
+    "text": "暂不支持的文件类型"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 155,
+    "text": "选择附件对话框"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 132,
+    "text": "图片过大（>5MB）"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 118,
+    "text": "未接线：需要宿主注入系统对话框"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 134,
+    "text": "PDF 过大（>20MB）"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 173,
+    "text": "已忽略未授权文件："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 221,
+    "text": "已忽略不支持的文件："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 136,
+    "text": "文本过大（>512KB）"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 197,
+    "text": "已忽略未授权文件："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 179,
+    "text": "\n（用户附上了这个文件夹的位置，内容未展开；需要时用 list_dir / glob / grep / read_file 按绝对路径查看）"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 187,
+    "text": "文件已不存在："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 190,
+    "text": "\n（用户附上了这个文件（"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 191,
+    "text": "），内容没有直接放进消息；需要时按上面的绝对路径读取：.docx / .xlsx / .pptx 用 read_file 可读出文字，其他格式视情况用命令或技能处理）"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 202,
+    "text": "读取失败已忽略："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 205,
+    "text": "图片过大已忽略："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 208,
+    "text": "已忽略不支持的文件："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 212,
+    "text": "」需使用 Anthropic 或 OpenAI Responses 协议的模型才能读取，本次已跳过"
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 214,
+    "text": "PDF 过大已忽略："
+  },
+  {
+    "file": "app/src/mvvm/services/attachments.py",
+    "line": 218,
+    "text": "文本过大已忽略："
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 207,
+    "text": "AnthropicProvider 未配置传输层：请传入 transport"
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 312,
+    "text": "流式错误"
+  },
+  {
+    "file": "app/src/mvvm/services/anthropic_provider.py",
+    "line": 312,
+    "text": "流式错误"
+  },
+  {
+    "file": "app/src/mvvm/services/secrets_crypto.py",
+    "line": 18,
+    "text": "密钥加密需要 cryptography 包（pip install -r app/requirements.txt）："
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 231,
+    "text": "（每行开头是表格的行号，其后各列以制表符分隔）\n\n"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 230,
+    "text": "## 工作表："
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 230,
+    "text": "（空）"
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 131,
+    "text": "## 第 "
+  },
+  {
+    "file": "app/src/mvvm/services/office_text.py",
+    "line": 131,
+    "text": " 页\n"
+  },
+  {
+    "file": "app/src/mvvm/services/model_view.py",
+    "line": 123,
+    "text": "（以下是用户在你执行过程中发来的消息，请据此调整接下来的工作，然后继续完成任务。）"
+  },
+  {
+    "file": "app/src/mvvm/services/model_view.py",
+    "line": 125,
+    "text": "(The user sent the following message while you were working. Take it into account for the rest of the task, then carry on.)"
+  },
+  {
+    "file": "app/src/mvvm/core/base_view_model.py",
+    "line": 61,
+    "text": "Error in property changed listener: "
+  },
+  {
+    "file": "app/src/mvvm/core/observable.py",
+    "line": 60,
+    "text": "Error in property changed listener: "
+  },
+  {
+    "file": "app/src/mvvm/core/factory.py",
+    "line": 33,
+    "text": "' is not registered"
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 35,
+    "text": "Error checking command execution: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 44,
+    "text": "Error executing command: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 96,
+    "text": "Error checking command execution: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 109,
+    "text": "Error executing async command: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 128,
+    "text": "Error executing async command: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 60,
+    "text": "Error in can_execute_changed listener: "
+  },
+  {
+    "file": "app/src/mvvm/core/command.py",
+    "line": 141,
+    "text": "Error in can_execute_changed listener: "
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 52,
+    "text": "这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 55,
+    "text": "请理解并处理上述附件。"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 168,
+    "text": "chat:send 需要一个对象"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 171,
+    "text": "chat:send 缺少 sessionId"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 206,
+    "text": "chat:send 的 text 为空：没有可发送的内容"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 325,
+    "text": "chat:create-session 缺少 sessionId"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 454,
+    "text": "chat:compact 缺少 sessionId"
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 456,
+    "text": "会话不存在："
+  },
+  {
+    "file": "app/src/mvvm/webui/host.py",
+    "line": 479,
+    "text": "压缩失败："
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 7,
+    "text": "关于 MVVM 架构"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 12,
+    "text": "数据与业务规则，不 import Qt"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 13,
+    "text": "界面状态与命令：ObservableProperty 通知、RelayCommand 执行"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 14,
+    "text": "只做渲染与绑定，Qt 名字一律经 utils.qt_compat"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 15,
+    "text": "被注入的能力（通信、仓库、后端），由容器注册后取用"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 23,
+    "text": "app/src/mvvm 的分层：\n"
+  },
+  {
+    "file": "app/src/mvvm/models/about_model.py",
+    "line": 24,
+    "text": "\n\n这个窗口就是例子：主窗口按钮 → CommandBinding →\nMainViewModel.show_about_command → about_visible 属性变化 → 视图显示/关闭。\n"
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 129,
+    "text": "ViewModel not set"
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 139,
+    "text": "ViewModel not set"
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 74,
+    "text": " has no getter: pass getter_name to add_ui_element() for two-way binding"
+  },
+  {
+    "file": "app/src/mvvm/views/base_view.py",
+    "line": 104,
+    "text": "Error binding command: "
+  },
+  {
+    "file": "app/src/mvvm/views/demo_window.py",
+    "line": 13,
+    "text": "重置"
+  },
+  {
+    "file": "app/src/mvvm/views/demo_window.py",
+    "line": 30,
+    "text": "MVVM 双向绑定演示"
+  },
+  {
+    "file": "app/src/mvvm/views/about_window.py",
+    "line": 7,
+    "text": "关闭"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 27,
+    "text": "成功"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 28,
+    "text": "失败"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 19,
+    "text": "你"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 20,
+    "text": "助手"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 21,
+    "text": "工具"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 22,
+    "text": "错误"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 23,
+    "text": "压缩摘要"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 24,
+    "text": "提示"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 108,
+    "text": "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"8\" style=\"background-color:"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 109,
+    "text": "; border:1px solid #e4e7ec;\"><tr><td><p style=\"color:"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 111,
+    "text": "）</p><p style=\"color:#344054;\">"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 124,
+    "text": "<p style=\"color:"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 124,
+    "text": "］</b></p><p style=\"color:#344054;\">"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 193,
+    "text": "待办"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 196,
+    "text": "（已完成 "
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 59,
+    "text": "工具"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 121,
+    "text": "（失败）"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 193,
+    "text": "待办："
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 195,
+    "text": "（已完成 "
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 102,
+    "text": "图片"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 104,
+    "text": "<p><img src=\""
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 104,
+    "text": "\"/></p><p style=\"color:#667085;\">［图片］"
+  },
+  {
+    "file": "app/src/mvvm/views/transcript_render.py",
+    "line": 159,
+    "text": "（失败）"
+  },
+  {
+    "file": "app/src/mvvm/views/main_window.py",
+    "line": 11,
+    "text": "关于 MVVM 架构"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 40,
+    "text": "发送"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 41,
+    "text": "停止"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 42,
+    "text": "输入消息，回车发送"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 45,
+    "text": "展开清单"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 46,
+    "text": "收起清单"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 47,
+    "text": "取消清单"
+  },
+  {
+    "file": "app/src/mvvm/views/chat_pane.py",
+    "line": 267,
+    "text": "[助手·输出中] "
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 17,
+    "text": "设置"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 18,
+    "text": "返回"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 19,
+    "text": "新增服务商"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 20,
+    "text": "删除服务商"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 21,
+    "text": "保存"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 22,
+    "text": "拉取模型清单"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 23,
+    "text": "添加模型"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 24,
+    "text": "删除模型"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 25,
+    "text": "编辑模型"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 26,
+    "text": "设为默认"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 27,
+    "text": "启用"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 28,
+    "text": "停用"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 29,
+    "text": "API 密钥（保存后不回显）"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 30,
+    "text": "保存密钥"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 31,
+    "text": "清除密钥"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 32,
+    "text": "已配置密钥"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 33,
+    "text": "未配置密钥"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 34,
+    "text": "拉取模型清单失败："
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 35,
+    "text": "恢复自动"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 37,
+    "text": "默认"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 38,
+    "text": "低"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 39,
+    "text": "中"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 40,
+    "text": "高"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 41,
+    "text": "很高"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 42,
+    "text": "最高"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 133,
+    "text": "配置"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 156,
+    "text": "启用该服务商"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 157,
+    "text": "名称"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 158,
+    "text": "服务地址"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 159,
+    "text": "协议"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 180,
+    "text": "模型 id"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 224,
+    "text": "自动"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 227,
+    "text": "自动"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 228,
+    "text": "显示名"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 229,
+    "text": "上下文窗口"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 230,
+    "text": "最大输出"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 406,
+    "text": "自定义服务商"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 409,
+    "text": "已新增服务商：填写地址、密钥与模型后即可使用"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 423,
+    "text": "服务商已保存"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 448,
+    "text": "密钥已清除"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 464,
+    "text": "正在拉取模型清单…"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 515,
+    "text": "模型已保存"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 100,
+    "text": "思考等级"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 307,
+    "text": "关闭"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 310,
+    "text": "默认模型："
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 327,
+    "text": "已启用"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 327,
+    "text": "未启用"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 360,
+    "text": "（默认）"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 432,
+    "text": "服务商已删除"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 432,
+    "text": "服务商删除失败"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 441,
+    "text": "密钥已保存"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 441,
+    "text": "密钥保存失败"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 457,
+    "text": "模型已添加"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 457,
+    "text": "模型未添加（id 为空或已存在）"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 486,
+    "text": "已设为默认模型"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 493,
+    "text": "模型已删除"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 521,
+    "text": "思考等级已更新，下一轮对话生效"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 330,
+    "text": " 个模型"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 384,
+    "text": "设置已更新，下一轮对话生效"
+  },
+  {
+    "file": "app/src/mvvm/views/settings_pane.py",
+    "line": 310,
+    "text": "未选择"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 29,
+    "text": "就绪"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 37,
+    "text": "错误："
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 148,
+    "text": "设置"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 174,
+    "text": "新对话"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 181,
+    "text": "重命名对话"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 181,
+    "text": "新的标题"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 193,
+    "text": "已重命名"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 204,
+    "text": "已归档（在列表外，可从数据文件恢复）"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 212,
+    "text": "删除对话"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 212,
+    "text": "删除后无法恢复，确定删除这条对话吗？"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 154,
+    "text": "当前对话还在回复，停止后才能切换"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 187,
+    "text": "标题不能为空"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 224,
+    "text": "已删除"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 224,
+    "text": "删除失败（对话不存在）"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 229,
+    "text": "未装配模型网关，无法拉取模型清单"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 232,
+    "text": "上一次拉取还没结束"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 239,
+    "text": "拉取模型清单失败：未装配模型网关"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 245,
+    "text": "拉取模型清单失败："
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 241,
+    "text": "已拉取 "
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 241,
+    "text": " 个模型"
+  },
+  {
+    "file": "app/src/mvvm/views/deva_main_window.py",
+    "line": 243,
+    "text": "拉取模型清单失败："
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 17,
+    "text": "新建对话"
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 18,
+    "text": "重命名"
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 19,
+    "text": "归档"
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 20,
+    "text": "删除"
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 21,
+    "text": "设置"
+  },
+  {
+    "file": "app/src/mvvm/views/session_list.py",
+    "line": 22,
+    "text": "还没有对话"
+  },
+  {
+    "file": "app/src/mvvm/view_models/demo_vm.py",
+    "line": 12,
+    "text": "（请输入名字）"
+  },
+  {
+    "file": "app/src/mvvm/view_models/demo_vm.py",
+    "line": 50,
+    "text": "你好，"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 171,
+    "text": "就绪"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 287,
+    "text": "就绪"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 238,
+    "text": "当前没有打开的会话，无法记录待办清单。"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 238,
+    "text": "无会话"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 380,
+    "text": "正在停止…"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 403,
+    "text": "没有可用的 provider：既没有 turn_factory 也没有缺省适配器"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 436,
+    "text": "没有打开会话：先调用 open_session()"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 451,
+    "text": "继续上次中断的回合。"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 536,
+    "text": "没有可用的 provider"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 734,
+    "text": "未配置压缩所需的模型服务"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 776,
+    "text": "失败"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 441,
+    "text": "思考中…"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 672,
+    "text": "模型没有返回任何正文"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 514,
+    "text": "回合失败："
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 663,
+    "text": "provider 声明 tool_use 但未返回工具调用"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 669,
+    "text": "工具调用超过 "
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 669,
+    "text": " 轮，已中止"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 330,
+    "text": "回合失败："
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 505,
+    "text": "已停止"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 507,
+    "text": "就绪"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 463,
+    "text": "就绪"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_vm.py",
+    "line": 614,
+    "text": "本轮已被用户停止，工具未执行。"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 27,
+    "text": "Anthropic 协议"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 28,
+    "text": "OpenAI Chat 协议"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 29,
+    "text": "OpenAI Responses 协议"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 228,
+    "text": "服务商已移除，但密钥删除失败（请手动清理）"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 362,
+    "text": "未装配模型网关"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 365,
+    "text": "拉取模型清单失败"
+  },
+  {
+    "file": "app/src/mvvm/view_models/settings_vm.py",
+    "line": 351,
+    "text": "密钥保存失败："
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 26,
+    "text": "刚刚"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 28,
+    "text": " 分钟前"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 30,
+    "text": " 小时前"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 32,
+    "text": " 天前"
+  },
+  {
+    "file": "app/src/mvvm/view_models/chat_sessions_vm.py",
+    "line": 39,
+    "text": "未命名对话"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 37,
+    "text": "Application exit code:"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 47,
+    "text": "Cleaned build/ and dist/"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 56,
+    "text": "PBS release:"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 118,
+    "text": "ai_upper - standalone Python application builder"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 134,
+    "text": "remove paths from site-packages; repeatable (relative glob)"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 136,
+    "text": "never remove matching site-packages paths; repeatable"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 138,
+    "text": "remove paths from the bundled runtime; repeatable"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 140,
+    "text": "never remove matching runtime paths; repeatable"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 143,
+    "text": "pack application code into an encrypted bundle archive for this build"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 145,
+    "text": "ship loose application files even when the project enables the egg"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 147,
+    "text": "override [tool.ai_upper.egg].key_hex (at least 16 hex bytes)"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 149,
+    "text": "egg extension loader: auto, memory or extract"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 203,
+    "text": "[2/6] Third-party dependencies"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 205,
+    "text": "[3/6] Target launcher"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 207,
+    "text": "[4/6] Package + native dependency closure"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 209,
+    "text": "[5/6] Static verification"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 212,
+    "text": "[6/6] Target runtime smoke"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 236,
+    "text": "Linux release: use your distribution signing/package system."
+  },
+  {
+    "file": "tools/build.py",
+    "line": 252,
+    "text": "macOS release requires codesign/xcrun and --identity"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 35,
+    "text": "Packaged executable missing: "
+  },
+  {
+    "file": "tools/build.py",
+    "line": 132,
+    "text": "add a named trim rule set for this build: "
+  },
+  {
+    "file": "tools/build.py",
+    "line": 151,
+    "text": "egg archive compression: "
+  },
+  {
+    "file": "tools/build.py",
+    "line": 180,
+    "text": "Lock written:"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 220,
+    "text": "Release manifest:"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 242,
+    "text": "Windows release requires signtool and AI_UPPER_SIGN_CERT"
+  },
+  {
+    "file": "tools/build.py",
+    "line": 185,
+    "text": "--run requires host target; host="
+  },
+  {
+    "file": "tools/build.py",
+    "line": 225,
+    "text": "ERROR: command failed with exit code "
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 39,
+    "text": "command line error"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 40,
+    "text": "fatal error"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 42,
+    "text": "Traceback \\(most recent call last\\)"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 52,
+    "text": "failed with exit (?:code|status)"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 254,
+    "text": "(empty log)"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 168,
+    "text": "::%s title=%s::%s"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 173,
+    "text": "path to the log file"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 174,
+    "text": "annotation title"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 177,
+    "text": "file holding the step's exit code; exit 0 downgrades to a notice"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 182,
+    "text": "what to call the log when it is missing (e.g. 'build.log')"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 188,
+    "text": "force the annotation level instead of deriving it from the exit code"
+  },
+  {
+    "file": "tools/ci_tail.py",
+    "line": 210,
+    "text": "%s was not created: the step failed before it could write one."
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 293,
+    "text": " import main\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 571,
+    "text": "No development Python found. Set AI_UPPER_PYTHON or install Python."
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 180,
+    "text": "[tool.ai_upper.dependencies].manylinux must not be empty"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 244,
+    "text": "[project].version is required"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 256,
+    "text": "[tool.ai_upper.app].name must be a single application name"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 263,
+    "text": "[tool.ai_upper.app].identifier must not be empty"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 342,
+    "text": "[tool.ai_upper.runtime].python must be an exact X.Y.Z Python version"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 368,
+    "text": "[tool.ai_upper.runtime].runtime is required when provider = 'local'"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 375,
+    "text": "[tool.ai_upper.runtime].sdk is required when provider = 'local'"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 422,
+    "text": "[tool.ai_upper.cython].merge must be one of: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 466,
+    "text": "[tool.ai_upper.native].exclude must be an array of glob patterns"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 619,
+    "text": "Target Python executable not found under "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 634,
+    "text": "Target Python include directory not found under "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 683,
+    "text": "[tool.ai_upper.build].jobs must not be negative"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 691,
+    "text": "[tool.ai_upper.build].incremental must be a boolean"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 82,
+    "text": "Unsupported target: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 176,
+    "text": "[tool.ai_upper.dependencies].manylinux must be a manylinux_X_Y string or an array of them"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 183,
+    "text": "[tool.ai_upper.dependencies].manylinux must be manylinux_X_Y or manylinux2014"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 210,
+    "text": " is missing.\nCreate your local configuration from the tracked template:\n    cp "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 274,
+    "text": "[tool.ai_upper].entry must stay under app/src"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 276,
+    "text": "Application entry file does not exist: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 320,
+    "text": "Unsupported host: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 329,
+    "text": "Unknown target: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 349,
+    "text": "Unsupported runtime provider: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 487,
+    "text": " must not be negative"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 552,
+    "text": "ai_upper build tool requires Python "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 552,
+    "text": "+; current interpreter is "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 577,
+    "text": "Development Python not found: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 583,
+    "text": "Could not determine development Python version: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 586,
+    "text": "Development Python "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 586,
+    "text": " is too old; Python 3.8+ is required: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 654,
+    "text": "Target Python "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 654,
+    "text": " does not match configured runtime Python "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 679,
+    "text": "[tool.ai_upper.build].jobs must be an integer"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 485,
+    "text": " must be an integer"
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 596,
+    "text": "Windows embeddable interpreter missing: "
+  },
+  {
+    "file": "tools/ai_upper/config.py",
+    "line": 579,
+    "text": "import sys; print(sys.version_info[0], sys.version_info[1])"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 549,
+    "text": "[launcher smoke]"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 223,
+    "text": "application site-packages"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 259,
+    "text": "no generated source/cache files in site-packages"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 299,
+    "text": "launcher subsystem: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 480,
+    "text": "SKIP target runtime smoke: cross target"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 540,
+    "text": "SKIP launcher smoke: cross target"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 83,
+    "text": "merged bundle stored "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 139,
+    "text": "egg native dependencies portable"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 234,
+    "text": "entry module Cythonized: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 263,
+    "text": "third-party wheel manifest"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 297,
+    "text": "launcher subsystem="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 325,
+    "text": "no entry sidecar next to the launcher"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 358,
+    "text": "runtime pip/ensurepip removed"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 364,
+    "text": "Windows embed runtime is flat"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 408,
+    "text": "native binaries checked="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 199,
+    "text": "merged bundle modules "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 228,
+    "text": "runtime manifest format="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 240,
+    "text": "encrypted egg "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 250,
+    "text": "egg memory backend helper _memimporter"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 295,
+    "text": "launcher subsystem: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 333,
+    "text": "embedded entry "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 344,
+    "text": "packaged egg magic"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 353,
+    "text": "embedded egg loader"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 82,
+    "text": "merged bundle in egg: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 89,
+    "text": "arch bundle "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 178,
+    "text": "source removed "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 186,
+    "text": "merged bundle "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 195,
+    "text": "egg merged bundle "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 196,
+    "text": "merged bundle not loose "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 211,
+    "text": "package marker not compiled "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 213,
+    "text": "source removed "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 214,
+    "text": "no per-module extension "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 230,
+    "text": "runtime manifest: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 243,
+    "text": "encrypted egg magic"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 267,
+    "text": "third-party requirements match"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 269,
+    "text": "third-party direct imports recorded"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 346,
+    "text": "packaged egg members="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 362,
+    "text": "Windows embed runtime "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 368,
+    "text": "launcher arch="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 467,
+    "text": "import importlib\nmodules = "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 468,
+    "text": "\nfor name in modules:\n    importlib.import_module(name)\nprint('SMOKE PASS', len(modules), 'modules (launcher registers merged bundles)' if "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 91,
+    "text": "arch bundle "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 136,
+    "text": "egg native dependency "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 136,
+    "text": "; use --no-egg for application extensions with custom linked libraries"
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 176,
+    "text": "egg extension "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 177,
+    "text": "extension not loose "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 207,
+    "text": "package marker "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 209,
+    "text": "egg package marker "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 210,
+    "text": "package marker not loose "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 245,
+    "text": "encrypted egg members="
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 348,
+    "text": "packaged egg members: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 370,
+    "text": "launcher arch: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 407,
+    "text": "native arch "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 190,
+    "text": "arch bundle "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 247,
+    "text": "encrypted egg members: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 271,
+    "text": "third-party manifest: "
+  },
+  {
+    "file": "tools/ai_upper/verify.py",
+    "line": 192,
+    "text": "arch bundle "
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 57,
+    "text": "Network request failed (HTTP "
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 57,
+    "text": "; retrying in "
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 67,
+    "text": "Network request failed for "
+  },
+  {
+    "file": "tools/ai_upper/net.py",
+    "line": 67,
+    "text": "; retrying in "
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 147,
+    "text": " contains an empty glob pattern"
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 149,
+    "text": " glob must be relative to the trim root: "
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 152,
+    "text": " glob must not contain empty, '.' or '..' segments: "
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 212,
+    "text": "[tool.ai_upper.trim].preset must be one of: "
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 385,
+    "text": "Trim root is not a directory: "
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 129,
+    "text": " must be a glob string or an array of glob strings"
+  },
+  {
+    "file": "tools/ai_upper/trim.py",
+    "line": 133,
+    "text": " must contain only glob strings"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 22,
+    "text": "[project].dependencies must be an array of requirement strings"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 31,
+    "text": "[tool.ai_upper.dependencies].find_links must be an array"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 277,
+    "text": "Unsupported wheel data bucket "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 419,
+    "text": "[tool.ai_upper.optimize].profile must be 'safe' or 'aggressive'"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 156,
+    "text": "Could not parse dependency name: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 244,
+    "text": "Unsafe wheel member path: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 266,
+    "text": "Invalid wheel .data member: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 407,
+    "text": "No compatible binary wheel resolved for "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 484,
+    "text": "Third-party optimization: removed "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 484,
+    "text": " files and "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 134,
+    "text": "Third-party resolver failed ("
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 253,
+    "text": "Wheel must contain exactly one .dist-info/METADATA: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 263,
+    "text": "Invalid wheel .data member: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 365,
+    "text": "Locked wheel manifest does not match configured target"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 367,
+    "text": "Locked wheel requirements do not match app/pyproject.toml"
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 377,
+    "text": "Locked build has no recorded wheels for "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 380,
+    "text": "Locked wheel set mismatch: expected "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 454,
+    "text": "Qt pruning: removed "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 118,
+    "text": "Target SDK Python has no pip: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 384,
+    "text": "Wheel checksum mismatch: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 299,
+    "text": "Wheel file collision with different content: "
+  },
+  {
+    "file": "tools/ai_upper/third_party.py",
+    "line": 374,
+    "text": "Locked wheel requirements do not match app/pyproject.toml"
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 32,
+    "text": "Runtime manifest not found: "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 35,
+    "text": "Invalid runtime manifest root: "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 96,
+    "text": "Runtime/SDK missing for "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 45,
+    "text": " must not escape "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 50,
+    "text": " must be inside "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 50,
+    "text": " for a portable manifest"
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 94,
+    "text": "Runtime manifest "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 100,
+    "text": "Runtime manifest "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 100,
+    "text": " must be a relative SDK path without '..'"
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 102,
+    "text": "Runtime manifest "
+  },
+  {
+    "file": "tools/ai_upper/manifest.py",
+    "line": 102,
+    "text": " does not exist: "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 80,
+    "text": "PBS runtime SHA256 mismatch: expected "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 87,
+    "text": "Unexpected PBS runtime archive layout: "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 106,
+    "text": "No Windows embeddable runtime for "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 166,
+    "text": "Local runtime/SDK missing: runtime="
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 65,
+    "text": "PBS full-build SDK has no install runtime tree: "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 141,
+    "text": "Duplicate member in Python embeddable ZIP: "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 149,
+    "text": "Incomplete Python embeddable ZIP "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 32,
+    "text": "Unsafe archive path: "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 129,
+    "text": " has no official embeddable ZIP for "
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 130,
+    "text": "); pin a version python.org publishes an embeddable ZIP for"
+  },
+  {
+    "file": "tools/ai_upper/runtime.py",
+    "line": 147,
+    "text": "Unsafe embed archive path: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 110,
+    "text": "Unknown PBS asset kind: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 157,
+    "text": "\nuv moves this file between releases; update PBS_RUNTIME_METADATA_URLS in tools/ai_upper/pbs.py."
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 237,
+    "text": "install_only_stripped runtime"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 239,
+    "text": "full SDK"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 241,
+    "text": "No PBS "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 241,
+    "text": " asset for Python "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 241,
+    "text": " in release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 241,
+    "text": ".\nRequested Python: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 242,
+    "text": "\nPBS release: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 244,
+    "text": "\nAvailable runtime Python versions: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 245,
+    "text": "\nAvailable SDK Python versions: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 246,
+    "text": "\nSet [tool.ai_upper.pbs].release to a release containing the requested exact Python version; ai_upper will not silently substitute another version."
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 357,
+    "text": "Extracting PBS SDK requires tar on PATH"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 65,
+    "text": "No Windows embeddable runtime for "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 91,
+    "text": "Empty PBS SHA256SUMS for release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 153,
+    "text": ": expected a JSON object, got "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 155,
+    "text": "Could not fetch the uv python-build-standalone metadata index.\n"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 296,
+    "text": "No PBS runtime metadata for exact Python "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 301,
+    "text": "PBS runtime metadata has no release build tag: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 363,
+    "text": "Unable to extract "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 363,
+    "text": ": tar could not read zstd archive and zstd is not installed"
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 376,
+    "text": "PBS full SDK has no PYTHON.json: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 403,
+    "text": "PBS full SDK contains no Python.h: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 406,
+    "text": "PBS full SDK holds several Python.h and its PYTHON.json records none: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 445,
+    "text": "PBS full SDK has no python/install directory: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 478,
+    "text": "PBS SDK SHA256 mismatch: expected "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 506,
+    "text": "PBS SDK marker missing under "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 85,
+    "text": "Invalid PBS SHA256SUMS for release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 85,
+    "text": " at line "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 88,
+    "text": "Duplicate PBS SHA256SUMS entry for release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 228,
+    "text": "No PBS SDK asset shares the "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 228,
+    "text": " flavour of runtime "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 228,
+    "text": ".\nSDK assets offered for this release: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 287,
+    "text": "No PBS runtime metadata for exact Python "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 287,
+    "text": ".\nRequested Python: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 289,
+    "text": "\nAvailable Python versions from PBS metadata for this target: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 290,
+    "text": "\nai_upper will not silently substitute another Python version."
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 269,
+    "text": "PBS release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 269,
+    "text": " publishes no SHA256SUMS. Releases before 20210724 predate that inventory; leave [tool.ai_upper.pbs].release empty so the uv metadata index can select the exact full build."
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 313,
+    "text": "PBS release "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 313,
+    "text": " publishes no SHA256SUMS and its metadata asset is not a full build: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 314,
+    "text": "\nai_upper cannot resolve a matching SDK for this release."
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 434,
+    "text": "Target Python executable not found in PBS SDK: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 434,
+    "text": "\nPYTHON.json python_exe: "
+  },
+  {
+    "file": "tools/ai_upper/pbs.py",
+    "line": 435,
+    "text": "\nLooked for "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 114,
+    "text": "(no output)"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 178,
+    "text": "Zig download index entry is missing a tarball or shasum"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 402,
+    "text": "Unsupported target: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 88,
+    "text": "vswhere failed (exit "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 146,
+    "text": "vcvarsall.bat did not initialize the MSVC environment ("
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 170,
+    "text": "No executable Zig release for host "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 189,
+    "text": " is not published in "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 189,
+    "text": "; update ZIG_VERSION in tools/ai_upper/toolchain.py"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 241,
+    "text": " not found after unpacking the Zig archive under "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 291,
+    "text": "Windows targets with Zig require a Windows/macOS/Linux build host, not "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 357,
+    "text": "Windows targets require a Windows/MSVC build host; set AI_UPPER_WINDOWS_TOOLCHAIN=zig to opt into executable Zig"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 372,
+    "text": "macOS targets require a macOS build host"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 376,
+    "text": "Xcode Command Line Tools with clang/clang++ are required"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 386,
+    "text": "Linux targets require a Linux build host"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 64,
+    "text": "Microsoft Visual Studio"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 65,
+    "text": "Microsoft Visual Studio"
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 186,
+    "text": "Unable to resolve Zig "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 302,
+    "text": "Zig SHA256 mismatch for "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 363,
+    "text": "vcvarsall.bat not found: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 366,
+    "text": "Unsupported MSVC host/target pair: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 398,
+    "text": " compiler is unavailable for host "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 206,
+    "text": "Duplicate member in Zig archive: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 224,
+    "text": "Duplicate member in Zig archive: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 230,
+    "text": "Unsafe Zig archive path: "
+  },
+  {
+    "file": "tools/ai_upper/toolchain.py",
+    "line": 214,
+    "text": "Unsafe Zig archive path: "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 869,
+    "text": "import importlib, json, sys\nresult = {'loaded': [], 'absent': []}\nfor name in "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 872,
+    "text": ".' + name)\nfor name in "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 875,
+    "text": ".' + name)\n    except ImportError:\n        result['absent'].append(name)\nresult['loaded'] = sorted(m for m in sys.modules if m.startswith('"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 700,
+    "text": " must be 'all' or an array of strings"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 709,
+    "text": " must be true or false"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 896,
+    "text": "(no output)"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 897,
+    "text": "Qt pruning: "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 897,
+    "text": " cannot import "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 908,
+    "text": "Qt pruning: %s has no %s; the application imports %s behind ImportError and starts without"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 938,
+    "text": "[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 941,
+    "text": "Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 951,
+    "text": "[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 958,
+    "text": "Qt pruning: cannot run the "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 958,
+    "text": " runtime on this host, keeping the full Qt payload"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 97,
+    "text": "Qt pruning: cannot parse "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 691,
+    "text": " must not be empty"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 696,
+    "text": " must be a non-empty array of strings"
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 903,
+    "text": "Qt pruning: "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 903,
+    "text": " printed no "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 903,
+    "text": " module list for "
+  },
+  {
+    "file": "tools/ai_upper/qt_prune.py",
+    "line": 949,
+    "text": "[tool.ai_upper.optimize].qt must not be an empty array"
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 63,
+    "text": "File collision: "
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 78,
+    "text": "Copy source directory does not exist: "
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 130,
+    "text": "Not a directory tree: "
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 51,
+    "text": ": Windows still reports this tree in use after "
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 52,
+    "text": "). Another process holds it: close the packaged application if it is still running from an earlier build, and check for an editor, indexer, or antivirus scan that is reading or executing the tree, then run the build again."
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 86,
+    "text": "File collision: "
+  },
+  {
+    "file": "tools/ai_upper/fs.py",
+    "line": 95,
+    "text": "File collision: "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 140,
+    "text": "\nfor name in modules: importlib.import_module(name)\nprint('SMOKE PASS launcher')\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 173,
+    "text": "the application entry"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 174,
+    "text": "the launcher smoke program"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 181,
+    "text": "const char* const kEggLoader = nullptr;\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 182,
+    "text": "const char* const kEggKey = \"\";\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 183,
+    "text": "const char* const kEggBackend = \"auto\";\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 222,
+    "text": "#include <winver.h>\n\nVS_VERSION_INFO VERSIONINFO\n FILEVERSION "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 259,
+    "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\"><dict><key>CFBundleExecutable</key><string>"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 140,
+    "text": "import importlib\nmodules = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 176,
+    "text": "the egg loader"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 177,
+    "text": "const char* const kEggLoader = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 178,
+    "text": "const char* const kEggKey = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 179,
+    "text": "const char* const kEggBackend = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 129,
+    "text": "Launcher build did not produce "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 153,
+    "text": " contains the C++ raw string delimiter )"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 155,
+    "text": " contains a triple quote and cannot be embedded in the bootstrap"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 265,
+    "text": "Native exclusions: removed "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 265,
+    "text": " file(s) matched by [tool.ai_upper.native].exclude"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 317,
+    "text": "Python stage missing: "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 319,
+    "text": "Runtime missing: "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 372,
+    "text": "Release output does not exist: "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 198,
+    "text": "extern const char* const kEggBackend;\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 92,
+    "text": "@echo off\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 82,
+    "text": "@echo off\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 196,
+    "text": "extern const char* const kEggKey;\n"
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 186,
+    "text": "// Generated by tools/ai_upper at packaging time: the programs the\n// launcher runs, so a packaged bundle ships no .int sidecar. Declared\n// extern so the definitions keep external linkage.\nnamespace ai_upper_embedded {\nextern const char* const kEntry;\nconst char* const kEntry = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 191,
+    "text": ";\nextern const char* const kSmoke;\nconst char* const kSmoke = "
+  },
+  {
+    "file": "tools/ai_upper/package.py",
+    "line": 193,
+    "text": ";\nextern const char* const kEggLoader;\n"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 102,
+    "text": "[tool.ai_upper.egg] must be a table"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 292,
+    "text": "egg_loader.py contains a triple quote and cannot be embedded"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 294,
+    "text": "egg_loader.py contains the C++ raw string delimiter )aiupper\""
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 332,
+    "text": "_memimporter is only available for Windows targets"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 340,
+    "text": "_memimporter must be compiled with the Zig toolchain; MSVC is not wired up. Use backend = 'extract' or install Zig."
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 74,
+    "text": "[tool.ai_upper.egg].key_hex must be a hexadecimal string"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 76,
+    "text": "[tool.ai_upper.egg].key_hex must contain at least 16 bytes"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 258,
+    "text": "egg input missing from site-packages: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 350,
+    "text": "vendored _memimporter sources are missing: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 375,
+    "text": "Zig completed but produced no _memimporter.pyd"
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 79,
+    "text": "[tool.ai_upper.egg].backend must be one of: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 82,
+    "text": "[tool.ai_upper.egg].compression must be one of: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 290,
+    "text": "egg_loader.py must be pure ASCII: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 311,
+    "text": " not found under the SDK tree "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 315,
+    "text": ".lib not found in "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 195,
+    "text": "egg input is missing: "
+  },
+  {
+    "file": "tools/ai_upper/egg.py",
+    "line": 310,
+    "text": "Import library of target Python "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 97,
+    "text": "Lock Python/runtime provider does not match app configuration"
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 102,
+    "text": "Lock dependency requirements do not match app/pyproject.toml"
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 92,
+    "text": "Lock file not found: "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 92,
+    "text": "; run python tools/build.py --lock"
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 95,
+    "text": "Unsupported lock format: "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 100,
+    "text": " is not present in "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 108,
+    "text": "Runtime manifest checksum mismatch for "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 114,
+    "text": "Locked Windows PBS build requires an official python.org embeddable runtime; recreate lock"
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 129,
+    "text": "Locked wheel set mismatch: expected "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 132,
+    "text": "Locked wheel checksum mismatch: "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 121,
+    "text": "Locked build requires cached PBS "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 124,
+    "text": "Locked PBS "
+  },
+  {
+    "file": "tools/ai_upper/lock.py",
+    "line": 124,
+    "text": " mismatch for "
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 74,
+    "text": "egg key must contain at least 16 bytes"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 72,
+    "text": "egg key must be a hexadecimal string"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 82,
+    "text": "unsafe egg member: "
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 223,
+    "text": "cannot publish egg cache: "
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 163,
+    "text": "egg backend must be one of: "
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 171,
+    "text": "egg is empty: "
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 186,
+    "text": "egg backend memory requires _memimporter in the bundle"
+  },
+  {
+    "file": "tools/ai_upper/egg_loader.py",
+    "line": 178,
+    "text": "bad egg, not a zip or wrong key: "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 514,
+    "text": "compile_merged_unix_extensions only supports Unix targets"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 577,
+    "text": "import os\nfrom setuptools import setup, Extension\nfrom setuptools.command.build_ext import build_ext as _build_ext\nTARGET_INCLUDE="
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 584,
+    "text": "\nclass TargetBuildExt(_build_ext):\n    def finalize_options(self):\n        super().finalize_options()\n        self.include_dirs=[TARGET_INCLUDE]\n        self.library_dirs=[TARGET_LIBDIR]\n    def get_ext_fullpath(self, ext_name):\n        fullname = self.get_ext_fullname(ext_name)\n        return os.path.join(self.build_lib, *fullname.split('.')) + TARGET_SUFFIX\n    def get_export_symbols(self, ext):\n        # A bundle has no PyInit_<bundle> entry point: every translation\n        # unit was renamed individually and register.c exports the single\n        # symbol the launcher resolves. MSVC would otherwise add\n        # /EXPORT:PyInit_<bundle> and fail with LNK2001.\n        return ['ai_upper_register_modules']\nextensions=[Extension(n,s,include_dirs=[TARGET_INCLUDE],library_dirs=[TARGET_LIBDIR],libraries=TARGET_LIBRARIES) for n,s in EXTENSIONS]\nsetup(name='ai-upper-target-merged',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 746,
+    "text": "import os\nfrom setuptools import setup, Extension\nfrom setuptools.command.build_ext import build_ext as _build_ext\nTARGET_INCLUDE="
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 754,
+    "text": "]\nclass TargetBuildExt(_build_ext):\n    def finalize_options(self):\n        super().finalize_options()\n        self.include_dirs=[TARGET_INCLUDE]\n        self.library_dirs=[TARGET_LIBDIR]\n    def get_ext_fullpath(self, ext_name):\n        fullname = self.get_ext_fullname(ext_name)\n        return os.path.join(self.build_lib, *fullname.split('.')) + TARGET_SUFFIX\nextensions=[Extension(n,[s],include_dirs=[TARGET_INCLUDE],library_dirs=[TARGET_LIBDIR],libraries=TARGET_LIBRARIES) for n,s in zip(NAMES,SOURCES)]\nsetup(name='ai-upper-target-native',ext_modules=extensions,cmdclass={'build_ext':TargetBuildExt})\n"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1084,
+    "text": "compile_unix_extensions only supports Unix targets"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 146,
+    "text": "import sys; print(f'{sys.version_info[0]}.{sys.version_info[1]}')"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 153,
+    "text": "import importlib.metadata as m; d=next(m.distributions(name='Cython'), None); print(d.version if d else '')"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 418,
+    "text": "static struct _inittab ai_upper_inittab[] = {"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 423,
+    "text": "#if defined(_WIN32)"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 424,
+    "text": "#define AI_UPPER_EXPORT __declspec(dllexport)"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 426,
+    "text": "#define AI_UPPER_EXPORT __attribute__((visibility(\"default\")))"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 429,
+    "text": "AI_UPPER_EXPORT int ai_upper_register_modules(void) {"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 430,
+    "text": "    return PyImport_ExtendInittab(ai_upper_inittab);"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 553,
+    "text": " merged bundle(s) changed"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 641,
+    "text": " merged bundle(s) changed"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 689,
+    "text": " merged bundle(s) changed"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1060,
+    "text": "Python stage ready: "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 342,
+    "text": " module(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 410,
+    "text": "extern PyObject* "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 445,
+    "text": "Cython generated no PyInit entry point in the translation unit for "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 449,
+    "text": "Cython generated more than one module entry point for "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 551,
+    "text": " merged bundle(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 639,
+    "text": " merged bundle(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 686,
+    "text": " merged bundle(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 811,
+    "text": "Import library of target Python "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 811,
+    "text": " not found under the SDK tree "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 812,
+    "text": "; it is a compiler input and is never taken from the runtime"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 816,
+    "text": ".lib not found in "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 875,
+    "text": " extension(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 930,
+    "text": " extension(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1059,
+    "text": "Encrypted egg: "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1059,
+    "text": " application file(s), backend="
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1114,
+    "text": " extension(s) up to date"
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 44,
+    "text": "Command failed ("
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 189,
+    "text": "Unable to bootstrap "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 353,
+    "text": "Cython completed but did not generate "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 475,
+    "text": "Cython output missing for "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 524,
+    "text": "Command failed ("
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 557,
+    "text": "Compiler completed but did not produce "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 645,
+    "text": "Zig completed but produced no "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 706,
+    "text": "Merged target extension missing: "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 883,
+    "text": "Zig compiler completed but did not produce "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 951,
+    "text": "Target extension missing: "
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1058,
+    "text": "warning: _memimporter unavailable ("
+  },
+  {
+    "file": "tools/ai_upper/python_build.py",
+    "line": 1058,
+    "text": "); egg falls back to extract"
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 30,
+    "text": "Image has the following dependencies"
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 158,
+    "text": "Collecting Linux host libraries requires ldconfig"
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 213,
+    "text": "cmd LC_RPATH"
+  },
+  {
+    "file": "tools/ai_upper/native/deps.py",
+    "line": 137,
+    "text": "ELF dependency inspection requires readelf or objdump (binutils)"
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 138,
+    "text": "Bundling external Linux libraries requires patchelf"
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 82,
+    "text": " requires lipo"
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 119,
+    "text": "strip_native=true requires llvm-strip or strip on PATH for Windows targets"
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 124,
+    "text": "strip_native=true requires strip on PATH"
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 128,
+    "text": "strip failed for "
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 250,
+    "text": "\nOptional native payloads can be dropped with [tool.ai_upper.native].exclude in app/pyproject.toml."
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 68,
+    "text": "codesign failed for "
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 249,
+    "text": "Unresolved native dependencies:\n  "
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 222,
+    "text": "Native dependency: bundled "
+  },
+  {
+    "file": "tools/ai_upper/native/bundle.py",
+    "line": 218,
+    "text": "Native dependency basename collision: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 243,
+    "text": " A foreign payload that no bundled image loads can be dropped with [tool.ai_upper.native].exclude in app/pyproject.toml."
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 98,
+    "text": "Truncated Mach-O header"
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 108,
+    "text": "Truncated Mach-O universal header"
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 196,
+    "text": "Unsupported or invalid native binary: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 113,
+    "text": "Truncated Mach-O universal header: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 178,
+    "text": "Mach-O universal"
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 207,
+    "text": "Unsupported target OS: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 267,
+    "text": "Architecture mismatch: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 134,
+    "text": "Invalid Mach-O slice bounds: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 186,
+    "text": "Invalid ELF byte order: "
+  },
+  {
+    "file": "tools/ai_upper/native/inspect.py",
+    "line": 261,
+    "text": "Architecture mismatch: "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_re.py",
+    "line": 23,
+    "text": "\n0\n(?:\n    x[0-9A-Fa-f](?:_?[0-9A-Fa-f])*   # hex\n    |\n    b[01](?:_?[01])*                 # bin\n    |\n    o[0-7](?:_?[0-7])*               # oct\n)\n|\n[+-]?(?:0|[1-9](?:_?[0-9])*)         # dec, integer part\n(?P<floatpart>\n    (?:\\.[0-9](?:_?[0-9])*)?         # optional fractional part\n    (?:[eE][+-]?[0-9](?:_?[0-9])*)?  # optional exponent part\n)\n"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_re.py",
+    "line": 47,
+    "text": "\n    (?:([Zz])|([+-])([01][0-9]|2[0-3]):([0-5][0-9]))?  # optional time offset\n)?\n"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 487,
+    "text": "Invalid initial character for a key part"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 746,
+    "text": "Invalid value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 118,
+    "text": "end of document"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 378,
+    "text": "Expected ']' at the end of a table declaration"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 401,
+    "text": "Expected ']]' at the end of an array declaration"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 432,
+    "text": "Cannot overwrite a value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 449,
+    "text": "Expected '=' after a key in a key/value pair"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 591,
+    "text": "Invalid hex value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 596,
+    "text": "Escaped character is not a Unicode scalar value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 97,
+    "text": "Free-form arguments for TOMLDecodeError are deprecated. Please set 'msg' (str), 'doc' (str) and 'pos' (int) arguments only."
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 138,
+    "text": "File must be opened in binary mode, e.g. use `open('foo.toml', 'rb')`"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 207,
+    "text": "Expected newline or end of document after a statement"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 338,
+    "text": "Found invalid character "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 369,
+    "text": "Cannot declare "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 374,
+    "text": "Cannot overwrite a value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 389,
+    "text": "Cannot mutate immutable namespace "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 397,
+    "text": "Cannot overwrite a value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 424,
+    "text": "Cannot mutate immutable namespace "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 430,
+    "text": "Cannot overwrite a value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 513,
+    "text": "Unclosed array"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 548,
+    "text": "Unclosed inline table"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 581,
+    "text": "Unescaped '\\' in a string"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 680,
+    "text": "TOML inline arrays/tables are nested more than the allowed "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 768,
+    "text": "parse_float must not return dicts or lists"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 152,
+    "text": "Expected str object, not '"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 291,
+    "text": "There is no nest behind this key"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 300,
+    "text": "An object other than list found behind this key"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 417,
+    "text": "Cannot redefine namespace "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 535,
+    "text": "Cannot mutate immutable namespace "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 539,
+    "text": "Cannot overwrite a value"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 541,
+    "text": "Duplicate inline table key "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 570,
+    "text": "Unescaped '\\' in a string"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 654,
+    "text": "Unterminated string"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 669,
+    "text": "Illegal character "
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 725,
+    "text": "Invalid date or datetime"
+  },
+  {
+    "file": "tools/ai_upper/_vendor/tomli/_parser.py",
+    "line": 195,
+    "text": "Invalid statement"
+  }
+]

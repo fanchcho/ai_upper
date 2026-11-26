@@ -1,0 +1,626 @@
+[
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 88,
+    "text": "{used}/{window} ({pct})",
+    "key": "chat.panel.usage"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 92,
+    "text": "~{n}",
+    "key": "chat.panel.approx"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 94,
+    "text": "Context",
+    "key": "chat.panel.context"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 177,
+    "text": "Context",
+    "key": "chat.panel.context"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 44,
+    "text": "回答",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "允许",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "text": "提交",
+    "key": "cf.git.commitDo"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "拒绝",
+    "key": "cf.reject"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "text": "关闭",
+    "key": "cf.close"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 24,
+    "text": "Mount workspace",
+    "key": "cf.mountWorkspace"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 45,
+    "text": "Deva",
+    "key": "chat.role.agent"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 54,
+    "text": "Deva",
+    "key": "chat.role.agent"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 535,
+    "text": "Search chats",
+    "key": "cf.searchChats"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 612,
+    "text": "Archived chats (",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 681,
+    "text": "Deva",
+    "key": "chat.role.agent"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 712,
+    "text": "No matches",
+    "key": "cf.searchNoResults"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 714,
+    "text": "No archived conversations",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 715,
+    "text": "No conversations",
+    "key": "chat.noSessions"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 738,
+    "text": "Archived chats (",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 767,
+    "text": " selected",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "text": "Deselect all",
+    "key": "cf.selectNone"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "text": "Select all",
+    "key": "cf.selectAll"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 913,
+    "text": "Start a conversation",
+    "key": "cf.quickStartTitle"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 935,
+    "text": "Pick a persona — tap its avatar to begin",
+    "key": "cf.quickStartHint"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1210,
+    "text": "交付文件",
+    "key": "chat.deliver.title"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1220,
+    "text": " 个文件",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1277,
+    "text": "文件已不存在",
+    "key": "chat.deliver.missing"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "text": "Message ",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "text": "Assistant",
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1525,
+    "text": "Mount workspace",
+    "key": "cf.mountWorkspace"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1561,
+    "text": "Send",
+    "key": "cf.send"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1805,
+    "text": "无法打开该文件，可在文件夹中查看",
+    "key": "chat.deliver.openFailed"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1812,
+    "text": "无法在文件夹中显示该文件",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1819,
+    "text": "无法复制该路径",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1851,
+    "text": "归档对话失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1884,
+    "text": "重命名对话失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1930,
+    "text": "部分对话归档失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1960,
+    "text": "删除对话失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1992,
+    "text": "切换模型失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2003,
+    "text": "切换思考等级失败",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2097,
+    "text": "New chat",
+    "key": "cf.newChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2098,
+    "text": "Rename",
+    "key": "cf.renameChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2099,
+    "text": "Select",
+    "key": "cf.multiSelect"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2100,
+    "text": "Archive",
+    "key": "cf.archive"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2101,
+    "text": "Delete",
+    "key": "cf.profile.memDelete"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2199,
+    "text": "Delete conversation “",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2212,
+    "text": "This conversation and all its messages will be permanently removed. This cannot be undone.",
+    "key": "cf.deleteChatConfirm"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2229,
+    "text": "Cancel",
+    "key": "cf.selCancel"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2257,
+    "text": "Delete",
+    "key": "cf.profile.memDelete"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2319,
+    "text": "Rename conversation",
+    "key": "cf.renameChatTitle"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2342,
+    "text": "Leave empty to restore the default title",
+    "key": "cf.renamePlaceholder"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2382,
+    "text": "Cancel",
+    "key": "cf.selCancel"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2410,
+    "text": "Rename",
+    "key": "cf.renameChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2522,
+    "text": "Assistant",
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2523,
+    "text": "Assistant",
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 15,
+    "text": "Saved",
+    "key": "models.keySaved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "Custom model",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "MCP servers",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "text": "Personas",
+    "key": "cf.filterRoles"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 33,
+    "text": "Empty address follows the current session model.",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 42,
+    "text": "Select an entry",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 83,
+    "text": "ID (new ID creates an entry)",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 84,
+    "text": "Base URL",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 85,
+    "text": "Model name",
+    "key": "models.displayName"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 86,
+    "text": "Command (stdio)",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 87,
+    "text": "Arguments (JSON array)",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 88,
+    "text": "Enabled",
+    "key": "models.enabled"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "text": "执行命令、写文件和 MCP 调用前审批",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "已设置",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "text": "未设置",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 91,
+    "text": "New API key / credential (empty keeps current)",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 105,
+    "text": "Persona Markdown",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 113,
+    "text": "Save",
+    "key": "cf.save"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 121,
+    "text": "Invalid JSON arguments",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 126,
+    "text": "Delete",
+    "key": "cf.profile.memDelete"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 129,
+    "text": "Clear credential",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 134,
+    "text": "Invalid JSON arguments",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 69,
+    "text": "Settings",
+    "key": "cf.settings"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 128,
+    "text": "General",
+    "key": "chat.subagent.fallback"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 129,
+    "text": "Models",
+    "key": "models.modelList"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 130,
+    "text": "Extensions",
+    "key": "extensions.title"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 131,
+    "text": "About",
+    "key": "settings.about"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 132,
+    "text": "Custom model",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 133,
+    "text": "MCP",
+    "key": "cf.kindMcp"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 134,
+    "text": "Personas",
+    "key": "cf.filterRoles"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 297,
+    "text": "General",
+    "key": "chat.subagent.fallback"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 311,
+    "text": "Language",
+    "key": "settings.language"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 312,
+    "text": "简体中文",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 319,
+    "text": "Theme",
+    "key": "settings.theme"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 320,
+    "text": "System",
+    "key": "settings.themeSystem"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 320,
+    "text": "Light",
+    "key": "settings.themeLight"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 320,
+    "text": "Dark",
+    "key": "settings.themeDark"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 326,
+    "text": "Text size",
+    "key": "settings.chatFontSize"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "text": "Small",
+    "key": "settings.chatFontSm"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "text": "Default",
+    "key": "settings.chatFontMd"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "text": "Large",
+    "key": "settings.chatFontLg"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "text": "Extra large",
+    "key": "settings.chatFontXl"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 538,
+    "text": "自定义模型网络",
+    "key": null
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1284,
+    "text": "Extensions",
+    "key": "extensions.title"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1477,
+    "text": "About",
+    "key": "settings.about"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1501,
+    "text": "Deva",
+    "key": "chat.role.agent"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1511,
+    "text": "Version",
+    "key": "settings.version"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1564,
+    "text": "Checking…",
+    "key": "settings.update.checking"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1565,
+    "text": "Check for updates",
+    "key": "settings.update.check"
+  }
+]

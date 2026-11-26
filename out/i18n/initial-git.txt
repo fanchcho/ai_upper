@@ -1,0 +1,17 @@
+本轮第一个只读工具调用的实际输出（修改前）：
+$ git -C /home/agent/shared_workspace/ai_upper log --oneline -8
+ccca79e fix(settings): bind all controls to deva light and dark themes
+315e407 docs(audit): record workspace mount screenshots and full verification
+6e59c78 fix(qml): contain file icons and persist picked workspaces
+b011b65 docs(audit): record three rejected cold rendering candidates
+055db71 docs(audit): close rejected idle prefetch investigation
+cf960b8 docs(audit): reject cold attachment regressions with measured evidence
+e1fbf80 docs(audit): verify cold and cached session frames and bounded memory
+b2de19d test(qml): await interaction prompt readiness
+$ git -C /home/agent/shared_workspace/ai_upper status --porcelain
+（空输出）
+$ git -C /home/agent/shared_workspace/ai_upper rev-parse HEAD
+ccca79e4523c29ac6f2a527ecc95faf1b9d698ff
+$ git -C /home/agent/shared_workspace/ai_upper ls-remote origin refs/heads/develop
+ccca79e4523c29ac6f2a527ecc95faf1b9d698ff refs/heads/develop
+exit=0

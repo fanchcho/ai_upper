@@ -1,0 +1,492 @@
+[
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 69,
+    "key": "cf.settings"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 128,
+    "key": "settings.general"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 129,
+    "key": "settings.models"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 130,
+    "key": "extensions.title"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 131,
+    "key": "settings.about"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 132,
+    "key": "native.message7"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 134,
+    "key": "cf.filterRoles"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 297,
+    "key": "settings.general"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 312,
+    "key": "settings.language"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 320,
+    "key": "settings.theme"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "key": "settings.themeSystem"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "key": "settings.themeLight"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 321,
+    "key": "settings.themeDark"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 327,
+    "key": "settings.chatFontSize"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "key": "settings.chatFontSm"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "key": "settings.chatFontMd"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "key": "settings.chatFontLg"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 328,
+    "key": "settings.chatFontXl"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 544,
+    "key": "native.message29"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1290,
+    "key": "extensions.title"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1483,
+    "key": "settings.about"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1517,
+    "key": "settings.version"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1570,
+    "key": "settings.update.checking"
+  },
+  {
+    "file": "app/src/qml/SettingsModal.qml",
+    "line": 1571,
+    "key": "settings.update.check"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 15,
+    "key": "models.keySaved"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "key": "native.message7"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "key": "native.message12"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 32,
+    "key": "cf.filterRoles"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 33,
+    "key": "native.message9"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 42,
+    "key": "native.message17"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 83,
+    "key": "native.message10"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 84,
+    "key": "native.message4"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 85,
+    "key": "models.displayName"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 86,
+    "key": "native.message6"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 87,
+    "key": "native.message3"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 88,
+    "key": "models.enabled"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 89,
+    "key": "native.message25"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "key": "native.message23"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 90,
+    "key": "native.message28"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 91,
+    "key": "native.message14"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 105,
+    "key": "native.message16"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 113,
+    "key": "cf.save"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 121,
+    "key": "native.message11"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 126,
+    "key": "common.delete"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 129,
+    "key": "native.message5"
+  },
+  {
+    "file": "app/src/qml/PluginSettingsPane.qml",
+    "line": 134,
+    "key": "native.message11"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 88,
+    "key": "chat.panel.usage"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 92,
+    "key": "chat.panel.approx"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 94,
+    "key": "chat.panel.context"
+  },
+  {
+    "file": "app/src/qml/ContextRing.qml",
+    "line": 177,
+    "key": "chat.panel.context"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 24,
+    "key": "cf.mountWorkspace"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 535,
+    "key": "cf.searchChats"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 612,
+    "key": "native.message2"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 712,
+    "key": "cf.searchNoResults"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 714,
+    "key": "native.message15"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 715,
+    "key": "chat.noSessions"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 738,
+    "key": "native.message2"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 767,
+    "key": "native.message0"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "key": "cf.selectNone"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 783,
+    "key": "cf.selectAll"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 913,
+    "key": "cf.quickStartTitle"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 935,
+    "key": "cf.quickStartHint"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1210,
+    "key": "chat.deliver.title"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1220,
+    "key": "native.message1"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1277,
+    "key": "chat.deliver.missing"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "key": "native.message13"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1450,
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1525,
+    "key": "cf.mountWorkspace"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1561,
+    "key": "cf.send"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1805,
+    "key": "chat.deliver.openFailed"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1812,
+    "key": "native.message26"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1819,
+    "key": "native.message27"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1851,
+    "key": "native.message24"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1884,
+    "key": "native.message31"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1930,
+    "key": "native.message30"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1960,
+    "key": "native.message21"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 1992,
+    "key": "native.message20"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2003,
+    "key": "native.message19"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2097,
+    "key": "cf.newChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2098,
+    "key": "cf.renameChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2099,
+    "key": "cf.multiSelect"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2100,
+    "key": "cf.archive"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2101,
+    "key": "common.delete"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2199,
+    "key": "native.message8"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2212,
+    "key": "cf.deleteChatConfirm"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2229,
+    "key": "common.cancel"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2257,
+    "key": "common.delete"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2319,
+    "key": "cf.renameChatTitle"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2342,
+    "key": "cf.renamePlaceholder"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2382,
+    "key": "common.cancel"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2410,
+    "key": "cf.renameChat"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2522,
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/Main.qml",
+    "line": 2523,
+    "key": "cf.assistant"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 44,
+    "key": "native.message22"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "key": "native.message18"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 46,
+    "key": "native.submit"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "key": "cf.reject"
+  },
+  {
+    "file": "app/src/qml/InteractionPrompt.qml",
+    "line": 47,
+    "key": "cf.close"
+  }
+]

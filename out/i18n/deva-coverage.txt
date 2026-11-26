@@ -1,0 +1,14 @@
+{
+  "zh-CN": {
+    "keys": 1383,
+    "missing": []
+  },
+  "en": {
+    "keys": 1382,
+    "missing": [
+      "chat.setup.change"
+    ]
+  }
+}
+zh-CN changed upstream values: []
+en changed upstream values: []

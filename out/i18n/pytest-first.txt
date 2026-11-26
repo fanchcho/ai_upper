@@ -1,0 +1,51 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................ss.............................................. [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+................................................s....................... [ 45%]
+........................................................................ [ 50%]
+......ssss.............................................................. [ 56%]
+........................................................................ [ 61%]
+........................................................................ [ 66%]
+........................................................................ [ 71%]
+...................................F.................................... [ 76%]
+........................................................................ [ 81%]
+........................................................................ [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+.............................................                            [100%]
+=================================== FAILURES ===================================
+______________ test_mount_picker_mouse_persist_cancel_and_reject _______________
+
+qapp = <PySide6.QtWidgets.QApplication(0x14ddbb90) at 0xffffa7aa9d00>
+tmp_path = PosixPath('/tmp/ai-upper-i18n-test/all/test_mount_picker_mouse_persis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffa34633f0>
+
+    def test_mount_picker_mouse_persist_cancel_and_reject(qapp, tmp_path, monkeypatch):
+        w, b, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            w.setProperty('page', 'chat')
+            _pump(qapp)
+            sid = w.property('activeId')
+            folder = tmp_path / 'chosen workspace'
+            folder.mkdir()
+            dialog = w.findChild(QObject, 'workspaceDialog')
+            chip = _find_item(w.contentItem(), 'mountChip')
+            before = store.session_path(sid).read_bytes()
+            _click(w, chip); _pump(qapp)
+            assert dialog.property('visible')
+            assert len(w.findChildren(QObject, 'workspaceDialog')) == 1
+>           assert b.beginWorkspace() == '目录选择框已打开'
+E           AssertionError: assert 'Folder picke... already open' == '目录选择框已打开'
+E             
+E             - 目录选择框已打开
+E             + Folder picker is already open
+
+app/tests/test_qml_workspace_mount.py:24: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_workspace_mount.py::test_mount_picker_mouse_persist_cancel_and_reject
+1 failed, 1403 passed, 9 skipped in 359.63s (0:05:59)
