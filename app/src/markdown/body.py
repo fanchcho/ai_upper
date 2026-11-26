@@ -39,6 +39,7 @@
 重新算一遍才是唯一站得住的路径。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Any, Callable, Optional
 
@@ -73,7 +74,7 @@ class BodyDocument:
     def __init__(self, style: Optional[BodyStyle] = None, content_width: float = 780.0,
                  highlight: bool = True) -> None:
         if not QT_AVAILABLE:  # pragma: no cover - 无 Qt 环境
-            raise ImportError("BodyDocument requires a Qt binding")
+            raise ImportError(tr('legacy.368997cd00d3'))
         from utils.emoji_font import ensure_emoji_font
         ensure_emoji_font()
         self.document = QTextDocument()
@@ -150,7 +151,7 @@ class BodyDocument:
     def set_scale(self, scale: float) -> None:
         scale = float(scale)
         if scale <= 0:
-            raise ValueError("text scale must be positive")
+            raise ValueError(tr('legacy.53f6e22fc48f'))
         self.set_style(_replace_scale(self.style, scale))
 
     def set_width(self, width: float) -> bool:

@@ -2,6 +2,7 @@
 Observable property system for MVVM
 支持属性变化通知和数据绑定
 """
+from locale_runtime import tr
 
 from typing import Any, Callable, Optional, List, TypeVar, Generic
 
@@ -57,7 +58,7 @@ class ObservableProperty(Generic[T]):
             try:
                 listener(event)
             except Exception as e:
-                print(f"Error in property changed listener: {e}")
+                print(tr('legacy.29a1c43bfb79' ,p1=e))
     
     def subscribe(self, callback: Callable[[PropertyChangedEvent], None]) -> Callable[[], None]:
         """

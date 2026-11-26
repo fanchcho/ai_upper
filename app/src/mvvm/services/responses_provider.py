@@ -12,6 +12,7 @@ Deva `providers/openai-responses.ts`：
 - `store: false`：不在服务端留存，也不使用 `previous_response_id`。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 from typing import Any, AsyncIterator, Optional
@@ -162,7 +163,7 @@ class ResponsesProvider(Provider):
     async def stream(self, request: GenerateRequest) -> AsyncIterator[StreamEvent]:  # type: ignore[override]
         if self.transport is None:
             raise ProviderError(
-                NormalizedError("invalid_request", "ResponsesProvider 未配置传输层：请传入 transport")
+                NormalizedError("invalid_request", tr('legacy.c9abf9e85d10'))
             )
         if self.cancel.cancelled:
             yield Done("aborted")

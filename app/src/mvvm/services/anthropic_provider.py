@@ -10,6 +10,7 @@
 - 错误：HTTP 错误走 `http_error`，流内 `error` 事件走 `inband_error`。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Any, AsyncIterator, Optional
 
@@ -204,7 +205,7 @@ class AnthropicProvider(Provider):
     async def stream(self, request: GenerateRequest) -> AsyncIterator[StreamEvent]:  # type: ignore[override]
         if self.transport is None:
             raise ProviderError(
-                NormalizedError("invalid_request", "AnthropicProvider 未配置传输层：请传入 transport")
+                NormalizedError("invalid_request", tr('legacy.f3be68b5b69e'))
             )
         if self.cancel.cancelled:
             # 用户已点停止：别再把请求发出去（省一次计费），直接按中止收尾。

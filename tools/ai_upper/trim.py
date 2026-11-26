@@ -15,6 +15,7 @@ Patterns are relative globs rather than host paths:
   that would otherwise be removed wholesale.
 """
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import os
 import re
@@ -126,11 +127,11 @@ def _pattern_tuple(value, where: str) -> tuple[str, ...]:
     elif isinstance(value, (list, tuple)):
         values = value
     else:
-        raise RuntimeError(f"{where} must be a glob string or an array of glob strings")
+        raise RuntimeError(tr('legacy.4d5a927039ed' ,p0=where))
     result: list[str] = []
     for item in values:
         if not isinstance(item, str):
-            raise RuntimeError(f"{where} must contain only glob strings")
+            raise RuntimeError(tr('legacy.32b457b4bc7a' ,p0=where))
         result.append(_validate_pattern(item, where))
     return tuple(result)
 
@@ -144,12 +145,12 @@ def _validate_pattern(pattern: str, where: str) -> str:
     """
     text = pattern.strip().replace("\\", "/")
     if not text:
-        raise RuntimeError(f"{where} contains an empty glob pattern")
+        raise RuntimeError(tr('legacy.987f64d06d3e' ,p0=where))
     if text.startswith("/") or text.startswith("//") or PureWindowsPath(text).drive:
-        raise RuntimeError(f"{where} glob must be relative to the trim root: {pattern!r}")
+        raise RuntimeError(tr('legacy.6a968a5bd748' ,p0=where, p2=repr(pattern)))
     parts = text.split("/")
     if any(part in {"", ".", ".."} for part in parts):
-        raise RuntimeError(f"{where} glob must not contain empty, '.' or '..' segments: {pattern!r}")
+        raise RuntimeError(tr('legacy.d207338c2cfb' ,p0=where, p2=repr(pattern)))
     return text
 
 
@@ -209,7 +210,7 @@ def _preset_name(value) -> str:
     name = str(value or "safe").strip().lower()
     if name not in PRESETS:
         choices = ", ".join(sorted(PRESETS))
-        raise RuntimeError(f"[tool.ai_upper.trim].preset must be one of: {choices}")
+        raise RuntimeError(tr('legacy.03e7db5f4363' ,p1=choices))
     return name
 
 
@@ -382,7 +383,7 @@ def trim_tree(root: Path, patterns: Sequence[str], keep: Sequence[str] = ()) -> 
     """
     root_path = Path(root)
     if not root_path.is_dir():
-        raise RuntimeError(f"Trim root is not a directory: {root_path}")
+        raise RuntimeError(tr('legacy.6a847c542ec6' ,p1=root_path))
     removals = tuple(_translate(pattern) for pattern in patterns)
     keeps = tuple(_translate(pattern) for pattern in keep)
     report = TrimReport()

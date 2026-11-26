@@ -18,6 +18,8 @@ View 只做绑定：输入、状态、错误、消息列表都是可观察属性
 `compact_now()`（对应 Deva 的 `/compact`）。
 """
 from __future__ import annotations
+from locale_runtime import tr
+from locale_runtime import tr
 
 import asyncio
 import queue
@@ -168,7 +170,7 @@ class ChatViewModel(BaseViewModel):
         self.input_text_property = PropertyFactory.create("", "input_text")
         self._register_property("input_text", self.input_text_property)
 
-        self.status_property = PropertyFactory.create("就绪", "status")
+        self.status_property = PropertyFactory.create(tr('legacy.b796f2d4ca85'), "status")
         self._register_property("status", self.status_property)
 
         self.error_property = PropertyFactory.create("", "error")
@@ -235,7 +237,7 @@ class ChatViewModel(BaseViewModel):
     def _apply_todo(self, tool_use_id: str, arguments: Any) -> ToolResult:
         """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
         if not self._session_id:
-            return ToolResult("当前没有打开的会话，无法记录待办清单。", True, "无会话")
+            return ToolResult(tr('legacy.03e273ff3b25'), True, tr('legacy.946734eab024'))
         session = self.store.ensure_session(self._session_id)
         applied = apply_todo_write_to(
             session.todos, session.todoCancelled, tool_use_id, arguments, now_ms()
@@ -284,7 +286,7 @@ class ChatViewModel(BaseViewModel):
         self.title_property.set_value(session.title)
         self.transcript_property.set_value(_display_messages(session.messages))
         self.todos_state_property.set_value(active_todo_list(session.todos, session.todoCancelled))
-        self.status_property.set_value("就绪")
+        self.status_property.set_value(tr('legacy.b796f2d4ca85'))
         self.error_property.set_value("")
 
     # ── 线程包装（界面用）─────────────────────────────────────────────────
@@ -327,7 +329,7 @@ class ChatViewModel(BaseViewModel):
                     )
                 )
             except Exception as exc:  # noqa: BLE001 - 线程边界：异常必须变成界面可见的错误
-                self._fail(f"回合失败：{exc}")
+                self._fail(tr('legacy.eb4efbaeb4ad' ,p1=exc))
             finally:
                 self._worker_ident = None
                 self._thread = None
@@ -377,7 +379,7 @@ class ChatViewModel(BaseViewModel):
         """用户点停止：只置取消标记，由回合内部在下一步检查点收尾。"""
         if self._cancel is not None and self.busy:
             self._cancel.cancel()
-            self.status_property.set_value("正在停止…")
+            self.status_property.set_value(tr('legacy.a6dd18c3f246'))
 
     # ── 流式刷新 ──────────────────────────────────────────────────────────
     def _push_streaming(self, text: str) -> None:
@@ -400,7 +402,7 @@ class ChatViewModel(BaseViewModel):
             return self.turn_factory(cancel, session_model)
         model = session_model or self.model
         if self.provider is None:
-            raise RuntimeError("没有可用的 provider：既没有 turn_factory 也没有缺省适配器")
+            raise RuntimeError(tr('legacy.aa91387b01cf'))
         return self.provider, model
 
     def _compact_model_now(self) -> Optional[CompactModel]:
@@ -433,12 +435,12 @@ class ChatViewModel(BaseViewModel):
         输入框为空」以及带「已忽略…」说明时。
         """
         if not self._session_id:
-            raise RuntimeError("没有打开会话：先调用 open_session()")
+            raise RuntimeError(tr('legacy.43738492f456'))
         body = question if question is not None else text
         self._ui(lambda: self.busy_property.set_value(True))
         self._ui(lambda: self.error_property.set_value(""))
         self._ui(lambda: self.streaming_property.set_value(""))
-        self._ui(lambda: self.status_property.set_value("思考中…"))
+        self._ui(lambda: self.status_property.set_value(tr('legacy.29653ff32b4f')))
         try:
             session = self.store.ensure_session(self._session_id)
             from mvvm.services.checkpoint_recovery import close_pending_tools
@@ -448,7 +450,7 @@ class ChatViewModel(BaseViewModel):
                 # Only a persisted pre-execution interaction may be reattached. A
                 # started operation is resolved from its journal and never rerun.
                 resume = lambda call: self.tools.execute(call.name, call.input, tool_use_id=call.id) if self.tools.interactions.has_operation(session.id, call.id) else None
-                body = '继续上次中断的回合。'
+                body = tr('legacy.a1e0818aab10')
             if close_pending_tools(session, self.tools.checkpoint, resume):
                 self.store.save(session.id)
             if self.identity_service is not None:
@@ -460,7 +462,7 @@ class ChatViewModel(BaseViewModel):
                     self.store.append_message(session.id, Message(role='assistant', content=[TextPart(text=reply)]))
                     self._append_display('user', text)
                     self._append_display('assistant', reply)
-                    self._ui(lambda: self.status_property.set_value('就绪'))
+                    self._ui(lambda: self.status_property.set_value(tr('legacy.b796f2d4ca85')))
                     self.emit({'type': 'done', 'stop': 'end_turn', 'text': reply})
                     return TurnOutcome(reply, 'end_turn')
             # 模型在回合开头定一次：中途改设置不影响这一轮（与 Deva 一轮内模型不变一致）。
@@ -502,16 +504,16 @@ class ChatViewModel(BaseViewModel):
                     )
                     self._append_display("assistant", answer)
             if stop == "aborted":
-                self._ui(lambda: self.status_property.set_value("已停止"))
+                self._ui(lambda: self.status_property.set_value(tr('legacy.75dddf524e4c')))
             else:
-                self._ui(lambda: self.status_property.set_value("就绪"))
+                self._ui(lambda: self.status_property.set_value(tr('legacy.b796f2d4ca85')))
             self.emit({"type": "done", "stop": stop, "text": answer})
             return TurnOutcome(answer, stop)
         except ProviderError as exc:
             self._fail(exc.error.message)
             return TurnOutcome("", "error")
         except Exception as exc:  # noqa: BLE001 - 回合边界：任何异常都要变成界面可见的错误
-            self._fail(f"回合失败：{exc}")
+            self._fail(tr('legacy.eb4efbaeb4ad' ,p1=exc))
             return TurnOutcome("", "error")
         finally:
             self.tools.close()
@@ -533,7 +535,7 @@ class ChatViewModel(BaseViewModel):
         answer = ""
         provider = provider if provider is not None else self.provider
         if provider is None:
-            raise RuntimeError("没有可用的 provider")
+            raise RuntimeError(tr('legacy.969a2eb8d325'))
         model = model or self.model
         for step in range(MAX_TOOL_STEPS + 1):
             session = self.store.ensure_session(session_id)
@@ -611,7 +613,7 @@ class ChatViewModel(BaseViewModel):
                     if cancel is not None and cancel.cancelled:
                         self.store.append_message(
                             session_id,
-                            tool_result_message(call, "本轮已被用户停止，工具未执行。", True),
+                            tool_result_message(call, tr('legacy.e1c6be578222'), True),
                         )
                         return text, "aborted"
                     result = self.tools.execute(call.name, call.input, tool_use_id=call.id)
@@ -660,16 +662,16 @@ class ChatViewModel(BaseViewModel):
             if stop_reason == "tool_use":
                 # 声明要调工具却没给调用：适配器行为异常，明确报错而不是当作正常结束。
                 raise ProviderError(
-                    _normalized("invalid_request", "provider 声明 tool_use 但未返回工具调用")
+                    _normalized("invalid_request", tr('legacy.34564c43784d'))
                 )
             answer = text
             break
         else:
             raise ProviderError(
-                _normalized("invalid_request", f"工具调用超过 {MAX_TOOL_STEPS} 轮，已中止")
+                _normalized("invalid_request", tr('legacy.008906a3e267' ,p1=MAX_TOOL_STEPS))
             )
         if not answer:
-            raise ProviderError(_normalized("server", "模型没有返回任何正文"))
+            raise ProviderError(_normalized("server", tr('legacy.72f60ab7b3ba')))
         return answer, "end_turn"
 
     # ── 压缩 ──────────────────────────────────────────────────────────────
@@ -731,7 +733,7 @@ class ChatViewModel(BaseViewModel):
         """手动压缩（`/compact`）。回调 `emit` 发 compacted 事件。"""
         model = self._compact_model_now()
         if self.provider_factory is None or model is None:
-            return CompactResult("failed", "未配置压缩所需的模型服务")
+            return CompactResult("failed", tr('legacy.eb50f4416300'))
         session = self.store.ensure_session(self._session_id)
         result = await compact_session(
             session,
@@ -773,7 +775,7 @@ class ChatViewModel(BaseViewModel):
     def _fail(self, message: str) -> None:
         def apply() -> None:
             self.error_property.set_value(message)
-            self.status_property.set_value("失败")
+            self.status_property.set_value(tr('legacy.3e3c8068bb0e'))
             self._append_display("error", message)
 
         self._ui(apply)

@@ -2,6 +2,7 @@
 Command system for MVVM
 支持命令绑定和异步命令执行
 """
+from locale_runtime import tr
 
 from typing import Callable, Any, Optional, Coroutine
 import asyncio
@@ -32,7 +33,7 @@ class RelayCommand:
             except TypeError:
                 return self._can_execute()
         except Exception as e:
-            print(f"Error checking command execution: {e}")
+            print(tr('legacy.01df9871a51a' ,p1=e))
             return False
     
     def execute(self, parameter: Any = None) -> None:
@@ -41,7 +42,7 @@ class RelayCommand:
             if self.can_execute(parameter):
                 self._execute(parameter)
         except Exception as e:
-            print(f"Error executing command: {e}")
+            print(tr('legacy.f1a2432836b9' ,p1=e))
     
     def subscribe_can_execute_changed(self, callback: Callable) -> Callable[[], None]:
         """
@@ -57,7 +58,7 @@ class RelayCommand:
             try:
                 listener()
             except Exception as e:
-                print(f"Error in can_execute_changed listener: {e}")
+                print(tr('legacy.1a5854cb0837' ,p1=e))
 
 
 class AsyncRelayCommand:
@@ -93,7 +94,7 @@ class AsyncRelayCommand:
             except TypeError:
                 return self._can_execute()
         except Exception as e:
-            print(f"Error checking command execution: {e}")
+            print(tr('legacy.01df9871a51a' ,p1=e))
             return False
     
     async def execute_async(self, parameter: Any = None) -> None:
@@ -106,7 +107,7 @@ class AsyncRelayCommand:
             self.notify_can_execute_changed()
             await self._execute(parameter)
         except Exception as e:
-            print(f"Error executing async command: {e}")
+            print(tr('legacy.a510aadb09e1' ,p1=e))
         finally:
             self._is_executing = False
             self.notify_can_execute_changed()
@@ -125,7 +126,7 @@ class AsyncRelayCommand:
                 # 否则直接运行
                 loop.run_until_complete(self.execute_async(parameter))
         except Exception as e:
-            print(f"Error executing async command: {e}")
+            print(tr('legacy.a510aadb09e1' ,p1=e))
     
     def subscribe_can_execute_changed(self, callback: Callable) -> Callable[[], None]:
         """订阅命令状态变化"""
@@ -138,4 +139,4 @@ class AsyncRelayCommand:
             try:
                 listener()
             except Exception as e:
-                print(f"Error in can_execute_changed listener: {e}")
+                print(tr('legacy.1a5854cb0837' ,p1=e))

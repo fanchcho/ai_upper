@@ -11,6 +11,7 @@
 本类不认识 Qt，可纯 Python 测试。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import copy
 import time
@@ -24,9 +25,9 @@ from mvvm.services.settings_service import SettingsService
 
 ADAPTERS = ("anthropic", "openai", "responses")
 ADAPTER_LABELS = {
-    "anthropic": "Anthropic 协议",
-    "openai": "OpenAI Chat 协议",
-    "responses": "OpenAI Responses 协议",
+    "anthropic": tr('legacy.7a82315e72bb'),
+    "openai": tr('legacy.92caa3d06c03'),
+    "responses": tr('legacy.3bcbadec45fd'),
 }
 EFFORT_LEVELS = ("default", "low", "medium", "high", "xhigh", "max")
 
@@ -62,7 +63,7 @@ def _provider_entry(provider: dict[str, Any], active_id: str, selected: bool) ->
         "id": identifier,
         "name": str(provider.get("name") or identifier),
         "adapter": adapter,
-        "adapter_label": ADAPTER_LABELS[adapter],
+        "adapter_label": ({'anthropic': tr('legacy.7a82315e72bb'), 'openai': tr('legacy.92caa3d06c03'), 'responses': tr('legacy.3bcbadec45fd')})[adapter],
         "base_url": str(provider.get("apiHost") or ""),
         "enabled": provider.get("enabled") is True,
         "models": model_list,
@@ -225,7 +226,7 @@ class SettingsViewModel(BaseViewModel):
         try:
             self.vault.delete_secret(provider_id)
         except Exception:  # noqa: BLE001 - 密钥删除失败不阻断服务商移除，但要说出来
-            self.message_property.set_value("服务商已移除，但密钥删除失败（请手动清理）")
+            self.message_property.set_value(tr('legacy.7c6e601ea4ce'))
         if self._selected_id == provider_id:
             self._selected_id = ""
         return True
@@ -348,7 +349,7 @@ class SettingsViewModel(BaseViewModel):
             else:
                 self.vault.delete_secret(provider_id)
         except Exception as exc:  # noqa: BLE001 - 密钥库不可用时界面要能提示
-            self.message_property.set_value(f"密钥保存失败：{exc}")
+            self.message_property.set_value(tr('legacy.6cbda0c09c93' ,p1=exc))
             return False
         if text:
             self.update_provider(provider_id, enabled=True)
@@ -359,10 +360,10 @@ class SettingsViewModel(BaseViewModel):
     async def fetch_models(self, provider_id: str) -> ListModelsResult:
         """设置页「拉取模型」：结果只回给界面；不自动写入配置（用户勾选后再加）。"""
         if self.gateway is None:
-            return ListModelsResult(False, kind="invalid_request", message="未装配模型网关")
+            return ListModelsResult(False, kind="invalid_request", message=tr('legacy.7f830163a197'))
         result = await self.gateway.list_models(provider_id)
         if not result.ok:
-            self.message_property.set_value(result.message or "拉取模型清单失败")
+            self.message_property.set_value(result.message or tr('legacy.91228ba66bac'))
         return result
 
     # ── 保存 ──────────────────────────────────────────────────────────────

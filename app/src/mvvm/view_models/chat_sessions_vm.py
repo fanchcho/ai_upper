@@ -9,6 +9,7 @@ Deva 的列表口径（`services/chat-store.ts`、渲染层 `store/chat.tsx`）�
 - 新建会话是**惰性**的：这里只发一个安全的新 id，真正建档发生在首条消息落盘时。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import secrets
 import time
@@ -23,20 +24,20 @@ def relative_time(updated_ms: int, now_ms: int | None = None) -> str:
     now = now_ms if now_ms is not None else int(time.time() * 1000)
     delta = max(0, now - int(updated_ms)) // 1000
     if delta < 60:
-        return "刚刚"
+        return tr('legacy.9e636642d6d4')
     if delta < 3600:
-        return f"{delta // 60} 分钟前"
+        return tr('legacy.cca145fe6835' ,p0=delta // 60)
     if delta < 86_400:
-        return f"{delta // 3600} 小时前"
+        return tr('legacy.f43f266bd07f' ,p0=delta // 3600)
     if delta < 86_400 * 30:
-        return f"{delta // 86_400} 天前"
+        return tr('legacy.9c439091a115' ,p0=delta // 86400)
     return time.strftime("%Y-%m-%d", time.localtime(updated_ms / 1000))
 
 
 def _entry(meta: Any, active_id: str = "") -> dict[str, Any]:
     return {
         "id": meta.id,
-        "title": meta.title or "未命名对话",
+        "title": meta.title or tr('legacy.8200c3d50b95'),
         "subtitle": relative_time(meta.updatedAt),
         "updated_at": meta.updatedAt,
         "active": meta.id == active_id,

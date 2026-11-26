@@ -11,21 +11,22 @@ Qt 富文本只支持 HTML 的一个子集（见 Qt 文档 Rich Text / Supported
 `transcript_html()` 同时返回需要注册的资源列表，`ChatPane` 负责按序 `addResource`。
 """
 from __future__ import annotations
+from locale_runtime import tr, display_text
 
 import base64
 from typing import Any, Iterable, Optional
 
 MESSAGE_ROLE_HEAD = {
-    "user": "你",
-    "assistant": "助手",
-    "tool": "工具",
-    "error": "错误",
-    "compaction": "压缩摘要",
-    "notice": "提示",
+    "user": tr('legacy.5630b886f9cd'),
+    "assistant": tr('legacy.9b0519a157ee'),
+    "tool": tr('legacy.a72ef18d9a0e'),
+    "error": tr('legacy.b859c7be7501'),
+    "compaction": tr('legacy.ed4240ed1fd4'),
+    "notice": tr('legacy.ab3656a956f5'),
 }
 
-TOOL_STATUS_OK = "成功"
-TOOL_STATUS_ERROR = "失败"
+TOOL_STATUS_OK = tr('legacy.51991a5d111a')
+TOOL_STATUS_ERROR = tr('legacy.3e3c8068bb0e')
 
 # 单张图片在正文里的最大显示宽度（像素）：再宽会撑破聊天区，正文滚动条只该出现在长文本上。
 IMAGE_MAX_WIDTH = 360
@@ -51,13 +52,13 @@ def _preserve(text: str) -> str:
 
 
 def tool_status_text(entry: dict[str, Any]) -> str:
-    return TOOL_STATUS_ERROR if entry.get("is_error") else TOOL_STATUS_OK
+    return (tr('legacy.3e3c8068bb0e')) if entry.get("is_error") else (tr('legacy.51991a5d111a'))
 
 
 def tool_card_title(entry: dict[str, Any]) -> str:
     """工具卡标题：`工具 read_file`；有摘要时附在后面。"""
-    name = str(entry.get("name") or "工具")
-    summary = str(entry.get("summary") or "").strip()
+    name = str(entry.get("name") or tr('legacy.a72ef18d9a0e'))
+    summary = display_text(entry.get("summary") or "").strip()
     return f"{name} · {summary}" if summary else name
 
 
@@ -99,16 +100,16 @@ def _tool_card(entry: dict[str, Any], image_index: list[int]) -> str:
             break
         index = image_index[0]
         image_index[0] += 1
-        name = _escape(image.get("name") or "图片")
+        name = _escape(image.get("name") or tr('legacy.be8da62ea113'))
         images.append(
             f'<p><img src="{image_placeholder(index)}" width="{IMAGE_MAX_WIDTH}"/></p>'
-            f'<p style="color:#667085;">［图片］{name}</p>'
+            f"<p style='color:#667085;'>［{tr('legacy.be8da62ea113')}］{name}</p>"
         )
     return (
         f'<table width="100%" cellspacing="0" cellpadding="8" '
         f'style="background-color:{background}; border:1px solid #e4e7ec;">'
         f'<tr><td>'
-        f'<p style="color:{color};"><b>{title}</b>（{TOOL_STATUS_ERROR if error else TOOL_STATUS_OK}）</p>'
+        f'<p style="color:{color};"><b>{title}</b>（{(tr('legacy.3e3c8068bb0e')) if error else (tr('legacy.51991a5d111a'))}）</p>'
         f'<p style="color:#344054;">{body}</p>'
         f"{''.join(images)}"
         f"</td></tr></table>"
@@ -116,9 +117,9 @@ def _tool_card(entry: dict[str, Any], image_index: list[int]) -> str:
 
 
 def _message(role: str, text: str, *, is_error: bool = False) -> str:
-    head = MESSAGE_ROLE_HEAD.get(role, role)
+    head = ({'user': tr('legacy.5630b886f9cd'), 'assistant': tr('legacy.9b0519a157ee'), 'tool': tr('legacy.a72ef18d9a0e'), 'error': tr('legacy.b859c7be7501'), 'compaction': tr('legacy.ed4240ed1fd4'), 'notice': tr('legacy.ab3656a956f5')}).get(role, role)
     if is_error:
-        head = f"{head}（失败）"
+        head = tr('legacy.1c9f086d2b88' ,p0=head)
     color = "#b42318" if is_error or role == "error" else "#101828"
     return (
         f'<p style="color:{color};"><b>［{_escape(head)}］</b></p>'
@@ -154,9 +155,9 @@ def transcript_plain_text(entries: Any) -> str:
         if not isinstance(entry, dict):
             continue
         role = str(entry.get("role", ""))
-        head = MESSAGE_ROLE_HEAD.get(role, role)
+        head = ({'user': tr('legacy.5630b886f9cd'), 'assistant': tr('legacy.9b0519a157ee'), 'tool': tr('legacy.a72ef18d9a0e'), 'error': tr('legacy.b859c7be7501'), 'compaction': tr('legacy.ed4240ed1fd4'), 'notice': tr('legacy.ab3656a956f5')}).get(role, role)
         if entry.get("is_error"):
-            head = f"{head}（失败）"
+            head = tr('legacy.1c9f086d2b88' ,p0=head)
         name = entry.get("name")
         if name:
             head = f"{head} {name}"
@@ -190,10 +191,10 @@ def todo_capsule_text(state: Optional[dict[str, Any]]) -> str:
     done, total = todo_counts(state)
     now = todo_now_text(state)
     title = str(state.get("title") or "").strip()
-    head = f"待办：{title}" if title else "待办"
+    head = tr('legacy.3be3bbe2d941' ,p1=title) if title else tr('legacy.f38aef0f951a')
     if now:
-        return f"{head}｜{now}（已完成 {done}/{total}）"
-    return f"{head}（已完成 {done}/{total}）"
+        return tr('legacy.1d91e5140320' ,p0=head, p2=now, p4=done, p6=total)
+    return tr('legacy.b496542da6af' ,p0=head, p2=done, p4=total)
 
 
 def todo_item_lines(state: Optional[dict[str, Any]]) -> list[str]:

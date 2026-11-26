@@ -23,6 +23,7 @@ the Qt5 bindings only as ``exec_`` -- so ``exec_loop`` is the one place that
 tells them apart.
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import importlib
 from types import ModuleType
@@ -74,8 +75,7 @@ def _load_binding() -> tuple[str, str]:
         _binding = (name, major)
         return _binding
     raise ImportError(
-        "No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 "
-        "(development: pip install PySide6)"
+        tr('legacy.60b5f3f7e216')
     )
 
 
@@ -86,7 +86,7 @@ def _binding_module(submodule: str) -> ModuleType:
         try:
             _modules[key] = importlib.import_module(key)
         except ImportError as exc:
-            raise ImportError(f"{binding} has no submodule {submodule!r}: {exc}") from exc
+            raise ImportError(tr('legacy.998a243fc8e7' ,p0=binding, p2=repr(submodule), p4=exc)) from exc
     return _modules[key]
 
 
@@ -112,8 +112,7 @@ class _QtModule:
             return getattr(module, name)
         except AttributeError as exc:
             raise ImportError(
-                f"{module.__name__} has no {name!r} "
-                f"(binding {qt_binding()}, Qt {qt_major()})"
+                tr('legacy.7f00bfbf3768' ,p0=module.__name__, p2=repr(name), p4=qt_binding(), p6=qt_major())
             ) from exc
 
     def __dir__(self) -> list[str]:
@@ -138,7 +137,7 @@ def __getattr__(name: str) -> Any:
     """
     if name.startswith("Qt"):
         return _QtModule(name)
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    raise AttributeError(tr('legacy.102f95aabbc6' ,p1=repr(__name__), p3=repr(name)))
 
 
 def _qt_factory(*names: str) -> Any:
@@ -154,7 +153,7 @@ def _qt_factory(*names: str) -> Any:
         factory = getattr(module, name, None)
         if factory is not None:
             return factory
-    raise ImportError(f"{qt_binding()}.QtCore provides none of {names}")
+    raise ImportError(tr('legacy.ab8bbfc0513e' ,p0=qt_binding(), p2=names))
 
 
 def enum_member(parent: Any, name: str) -> Any:
@@ -174,7 +173,7 @@ def enum_member(parent: Any, name: str) -> Any:
         member = getattr(holder, name, None)
         if member is not None:
             return member
-    raise AttributeError(f"{parent!r} has no enum member {name!r}")
+    raise AttributeError(tr('legacy.3e4a29f8ba1d' ,p0=repr(parent), p2=repr(name)))
 
 
 def Signal(*args: Any, **kwargs: Any) -> Any:
@@ -209,6 +208,5 @@ def exec_loop(target: Any, *args: Any, **kwargs: Any) -> Any:
         if method is not None:
             return method(*args, **kwargs)
     raise AttributeError(
-        f"{type(target).__name__} has neither exec nor exec_ "
-        f"(binding {qt_binding()}, Qt {qt_major()})"
+        tr('legacy.3630ff484185' ,p0=type(target).__name__, p2=qt_binding(), p4=qt_major())
     )

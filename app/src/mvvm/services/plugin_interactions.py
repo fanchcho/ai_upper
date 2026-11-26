@@ -1,4 +1,5 @@
 """Persisted local approvals/questions. Only an explicit answer authorizes work."""
+from locale_runtime import tr
 import hashlib
 import json
 import threading
@@ -58,7 +59,7 @@ class Interactions:
             if path.exists():
                 row = json.loads(path.read_text())
                 if row['fingerprint'] != fingerprint:
-                    raise ValueError('Interaction operation ID reused with different input')
+                    raise ValueError(tr('legacy.929ee7b311bd'))
             else:
                 row = dict(id=request_id, session=session, operation=operation, kind=kind, question=question,
                            choices=list(choices), fingerprint=fingerprint, outcome='pending', expires=time.time()+self.timeout)

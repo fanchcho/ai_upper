@@ -1,4 +1,5 @@
 """Desktop equivalents for scoped plugin settings. Secrets never enter public views."""
+from locale_runtime import tr
 import hashlib
 import json
 import os
@@ -43,9 +44,9 @@ class PluginSettings:
         if base:
             parsed = urlsplit(base)
             if parsed.scheme not in ('https', 'http') or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment:
-                raise ValueError('Base URL must be an HTTP(S) address without credentials, query or fragment')
+                raise ValueError(tr('legacy.6c5e0b628b08'))
             if not model or any(ord(c) < 32 for c in model):
-                raise ValueError('Model name is required')
+                raise ValueError(tr('legacy.b24ab84171d4'))
         old = self.custom().get('baseUrl', '')
         self.write(customModel={'baseUrl': base, 'model': model if base else ''})
         if old != base:
@@ -57,7 +58,7 @@ class PluginSettings:
         if base and key is not None:
             if key:
                 if not self.vault.set_secret(self.key_id('model', base), key).get('ok'):
-                    raise OSError('Credential store is unavailable')
+                    raise OSError(tr('legacy.e8d364844a4f'))
             else:
                 self.vault.delete_secret(self.key_id('model', base))
         return self.custom()
@@ -74,23 +75,23 @@ class PluginSettings:
 
     def save_server(self, name, config, secret=None):
         if not is_safe_id(name):
-            raise ValueError('Invalid server ID')
+            raise ValueError(tr('legacy.323e8e83e31a'))
         if 'command' in config and not isinstance(config['command'], str):
-            raise ValueError('command must be a string')
+            raise ValueError(tr('legacy.4d6a21518529'))
         if 'url' in config and not isinstance(config['url'], str):
-            raise ValueError('url must be a string')
+            raise ValueError(tr('legacy.e7bb1ea0d448'))
         # Executable environment/headers are credentials and must not enter the view.
         allowed = {'url', 'command', 'args', 'enabled'}
         if set(config) - allowed:
-            raise ValueError('Only url, command, args, enabled are public fields')
+            raise ValueError(tr('legacy.a5ee1c446f3b'))
         if not config.get('url') and not config.get('command'):
-            raise ValueError('Server requires url or command')
+            raise ValueError(tr('legacy.811be24fda82'))
         if config.get('url'):
             u = urlsplit(config['url'])
             if u.scheme not in ('http', 'https') or not u.hostname or u.username or u.password or u.query or u.fragment:
-                raise ValueError('Invalid server URL')
+                raise ValueError(tr('legacy.2d8ed86e82ea'))
         if not isinstance(config.get('args', []), list) or any(not isinstance(v, str) for v in config.get('args', [])):
-            raise ValueError('args must be an array of strings')
+            raise ValueError(tr('legacy.7d624bb12924'))
         servers = self.data().get('mcp', {})
         old = servers.get(name, {})
         servers[name] = dict(config, enabled=bool(config.get('enabled', True)))
@@ -102,7 +103,7 @@ class PluginSettings:
         if secret is not None:
             if secret:
                 if not self.vault.set_secret(self.key_id('mcp', name), secret).get('ok'):
-                    raise OSError('Credential store is unavailable')
+                    raise OSError(tr('legacy.e8d364844a4f'))
             else: self.vault.delete_secret(self.key_id('mcp', name))
 
     def delete_server(self, name):
@@ -139,7 +140,7 @@ class PluginSettings:
         return record['prompt'] if record else ''
 
     def save_identity(self, name, text):
-        if not is_safe_id(name): raise ValueError('Invalid identity ID')
+        if not is_safe_id(name): raise ValueError(tr('legacy.92b863511f20'))
         from mvvm.services.plugin_identity import shared_store, check_owned
         root = shared_store().dir
         root.mkdir(mode=0o700, parents=True, exist_ok=True)

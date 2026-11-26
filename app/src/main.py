@@ -63,7 +63,12 @@ def run(headless: Optional[bool] = None) -> int:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
-    del argv  # 入口暂不接受参数：会话与模型都由界面/配置决定
+    import argparse
+    from locale_runtime import configure_cli, tr
+    configure_cli(argv)
+    parser = argparse.ArgumentParser(description=tr('cli.ade5abfa0abe'))
+    parser.add_argument('--lang', choices=('zh-CN', 'en'), help=tr('cli.d7fa6622c296'))
+    parser.parse_args(argv)
     return run()
 
 

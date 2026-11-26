@@ -10,6 +10,7 @@
 所以会话列表与设置页做成嵌进本窗口的控件，而不是各自注册成独立 View。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import asyncio
 import threading
@@ -26,7 +27,7 @@ from utils.paths import app_name
 
 WINDOW_TITLE = app_name()
 SPLIT_SIZES = (280, 780)
-STATUS_DEFAULT = "就绪"
+STATUS_DEFAULT = tr('legacy.b796f2d4ca85')
 
 
 def notice_text(message: str, *, level: str = "info") -> str:
@@ -34,7 +35,7 @@ def notice_text(message: str, *, level: str = "info") -> str:
     text = str(message or "").strip()
     if not text:
         return ""
-    return f"{text}" if level != "error" else f"错误：{text}"
+    return f"{text}" if level != "error" else tr('legacy.01dd57ee1fb5' ,p1=text)
 
 
 class DevaMainWindow(ViewBase):
@@ -67,7 +68,7 @@ class DevaMainWindow(ViewBase):
         # 状态栏先建：设置页构造时会触发 `_refresh_header` -> 下拉框 `setCurrentIndex`
         # -> `_on_effort_changed` -> `on_notice` -> `_set_status`，此时 `_status` 必须已存在。
         # 布局顺序仍在最后加入（代码下方 `layout.addWidget(self._status)`）。
-        self._status = QtWidgets.QLabel(STATUS_DEFAULT)
+        self._status = QtWidgets.QLabel((tr('legacy.b796f2d4ca85')))
         self._session_pane = SessionListPane(
             sessions,
             on_select=self._switch_session,
@@ -138,20 +139,20 @@ class DevaMainWindow(ViewBase):
 
     def _back_to_chat(self) -> None:
         self._show_chat()
-        self._set_status(STATUS_DEFAULT)
+        self._set_status((tr('legacy.b796f2d4ca85')))
 
     def _show_settings(self) -> None:
         self._settings_visible = True
         self._stack.setCurrentIndex(1)
         self._chat_pane.widget().hide()
         self._settings_pane.widget().show()
-        self._set_status("设置")
+        self._set_status(tr('legacy.7debf9cb0372'))
 
     def _switch_session(self, session_id: str) -> None:
         if not session_id or session_id == self._chat.session_id:
             return
         if self._chat.busy:
-            self._set_status("当前对话还在回复，停止后才能切换")
+            self._set_status(tr('legacy.f6a9dcdaa966'))
             self._session_pane.rebuild()
             return
         self._open(session_id)
@@ -162,7 +163,7 @@ class DevaMainWindow(ViewBase):
         self._sessions.refresh()
         self._session_pane.rebuild()
         self._show_chat()
-        self._set_status(STATUS_DEFAULT)
+        self._set_status((tr('legacy.b796f2d4ca85')))
 
     def _new_session(self) -> None:
         # 惰性建档：新会话要等第一条消息落盘才出现在列表里（与 Deva 一致）。
@@ -171,26 +172,26 @@ class DevaMainWindow(ViewBase):
         self._sessions.refresh()
         self._session_pane.rebuild()
         self._show_chat()
-        self._set_status("新对话")
+        self._set_status(tr('legacy.1b7abf96f8bc'))
 
     def _rename_session(self, session_id: str) -> None:
         from utils.qt_compat import QtWidgets
 
         current = next((s for s in self._sessions.sessions if s["id"] == session_id), None)
         title, ok = QtWidgets.QInputDialog.getText(
-            self._window, "重命名对话", "新的标题", text=(current or {}).get("title", "")
+            self._window, tr('legacy.23543b7d1ae2'), tr('legacy.65234c1d4f77'), text=(current or {}).get("title", "")
         )
         if not ok:
             return
         title = str(title or "").strip()
         if not title:
-            self._set_status("标题不能为空")
+            self._set_status(tr('legacy.f2d8d992fe5c'))
             return
         self._sessions.rename(session_id, title)
         if session_id == self._chat.session_id:
             self._chat.title_property.set_value(title)
         self._session_pane.rebuild()
-        self._set_status("已重命名")
+        self._set_status(tr('legacy.dc9fe43fb71e'))
 
     def _archive_session(self, session_id: str) -> None:
         self._sessions.archive(session_id, True)
@@ -201,7 +202,7 @@ class DevaMainWindow(ViewBase):
                 self._open(remaining[0]["id"])
             else:
                 self._new_session()
-        self._set_status("已归档（在列表外，可从数据文件恢复）")
+        self._set_status(tr('legacy.f5bc1155fbff'))
 
     def _delete_session(self, session_id: str) -> None:
         from utils.qt_compat import QtWidgets, enum_member
@@ -209,7 +210,7 @@ class DevaMainWindow(ViewBase):
         yes = enum_member(QtWidgets.QMessageBox, "Yes")
         no = enum_member(QtWidgets.QMessageBox, "No")
         answer = QtWidgets.QMessageBox.question(
-            self._window, "删除对话", "删除后无法恢复，确定删除这条对话吗？", yes | no, no
+            self._window, tr('legacy.3559dc2da370'), tr('legacy.6279db526363'), yes | no, no
         )
         if answer != yes:
             return
@@ -221,28 +222,28 @@ class DevaMainWindow(ViewBase):
                 self._open(remaining[0]["id"])
             else:
                 self._new_session()
-        self._set_status("已删除" if deleted else "删除失败（对话不存在）")
+        self._set_status(tr('legacy.fb5fe1e266c6') if deleted else tr('legacy.a597340b1005'))
 
     # ── 拉模型清单（后台线程）──────────────────────────────────────────────
     def _fetch_models_async(self, provider_id: str) -> None:
         if self._fetch_models is None:
-            self._set_status("未装配模型网关，无法拉取模型清单")
+            self._set_status(tr('legacy.ca9f571a40a9'))
             return
         if self._fetch_thread is not None and self._fetch_thread.is_alive():
-            self._set_status("上一次拉取还没结束")
+            self._set_status(tr('legacy.bb113e28a86b'))
             return
 
         def runner() -> None:
             try:
                 result = asyncio.run(_await_maybe(self._fetch_models(provider_id)))
                 if result is None:
-                    self._post("拉取模型清单失败：未装配模型网关")
+                    self._post(tr('legacy.a19c2d6d29e3'))
                 elif getattr(result, "ok", False):
-                    self._post(f"已拉取 {len(result.models)} 个模型")
+                    self._post(tr('legacy.70c9d64d3c44' ,p1=len(result.models)))
                 else:
-                    self._post(f"拉取模型清单失败：{getattr(result, 'message', '')}")
+                    self._post(tr('legacy.4f27d4a2784d' ,p1=getattr(result, 'message', '')))
             except Exception as exc:  # noqa: BLE001 - 线程边界，错误要显示到状态栏
-                self._post(f"拉取模型清单失败：{exc}")
+                self._post(tr('legacy.4f27d4a2784d' ,p1=exc))
             finally:
                 self._fetch_thread = None
 

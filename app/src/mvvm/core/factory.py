@@ -1,6 +1,7 @@
 """Factories: property factory for declarative ViewModel fields and the
 ViewModelFactory that centralizes construction."""
 from __future__ import annotations
+from locale_runtime import tr
 from typing import Any, Type
 
 from mvvm.core.observable import ObservableProperty
@@ -30,5 +31,5 @@ class ViewModelFactory:
     def create(cls, name: str, **kwargs) -> Any:
         vm_type = cls._registry.get(name)
         if vm_type is None:
-            raise KeyError(f"ViewModel '{name}' is not registered")
+            raise KeyError(tr('legacy.1f9a9cd036ba' ,p1=name))
         return vm_type(**kwargs)

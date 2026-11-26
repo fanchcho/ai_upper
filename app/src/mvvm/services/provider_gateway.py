@@ -12,6 +12,7 @@ P1 只做「单轮文本流 + 错误归一」这条主干。真正的网络适�
 `NotImplementedError`，不得返回假数据冒充可用。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 import re
@@ -211,7 +212,7 @@ def _forbidden_error(body: str) -> NormalizedError:
     advice = "：请检查 API 密钥、账号对该模型的权限，以及该服务商是否限制了可接入的客户端。"
     return NormalizedError(
         "auth",
-        f"服务商拒绝了请求（403）{hint or advice}",
+        tr('legacy.b6b969217faf' ,p1=hint or advice),
         False,
         403,
     )
@@ -227,20 +228,20 @@ def http_error(
     if _is_output_limit_rejection(status, body):
         return NormalizedError(
             "output_limit",
-            f"请求的输出上限超出该模型允许范围（{status}）{_body_hint(body)}",
+            tr('legacy.306bf6b480ba' ,p1=status, p3=_body_hint(body)),
             False,
             status,
             limit=parse_context_limit(body),
             overflow=parse_context_overflow(body),
         )
     if status == 401:
-        return NormalizedError("auth", f"鉴权失败（{status}）：请检查 API 密钥。", False, status)
+        return NormalizedError("auth", tr('legacy.07afcb53677a' ,p1=status), False, status)
     if status == 403:
         return _forbidden_error(body)
     if status == 429:
         return NormalizedError(
             "rate_limit",
-            f"触发限流（429），请稍后重试{_body_hint(body)}",
+            tr('legacy.0c524ed6f364' ,p1=_body_hint(body)),
             True,
             status,
             retry_after_ms=_parse_retry_after(retry_after),
@@ -249,14 +250,14 @@ def http_error(
     if effort_sent and _is_effort_rejection(status, body):
         return NormalizedError(
             "effort_unsupported",
-            f"该模型不支持所选思考等级（{status}）{_body_hint(body)}",
+            tr('legacy.124ad8199b36' ,p1=status, p3=_body_hint(body)),
             False,
             status,
         )
     if status == 400 and re.search(r"context|token|length|maximum", body, re.I):
         return NormalizedError(
             "context_length",
-            "对话长度已超出该模型的上下文上限，无法继续。请新建对话，或换用上下文更大的模型后重试。",
+            tr('legacy.f482a35f434f'),
             False,
             status,
             limit=parse_context_limit(body),
@@ -265,14 +266,14 @@ def http_error(
     if status >= 500:
         return NormalizedError(
             "server",
-            f"服务端错误（{status}）{_body_hint(body)}",
+            tr('legacy.bd9dd413b087' ,p1=status, p3=_body_hint(body)),
             True,
             status,
             retry_after_ms=_parse_retry_after(retry_after),
         )
     return NormalizedError(
         "invalid_request",
-        f"请求失败（{status}）：{body[:300]}",
+        tr('legacy.3bd0091cb608' ,p1=status, p3=body[:300]),
         False,
         status,
     )
@@ -469,7 +470,7 @@ class NotImplementedProvider(Provider):
         self._reason = reason
 
     async def stream(self, request: GenerateRequest) -> AsyncIterator[StreamEvent]:  # type: ignore[override]
-        raise NotImplementedError(f"provider {self.name!r} 尚未实现：{self._reason}")
+        raise NotImplementedError(tr('legacy.8bc8382346d3' ,p1=repr(self.name), p3=self._reason))
         yield  # unreachable, keeps the async-generator type honest
 
 

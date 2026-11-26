@@ -8,6 +8,7 @@ TLS 服务。适配器只依赖 `Transport.post(...)` 这个协议，测试注�
 所以「用户点停止」不必等满读超时。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import asyncio
 from dataclasses import dataclass, field
@@ -142,7 +143,7 @@ async def _iter_httpx_body(response, cancel: Optional[CancelToken]) -> AsyncIter
     try:
         while True:
             if cancel is not None and cancel.cancelled:
-                raise CancelledError("请求已取消")
+                raise CancelledError(tr('legacy.f2187b0114d3'))
             if cancel is None:
                 try:
                     yield await iterator.__anext__()
@@ -154,7 +155,7 @@ async def _iter_httpx_body(response, cancel: Optional[CancelToken]) -> AsyncIter
             done, pending = await asyncio.wait({read, stop}, return_when=asyncio.FIRST_COMPLETED)
             if stop in done:
                 read.cancel()
-                raise CancelledError("请求已取消")
+                raise CancelledError(tr('legacy.f2187b0114d3'))
             stop.cancel()
             try:
                 yield read.result()

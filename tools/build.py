@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import argparse
 import os
@@ -32,9 +33,9 @@ def _run_app(out: Path, target) -> int:
     if target.os == "macos":
         executable = out / "Contents" / "MacOS" / name
     if not executable.exists():
-        raise RuntimeError(f"Packaged executable missing: {executable}")
+        raise RuntimeError(tr('legacy.7d146fdd72cc' ,p1=executable))
     result = run_packaged_launcher(executable, cwd=out)
-    print("Application exit code:", result.returncode)
+    print(tr('legacy.bfec4ce35310'), result.returncode)
     return result.returncode
 
 
@@ -44,22 +45,22 @@ def _clean() -> int:
     retire_tree(DIST, trash=BUILD / "retired")
     if BUILD.exists():
         shutil.rmtree(BUILD)
-    print("Cleaned build/ and dist/")
+    print(tr('legacy.ab0d461476e3'))
     return 0
 
 
 def _doctor(target) -> int:
-    print("host:", host_description())
-    print("target:", target.key, target.triple)
-    print("target-python:", python_version())
-    print("runtime-provider:", runtime_provider())
-    print("PBS release:", pbs_release() or "auto")
+    print(tr('legacy.b5b379cb878c'), host_description())
+    print(tr('legacy.83e75b7fd519'), target.key, target.triple)
+    print(tr('legacy.bca299ecf9c5'), python_version())
+    print(tr('legacy.35d5d317b79a'), runtime_provider())
+    print(tr('legacy.36ef05bdfea0'), pbs_release() or "auto")
     try:
-        print("dev-python:", require_local_python())
+        print(tr('legacy.ea97c9af6812'), require_local_python())
     except Exception as exc:
-        print("dev-python: UNAVAILABLE:", exc)
-    print("SDK:", pbs_sdk_dir(target))
-    print("runtime:", target_runtime_dir(target))
+        print(tr('legacy.90d30a83f58c'), exc)
+    print(tr('legacy.b206933d1c87'), pbs_sdk_dir(target))
+    print(tr('legacy.8529e3e5bcef'), target_runtime_dir(target))
     missing = []
     for tool in ("cmake", "ninja"):
         path = shutil.which(tool)
@@ -67,14 +68,14 @@ def _doctor(target) -> int:
         if not path:
             missing.append(tool)
     try:
-        print("toolchain:", describe_toolchain(target))
+        print(tr('legacy.635ce45cfa9c'), describe_toolchain(target))
     except Exception as exc:
-        print("toolchain: UNAVAILABLE:", exc)
+        print(tr('legacy.7ba3bdcb4c48'), exc)
         missing.append("toolchain")
     # A build cannot start without these, so the diagnostic exits non-zero and
     # doubles as the toolchain gate in CI instead of a second, hand-rolled probe.
     if missing:
-        print("doctor: FAILED, missing:", ", ".join(missing))
+        print(tr('legacy.fd0c36279915'), ", ".join(missing))
         return 1
     return 0
 
@@ -113,9 +114,11 @@ def _line_buffered() -> None:
 
 
 def main(argv=None) -> int:
+    from ai_upper.localization import configure_cli
+    configure_cli(argv)
     _line_buffered()
     validate_build_python_version()
-    parser = argparse.ArgumentParser(description="ai_upper - standalone Python application builder")
+    parser = argparse.ArgumentParser(description=tr('legacy.9e8a12d793eb'))
     parser.add_argument("command", nargs="?", choices=["doctor", "build", "run", "verify", "lock", "release", "clean"])
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--doctor", action="store_true")
@@ -131,24 +134,25 @@ def main(argv=None) -> int:
     parser.add_argument("--trim-preset", choices=tuple(PRESETS), metavar="NAME",
                         help="add a named trim rule set for this build: " + ", ".join(PRESETS))
     parser.add_argument("--trim-site", action="append", default=[], metavar="GLOB",
-                        help="remove paths from site-packages; repeatable (relative glob)")
+                        help=tr('legacy.99c42b87afe8'))
     parser.add_argument("--trim-site-keep", action="append", default=[], metavar="GLOB",
-                        help="never remove matching site-packages paths; repeatable")
+                        help=tr('legacy.821af90ca8fc'))
     parser.add_argument("--trim-runtime", action="append", default=[], metavar="GLOB",
-                        help="remove paths from the bundled runtime; repeatable")
+                        help=tr('legacy.8be52bec09f6'))
     parser.add_argument("--trim-runtime-keep", action="append", default=[], metavar="GLOB",
-                        help="never remove matching runtime paths; repeatable")
+                        help=tr('legacy.f29fab35580f'))
     egg_actions = parser.add_mutually_exclusive_group()
     egg_actions.add_argument("--egg", dest="egg", action="store_true", default=None,
-                             help="pack application code into an encrypted bundle archive for this build")
+                             help=tr('legacy.c6fd2cda2739'))
     egg_actions.add_argument("--no-egg", dest="egg", action="store_false", default=None,
-                             help="ship loose application files even when the project enables the egg")
+                             help=tr('legacy.5490f2c8bbcd'))
     parser.add_argument("--egg-key", metavar="HEX",
-                        help="override [tool.ai_upper.egg].key_hex (at least 16 hex bytes)")
+                        help=tr('legacy.3b421fff22d3'))
     parser.add_argument("--egg-backend", choices=BACKENDS, metavar="NAME",
-                        help="egg extension loader: auto, memory or extract")
+                        help=tr('legacy.57e54def59d6'))
     parser.add_argument("--egg-compression", choices=COMPRESSIONS, metavar="NAME",
                         help="egg archive compression: " + ", ".join(COMPRESSIONS))
+    parser.add_argument("--lang", choices=("zh-CN", "en"), help=tr('cli.d7fa6622c296'))
     args = parser.parse_args(argv)
 
     action = args.command or "build"
@@ -177,12 +181,12 @@ def main(argv=None) -> int:
             ensure_sdk(target)
             ensure_runtime(target)
             resolve_wheels(target)
-            print("Lock written:", write_lock(target))
+            print(tr('legacy.e3ec3573f9b3'), write_lock(target))
             return 0
         if action not in {"build", "run", "release"}:
             return 1
         if action == "run" and target != host_target():
-            raise RuntimeError(f"--run requires host target; host={host_target().key}, target={target.key}")
+            raise RuntimeError(tr('legacy.8fc0da44b55c' ,p1=host_target().key, p3=target.key))
         if args.locked:
             verify_lock(target)
             os.environ["AI_UPPER_LOCKED"] = "1"
@@ -197,19 +201,19 @@ def main(argv=None) -> int:
 
         egg = egg_config(args.egg, args.egg_key, args.egg_backend, args.egg_compression)
 
-        print("[1/6] Runtime + SDK")
+        print(tr('legacy.4213af8a9ae5'))
         ensure_sdk(target)
         ensure_runtime(target)
-        print("[2/6] Third-party dependencies")
+        print(tr('legacy.d297eedc8c9e'))
         build_python_package(target, trim, egg)
-        print("[3/6] Target launcher")
+        print(tr('legacy.cdde33d8c30a'))
         launcher = build_launcher(target, egg)
-        print("[4/6] Package + native dependency closure")
+        print(tr('legacy.8cf42e666d61'))
         out = package(target, launcher, trim)
-        print("[5/6] Static verification")
+        print(tr('legacy.b0a4b0aceabb'))
         if verify(target):
             return 1
-        print("[6/6] Target runtime smoke")
+        print(tr('legacy.821bd0b25b7e'))
         run_target_python_smoke(target)
         run_launcher_smoke(target, out / ("Contents/MacOS/" + app_name() if target.os == "macos" else (app_name() + ".exe" if target.os == "windows" else app_name())))
 
@@ -217,15 +221,15 @@ def main(argv=None) -> int:
             return _run_app(out, target)
         if action == "release":
             release(target, args.identity, args.notary_profile)
-            print("Release manifest:", write_release_manifest(target))
+            print(tr('legacy.7b9b2ee07a29'), write_release_manifest(target))
         else:
-            print("READY:", out)
+            print(tr('legacy.2db9a748ad8a'), out)
         return 0
     except subprocess.CalledProcessError as exc:
-        print(f"ERROR: command failed with exit code {exc.returncode}: {' '.join(map(str, exc.cmd)) if isinstance(exc.cmd, (list, tuple)) else exc.cmd}")
+        print(tr('legacy.d59a5b3f12e7' ,p1=exc.returncode, p3=' '.join(map(str, exc.cmd)) if isinstance(exc.cmd, (list, tuple)) else exc.cmd))
         return exc.returncode or 1
     except Exception as exc:
-        print(f"ERROR: {type(exc).__name__}: {exc}")
+        print(tr('legacy.82862f1bf8bc' ,p1=type(exc).__name__, p3=exc))
         if os.environ.get("AI_UPPER_TRACEBACK") == "1":
             raise
         return 1
@@ -233,13 +237,13 @@ def main(argv=None) -> int:
 
 def release(target, identity=None, notary_profile=None) -> int:
     if target.os == "linux":
-        print("Linux release: use your distribution signing/package system.")
+        print(tr('legacy.56dad428204b'))
         return 0
     if target.os == "windows":
         tool = shutil.which("signtool")
         cert = os.environ.get("AI_UPPER_SIGN_CERT") or os.environ.get("PYSTAND_SIGN_CERT")
         if not tool or not cert:
-            raise RuntimeError("Windows release requires signtool and AI_UPPER_SIGN_CERT")
+            raise RuntimeError(tr('legacy.bc120a8a2434'))
         for path in (DIST / app_name()).rglob("*"):
             if path.is_file() and path.suffix.lower() in {".exe", ".dll", ".pyd"}:
                 subprocess.run([tool, "sign", "/fd", "SHA256", "/a", "/f", cert, str(path)], check=True)
@@ -249,7 +253,7 @@ def release(target, identity=None, notary_profile=None) -> int:
     xcrun = shutil.which("xcrun")
     ident = identity or os.environ.get("AI_UPPER_CODESIGN_IDENTITY") or os.environ.get("PYSTAND_CODESIGN_IDENTITY")
     if not codesign or not xcrun or not ident:
-        raise RuntimeError("macOS release requires codesign/xcrun and --identity")
+        raise RuntimeError(tr('legacy.68114bd60220'))
     nested = [p for p in app.rglob("*") if p.is_file() and p.suffix.lower() in {".dylib", ".so"}]
     nested.append(app / "Contents" / "MacOS" / app_name())
     for path in nested:

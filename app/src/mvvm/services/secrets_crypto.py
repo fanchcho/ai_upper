@@ -8,6 +8,7 @@ OpenSSL，不需要系统头文件。
 这一层刻意做得很薄：只暴露 `derive_key` 与再导出的 `AESGCM`，方便测试替换与审计。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Optional
 
@@ -15,8 +16,7 @@ try:  # pragma: no cover - 导入失败时由调用方给出可读错误
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 except Exception as exc:  # pragma: no cover
     raise ImportError(
-        "密钥加密需要 cryptography 包（pip install -r app/requirements.txt）："
-        f"{exc}"
+        tr('legacy.e72e78003988', p1=exc)
     ) from exc
 
 _SALT_INFO = b"deva-secrets-v1"

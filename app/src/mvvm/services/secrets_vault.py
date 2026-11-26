@@ -22,6 +22,7 @@
 （DPAPI/Keychain 的密钥绑定 Electron 的应用身份），所以**不读旧密文**——用户在新工程重填一次。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import base64
 import json
@@ -128,7 +129,7 @@ class SecretsVault:
             self._items = {}
             return self._items
         except OSError as exc:
-            raise SecretsDecryptError(f"读取密钥文件失败：{exc}") from exc
+            raise SecretsDecryptError(tr('legacy.de9a7de2fedc' ,p1=exc)) from exc
         try:
             payload = json.loads(raw)
             salt = base64.b64decode(str(payload["salt"]))
@@ -137,10 +138,10 @@ class SecretsVault:
             plaintext = AESGCM(derive_key(self._master_key(), salt)).decrypt(nonce, blob, None)
             parsed = json.loads(plaintext.decode("utf-8"))
             if not isinstance(parsed, dict):
-                raise ValueError("条目表不是对象")
+                raise ValueError(tr('legacy.4afdeab944c5'))
         except Exception as exc:  # noqa: BLE001 - 统一转成可读的解密失败
             raise SecretsDecryptError(
-                f"密钥文件无法解密（主密钥 {self._key_path} 可能已被替换）：{exc}"
+                tr('legacy.555328042b45' ,p1=self._key_path, p3=exc)
             ) from exc
         self._salt = salt
         self._items = {str(k): str(v) for k, v in parsed.items()}
@@ -181,7 +182,7 @@ class SecretsVault:
         except FileNotFoundError:
             pass
         except OSError as exc:
-            raise SecretsDecryptError(f"读取主密钥失败：{exc}") from exc
+            raise SecretsDecryptError(tr('legacy.f0f186a9e977' ,p1=exc)) from exc
         self._home.mkdir(parents=True, exist_ok=True)
         key = _secrets.token_bytes(_KEY_BYTES)
         try:
@@ -190,7 +191,7 @@ class SecretsVault:
             # 并发首次使用：另一进程刚建好，读它写下的那一份（读不到/长度不对就明确报错）
             raw = self._key_path.read_bytes()
             if len(raw) != _KEY_BYTES:
-                raise SecretsDecryptError(f"主密钥文件长度异常：{self._key_path}")
+                raise SecretsDecryptError(tr('legacy.976390a41ffc' ,p1=self._key_path))
             self._master = raw
             return raw
         try:

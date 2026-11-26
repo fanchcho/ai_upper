@@ -21,6 +21,7 @@ The escape used by the workflow-command format expands the text (``%`` becomes
 Python 3.8 is the oldest interpreter that runs this repository's CI matrix, so
 nothing newer than that is used here.
 """
+from ai_upper.localization import tr
 
 import argparse
 import re
@@ -169,24 +170,27 @@ def emit(level, title, message):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--log", required=True, help="path to the log file")
-    parser.add_argument("--title", required=True, help="annotation title")
+    from ai_upper.localization import configure_cli
+    configure_cli(argv)
+    parser = argparse.ArgumentParser(description=tr('cli.550fb411462d'))
+    parser.add_argument("--log", required=True, help=tr('legacy.39c18e099daf'))
+    parser.add_argument("--title", required=True, help=tr('legacy.1ade049df091'))
     parser.add_argument(
         "--exit-code-file",
-        help="file holding the step's exit code; exit 0 downgrades to a notice",
+        help=tr('legacy.4681048c9e29'),
     )
     parser.add_argument(
         "--label",
         default="log",
-        help="what to call the log when it is missing (e.g. 'build.log')",
+        help=tr('legacy.b3928325349a'),
     )
     parser.add_argument(
         "--level",
         choices=("error", "warning", "notice"),
         default=None,
-        help="force the annotation level instead of deriving it from the exit code",
+        help=tr('legacy.fa8e373674f7'),
     )
+    parser.add_argument("--lang", choices=("zh-CN", "en"), help=tr('cli.d7fa6622c296'))
     args = parser.parse_args(argv)
 
     exit_code = None
@@ -207,7 +211,7 @@ def main(argv=None):
             args.level or "error",
             args.title,
             escape_command_message(
-                "%s was not created: the step failed before it could write one." % args.label
+                tr('cli.3464dbfca280') % args.label
             ),
         )
         return 0

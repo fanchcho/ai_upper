@@ -8,48 +8,50 @@
 密钥输入框每次进入详情都清空：密钥库不回读明文，界面也不缓存上一次输入。
 """
 from __future__ import annotations
+from locale_runtime import tr
+from locale_runtime import tr
 
 from typing import Any, Callable, Optional
 
 from mvvm.view_models.settings_vm import ADAPTER_LABELS, ADAPTERS, EFFORT_LEVELS, SettingsViewModel
 from mvvm.views.base_view import ViewBase
 
-TITLE = "设置"
-BACK_TEXT = "返回"
-ADD_PROVIDER_TEXT = "新增服务商"
-REMOVE_PROVIDER_TEXT = "删除服务商"
-SAVE_PROVIDER_TEXT = "保存"
-FETCH_MODELS_TEXT = "拉取模型清单"
-ADD_MODEL_TEXT = "添加模型"
-REMOVE_MODEL_TEXT = "删除模型"
-EDIT_MODEL_TEXT = "编辑模型"
-SET_DEFAULT_TEXT = "设为默认"
-ENABLE_TEXT = "启用"
-DISABLE_TEXT = "停用"
-KEY_PLACEHOLDER = "API 密钥（保存后不回显）"
-SAVE_KEY_TEXT = "保存密钥"
-CLEAR_KEY_TEXT = "清除密钥"
-KEY_SET_HINT = "已配置密钥"
-KEY_MISSING_HINT = "未配置密钥"
-FETCH_FAILED_HINT = "拉取模型清单失败："
-RESTORE_AUTO_TEXT = "恢复自动"
+TITLE = tr('legacy.7debf9cb0372')
+BACK_TEXT = tr('legacy.11d024154013')
+ADD_PROVIDER_TEXT = tr('legacy.1db8fdda7b26')
+REMOVE_PROVIDER_TEXT = tr('legacy.2f38a9068f4b')
+SAVE_PROVIDER_TEXT = tr('legacy.fadf24dbc5a9')
+FETCH_MODELS_TEXT = tr('legacy.23ad2816f6cd')
+ADD_MODEL_TEXT = tr('legacy.532a64e19cd2')
+REMOVE_MODEL_TEXT = tr('legacy.cf24da5745f2')
+EDIT_MODEL_TEXT = tr('legacy.29e31e4ff1c1')
+SET_DEFAULT_TEXT = tr('legacy.536a009a9b59')
+ENABLE_TEXT = tr('legacy.d4e9ca3dd494')
+DISABLE_TEXT = tr('legacy.d989e55188c9')
+KEY_PLACEHOLDER = tr('legacy.484821eb0713')
+SAVE_KEY_TEXT = tr('legacy.cdfb82b464c9')
+CLEAR_KEY_TEXT = tr('legacy.b96554478025')
+KEY_SET_HINT = tr('legacy.a1fd4bfa5d44')
+KEY_MISSING_HINT = tr('legacy.a3e7368ec053')
+FETCH_FAILED_HINT = tr('legacy.e9de2f963c09')
+RESTORE_AUTO_TEXT = tr('legacy.8d4e1e385eb6')
 EFFORT_LABELS = {
-    "default": "默认",
-    "low": "低",
-    "medium": "中",
-    "high": "高",
-    "xhigh": "很高",
-    "max": "最高",
+    "default": tr('legacy.c8d09cf955f5'),
+    "low": tr('legacy.b9ee259b7f6c'),
+    "medium": tr('legacy.0869071c92c0'),
+    "high": tr('legacy.b096b3f5acd6'),
+    "xhigh": tr('legacy.1cb58b7bf00f'),
+    "max": tr('legacy.2cd489b0a572'),
 }
 
 
 def key_status_text(has_key: bool) -> str:
-    return KEY_SET_HINT if has_key else KEY_MISSING_HINT
+    return (tr('legacy.a1fd4bfa5d44')) if has_key else (tr('legacy.a3e7368ec053'))
 
 
 def effort_labels() -> list[str]:
     """思考等级下拉的显示文案（与 EFFORT_LEVELS 一一对应）。"""
-    return [EFFORT_LABELS.get(level, level) for level in EFFORT_LEVELS]
+    return [({'default': tr('legacy.c8d09cf955f5'), 'low': tr('legacy.b9ee259b7f6c'), 'medium': tr('legacy.0869071c92c0'), 'high': tr('legacy.b096b3f5acd6'), 'xhigh': tr('legacy.1cb58b7bf00f'), 'max': tr('legacy.2cd489b0a572')}).get(level, level) for level in EFFORT_LEVELS]
 
 
 class SettingsPane(ViewBase):
@@ -84,8 +86,8 @@ class SettingsPane(ViewBase):
         layout.setContentsMargins(10, 10, 10, 10)
 
         header = QtWidgets.QHBoxLayout()
-        self._back_button = QtWidgets.QPushButton(BACK_TEXT)
-        self._title = QtWidgets.QLabel(TITLE)
+        self._back_button = QtWidgets.QPushButton((tr('legacy.11d024154013')))
+        self._title = QtWidgets.QLabel((tr('legacy.7debf9cb0372')))
         header.addWidget(self._title)
         header.addStretch(1)
         header.addWidget(self._back_button)
@@ -97,7 +99,7 @@ class SettingsPane(ViewBase):
         for label in effort_labels():
             self._effort_combo.addItem(label)
         effort_row = QtWidgets.QHBoxLayout()
-        effort_row.addWidget(QtWidgets.QLabel("思考等级"))
+        effort_row.addWidget(QtWidgets.QLabel(tr('legacy.4713153f38d2')))
         effort_row.addWidget(self._effort_combo)
         effort_row.addStretch(1)
         layout.addWidget(self._active_label)
@@ -130,8 +132,8 @@ class SettingsPane(ViewBase):
         self._provider_list.itemDoubleClicked.connect(lambda _item: self._open_provider())
         self._provider_list.currentRowChanged.connect(lambda _row: self._sync_list_buttons())
         buttons = QtWidgets.QHBoxLayout()
-        self._open_button = QtWidgets.QPushButton("配置")
-        self._add_provider_button = QtWidgets.QPushButton(ADD_PROVIDER_TEXT)
+        self._open_button = QtWidgets.QPushButton(tr('legacy.d7d7ce790b9a'))
+        self._add_provider_button = QtWidgets.QPushButton((tr('legacy.1db8fdda7b26')))
         buttons.addWidget(self._open_button)
         buttons.addWidget(self._add_provider_button)
         buttons.addStretch(1)
@@ -153,19 +155,19 @@ class SettingsPane(ViewBase):
         self._adapter_combo = QtWidgets.QComboBox()
         for adapter in ADAPTERS:
             self._adapter_combo.addItem(ADAPTER_LABELS[adapter])
-        self._enabled_box = QtWidgets.QCheckBox("启用该服务商")
-        form.addRow("名称", self._name_edit)
-        form.addRow("服务地址", self._base_edit)
-        form.addRow("协议", self._adapter_combo)
+        self._enabled_box = QtWidgets.QCheckBox(tr('legacy.20fcc553227f'))
+        form.addRow(tr('legacy.1be7ae4fc257'), self._name_edit)
+        form.addRow(tr('legacy.86e118291ed4'), self._base_edit)
+        form.addRow(tr('legacy.b0c431675bce'), self._adapter_combo)
         form.addRow("", self._enabled_box)
         layout.addLayout(form)
 
         key_row = QtWidgets.QHBoxLayout()
         self._key_edit = QtWidgets.QLineEdit()
-        self._key_edit.setPlaceholderText(KEY_PLACEHOLDER)
+        self._key_edit.setPlaceholderText((tr('legacy.484821eb0713')))
         self._key_edit.setEchoMode(self._enum_member(QtWidgets.QLineEdit, "Password"))
-        self._save_key_button = QtWidgets.QPushButton(SAVE_KEY_TEXT)
-        self._clear_key_button = QtWidgets.QPushButton(CLEAR_KEY_TEXT)
+        self._save_key_button = QtWidgets.QPushButton((tr('legacy.cdfb82b464c9')))
+        self._clear_key_button = QtWidgets.QPushButton((tr('legacy.b96554478025')))
         key_row.addWidget(self._key_edit, 1)
         key_row.addWidget(self._save_key_button)
         key_row.addWidget(self._clear_key_button)
@@ -175,22 +177,22 @@ class SettingsPane(ViewBase):
 
         model_buttons = QtWidgets.QHBoxLayout()
         self._model_list = QtWidgets.QListWidget()
-        self._fetch_button = QtWidgets.QPushButton(FETCH_MODELS_TEXT)
+        self._fetch_button = QtWidgets.QPushButton((tr('legacy.23ad2816f6cd')))
         self._new_model_edit = QtWidgets.QLineEdit()
-        self._new_model_edit.setPlaceholderText("模型 id")
-        self._add_model_button = QtWidgets.QPushButton(ADD_MODEL_TEXT)
+        self._new_model_edit.setPlaceholderText(tr('legacy.c41734a4cc66'))
+        self._add_model_button = QtWidgets.QPushButton((tr('legacy.532a64e19cd2')))
         model_buttons.addWidget(self._new_model_edit, 1)
         model_buttons.addWidget(self._add_model_button)
         layout.addWidget(self._model_list, 1)
         layout.addLayout(model_buttons)
 
         actions = QtWidgets.QHBoxLayout()
-        self._edit_model_button = QtWidgets.QPushButton(EDIT_MODEL_TEXT)
-        self._toggle_model_button = QtWidgets.QPushButton(ENABLE_TEXT)
-        self._set_default_button = QtWidgets.QPushButton(SET_DEFAULT_TEXT)
-        self._remove_model_button = QtWidgets.QPushButton(REMOVE_MODEL_TEXT)
-        self._remove_provider_button = QtWidgets.QPushButton(REMOVE_PROVIDER_TEXT)
-        self._save_provider_button = QtWidgets.QPushButton(SAVE_PROVIDER_TEXT)
+        self._edit_model_button = QtWidgets.QPushButton((tr('legacy.29e31e4ff1c1')))
+        self._toggle_model_button = QtWidgets.QPushButton((tr('legacy.d4e9ca3dd494')))
+        self._set_default_button = QtWidgets.QPushButton((tr('legacy.536a009a9b59')))
+        self._remove_model_button = QtWidgets.QPushButton((tr('legacy.cf24da5745f2')))
+        self._remove_provider_button = QtWidgets.QPushButton((tr('legacy.2f38a9068f4b')))
+        self._save_provider_button = QtWidgets.QPushButton((tr('legacy.fadf24dbc5a9')))
         self._fetch_button.clicked.connect(lambda _=False: self._fetch_models())
         for button in (self._edit_model_button, self._toggle_model_button,
                        self._set_default_button, self._remove_model_button):
@@ -221,17 +223,17 @@ class SettingsPane(ViewBase):
         self._model_name_edit = QtWidgets.QLineEdit()
         self._context_spin = QtWidgets.QSpinBox()
         self._context_spin.setRange(0, 10_000_000)
-        self._context_spin.setSpecialValueText("自动")
+        self._context_spin.setSpecialValueText(tr('legacy.4afad877551a'))
         self._output_spin = QtWidgets.QSpinBox()
         self._output_spin.setRange(0, 1_000_000)
-        self._output_spin.setSpecialValueText("自动")
-        form.addRow("显示名", self._model_name_edit)
-        form.addRow("上下文窗口", self._context_spin)
-        form.addRow("最大输出", self._output_spin)
+        self._output_spin.setSpecialValueText(tr('legacy.4afad877551a'))
+        form.addRow(tr('legacy.c10bbf5ddd2d'), self._model_name_edit)
+        form.addRow(tr('legacy.9a1fbe0bb901'), self._context_spin)
+        form.addRow(tr('legacy.880c22952280'), self._output_spin)
         layout.addLayout(form)
         buttons = QtWidgets.QHBoxLayout()
-        self._restore_button = QtWidgets.QPushButton(RESTORE_AUTO_TEXT)
-        self._save_model_button = QtWidgets.QPushButton(SAVE_PROVIDER_TEXT)
+        self._restore_button = QtWidgets.QPushButton((tr('legacy.8d4e1e385eb6')))
+        self._save_model_button = QtWidgets.QPushButton((tr('legacy.fadf24dbc5a9')))
         buttons.addWidget(self._restore_button)
         buttons.addStretch(1)
         buttons.addWidget(self._save_model_button)
@@ -304,10 +306,10 @@ class SettingsPane(ViewBase):
             self._refresh_model(provider)
         index = {"list": 0, "provider": 1, "model": 2}[self._page]
         self._pages.setCurrentIndex(index)
-        self._back_button.setText(BACK_TEXT if self._page != "list" else "关闭")
+        self._back_button.setText((tr('legacy.11d024154013')) if self._page != "list" else tr('legacy.6c14bd7f6f9e'))
 
     def _refresh_header(self) -> None:
-        self._active_label.setText(f"默认模型：{self.viewmodel.active_model or '未选择'}")
+        self._active_label.setText(tr('legacy.a74a5f436597' ,p1=self.viewmodel.active_model or tr('legacy.53e2db70167f')))
         level = self.viewmodel.active_effort
         if level in EFFORT_LEVELS:
             self._effort_combo.blockSignals(True)
@@ -324,10 +326,10 @@ class SettingsPane(ViewBase):
         self._provider_list.clear()
         select_row = -1
         for row, entry in enumerate(providers):
-            state = "已启用" if entry["enabled"] else "未启用"
+            state = tr('legacy.25d284315063') if entry["enabled"] else tr('legacy.8bb38ef00ccc')
             models = len(entry["models"])
             item = QtWidgets.QListWidgetItem(
-                f"{entry['name']} · {entry['adapter_label']} · {state} · {models} 个模型"
+                tr('legacy.e59e3786cb63' ,p0=entry['name'], p2=entry['adapter_label'], p4=state, p6=models)
             )
             self._provider_list.addItem(item)
             if entry["id"] == current:
@@ -357,7 +359,7 @@ class SettingsPane(ViewBase):
         self._model_list.clear()
         for model in provider["models"]:
             mark = "✓" if model["enabled"] else "○"
-            default = "（默认）" if active == f"{provider['id']}:{model['id']}" else ""
+            default = tr('legacy.b98bde85a892') if active == f"{provider['id']}:{model['id']}" else ""
             self._model_list.addItem(QtWidgets.QListWidgetItem(f"{mark} {model['name']}{default}"))
         if 0 <= previous < len(provider["models"]):
             self._model_list.setCurrentRow(previous)
@@ -381,7 +383,7 @@ class SettingsPane(ViewBase):
         elif self._page == "provider":
             self._page = "list"
             self._provider_id = ""
-            self._notify("设置已更新，下一轮对话生效")
+            self._notify(tr('legacy.64028da77b65'))
         else:
             self._fire(self._on_back)
             return
@@ -403,10 +405,10 @@ class SettingsPane(ViewBase):
         self._refresh()
 
     def _add_provider(self) -> None:
-        provider_id = self.viewmodel.add_provider("自定义服务商")
+        provider_id = self.viewmodel.add_provider(tr('legacy.251ea23e6514'))
         self._provider_id = provider_id
         self._page = "provider"
-        self._notify("已新增服务商：填写地址、密钥与模型后即可使用")
+        self._notify(tr('legacy.ac92decf7344'))
         self._refresh()
 
     def _save_provider(self) -> None:
@@ -420,7 +422,7 @@ class SettingsPane(ViewBase):
             adapter=adapter,
             enabled=self._enabled_box.isChecked(),
         )
-        self._notify("服务商已保存")
+        self._notify(tr('legacy.769ee76de92e'))
         self._refresh()
 
     def _remove_provider(self) -> None:
@@ -429,7 +431,7 @@ class SettingsPane(ViewBase):
         removed = self.viewmodel.remove_provider(self._provider_id)
         self._provider_id = ""
         self._page = "list"
-        self._notify("服务商已删除" if removed else "服务商删除失败")
+        self._notify(tr('legacy.51b989540f6c') if removed else tr('legacy.6b15373cad3b'))
         self._refresh()
 
     def _save_key(self) -> None:
@@ -438,14 +440,14 @@ class SettingsPane(ViewBase):
         key = self._key_edit.text()
         ok = self.viewmodel.set_api_key(self._provider_id, key)
         self._key_edit.clear()
-        self._notify("密钥已保存" if ok else "密钥保存失败")
+        self._notify(tr('legacy.8216e0e26e90') if ok else tr('legacy.cc150360fc59'))
         self._refresh()
 
     def _clear_key(self) -> None:
         if not self._provider_id:
             return
         self.viewmodel.set_api_key(self._provider_id, "")
-        self._notify("密钥已清除")
+        self._notify(tr('legacy.8de8c7493bfb'))
         self._refresh()
 
     def _add_model(self) -> None:
@@ -454,14 +456,14 @@ class SettingsPane(ViewBase):
         model_id = self._new_model_edit.text().strip()
         added = self.viewmodel.add_model(self._provider_id, model_id)
         self._new_model_edit.clear()
-        self._notify("模型已添加" if added else "模型未添加（id 为空或已存在）")
+        self._notify(tr('legacy.db5ac3f8f154') if added else tr('legacy.5f1ea7e18069'))
         self._refresh()
 
     def _fetch_models(self) -> None:
         """拉清单是异步的：交给窗口层的 runnable，结果回来后写进输入框供勾选/添加。"""
         if not self._provider_id:
             return
-        self._notify("正在拉取模型清单…")
+        self._notify(tr('legacy.f6f756c66755'))
         self._fire(self._on_fetch, self._provider_id)
 
     def _selected_model_id(self) -> str:
@@ -483,14 +485,14 @@ class SettingsPane(ViewBase):
         model_id = self._selected_model_id()
         if model_id:
             self.viewmodel.set_active_model(self._provider_id, model_id)
-            self._notify("已设为默认模型")
+            self._notify(tr('legacy.e31be7e56e3f'))
             self._refresh()
 
     def _remove_model(self) -> None:
         model_id = self._selected_model_id()
         if model_id:
             self.viewmodel.remove_model(self._provider_id, model_id)
-            self._notify("模型已删除")
+            self._notify(tr('legacy.b16386c8a910'))
             self._refresh()
 
     def _open_model(self) -> None:
@@ -512,13 +514,13 @@ class SettingsPane(ViewBase):
             max_output=None if clear else (self._output_spin.value() or None),
             clear=clear,
         )
-        self._notify("模型已保存")
+        self._notify(tr('legacy.5a6ca3d8cdb6'))
         self._refresh()
 
     def _on_effort_changed(self, index: int) -> None:
         if 0 <= index < len(EFFORT_LEVELS):
             self.viewmodel.set_active_effort(EFFORT_LEVELS[index])
-            self._notify("思考等级已更新，下一轮对话生效")
+            self._notify(tr('legacy.cff333d4e3f9'))
             self._refresh_header()
 
     # ── 按钮可用性 ────────────────────────────────────────────────────────
@@ -530,7 +532,7 @@ class SettingsPane(ViewBase):
         for button in (self._edit_model_button, self._toggle_model_button,
                        self._set_default_button, self._remove_model_button):
             button.setEnabled(has_selection)
-        self._toggle_model_button.setText(DISABLE_TEXT if has_selection else ENABLE_TEXT)
+        self._toggle_model_button.setText((tr('legacy.d989e55188c9')) if has_selection else (tr('legacy.d4e9ca3dd494')))
 
     # ── 通知 ──────────────────────────────────────────────────────────────
     def _notify(self, message: str) -> None:

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import hashlib
 import json
@@ -19,7 +20,7 @@ MANIFEST_FORMAT = 4
 def dependency_specs() -> list[str]:
     value = load_app_config().get("project", {}).get("dependencies", [])
     if not isinstance(value, list):
-        raise RuntimeError("[project].dependencies must be an array of requirement strings")
+        raise RuntimeError(tr('legacy.1a8690616c5d'))
     return [str(item).strip() for item in value if str(item).strip()]
 
 
@@ -28,7 +29,7 @@ def _find_links() -> list[str]:
     if value in (None, ""):
         return []
     if not isinstance(value, list):
-        raise RuntimeError("[tool.ai_upper.dependencies].find_links must be an array")
+        raise RuntimeError(tr('legacy.b934d5e06a48'))
     links: list[str] = []
     for item in value:
         value = str(item).strip()
@@ -115,7 +116,7 @@ def resolution_python(target: Target) -> tuple[Path, list[str]]:
 
             sdk_python = Path(sdk_info(target)["python_executable"])
             if not _has_pip(sdk_python):
-                raise RuntimeError(f"Target SDK Python has no pip: {sdk_python}")
+                raise RuntimeError(tr('legacy.bf86d52e07d1' ,p1=sdk_python))
             return sdk_python, _resolver_args()
         try:
             runtime = runtime_executable(target)
@@ -131,7 +132,7 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
     try:
         subprocess.run(cmd, cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
-        raise RuntimeError(f"Third-party resolver failed ({exc.returncode}): {' '.join(map(str, cmd))}") from exc
+        raise RuntimeError(tr('legacy.f3aac04142e4' ,p1=exc.returncode, p3=' '.join(map(str, cmd)))) from exc
 
 
 def wheel_sha256(path: Path) -> str:
@@ -153,7 +154,7 @@ def _manifest_path(target: Target) -> Path:
 def _requirement_name(spec: str) -> str:
     match = re.match(r"^\s*([A-Za-z0-9][A-Za-z0-9_.-]*)", spec)
     if not match:
-        raise RuntimeError(f"Could not parse dependency name: {spec}")
+        raise RuntimeError(tr('legacy.60ec31793db3' ,p1=spec))
     return re.sub(r"[-_.]+", "-", match.group(1)).lower()
 
 
@@ -241,7 +242,7 @@ def _safe_member(name: str) -> Path:
     parts = name.rstrip("/").split("/")
     if (not name or name.startswith("/") or "\\" in name
             or PureWindowsPath(name).drive or any(part in {"", ".", ".."} for part in parts)):
-        raise RuntimeError(f"Unsafe wheel member path: {name}")
+        raise RuntimeError(tr('legacy.4446d2641a99' ,p1=name))
     return Path(*parts)
 
 
@@ -250,7 +251,7 @@ def _wheel_records(path: Path) -> tuple[list[str], Path]:
         names = archive.namelist()
         dist_infos = [name for name in names if name.endswith(".dist-info/METADATA")]
         if len(dist_infos) != 1:
-            raise RuntimeError(f"Wheel must contain exactly one .dist-info/METADATA: {path.name}")
+            raise RuntimeError(tr('legacy.63a35d43bd39' ,p1=path.name))
         for name in names:
             _safe_member(name)
         return names, Path(dist_infos[0]).parent
@@ -260,10 +261,10 @@ def _destination_for_member(member: Path, site: Path, staging: Path, data_root: 
     parts = member.parts
     if parts[0] != data_root:
         if parts[0].endswith(".data"):
-            raise RuntimeError(f"Invalid wheel .data member: {'/'.join(parts)}")
+            raise RuntimeError(tr('legacy.f6c295981d4f' ,p1='/'.join(parts)))
         return site.joinpath(*parts)
     if len(parts) < 3:
-        raise RuntimeError(f"Invalid wheel .data member: {'/'.join(parts)}")
+        raise RuntimeError(tr('legacy.f6c295981d4f' ,p1='/'.join(parts)))
     bucket = parts[1]
     relative = parts[2:]
     if bucket in {"purelib", "platlib"}:
@@ -274,7 +275,7 @@ def _destination_for_member(member: Path, site: Path, staging: Path, data_root: 
         return staging.joinpath("runtime-data", "bin", *relative)
     if bucket == "headers":
         return None
-    raise RuntimeError(f"Unsupported wheel data bucket {bucket!r} in {'/'.join(parts)}")
+    raise RuntimeError(tr('legacy.289586e82c85' ,p1=repr(bucket), p3='/'.join(parts)))
 
 
 def _extract_wheel(wheel: Path, site: Path, staging: Path | None = None) -> list[Path]:
@@ -296,7 +297,7 @@ def _extract_wheel(wheel: Path, site: Path, staging: Path | None = None) -> list
             payload = archive.read(info)
             if destination.exists():
                 if destination.read_bytes() != payload:
-                    raise RuntimeError(f"Wheel file collision with different content: {destination}")
+                    raise RuntimeError(tr('legacy.e96ebc94319e' ,p1=destination))
             else:
                 destination.write_bytes(payload)
             _apply_wheel_mode(info, destination)
@@ -362,26 +363,26 @@ def resolve_wheels(target: Target) -> Path:
         if manifest.exists():
             data = json.loads(manifest.read_text(encoding="utf-8"))
             if data.get("format") != MANIFEST_FORMAT or data.get("python") != python_version() or data.get("target") != target.key:
-                raise RuntimeError("Locked wheel manifest does not match configured target")
+                raise RuntimeError(tr('legacy.ff03cbc3fdb9'))
             if data.get("requirements", []) != dependency_specs():
-                raise RuntimeError("Locked wheel requirements do not match app/pyproject.toml")
+                raise RuntimeError(tr('legacy.0b49e185468b'))
             records = {str(item["file"]): item for item in data.get("wheels", []) if isinstance(item, dict) and item.get("file")}
         elif LOCK.exists() or LEGACY_LOCK.exists():
             lock = json.loads((LOCK if LOCK.exists() else LEGACY_LOCK).read_text(encoding="utf-8"))
             target_data = lock.get("targets", {}).get(target.key, {}) if isinstance(lock, dict) else {}
             if isinstance(target_data, dict):
                 if target_data.get("requirements", []) != dependency_specs():
-                    raise RuntimeError("Locked wheel requirements do not match app/pyproject.toml")
+                    raise RuntimeError(tr('legacy.0b49e185468b'))
                 records = {str(item["file"]): item for item in target_data.get("wheels", []) if isinstance(item, dict) and item.get("file")}
         if not records and dependency_specs():
-            raise RuntimeError(f"Locked build has no recorded wheels for {target.key}: {LOCK}")
+            raise RuntimeError(tr('legacy.0388a8a6a156' ,p1=target.key, p3=LOCK))
         actual = {path.name: path for path in _wheel_files(out)}
         if set(actual) != set(records):
-            raise RuntimeError(f"Locked wheel set mismatch: expected {sorted(records)}, found {sorted(actual)}")
+            raise RuntimeError(tr('legacy.1a73f42b3189' ,p1=sorted(records), p3=sorted(actual)))
         for name, record in records.items():
             expected = str(record.get("sha256") or "").lower()
             if expected and wheel_sha256(actual[name]).lower() != expected:
-                raise RuntimeError(f"Wheel checksum mismatch: {name}")
+                raise RuntimeError(tr('legacy.ed895988e213' ,p1=name))
         return out
 
     if out.exists():
@@ -404,7 +405,7 @@ def resolve_wheels(target: Target) -> Path:
     _run(cmd, cwd=APP)
     wheels = _wheel_files(out)
     if not wheels:
-        raise RuntimeError(f"No compatible binary wheel resolved for {target.key} / Python {python_version()}")
+        raise RuntimeError(tr('legacy.e71a487890f2' ,p1=target.key, p3=python_version()))
     for wheel in wheels:
         _wheel_records(wheel)
     stage_site = BUILD / "staging" / target.key / "site-packages"
@@ -416,7 +417,7 @@ def optimize_site(site: Path, target: Target | None = None, trim=None) -> dict[s
     cfg = optimize_config()
     profile = str(cfg.get("profile") or "safe").lower()
     if profile not in {"safe", "aggressive"}:
-        raise RuntimeError("[tool.ai_upper.optimize].profile must be 'safe' or 'aggressive'")
+        raise RuntimeError(tr('legacy.966a7239c972'))
     removed_files = removed_dirs = 0
     remove_caches = bool(cfg.get("remove_python_caches", True))
     for path in sorted(site.rglob("*"), key=lambda value: len(value.parts), reverse=True):
@@ -451,8 +452,7 @@ def optimize_site(site: Path, target: Target | None = None, trim=None) -> dict[s
         qt = prune_qt(site, target)
         if qt:
             print(
-                f"Qt pruning: removed {qt['files']} file(s) and {qt['dirs']} director(ies), "
-                f"freed {qt['bytes'] / 1_000_000:.0f} MB"
+                tr('legacy.b8531fb62cf4' ,p1=qt['files'], p3=qt['dirs'], p5=format(qt['bytes'] / 1000000, f'.0f'))
             )
             removed_files += qt["files"]
             removed_dirs += qt["dirs"]
@@ -481,5 +481,5 @@ def install_wheels(target: Target, staging: Path, trim=None) -> Path:
     optimize = optimize_site(site, target, trim)
     _write_manifest(target, _wheel_files(out), site, imports)
     if optimize["removed_files"] or optimize["removed_dirs"]:
-        print(f"Third-party optimization: removed {optimize['removed_files']} files and {optimize['removed_dirs']} directories")
+        print(tr('legacy.444fb7db34a5' ,p1=optimize['removed_files'], p3=optimize['removed_dirs']))
     return out

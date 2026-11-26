@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import struct
 from dataclasses import dataclass
@@ -95,7 +96,7 @@ def _mach_arches(data: bytes, magic: int) -> set[str]:
 
 def _mach_loadable(data: bytes, magic: int) -> bool:
     if len(data) < 16:
-        raise ValueError("Truncated Mach-O header")
+        raise ValueError(tr('legacy.5952334a238d'))
     endian = "<" if magic in _MACH_LITTLE_MAGICS else ">"
     file_type = struct.unpack_from(endian + "I", data, 12)[0]
     return file_type in _MACH_LOADABLE_FILETYPES
@@ -105,12 +106,12 @@ def _fat_entries(data: bytes, magic: int) -> list[tuple[int, int, int]]:
     little = magic in {_FAT_LITTLE_MAGIC, _FAT64_LITTLE_MAGIC}
     endian = "<" if little else ">"
     if len(data) < 8:
-        raise ValueError("Truncated Mach-O universal header")
+        raise ValueError(tr('legacy.6c1b360b6c21'))
     nfat_arch = struct.unpack_from(endian + "I", data, 4)[0]
     is_64 = magic in {_FAT64_BIG_MAGIC, _FAT64_LITTLE_MAGIC}
     entry_size = 32 if is_64 else 20
     if not nfat_arch or len(data) < 8 + nfat_arch * entry_size:
-        raise ValueError(f"Truncated Mach-O universal header: {len(data)} bytes")
+        raise ValueError(tr('legacy.855aa6fe0dee' ,p1=len(data)))
     entries = []
     for index in range(nfat_arch):
         offset = 8 + index * entry_size
@@ -131,7 +132,7 @@ def _fat_loadable(path: Path, data: bytes, magic: int) -> bool:
     with path.open("rb") as stream:
         for _, start, size in entries:
             if start < 8 or size < 4 or start + size > file_size:
-                raise ValueError(f"Invalid Mach-O slice bounds: {path}")
+                raise ValueError(tr('legacy.59239d67e656' ,p1=path))
             stream.seek(start)
             header = stream.read(min(size, 16))
             slice_magic = struct.unpack_from(">I", header)[0]
@@ -183,7 +184,7 @@ def inspect(path: Path) -> BinaryInfo:
         elif data[5] == 2:
             endian = ">"
         else:
-            raise ValueError(f"Invalid ELF byte order: {path}")
+            raise ValueError(tr('legacy.c630b0165f2b' ,p1=path))
         elf_type = struct.unpack_from(endian + "H", data, 16)[0]
         machine = struct.unpack_from(endian + "H", data, 18)[0]
         elf = {62: "x86_64", 183: "arm64"}
@@ -193,7 +194,7 @@ def inspect(path: Path) -> BinaryInfo:
             elf.get(machine, f"0x{machine:04x}"),
             loadable=elf_type in _ELF_LOADABLE_TYPES,
         )
-    raise ValueError(f"Unsupported or invalid native binary: {path}")
+    raise ValueError(tr('legacy.f78cb8f15d64' ,p1=path))
 
 
 _TARGET_FORMATS = {"windows": "PE", "macos": "Mach-O", "linux": "ELF"}
@@ -204,7 +205,7 @@ def target_format(target) -> str:
     try:
         return _TARGET_FORMATS[target.os]
     except KeyError as exc:
-        raise RuntimeError(f"Unsupported target OS: {target.os}") from exc
+        raise RuntimeError(tr('legacy.c3e2d9bde7f6' ,p1=target.os)) from exc
 
 
 def is_debug_artifact(path: Path) -> bool:
@@ -258,13 +259,12 @@ def verify_arch(path: Path, target) -> BinaryInfo:
         arches = _fat_arches(data, magic)
         if expected_arch(target) not in arches:
             raise RuntimeError(
-                f"Architecture mismatch: {path.name}: universal ({', '.join(sorted(arches))}), "
-                f"expected {target.arch}." + _ARCH_MISMATCH_REMEDY
+                tr('legacy.625a84f22f1f' ,p1=path.name, p3=', '.join(sorted(arches)), p5=target.arch) + _ARCH_MISMATCH_REMEDY
             )
         return info
     if not compatible_with(info.arch, expected_arch(target)):
         raise RuntimeError(
-            f"Architecture mismatch: {path.name}: {info.arch}, expected {target.arch}."
+            tr('legacy.57ccc8dc3c32' ,p1=path.name, p3=info.arch, p5=target.arch)
             + _ARCH_MISMATCH_REMEDY
         )
     return info

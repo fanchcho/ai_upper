@@ -13,6 +13,7 @@ highlight.js 的 token 名（comment/keyword/string/number/title/type/attr）定
 语言不支持时不着色——不做「猜一个语法」的假高亮。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import re
 from typing import Any, Dict, List, Optional, Pattern, Tuple
@@ -234,7 +235,7 @@ class CodeHighlighter(QSyntaxHighlighter):
 
     def __init__(self, document: Any, style: Optional[BodyStyle] = None) -> None:
         if not QT_AVAILABLE:  # pragma: no cover - 无 Qt 时不该构造
-            raise ImportError("CodeHighlighter requires a Qt binding")
+            raise ImportError(tr('legacy.f528c08df47d'))
         super().__init__(document)
         self.style = style or BodyStyle()
         self._formats: Dict[str, Any] = {}

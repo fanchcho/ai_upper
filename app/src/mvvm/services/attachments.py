@@ -21,6 +21,7 @@ IPC：附件选择直接调 `pick_attachments()`，发送直接调 `build_attach
 发送侧仍需能拼出同样的提示；但当前没有任何路径会往 `allowed_dirs` 里写。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import base64
 import os
@@ -115,7 +116,7 @@ class AttachmentService:
 
     def _require(self, value: Optional[Callable[..., Any]], what: str) -> Callable[..., Any]:
         if value is None:
-            raise RuntimeError(f"{what}未接线：需要宿主注入系统对话框")
+            raise RuntimeError(tr('legacy.c85587c0bd2b' ,p0=what))
         return value
 
     # ── 类型 / 体积判定（选择框与发送共用）───────────────────────────────────

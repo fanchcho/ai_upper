@@ -12,6 +12,7 @@
   按常规拼法必然 404。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 from dataclasses import dataclass
@@ -180,7 +181,7 @@ def build_provider(
         return OpenAIProvider(resolved.base_url, api_key, **common)
     if resolved.adapter == "responses":
         return ResponsesProvider(resolved.base_url, api_key, **common)
-    raise ValueError(f"未知的 provider adapter：{resolved.adapter!r}")
+    raise ValueError(tr('legacy.e9e8b9094c5b' ,p1=repr(resolved.adapter)))
 
 
 @dataclass(frozen=True)
@@ -245,7 +246,7 @@ class _closing:  # noqa: N801 - 与上下文管理器习惯一致
 
 def normalized_not_configured(what: str = "模型服务商") -> NormalizedError:
     """统一的「没配置」错误，界面据此显示设置入口而不是技术栈堆栈。"""
-    return NormalizedError("invalid_request", f"尚未配置{what}：请到设置页填写服务地址、模型与 API 密钥")
+    return NormalizedError("invalid_request", tr('legacy.f08c47e70238' ,p1=what))
 
 
 __all__ = [

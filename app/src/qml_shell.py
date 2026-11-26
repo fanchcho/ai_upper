@@ -18,6 +18,7 @@ frame，但段错误无法在进程内捕获，所以这里保留 ``AI_UPPER_QML
 时正文退化为纯文本（``render_plain_text``，不建表格），壳与列表照旧。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import base64
 import json
@@ -413,7 +414,7 @@ class ShellBridge(QtCore.QObject):
             elif operation == "saveApproval":
                 service.write(approvalEnabled=data.get('enabled') is True)
             elif operation not in ("read", "identities"):
-                raise ValueError("Unknown settings operation")
+                raise ValueError(tr('legacy.e33129d04c41'))
             return json.dumps({"ok": True, "model": service.custom(), "servers": service.servers(), "approvalEnabled": service.data().get('approvalEnabled') is True,
                                "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
         except (ValueError, OSError, KeyError) as exc:
@@ -513,7 +514,7 @@ class ShellBridge(QtCore.QObject):
                 payload = json.loads(response.read().decode("utf-8"))
             tag = str(payload.get("tag_name") or "").strip().lstrip("vV")
             if not tag:
-                raise ValueError("release tag missing")
+                raise ValueError(tr('legacy.3682234e64de'))
             if _version_tuple(tag) > _version_tuple(app_version()):
                 state = {
                     "phase": "available",

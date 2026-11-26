@@ -27,6 +27,7 @@
 不会返回假成功。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import asyncio
 import threading
@@ -165,10 +166,10 @@ class ChatHost:
     def send(self, request: Any) -> dict[str, str]:
         """`chat:send`：落盘用户消息 → 推 turn_start → 后台起回合 → 立即返回 turnId。"""
         if not isinstance(request, dict):
-            raise BridgeError("chat:send 需要一个对象")
+            raise BridgeError(tr('legacy.a728e87a8a99'))
         session_id = _as_str(request.get("sessionId"))
         if not session_id:
-            raise BridgeError("chat:send 缺少 sessionId")
+            raise BridgeError(tr('legacy.264bbac62499'))
         text = _as_str(request.get("text"))
         if self.is_busy(session_id):
             raise BridgeError(BUSY_MESSAGE)
@@ -203,7 +204,7 @@ class ChatHost:
             # note 是「读不进消息」的说明，拼在提问正文后的括号里（原版 questionText 同形状）。
             question = f"{question}\n（{'；'.join(notes)}）"
         if not question.strip():
-            raise BridgeError("chat:send 的 text 为空：没有可发送的内容")
+            raise BridgeError(tr('legacy.455eb564fc42'))
         vm = self.vm_for(session_id)
         # ViewModel 的 run_turn 自己落盘用户消息并写标题；这里只为 turn_start 准备展示形态。
         turn_id = uuid.uuid4().hex
@@ -322,7 +323,7 @@ class ChatHost:
         payload = request if isinstance(request, dict) else {}
         session_id = _as_str(payload.get("sessionId"))
         if not session_id:
-            raise BridgeError("chat:create-session 缺少 sessionId")
+            raise BridgeError(tr('legacy.b2e079b9ad36'))
         session = self.store.ensure_session(
             session_id,
             persona_id=_optional_str(payload.get("personaId")),
@@ -451,9 +452,9 @@ class ChatHost:
         payload = request if isinstance(request, dict) else {}
         session_id = _as_str(payload.get("sessionId"))
         if not session_id:
-            raise BridgeError("chat:compact 缺少 sessionId")
+            raise BridgeError(tr('legacy.105260295be9'))
         if self.store.load_session(session_id) is None:
-            raise BridgeError(f"会话不存在：{session_id}")
+            raise BridgeError(tr('legacy.c93accfa32ee' ,p1=session_id))
         if self.is_busy(session_id):
             raise BridgeError(BUSY_MESSAGE)
         vm = self.vm_for(session_id)

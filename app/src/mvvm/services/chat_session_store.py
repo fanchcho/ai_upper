@@ -16,6 +16,7 @@
 索引落盘失败仍然静默——索引可从对话文件重建，吞掉是安全的。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 import os
@@ -51,7 +52,7 @@ def safe_id(session_id: str) -> str:
     """会话 id → 文件名安全形式（白名单字符），杜绝 `../` 与分隔符造成的路径穿越。"""
     cleaned = _SAFE_ID.sub("", session_id)
     if not cleaned:
-        raise ValueError(f"非法会话 id：{session_id!r}")
+        raise ValueError(tr('legacy.66b637d4b6c5' ,p1=repr(session_id)))
     return cleaned
 
 
@@ -348,7 +349,7 @@ class ChatSessionStore:
         session_id = safe_id(session_id)
         session = self._cache.get(session_id)
         if session is None:
-            raise KeyError(f"会话不在内存中，未加载过：{session_id}")
+            raise KeyError(tr('legacy.c74e5394b8d9' ,p1=session_id))
         stale = self._sync_compacted(session)
         live = session.messages[session.compacted.count:] if session.compacted else session.messages
         payload = session.model_copy(update={"messages": live})

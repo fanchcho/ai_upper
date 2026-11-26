@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import hashlib
 import json
@@ -89,44 +90,44 @@ def write_lock(target: Target) -> Path:
 def verify_lock(target: Target) -> None:
     path = lock_path()
     if not path.exists():
-        raise RuntimeError(f"Lock file not found: {path}; run python tools/build.py --lock")
+        raise RuntimeError(tr('legacy.7fa7f36a712d' ,p1=path))
     data = json.loads(path.read_text(encoding="utf-8"))
     if data.get("format") != FORMAT:
-        raise RuntimeError(f"Unsupported lock format: {data.get('format')!r}")
+        raise RuntimeError(tr('legacy.73915115af15' ,p1=repr(data.get('format'))))
     if data.get("python") != python_version() or data.get("runtime_provider") != runtime_provider():
-        raise RuntimeError("Lock Python/runtime provider does not match app configuration")
+        raise RuntimeError(tr('legacy.b505dee94c09'))
     target_data = data.get("targets", {}).get(target.key)
     if not isinstance(target_data, dict):
-        raise RuntimeError(f"Target {target.key} is not present in {path}")
+        raise RuntimeError(tr('legacy.2adbbe8ac2c6' ,p1=target.key, p3=path))
     if target_data.get("requirements", []) != dependency_specs():
-        raise RuntimeError("Lock dependency requirements do not match app/pyproject.toml")
+        raise RuntimeError(tr('legacy.15f4dcb61026'))
 
     spec = runtime_spec(target)
     manifest = read_manifest(spec.root)
     expected_manifest = target_data.get("runtime_manifest_sha256")
     if expected_manifest and manifest_hash(manifest) != expected_manifest:
-        raise RuntimeError(f"Runtime manifest checksum mismatch for {target.key}")
+        raise RuntimeError(tr('legacy.8d965fcc31e7' ,p1=target.key))
 
     if runtime_provider() == "pbs":
         recorded_runtime = target_data.get("runtime", {})
         if target.os == "windows" and (not isinstance(recorded_runtime, dict)
                                        or recorded_runtime.get("source") != "python.org"):
-            raise RuntimeError("Locked Windows PBS build requires an official python.org embeddable runtime; recreate lock")
+            raise RuntimeError(tr('legacy.06c62855273f'))
         for label, root, marker_name, legacy_marker in (
             ("runtime", spec.root, RUNTIME_MARKER, LEGACY_RUNTIME_MARKER),
             ("sdk", spec.sdk_root, SDK_MARKER, LEGACY_SDK_MARKER),
         ):
             current = _marker(root, marker_name, legacy_marker)
             if not current:
-                raise RuntimeError(f"Locked build requires cached PBS {label}: {root}")
+                raise RuntimeError(tr('legacy.b31d726c4c2d' ,p1=label, p3=root))
             for key, expected in target_data.get(label, {}).items():
                 if expected and current.get(key) != expected:
-                    raise RuntimeError(f"Locked PBS {label} mismatch for {target.key}: {key}")
+                    raise RuntimeError(tr('legacy.af704404e11e' ,p1=label, p3=target.key, p5=key))
 
     actual = {path.name: path for path in wheel_dir(target).glob("*.whl")}
     expected_wheels = {str(record["file"]): record for record in target_data.get("wheels", []) if isinstance(record, dict) and record.get("file")}
     if set(actual) != set(expected_wheels):
-        raise RuntimeError(f"Locked wheel set mismatch: expected {sorted(expected_wheels)}, found {sorted(actual)}")
+        raise RuntimeError(tr('legacy.1a73f42b3189' ,p1=sorted(expected_wheels), p3=sorted(actual)))
     for name, record in expected_wheels.items():
         if _sha256(actual[name]).lower() != str(record["sha256"]).lower():
-            raise RuntimeError(f"Locked wheel checksum mismatch: {name}")
+            raise RuntimeError(tr('legacy.685561550505' ,p1=name))

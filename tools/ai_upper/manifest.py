@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import hashlib
 import json
@@ -29,10 +30,10 @@ def write_manifest(root: Path, data: dict[str, Any]) -> Path:
 def read_manifest(root: Path) -> dict[str, Any]:
     path = root / FILENAME
     if not path.exists():
-        raise RuntimeError(f"Runtime manifest not found: {path}")
+        raise RuntimeError(tr('legacy.413b64ddff8a' ,p1=path))
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise RuntimeError(f"Invalid runtime manifest root: {path}")
+        raise RuntimeError(tr('legacy.394fadce7e01' ,p1=path))
     return data
 
 
@@ -42,12 +43,12 @@ def _relative(value: str | Path | None, root: Path) -> str:
     path = Path(str(value))
     if not path.is_absolute():
         if ".." in path.parts:
-            raise RuntimeError(f"Path {path} must not escape {root}")
+            raise RuntimeError(tr('legacy.516e7adbf6d4' ,p1=path, p3=root))
         return path.as_posix()
     try:
         return path.resolve().relative_to(root.resolve()).as_posix()
     except ValueError as exc:
-        raise RuntimeError(f"Path {path} must be inside {root} for a portable manifest") from exc
+        raise RuntimeError(tr('legacy.f2710f322222' ,p1=path, p3=root)) from exc
 
 
 def build_manifest(spec: RuntimeSpec, sdk: dict[str, Any]) -> dict[str, Any]:
@@ -91,12 +92,12 @@ def validate_manifest(data: dict[str, Any], target: Target, spec: RuntimeSpec) -
     }
     for key, value in expected.items():
         if str(data.get(key)) != str(value):
-            raise RuntimeError(f"Runtime manifest {key} {data.get(key)!r} != {value!r}")
+            raise RuntimeError(tr('legacy.05d57bbbb8a7' ,p1=key, p3=repr(data.get(key)), p5=repr(value)))
     if not spec.root.exists() or not spec.sdk_root.exists():
-        raise RuntimeError(f"Runtime/SDK missing for {target.key}: runtime={spec.root} sdk={spec.sdk_root}")
+        raise RuntimeError(tr('legacy.2a64f7584057' ,p1=target.key, p3=spec.root, p5=spec.sdk_root))
     for key in ("python_executable", "include_dir"):
         value = data.get(key)
         if not isinstance(value, str) or not value or Path(value).is_absolute() or ".." in Path(value).parts:
-            raise RuntimeError(f"Runtime manifest {key} must be a relative SDK path without '..'")
+            raise RuntimeError(tr('legacy.f82705683352' ,p1=key))
         if not (spec.sdk_root / value).exists():
-            raise RuntimeError(f"Runtime manifest {key} does not exist: {spec.sdk_root / value}")
+            raise RuntimeError(tr('legacy.d12f56ca114a' ,p1=key, p3=spec.sdk_root / value))

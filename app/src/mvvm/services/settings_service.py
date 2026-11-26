@@ -13,6 +13,7 @@
 敏感信息绝不进这里：API 密钥走 `secrets_vault`。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import copy
 import json
@@ -82,7 +83,7 @@ class SettingsService:
     def set_config(self, patch: dict[str, Any]) -> dict[str, bool]:
         """顶层浅合并；值 `None` 删除该键。落盘失败抛 OSError（不静默）。"""
         if not isinstance(patch, dict):
-            raise TypeError("config 补丁必须是对象")
+            raise TypeError(tr('legacy.2512eb63b237'))
         config = self._ensure_loaded()
         # deva-agent desktop-models.mjs: expectedRaw prevents stale desktop mirrors
         # from overwriting an external model/configuration edit.
@@ -91,7 +92,7 @@ class SettingsService:
         except FileNotFoundError:
             current_raw = None
         if current_raw != self._loaded_raw:
-            raise OSError("Configuration changed externally; reload before saving")
+            raise OSError(tr('legacy.fc014981cacf'))
         for key, value in patch.items():
             if value is None:
                 config.pop(key, None)

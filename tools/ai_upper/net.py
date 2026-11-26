@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import json
 import os
@@ -54,8 +55,7 @@ def open_url(request: urllib.request.Request) -> BinaryIO:
                 raise
             delay = _retry_delay(exc, attempt)
             print(
-                f"Network request failed (HTTP {exc.code}) for {request.full_url}; "
-                f"retrying in {delay:g}s ({attempt + 1}/{retries})"
+                tr('legacy.fed1ac0d22f9' ,p1=exc.code, p3=request.full_url, p5=format(delay, f'g'), p7=attempt + 1, p9=retries)
             )
             time.sleep(delay)
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
@@ -64,8 +64,7 @@ def open_url(request: urllib.request.Request) -> BinaryIO:
                 raise
             delay = min(2.0**attempt, MAX_BACKOFF)
             print(
-                f"Network request failed for {request.full_url}: {exc}; "
-                f"retrying in {delay:g}s ({attempt + 1}/{retries})"
+                tr('legacy.2de0313fff42' ,p1=request.full_url, p3=exc, p5=format(delay, f'g'), p7=attempt + 1, p9=retries)
             )
             time.sleep(delay)
 

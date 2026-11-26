@@ -4,13 +4,14 @@
 与 MainWindow/AboutWindow 的约定一致。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Optional
 
 from mvvm.view_models.demo_vm import DemoViewModel
 from mvvm.views.base_view import ViewBase
 
-RESET_BUTTON_TEXT = "重置"
+RESET_BUTTON_TEXT = tr('legacy.3d81345303ab')
 
 
 class DemoWindow(ViewBase):
@@ -27,12 +28,12 @@ class DemoWindow(ViewBase):
         from utils.qt_compat import QtWidgets
 
         window = QtWidgets.QWidget()
-        window.setWindowTitle("MVVM 双向绑定演示")
+        window.setWindowTitle(tr('legacy.d6c39c5ceb4c'))
         layout = QtWidgets.QVBoxLayout(window)
 
         line_edit = QtWidgets.QLineEdit(viewmodel.name)
         greeting_label = QtWidgets.QLabel(viewmodel.greeting)
-        reset_button = QtWidgets.QPushButton(RESET_BUTTON_TEXT)
+        reset_button = QtWidgets.QPushButton((tr('legacy.3d81345303ab')))
         layout.addWidget(line_edit)
         layout.addWidget(greeting_label)
         layout.addWidget(reset_button)

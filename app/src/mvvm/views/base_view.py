@@ -1,6 +1,7 @@
 """
 View Layer - Pure UI Components with MVVM Data Binding
 """
+from locale_runtime import tr
 
 from typing import Any, Optional, Callable, List
 from mvvm.core import BaseViewModel, PropertyChangedEvent
@@ -71,8 +72,7 @@ class MVVMBinding:
         getter_name = ui_info['getter']
         if getter_name is None:
             raise ValueError(
-                f"binding {self.property_name!r} has no getter: "
-                f"pass getter_name to add_ui_element() for two-way binding"
+                tr('legacy.9258fd0eb3ac' ,p1=repr(self.property_name))
             )
         getter = getattr(ui_info['element'], getter_name)
         value = getter() if callable(getter) else getter
@@ -101,7 +101,7 @@ class CommandBinding:
                 event_obj = getattr(ui_element, event_name)
                 event_obj.connect(lambda param=None: self.command.execute(param))
             except Exception as e:
-                print(f"Error binding command: {e}")
+                print(tr('legacy.59db7ca1fe5e' ,p1=e))
     
     def execute(self, parameter: Any = None) -> None:
         """执行命令"""
@@ -126,7 +126,7 @@ class ViewBase:
     ) -> MVVMBinding:
         """绑定ViewModel属性到UI元素（attribute_name 可为 setter 方法名）"""
         if not self.viewmodel:
-            raise ValueError("ViewModel not set")
+            raise ValueError(tr('legacy.2137be04a7dc'))
         
         binding = MVVMBinding(self.viewmodel, property_name)
         binding.add_ui_element(ui_element, attribute_name, getter_name)
@@ -136,7 +136,7 @@ class ViewBase:
     def bind_command(self, command_name: str, ui_element: Any, event_name: str = 'clicked') -> CommandBinding:
         """绑定ViewModel命令到UI事件"""
         if not self.viewmodel:
-            raise ValueError("ViewModel not set")
+            raise ValueError(tr('legacy.2137be04a7dc'))
         
         binding = CommandBinding(self.viewmodel, command_name)
         binding.add_ui_element(ui_element, event_name)

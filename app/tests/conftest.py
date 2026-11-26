@@ -59,3 +59,17 @@ def install_fake_binding(monkeypatch, bindings: dict[str, dict[str, dict[str, ob
     monkeypatch.setattr(qt_compat, "_binding", None)
     monkeypatch.setattr(qt_compat, "_modules", {})
     return qt_compat
+
+@pytest.fixture(autouse=True)
+def _legacy_text_language(request, monkeypatch):
+    """Existing application scenarios assert their original Chinese UI strings.
+
+    Build/CLI tests retain the English host default. Dedicated i18n tests set
+    their own locale and verify both languages and selection precedence.
+    """
+    name = request.node.fspath.basename
+    chinese = ('test_compaction.py', 'test_host_write.py', 'test_provider_headers.py', 'test_chat_vm_compaction.py', 'test_chat_vm_todos.py', 'test_chat_streaming.py', 'test_mvvm_example.py', 'test_chat_vm.py', 'test_chat_sessions_vm.py', 'test_transcript_render.py',
+               'test_deva_panes.py', 'test_settings_vm.py', 'test_provider_gateway.py',
+               'test_provider_setup.py', 'test_demo.py', 'test_mvvm.py')
+    if name in chinese:
+        monkeypatch.setenv('AI_UPPER_LANG', 'zh-CN')

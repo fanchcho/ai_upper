@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import hashlib
 import os
@@ -48,11 +49,7 @@ def _housekeeping(step, *, path: Path) -> None:
                 raise
             if attempt == _BUSY_ATTEMPTS:
                 raise RuntimeError(
-                    f"{path}: Windows still reports this tree in use after {_BUSY_ATTEMPTS} "
-                    f"attempts (WinError {exc.winerror}). Another process holds it: close the "
-                    "packaged application if it is still running from an earlier build, and "
-                    "check for an editor, indexer, or antivirus scan that is reading or "
-                    "executing the tree, then run the build again."
+                    tr('legacy.1de5811077bb' ,p0=path, p2=_BUSY_ATTEMPTS, p4=exc.winerror)
                 ) from exc
             time.sleep(_BUSY_DELAY)
 
@@ -60,7 +57,7 @@ def _housekeeping(step, *, path: Path) -> None:
 def copy_file_contents(source: Path, destination: Path, *, replace: bool = True) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists() and not replace:
-        raise RuntimeError(f"File collision: {destination}")
+        raise RuntimeError(tr('legacy.c0c95248a392' ,p1=destination))
     shutil.copyfile(source, destination)
     # Executable status is functional, not disposable metadata: a copied
     # interpreter or tool must stay runnable. Only execute bits are added;
@@ -75,7 +72,7 @@ def copy_tree_contents(source: Path, destination: Path, *, replace: bool = True)
     source = Path(source)
     destination = Path(destination)
     if not source.is_dir():
-        raise RuntimeError(f"Copy source directory does not exist: {source}")
+        raise RuntimeError(tr('legacy.08300c05c265' ,p1=source))
     destination.mkdir(parents=True, exist_ok=True)
     for entry in os.scandir(source):
         src = Path(entry.path)
@@ -83,7 +80,7 @@ def copy_tree_contents(source: Path, destination: Path, *, replace: bool = True)
         if entry.is_symlink():
             if dst.exists() or dst.is_symlink():
                 if not replace:
-                    raise RuntimeError(f"File collision: {dst}")
+                    raise RuntimeError(tr('legacy.c0c95248a392' ,p1=dst))
                 if dst.is_dir() and not dst.is_symlink():
                     shutil.rmtree(dst)
                 else:
@@ -92,7 +89,7 @@ def copy_tree_contents(source: Path, destination: Path, *, replace: bool = True)
         elif entry.is_dir(follow_symlinks=False):
             if dst.exists() and not dst.is_dir():
                 if not replace:
-                    raise RuntimeError(f"File collision: {dst}")
+                    raise RuntimeError(tr('legacy.c0c95248a392' ,p1=dst))
                 dst.unlink()
                 dst.mkdir(parents=True, exist_ok=True)
             copy_tree_contents(src, dst, replace=replace)
@@ -127,7 +124,7 @@ def retire_tree(path: Path, *, trash: Path) -> None:
     if not path.exists():
         return
     if not path.is_dir() or path.is_symlink():
-        raise RuntimeError(f"Not a directory tree: {path}")
+        raise RuntimeError(tr('legacy.3090d43f0646' ,p1=path))
     trash.mkdir(parents=True, exist_ok=True)
     retired = trash / f"{path.name}.{os.getpid()}"
     if retired.exists():

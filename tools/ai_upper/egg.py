@@ -20,6 +20,7 @@ changes the bundle size -- the bulk is the runtime and third-party wheels; use
 ``[tool.ai_upper.trim]`` and Qt pruning for size.
 """
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import hashlib
 import io
@@ -71,15 +72,15 @@ class EggConfig:
     def __post_init__(self) -> None:
         text = str(self.key_hex or "").strip()
         if not _KEY_PATTERN.match(text):
-            raise RuntimeError("[tool.ai_upper.egg].key_hex must be a hexadecimal string")
+            raise RuntimeError(tr('legacy.a12b8b11db79'))
         if len(bytes.fromhex(text)) < 16:
-            raise RuntimeError("[tool.ai_upper.egg].key_hex must contain at least 16 bytes")
+            raise RuntimeError(tr('legacy.274b02be0ae8'))
         backend = str(self.backend or "auto").strip().lower()
         if backend not in BACKENDS:
-            raise RuntimeError("[tool.ai_upper.egg].backend must be one of: " + ", ".join(BACKENDS))
+            raise RuntimeError(tr('legacy.e5ed12c721d9') + ", ".join(BACKENDS))
         compression = str(self.compression or "deflated").strip().lower()
         if compression not in COMPRESSIONS:
-            raise RuntimeError("[tool.ai_upper.egg].compression must be one of: " + ", ".join(COMPRESSIONS))
+            raise RuntimeError(tr('legacy.7128dc053518') + ", ".join(COMPRESSIONS))
         object.__setattr__(self, "key_hex", text.lower())
         object.__setattr__(self, "backend", backend)
         object.__setattr__(self, "compression", compression)
@@ -99,7 +100,7 @@ def egg_config(enabled=None, key_hex=None, backend=None, compression=None) -> Eg
     """
     value = ai_upper_config().get("egg", {})
     if not isinstance(value, dict):
-        raise RuntimeError("[tool.ai_upper.egg] must be a table")
+        raise RuntimeError(tr('legacy.2d899cdb2de9'))
     resolved = EggConfig(
         enabled=bool(value.get("enabled", True)),
         key_hex=str(value.get("key_hex") or DEFAULT_KEY_HEX),
@@ -192,7 +193,7 @@ def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
         for name in names:
             source = site / Path(name)
             if not source.is_file():
-                raise RuntimeError("egg input is missing: " + str(source))
+                raise RuntimeError(tr('legacy.66baac4d0116') + str(source))
             stored = name.startswith(BUNDLE_DIR + "/")
             entry_method = zipfile.ZIP_STORED if stored else method
             entry_level = None if stored else level
@@ -255,7 +256,7 @@ def application_files(site: Path, compiled) -> list:
             result.add(relative)
     missing = [name for name in result if not (site / name).is_file()]
     if missing:
-        raise RuntimeError("egg input missing from site-packages: " + ", ".join(sorted(missing)))
+        raise RuntimeError(tr('legacy.b34db3c46ea0') + ", ".join(sorted(missing)))
     return sorted(result)
 
 
@@ -287,11 +288,11 @@ def egg_loader_source() -> str:
     try:
         text.encode("ascii")
     except UnicodeEncodeError as exc:
-        raise RuntimeError("egg_loader.py must be pure ASCII: " + str(exc))
+        raise RuntimeError(tr('legacy.6a1df78be92a') + str(exc))
     if '"""' in text:
-        raise RuntimeError('egg_loader.py contains a triple quote and cannot be embedded')
+        raise RuntimeError(tr('legacy.4a50531fe7c0'))
     if ')aiupper"' in text:
-        raise RuntimeError('egg_loader.py contains the C++ raw string delimiter )aiupper"')
+        raise RuntimeError(tr('legacy.69fe978c3b34'))
     compile(text, "egg_loader.py", "exec")
     return text
 
@@ -307,12 +308,12 @@ def _windows_import_library(target_python):
     libdir = next((path for path in candidates if path.exists() and any(path.glob("python*.lib"))), None)
     if libdir is None:
         raise RuntimeError(
-            "Import library of target Python " + target_python.python_major_minor
-            + " not found under the SDK tree " + str(target_python.sdk_root)
+            tr('legacy.0e70298886b9') + target_python.python_major_minor
+            + tr('legacy.42ed6dbd054e') + str(target_python.sdk_root)
         )
     python_lib = "python" + target_python.python_major_minor.replace(".", "")
     if not (libdir / (python_lib + ".lib")).is_file():
-        raise RuntimeError(python_lib + ".lib not found in " + str(libdir))
+        raise RuntimeError(python_lib + tr('legacy.38b5c2cb691b') + str(libdir))
     return target_python.include_dir, libdir, python_lib
 
 
@@ -329,7 +330,7 @@ def build_memimporter(target: Target, site: Path) -> Path:
     Python version (``.pyd`` is on ``EXTENSION_SUFFIXES`` for every version).
     """
     if target.os != "windows":
-        raise RuntimeError("_memimporter is only available for Windows targets")
+        raise RuntimeError(tr('legacy.8890cde6248b'))
     from .python_build import _is_current, _mark_current, _sha256_file
     from .toolchain import resolve_toolchain
 
@@ -337,8 +338,7 @@ def build_memimporter(target: Target, site: Path) -> Path:
     tc = resolve_toolchain(target)
     if tc.compiler_args is None:
         raise RuntimeError(
-            "_memimporter must be compiled with the Zig toolchain; MSVC is not wired up. "
-            "Use backend = 'extract' or install Zig."
+            tr('legacy.8e9148b1af70')
         )
     include, libdir, python_lib = _windows_import_library(target_python)
     cache = _memimporter_cache(target)
@@ -347,7 +347,7 @@ def build_memimporter(target: Target, site: Path) -> Path:
     sources = [VENDOR / name for name in MEMIMPORTER_SOURCES]
     missing = [str(path) for path in sources if not path.is_file()]
     if missing:
-        raise RuntimeError("vendored _memimporter sources are missing: " + ", ".join(missing))
+        raise RuntimeError(tr('legacy.861585b33c07') + ", ".join(missing))
     compiler_args = list(tc.compiler_args or ())
     cmd = [
         tc.compiler, *compiler_args,
@@ -372,7 +372,7 @@ def build_memimporter(target: Target, site: Path) -> Path:
         import subprocess
         subprocess.run(cmd, check=True, env=tc.env)
         if not artifact.is_file():
-            raise RuntimeError("Zig completed but produced no _memimporter.pyd")
+            raise RuntimeError(tr('legacy.88286986a0af'))
         _mark_current(artifact, key)
     destination = site / "_memimporter.pyd"
     shutil.copyfile(artifact, destination)

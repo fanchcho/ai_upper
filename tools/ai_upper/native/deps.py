@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import os
 import re
@@ -134,7 +135,7 @@ def elf_dynamic_entries(path: Path) -> list[tuple[str, str]]:
     else:
         objdump = shutil.which("objdump")
         if not objdump:
-            raise RuntimeError("ELF dependency inspection requires readelf or objdump (binutils)")
+            raise RuntimeError(tr('legacy.76ad0c335006'))
         command = [objdump, "-p", str(path)]
         pattern = r"^\s*(NEEDED|RPATH|RUNPATH)\s+(.*)$"
     output = subprocess.run(command, capture_output=True, text=True, check=True).stdout
@@ -155,7 +156,7 @@ def linux_host_libraries(target) -> dict[str, Path]:
         return {}
     ldconfig = shutil.which("ldconfig") or shutil.which("ldconfig", path="/sbin:/usr/sbin")
     if not ldconfig:
-        raise RuntimeError("Collecting Linux host libraries requires ldconfig")
+        raise RuntimeError(tr('legacy.95f2a6b1f342'))
     output = subprocess.run([ldconfig, "-p"], capture_output=True, text=True, check=True).stdout
     result: dict[str, Path] = {}
     for line in output.splitlines():

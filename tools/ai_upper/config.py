@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import os
 import platform
@@ -79,7 +80,7 @@ class Target:
         if self.os == "linux":
             arch = {"x86_64": "x86_64", "arm64": "aarch64"}[self.arch]
             return tuple(_manylinux_tag(baseline, arch) for baseline in manylinux_baselines())
-        raise RuntimeError(f"Unsupported target: {self.key}")
+        raise RuntimeError(tr('legacy.a3ba010a0f39' ,p1=self.key))
 
     @property
     def primary_wheel_platform(self) -> str:
@@ -173,14 +174,14 @@ def manylinux_baselines() -> list[str]:
         baselines = [str(item) for item in value]
     else:
         raise RuntimeError(
-            "[tool.ai_upper.dependencies].manylinux must be a manylinux_X_Y string or an array of them"
+            tr('legacy.1e57affe7d3b')
         )
     cleaned = [baseline.strip() for baseline in baselines if str(baseline).strip()]
     if not cleaned:
-        raise RuntimeError("[tool.ai_upper.dependencies].manylinux must not be empty")
+        raise RuntimeError(tr('legacy.c3520b7c688c'))
     for baseline in cleaned:
         if baseline != "manylinux2014" and not baseline.startswith("manylinux_"):
-            raise RuntimeError("[tool.ai_upper.dependencies].manylinux must be manylinux_X_Y or manylinux2014")
+            raise RuntimeError(tr('legacy.5909d01df413'))
     return cleaned
 
 
@@ -207,9 +208,7 @@ def load_app_config() -> dict:
         target = _readable_path(APP_CONFIG)
         example = _readable_path(APP_CONFIG_EXAMPLE)
         raise RuntimeError(
-            f"{target} is missing.\n"
-            "Create your local configuration from the tracked template:\n"
-            f"    cp {example} {target}"
+            tr('legacy.8f84890cf58c' ,p0=target, p2=example, p4=target)
         )
     with APP_CONFIG.open("rb") as f:
         return tomllib.load(f)
@@ -241,7 +240,7 @@ def project_config() -> dict:
 def project_version() -> str:
     value = str(project_config().get("version") or "").strip()
     if not value:
-        raise RuntimeError("[project].version is required")
+        raise RuntimeError(tr('legacy.410a72fda1c3'))
     return value
 
 
@@ -253,14 +252,14 @@ def app_config() -> dict:
 def app_name() -> str:
     value = str(app_config().get("name") or "ai_upper").strip()
     if not value or value in {".", ".."} or any(sep in value for sep in ("/", "\\")):
-        raise RuntimeError("[tool.ai_upper.app].name must be a single application name")
+        raise RuntimeError(tr('legacy.6575fb740b4e'))
     return value
 
 
 def app_identifier() -> str:
     value = str(app_config().get("identifier") or "com.example.aiupper").strip()
     if not value:
-        raise RuntimeError("[tool.ai_upper.app].identifier must not be empty")
+        raise RuntimeError(tr('legacy.c504bd9f5b3b'))
     return value
 
 
@@ -271,9 +270,9 @@ def entry_path() -> Path:
     try:
         path.relative_to(root)
     except ValueError as exc:
-        raise RuntimeError("[tool.ai_upper].entry must stay under app/src") from exc
+        raise RuntimeError(tr('legacy.5a24a4ab1787')) from exc
     if path.suffix != ".py" or not path.exists():
-        raise RuntimeError(f"Application entry file does not exist: {path}")
+        raise RuntimeError(tr('legacy.7019cc030ef5' ,p1=path))
     return path
 
 
@@ -317,7 +316,7 @@ def host_target() -> Target:
     }
     name = aliases.get((system, machine))
     if not name:
-        raise RuntimeError(f"Unsupported host: {system} {machine}")
+        raise RuntimeError(tr('legacy.220b02653296' ,p1=system, p3=machine))
     return TARGETS[name]
 
 
@@ -339,14 +338,14 @@ def python_version() -> str:
     value = str(runtime_config().get("python") or "").strip()
     parts = value.split(".")
     if len(parts) != 3 or not all(part.isdigit() for part in parts):
-        raise RuntimeError("[tool.ai_upper.runtime].python must be an exact X.Y.Z Python version")
+        raise RuntimeError(tr('legacy.93d49673235a'))
     return value
 
 
 def runtime_provider() -> str:
     provider = str(runtime_config().get("provider") or "pbs").strip().lower()
     if provider not in {"pbs", "local"}:
-        raise RuntimeError(f"Unsupported runtime provider: {provider!r}; use 'pbs' or 'local'")
+        raise RuntimeError(tr('legacy.bea8934666f1' ,p1=repr(provider)))
     return provider
 
 
@@ -365,14 +364,14 @@ def runtime_spec(target: Target) -> RuntimeSpec:
 def local_runtime_path(target: Target) -> Path:
     value = runtime_config().get("runtime")
     if not value:
-        raise RuntimeError("[tool.ai_upper.runtime].runtime is required when provider = 'local'")
+        raise RuntimeError(tr('legacy.f1d167fd5278'))
     return _expand_target_path(str(value), target)
 
 
 def local_sdk_path(target: Target) -> Path:
     value = runtime_config().get("sdk")
     if not value:
-        raise RuntimeError("[tool.ai_upper.runtime].sdk is required when provider = 'local'")
+        raise RuntimeError(tr('legacy.6e7cdb15e2f4'))
     return _expand_target_path(str(value), target)
 
 
@@ -419,7 +418,7 @@ def cython_merge_mode() -> str:
     if text in ("directory", "dir", "package", "on", "true", "yes", "1"):
         return "directory"
     raise RuntimeError(
-        "[tool.ai_upper.cython].merge must be one of: " + ", ".join(MERGE_MODES)
+        tr('legacy.be1ae9054874') + ", ".join(MERGE_MODES)
     )
 
 
@@ -463,7 +462,7 @@ def native_exclude_patterns() -> list[str]:
     if value in (None, ""):
         return []
     if not isinstance(value, list):
-        raise RuntimeError("[tool.ai_upper.native].exclude must be an array of glob patterns")
+        raise RuntimeError(tr('legacy.584f8fd421ae'))
     return [str(item).strip() for item in value if str(item).strip()]
 
 
@@ -482,9 +481,9 @@ def _positive_int(value, fallback: int, name: str) -> int:
     try:
         parsed = int(value)
     except (TypeError, ValueError) as exc:
-        raise RuntimeError(f"{name} must be an integer") from exc
+        raise RuntimeError(tr('legacy.07caf65db32a' ,p0=name)) from exc
     if parsed < 0:
-        raise RuntimeError(f"{name} must not be negative")
+        raise RuntimeError(tr('legacy.375d1d68d230' ,p0=name))
     return parsed
 
 
@@ -549,8 +548,7 @@ def validate_build_python_version(version_info=None) -> None:
     actual = (int(info.major), int(info.minor))
     if actual < MIN_BUILD_PYTHON:
         raise RuntimeError(
-            f"ai_upper build tool requires Python {MIN_BUILD_PYTHON[0]}.{MIN_BUILD_PYTHON[1]}+; "
-            f"current interpreter is {info.major}.{info.minor}"
+            tr('legacy.d8ae625700b7' ,p1=MIN_BUILD_PYTHON[0], p3=MIN_BUILD_PYTHON[1], p5=info.major, p7=info.minor)
         )
 
 
@@ -568,22 +566,22 @@ def python_executable() -> Path:
         found = shutil.which(name)
         if found:
             return Path(found).resolve()
-    raise RuntimeError("No development Python found. Set AI_UPPER_PYTHON or install Python.")
+    raise RuntimeError(tr('legacy.c1f82cf5b3c6'))
 
 
 def require_local_python() -> Path:
     path = python_executable()
     if not path.exists():
-        raise RuntimeError(f"Development Python not found: {path}")
+        raise RuntimeError(tr('legacy.f1864334de3e' ,p1=path))
     probe = subprocess.run(
         [str(path), "-c", "import sys; print(sys.version_info[0], sys.version_info[1])"],
         capture_output=True, text=True, check=True,
     ).stdout.strip().split()
     if len(probe) != 2:
-        raise RuntimeError(f"Could not determine development Python version: {path}")
+        raise RuntimeError(tr('legacy.2f6c22c0f6ec' ,p1=path))
     major, minor = int(probe[0]), int(probe[1])
     if (major, minor) < MIN_BUILD_PYTHON:
-        raise RuntimeError(f"Development Python {major}.{minor} is too old; Python 3.8+ is required: {path}")
+        raise RuntimeError(tr('legacy.9677611c241a' ,p1=major, p3=minor, p5=path))
     return path
 
 
@@ -593,7 +591,7 @@ def runtime_executable(target: Target) -> Path:
     if target.os == "windows" and runtime_provider() == "pbs":
         executable = root / "python.exe"
         if not executable.is_file():
-            raise RuntimeError(f"Windows embeddable interpreter missing: {executable}")
+            raise RuntimeError(tr('legacy.3d6b8cbf7c40' ,p1=executable))
         return executable
     return _find_target_executable(root, target)
 
@@ -616,7 +614,7 @@ def _find_target_executable(root: Path, target: Target) -> Path:
         for candidate in root.rglob(name):
             if candidate.is_file():
                 return candidate
-    raise RuntimeError(f"Target Python executable not found under {root}")
+    raise RuntimeError(tr('legacy.cf175ca0ebbb' ,p1=root))
 
 
 def _find_target_include(sdk_root: Path) -> Path:
@@ -631,7 +629,7 @@ def _find_target_include(sdk_root: Path) -> Path:
     matches = sorted(p.parent for p in sdk_root.rglob("Python.h"))
     if matches:
         return matches[0]
-    raise RuntimeError(f"Target Python include directory not found under {sdk_root}")
+    raise RuntimeError(tr('legacy.77cdbe3f52f8' ,p1=sdk_root))
 
 
 def resolve_target_python(target: Target) -> TargetPython:
@@ -651,7 +649,7 @@ def resolve_target_python(target: Target) -> TargetPython:
         include = _find_target_include(sdk_root)
     actual = str(info.get("python") or spec.python)
     if actual != spec.python:
-        raise RuntimeError(f"Target Python {actual} does not match configured runtime Python {spec.python}")
+        raise RuntimeError(tr('legacy.a991916500fc' ,p1=actual, p3=spec.python))
     major_minor = ".".join(actual.split(".")[:2])
     abi = f"cp{major_minor.replace('.', '')}"
     suffix = target_extension_suffix(target, major_minor, abi)
@@ -676,11 +674,11 @@ def build_jobs() -> int:
     try:
         jobs = int(value)
     except (TypeError, ValueError) as exc:
-        raise RuntimeError("[tool.ai_upper.build].jobs must be an integer") from exc
+        raise RuntimeError(tr('legacy.bf88c3b7a31c')) from exc
     if jobs == 0:
         return max(1, os.cpu_count() or 1)
     if jobs < 0:
-        raise RuntimeError("[tool.ai_upper.build].jobs must not be negative")
+        raise RuntimeError(tr('legacy.c177f3598735'))
     return jobs
 
 
@@ -688,5 +686,5 @@ def incremental_build_enabled() -> bool:
     """Whether a module that did not change reuses its cached build output."""
     value = build_config().get("incremental", True)
     if not isinstance(value, bool):
-        raise RuntimeError("[tool.ai_upper.build].incremental must be a boolean")
+        raise RuntimeError(tr('legacy.15e5a91d4672'))
     return value

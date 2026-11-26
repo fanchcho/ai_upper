@@ -1,5 +1,6 @@
 """Packaging: build the launcher, assemble the bundle and record the release manifest."""
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import json
 import os
@@ -126,7 +127,7 @@ def build_launcher(target: Target, egg=None):
     if not exe.exists() and (b / "Release" / exe.name).exists():
         exe = b / "Release" / exe.name
     if not exe.exists():
-        raise RuntimeError(f"Launcher build did not produce {exe}")
+        raise RuntimeError(tr('legacy.4350f4feba9e' ,p1=exe))
     return exe
 
 
@@ -150,9 +151,9 @@ def _embedded_literal(source: str, what: str) -> str:
     delimited by exactly that.
     """
     if f'){RAW_STRING_DELIMITER}"' in source:
-        raise RuntimeError(f"{what} contains the C++ raw string delimiter ){RAW_STRING_DELIMITER}\"")
+        raise RuntimeError(tr('legacy.61f34b311f82' ,p0=what, p2=RAW_STRING_DELIMITER))
     if '"""' in source:
-        raise RuntimeError(f'{what} contains a triple quote and cannot be embedded in the bootstrap')
+        raise RuntimeError(tr('legacy.e4438317757c' ,p0=what))
     return f'R"{RAW_STRING_DELIMITER}({source}){RAW_STRING_DELIMITER}"'
 
 
@@ -262,7 +263,7 @@ def _mac_info_plist(name: str) -> str:
 def _report_pruned(site: Path) -> None:
     removed = prune_excluded_native_files(site)
     if removed:
-        print(f"Native exclusions: removed {len(removed)} file(s) matched by [tool.ai_upper.native].exclude")
+        print(tr('legacy.8e3b52759c27' ,p1=len(removed)))
 
 
 def _optimize_runtime(path: Path, trim=None) -> dict[str, int]:
@@ -314,9 +315,9 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
     runtime = target_runtime_dir(target)
     site = stage / "site-packages"
     if not site.exists():
-        raise RuntimeError(f"Python stage missing: {site}")
+        raise RuntimeError(tr('legacy.59e5ad53205a' ,p1=site))
     if not runtime.exists():
-        raise RuntimeError(f"Runtime missing: {runtime}")
+        raise RuntimeError(tr('legacy.78a3fe1d6db1' ,p1=runtime))
 
     name = app_name()
     assembly = publish_dir(target)
@@ -369,7 +370,7 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
 def write_release_manifest(target: Target, output: Path | None = None) -> Path:
     root = output or DIST
     if not root.exists():
-        raise RuntimeError(f"Release output does not exist: {root}")
+        raise RuntimeError(tr('legacy.6074bda83d51' ,p1=root))
     files = []
     for path in sorted(p for p in root.rglob("*") if p.is_file() and p.name != "release-manifest.json"):
         files.append({

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import json
 import os
@@ -65,7 +66,7 @@ def ad_hoc_sign(path: Path) -> None:
     if codesign:
         result = subprocess.run([codesign, "--force", "--sign", "-", "--timestamp=none", str(path)], capture_output=True, text=True, check=False)
         if result.returncode != 0:
-            raise RuntimeError(f"codesign failed for {path}: {result.stderr.strip()}")
+            raise RuntimeError(tr('legacy.853feb29e080' ,p1=path, p3=result.stderr.strip()))
 
 
 def _thin_mach_o(path: Path, arch: str) -> None:
@@ -79,7 +80,7 @@ def _thin_mach_o(path: Path, arch: str) -> None:
         return
     lipo = shutil.which("lipo")
     if not lipo:
-        raise RuntimeError(f"thinning {path.name} to {arch} requires lipo")
+        raise RuntimeError(tr('legacy.62d533f30c44' ,p1=path.name, p3=arch))
     thinned = path.with_name(path.name + ".thin")
     subprocess.run([lipo, "-thin", arch, "-output", str(thinned), str(path)], check=True)
     # lipo writes a fresh file, so an executable slice would lose its bits.
@@ -116,16 +117,16 @@ def _strip_native(path: Path, target) -> None:
     if target.os == "windows":
         tool = shutil.which("llvm-strip") or shutil.which("strip")
         if not tool:
-            raise RuntimeError("strip_native=true requires llvm-strip or strip on PATH for Windows targets")
+            raise RuntimeError(tr('legacy.49ba3263160b'))
         cmd = [tool, str(path)]
     else:
         tool = shutil.which("strip")
         if not tool:
-            raise RuntimeError("strip_native=true requires strip on PATH")
+            raise RuntimeError(tr('legacy.fb475f06cbad'))
         cmd = [tool, "--strip-unneeded", str(path)] if target.os == "linux" else [tool, "-x", str(path)]
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if result.returncode != 0:
-        raise RuntimeError(f"strip failed for {path}: {(result.stderr or result.stdout).strip()}")
+        raise RuntimeError(tr('legacy.3ef36a1dba43' ,p1=path, p3=(result.stderr or result.stdout).strip()))
 
 
 def _relocate_linux_dependencies(dependencies: list[Dependency], copied: set[Path]) -> None:
@@ -135,7 +136,7 @@ def _relocate_linux_dependencies(dependencies: list[Dependency], copied: set[Pat
         return
     patchelf = shutil.which("patchelf")
     if not patchelf:
-        raise RuntimeError("Bundling external Linux libraries requires patchelf")
+        raise RuntimeError(tr('legacy.04b645207320'))
     for owner in sorted(affected):
         entries = elf_dynamic_entries(owner)
         has_runpath = any(kind == "RUNPATH" for kind, _ in entries)
@@ -215,11 +216,11 @@ def bundle_native_dependencies(root: Path, target, env: dict[str, str] | None = 
                     # Its first copy is a different path by definition; only
                     # different bytes under that basename are a collision.
                     if sha256(destination) != sha256(resolved):
-                        raise RuntimeError(f"Native dependency basename collision: {destination} != {resolved}")
+                        raise RuntimeError(tr('legacy.cfb2cee62d29' ,p1=destination, p3=resolved))
                 else:
                     copy_file_contents(resolved, destination)
                     resolver.index.add(destination)
-                    print(f"Native dependency: bundled {resolved} as {destination.relative_to(root)}")
+                    print(tr('legacy.dec2bd3c00b5' ,p1=resolved, p3=destination.relative_to(root)))
                 resolved = destination.resolve()
                 copied.add(resolved)
             # A library already inside runtime/resources still has its own
@@ -246,9 +247,8 @@ def bundle_native_dependencies(root: Path, target, env: dict[str, str] | None = 
     if unresolved:
         lines = sorted(set(f"{dep.owner.relative_to(root)}: {dep.name}" for dep in unresolved))
         raise RuntimeError(
-            "Unresolved native dependencies:\n  " + "\n  ".join(lines)
-            + "\nOptional native payloads can be dropped with [tool.ai_upper.native].exclude "
-              "in app/pyproject.toml."
+            tr('legacy.774e102d6548') + "\n  ".join(lines)
+            + tr('legacy.197c601e8c93')
         )
 
     # Full RPATH replacement remains opt-in. The mandatory relocation below

@@ -1,5 +1,6 @@
 """主窗口：这个应用的参考 View —— 绑定、命令、跟子窗口的联动都在这里。"""
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Optional
 
@@ -8,7 +9,7 @@ from mvvm.view_models import MainViewModel
 from mvvm.views.about_window import AboutWindow
 from mvvm.views.base_view import ViewBase
 
-ABOUT_BUTTON_TEXT = "关于 MVVM 架构"
+ABOUT_BUTTON_TEXT = tr('legacy.4f2c9a32be62')
 
 
 class MainWindow(ViewBase):
@@ -24,7 +25,7 @@ class MainWindow(ViewBase):
         central = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(central)
         label = QtWidgets.QLabel(viewmodel.message)
-        button = QtWidgets.QPushButton(ABOUT_BUTTON_TEXT)
+        button = QtWidgets.QPushButton((tr('legacy.4f2c9a32be62')))
         layout.addWidget(label)
         layout.addWidget(button)
         window.setCentralWidget(central)

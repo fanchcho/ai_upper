@@ -8,18 +8,19 @@
 记录器，不需要事件循环。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Any, Callable, Optional
 
 from mvvm.view_models.chat_sessions_vm import ChatSessionsViewModel
 from mvvm.views.base_view import ViewBase
 
-NEW_BUTTON_TEXT = "新建对话"
-RENAME_BUTTON_TEXT = "重命名"
-ARCHIVE_BUTTON_TEXT = "归档"
-DELETE_BUTTON_TEXT = "删除"
-SETTINGS_BUTTON_TEXT = "设置"
-EMPTY_HINT = "还没有对话"
+NEW_BUTTON_TEXT = tr('legacy.b3e55858d9d4')
+RENAME_BUTTON_TEXT = tr('legacy.1cd80fd7a8b3')
+ARCHIVE_BUTTON_TEXT = tr('legacy.ddfde75bec38')
+DELETE_BUTTON_TEXT = tr('legacy.3755f56f2f83')
+SETTINGS_BUTTON_TEXT = tr('legacy.7debf9cb0372')
+EMPTY_HINT = tr('legacy.46b23a5ba88a')
 
 
 class SessionListPane(ViewBase):
@@ -52,14 +53,14 @@ class SessionListPane(ViewBase):
         layout.setContentsMargins(6, 6, 6, 6)
 
         self._list = QtWidgets.QListWidget()
-        self._hint = QtWidgets.QLabel(EMPTY_HINT)
+        self._hint = QtWidgets.QLabel((tr('legacy.46b23a5ba88a')))
         self._hint.setWordWrap(True)
 
-        new_button = QtWidgets.QPushButton(NEW_BUTTON_TEXT)
-        rename_button = QtWidgets.QPushButton(RENAME_BUTTON_TEXT)
-        archive_button = QtWidgets.QPushButton(ARCHIVE_BUTTON_TEXT)
-        delete_button = QtWidgets.QPushButton(DELETE_BUTTON_TEXT)
-        settings_button = QtWidgets.QPushButton(SETTINGS_BUTTON_TEXT)
+        new_button = QtWidgets.QPushButton((tr('legacy.b3e55858d9d4')))
+        rename_button = QtWidgets.QPushButton((tr('legacy.1cd80fd7a8b3')))
+        archive_button = QtWidgets.QPushButton((tr('legacy.ddfde75bec38')))
+        delete_button = QtWidgets.QPushButton((tr('legacy.3755f56f2f83')))
+        settings_button = QtWidgets.QPushButton((tr('legacy.7debf9cb0372')))
 
         row1 = QtWidgets.QHBoxLayout()
         row1.addWidget(new_button)

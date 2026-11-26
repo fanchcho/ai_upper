@@ -1,5 +1,6 @@
 """Verification: static package checks plus the target-runtime and launcher smoke tests."""
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import io
 import json
@@ -477,7 +478,7 @@ def write_smoke_script(target: Target, destination: Path) -> Path:
 
 def run_target_python_smoke(target: Target) -> None:
     if target != host_target():
-        print("SKIP target runtime smoke: cross target")
+        print(tr('legacy.6a69710b0c43'))
         return
     stage_root = BUILD / "staging" / target.key
     site = stage_root / "site-packages"
@@ -537,7 +538,7 @@ def run_packaged_launcher(
 
 def run_launcher_smoke(target: Target, launcher: Path) -> None:
     if target != host_target():
-        print("SKIP launcher smoke: cross target")
+        print(tr('legacy.b9a558abb667'))
         return
     # The smoke program is compiled into the launcher like the entry is, so the
     # run below is what proves it: there is no file to check first.
@@ -546,5 +547,5 @@ def run_launcher_smoke(target: Target, launcher: Path) -> None:
     # The smoke test is non-interactive by definition: a failure must surface as
     # a non-zero exit code, not as a dialog waiting for a click.
     env["AI_UPPER_NO_DIALOG"] = "1"
-    print("+", launcher, "[launcher smoke]")
+    print("+", launcher, tr('legacy.03923e5ebf5b'))
     run_packaged_launcher(launcher, cwd=launcher.parent, env=env, check=True)

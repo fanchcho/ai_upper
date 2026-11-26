@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import os
 import platform
@@ -85,7 +86,7 @@ def _vs_install(host_arch: str) -> Path | None:
     # message. A non-zero exit means vswhere itself failed, and its output is
     # the only description of why, so surface that instead of hiding it.
     if result.returncode != 0:
-        raise RuntimeError(f"vswhere failed (exit {result.returncode}):\n{_output_tail(result.stdout, result.stderr)}")
+        raise RuntimeError(tr('legacy.0cb21e440411' ,p1=result.returncode, p3=_output_tail(result.stdout, result.stderr)))
     return None
 
 
@@ -143,9 +144,7 @@ def _msvc_environment(bat: Path, vc_target: str) -> dict[str, str]:
     env = _parse_windows_environment(result.stdout)
     if not env.get("VCTOOLSINSTALLDIR") or not env.get("INCLUDE"):
         raise RuntimeError(
-            f"vcvarsall.bat did not initialize the MSVC environment "
-            f"({bat} {vc_target}, exit {result.returncode}):\n"
-            f"{_output_tail(result.stdout, result.stderr)}"
+            tr('legacy.a3edb902baa3' ,p1=bat, p3=vc_target, p5=result.returncode, p7=_output_tail(result.stdout, result.stderr))
         )
     return env
 
@@ -167,7 +166,7 @@ ZIG_HOST_KEYS = {
 def _zig_host_key(host_os: str, host_arch: str) -> str:
     key = ZIG_HOST_KEYS.get(host_arch, {}).get(host_os)
     if not key:
-        raise RuntimeError(f"No executable Zig release for host {host_os}/{host_arch}")
+        raise RuntimeError(tr('legacy.cbd683727246' ,p1=host_os, p3=host_arch))
     return key
 
 
@@ -175,7 +174,7 @@ def _zig_entry(entry: dict) -> tuple[str, str]:
     tarball = str(entry.get("tarball") or "").strip()
     shasum = str(entry.get("shasum") or "").strip()
     if not tarball or not shasum:
-        raise RuntimeError("Zig download index entry is missing a tarball or shasum")
+        raise RuntimeError(tr('legacy.da02ea9274be'))
     return tarball, shasum
 
 
@@ -183,10 +182,10 @@ def _zig_release(host_os: str, host_arch: str) -> tuple[str, str]:
     try:
         index = http_json(ZIG_INDEX_URL)
     except Exception as exc:
-        raise RuntimeError(f"Unable to resolve Zig {ZIG_VERSION} from {ZIG_INDEX_URL}: {exc}") from exc
+        raise RuntimeError(tr('legacy.9d666e56e9b1' ,p1=ZIG_VERSION, p3=ZIG_INDEX_URL, p5=exc)) from exc
     entry = index.get(ZIG_VERSION) if isinstance(index, dict) else None
     if not isinstance(entry, dict):
-        raise RuntimeError(f"Zig {ZIG_VERSION} is not published in {ZIG_INDEX_URL}; update ZIG_VERSION in tools/ai_upper/toolchain.py")
+        raise RuntimeError(tr('legacy.fe22e896ddda' ,p1=ZIG_VERSION, p3=ZIG_INDEX_URL))
     return _zig_entry(entry.get(_zig_host_key(host_os, host_arch)) or {})
 
 
@@ -203,7 +202,7 @@ def _safe_archive_members(archive: Path):
             members = zf.infolist()
             names = {entry.filename for entry in members}
             if len(names) != len(members):
-                raise RuntimeError(f"Duplicate member in Zig archive: {archive.name}")
+                raise RuntimeError(tr('legacy.8ac281a2da14' ,p1=archive.name))
             for entry in members:
                 name = entry.filename
                 if entry.is_dir():
@@ -211,7 +210,7 @@ def _safe_archive_members(archive: Path):
                 if (not name or name.endswith("/") or name in {".", ".."}
                         or chr(92) in name or name.startswith("/")
                         or ".." in Path(name).parts):
-                    raise RuntimeError(f"Unsafe Zig archive path: {name}")
+                    raise RuntimeError(tr('legacy.3869c017edd9' ,p1=name))
                 with zf.open(entry) as stream:
                     yield name, stream
         return
@@ -221,13 +220,13 @@ def _safe_archive_members(archive: Path):
         for entry in tf:
             name = entry.name
             if name in seen:
-                raise RuntimeError(f"Duplicate member in Zig archive: {archive.name}")
+                raise RuntimeError(tr('legacy.8ac281a2da14' ,p1=archive.name))
             seen.add(name)
             if not entry.isfile():
                 continue
             if (not name or name in {".", ".."} or chr(92) in name
                     or name.startswith("/") or ".." in Path(name).parts):
-                raise RuntimeError(f"Unsafe Zig archive path: {name}")
+                raise RuntimeError(tr('legacy.3869c017edd9' ,p1=name))
             stream = tf.extractfile(entry)
             if stream is None:
                 continue
@@ -238,7 +237,7 @@ def _find_zig(root: Path) -> Path:
     name = _zig_exe_name()
     candidates = [path for path in root.rglob(name) if path.is_file()]
     if not candidates:
-        raise RuntimeError(f"{name} not found after unpacking the Zig archive under {root}")
+        raise RuntimeError(tr('legacy.edfba1584a23' ,p0=name, p2=root))
     return candidates[0]
 
 
@@ -288,7 +287,7 @@ def ensure_zig(target: Target) -> Toolchain:
     host_os = platform.system()
     host_arch = _host_arch()
     if host_os not in {"Windows", "Darwin", "Linux"}:
-        raise RuntimeError(f"Windows targets with Zig require a Windows/macOS/Linux build host, not {host_os}")
+        raise RuntimeError(tr('legacy.ecfe905f1d9e' ,p1=host_os))
     host_key = _zig_host_key(host_os, host_arch)
     root = BUILD / "host-tools" / "zig" / f"{ZIG_VERSION}-{host_key}"
     if not (root / ".verified").is_file():
@@ -299,7 +298,7 @@ def ensure_zig(target: Target) -> Toolchain:
         download(url, archive)
         actual = sha256(archive)
         if actual.lower() != expected.lower():
-            raise RuntimeError(f"Zig SHA256 mismatch for {url}: expected {expected}, got {actual}")
+            raise RuntimeError(tr('legacy.463c30c045cd' ,p1=url, p3=expected, p5=actual))
         marker = root / ".verified"
         if marker.exists():
             marker.unlink()
@@ -354,26 +353,26 @@ def resolve_toolchain(target: Target) -> Toolchain:
     host_arch = _host_arch()
     if target.os == "windows":
         if host_os != "Windows" and os.environ.get("AI_UPPER_WINDOWS_TOOLCHAIN") != "zig":
-            raise RuntimeError("Windows targets require a Windows/MSVC build host; set AI_UPPER_WINDOWS_TOOLCHAIN=zig to opt into executable Zig")
+            raise RuntimeError(tr('legacy.68aa690cb751'))
         install = _vs_install(host_arch)
         if not install:
             return ensure_zig(target)
         bat = install / "VC" / "Auxiliary" / "Build" / "vcvarsall.bat"
         if not bat.exists():
-            raise RuntimeError(f"vcvarsall.bat not found: {bat}")
+            raise RuntimeError(tr('legacy.bc37f85a104f' ,p1=bat))
         vc_target = VCVARSALL_HOST_TARGET.get((host_arch, target.arch))
         if not vc_target:
-            raise RuntimeError(f"Unsupported MSVC host/target pair: {host_arch} -> {target.arch}")
+            raise RuntimeError(tr('legacy.956824395f3d' ,p1=host_arch, p3=target.arch))
         env = _msvc_environment(bat, vc_target)
         return Toolchain(target, env, env.get("CC", "cl"), env.get("CXX", "cl"), "link.exe")
 
     if target.os == "macos":
         if host_os != "Darwin":
-            raise RuntimeError("macOS targets require a macOS build host")
+            raise RuntimeError(tr('legacy.bd5994d44ec4'))
         clang = shutil.which("clang")
         clangxx = shutil.which("clang++")
         if not clang or not clangxx:
-            raise RuntimeError("Xcode Command Line Tools with clang/clang++ are required")
+            raise RuntimeError(tr('legacy.84b3b06a90ac'))
         arch = target.arch
         env = dict(os.environ)
         env.update({"CC": clang, "CXX": clangxx})
@@ -383,7 +382,7 @@ def resolve_toolchain(target: Target) -> Toolchain:
 
     if target.os == "linux":
         if host_os != "Linux":
-            raise RuntimeError("Linux targets require a Linux build host")
+            raise RuntimeError(tr('legacy.6bf0ef199ff7'))
         native_arm = host_arch == "arm64"
         native_x64 = host_arch == "x86_64"
         if target.arch == "x86_64" and native_x64:
@@ -395,11 +394,11 @@ def resolve_toolchain(target: Target) -> Toolchain:
         else:
             cc, cxx = shutil.which("aarch64-linux-gnu-gcc"), shutil.which("aarch64-linux-gnu-g++")
         if not cc or not cxx:
-            raise RuntimeError(f"Linux {target.arch} compiler is unavailable for host {host_arch}")
+            raise RuntimeError(tr('legacy.fe0d2496594b' ,p1=target.arch, p3=host_arch))
         env = dict(os.environ)
         env.update({"CC": cc, "CXX": cxx})
         return Toolchain(target, env, cc, cxx, cc)
-    raise RuntimeError(f"Unsupported target: {target.key}")
+    raise RuntimeError(tr('legacy.a3ba010a0f39' ,p1=target.key))
 
 
 def describe_toolchain(target: Target) -> dict[str, str]:

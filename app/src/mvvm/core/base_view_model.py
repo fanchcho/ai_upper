@@ -2,6 +2,7 @@
 Base ViewModel for MVVM
 所有ViewModel都应继承此类
 """
+from locale_runtime import tr
 
 from typing import Any, Callable, Dict, Optional
 from mvvm.core.observable import ObservableProperty, PropertyChangedEvent
@@ -58,7 +59,7 @@ class BaseViewModel:
             try:
                 listener(event)
             except Exception as e:
-                print(f"Error in property changed listener: {e}")
+                print(tr('legacy.29a1c43bfb79' ,p1=e))
         
         # 调用虚方法，便于子类处理特定的属性变化
         self.on_property_changed(event)

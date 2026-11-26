@@ -22,6 +22,7 @@
 面板不拥有 ViewModel 的生命周期（它由应用容器持有）；`close()` 只停定时器。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 from typing import Any, Optional
 
@@ -37,14 +38,14 @@ from mvvm.views.transcript_render import (
 )
 
 # 与 ChatWindow 共用的文案常量放在这里，窗口只是薄壳。
-SEND_BUTTON_TEXT = "发送"
-STOP_BUTTON_TEXT = "停止"
-INPUT_PLACEHOLDER = "输入消息，回车发送"
+SEND_BUTTON_TEXT = tr('legacy.1214d633a448')
+STOP_BUTTON_TEXT = tr('legacy.a17f70a8d3d6')
+INPUT_PLACEHOLDER = tr('legacy.fc4f2f83ab0b')
 DRAIN_INTERVAL_MS = 40
 
-TODO_EXPAND_TEXT = "展开清单"
-TODO_COLLAPSE_TEXT = "收起清单"
-TODO_CANCEL_TEXT = "取消清单"
+TODO_EXPAND_TEXT = tr('legacy.2a9ab4d435e8')
+TODO_COLLAPSE_TEXT = tr('legacy.e453ed23f866')
+TODO_CANCEL_TEXT = tr('legacy.d37451998387')
 
 
 class ChatPane(ViewBase):
@@ -69,8 +70,8 @@ class ChatPane(ViewBase):
         todo_layout.setContentsMargins(0, 0, 0, 0)
         todo_pill = QtWidgets.QLabel("")
         todo_pill.setWordWrap(True)
-        todo_toggle = QtWidgets.QPushButton(TODO_EXPAND_TEXT)
-        todo_cancel = QtWidgets.QPushButton(TODO_CANCEL_TEXT)
+        todo_toggle = QtWidgets.QPushButton((tr('legacy.2a9ab4d435e8')))
+        todo_cancel = QtWidgets.QPushButton((tr('legacy.d37451998387')))
         todo_layout.addWidget(todo_pill, 1)
         todo_layout.addWidget(todo_toggle)
         todo_layout.addWidget(todo_cancel)
@@ -83,10 +84,10 @@ class ChatPane(ViewBase):
         error = QtWidgets.QLabel("")
         error.setWordWrap(True)
         input_box = QtWidgets.QPlainTextEdit()
-        input_box.setPlaceholderText(INPUT_PLACEHOLDER)
+        input_box.setPlaceholderText((tr('legacy.fc4f2f83ab0b')))
         input_box.setFixedHeight(72)
-        send_button = QtWidgets.QPushButton(SEND_BUTTON_TEXT)
-        stop_button = QtWidgets.QPushButton(STOP_BUTTON_TEXT)
+        send_button = QtWidgets.QPushButton((tr('legacy.1214d633a448')))
+        stop_button = QtWidgets.QPushButton((tr('legacy.a17f70a8d3d6')))
         stop_button.setEnabled(False)
 
         buttons = QtWidgets.QHBoxLayout()
@@ -212,7 +213,7 @@ class ChatPane(ViewBase):
             self._todos_expanded = False
             self._todo_details.setText("")
             self._todo_details.hide()
-            self._todo_toggle.setText(TODO_EXPAND_TEXT)
+            self._todo_toggle.setText((tr('legacy.2a9ab4d435e8')))
             self._todo_row.hide()
             self._todo_pill.setText("")
             return
@@ -224,7 +225,7 @@ class ChatPane(ViewBase):
             self._todo_details.show()
         else:
             self._todo_details.hide()
-        self._todo_toggle.setText(TODO_COLLAPSE_TEXT if self._todos_expanded else TODO_EXPAND_TEXT)
+        self._todo_toggle.setText((tr('legacy.e453ed23f866')) if self._todos_expanded else (tr('legacy.2a9ab4d435e8')))
 
     def _toggle_todos(self) -> None:
         """展开/收起条目。没有条目可展开时保持收起（胶囊只剩摘要，不该装成能展开）。"""
@@ -238,7 +239,7 @@ class ChatPane(ViewBase):
             else:
                 self._todo_details.hide()
         self._todo_toggle.setText(
-            TODO_COLLAPSE_TEXT if self._todos_expanded else TODO_EXPAND_TEXT
+            (tr('legacy.e453ed23f866')) if self._todos_expanded else (tr('legacy.2a9ab4d435e8'))
         )
 
     def _toggle_streaming(self, event: Any = None) -> None:
@@ -264,7 +265,7 @@ def streaming_to_text(streaming: Any) -> str:
     text = str(streaming or "")
     if not text:
         return ""
-    return f"[助手·输出中] {text}"
+    return tr('legacy.957dc00c1d47' ,p1=text)
 
 
 def _image_resource_type(QtGui: Any) -> Any:

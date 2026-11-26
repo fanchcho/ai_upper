@@ -4,6 +4,7 @@ Lifecycle/transport: modelcontextprotocol.io/specification/2025-06-18/basic.
 Connections live for one turn and are closed on disable, cancellation and completion.
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import hashlib
 import json
@@ -41,7 +42,7 @@ class McpConnection:
                 if secret.lstrip().startswith('{'):
                     values = json.loads(secret)
                     if not isinstance(values, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in values.items()):
-                        raise ValueError('HTTP credential must be a JSON header map or bearer token')
+                        raise ValueError(tr('legacy.ff8404a7dd4c'))
                     self.headers.update(values)
                 else:
                     self.headers["Authorization"] = "Bearer " + secret
@@ -52,7 +53,7 @@ class McpConnection:
                 # A JSON map permits MCP servers with their own credential names.
                 values = json.loads(secret)
                 if not isinstance(values, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in values.items()):
-                    raise ValueError("stdio credential must be a JSON environment map")
+                    raise ValueError(tr('legacy.c2f59ad62975'))
                 env.update(values)
             self.process = subprocess.Popen(
                 [config["command"], *config.get("args", [])], stdin=subprocess.PIPE,
@@ -99,7 +100,7 @@ class McpConnection:
 
     def send(self, payload, responses=None):
         if self.closed:
-            raise OSError("MCP connection is closed")
+            raise OSError(tr('legacy.61b329a7034e'))
         if self.process:
             self.process.stdin.write(json.dumps(payload) + "\n")
             self.process.stdin.flush()
@@ -116,8 +117,8 @@ class McpConnection:
             try:
                 result = responses.get(timeout=min(5, self.timeout))
             except queue.Empty:
-                raise OSError('MCP notification timed out')
-            if result.get('transportError'): raise OSError('MCP notification failed')
+                raise OSError(tr('legacy.4cf3b8682862'))
+            if result.get('transportError'): raise OSError(tr('legacy.82c3b1a4e695'))
 
     def request(self, method, params=None):
         self.serial += 1
@@ -131,13 +132,13 @@ class McpConnection:
                     self.notify("notifications/cancelled", {"requestId": request_id, "reason": "cancelled or timed out"})
                 finally:
                     self.close()
-                raise OSError("MCP cancelled or timed out; execution outcome may be unknown")
+                raise OSError(tr('legacy.be14f46f4f53'))
             try:
                 message = messages.get(timeout=.05)
             except queue.Empty:
                 continue
             if message.get("transportClosed") or message.get("transportError"):
-                raise OSError("MCP transport failed")
+                raise OSError(tr('legacy.8a3104d19976'))
             if "method" in message:
                 if "id" in message:
                     reply = {"jsonrpc": "2.0", "id": message["id"]}
@@ -148,14 +149,14 @@ class McpConnection:
             if message.get("id") != request_id:
                 continue
             if "error" in message:
-                raise OSError("MCP request rejected: " + str(message["error"].get("code", "unknown")))
+                raise OSError(tr('legacy.8d2569bcebf5') + str(message["error"].get("code", "unknown")))
             return message.get("result", {})
 
     def initialize(self):
         result = self.request("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "ai_upper", "version": "1"}})
         version = result.get("protocolVersion")
         if version not in ("2025-06-18", "2025-03-26", "2024-11-05"):
-            raise ValueError("Unsupported MCP protocol version")
+            raise ValueError(tr('legacy.53bf4abaee00'))
         self.headers["MCP-Protocol-Version"] = version
         self.notify("notifications/initialized")
 
@@ -211,7 +212,7 @@ class McpTools:
                         self.tools[public] = (name, original, spec)
                     cursor = result.get('nextCursor')
                     if not cursor: break
-                    if cursor in seen: raise ValueError('MCP pagination loop')
+                    if cursor in seen: raise ValueError(tr('legacy.8e0969d8814e'))
                     seen.add(cursor)
             except Exception:
                 self.stop(name)

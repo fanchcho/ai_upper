@@ -13,6 +13,7 @@ The result is validated by the build's own Qt smoke test, which imports the
 application and opens a real window in the packaged bundle.
 """
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import ast
 import json
@@ -94,7 +95,7 @@ def _imported_paths(path: Path) -> tuple[set[str], set[str]]:
     try:
         tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"), filename=str(path))
     except SyntaxError as exc:
-        raise RuntimeError(f"Qt pruning: cannot parse {path}: {exc}") from exc
+        raise RuntimeError(tr('legacy.a7875ab1e9ac' ,p1=path, p3=exc)) from exc
 
     required: set[str] = set()
     optional: set[str] = set()
@@ -688,16 +689,16 @@ def _qt_option_list(value, name: str, default: tuple[str, ...] | None) -> frozen
         if text.lower() in {"all", "*"}:
             return None
         if not text:
-            raise RuntimeError(f"[tool.ai_upper.optimize].{name} must not be empty")
+            raise RuntimeError(tr('legacy.ee8528dfbfe1' ,p1=name))
         return frozenset({text})
     if isinstance(value, (list, tuple)):
         if not value or any(not isinstance(item, str) or not item.strip() for item in value):
             raise RuntimeError(
-                f"[tool.ai_upper.optimize].{name} must be a non-empty array of strings"
+                tr('legacy.aee1968a3569' ,p1=name)
             )
         return frozenset(item.strip() for item in value)
     raise RuntimeError(
-        f"[tool.ai_upper.optimize].{name} must be 'all' or an array of strings"
+        tr('legacy.decc0a5f7f83' ,p1=name)
     )
 
 
@@ -706,7 +707,7 @@ def _qt_option_bool(value, name: str, default: bool) -> bool:
         return default
     if isinstance(value, bool):
         return value
-    raise RuntimeError(f"[tool.ai_upper.optimize].{name} must be true or false")
+    raise RuntimeError(tr('legacy.5f69d8458995' ,p1=name))
 
 
 def _payload_options() -> _QtPayloadOptions:
@@ -894,19 +895,18 @@ def _runtime_closure(site: Path, target: Target, modules: set[str], optional=())
     requested = ", ".join(sorted(modules)) or "(none)"
     if probe.returncode != 0:
         detail = probe.stderr.strip() or probe.stdout.strip() or "(no output)"
-        raise RuntimeError(f"Qt pruning: {python} cannot import {requested}:\n{detail}")
+        raise RuntimeError(tr('legacy.c9f5c2499d84' ,p1=python, p3=requested, p5=detail))
     try:
         result = json.loads(probe.stdout.strip().splitlines()[-1])
         loaded = result["loaded"]
         absent = result["absent"]
     except (ValueError, IndexError, KeyError, TypeError):
-        raise RuntimeError(f"Qt pruning: {python} printed no {binding} module list for {requested}")
+        raise RuntimeError(tr('legacy.e1544ee4193a' ,p1=python, p3=binding, p5=requested))
     if absent:
         # Say it out loud. An optional module the wheel lacks is a platform gap
         # the bundle carries, not something to discover at runtime.
         print(
-            "Qt pruning: %s has no %s; the application imports %s behind "
-            "ImportError and starts without" % (binding, ", ".join(sorted(absent)), "it" if len(absent) == 1 else "them")
+            tr('legacy.0c9f0048b2f5') % (binding, ", ".join(sorted(absent)), "it" if len(absent) == 1 else "them")
         )
     return {name.split(".", 1)[1] for name in loaded if name.count(".") == 1}
 
@@ -935,10 +935,10 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
         if setting in {"all", ""}:
             return None
         if setting != "imports":
-            raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
+            raise RuntimeError(tr('legacy.a296306fb20e'))
         requested, optional = qt_module_usage()
         if not requested and not optional:
-            print("Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload")
+            print(tr('legacy.9316d9bf336f'))
             return None
     elif isinstance(value, list):
         # An explicit list is a statement about what to keep, not a reading of
@@ -946,16 +946,16 @@ def configured_modules(target: Target, site: Path) -> set[str] | None:
         requested = {str(item).strip() for item in value if str(item).strip()}
         optional = set()
         if not requested:
-            raise RuntimeError("[tool.ai_upper.optimize].qt must not be an empty array")
+            raise RuntimeError(tr('legacy.785b2b29a882'))
     else:
-        raise RuntimeError("[tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names")
+        raise RuntimeError(tr('legacy.a296306fb20e'))
 
     closure = _runtime_closure(site, target, requested, optional)
     if closure is None:
         # Without the target interpreter the closure cannot be computed, and a
         # guessed subset is what deletes the Qt libraries the application loads
         # indirectly. Keeping the payload whole costs size, never correctness.
-        print(f"Qt pruning: cannot run the {target.key} runtime on this host, keeping the full Qt payload")
+        print(tr('legacy.471e2108ced0' ,p1=target.key))
         return None
     return closure
 

@@ -1,10 +1,11 @@
 """「关于」窗口：绑定 MainViewModel，自己不做任何业务判断。"""
 from __future__ import annotations
+from locale_runtime import tr
 
 from mvvm.view_models import MainViewModel
 from mvvm.views.base_view import ViewBase
 
-CLOSE_BUTTON_TEXT = "关闭"
+CLOSE_BUTTON_TEXT = tr('legacy.6c14bd7f6f9e')
 
 
 class AboutWindow(ViewBase):
@@ -19,7 +20,7 @@ class AboutWindow(ViewBase):
         layout = QtWidgets.QVBoxLayout(dialog)
         browser = QtWidgets.QTextBrowser()
         browser.setPlainText(viewmodel.about_body)
-        close_button = QtWidgets.QPushButton(CLOSE_BUTTON_TEXT)
+        close_button = QtWidgets.QPushButton((tr('legacy.6c14bd7f6f9e')))
         layout.addWidget(browser)
         layout.addWidget(close_button)
         dialog.resize(560, 320)

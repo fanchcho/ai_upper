@@ -10,6 +10,7 @@
   否则本轮会以「自然结束 + 零正文」收场，用户只看到一句空回合提示。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 from typing import Any, AsyncIterator, Optional
@@ -199,7 +200,7 @@ class OpenAIProvider(Provider):
     async def stream(self, request: GenerateRequest) -> AsyncIterator[StreamEvent]:  # type: ignore[override]
         if self.transport is None:
             raise ProviderError(
-                NormalizedError("invalid_request", "OpenAIProvider 未配置传输层：请传入 transport")
+                NormalizedError("invalid_request", tr('legacy.7ed0ee3ebcac'))
             )
         if self.cancel.cancelled:
             yield Done("aborted")
@@ -327,7 +328,7 @@ class OpenAIProvider(Provider):
                     # 智谱：network_error = 推理异常，本步输出不完整——按可重试错误上报。
                     if finish_reason == "network_error":
                         yield StreamError(
-                            NormalizedError("server", "服务端推理异常（finish_reason: network_error）", True)
+                            NormalizedError("server", tr('legacy.642b4f69c121'), True)
                         )
                         yield Done("error")
                         return

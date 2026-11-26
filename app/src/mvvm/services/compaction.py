@@ -18,6 +18,7 @@
 2. 压缩触发后的「通知」由调用方（聊天视图模型）负责，这里只返回结果。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import asyncio
 import json
@@ -643,7 +644,7 @@ async def summarize(
         if not (collected.retryable or timed_out or collected.interrupted):
             if body:
                 return body
-            raise SummaryError("模型没有返回摘要正文（可能只输出了思维链，或被内容策略拦截）")
+            raise SummaryError(tr('legacy.e5da8854b1c8'))
 
         last_reason = (
             f"摘要请求超过 {round(timeout_ms / 1000)}s 仍未完成"
@@ -651,7 +652,7 @@ async def summarize(
             else (collected.retryable or "连接中断")
         )
         if attempt >= SUMMARY_MAX_RETRY:
-            raise SummaryError(f"{last_reason}（已重试 {SUMMARY_MAX_RETRY} 次）")
+            raise SummaryError(tr('legacy.dfa494073473' ,p0=last_reason, p2=SUMMARY_MAX_RETRY))
 
         await backoff(min(1000 * 2**attempt, 8000) / 1000)
 

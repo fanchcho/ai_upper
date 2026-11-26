@@ -1,5 +1,6 @@
 """PBS (python-build-standalone) resolution: release metadata, assets, runtime and SDK."""
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import json
 import os
@@ -62,7 +63,7 @@ def metadata_key(target: Target, pyver: str) -> str:
 def windows_embed_asset(target: Target, pyver: str) -> PBSAsset:
     """Official CPython embeddable runtime; PBS remains the build-only SDK."""
     if target.os != "windows":
-        raise ValueError(f"No Windows embeddable runtime for {target.key}")
+        raise ValueError(tr('legacy.439dcd8da297' ,p1=target.key))
     architecture = {"x86": "win32", "x86_64": "amd64", "arm64": "arm64"}[target.arch]
     name = f"python-{pyver}-embed-{architecture}.zip"
     return PBSAsset(name, f"https://www.python.org/ftp/python/{pyver}/{name}")
@@ -82,13 +83,13 @@ def release_assets(checksums: str, tag: str) -> list[PBSAsset]:
             continue
         match = re.fullmatch(r"([a-fA-F0-9]{64}) [ *]([A-Za-z0-9_][A-Za-z0-9_+.-]*)", line)
         if not match:
-            raise RuntimeError(f"Invalid PBS SHA256SUMS for release {tag} at line {number}")
+            raise RuntimeError(tr('legacy.f46539ab8683' ,p1=tag, p3=number))
         digest, name = match.groups()
         if name in assets:
-            raise RuntimeError(f"Duplicate PBS SHA256SUMS entry for release {tag}: {name}")
+            raise RuntimeError(tr('legacy.77e3f31bd766' ,p1=tag, p3=name))
         assets[name] = PBSAsset(name, f"{base_url}/{quote(name, safe='')}", digest.lower())
     if not assets:
-        raise RuntimeError(f"Empty PBS SHA256SUMS for release {tag}")
+        raise RuntimeError(tr('legacy.90ccff1e8e67' ,p1=tag))
     return list(assets.values())
 
 
@@ -107,7 +108,7 @@ def is_matching_asset(name: str, target: Target, pyver: str, *, kind: str) -> bo
         return name.endswith("-install_only_stripped.tar.gz")
     if kind == "sdk":
         return name.endswith(("-pgo+lto-full.tar.zst", "-pgo-full.tar.zst", "-full.tar.zst"))
-    raise ValueError(f"Unknown PBS asset kind: {kind}")
+    raise ValueError(tr('legacy.e58f13a64356' ,p1=kind))
 
 
 def matching_assets(assets: list[PBSAsset], target: Target, pyver: str, *, kind: str) -> list[PBSAsset]:
@@ -152,9 +153,9 @@ def _fetch_metadata_index(fetch_json: Callable[[str], Any]) -> dict[str, Any]:
             return value
         failures.append(f"{url}: expected a JSON object, got {type(value).__name__}")
     raise RuntimeError(
-        "Could not fetch the uv python-build-standalone metadata index.\n"
+        tr('legacy.c6e636ea6cdc')
         + "\n".join(failures)
-        + "\nuv moves this file between releases; update PBS_RUNTIME_METADATA_URLS in tools/ai_upper/pbs.py."
+        + tr('legacy.6569969659e6')
     )
 
 
@@ -225,8 +226,7 @@ def _best_sdk(assets: list[PBSAsset], runtime_name: str) -> PBSAsset:
         candidates = [asset for asset in assets if asset_flavor(asset.name) == flavor]
         if not candidates:
             raise RuntimeError(
-                f"No PBS SDK asset shares the {flavor} flavour of runtime {runtime_name}.\n"
-                f"SDK assets offered for this release: {', '.join(asset.name for asset in assets)}"
+                tr('legacy.42da2e780bcb' ,p1=flavor, p3=runtime_name, p5=', '.join((asset.name for asset in assets)))
             )
     return max(candidates, key=lambda asset: ("pgo+lto-full" in asset.name, asset.name))
 
@@ -238,14 +238,7 @@ def no_asset_error(release_tag: str, target: Target, pyver: str, assets: list[PB
     if missing_sdk:
         missing.append("full SDK")
     return RuntimeError(
-        f"No PBS {' / '.join(missing)} asset for Python {pyver} / {target.triple} in release {release_tag}.\n"
-        f"Requested Python: {pyver}\n"
-        f"PBS release: {release_tag}\n"
-        f"Target: {target.triple}\n"
-        f"Available runtime Python versions: {', '.join(available_python_versions(assets, target, kind='runtime')) or 'none'}\n"
-        f"Available SDK Python versions: {', '.join(available_python_versions(assets, target, kind='sdk')) or 'none'}\n"
-        "Set [tool.ai_upper.pbs].release to a release containing the requested exact Python version; "
-        "ai_upper will not silently substitute another version."
+        tr('legacy.b56d9089d8c7' ,p1=' / '.join(missing), p3=pyver, p5=target.triple, p7=release_tag, p9=pyver, p11=release_tag, p13=target.triple, p15=', '.join(available_python_versions(assets, target, kind='runtime')) or 'none', p17=', '.join(available_python_versions(assets, target, kind='sdk')) or 'none')
     )
 
 
@@ -266,9 +259,7 @@ def resolve_pbs_inputs(
             if exc.code != 404:
                 raise
             raise RuntimeError(
-                f"PBS release {configured_tag} publishes no SHA256SUMS. Releases before "
-                "20210724 predate that inventory; leave [tool.ai_upper.pbs].release empty "
-                "so the uv metadata index can select the exact full build."
+                tr('legacy.0acc26c43917' ,p1=configured_tag)
             ) from exc
         runtime_assets = matching_assets(assets, target, pyver, kind="runtime")
         sdk_assets = matching_assets(assets, target, pyver, kind="sdk")
@@ -284,21 +275,17 @@ def resolve_pbs_inputs(
         available = available_metadata_python_versions(data, target)
         if available and pyver not in available:
             raise RuntimeError(
-                f"No PBS runtime metadata for exact Python {pyver} / {target.triple}.\n"
-                f"Requested Python: {pyver}\n"
-                f"Target: {target.triple}\n"
-                f"Available Python versions from PBS metadata for this target: {', '.join(available)}\n"
-                "ai_upper will not silently substitute another Python version."
+                tr('legacy.8486ae0f78fe' ,p1=pyver, p3=target.triple, p5=pyver, p7=target.triple, p9=', '.join(available))
             )
         data = _load_metadata(fetch_json, force=True)
         runtime = metadata_asset(data, target, pyver)
     if runtime is None:
-        raise RuntimeError(f"No PBS runtime metadata for exact Python {pyver} / {target.triple}")
+        raise RuntimeError(tr('legacy.4930db3b40d6' ,p1=pyver, p3=target.triple))
 
     match = re.search(r"/releases/download/([^/]+)/", runtime.url)
     tag = unquote(match.group(1)) if match else ""
     if not tag:
-        raise RuntimeError(f"PBS runtime metadata has no release build tag: {runtime.url}")
+        raise RuntimeError(tr('legacy.dc7832017530' ,p1=runtime.url))
 
     try:
         assets = _release_assets(fetch_text, tag)
@@ -310,9 +297,7 @@ def resolve_pbs_inputs(
         # It is a runtime too: ensure_pbs_runtime copies its install/ tree.
         if not is_full_build_asset(runtime.name):
             raise RuntimeError(
-                f"PBS release {tag} publishes no SHA256SUMS and its metadata asset is "
-                f"not a full build: {runtime.name}\n"
-                "ai_upper cannot resolve a matching SDK for this release."
+                tr('legacy.51226f70634a' ,p1=tag, p3=runtime.name)
             ) from exc
         return PBSInputs(tag, runtime, runtime, "metadata-full")
 
@@ -354,13 +339,13 @@ def _safe_extract_zst(archive: Path, destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     tar = shutil.which("tar")
     if not tar:
-        raise RuntimeError("Extracting PBS SDK requires tar on PATH")
+        raise RuntimeError(tr('legacy.2b8d631eafff'))
     result = _run_tar(tar, "-axf", archive, destination, capture_output=True, text=True, check=False)
     if result.returncode == 0:
         return
     zstd = shutil.which("zstd")
     if not zstd:
-        raise RuntimeError(f"Unable to extract {archive.name}: tar could not read zstd archive and zstd is not installed")
+        raise RuntimeError(tr('legacy.d722543719b0' ,p1=archive.name))
     raw = archive.with_suffix("")
     subprocess.run([zstd, "-d", "-f", archive.name, "-o", raw.name], cwd=str(archive.parent), check=True)
     try:
@@ -373,7 +358,7 @@ def _sdk_metadata(root: Path) -> dict:
     """The SDK's own PYTHON.json, which is the authoritative layout record."""
     path = root / "PYTHON.json"
     if not path.is_file():
-        raise RuntimeError(f"PBS full SDK has no PYTHON.json: {path}")
+        raise RuntimeError(tr('legacy.aa9ec5e138ef' ,p1=path))
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -400,10 +385,10 @@ def _sdk_include(root: Path, metadata: dict) -> Path:
         return recorded
     matches = sorted(path.parent for path in root.rglob("Python.h"))
     if not matches:
-        raise RuntimeError(f"PBS full SDK contains no Python.h: {root}")
+        raise RuntimeError(tr('legacy.3e237050c5ea' ,p1=root))
     if len(matches) > 1:
         raise RuntimeError(
-            "PBS full SDK holds several Python.h and its PYTHON.json records none: "
+            tr('legacy.53c6f4889476')
             + ", ".join(str(path) for path in matches)
         )
     return matches[0]
@@ -431,9 +416,7 @@ def _sdk_interpreter(root: Path, target: Target, metadata: dict) -> Path:
             if (directory / name).is_file():
                 return directory / name
     raise RuntimeError(
-        f"Target Python executable not found in PBS SDK: {root}\n"
-        f"PYTHON.json python_exe: {metadata.get('python_exe')!r}\n"
-        "Looked for " + ", ".join(names) + " in " + ", ".join(str(directory) for directory in directories)
+        tr('legacy.a35163b0cc16' ,p1=root, p3=repr(metadata.get('python_exe'))) + ", ".join(names) + tr('legacy.64d2f058b2c6') + ", ".join(str(directory) for directory in directories)
     )
 
 
@@ -442,7 +425,7 @@ def _validate_layout(root: Path, target: Target) -> tuple[Path, dict]:
     metadata = _sdk_metadata(python_root)
     install_root = python_root / "install"
     if not install_root.is_dir():
-        raise RuntimeError(f"PBS full SDK has no python/install directory: {install_root}")
+        raise RuntimeError(tr('legacy.20e7e19f4bbe' ,p1=install_root))
     # Resolve both now: a truncated or renamed archive has to fail here, not
     # after the tree has been copied into the cache.
     _sdk_interpreter(python_root, target, metadata)
@@ -475,7 +458,7 @@ def ensure_pbs_sdk(target: Target) -> Path:
     download(inputs.sdk.url, archive)
     actual = sha256(archive)
     if inputs.sdk.sha256 and actual.lower() != inputs.sdk.sha256.lower():
-        raise RuntimeError(f"PBS SDK SHA256 mismatch: expected {inputs.sdk.sha256}, got {actual}")
+        raise RuntimeError(tr('legacy.8cfb269f86ec' ,p1=inputs.sdk.sha256, p3=actual))
 
     extract = CACHE / "pbs" / inputs.tag / target.key / "sdk-extract"
     if extract.exists():
@@ -503,7 +486,7 @@ def sdk_info(target: Target) -> dict:
     root = ensure_pbs_sdk(target)
     marker_path = marker_file(root, SDK_MARKER, LEGACY_SDK_MARKER)
     if marker_path is None:
-        raise RuntimeError(f"PBS SDK marker missing under {root}")
+        raise RuntimeError(tr('legacy.129e557d8985' ,p1=root))
     marker = json.loads(marker_path.read_text(encoding="utf-8"))
     metadata = _sdk_metadata(root)
     include = _sdk_include(root, metadata)

@@ -1,4 +1,5 @@
 """One-time legacy layout migration; existing shared values always win."""
+from locale_runtime import tr
 import json
 import shutil
 import uuid
@@ -17,12 +18,12 @@ def migrate_legacy(root):
     def read(path):
         if not path.exists(): return {}
         value = json.loads(path.read_text(encoding='utf-8'))
-        if not isinstance(value, dict): raise ValueError('Legacy file must contain a JSON object')
+        if not isinstance(value, dict): raise ValueError(tr('legacy.9b7597b1735e'))
         return value
     current = read(root / 'config.json')
     settings = SettingsService(root)
     if settings.get_config_sync() != current:
-        raise OSError('Configuration changed while starting migration')
+        raise OSError(tr('legacy.be87a578f3c0'))
     identities = read(legacy / 'identity.json')
     sessions = read(legacy / 'sessions.json')
     mcp = read(legacy / 'mcp-servers.json')
@@ -44,12 +45,12 @@ def migrate_legacy(root):
     mcp_section = dict(current.get('mcp', {}))
     enabled = dict(mcp_section.get('enabled', {}))
     for name, value in mcp.get('servers', {}).items():
-        if not isinstance(value, dict): raise ValueError('Invalid legacy MCP entry')
+        if not isinstance(value, dict): raise ValueError(tr('legacy.c2cf5eb4a8e7'))
         servers.setdefault(name, {key: val for key, val in value.items() if key != 'enabled'})
         enabled.setdefault(name, value.get('enabled') is not False)
     shared_mcp['mcpServers'] = servers
     current_raw = mcp_path.read_text(encoding='utf-8') if mcp_path.exists() else None
-    if current_raw != raw: raise OSError('MCP configuration changed externally; migration stopped')
+    if current_raw != raw: raise OSError(tr('legacy.2753c19af247'))
     write_file_atomic(mcp_path, json.dumps(shared_mcp, ensure_ascii=False, indent=2))
     mcp_section['enabled'] = enabled
     # Read/write the latest shared config with expectedRaw protection; preserve other keys.

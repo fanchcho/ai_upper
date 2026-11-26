@@ -1,4 +1,5 @@
 """Shared deva identities; session overrides never rewrite the shared default."""
+from locale_runtime import tr
 import json
 import os
 import re
@@ -15,11 +16,11 @@ def identity_home():
 def check_owned(path):
     """Reject redirects and foreign/group-writable identity files on POSIX."""
     if path.is_symlink():
-        raise PermissionError('Identity path must not be a symlink')
+        raise PermissionError(tr('legacy.c5005f5e3dd5'))
     if path.exists() and os.name == 'posix':
         stat = path.stat()
         if stat.st_uid != os.getuid() or stat.st_mode & 0o022:
-            raise PermissionError('Identity path must be owned by current user and not group/world writable')
+            raise PermissionError(tr('legacy.22b834dec0d3'))
 
 
 def shared_store():
@@ -53,7 +54,7 @@ def apply_input(service, session, text):
     elif token and token not in ('list', '查看'):
         if token not in ids:
             if prefix: return text, None
-            raise ValueError('未知身份：' + token + '（可选：' + ' / '.join(ids) + '）')
+            raise ValueError(tr('legacy.6ca210224ee2') + token + tr('legacy.6c25f767e352') + ' / '.join(ids) + '）')
         session.personaId = token
     if command:
         current = selected(service, session.personaId)

@@ -12,6 +12,7 @@
 - 解析失败的文件跳过，绝不让一条坏文件拖垮列表。
 """
 from __future__ import annotations
+from locale_runtime import tr
 
 import json
 import os
@@ -303,7 +304,7 @@ ALLOWED_WRITES_NOTE = "角色写入（upsert / remove / 排序 / 头像）尚未
 
 def not_implemented(what: str) -> None:
     """未接入的写入通道显式报错，不假装成功。"""
-    raise NotImplementedError(f"{what}：{ALLOWED_WRITES_NOTE}")
+    raise NotImplementedError(tr('legacy.b2fd20806334' ,p0=what, p2=ALLOWED_WRITES_NOTE))
 
 
 def make_id(name: str, taken: Any) -> str:
@@ -315,7 +316,7 @@ def make_id(name: str, taken: Any) -> str:
         candidate = f"{slug}-{secrets.token_hex(4)}"
         if is_safe_id(candidate) and candidate not in taken:
             return candidate
-    raise RuntimeError("无法生成不冲突的角色 id")
+    raise RuntimeError(tr('legacy.251ab7ed8779'))
 
 
 def compose_persona_md(

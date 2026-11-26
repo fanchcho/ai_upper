@@ -1,5 +1,6 @@
 """Target runtime: provider dispatch, PBS acquisition and release-safe optimization."""
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import json
 import os
@@ -29,7 +30,7 @@ def safe_extract(tar_path: Path, dest: Path) -> None:
         for member in tf.getmembers():
             target = (dest / member.name).resolve()
             if os.path.commonpath([str(root), str(target)]) != str(root):
-                raise RuntimeError(f"Unsafe archive path: {member.name}")
+                raise RuntimeError(tr('legacy.e1a96e9e350b' ,p1=member.name))
         tf.extractall(dest)
 
 
@@ -62,7 +63,7 @@ def ensure_pbs_runtime(target: Target) -> Path:
         sdk = ensure_pbs_sdk(target)
         source = sdk / "install"
         if not source.is_dir():
-            raise RuntimeError(f"PBS full-build SDK has no install runtime tree: {source}")
+            raise RuntimeError(tr('legacy.676eb9d79c00' ,p1=source))
         if out.exists():
             shutil.rmtree(out)
         copy_tree_contents(source, out)
@@ -77,14 +78,14 @@ def ensure_pbs_runtime(target: Target) -> Path:
     download(inputs.runtime.url, archive)
     actual = sha256(archive)
     if inputs.runtime.sha256 and actual.lower() != inputs.runtime.sha256.lower():
-        raise RuntimeError(f"PBS runtime SHA256 mismatch: expected {inputs.runtime.sha256}, got {actual}")
+        raise RuntimeError(tr('legacy.6e3c433b1a5c' ,p1=inputs.runtime.sha256, p3=actual))
     extract = CACHE / "pbs" / inputs.tag / target.key / "runtime-extract"
     if extract.exists():
         shutil.rmtree(extract)
     safe_extract(archive, extract)
     source = extract / "python"
     if not source.exists():
-        raise RuntimeError(f"Unexpected PBS runtime archive layout: {extract}")
+        raise RuntimeError(tr('legacy.b4edb331ca3d' ,p1=extract))
     if out.exists():
         shutil.rmtree(out)
     copy_tree_contents(source, out)
@@ -103,7 +104,7 @@ def ensure_windows_embed_runtime(target: Target) -> Path:
     invoking python.exe during a build needs isolation from host site-packages.
     """
     if target.os != "windows":
-        raise ValueError(f"No Windows embeddable runtime for {target.key}")
+        raise ValueError(tr('legacy.439dcd8da297' ,p1=target.key))
     out = target_runtime_dir(target)
     asset = windows_embed_asset(target, python_version())
     marker = out / RUNTIME_MARKER
@@ -126,8 +127,7 @@ def ensure_windows_embed_runtime(target: Target) -> Path:
         # architecture; PBS covers more versions than python.org does.
         if exc.code == 404:
             raise RuntimeError(
-                f"Python {python_version()} has no official embeddable ZIP for {target.key} "
-                f"({asset.url}); pin a version python.org publishes an embeddable ZIP for"
+                tr('legacy.489e6a4e14ce' ,p1=python_version(), p3=target.key, p5=asset.url)
             ) from exc
         raise
     actual = sha256(archive)
@@ -138,15 +138,15 @@ def ensure_windows_embed_runtime(target: Target) -> Path:
         entries = source.infolist()
         names = {entry.filename for entry in entries}
         if len(names) != len(entries):
-            raise RuntimeError(f"Duplicate member in Python embeddable ZIP: {asset.name}")
+            raise RuntimeError(tr('legacy.44915258dc64' ,p1=asset.name))
         for entry in entries:
             name = entry.filename
             if (not name or name.endswith("/") or "/" in name or "\\" in name
                     or PureWindowsPath(name).drive or PurePosixPath(name).is_absolute()
                     or name in {".", ".."}):
-                raise RuntimeError(f"Unsafe embed archive path: {name}")
+                raise RuntimeError(tr('legacy.a659e1639515' ,p1=name))
         if not required <= names:
-            raise RuntimeError(f"Incomplete Python embeddable ZIP {asset.name}: missing {sorted(required - names)}")
+            raise RuntimeError(tr('legacy.32bf51040eea' ,p1=asset.name, p3=sorted(required - names)))
         if out.exists():
             shutil.rmtree(out)
         out.mkdir(parents=True)
@@ -163,7 +163,7 @@ def ensure_windows_embed_runtime(target: Target) -> Path:
 def _local_info(target: Target) -> dict:
     spec = runtime_spec(target)
     if not spec.root.exists() or not spec.sdk_root.exists():
-        raise RuntimeError(f"Local runtime/SDK missing: runtime={spec.root} sdk={spec.sdk_root}")
+        raise RuntimeError(tr('legacy.99d695cd4d94' ,p1=spec.root, p3=spec.sdk_root))
     manifest = read_manifest(spec.root)
     validate_manifest(manifest, target, spec)
     return {

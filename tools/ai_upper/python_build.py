@@ -1,5 +1,6 @@
 """Application build: Cython generation, target extension compilation and staging."""
 from __future__ import annotations
+from ai_upper.localization import tr
 
 import concurrent.futures
 import fnmatch
@@ -41,7 +42,7 @@ def _run(cmd: list[str], *, cwd: Path | None = None, env: dict[str, str] | None 
     try:
         subprocess.run(cmd, cwd=cwd, env=env, check=True)
     except subprocess.CalledProcessError as exc:
-        raise RuntimeError(f"Command failed ({exc.returncode}): {' '.join(map(str, cmd))}") from exc
+        raise RuntimeError(tr('legacy.50671cb4e6e2' ,p1=exc.returncode, p3=' '.join(map(str, cmd)))) from exc
 
 
 def _run_parallel(tasks: list[tuple[list[str], Path | None, dict[str, str] | None]]) -> None:
@@ -186,7 +187,7 @@ def _cython_env(host_python: Path) -> dict[str, str]:
         env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
         cached = _cython_version(host_python, env)
         if not _supported_cython(cached):
-            raise RuntimeError(f"Unable to bootstrap {CYTHON_REQUIREMENT} for {host_python}; cache={cache}")
+            raise RuntimeError(tr('legacy.bb3cb1499963' ,p1=CYTHON_REQUIREMENT, p3=host_python, p5=cache))
     elif not _supported_cython(installed):
         env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     return env
@@ -339,10 +340,10 @@ def cythonize_to_c(sources: list[Path], host_python: Path) -> dict[Path, Path]:
         pending.append((source, destination, key))
 
     if not pending:
-        print(f"Cython: {len(sources)} module(s) up to date")
+        print(tr('legacy.ca21df0af7c6' ,p1=len(sources)))
         return outputs
 
-    print(f"Cython: {len(pending)} of {len(sources)} module(s) changed")
+    print(tr('legacy.45324af0c4af' ,p1=len(pending), p3=len(sources)))
     tasks: list[tuple[list[str], Path | None, dict[str, str] | None]] = []
     for source, destination, _ in pending:
         output_rel = os.path.relpath(destination, source.parent)
@@ -350,7 +351,7 @@ def cythonize_to_c(sources: list[Path], host_python: Path) -> dict[Path, Path]:
     _run_parallel(tasks)
     for source, destination, key in pending:
         if not destination.exists():
-            raise RuntimeError(f"Cython completed but did not generate {destination}")
+            raise RuntimeError(tr('legacy.61103cf571d0' ,p1=destination))
         _mark_current(destination, key)
     return outputs
 
@@ -442,12 +443,11 @@ def _renamed_translation_unit(text: str, symbol: str, source: Path) -> str:
     found = {match.group(1) for match in _PYINIT_RE.finditer(text)}
     if not found:
         raise RuntimeError(
-            f"Cython generated no PyInit entry point in the translation unit for {module_name(source)}"
+            tr('legacy.55dbaf79a553' ,p1=module_name(source))
         )
     if len(found) > 1:
         raise RuntimeError(
-            "Cython generated more than one module entry point for "
-            f"{module_name(source)}: {', '.join(sorted(found))}"
+            tr('legacy.fed55d51d64d', p1=module_name(source), p3=', '.join(sorted(found)))
         )
     return _PYINIT_RE.sub(lambda match: symbol, text)
 
@@ -472,7 +472,7 @@ def prepare_merged_group(
     for index, source in enumerate(sources):
         c_source = generated.get(source)
         if c_source is None or not c_source.is_file():
-            raise RuntimeError(f"Cython output missing for {module_name(source)}")
+            raise RuntimeError(tr('legacy.c370a4ed66c5' ,p1=module_name(source)))
         name = module_name(source)
         destination = directory / f"{index:04d}_{re.sub(r'[^A-Za-z0-9_]', '_', name)}.c"
         text = c_source.read_text(encoding="utf-8")
@@ -511,7 +511,7 @@ def _merged_unix_compile_command(
             f"-mmacosx-version-min={tc.deployment_target or '11.0'}",
             f"-I{target_python.include_dir}", *files, "-o", str(output),
         ]
-    raise RuntimeError("compile_merged_unix_extensions only supports Unix targets")
+    raise RuntimeError(tr('legacy.fb1934e28e20'))
 
 
 def _run_merged(cmd: list[str], label: str, env: dict[str, str] | None = None) -> None:
@@ -521,7 +521,7 @@ def _run_merged(cmd: list[str], label: str, env: dict[str, str] | None = None) -
     try:
         subprocess.run(cmd, check=True, env=env)
     except subprocess.CalledProcessError as exc:
-        raise RuntimeError(f"Command failed ({exc.returncode}): {label}") from exc
+        raise RuntimeError(tr('legacy.50671cb4e6e2' ,p1=exc.returncode, p3=label)) from exc
 
 
 def compile_merged_unix_extensions(
@@ -548,13 +548,13 @@ def compile_merged_unix_extensions(
             continue
         pending.append((cmd, artifact, key, group, len(inputs)))
     if not pending:
-        print(f"Compile: {len(outputs)} merged bundle(s) up to date")
+        print(tr('legacy.e0fbcbcaf6f2' ,p1=len(outputs)))
         return outputs
-    print(f"Compile: {len(pending)} of {len(outputs)} merged bundle(s) changed")
+    print(tr('legacy.2930059b0b61' ,p1=len(pending), p3=len(outputs)))
     for cmd, artifact, key, group, count in pending:
         _run_merged(cmd, f"merged {group} ({count} module(s)) -> {artifact.relative_to(root)}")
         if not artifact.is_file():
-            raise RuntimeError(f"Compiler completed but did not produce {artifact}")
+            raise RuntimeError(tr('legacy.d81c65d46f03' ,p1=artifact))
         _mark_current(artifact, key)
     return outputs
 
@@ -636,13 +636,13 @@ def compile_merged_windows_extensions_with_zig(
             continue
         pending.append((cmd, artifact, key, group, len(inputs)))
     if not pending:
-        print(f"Compile: {len(outputs)} merged bundle(s) up to date")
+        print(tr('legacy.e0fbcbcaf6f2' ,p1=len(outputs)))
         return outputs
-    print(f"Compile: {len(pending)} of {len(outputs)} merged bundle(s) changed")
+    print(tr('legacy.2930059b0b61' ,p1=len(pending), p3=len(outputs)))
     for cmd, artifact, key, group, count in pending:
         _run_merged(cmd, f"merged {group} ({count} module(s)) -> {artifact.relative_to(root)}", tc.env)
         if not artifact.is_file():
-            raise RuntimeError(f"Zig completed but produced no {artifact}")
+            raise RuntimeError(tr('legacy.d979166c33c3' ,p1=artifact))
         _mark_current(artifact, key)
     return outputs
 
@@ -683,10 +683,10 @@ def _compile_merged_windows_extensions_msvc(
         stale[group] = all_inputs
         keys[group] = key
     if not stale:
-        print(f"Compile: {len(outputs)} merged bundle(s) up to date")
+        print(tr('legacy.e0fbcbcaf6f2' ,p1=len(outputs)))
         return outputs
 
-    print(f"Compile: {len(stale)} of {len(outputs)} merged bundle(s) changed")
+    print(tr('legacy.2930059b0b61' ,p1=len(stale), p3=len(outputs)))
     if build_root.exists():
         shutil.rmtree(build_root)
     build_root.mkdir(parents=True)
@@ -703,7 +703,7 @@ def _compile_merged_windows_extensions_msvc(
     for group, inputs in stale.items():
         expected = build_root / (f"ai_upper_{group}" + suffix)
         if not expected.exists():
-            raise RuntimeError(f"Merged target extension missing: {expected}")
+            raise RuntimeError(tr('legacy.cfd1ef35515b' ,p1=expected))
         copy_file_contents(expected, bundle_root / merged_bundle_name(group, suffix))
         _mark_current(bundle_root / merged_bundle_name(group, suffix), keys[group])
     return outputs
@@ -808,12 +808,11 @@ def _windows_import_library(target_python) -> tuple[Path, Path, str]:
     libdir = next((path for path in candidates if path.exists() and any(path.glob("python*.lib"))), None)
     if libdir is None:
         raise RuntimeError(
-            f"Import library of target Python {target_python.python_major_minor} not found under the "
-            f"SDK tree {target_python.sdk_root}; it is a compiler input and is never taken from the runtime"
+            tr('legacy.5696297ed39c' ,p1=target_python.python_major_minor, p3=target_python.sdk_root)
         )
     python_lib = f"python{target_python.python_major_minor.replace('.', '')}"
     if not (libdir / f"{python_lib}.lib").is_file():
-        raise RuntimeError(f"{python_lib}.lib not found in {libdir}")
+        raise RuntimeError(tr('legacy.cf3b9d84fe6b' ,p0=python_lib, p2=libdir))
     return target_python.include_dir, libdir, python_lib
 
 
@@ -872,15 +871,15 @@ def compile_windows_extensions_with_zig(
         stale.append((source, artifact, cmd))
 
     if not stale:
-        print(f"Compile: {len(outputs)} extension(s) up to date")
+        print(tr('legacy.641eff7b3855' ,p1=len(outputs)))
         return list(outputs.values())
 
-    print(f"Compile: {len(stale)} of {len(outputs)} extension(s) changed")
+    print(tr('legacy.209e67204934' ,p1=len(stale), p3=len(outputs)))
     keys = [_windows_native_key(generated[source], artifact, include, libdir, [python_lib], suffix, tc.env) for source, artifact, _ in stale]
     _run_parallel([(cmd, None, tc.env) for _, _, cmd in stale])
     for (source, artifact, _), key in zip(stale, keys):
         if not artifact.exists():
-            raise RuntimeError(f"Zig compiler completed but did not produce {artifact}")
+            raise RuntimeError(tr('legacy.4c0297829765' ,p1=artifact))
         _mark_current(artifact, key)
     return list(outputs.values())
 
@@ -927,10 +926,10 @@ def _compile_windows_extensions_msvc(
         stale.append((source, artifact, key))
 
     if not stale:
-        print(f"Compile: {len(sources)} extension(s) up to date")
+        print(tr('legacy.641eff7b3855' ,p1=len(sources)))
         return list(outputs.values())
 
-    print(f"Compile: {len(stale)} of {len(sources)} extension(s) changed")
+    print(tr('legacy.209e67204934' ,p1=len(stale), p3=len(sources)))
     if build_root.exists():
         shutil.rmtree(build_root)
     build_root.mkdir(parents=True)
@@ -948,7 +947,7 @@ def _compile_windows_extensions_msvc(
     for source, artifact, key in stale:
         expected = build_root.joinpath(*source.relative_to(APP / "src").with_suffix("").parts[:-1], source.stem + suffix)
         if not expected.exists():
-            raise RuntimeError(f"Target extension missing: {expected}")
+            raise RuntimeError(tr('legacy.9cab9f10ed0c' ,p1=expected))
         copy_file_contents(expected, artifact)
         _mark_current(artifact, key)
     return list(outputs.values())
@@ -1055,9 +1054,9 @@ def build_python_package(target: Target, trim=None, egg=None) -> Path:
             except Exception as exc:
                 if egg.backend == "memory":
                     raise
-                print(f"warning: _memimporter unavailable ({exc}); egg falls back to extract")
-        print(f"Encrypted egg: {len(files)} application file(s), backend={egg.backend}")
-    print(f"Python stage ready: {site}")
+                print(tr('legacy.2d0c3ae81446' ,p1=exc))
+        print(tr('legacy.ee5b699ae493' ,p1=len(files), p3=egg.backend))
+    print(tr('legacy.c606b03e13f7' ,p1=site))
     return stage
 
 
@@ -1081,7 +1080,7 @@ def _unix_compile_command(target: Target, target_python, tc, c_source: Path, out
             f"-mmacosx-version-min={tc.deployment_target or '11.0'}",
             f"-I{target_python.include_dir}", str(c_source), "-o", str(output),
         ]
-    raise RuntimeError("compile_unix_extensions only supports Unix targets")
+    raise RuntimeError(tr('legacy.73fac91ed892'))
 
 
 def compile_unix_extensions(target: Target, generated: dict[Path, Path]) -> list[Path]:
@@ -1111,10 +1110,10 @@ def compile_unix_extensions(target: Target, generated: dict[Path, Path]) -> list
         pending.append((cmd, artifact, key))
 
     if not pending:
-        print(f"Compile: {len(outputs)} extension(s) up to date")
+        print(tr('legacy.641eff7b3855' ,p1=len(outputs)))
         return list(outputs.values())
 
-    print(f"Compile: {len(pending)} of {len(outputs)} extension(s) changed")
+    print(tr('legacy.209e67204934' ,p1=len(pending), p3=len(outputs)))
     _run_parallel([(cmd, None, None) for cmd, _, _ in pending])
     for _, artifact, key in pending:
         # A stubbed runner produces no file; a real compiler always does. Only a
