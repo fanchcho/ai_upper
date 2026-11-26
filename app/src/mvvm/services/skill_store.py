@@ -233,7 +233,7 @@ class SkillStore:
                 if not folder.is_dir():
                     continue
                 raw = (folder / "SKILL.md").read_text(encoding="utf-8")
-            except OSError:
+            except (OSError, UnicodeError):
                 continue  # 无 SKILL.md / 读失败 → 跳过该目录
             out.append(
                 parse_skill(skill_id, raw, enabled.get(skill_id) is not False, roles.get(skill_id))

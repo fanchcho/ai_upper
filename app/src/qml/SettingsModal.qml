@@ -1277,11 +1277,16 @@ Item {
         Item {
             id: extPane
             property var rows: []
+            property var selected: null
+            property string loadError: ""
 
             Component.onCompleted: refresh()
 
             function refresh() {
-                rows = shellBridge ? (I18n.locale, shellBridge.extensionRows()) : []
+                try { rows = shellBridge ? (I18n.locale, shellBridge.extensionRows()) : [] }
+                catch (error) { rows = [] }
+                var result = JSON.parse(shellBridge.extensionAction("errors", "", "", "{}"))
+                loadError = result.ok ? result.errors.join("\n") : result.error
             }
 
             Text {
@@ -1292,6 +1297,23 @@ Item {
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
                 font.weight: 700
+            }
+
+            Text {
+                x: 20; y: 40; width: parent.width - 40
+                visible: extPane.loadError.length > 0
+                text: extPane.loadError; color: Theme.danger; wrapMode: Text.Wrap
+            }
+            Loader {
+                anchors.fill: parent; z: 10
+                active: extPane.selected !== null
+                sourceComponent: Component {
+                    ExtensionDetail {
+                        item: extPane.selected || ({})
+                        Rectangle { anchors.fill: parent; color: Theme.bgPanel; z: -1 }
+                        onBack: { extPane.selected = null; extPane.refresh() }
+                    }
+                }
             }
 
             // 空态：原版 `.cf-empty`（padding 20、居中、12px subtle）。
@@ -1323,7 +1345,7 @@ Item {
             Rectangle {
                 visible: extPane.rows.length > 0
                 x: 20
-                y: 55
+                y: extPane.loadError.length ? 100 : 55
                 width: parent.width - 40
                 height: extColumn.height + 2
                 radius: Theme.radiusLg
@@ -1403,6 +1425,21 @@ Item {
                                 }
                             }
 
+                            Icon {
+                                visible: !extRow.modelData.builtin
+                                anchors.right: parent.right; anchors.rightMargin: 66
+                                anchors.verticalCenter: parent.verticalCenter
+                                name: IconData.chevronRight; size: 15; color: Theme.fgSubtle
+                            }
+                            MouseArea {
+                                anchors.fill: parent; anchors.rightMargin: 60
+                                enabled: !extRow.modelData.builtin
+                                onClicked: {
+                                    var result = JSON.parse(shellBridge.extensionAction("detail", extRow.modelData.kind, extRow.modelData.id, "{}"))
+                                    if (result.ok) extPane.selected = result.item; else extPane.loadError = result.error
+                                }
+                            }
+
                             // 开关：38×22 胶囊，开启=accent、滑块白 18 圆 16px 位移；
                             // 内置技能 locked → 整组 0.55 不透明、不可点（原版 `.cf-switch:disabled`）。
                             // 注意：CSS 的 opacity 作用在元素整体（先合成再调透明度），
@@ -1437,7 +1474,8 @@ Item {
                                     enabled: !extRow.modelData.builtin
                                     onClicked: {
                                         // 无条件重读：写失败时行数据保持原样，开关不会假装翻面。
-                                        if (shellBridge) shellBridge.toggleExtension(extRow.modelData.kind, extRow.modelData.id)
+                                        var result = JSON.parse(shellBridge.extensionAction("update", extRow.modelData.kind, extRow.modelData.id, JSON.stringify({enabled: !extRow.modelData.enabled})))
+                                        if (!result.ok) { extPane.loadError = result.error; return }
                                         extPane.refresh()
                                     }
                                 }

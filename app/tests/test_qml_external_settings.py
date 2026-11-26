@@ -22,4 +22,4 @@ def test_qml_selection_rejects_external_edit(qapp, tmp_path, monkeypatch):
         ticker.stop()
         window.close()
         _pump(qapp, 0.1)
-        del engine
+        engine.deleteLater()

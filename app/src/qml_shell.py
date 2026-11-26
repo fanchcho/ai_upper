@@ -1041,6 +1041,23 @@ class ShellBridge(QtCore.QObject):
         cleaned = {key: value for key, value in models.items() if value is not None}
         return self._write_config({"models": cleaned})
 
+    @QtCore.Slot(str, str, str, str, result=str)
+    def extensionAction(self, action, kind, key, payload):
+        from mvvm.services.extension_settings import ExtensionSettings
+        service = ExtensionSettings(self._settings, self._vault)
+        try:
+            data = json.loads(payload or '{}')
+            if action == 'errors': return json.dumps({'ok': True, 'errors': service.errors()})
+            if action == 'update': service.update(kind, key, data)
+            elif action == 'remove':
+                service.remove(kind, key)
+                return json.dumps({'ok': True})
+            elif action == 'secret': service.secret(key, data['field'], data['value'])
+            elif action != 'detail': raise ValueError('Unknown extension operation')
+            return json.dumps({'ok': True, 'item': service.detail(kind, key)})
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return json.dumps({'ok': False, 'error': str(exc)})
+
     @QtCore.Slot(result=list)
     def extensionRows(self) -> List[Dict[str, Any]]:
         """扩展页：技能与 MCP 注册列表，启用态来自各自的配置来源。
@@ -1066,8 +1083,19 @@ class ShellBridge(QtCore.QObject):
                 }
             )
         if self._settings is not None and self._vault is not None:
-            from mvvm.services.plugin_settings import PluginSettings
-            for server in PluginSettings(self._settings, self._vault).servers(include_registered=True):
+            from mvvm.services.extension_settings import ExtensionSettings
+            from functools import cmp_to_key
+            service = ExtensionSettings(self._settings, self._vault)
+            try:
+                registry = service.registry()
+                config = service.read('config.json')
+            except (OSError, ValueError):
+                registry, config = {}, {}
+            collator = QtCore.QCollator(QtCore.QLocale('en_US'))
+            ordered = sorted(registry.items(), key=cmp_to_key(
+                lambda a, b: collator.compare(str(a[1].get('name') or a[0]), str(b[1].get('name') or b[0]))))
+            for key, record in ordered:
+                server = dict(record, id=key, enabled=config.get('mcp', {}).get('enabled', {}).get(key) is True)
                 rows.append({
                     "id": server["id"], "kind": "mcp",
                     "name": server.get("name") or server["id"],

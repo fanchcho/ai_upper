@@ -18,7 +18,7 @@ def test_custom_model_editor_hides_secret(qapp,tmp_path,monkeypatch):
         assert 'test-secret' not in json.dumps(result)
         assert _find_item(root,'pluginSecret').property('text')==''
     finally:
-        ticker.stop();w.close();_pump(qapp,.1);del engine
+        ticker.stop();w.close();_pump(qapp,.1);engine.deleteLater()
 
 
 def test_mcp_and_identity_editors(qapp,tmp_path,monkeypatch):
@@ -38,7 +38,7 @@ def test_mcp_and_identity_editors(qapp,tmp_path,monkeypatch):
         _click_item(w,_find_item(root,'pluginSave'));_pump(qapp)
         assert {'id':'test-persona','text':'Authoritative disk content'} in json.loads(bridge.pluginSettings('identities','{}'))['identities']
     finally:
-        ticker.stop();w.close();_pump(qapp,.1);del engine
+        ticker.stop();w.close();_pump(qapp,.1);engine.deleteLater()
 
 
 def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
@@ -65,4 +65,4 @@ def test_actual_qml_approval_and_answer_buttons(qapp,tmp_path,monkeypatch):
     finally:
         for row in bridge.pendingInteractions(): bridge.answerInteraction(row['id'],'cancelled','')
         for worker in workers:worker.join(1)
-        ticker.stop();w.close();_pump(qapp,.1);del engine
+        ticker.stop();w.close();_pump(qapp,.1);engine.deleteLater()

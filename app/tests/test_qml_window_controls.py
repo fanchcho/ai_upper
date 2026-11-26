@@ -303,7 +303,7 @@ def test_frameless_drag_and_resize_hit_regions(qapp, tmp_path, monkeypatch):
         ticker.stop()
         window.close()
         _pump(qapp, 0.1)
-        del engine
+        engine.deleteLater()
 
 
 @pytest.mark.parametrize("mac", [False, True])
@@ -324,4 +324,4 @@ def test_platform_chrome_branch(qapp, tmp_path, monkeypatch, mac):
         ticker.stop()
         window.close()
         _pump(qapp, 0.1)
-        del engine
+        engine.deleteLater()
