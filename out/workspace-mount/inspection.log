@@ -1,0 +1,99 @@
+$ git branch --show-current
+develop
+exit_code=0
+
+$ git log --oneline -8
+b011b65 docs(audit): record three rejected cold rendering candidates
+055db71 docs(audit): close rejected idle prefetch investigation
+cf960b8 docs(audit): reject cold attachment regressions with measured evidence
+e1fbf80 docs(audit): verify cold and cached session frames and bounded memory
+b2de19d test(qml): await interaction prompt readiness
+b11ed32 perf(qml): reuse bounded session display documents
+468f5b7 docs(audit): verify retained develop before authorized push
+9b5775a docs(audit): quantify render costs and record full-suite verification
+exit_code=0
+
+$ git diff --check
+exit_code=0
+
+$ rg -n Mount workspace|placeholderText:.*Message|deepseek-v4.1-flash|sizeText|model: window.deliveries|height: 60|id: bodyScroll|clip: true app/src/qml/Main.qml
+24:        title: "Mount workspace"
+58:    //   attachments: [{name,kind,size,sizeText,thumb,index}]
+59:    //   deliveries:  [{path,name,dir,size,sizeText,openable,missing,toolUseId}]
+143:    property string modelLabel: "deepseek-v4.1-flash"
+527:                clip: true
+653:            clip: true
+1065:            id: bodyScroll
+1072:            clip: true
+1081:                id: bodyScrollbar
+1088:                clip: true
+1171:                                    text: modelData.sizeText || ""
+1228:                            model: window.deliveries
+1233:                                height: 60
+1278:                                          : ((modelData.sizeText || "") + " · " + (modelData.dir || ""))
+1450:                placeholderText: "Message " + (window.activePersonaName || "Assistant") + "…"
+1525:                        text: window.focusRoot ? (window.focusRoot.split("/").pop() || window.focusRoot) : "Mount workspace"
+2361:                    clip: true
+exit_code=0
+
+$ rg -n layer.enabled|Shape|scale:|part\(|name.split app/src/qml/Icon.qml
+9:// 生成器用 "|" 连接；这里拆开后每条子路径各自一个 ShapePath，避免跨子路径连线。
+11:import QtQuick.Shapes
+23:    // Rasterize each vector inside its own bounds so software Shape nodes
+25:    layer.enabled: true
+30:    readonly property var parts: name.length ? name.split("|") : []
+32:    function part(i) { return i < parts.length ? parts[i] : "" }
+34:    Shape {
+37:        scale: icon.size / 24
+39:        preferredRendererType: Shape.CurveRenderer
+43:        // 注意：Repeater 的 delegate 必须是 Item，而 ShapePath 不是 Item，
+45:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(0) } }
+46:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(1) } }
+47:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(2) } }
+48:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(3) } }
+49:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(4) } }
+50:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(5) } }
+51:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(6) } }
+52:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(7) } }
+53:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(8) } }
+54:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(9) } }
+55:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(10) } }
+56:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(11) } }
+57:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(12) } }
+58:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(13) } }
+59:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(14) } }
+60:        ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(15) } }
+exit_code=0
+
+$ rg -n beginWorkspace|acceptWorkspace|cancelWorkspace|trust_root|focusRoot app/src/qml_shell.py
+348:            root = getattr(meta, "focusRoot", None)
+350:                self._host.guard.trust_root(root)
+1197:    def beginWorkspace(self) -> str:
+1206:    def cancelWorkspace(self) -> None:
+1210:    def acceptWorkspace(self, url: Any) -> str:
+1212:        # focusRoot supplied by a message/tool. Bind to the opening session.
+1229:            self._host.guard.trust_root(root)
+1564:        `focusName` 是 `focusRoot` 的 basename：原版搜索按「标题 + 角色名 + 挂载目录名」过滤
+1571:        focus = {str(getattr(m, "id", "")): str(getattr(m, "focusRoot", "") or "")
+1613:        window.setProperty("focusRoot", str(session.focusRoot or "") if session else "")
+1688:        guard.trust_root(workspace)
+exit_code=0
+
+$ rg -n fillMode:.*Tile app/src/qml
+exit_code=1
+
+$ rg -n workspaceDialog.open|FolderDialog|QtQuick.Dialogs app/src/qml
+app/src/qml/Main.qml:15:import QtQuick.Dialogs as Dialogs
+app/src/qml/Main.qml:21:    Dialogs.FolderDialog {
+app/src/qml/Main.qml:1544:                        if (!error) workspaceDialog.open()
+exit_code=0
+
+$ rg -n mountFocus|setFocus /home/agent/shared_workspace/deva/apps/desktop/src/renderer/src/store/chat.tsx
+430:  mountFocus: (path: string | null) => void
+460:   * 挂载成功时**同步更新本对话绑定覆盖层**（等价于 mountFocus）——否则下次 chat:send 会用旧覆盖层
+538:  mountFocus: true,
+2076:    const mountFocus = (path: string | null): void => {
+2081:        await window.deva.chat.setFocus({ sessionId: sid, focusRoot: path })
+2402:      mountFocus,
+exit_code=0
+

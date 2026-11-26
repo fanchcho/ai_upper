@@ -1,0 +1,292 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................ss.............................................. [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+................................................s....................... [ 45%]
+........................................................................ [ 51%]
+....ssss................................................................ [ 56%]
+........................................................................ [ 61%]
+.................................................................FFF.... [ 66%]
+........................................................................ [ 71%]
+................................................................F....... [ 76%]
+........................................................................ [ 81%]
+........................................................................ [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 97%]
+..........................................                               [100%]
+=================================== FAILURES ===================================
+__________ test_models_panel_structure_and_drilldown[True-True-False] __________
+
+models_qapp = <PySide6.QtWidgets.QApplication(0x143a0390) at 0xffff8b213fc0>
+tmp_path = PosixPath('/tmp/ai-upper-mount-full-tests/test_models_panel_structure_an0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff867ec360>
+enabled = True, keyed = True, warn = False
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+            assert title.property("color").name() == "#1f1f24"
+            assert title.property("font").pixelSize() == 15
+            assert (head.x(), head.y(), head.height()) == (20, 16, 28)
+            assert (add.width(), add.height(), add.property("radius")) == (28, 28, 8)
+            assert QQmlProperty.read(add, "border.width") == 1
+            assert QQmlProperty.read(add, "border.color").name() == "#e6e6ea"
+            assert (rows.x(), rows.y(), rows.width(), rows.height()) == (20, 60, 510, 54)
+            assert rows.property("radius") == 12
+            assert QQmlProperty.read(rows, "border.width") == 1
+            assert QQmlProperty.read(rows, "border.color").name() == "#e6e6ea"
+            assert (listing.x(), listing.y(), listing.width(), listing.height()) == (1, 1, 508, 52)
+            row = next(child for child in listing.property("contentItem").childItems()
+                       if child.property("modelData") is not None)
+            assert row.height() == 52
+            projected = provider_rows(section, lambda _id: keyed, "en")
+            assert bridge.modelRows() == projected
+            assert row.property("modelData") == projected[0]
+            row_context = QQmlEngine.contextForObject(row)
+            main = row_context.contextProperty("providerMain")
+            aside = row_context.contextProperty("providerAside")
+            name, subtitle = main.childItems()
+            assert (name.property("text"), subtitle.property("text")) == ("Projected provider", "2 models")
+            assert main.x() == 36  # 14px padding + 10px dot + 12px gap
+            dot = next(child for child in row.childItems() if child.width() == 10 and child.height() == 10)
+            assert (dot.x(), dot.y()) == (14, 21)
+            assert dot.property("color").name() == ("#2f9e44" if enabled else "#8a8a94")
+>           warning, chevron = aside.childItems()
+            ^^^^^^^^^^^^^^^^
+E           ValueError: too many values to unpack (expected 2)
+
+app/tests/test_qml_settings_models.py:136: ValueError
+__________ test_models_panel_structure_and_drilldown[True-False-True] __________
+
+models_qapp = <PySide6.QtWidgets.QApplication(0x143a0390) at 0xffff8b213fc0>
+tmp_path = PosixPath('/tmp/ai-upper-mount-full-tests/test_models_panel_structure_an1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff86781c50>
+enabled = True, keyed = False, warn = True
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+            assert title.property("color").name() == "#1f1f24"
+            assert title.property("font").pixelSize() == 15
+            assert (head.x(), head.y(), head.height()) == (20, 16, 28)
+            assert (add.width(), add.height(), add.property("radius")) == (28, 28, 8)
+            assert QQmlProperty.read(add, "border.width") == 1
+            assert QQmlProperty.read(add, "border.color").name() == "#e6e6ea"
+            assert (rows.x(), rows.y(), rows.width(), rows.height()) == (20, 60, 510, 54)
+            assert rows.property("radius") == 12
+            assert QQmlProperty.read(rows, "border.width") == 1
+            assert QQmlProperty.read(rows, "border.color").name() == "#e6e6ea"
+            assert (listing.x(), listing.y(), listing.width(), listing.height()) == (1, 1, 508, 52)
+            row = next(child for child in listing.property("contentItem").childItems()
+                       if child.property("modelData") is not None)
+            assert row.height() == 52
+            projected = provider_rows(section, lambda _id: keyed, "en")
+            assert bridge.modelRows() == projected
+            assert row.property("modelData") == projected[0]
+            row_context = QQmlEngine.contextForObject(row)
+            main = row_context.contextProperty("providerMain")
+            aside = row_context.contextProperty("providerAside")
+            name, subtitle = main.childItems()
+            assert (name.property("text"), subtitle.property("text")) == ("Projected provider", "2 models")
+            assert main.x() == 36  # 14px padding + 10px dot + 12px gap
+            dot = next(child for child in row.childItems() if child.width() == 10 and child.height() == 10)
+            assert (dot.x(), dot.y()) == (14, 21)
+            assert dot.property("color").name() == ("#2f9e44" if enabled else "#8a8a94")
+>           warning, chevron = aside.childItems()
+            ^^^^^^^^^^^^^^^^
+E           ValueError: too many values to unpack (expected 2)
+
+app/tests/test_qml_settings_models.py:136: ValueError
+_________ test_models_panel_structure_and_drilldown[False-False-False] _________
+
+models_qapp = <PySide6.QtWidgets.QApplication(0x143a0390) at 0xffff8b213fc0>
+tmp_path = PosixPath('/tmp/ai-upper-mount-full-tests/test_models_panel_structure_an2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff867640c0>
+enabled = False, keyed = False, warn = False
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+            assert title.property("color").name() == "#1f1f24"
+            assert title.property("font").pixelSize() == 15
+            assert (head.x(), head.y(), head.height()) == (20, 16, 28)
+            assert (add.width(), add.height(), add.property("radius")) == (28, 28, 8)
+            assert QQmlProperty.read(add, "border.width") == 1
+            assert QQmlProperty.read(add, "border.color").name() == "#e6e6ea"
+            assert (rows.x(), rows.y(), rows.width(), rows.height()) == (20, 60, 510, 54)
+            assert rows.property("radius") == 12
+            assert QQmlProperty.read(rows, "border.width") == 1
+            assert QQmlProperty.read(rows, "border.color").name() == "#e6e6ea"
+            assert (listing.x(), listing.y(), listing.width(), listing.height()) == (1, 1, 508, 52)
+            row = next(child for child in listing.property("contentItem").childItems()
+                       if child.property("modelData") is not None)
+            assert row.height() == 52
+            projected = provider_rows(section, lambda _id: keyed, "en")
+            assert bridge.modelRows() == projected
+            assert row.property("modelData") == projected[0]
+            row_context = QQmlEngine.contextForObject(row)
+            main = row_context.contextProperty("providerMain")
+            aside = row_context.contextProperty("providerAside")
+            name, subtitle = main.childItems()
+            assert (name.property("text"), subtitle.property("text")) == ("Projected provider", "2 models")
+            assert main.x() == 36  # 14px padding + 10px dot + 12px gap
+            dot = next(child for child in row.childItems() if child.width() == 10 and child.height() == 10)
+            assert (dot.x(), dot.y()) == (14, 21)
+            assert dot.property("color").name() == ("#2f9e44" if enabled else "#8a8a94")
+>           warning, chevron = aside.childItems()
+            ^^^^^^^^^^^^^^^^
+E           ValueError: too many values to unpack (expected 2)
+
+app/tests/test_qml_settings_models.py:136: ValueError
+___________ test_runtime_closure_probe_inherits_the_host_environment ___________
+
+tmp_path = PosixPath('/tmp/ai-upper-mount-full-tests/test_runtime_closure_probe_inh0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff8b513700>
+
+    def test_runtime_closure_probe_inherits_the_host_environment(tmp_path, monkeypatch):
+        """The closure probe must not hand the target interpreter a built environment.
+    
+        It needs PYTHONPATH (the staged payload) and PYTHONDONTWRITEBYTECODE, but
+        everything else has to come from the host. A block containing only those two
+        plus a POSIX PATH is not a smaller host environment: on Windows the target
+        interpreter dies during preinit without SystemRoot, reporting
+        "_Py_HashRandomization_Init: failed to get random numbers to initialize
+        Python", which failed every Windows host build with qt = "imports" before
+        the launcher step.
+        """
+        from ai_upper import qt_prune
+    
+        site = tmp_path / "site-packages"
+        site.mkdir()
+        recorded: dict[str, object] = {}
+    
+        def fake_run(cmd, **kwargs):
+            recorded["cmd"] = cmd
+            recorded["env"] = kwargs["env"]
+            loaded = {"loaded": ["PySide6.QtWidgets", "PySide6.QtCore"], "absent": []}
+            return subprocess.CompletedProcess(cmd, 0, stdout=json.dumps(loaded) + "\n", stderr="")
+    
+        monkeypatch.setattr(qt_prune, "_native_runtime_python", lambda target: Path(sys.executable))
+        monkeypatch.setattr(qt_prune.subprocess, "run", fake_run)
+    
+        closure = qt_prune._runtime_closure(site, TARGETS["macos-arm64"], {"QtWidgets"})
+    
+        assert closure == {"QtWidgets", "QtCore"}
+        env = recorded["env"]
+        assert env["PYTHONPATH"] == str(site)
+        assert env["PYTHONDONTWRITEBYTECODE"] == "1"
+        dropped = {name: value for name, value in os.environ.items() if env.get(name) != value}
+>       assert not dropped, f"the probe dropped host variables: {sorted(dropped)}"
+E       AssertionError: the probe dropped host variables: ['PYTHONPATH']
+E       assert not {'PYTHONPATH': 'app/src'}
+
+app/tests/test_qt_prune.py:498: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[True-True-False]
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[True-False-True]
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[False-False-False]
+FAILED app/tests/test_qt_prune.py::test_runtime_closure_probe_inherits_the_host_environment
+4 failed, 1397 passed, 9 skipped in 286.78s (0:04:46)

@@ -1,0 +1,38 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_scrolled_delivery_icons_do_not_paint_over_composer ____________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x103ebdf0) at 0xffff7c29cfc0>
+tmp_path = PosixPath('/tmp/ai-upper-mount-red-tests/test_scrolled_delivery_icons_d0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff7c863100>
+
+    def test_scrolled_delivery_icons_do_not_paint_over_composer(qapp, tmp_path, monkeypatch):
+        w, b, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
+        try:
+            w.setProperty('page', 'chat'); w.setWidth(1200); w.setHeight(800)
+            rows = [dict(path=f'/fixture/{i}',name='Patch.java',dir='/Users/fanchunchun/ekko_workspace/app/charles/work',sizeText='5.9 MB',missing=False,openable=False,toolUseId='t') for i in range(24)]
+            w.setProperty('deliveries', rows); _pump(qapp)
+            scroll = w.findChild(QObject, 'bodyScroll')
+            for y in range(0,480,17):
+                scroll.setProperty('contentY', y); _pump(qapp,.02)
+            image = w.grabWindow()
+            # Three columns previously left dark icon trails in this empty composer band.
+            for x in [478,1088,1118]:
+                for y in range(685,725):
+                    color = image.pixelColor(x,y)
+>                   assert min(color.red(),color.green(),color.blue()) > 235, (x,y,color.name())
+E                   AssertionError: (478, 685, '#808088')
+E                   assert 128 > 235
+E                    +  where 128 = min(128, 128, 136)
+E                    +    where 128 = <built-in method red of PySide6.QtGui.QColor object at 0xffff7c43e840>()
+E                    +      where <built-in method red of PySide6.QtGui.QColor object at 0xffff7c43e840> = PySide6.QtGui.QColor.fromRgbF(0.501961, 0.501961, 0.533333, 1.000000).red
+E                    +    and   128 = <built-in method green of PySide6.QtGui.QColor object at 0xffff7c43e840>()
+E                    +      where <built-in method green of PySide6.QtGui.QColor object at 0xffff7c43e840> = PySide6.QtGui.QColor.fromRgbF(0.501961, 0.501961, 0.533333, 1.000000).green
+E                    +    and   136 = <built-in method blue of PySide6.QtGui.QColor object at 0xffff7c43e840>()
+E                    +      where <built-in method blue of PySide6.QtGui.QColor object at 0xffff7c43e840> = PySide6.QtGui.QColor.fromRgbF(0.501961, 0.501961, 0.533333, 1.000000).blue
+
+app/tests/test_qml_workspace_mount.py:83: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_workspace_mount.py::test_scrolled_delivery_icons_do_not_paint_over_composer
+1 failed in 6.33s
+exit_code=1

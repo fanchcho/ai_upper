@@ -1,0 +1,80 @@
+F
+=================================== FAILURES ===================================
+__________ test_models_panel_structure_and_drilldown[True-True-False] __________
+
+models_qapp = <PySide6.QtGui.QGuiApplication(0x34443ee0) at 0xffff88876a80>
+tmp_path = PosixPath('/tmp/ai-upper-mount-failure-tests/test_models_panel_structure_an0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff889f75c0>
+enabled = True, keyed = True, warn = False
+
+    @pytest.mark.parametrize("enabled,keyed,warn", [
+        (True, True, False), (True, False, True), (False, False, False),
+    ])
+    def test_models_panel_structure_and_drilldown(
+        models_qapp, tmp_path, monkeypatch, enabled, keyed, warn,
+    ):
+        """deva app.css:4475-4582 geometry + projected states + real pointer navigation.
+    
+        Use QML contexts to inspect the existing component IDs without adding a
+        second view model or changing production objects just for test selectors.
+        """
+        from PySide6.QtQml import QQmlEngine, QQmlProperty
+        from test_qml_settings_provider import _build_window, _click, _find_item, _pump
+    
+        window, bridge, settings, vault, ticker, engine = _build_window(
+            tmp_path, monkeypatch, page="chat"
+        )
+        try:
+            section = {"providers": [{
+                "id": "p1", "kind": "custom", "purpose": "llm",
+                "name": "Projected provider", "enabled": enabled,
+                "models": [{"id": "first"}, {"id": "second"}],
+            }]}
+            settings.set_config({"models": section})
+            if not keyed:
+                vault.delete_secret("p1")
+            window.setProperty("page", "settings-models")
+            _pump(models_qapp, 0.6)
+            add = _find_item(window.contentItem(), "modelsAddProvider")
+            context = QQmlEngine.contextForObject(add)
+            title = context.contextProperty("modTitle")
+            head = title.parentItem()
+            rows = context.contextProperty("modRows")
+            listing = context.contextProperty("modList")
+            pane = context.contextProperty("modPane")
+            assert title.property("text") == "Providers"
+            assert title.property("color").name() == "#1f1f24"
+            assert title.property("font").pixelSize() == 15
+            assert (head.x(), head.y(), head.height()) == (20, 16, 28)
+            assert (add.width(), add.height(), add.property("radius")) == (28, 28, 8)
+            assert QQmlProperty.read(add, "border.width") == 1
+            assert QQmlProperty.read(add, "border.color").name() == "#e6e6ea"
+            assert (rows.x(), rows.y(), rows.width(), rows.height()) == (20, 60, 510, 54)
+            assert rows.property("radius") == 12
+            assert QQmlProperty.read(rows, "border.width") == 1
+            assert QQmlProperty.read(rows, "border.color").name() == "#e6e6ea"
+            assert (listing.x(), listing.y(), listing.width(), listing.height()) == (1, 1, 508, 52)
+            row = next(child for child in listing.property("contentItem").childItems()
+                       if child.property("modelData") is not None)
+            assert row.height() == 52
+            projected = provider_rows(section, lambda _id: keyed, "en")
+            assert bridge.modelRows() == projected
+            assert row.property("modelData") == projected[0]
+            row_context = QQmlEngine.contextForObject(row)
+            main = row_context.contextProperty("providerMain")
+            aside = row_context.contextProperty("providerAside")
+            name, subtitle = main.childItems()
+            assert (name.property("text"), subtitle.property("text")) == ("Projected provider", "2 models")
+            assert main.x() == 36  # 14px padding + 10px dot + 12px gap
+            dot = next(child for child in row.childItems() if child.width() == 10 and child.height() == 10)
+            assert (dot.x(), dot.y()) == (14, 21)
+            assert dot.property("color").name() == ("#2f9e44" if enabled else "#8a8a94")
+>           warning, chevron = aside.childItems()
+            ^^^^^^^^^^^^^^^^
+E           ValueError: too many values to unpack (expected 2)
+
+app/tests/test_qml_settings_models.py:136: ValueError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_settings_models.py::test_models_panel_structure_and_drilldown[True-True-False]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 4.93s

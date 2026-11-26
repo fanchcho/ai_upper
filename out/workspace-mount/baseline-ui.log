@@ -1,0 +1,80 @@
+$ git show b011b65:app/src/qml/Main.qml
+1493: 
+1494:                 // 挂载工作区 chip
+1495:                 Row {
+1496:                     id: mountChip
+1497:                     x: 34
+1498:                     y: (parent.height - 30) / 2
+1499:                     height: 30
+1500:                     spacing: 0
+1501:                     Item {
+1502:                         width: 15
+1503:                         height: 30
+1504:                         Icon {
+1505:                             anchors.verticalCenter: parent.verticalCenter
+1506:                             name: IconData.folder
+1507:                             size: 15
+1508:                             color: Theme.fgSubtle
+1509:                         }
+1510:                     }
+1511:                     Text {
+1512:                         text: "Mount workspace"
+1513:                         anchors.verticalCenter: undefined
+1514:                         y: (30 - height) / 2
+1515:                         color: Theme.fgSubtle
+1516:                         font.family: Theme.sansFamily
+1517:                         font.pixelSize: 12
+1518:                         rightPadding: 8
+1519:                         leftPadding: 9
+1520:                     }
+1521:                 }
+1522: 
+1523:                 // 右侧：模型 chip + 强度 chip + 发送
+exit_code=0
+
+$ git show b011b65:app/src/qml/Icon.qml
+14: Item {
+15:     id: icon
+16:     property string name: ""
+17:     property real size: 16
+18:     property color color: Theme.fgSubtle
+19:     // 原版个别图标改过线宽；默认按 lucide 规格 2。
+20:     property real strokeWidth: 2
+21:     property bool filled: false
+22: 
+23:     implicitWidth: size
+24:     implicitHeight: size
+25: 
+26:     readonly property var parts: name.length ? name.split("|") : []
+27:     // 子路径条数上限：lucide 里最多的是 cog（14 条），留到 16 条足够。
+28:     function part(i) { return i < parts.length ? parts[i] : "" }
+29: 
+30:     Shape {
+31:         width: 24
+32:         height: 24
+33:         scale: icon.size / 24
+34:         transformOrigin: Item.TopLeft
+35:         preferredRendererType: Shape.CurveRenderer
+36:         // 线宽是 viewBox 单位，先按缩放倒回，使屏幕上呈现 strokeWidth * size/24 的视觉线宽
+37:         // 与原版 `<svg stroke-width=2>` 在同样尺寸下一致。
+38:         //
+39:         // 注意：Repeater 的 delegate 必须是 Item，而 ShapePath 不是 Item，
+40:         // 所以这里不用 Repeater，改用固定槽位 + 空 path 占位（空 path 不画任何东西）。
+41:         ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(0) } }
+42:         ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(1) } }
+43:         ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(2) } }
+44:         ShapePath { strokeColor: icon.filled ? "transparent" : icon.color; fillColor: icon.filled ? icon.color : "transparent"; strokeWidth: icon.strokeWidth; capStyle: ShapePath.RoundCap; joinStyle: ShapePath.RoundJoin; PathSvg { path: icon.part(3) } }
+exit_code=0
+
+$ git show b011b65:app/src/qml_shell.py
+1636:     store = ChatSessionStore(home)
+1637:     personas = shared_store()
+1638:     personas.ensure_seeded()
+1639:     guard = WorkspaceGuard()
+1640:     workspace = trusted_workspace_from_env()
+1641:     if workspace:
+1642:         guard.trust_root(workspace)
+1643: 
+1644:     # 必须是真 `QApplication`（而不是 `QGuiApplication`）：附件选择要 `QFileDialog`，
+exit_code=0
+

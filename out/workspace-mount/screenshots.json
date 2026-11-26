@@ -1,0 +1,22 @@
+{
+  "after.png": {
+    "bytes": 137908,
+    "sha256": "2a07099e72284185df5f71c1917ced964ef941b25ea1bf4108bf14a15b766823"
+  },
+  "before.png": {
+    "bytes": 155027,
+    "sha256": "80bdf6608ba498b29a4ea0e228045be3375c0e8897e736b5840903c42f93997b"
+  },
+  "dialog-selection.png": {
+    "bytes": 17074,
+    "sha256": "6d20194dc3b59a9550eac51493f94fc096414a44ae4715ef59d11bf7bbc2ff7f"
+  },
+  "dialog.png": {
+    "bytes": 24801,
+    "sha256": "7bf9d813e6f483787d9ce02b9b63cd0501ded646bb3d68765c2e94f61ced1751"
+  },
+  "user.png": {
+    "bytes": 97023,
+    "sha256": "f5aa7fe1079d10eba510d533e1803848f959c5de5f4d72792466bbdc3fd55149"
+  }
+}

@@ -1,0 +1,5 @@
+mouse dialog=visible; singleton=1; cancel=unchanged; disk/reopen/restart=ok; unauthorized/symlink/file/remote/missing/switch/no-session=rejected
+.24 rows; three composer columns clean; visible folder retained
+.
+2 passed in 12.80s
+exit_code=0

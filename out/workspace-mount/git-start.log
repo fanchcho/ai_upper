@@ -1,0 +1,9 @@
+b011b65 docs(audit): record three rejected cold rendering candidates
+055db71 docs(audit): close rejected idle prefetch investigation
+cf960b8 docs(audit): reject cold attachment regressions with measured evidence
+e1fbf80 docs(audit): verify cold and cached session frames and bounded memory
+b2de19d test(qml): await interaction prompt readiness
+b11ed32 perf(qml): reuse bounded session display documents
+468f5b7 docs(audit): verify retained develop before authorized push
+9b5775a docs(audit): quantify render costs and record full-suite verification
+develop
