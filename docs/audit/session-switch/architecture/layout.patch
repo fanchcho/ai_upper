@@ -1,0 +1,17 @@
+diff --git a/app/src/markdown/prepare.py b/app/src/markdown/prepare.py
+index b93ac92..5af158c 100644
+--- a/app/src/markdown/prepare.py
++++ b/app/src/markdown/prepare.py
+@@ -6,10 +6,12 @@ from .body import _image_names
+ 
+ def prepare_document(source, plain, style, width, resolver):
+     document = QtGui.QTextDocument()
++    document.setLayoutEnabled(False)
+     if plain:
+         render_plain_text(document, source, style, width)
+     else:
+         render_markdown(document, source, style, width, resolver)
++    document.setLayoutEnabled(True)
+     kind = QtGui.QTextDocument.ResourceType.ImageResource.value
+     images = [(url, document.resource(kind, url)) for url in _image_names(document)]
+     return QtGui.QTextDocumentFragment(document), images

@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "commit",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "commit",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "commit",
+    "group": 3,
+    "exit_code": 0
+  }
+]

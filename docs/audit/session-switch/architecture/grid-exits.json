@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "grid",
+    "group": 1,
+    "exit_code": 0
+  },
+  {
+    "mode": "grid",
+    "group": 2,
+    "exit_code": 0
+  },
+  {
+    "mode": "grid",
+    "group": 3,
+    "exit_code": 0
+  }
+]

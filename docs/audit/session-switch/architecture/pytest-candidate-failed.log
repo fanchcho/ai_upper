@@ -1,0 +1,73 @@
+.................................................F...................... [ 45%]
+........................................................................ [ 91%]
+..............                                                           [100%]
+=================================== FAILURES ===================================
+__________________ test_qml_scrollbars_match_deva_and_scroll ___________________
+
+qapp = <PySide6.QtGui.QGuiApplication(0x7c7c270) at 0xffff7ab28900>
+tmp_path = PosixPath('/tmp/ai-upper-arch-related-base/test_qml_scrollbars_match_deva0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff826c6970>
+
+    def test_qml_scrollbars_match_deva_and_scroll(qapp, tmp_path, monkeypatch):
+        """侧栏 / 正文使用真实 QML ScrollBar：8px 轨道、2px 内缩、4px 可见 thumb，
+        常态 rgba(0,0,0,0.18)、hover #8a8a94，且滚轮与拖动都真的改变 contentY。"""
+        from test_qml_scrollbars import (
+            test_scrollbars_exist_and_match_deva_tokens as check_tokens,
+            test_scrollbars_scroll_with_wheel_and_drag as check_scroll,
+        )
+    
+>       check_tokens(tmp_path / "tokens", monkeypatch, qapp)
+
+app/tests/test_qml_shell.py:715: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/ai-upper-arch-related-base/test_qml_scrollbars_match_deva0/tokens')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff826c6970>
+qapp = <PySide6.QtGui.QGuiApplication(0x7c7c270) at 0xffff7ab28900>
+
+    def test_scrollbars_exist_and_match_deva_tokens(tmp_path, monkeypatch, qapp):
+        window, _bridge, _ticker, _engine = _build_window(tmp_path, monkeypatch)
+        _pump(qapp)
+    
+        sidebar = _find_item(window.contentItem(), "sidebar-scrollbar")
+        body = _find_item(window.contentItem(), "body-scrollbar")
+        assert sidebar is not None, "侧栏必须有真实的 QML ScrollBar（objectName=sidebar-scrollbar）"
+        assert body is not None, "正文区必须有真实的 QML ScrollBar（objectName=body-scrollbar）"
+    
+        for bar in (sidebar, body):
+            assert round(bar.property("width")) == 8
+            assert round(bar.property("padding")) == 2
+            content = bar.property("contentItem")
+            assert round(content.property("width")) == 4, "2px 透明内缩后可见滑块宽必须为 4px"
+            assert _color_name(content) == "#000000", "常态 thumb 是 rgba(0,0,0,0.18)"
+    
+        image = window.grabWindow()
+        # 侧栏：ListView 右侧 8px 轨道 x347..354，2px 内缩后 thumb x349..352。
+        assert _pixel(image, 350, 100) == (202, 202, 203), "侧栏滚动条常态色必须等于 deva 实拍"
+        # 正文：贴窗口右缘，thumb x1274..1277；纵向按当前滚动位置取滑块中心。
+        body_x, body_y = _thumb_center(body)
+        assert body_x in (1275, 1276), "正文 thumb 必须落在 deva 实拍的 x1274..1277 内"
+        assert _pixel(image, body_x, body_y) == (209, 209, 209), "正文滚动条常态色必须等于 deva 实拍"
+    
+        # hover：thumb 色切到 --fg-subtle #8a8a94（两处都测）。
+        from PySide6.QtCore import QPoint
+        from PySide6.QtTest import QTest
+    
+        QTest.mouseMove(window, QPoint(350, 100), 100)
+        _pump(qapp, 0.2)
+        assert _color_name(sidebar.property("contentItem")) == "#8a8a94"
+        image = window.grabWindow()
+        assert _pixel(image, 350, 100) == (138, 138, 148)
+    
+        QTest.mouseMove(window, QPoint(body_x, body_y), 100)
+        _pump(qapp, 0.2)
+>       assert _color_name(body.property("contentItem")) == "#8a8a94"
+E       AssertionError: assert '#000000' == '#8a8a94'
+E         
+E         - #8a8a94
+E         + #000000
+
+app/tests/test_qml_scrollbars.py:235: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qml_shell.py::test_qml_scrollbars_match_deva_and_scroll
+1 failed, 157 passed in 16.34s

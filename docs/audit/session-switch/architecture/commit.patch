@@ -1,0 +1,20 @@
+diff --git a/app/src/markdown/body.py b/app/src/markdown/body.py
+index 1fcf4a6..4d80af5 100644
+--- a/app/src/markdown/body.py
++++ b/app/src/markdown/body.py
+@@ -210,6 +210,7 @@ class BodyDocument:
+         target.setDocumentMargin(0 if fragment is not None else self.document.documentMargin())
+         if self._highlighter is not None and self._highlighter.document() is not target:
+             self._highlighter.setDocument(target)
++        target.setLayoutEnabled(False)
+         cursor = QtGui.QTextCursor(target)
+         cursor.beginEditBlock()
+         try:
+@@ -219,6 +220,7 @@ class BodyDocument:
+                                   else QtGui.QTextDocumentFragment(self.document))
+         finally:
+             cursor.endEditBlock()
++            target.setLayoutEnabled(True)
+         if images is None:
+             self._copy_images(target)
+         else:

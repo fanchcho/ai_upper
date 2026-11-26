@@ -1,0 +1,45 @@
+diff --git a/app/src/markdown/viewport.py b/app/src/markdown/viewport.py
+index f4dd2d0..376ca9d 100644
+--- a/app/src/markdown/viewport.py
++++ b/app/src/markdown/viewport.py
+@@ -136,6 +136,32 @@ def _is_code_table(table):
+     return block.blockFormat().hasProperty(CODE_LANGUAGE_PROPERTY)
+ 
+ 
++class DocumentGridOverlay(QtQuick.QQuickPaintedItem):
++    """One scene item for all table grid segments; preserve per-table rounding."""
++    def __init__(self, parent, specs, color):
++        super().__init__(parent)
++        self.setObjectName("tableGrid")
++        self.specs = specs
++        self.color = color
++        self.setWidth(parent.width())
++        self.setHeight(max(round(r.y()) + max(1, round(r.height())) for r, _, _ in specs))
++        self.setZ(0.5)
++        self.setAcceptedMouseButtons(QtCore.Qt.NoButton)
++
++    def paint(self, painter):
++        painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
++        for rect, rows, columns in self.specs:
++            ox, oy = round(rect.x()), round(rect.y())
++            width, height = max(1, round(rect.width())), max(1, round(rect.height()))
++            for y in rows:
++                local = min(max(round(y) - oy, 0), height - 1)
++                painter.fillRect(QtCore.QRectF(ox, oy + local, width, 1), self.color)
++            for x in columns:
++                local = round(x) - ox
++                if 0 <= local <= width - 1:
++                    painter.fillRect(QtCore.QRectF(ox + local, oy, 1, height), self.color)
++
++
+ def attach_table_grids(quick_document, document, color):
+     """Strip the QML copy's table frame border and paint a pixel-exact grid.
+ 
+@@ -186,5 +212,5 @@ def attach_table_grids(quick_document, document, color):
+         row_lines = [top + index * row_height for index in range(rows + 1)]
+         col_lines.append(right)
+         rect = QtCore.QRectF(left, top, right - left, bottom - top)
+-        overlays.append(TableGridOverlay(parent, rect, row_lines, col_lines, color))
+-    return overlays
++        overlays.append((rect, row_lines, col_lines))
++    return [DocumentGridOverlay(parent, overlays, color)] if overlays else []
