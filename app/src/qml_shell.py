@@ -1043,7 +1043,7 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(result=list)
     def extensionRows(self) -> List[Dict[str, Any]]:
-        """扩展页：真实技能列表（内置三条 + 磁盘技能），启用态来自 config.json。
+        """扩展页：技能与 MCP 注册列表，启用态来自各自的配置来源。
 
         行形状对齐原版 `SettingsPane.tsx:195-260`：徽标恒为扩展类型（技能 = `cf.kindSkill`），
         `note` 只在 source == "builtin" 时给 `cf.builtin`，内置行 `locked`（开关禁用、不可点开详情）。
@@ -1056,6 +1056,7 @@ class ShellBridge(QtCore.QObject):
             builtin = skill.get("source") == "builtin"
             rows.append(
                 {
+                    "kind": "skill",
                     "id": str(skill.get("id") or ""),
                     "name": str(skill.get("name") or skill.get("id") or ""),
                     "enabled": skill.get("enabled") is not False,
@@ -1064,7 +1065,32 @@ class ShellBridge(QtCore.QObject):
                     "note": labels["builtIn"] if builtin else "",
                 }
             )
+        if self._settings is not None and self._vault is not None:
+            from mvvm.services.plugin_settings import PluginSettings
+            for server in PluginSettings(self._settings, self._vault).servers(include_registered=True):
+                rows.append({
+                    "id": server["id"], "kind": "mcp",
+                    "name": server.get("name") or server["id"],
+                    "enabled": server.get("enabled") is True, "builtin": False,
+                    "badge": translate(self.locale, "cf.kindMcp"),
+                    "note": translate(self.locale, "extensions.status.disconnected")
+                        if server.get("enabled") is True else "",
+                })
         return rows
+
+    @QtCore.Slot(str, str, result=bool)
+    def toggleExtension(self, kind: str, extension_id: str) -> bool:
+        if kind != "mcp":
+            return self.setSkillEnabled(extension_id)
+        from mvvm.services.plugin_settings import PluginSettings
+        service = PluginSettings(self._settings, self._vault)
+        row = next((r for r in service.servers(include_registered=True) if r['id'] == extension_id), None)
+        if row is None:
+            return False
+        try:
+            return service.set_server_enabled(extension_id, not row.get('enabled', False))
+        except OSError:
+            return False
 
     @QtCore.Slot(str, result=bool)
     def setSkillEnabled(self, skill_id: str) -> bool:
@@ -1081,7 +1107,7 @@ class ShellBridge(QtCore.QObject):
             return False
         # 开关是「取反」语义，服务层只收绝对值：先用当前启用位算目标值。
         current = next(
-            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id), None
+            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id and row["kind"] == "skill"), None
         )
         if current is None:
             return False
@@ -1095,7 +1121,7 @@ class ShellBridge(QtCore.QObject):
         if self._settings is not None:
             self._settings.reload()
         return next(
-            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id), False
+            (row["enabled"] for row in self.extensionRows() if row["id"] == skill_id and row["kind"] == "skill"), False
         )
 
     @QtCore.Slot(str, "QVariantList", result=bool)

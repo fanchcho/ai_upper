@@ -88,3 +88,36 @@ def test_conflict_does_not_delete_credentials(service):
         service.save_custom('https://new.test','new')
     assert service.vault.get_secret(service.key_id('model','https://old.test'))=='keep-secret'
     assert json.loads(service.settings.path.read_text())==external
+
+
+def test_disk_mcp_discovery_and_toggle(service):
+    registry = {'mcpServers': {
+        'disk-one': {'name': 'Zulu', 'command': 'example', 'env': {'TOKEN': 'private'}},
+        'disk-two': {'name': 'Alpha', 'command': 'example'},
+        '../bad': {'command': 'example'},
+    }}
+    path = service.settings.home / 'mcp.json'
+    path.write_text(json.dumps(registry))
+    service.settings.set_config({'mcp': {'enabled': {'disk-one': True}, 'roles': {'disk-one': ['general']}}})
+    rows = service.servers(include_registered=True)
+    assert [r['id'] for r in rows] == ['disk-two', 'disk-one']
+    assert [r['enabled'] for r in rows] == [False, True]
+    assert 'private' not in json.dumps(rows)
+    assert service.set_server_enabled('disk-one', False)
+    assert service.settings.get('mcp')['roles'] == {'disk-one': ['general']}
+    assert json.loads(path.read_text()) == registry
+    assert not PluginSettings(service.settings, service.vault).servers(include_registered=True)[1]['enabled']
+    service.save_server('disk-one', {'command': 'override', 'enabled': True})
+    assert len(service.servers(include_registered=True)) == 2
+    assert next(r for r in service.servers(include_registered=True) if r['id'] == 'disk-one')['command'] == 'override'
+    assert service.set_server_enabled('disk-one', False)
+    assert not next(r for r in service.servers(include_registered=True) if r['id'] == 'disk-one')['enabled']
+
+
+def test_disk_mcp_empty_and_invalid(service):
+    assert service.servers(include_registered=True) == []
+    path = service.settings.home / 'mcp.json'
+    for raw in ['{', '[]', '{"mcpServers": []}', '{"mcpServers": {"broken": null}}']:
+        path.write_text(raw)
+        assert service.servers(include_registered=True) == []
+    assert not service.set_server_enabled('missing', True)

@@ -1307,6 +1307,18 @@ Item {
                 font.pixelSize: 12
             }
 
+            Text {
+                visible: extPane.rows.length > 0 && extPane.rows.every(function(row) { return row.builtin })
+                x: 20
+                y: 70 + extColumn.height
+                width: parent.width - 40
+                horizontalAlignment: Text.AlignHCenter
+                text: I18n.t("cf.extUserEmpty")
+                color: Theme.fgMuted
+                font.family: Theme.sansFamily
+                font.pixelSize: 12
+            }
+
             // 行列表：卡片自带 1px 外框，行间用 1px 分隔线（原版 .cf-rows + .cf-setrow）。
             Rectangle {
                 visible: extPane.rows.length > 0
@@ -1425,7 +1437,7 @@ Item {
                                     enabled: !extRow.modelData.builtin
                                     onClicked: {
                                         // 无条件重读：写失败时行数据保持原样，开关不会假装翻面。
-                                        if (shellBridge) shellBridge.setSkillEnabled(extRow.modelData.id)
+                                        if (shellBridge) shellBridge.toggleExtension(extRow.modelData.kind, extRow.modelData.id)
                                         extPane.refresh()
                                     }
                                 }

@@ -361,7 +361,7 @@ ApplicationWindow {
             name: btn.iconName
             // 原版图标 20px（.cf-navbtn svg{width:20px} → 实测外框 24 内 20 可见）
             size: 20
-            color: btn.active ? Theme.accent : Theme.fgSubtle
+            color: btn.active ? Theme.accent : railHover.hovered ? Theme.fg : Theme.fgSubtle
             opacity: btn.dim ? 0.7 : 1
         }
         HoverHandler { id: railHover }

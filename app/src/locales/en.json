@@ -1330,6 +1330,7 @@
   "cf.fPrompt": "System prompt",
   "cf.promptEmpty": "Empty — click to edit",
   "cf.promptCount": "{n} chars",
+  "cf.extUserEmpty": "No user-installed extensions",
   "cf.extEmpty": "No extensions",
   "cf.kindSkill": "Skill",
   "cf.kindMcp": "MCP",

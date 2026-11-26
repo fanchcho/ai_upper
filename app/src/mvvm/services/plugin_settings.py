@@ -69,9 +69,43 @@ class PluginSettings:
             return None
         return ResolvedModel('openai', self.key_id('model', value['baseUrl']), value['baseUrl'], value['model'])
 
-    def servers(self):
-        return [dict(v, id=k, hasKey=self.vault.has_secret(self.key_id('mcp', k)))
-                for k, v in self.data().get('mcp', {}).items()]
+    def registered_servers(self):
+        """Deva disk registry; scoped desktop registrations override matching ids."""
+        path = self.settings.home / 'mcp.json'
+        try:
+            data = json.loads(path.read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            return {}
+        servers = data.get('mcpServers', {}) if isinstance(data, dict) else {}
+        return {k: v for k, v in servers.items() if is_safe_id(k) and isinstance(v, dict)} if isinstance(servers, dict) else {}
+
+    def servers(self, include_registered=False):
+        if not include_registered:
+            return [dict(v, id=k, hasKey=self.vault.has_secret(self.key_id('mcp', k)))
+                    for k, v in self.data().get('mcp', {}).items()]
+        enabled = self.settings.get('mcp', {}).get('enabled', {})
+        rows = {k: dict(v, enabled=enabled.get(k) is True)
+                for k, v in self.registered_servers().items()}
+        rows.update(self.data().get('mcp', {}))
+        return [dict({field: value for field, value in v.items()
+                      if field in {'name', 'command', 'args', 'url', 'enabled', 'transport'}},
+                     id=k, hasKey=self.vault.has_secret(self.key_id('mcp', k)))
+                for k, v in sorted(rows.items(), key=lambda item: str(item[1].get('name') or item[0]).casefold())]
+
+    def set_server_enabled(self, name, enabled):
+        scoped = self.data().get('mcp', {})
+        if name in scoped:
+            scoped[name] = dict(scoped[name], enabled=enabled)
+            self.write(mcp=scoped)
+        elif name in self.registered_servers():
+            section = dict(self.settings.get('mcp', {}))
+            section['enabled'] = dict(section.get('enabled', {}), **{name: enabled})
+            self.settings.set_config({'mcp': section})
+        else:
+            return False
+        from mvvm.services.mcp_runtime import stop_server
+        stop_server(self.scope, name)
+        return True
 
     def save_server(self, name, config, secret=None):
         if not is_safe_id(name):

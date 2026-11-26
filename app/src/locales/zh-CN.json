@@ -1331,6 +1331,7 @@
   "cf.fPrompt": "系统提示词",
   "cf.promptEmpty": "未填写，点此编辑",
   "cf.promptCount": "{n} 字",
+  "cf.extUserEmpty": "暂无自装扩展",
   "cf.extEmpty": "暂无扩展",
   "cf.kindSkill": "技能",
   "cf.kindMcp": "MCP",
