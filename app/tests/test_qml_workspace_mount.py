@@ -10,6 +10,8 @@ from mvvm.services.chat_session_store import ChatSessionStore
 def test_mount_picker_mouse_persist_cancel_and_reject(qapp, tmp_path, monkeypatch):
     w, b, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
     try:
+        # This scenario asserts Chinese application errors; select that locale explicitly.
+        assert b.setLanguage('zh-CN')
         w.setProperty('page', 'chat')
         _pump(qapp)
         sid = w.property('activeId')

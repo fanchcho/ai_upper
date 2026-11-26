@@ -72,3 +72,16 @@ def test_body_preserves_model_and_user_text():
     messages = [SimpleNamespace(role='assistant', content='不要翻译 Settings 或 General')]
     assert '不要翻译 Settings 或 General' in transcript_markdown(messages, lang='en')
     assert transcript_markdown([], pending_user='原文', streaming='回答', lang='en') == '## You\n\n原文\n\n## Assistant\n\n回答'
+
+
+def test_memory_egg_resource_loading(monkeypatch):
+    import locales
+    from types import SimpleNamespace
+    from native_i18n import load_messages
+    calls = []
+    def read_data(name):
+        calls.append(name)
+        return json.dumps(MESSAGES[Path(name).stem]).encode()
+    monkeypatch.setattr(locales, '__loader__', SimpleNamespace(read_data=read_data))
+    assert load_messages() == MESSAGES
+    assert calls == ['locales/zh-CN.json', 'locales/en.json']

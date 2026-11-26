@@ -4,8 +4,18 @@ from importlib.resources import files
 
 SUPPORTED = ('zh-CN', 'en')
 LANGUAGE_NAMES = ('简体中文', 'English')
-MESSAGES = {locale: json.loads(files('locales').joinpath(locale + '.json').read_text(encoding='utf-8'))
+def load_messages():
+    import locales
+    loader = locales.__loader__
+    # The Windows memory egg loader exposes read_data, not ResourceReader.
+    if hasattr(loader, "read_data"):
+        return {locale: json.loads(loader.read_data("locales/" + locale + ".json"))
+                for locale in SUPPORTED}
+    return {locale: json.loads(files('locales').joinpath(locale + '.json').read_text(encoding='utf-8'))
             for locale in SUPPORTED}
+
+
+MESSAGES = load_messages()
 
 
 def translate(locale, key, **values):

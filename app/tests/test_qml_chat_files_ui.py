@@ -230,6 +230,7 @@ def test_delivery_rows_dedupe_repeated_paths_and_drop_relative_entries():
 # ── 5. 回形针：真弹选择框 + 白名单 ────────────────────────────────────────
 def test_pick_attachments_goes_through_the_real_file_dialog(qapp, tmp_path, monkeypatch, capsys):
     bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("ok"), sessions=[("s-1", "旧")])
+    assert bridge.setLanguage("zh-CN")
     picked = tmp_path / "home" / "shot.png"
     picked.write_bytes(PNG_4X4)
     calls = []
