@@ -19,14 +19,21 @@ Item {
 
     Rectangle {
         anchors.fill: parent; radius: width / 2
-        visible: avatarImage.status === Image.Error
+        visible: avatarImage.status === Image.Error || avatarImage.source.toString().length === 0
         color: Theme.accent
         Text { anchors.centerIn: parent; text: ava.persona.slice(0, 1).toUpperCase(); color: Theme.accentFg; font.pixelSize: ava.size * 0.5 }
     }
     Image {
         id: avatarImage
         anchors.fill: parent
-        source: ava.imageSource || (ava.persona === "user" || typeof shellBridge === "undefined" || !shellBridge ? "avatars/" + ava.persona + (ava.pop ? "-pop" : "") + ".svg" : shellBridge.personaAvatar(ava.persona, ava.pop))
+        source: {
+            if (ava.imageSource) return ava.imageSource
+            if (ava.persona === "user") return "avatars/user" + (ava.pop ? "-pop" : "") + ".svg"
+            if (typeof shellBridge !== "undefined" && shellBridge)
+                return shellBridge.personaAvatar(ava.persona, ava.pop)
+            // The context is gone during teardown: never start a disk read.
+            return ""
+        }
         sourceSize: Qt.size(ava.size, ava.size)
         fillMode: Image.PreserveAspectFit
         smooth: true

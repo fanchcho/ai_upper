@@ -22,6 +22,7 @@ Item {
     }
     component ExtensionScrollBar: ScrollBar {
         id: bar
+        padding: 0; implicitWidth: 8
         visible: size < 1
         contentItem: Item {
             implicitWidth: 8; implicitHeight: 8
@@ -113,34 +114,47 @@ Item {
                 width: parent.width; height: root.item.kind === "mcp" ? 70.5 : 61
                 FieldLabel { text: I18n.t("extensions.roles"); height: root.item.kind === "mcp" ? 16.5 : 17; topPadding: root.item.kind === "mcp" ? 0 : 4; verticalAlignment: Text.AlignVCenter }
             SettingsButton {
-                y: root.item.kind === "mcp" ? 22.5 : 29
-                width: parent.width; height: 32
+                y: root.item.kind === "mcp" ? 22.5 : 29.5
+                width: parent.width; height: 32; leftPadding: 9
                 contentItem: Row { spacing: 8
-                    Icon { visible: !root.item.roles || !root.item.roles.length; name: IconData.users; size: 20; color: Theme.accent }
+                    Rectangle {
+                        visible: !root.item.roles || !root.item.roles.length
+                        width: 20; height: 20; radius: 10; color: Theme.bgSelected
+                        Icon { anchors.centerIn: parent; name: IconData.users; size: 12; color: Theme.accent }
+                    }
                     Row { spacing: -6; Repeater { model: root.item.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: root.personaRecord(modelData).avatarImage || ""; size: 20 } } }
                     Text { text: root.rolesSummary(); color: Theme.fg; font.pixelSize: 13 }
                 }
                 Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; size: 12; color: Theme.fgSubtle }
                 onClicked: rolesPopup.open()
                 Popup {
-                    id: rolesPopup; focus: true; y: parent.height; width: parent.width
-                    background: Rectangle { color: Theme.bgElevated; border.color: Theme.border; radius: 8 }
+                    id: rolesPopup; focus: true; y: parent.height + 6; width: parent.width
+                    padding: 7
+                    background: Item {
+                        SoftShadow { target: rolesBackground }
+                        Rectangle { id: rolesBackground; anchors.fill: parent; color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
+                    }
                     contentItem: Column {
-                        Item { width: parent.width; height: 52
-                            Icon { x: 12; y: 16; name: IconData.users; size: 18; color: Theme.accent }
-                            Text { x: 44; y: 8; text: I18n.t("extensions.rolesGeneral"); color: Theme.fg; font.pixelSize: 13 }
-                            Text { x: 44; y: 26; text: I18n.t("extensions.rolesGeneralHint"); color: Theme.fgSubtle; font.pixelSize: 12 }
+                        Item { width: parent.width; height: 48.75
+                            Rectangle { x: 8; y: 11.375; width: 26; height: 26; radius: 13; color: Theme.bgSelected
+                                Icon { anchors.centerIn: parent; name: IconData.users; size: 14; color: Theme.accent }
+                            }
+                            Text { x: 44; y: 6; text: I18n.t("extensions.rolesGeneral"); color: Theme.fg; font.pixelSize: 13 }
+                            Text { x: 44; y: 25.5; text: I18n.t("extensions.rolesGeneralHint"); color: Theme.fgSubtle; font.pointSize: 8.625 }
                             MouseArea { anchors.fill: parent; onClicked: { root.save("roles", null); rolesPopup.close() } }
                         }
-                        Rectangle { width: parent.width; height: 1; color: Theme.border }
-                        Text { text: I18n.t("extensions.rolesOnly"); color: Theme.fgSubtle; font.pixelSize: 11; padding: 10 }
+                        Item { width: parent.width; height: 13
+                            Rectangle { x: 4; y: 6; width: parent.width - 8; height: 1; color: Theme.border }
+                        }
+                        Text { text: I18n.t("extensions.rolesOnly"); color: Theme.fgSubtle; font.pixelSize: 11; height: 26.5; leftPadding: 8; topPadding: 6 }
                         Repeater {
                             model: root.item.personas || []
                             Item {
                                 required property var modelData
-                                width: parent.width; height: 38
-                                Avatar { x: 8; anchors.verticalCenter: parent.verticalCenter; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 24 }
-                                Text { x: 42; anchors.verticalCenter: parent.verticalCenter; text: modelData.name; color: Theme.fg; font.pixelSize: 13 }
+                                width: parent.width; height: modelData.desc ? 48.75 : 38
+                                Avatar { x: 8; anchors.verticalCenter: parent.verticalCenter; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 26 }
+                                Text { x: 44; y: modelData.desc ? 6 : 9.25; text: modelData.name; color: Theme.fg; font.pixelSize: 13 }
+                                Text { x: 44; y: 25.5; width: parent.width - 70; text: modelData.desc || ""; elide: Text.ElideRight; color: Theme.fgSubtle; font.pointSize: 8.625 }
                                 Text { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; text: (root.item.roles || []).indexOf(modelData.id) >= 0 ? "✓" : ""; color: Theme.accent }
                                 MouseArea { anchors.fill: parent; onClicked: {
                                     var roles = (root.item.roles || []).slice(); var i = roles.indexOf(modelData.id)
@@ -277,7 +291,7 @@ Item {
             id: instructionsScroll; objectName: "extensionInstructionsScroll"
             anchors.fill: parent; anchors.leftMargin: 17; anchors.rightMargin: 3; anchors.topMargin: 13; anchors.bottomMargin: 13; clip: true; contentWidth: width
             contentHeight: instructionsText.height; boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: ExtensionScrollBar {}
+            ScrollBar.vertical: ExtensionScrollBar { x: instructionsScroll.width - width + 2 }
             TextEdit {
                 id: instructionsText
                 width: instructionsScroll.width - 14; height: contentHeight
