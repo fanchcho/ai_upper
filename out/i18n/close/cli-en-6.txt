@@ -1,0 +1,10 @@
+$ LANG=en LC_ALL=en .venv/bin/python app/src/main.py --help
+usage: main.py [-h] [--lang {zh-CN,en}]
+
+ai_upper desktop application
+
+options:
+  -h, --help         show this help message and exit
+  --lang {zh-CN,en}  Language: zh-CN or en
+
+exit=0

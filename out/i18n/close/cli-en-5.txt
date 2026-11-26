@@ -1,0 +1,4 @@
+$ LANG=en LC_ALL=en .venv/bin/python tools/ci_tail.py --log /home/agent/shared_workspace/ai_upper/.tmp/i18n-close/absent.log --title test
+::error title=test::log was not created: the step failed before it could write one.
+
+exit=0

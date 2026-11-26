@@ -1,0 +1,7 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python tools/ci_tail.py
+用法：ci_tail.py [-h] --log LOG --title TITLE [--exit-code-file EXIT_CODE_FILE]
+              [--label LABEL] [--level {error,warning,notice}]
+              [--lang {zh-CN,en}]
+ci_tail.py：错误：缺少必需参数：--log, --title
+
+exit=2

@@ -1,0 +1,10 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python app/src/main.py --help
+用法：main.py [-h] [--lang {zh-CN,en}]
+
+ai_upper 桌面应用
+
+选项:
+  -h, --help         显示帮助并退出
+  --lang {zh-CN,en}  语言：zh-CN 或 en
+
+exit=0

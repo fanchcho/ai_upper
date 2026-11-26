@@ -1,0 +1,15 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python tools/build.py --doctor
+主持人： Linux aarch64 Python 3.13.5
+目标： linux-arm64 aarch64-unknown-linux-gnu
+目标Python： 3.13.5
+运行时提供者： pbs
+美国公共广播公司发布： auto
+开发Python： /home/agent/shared_workspace/ai_upper/.venv/bin/python-real
+软件开发工具包： /home/agent/shared_workspace/ai_upper/.cache/pbs-sdk/linux-arm64/3.13.5
+运行时间： /home/agent/shared_workspace/ai_upper/runtimes/linux-arm64/3.13.5
+cmake: /usr/bin/cmake
+ninja: MISSING
+工具链： {'target': 'linux-arm64', 'compiler': '/usr/bin/gcc', 'cxx': '/usr/bin/g++', 'linker': '/usr/bin/gcc', 'deployment_target': ''}
+医生：失败，失踪： ninja
+
+exit=1

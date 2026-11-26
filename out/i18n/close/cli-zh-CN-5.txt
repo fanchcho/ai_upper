@@ -1,0 +1,4 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python tools/ci_tail.py --log /home/agent/shared_workspace/ai_upper/.tmp/i18n-close/absent.log --title test
+::error title=test::未生成 log：步骤在写入之前失败。
+
+exit=0

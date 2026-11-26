@@ -1,0 +1,15 @@
+$ LANG=en LC_ALL=en .venv/bin/python tools/build.py --doctor
+host: Linux aarch64 Python 3.13.5
+target: linux-arm64 aarch64-unknown-linux-gnu
+target-python: 3.13.5
+runtime-provider: pbs
+PBS release: auto
+dev-python: /home/agent/shared_workspace/ai_upper/.venv/bin/python-real
+SDK: /home/agent/shared_workspace/ai_upper/.cache/pbs-sdk/linux-arm64/3.13.5
+runtime: /home/agent/shared_workspace/ai_upper/runtimes/linux-arm64/3.13.5
+cmake: /usr/bin/cmake
+ninja: MISSING
+toolchain: {'target': 'linux-arm64', 'compiler': '/usr/bin/gcc', 'cxx': '/usr/bin/g++', 'linker': '/usr/bin/gcc', 'deployment_target': ''}
+doctor: FAILED, missing: ninja
+
+exit=1

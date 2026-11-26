@@ -170,3 +170,37 @@ $ cat out/i18n/pytest.exit
 应用代码状态为 `3a1e626`，原始全量输出保存于 `pytest.txt`。本次完整运行无失败。9 skipped 按测试环境条件跳过，不表示对应平台实测通过。
 
 本报告、原始输出、逐条候选清单和 PNG 随证据提交一并保存。`push.txt` 在推送后生成，记录远端 develop 与本地最终 HEAD 一致及工作树干净；它自身是本地交付核验文件，不再递归提交。
+
+## 本次续接：旧 QWidget / 工具卡 / CLI 扩展迁移
+
+本轮从已落盘的约 600 条初筛与迁移脚本恢复，没有重做已完成翻译。实现了旧界面主要文案、构建 CLI help/进度/错误、旧 ViewModel 状态与关于窗口内容；补充统一 locale_runtime，工具摘要在展示边界转换。**本轮仍未达到用户要求的全部收口**，不可把以下证据解释成全仓零残留。
+
+语言选择优先级：`--lang` > `AI_UPPER_LANG` > 显式 `AI_UPPER_HOME/config.json.locale` > `LC_ALL` > `LC_MESSAGES` > `LANG` > en。中文 locale 映射 zh-CN，其余 en。旧界面创建时与展示更新时读同一选择；QML 原有 localeChanged 路径保留。CLI 默认读取显式应用数据目录，不触碰真实用户目录。
+
+中英资源当前每语言 2098 键，缺键 0；Python 调用插值缺参 0。新增译文先生成草稿，已修复 lipo/codesign/strip 等技术词错误，但未完成每一条译文的人工质量复核。
+
+证据目录 `/home/agent/shared_workspace/ai_upper/out/i18n/close/`：
+
+- mapping.md / mapping.json：修改前文件行号、原文和新键；migrated.json / extra-migrated.json 是实际迁移清单，display-before.json 是展示摘要来源。
+- coverage.txt / interpolation-check.json：键覆盖与插值检查真实结果。
+- scan.py / scan.json / scan-summary.txt：全仓 AST 候选扫描；仍存在 needs_review，不能声称零未解释残留。
+- cli-results.json、cli-en-0.txt 至 cli-en-6.txt、cli-zh-CN-0.txt 至 cli-zh-CN-6.txt：每语言七条真实命令、原始输出和退出码。覆盖 build help、无效 target、doctor、ci_tail help、缺参、缺日志、app main help。
+- en/、zh-CN/、en-dark/、zh-CN-dark/：各五张旧窗口截图，涵盖聊天、设置列表、服务商详情、工具卡、展开清单。用户/模型内容保持原文。
+- render-widgets.py / render-widgets-dark.py / recheck-ui.sh：可复现截图脚本。深色使用 Qt palette，不是 QML 主题。
+- focused2.txt：58 passed；failure-check4.txt：114 passed；legacy-test.txt：3 passed。
+- verify.sh / pytest-final.txt / pytest-final.exit：最终全量测试命令、原始日志和退出码。
+
+发现并保留的未完成项：全仓候选逐条语义复核、bootstrap loader 报错、部分构建 verify 项名称、演示 GreetingService、工具卡正文应用说明，以及旧富文本深色对比度。详见 STATUS.md 与 ../remaining-review.md。旧 QWidget 能实际启动，不能用“不可达”掩盖这些缺口。
+
+现有 CLI 没有 --json 或交互确认入口，未新增这些功能；因此 --json / 确认提示未验证（原因是不存在可执行路径）。CI annotation 的 `::error title=...::` 协议格式、错误种类 auth 等字段保留；新增测试验证仅翻译消息、不修改工具记录。macOS、Windows 原生渲染及发布包未验证。20 张旧窗口截图不能替代跨平台验收。
+
+最终全量运行实际输出：
+
+```text
+$ bash out/i18n/close/verify.sh
+1409 passed, 9 skipped in 350.01s (0:05:50)
+$ cat out/i18n/close/pytest-final.exit
+0
+```
+
+此前全量失败日志保留：full-tests.txt 为 49 failed / 1357 passed / 9 skipped，pytest.txt 为 10 failed / 1398 passed / 9 skipped。修复 import-time 固定语言、旧中文场景明确 locale 和遗漏插值后，最终结果如上。没有用失败运行冒充通过。

@@ -1,0 +1,7 @@
+$ LANG=en LC_ALL=en .venv/bin/python tools/ci_tail.py
+usage: ci_tail.py [-h] --log LOG --title TITLE
+                  [--exit-code-file EXIT_CODE_FILE] [--label LABEL]
+                  [--level {error,warning,notice}] [--lang {zh-CN,en}]
+ci_tail.py: error: the following arguments are required: --log, --title
+
+exit=2

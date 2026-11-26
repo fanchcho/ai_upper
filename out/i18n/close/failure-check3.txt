@@ -1,0 +1,35 @@
+...F............                                                         [100%]
+=================================== FAILURES ===================================
+______________ test_the_about_button_opens_and_closes_the_window _______________
+
+fake_qt = {'windows': [<test_mvvm_example.FakeMainWindow object at 0xffff7cdeb9d0>], 'dialogs': [<test_mvvm_example.FakeDialog o...<test_mvvm_example.FakeButton object at 0xffff7cdeb4d0>, <test_mvvm_example.FakeButton object at 0xffff7cde2d70>], ...}
+
+    def test_the_about_button_opens_and_closes_the_window(fake_qt):
+        from application import AiUpperApplication
+    
+        application = AiUpperApplication()
+        application.prepare()
+    
+        viewmodel = application.mvvm_app.get_viewmodel("main")
+        window = fake_qt["windows"][0]
+        dialog = fake_qt["dialogs"][0]
+    
+        # start() 显示了主窗口，但没点按钮就不该弹出「关于」窗口
+        assert window.visible is True
+        assert window.raised is True
+        assert window.activated is True
+        assert dialog.visible is False
+    
+        # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
+        assert window.title == viewmodel.title != ""
+        assert fake_qt["labels"][0].text == "Hello from ai_upper"
+>       assert dialog.title == ABOUT_BUTTON
+E       AssertionError: assert 'About MVVM architecture' == '关于 MVVM 架构'
+E         
+E         - 关于 MVVM 架构
+E         + About MVVM architecture
+
+app/tests/test_mvvm_example.py:315: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_mvvm_example.py::test_the_about_button_opens_and_closes_the_window
+1 failed, 15 passed in 0.33s

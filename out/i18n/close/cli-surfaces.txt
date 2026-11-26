@@ -1,0 +1,15 @@
+tools/ai_upper/localization.py:12:    import argparse
+tools/ai_upper/localization.py:18:    argparse._ = lambda text: tr(reverse[text]) if text in reverse else text
+tools/ai_upper/egg.py:224:def _native_input(path: Path) -> bool:
+tools/ai_upper/egg.py:252:        if _native_input(path):
+app/src/mvvm/view_models/chat_vm.py:456:                body, reply = apply_input(self.identity_service, session, body)
+app/src/mvvm/views/chat_pane.py:252:    def _sync_input(self) -> None:
+tools/ci_tail.py:25:import argparse
+tools/ci_tail.py:172:    parser = argparse.ArgumentParser(description=__doc__)
+tools/build.py:3:import argparse
+tools/build.py:118:    parser = argparse.ArgumentParser(description="ai_upper - standalone Python application builder")
+app/src/mvvm/services/todos.py:79:def parse_todo_input(
+app/src/mvvm/services/todos.py:118:    parsed = parse_todo_input(raw_input)
+app/src/mvvm/services/plugin_identity.py:44:def apply_input(service, session, text):
+app/src/mvvm/services/responses_provider.py:49:def map_input(messages: Any) -> list[dict[str, Any]]:
+app/src/mvvm/services/responses_provider.py:129:            "input": map_input(request.messages),

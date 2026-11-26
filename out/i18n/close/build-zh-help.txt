@@ -1,0 +1,41 @@
+用法：build.py [-h] [--doctor | --run | --verify | --lock | --release | --clean]
+            [--target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}]
+            [--locked] [--identity IDENTITY] [--notary-profile NOTARY_PROFILE]
+            [--trim-preset NAME] [--trim-site GLOB] [--trim-site-keep GLOB]
+            [--trim-runtime GLOB] [--trim-runtime-keep GLOB] [--egg |
+            --no-egg] [--egg-key HEX] [--egg-backend NAME]
+            [--egg-compression NAME] [--lang {zh-CN,en}]
+            [{doctor,build,run,verify,lock,release,clean}]
+
+ai_upper - 独立的 Python 应用程序构建器
+
+位置参数:
+  {doctor,build,run,verify,lock,release,clean}
+
+选项:
+  -h, --help            显示帮助并退出
+  --doctor
+  --run
+  --verify
+  --lock
+  --release
+  --clean
+  --target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}
+  --locked
+  --identity IDENTITY
+  --notary-profile NOTARY_PROFILE
+  --trim-preset NAME    add a named trim rule set for this build: safe,
+                        release, minimal
+  --trim-site GLOB      从站点包中删除路径；可重复（相对全局）
+  --trim-site-keep GLOB
+                        永远不要删除匹配的站点包路径；可重复的
+  --trim-runtime GLOB   从捆绑的运行时中删除路径；可重复的
+  --trim-runtime-keep GLOB
+                        永远不要删除匹配的运行时路径；可重复的
+  --egg                 为此构建将应用程序代码打包到加密的捆绑包存档中
+  --no-egg              即使项目启用了 Egg，仍会发送松散的应用程序文件
+  --egg-key HEX         覆盖 [tool.ai_upper.egg].key_hex（至少 16 个十六进制字节）
+  --egg-backend NAME    鸡蛋扩展加载器：自动、记忆或提取
+  --egg-compression NAME
+                        egg archive compression: deflated, stored, lzma
+  --lang {zh-CN,en}     语言：zh-CN 或 en

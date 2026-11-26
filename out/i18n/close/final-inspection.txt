@@ -1,0 +1,11 @@
+$ git diff HEAD -- app/src/qml/Theme.qml app/src/qml/I18n.qml
+exit=0
+$ git -C /home/agent/shared_workspace/deva status --porcelain
+?? .tmp/
+?? en-US-10-1.bdic
+?? out/DESKTOP-FIXES.md
+?? out/DESKTOP-UNIMPLEMENTED.md
+?? out/DEVA-DOT-DEVA-AUDIT.md
+exit=0
+$ git diff --check
+exit=0

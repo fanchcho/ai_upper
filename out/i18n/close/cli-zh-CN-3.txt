@@ -1,0 +1,19 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python tools/ci_tail.py --help
+用法：ci_tail.py [-h] --log LOG --title TITLE [--exit-code-file EXIT_CODE_FILE]
+              [--label LABEL] [--level {error,warning,notice}]
+              [--lang {zh-CN,en}]
+
+CI 日志注释
+
+选项:
+  -h, --help            显示帮助并退出
+  --log LOG             日志文件的路径
+  --title TITLE         注释标题
+  --exit-code-file EXIT_CODE_FILE
+                        保存步骤退出代码的文件； exit 0 降级为通知
+  --label LABEL         当日志丢失时如何称呼它（例如“build.log”）
+  --level {error,warning,notice}
+                        强制注释级别而不是从退出代码派生它
+  --lang {zh-CN,en}     语言：zh-CN 或 en
+
+exit=0

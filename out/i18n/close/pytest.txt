@@ -1,0 +1,249 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+....................F...........F.F.F................................... [ 15%]
+.....F.F................................................................ [ 20%]
+........................ss...........................................F.. [ 25%]
+..................F..................................................... [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+......................................F...........s..................... [ 45%]
+........................................................................ [ 50%]
+..........ssss.........................................................F [ 55%]
+........................................................................ [ 60%]
+........................................................................ [ 66%]
+........................................................................ [ 71%]
+........................................................................ [ 76%]
+........................................................................ [ 81%]
+........................................................................ [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+.................................................                        [100%]
+=================================== FAILURES ===================================
+______________ test_stop_cancels_the_turn_and_keeps_partial_text _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final2/test_stop_cancels_the_turn_and0')
+
+    def test_stop_cancels_the_turn_and_keeps_partial_text(tmp_path):
+        holder: dict = {}
+    
+        def turn_factory(cancel, session_model):
+            provider = CancellableProvider(cancel)
+            holder["provider"] = provider
+            return provider, "paced"
+    
+        vm, store = make_vm(tmp_path, None, turn_factory=turn_factory)
+        vm.open_session("s")
+        vm.input_text_property.set_value("慢慢说")
+        vm.send()
+    
+        # 工厂在回合线程里被调用，主线程要等一下才能拿到 provider 句柄。
+        deadline = time.time() + 5.0
+        while time.time() < deadline and "provider" not in holder:
+            time.sleep(0.01)
+        assert "provider" in holder, "回合线程没有调用 turn_factory"
+        assert holder["provider"].started.wait(10.0)
+        vm.drain()  # 「忙碌」由回合线程入队，UI 线程取走后才生效
+        assert vm.busy is True
+        vm.cancel()
+>       assert vm.status == "正在停止…"
+E       AssertionError: assert 'Stopping…' == '正在停止…'
+E         
+E         - 正在停止…
+E         + Stopping…
+
+app/tests/test_chat_streaming.py:140: AssertionError
+_______________ test_mid_turn_compaction_runs_between_tool_steps _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final2/test_mid_turn_compaction_runs_0')
+
+    def test_mid_turn_compaction_runs_between_tool_steps(tmp_path):
+        """第二步之前再查一次阈值：工具结果把上下文顶过线时会压（轮中压缩）。"""
+        vm, store = make_vm(tmp_path)
+        _seed_session(store, count=28)  # 56 条 × ~304 token ≈ 17k，已超过 8k 触发线
+        calls: list[str] = []
+    
+        class ToolCallingProvider(Provider):
+            name = "tool-loop"
+    
+            async def stream(self, request):  # type: ignore[override]
+                calls.append("call")
+                if len(calls) == 1:
+                    from mvvm.services.provider_gateway import ToolCall
+    
+                    yield ToolCall(id="c1", name="read_file", input={"path": "notes.txt"})
+                    yield Done("tool_use")
+                else:
+                    yield TextDelta("读完了")
+                    yield Done("end_turn")
+    
+        (tmp_path / "work" / "notes.txt").write_text("会议纪要\n", encoding="utf-8")
+        vm.provider = ToolCallingProvider()
+        events: list[dict] = []
+        vm.emit = events.append
+    
+        vm.open_session("long")
+        vm.input_text_property.set_value("看一下 notes.txt")
+        vm.send()
+        assert vm.wait_idle(10.0)
+    
+        assert vm.error == "", vm.error
+        # 轮首压过一次（旧历史），第二步前又压过一次（含第一步的工具结果）。
+        # 轮中压缩的目标是「这一步仍要发出去的内容」不比上一步多，故只要求至少压过一次。
+        compacted = [event for event in events if event["type"] == "compacted"]
+        assert compacted and compacted[0]["status"] == "compacted"
+        assert len(calls) == 2
+        session = store.ensure_session("long")
+        summaries = [m for m in session.messages if str(m.content).startswith(COMPACT_MARKER)]
+        assert len(summaries) >= 1
+        # 工具调用与结果没被拆散：最后一步请求能发出去（没有悬空 tool_use 导致的报错）
+>       assert vm.status == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_chat_vm_compaction.py:168: AssertionError
+__________ test_compact_now_without_compaction_model_reports_failure ___________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final2/test_compact_now_without_compa0')
+
+    def test_compact_now_without_compaction_model_reports_failure(tmp_path):
+        vm, _ = make_vm(tmp_path, compact=False)
+        vm.open_session("plain")
+        result = asyncio.run(vm.compact_now())
+        assert result.status == "failed"
+>       assert "未配置" in str(result.message)
+E       AssertionError: assert '未配置' in 'Model services required for compression are not configured'
+E        +  where 'Model services required for compression are not configured' = str('Model services required for compression are not configured')
+E        +    where 'Model services required for compression are not configured' = CompactResult(status='failed', message='Model services required for compression are not configured').message
+
+app/tests/test_chat_vm_compaction.py:191: AssertionError
+_______________ test_compaction_failure_does_not_block_the_turn ________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final2/test_compaction_failure_does_n0')
+
+    def test_compaction_failure_does_not_block_the_turn(tmp_path):
+        """摘要失败（模型报错）不阻断本回合：这一轮不压，照常回复。"""
+        vm, store = make_vm(tmp_path, summary=SummaryProvider(text=""))
+        _seed_session(store)
+        events: list[dict] = []
+        vm.emit = events.append
+    
+        vm.open_session("long")
+        vm.input_text_property.set_value("继续")
+        vm.send()
+        assert vm.wait_idle(10.0)
+    
+        assert vm.error == "", vm.error
+>       assert vm.status == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_chat_vm_compaction.py:225: AssertionError
+__________________ test_summarize_gives_up_after_max_retries ___________________
+
+    def test_summarize_gives_up_after_max_retries():
+        bad = ScriptedProvider([StreamError(NormalizedError("server", "服务器错误", True)), Done("error")])
+        sleeps: list[float] = []
+        with pytest.raises(cp.SummaryError) as excinfo:
+            asyncio.run(
+                cp.summarize(MODEL, "转录", lambda cancel: bad, cancel=CancelToken(), sleep=sleeps.append)
+            )
+>       assert "已重试 3 次" in str(excinfo.value)
+E       AssertionError: assert '已重试 3 次' in '服务器错误 (retried 3 times)'
+E        +  where '服务器错误 (retried 3 times)' = str(SummaryError('服务器错误 (retried 3 times)'))
+E        +    where SummaryError('服务器错误 (retried 3 times)') = <ExceptionInfo SummaryError('服务器错误 (retried 3 times)') tblen=5>.value
+
+app/tests/test_compaction.py:361: AssertionError
+______________________ test_summarize_rejects_empty_body _______________________
+
+    def test_summarize_rejects_empty_body():
+        provider = ScriptedProvider(text="")
+        with pytest.raises(cp.SummaryError) as excinfo:
+            asyncio.run(cp.summarize(MODEL, "转录", lambda cancel: provider, cancel=CancelToken()))
+>       assert "没有返回摘要正文" in str(excinfo.value)
+E       AssertionError: assert '没有返回摘要正文' in 'The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)'
+E        +  where 'The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)' = str(SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)'))
+E        +    where SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)') = <ExceptionInfo SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)') tblen=5>.value
+
+app/tests/test_compaction.py:376: AssertionError
+_______ test_send_without_text_is_rejected_before_anything_is_persisted ________
+
+rig = <test_host_write.Rig object at 0xffff9a07f250>
+
+    def test_send_without_text_is_rejected_before_anything_is_persisted(rig):
+        with pytest.raises(Exception) as excinfo:
+            rig.host.send({"sessionId": "h-empty", "text": "   "})
+>       assert "没有可发送的内容" in str(excinfo.value)
+E       AssertionError: assert '没有可发送的内容' in 'The text of chat:send is empty: there is no content to send'
+E        +  where 'The text of chat:send is empty: there is no content to send' = str(BridgeError('The text of chat:send is empty: there is no content to send'))
+E        +    where BridgeError('The text of chat:send is empty: there is no content to send') = <ExceptionInfo BridgeError('The text of chat:send is empty: there is no content to send') tblen=2>.value
+
+app/tests/test_host_write.py:194: AssertionError
+____________________ test_compact_on_missing_session_raises ____________________
+
+rig = <test_host_write.Rig object at 0xffff9a0fc9e0>
+
+    def test_compact_on_missing_session_raises(rig):
+        with pytest.raises(Exception) as excinfo:
+            rig.host.compact({"sessionId": "nope"})
+>       assert "会话不存在" in str(excinfo.value)
+E       AssertionError: assert '会话不存在' in 'Session does not exist: nope'
+E        +  where 'Session does not exist: nope' = str(BridgeError('Session does not exist: nope'))
+E        +    where BridgeError('Session does not exist: nope') = <ExceptionInfo BridgeError('Session does not exist: nope') tblen=2>.value
+
+app/tests/test_host_write.py:388: AssertionError
+______________ test_the_about_button_opens_and_closes_the_window _______________
+
+fake_qt = {'windows': [<test_mvvm_example.FakeMainWindow object at 0xffff9a07f4d0>], 'dialogs': [<test_mvvm_example.FakeDialog o...<test_mvvm_example.FakeButton object at 0xffff9a07e5d0>, <test_mvvm_example.FakeButton object at 0xffff9a137a80>], ...}
+
+    def test_the_about_button_opens_and_closes_the_window(fake_qt):
+        from application import AiUpperApplication
+    
+        application = AiUpperApplication()
+        application.prepare()
+    
+        viewmodel = application.mvvm_app.get_viewmodel("main")
+        window = fake_qt["windows"][0]
+        dialog = fake_qt["dialogs"][0]
+    
+        # start() 显示了主窗口，但没点按钮就不该弹出「关于」窗口
+        assert window.visible is True
+        assert window.raised is True
+        assert window.activated is True
+        assert dialog.visible is False
+    
+        # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
+        assert window.title == viewmodel.title != ""
+        assert fake_qt["labels"][0].text == "Hello from ai_upper"
+>       assert dialog.title == ABOUT_BUTTON
+E       AssertionError: assert 'About MVVM architecture' == '关于 MVVM 架构'
+E         
+E         - 关于 MVVM 架构
+E         + About MVVM architecture
+
+app/tests/test_mvvm_example.py:315: AssertionError
+______________________ test_401_still_says_check_api_key _______________________
+
+    def test_401_still_says_check_api_key():
+        err = http_error(401, "bad key")
+        assert err.kind == "auth"
+>       assert "请检查 API 密钥" in err.message
+E       AssertionError: assert '请检查 API 密钥' in 'Authentication failed (401): Please check the API key.'
+E        +  where 'Authentication failed (401): Please check the API key.' = NormalizedError(kind='auth', message='Authentication failed (401): Please check the API key.', retryable=False, status=401, retry_after_ms=None, limit=None, overflow=None).message
+
+app/tests/test_provider_headers.py:144: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_chat_streaming.py::test_stop_cancels_the_turn_and_keeps_partial_text
+FAILED app/tests/test_chat_vm_compaction.py::test_mid_turn_compaction_runs_between_tool_steps
+FAILED app/tests/test_chat_vm_compaction.py::test_compact_now_without_compaction_model_reports_failure
+FAILED app/tests/test_chat_vm_compaction.py::test_compaction_failure_does_not_block_the_turn
+FAILED app/tests/test_compaction.py::test_summarize_gives_up_after_max_retries
+FAILED app/tests/test_compaction.py::test_summarize_rejects_empty_body - Asse...
+FAILED app/tests/test_host_write.py::test_send_without_text_is_rejected_before_anything_is_persisted
+FAILED app/tests/test_host_write.py::test_compact_on_missing_session_raises
+FAILED app/tests/test_mvvm_example.py::test_the_about_button_opens_and_closes_the_window
+FAILED app/tests/test_provider_headers.py::test_401_still_says_check_api_key
+10 failed, 1398 passed, 9 skipped in 350.89s (0:05:50)

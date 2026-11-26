@@ -1,0 +1,24 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+..........................F
+=================================== FAILURES ===================================
+______________________ test_send_requires_an_open_session ______________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/triage/test_send_requires_an_open_ses0')
+workspace = PosixPath('/tmp/ai-upper-i18n-close/triage/test_send_requires_an_open_ses0/work')
+
+    def test_send_requires_an_open_session(tmp_path, workspace):
+        vm = make_vm(tmp_path / "home", workspace)
+        vm.input_text_property.set_value("hi")
+        vm.send()
+        assert vm.wait_idle(5.0)
+        assert vm.status == "失败"
+>       assert "没有打开会话" in vm.error
+E       AssertionError: assert '没有打开会话' in '回合失败：No session is opened: call open_session() first'
+E        +  where '回合失败：No session is opened: call open_session() first' = ChatViewModel().error
+
+app/tests/test_chat_vm.py:151: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_chat_vm.py::test_send_requires_an_open_session - Assert...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 168 passed, 2 skipped in 3.26s

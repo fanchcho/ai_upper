@@ -1,0 +1,12 @@
+$ LANG=zh-CN LC_ALL=zh-CN .venv/bin/python tools/build.py --target not-a-target
+用法：build.py [-h] [--doctor | --run | --verify | --lock | --release | --clean]
+            [--target {windows-x86,windows-x86_64,windows-arm64,macos-x86_64,macos-arm64,linux-x86_64,linux-arm64}]
+            [--locked] [--identity IDENTITY] [--notary-profile NOTARY_PROFILE]
+            [--trim-preset NAME] [--trim-site GLOB] [--trim-site-keep GLOB]
+            [--trim-runtime GLOB] [--trim-runtime-keep GLOB] [--egg |
+            --no-egg] [--egg-key HEX] [--egg-backend NAME]
+            [--egg-compression NAME] [--lang {zh-CN,en}]
+            [{doctor,build,run,verify,lock,release,clean}]
+build.py：错误：argument --target: 无效选项：'not-a-target'（可选：windows-x86, windows-x86_64, windows-arm64, macos-x86_64, macos-arm64, linux-x86_64, linux-arm64）
+
+exit=2

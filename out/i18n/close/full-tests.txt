@@ -1,0 +1,964 @@
+........................................................................ [  5%]
+.......................................ss............................... [ 10%]
+................F...FF..F.F.F...F.F.F................................... [ 15%]
+.....F.F........................................................FFFFF.F. [ 20%]
+.FFFFFFFFFFFFF..F.......ss...........................................F.. [ 25%]
+..................F..................................................... [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+..................................F.F...........s....................... [ 45%]
+........................................................................ [ 50%]
+........ssss.........................................................F.. [ 55%]
+.F...................................................................... [ 61%]
+........................................................................ [ 66%]
+........................................................................ [ 71%]
+........................................................................ [ 76%]
+........................................................................ [ 81%]
+.............F................F......................................... [ 86%]
+........................................................................ [ 91%]
+........................................................FF..FFFF...FF.F. [ 96%]
+F..............................................                          [100%]
+=================================== FAILURES ===================================
+_______________ test_subtitle_shows_relative_time_and_empty_hint _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_subtitle_shows_relative_t0')
+
+    def test_subtitle_shows_relative_time_and_empty_hint(tmp_path):
+        store = make_store(tmp_path)
+        seed(store, "a", "甲")
+        vm = ChatSessionsViewModel(store)
+        item = vm.sessions[0]
+>       assert item["subtitle"] in ("刚刚", "1 分钟前", "刚刚更新")
+E       AssertionError: assert 'just now' in ('刚刚', '1 分钟前', '刚刚更新')
+
+app/tests/test_chat_sessions_vm.py:102: AssertionError
+______________ test_stop_cancels_the_turn_and_keeps_partial_text _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_stop_cancels_the_turn_and0')
+
+    def test_stop_cancels_the_turn_and_keeps_partial_text(tmp_path):
+        holder: dict = {}
+    
+        def turn_factory(cancel, session_model):
+            provider = CancellableProvider(cancel)
+            holder["provider"] = provider
+            return provider, "paced"
+    
+        vm, store = make_vm(tmp_path, None, turn_factory=turn_factory)
+        vm.open_session("s")
+        vm.input_text_property.set_value("慢慢说")
+        vm.send()
+    
+        # 工厂在回合线程里被调用，主线程要等一下才能拿到 provider 句柄。
+        deadline = time.time() + 5.0
+        while time.time() < deadline and "provider" not in holder:
+            time.sleep(0.01)
+        assert "provider" in holder, "回合线程没有调用 turn_factory"
+        assert holder["provider"].started.wait(10.0)
+        vm.drain()  # 「忙碌」由回合线程入队，UI 线程取走后才生效
+        assert vm.busy is True
+        vm.cancel()
+>       assert vm.status == "正在停止…"
+E       AssertionError: assert 'Stopping…' == '正在停止…'
+E         
+E         - 正在停止…
+E         + Stopping…
+
+app/tests/test_chat_streaming.py:140: AssertionError
+____________ test_full_slice_allowed_then_persisted_then_read_back _____________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_full_slice_allowed_then_p0')
+workspace = PosixPath('/tmp/ai-upper-i18n-close/final/test_full_slice_allowed_then_p0/work')
+
+    def test_full_slice_allowed_then_persisted_then_read_back(tmp_path, workspace):
+        home = tmp_path / "deva-home"
+        vm = make_vm(home, workspace)
+        vm.open_session("session-1")
+        vm.input_text_property.set_value("看一下 notes.txt")
+    
+        vm.send()
+        assert vm.wait_idle(5.0)
+    
+        assert vm.error == "", vm.error
+>       assert vm.status == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_chat_vm.py:50: AssertionError
+_______________ test_provider_failure_surfaces_as_visible_error ________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_provider_failure_surfaces0')
+workspace = PosixPath('/tmp/ai-upper-i18n-close/final/test_provider_failure_surfaces0/work')
+
+    def test_provider_failure_surfaces_as_visible_error(tmp_path, workspace):
+        vm = make_vm(tmp_path / "home", workspace, provider=FakeProvider(fail_with="密钥无效"))
+        vm.open_session("auth-fail")
+        vm.input_text_property.set_value("你好")
+        vm.send()
+        assert vm.wait_idle(5.0)
+    
+>       assert vm.status == "失败"
+E       AssertionError: assert 'Failed' == '失败'
+E         
+E         - 失败
+E         + Failed
+
+app/tests/test_chat_vm.py:127: AssertionError
+______________________ test_send_requires_an_open_session ______________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_send_requires_an_open_ses0')
+workspace = PosixPath('/tmp/ai-upper-i18n-close/final/test_send_requires_an_open_ses0/work')
+
+    def test_send_requires_an_open_session(tmp_path, workspace):
+        vm = make_vm(tmp_path / "home", workspace)
+        vm.input_text_property.set_value("hi")
+        vm.send()
+        assert vm.wait_idle(5.0)
+>       assert vm.status == "失败"
+E       AssertionError: assert 'Failed' == '失败'
+E         
+E         - 失败
+E         + Failed
+
+app/tests/test_chat_vm.py:150: AssertionError
+____________ test_tool_loop_stops_when_provider_keeps_calling_tools ____________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_tool_loop_stops_when_prov0')
+workspace = PosixPath('/tmp/ai-upper-i18n-close/final/test_tool_loop_stops_when_prov0/work')
+
+    def test_tool_loop_stops_when_provider_keeps_calling_tools(tmp_path, workspace):
+        """provider 无限要工具时必须中止，不能死循环。"""
+        looping = FakeProvider(
+            script=[
+                TextDelta("再看看"),
+                ToolCall(id="loop", name="read_file", input={"path": "notes.txt"}),
+                Done("tool_use"),
+            ]
+        )
+        vm = make_vm(tmp_path / "home", workspace, provider=looping)
+        vm.open_session("loop")
+        vm.input_text_property.set_value("循环")
+    
+        vm.send()
+        assert vm.wait_idle(5.0)
+    
+>       assert vm.status == "失败"
+E       AssertionError: assert 'Failed' == '失败'
+E         
+E         - 失败
+E         + Failed
+
+app/tests/test_chat_vm.py:183: AssertionError
+_______________ test_mid_turn_compaction_runs_between_tool_steps _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_mid_turn_compaction_runs_0')
+
+    def test_mid_turn_compaction_runs_between_tool_steps(tmp_path):
+        """第二步之前再查一次阈值：工具结果把上下文顶过线时会压（轮中压缩）。"""
+        vm, store = make_vm(tmp_path)
+        _seed_session(store, count=28)  # 56 条 × ~304 token ≈ 17k，已超过 8k 触发线
+        calls: list[str] = []
+    
+        class ToolCallingProvider(Provider):
+            name = "tool-loop"
+    
+            async def stream(self, request):  # type: ignore[override]
+                calls.append("call")
+                if len(calls) == 1:
+                    from mvvm.services.provider_gateway import ToolCall
+    
+                    yield ToolCall(id="c1", name="read_file", input={"path": "notes.txt"})
+                    yield Done("tool_use")
+                else:
+                    yield TextDelta("读完了")
+                    yield Done("end_turn")
+    
+        (tmp_path / "work" / "notes.txt").write_text("会议纪要\n", encoding="utf-8")
+        vm.provider = ToolCallingProvider()
+        events: list[dict] = []
+        vm.emit = events.append
+    
+        vm.open_session("long")
+        vm.input_text_property.set_value("看一下 notes.txt")
+        vm.send()
+        assert vm.wait_idle(10.0)
+    
+        assert vm.error == "", vm.error
+        # 轮首压过一次（旧历史），第二步前又压过一次（含第一步的工具结果）。
+        # 轮中压缩的目标是「这一步仍要发出去的内容」不比上一步多，故只要求至少压过一次。
+        compacted = [event for event in events if event["type"] == "compacted"]
+        assert compacted and compacted[0]["status"] == "compacted"
+        assert len(calls) == 2
+        session = store.ensure_session("long")
+        summaries = [m for m in session.messages if str(m.content).startswith(COMPACT_MARKER)]
+        assert len(summaries) >= 1
+        # 工具调用与结果没被拆散：最后一步请求能发出去（没有悬空 tool_use 导致的报错）
+>       assert vm.status == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_chat_vm_compaction.py:168: AssertionError
+__________ test_compact_now_without_compaction_model_reports_failure ___________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_compact_now_without_compa0')
+
+    def test_compact_now_without_compaction_model_reports_failure(tmp_path):
+        vm, _ = make_vm(tmp_path, compact=False)
+        vm.open_session("plain")
+        result = asyncio.run(vm.compact_now())
+        assert result.status == "failed"
+>       assert "未配置" in str(result.message)
+E       AssertionError: assert '未配置' in 'Model services required for compression are not configured'
+E        +  where 'Model services required for compression are not configured' = str('Model services required for compression are not configured')
+E        +    where 'Model services required for compression are not configured' = CompactResult(status='failed', message='Model services required for compression are not configured').message
+
+app/tests/test_chat_vm_compaction.py:191: AssertionError
+_______________ test_compaction_failure_does_not_block_the_turn ________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_compaction_failure_does_n0')
+
+    def test_compaction_failure_does_not_block_the_turn(tmp_path):
+        """摘要失败（模型报错）不阻断本回合：这一轮不压，照常回复。"""
+        vm, store = make_vm(tmp_path, summary=SummaryProvider(text=""))
+        _seed_session(store)
+        events: list[dict] = []
+        vm.emit = events.append
+    
+        vm.open_session("long")
+        vm.input_text_property.set_value("继续")
+        vm.send()
+        assert vm.wait_idle(10.0)
+    
+        assert vm.error == "", vm.error
+>       assert vm.status == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_chat_vm_compaction.py:225: AssertionError
+__________________ test_summarize_gives_up_after_max_retries ___________________
+
+    def test_summarize_gives_up_after_max_retries():
+        bad = ScriptedProvider([StreamError(NormalizedError("server", "服务器错误", True)), Done("error")])
+        sleeps: list[float] = []
+        with pytest.raises(cp.SummaryError) as excinfo:
+            asyncio.run(
+                cp.summarize(MODEL, "转录", lambda cancel: bad, cancel=CancelToken(), sleep=sleeps.append)
+            )
+>       assert "已重试 3 次" in str(excinfo.value)
+E       AssertionError: assert '已重试 3 次' in '服务器错误 (retried 3 times)'
+E        +  where '服务器错误 (retried 3 times)' = str(SummaryError('服务器错误 (retried 3 times)'))
+E        +    where SummaryError('服务器错误 (retried 3 times)') = <ExceptionInfo SummaryError('服务器错误 (retried 3 times)') tblen=5>.value
+
+app/tests/test_compaction.py:361: AssertionError
+______________________ test_summarize_rejects_empty_body _______________________
+
+    def test_summarize_rejects_empty_body():
+        provider = ScriptedProvider(text="")
+        with pytest.raises(cp.SummaryError) as excinfo:
+            asyncio.run(cp.summarize(MODEL, "转录", lambda cancel: provider, cancel=CancelToken()))
+>       assert "没有返回摘要正文" in str(excinfo.value)
+E       AssertionError: assert '没有返回摘要正文' in 'The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)'
+E        +  where 'The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)' = str(SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)'))
+E        +    where SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)') = <ExceptionInfo SummaryError('The model did not return the summary text (it may have only output the thought chain, or it may have been blocked by content policy)') tblen=5>.value
+
+app/tests/test_compaction.py:376: AssertionError
+__________________ test_settings_pane_opens_on_provider_list ___________________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff760aeba0>, SettingsViewModel(), <mvvm.services.settings_service.SettingsService object at 0xffff760ae3c0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff76036350>, [])
+
+    def test_settings_pane_opens_on_provider_list(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        assert pane.page() == "list"
+        assert pane.widgets()["provider_list"].count() == 2
+>       assert pane.widgets()["active_label"].text() == "默认模型：p1:claude-sonnet-5-5"
+E       AssertionError: assert 'Default mode...de-sonnet-5-5' == '默认模型：p1:claude-sonnet-5-5'
+E         
+E         - 默认模型：p1:claude-sonnet-5-5
+E         + Default model: p1:claude-sonnet-5-5
+
+app/tests/test_deva_panes.py:193: AssertionError
+____________________ test_settings_pane_drill_down_and_back ____________________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff76035e50>, SettingsViewModel(), <mvvm.services.settings_service.SettingsService object at 0xffff76035d10>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff76035f90>, [])
+
+    def test_settings_pane_drill_down_and_back(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(0)
+        widgets["open_provider"].click()
+        assert pane.page() == "provider"
+        assert pane.current_provider_id() == "p1"
+        assert widgets["name"].text() == "Anthropic"
+>       assert widgets["key_status"].text() == "未配置密钥"
+E       AssertionError: assert 'No key configured' == '未配置密钥'
+E         
+E         - 未配置密钥
+E         + No key configured
+
+app/tests/test_deva_panes.py:207: AssertionError
+________________ test_settings_pane_edits_provider_and_persists ________________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff760342d0>, SettingsViewModel(), <mvvm.services.settings_servic...t 0xffff76034910>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff76357950>, ['Service provider has saved'])
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_settings_pane_edits_provi0')
+
+    def test_settings_pane_edits_provider_and_persists(settings_pane, tmp_path):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(1)
+        widgets["open_provider"].click()
+    
+        widgets["name"].setText("DeepSeek 官方")
+        widgets["base_url"].setText("https://api.deepseek.com/v1")
+        widgets["adapter"].setCurrentIndex(0)  # Anthropic 协议
+        widgets["enabled"].setChecked(True)
+        widgets["save_provider"].click()
+    
+        saved = next(p for p in settings.models_section()["providers"] if p["id"] == "p2")
+        assert saved["name"] == "DeepSeek 官方"
+        assert saved["apiHost"] == "https://api.deepseek.com/v1"
+        assert saved["adapter"] == "anthropic"
+        assert saved["enabled"] is True
+>       assert notices[-1] == "服务商已保存"
+E       AssertionError: assert 'Service provider has saved' == '服务商已保存'
+E         
+E         - 服务商已保存
+E         + Service provider has saved
+
+app/tests/test_deva_panes.py:237: AssertionError
+_______________ test_settings_pane_saves_key_and_never_echoes_it _______________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff760356d0>, SettingsViewModel(), <mvvm.services.settings_servic...sService object at 0xffff7696fbb0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff763563f0>, ['Key saved'])
+
+    def test_settings_pane_saves_key_and_never_echoes_it(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(1)
+        widgets["open_provider"].click()
+    
+        widgets["key"].setText("sk-deepseek-secret")
+        widgets["save_key"].click()
+    
+        assert vault.get_secret("p2") == "sk-deepseek-secret"
+        assert widgets["key"].text() == ""  # 输入框保存后清空
+>       assert widgets["key_status"].text() == "已配置密钥"
+E       AssertionError: assert 'Configured key' == '已配置密钥'
+E         
+E         - 已配置密钥
+E         + Configured key
+
+app/tests/test_deva_panes.py:253: AssertionError
+______________ test_settings_pane_adds_toggles_and_removes_model _______________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff76034690>, SettingsViewModel(), <mvvm.services.settings_servic...ervice object at 0xffff756c8d60>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff75710ef0>, ['Model added'])
+
+    def test_settings_pane_adds_toggles_and_removes_model(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(1)
+        widgets["open_provider"].click()
+    
+        widgets["new_model"].setText("deepseek-reasoner")
+        widgets["add_model"].click()
+        assert "deepseek-reasoner" in [m["id"] for m in vm.models_of("p2")]
+>       assert notices[-1] == "模型已添加"
+E       AssertionError: assert 'Model added' == '模型已添加'
+E         
+E         - 模型已添加
+E         + Model added
+
+app/tests/test_deva_panes.py:270: AssertionError
+________________ test_settings_pane_effort_change_writes_config ________________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff76036850>, SettingsViewModel(), <mvvm.services.settings_servic...object at 0xffff75fe67a0>, ['The thinking level has been updated and will take effect in the next round of dialogue.'])
+
+    def test_settings_pane_effort_change_writes_config(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        pane.widgets()["effort"].setCurrentIndex(5)  # max
+        assert settings.models_section()["activeEffort"] == "max"
+>       assert notices[-1] == "思考等级已更新，下一轮对话生效"
+E       AssertionError: assert 'The thinking... of dialogue.' == '思考等级已更新，下一轮对话生效'
+E         
+E         - 思考等级已更新，下一轮对话生效
+E         + The thinking level has been updated and will take effect in the next round of dialogue.
+
+app/tests/test_deva_panes.py:321: AssertionError
+_____________ test_settings_pane_refreshes_when_viewmodel_changes ______________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff76036c10>, SettingsViewModel(), <mvvm.services.settings_service.SettingsService object at 0xffff7570d550>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff760716d0>, [])
+
+    def test_settings_pane_refreshes_when_viewmodel_changes(settings_pane):
+        """ViewModel 被别处改动（例如后台拉取后写配置）时界面要跟着重建。"""
+        pane, vm, settings, vault, notices = settings_pane
+        vm.set_active_model("p2", "deepseek-chat")
+>       assert pane.widgets()["active_label"].text() == "默认模型：p2:deepseek-chat"
+E       AssertionError: assert 'Default mode...deepseek-chat' == '默认模型：p2:deepseek-chat'
+E         
+E         - 默认模型：p2:deepseek-chat
+E         + Default model: p2:deepseek-chat
+
+app/tests/test_deva_panes.py:351: AssertionError
+______________ test_main_window_starts_on_chat_with_session_list _______________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff760ae120>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff7669f200>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff7669f020>)
+
+    def test_main_window_starts_on_chat_with_session_list(main_window):
+        window, chat, sessions, settings, vault = main_window
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:357: AssertionError
+______________________ test_main_window_switches_session _______________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff760374d0>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff75725310>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff76088f30>)
+
+    def test_main_window_switches_session(main_window):
+        window, chat, sessions, settings, vault = main_window
+        assert chat.session_id == "b"
+        window.session_pane().list_widget().setCurrentRow(1)  # 甲
+        assert chat.session_id == "a"
+        assert sessions.active_id == "a"
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:369: AssertionError
+__________________ test_main_window_refuses_switch_while_busy __________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff75734050>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff7608a190>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff7608a270>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff7574c600>
+
+    def test_main_window_refuses_switch_while_busy(main_window, monkeypatch):
+        window, chat, sessions, settings, vault = main_window
+        monkeypatch.setattr(type(chat), "busy", property(lambda self: True))
+        window.session_pane().list_widget().setCurrentRow(1)
+        assert chat.session_id == "b"  # 没切
+>       assert "停止后才能切换" in window.status_text
+E       AssertionError: assert '停止后才能切换' in 'The current conversation is still being replied and can only be switched after stopping.'
+E        +  where 'The current conversation is still being replied and can only be switched after stopping.' = <mvvm.views.deva_main_window.DevaMainWindow object at 0xffff75734050>.status_text
+
+app/tests/test_deva_panes.py:377: AssertionError
+_____________________ test_main_window_new_session_is_lazy _____________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff756ca9e0>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff7608b3f0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff7a7e6820>)
+
+    def test_main_window_new_session_is_lazy(main_window):
+        window, chat, sessions, settings, vault = main_window
+        window.session_pane().buttons()["new"].click()
+        assert chat.session_id.startswith("sess_")
+        assert chat.session_id != "b"
+        # 惰性建档：没有消息的会话不进列表
+        assert window.session_pane().list_widget().count() == 2
+>       assert window.status_text == "新对话"
+E       AssertionError: assert 'New chat' == '新对话'
+E         
+E         - 新对话
+E         + New chat
+
+app/tests/test_deva_panes.py:387: AssertionError
+________________ test_main_window_rename_updates_list_and_title ________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff756cb230>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff7a0dd710>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff756f84d0>)
+
+    def test_main_window_rename_updates_list_and_title(main_window):
+        window, chat, sessions, settings, vault = main_window
+        FakeInputDialog.answer = "乙（改名）"
+        FakeInputDialog.accepted = True
+        try:
+            window.session_pane().buttons()["rename"].click()
+        finally:
+            FakeInputDialog.accepted = False
+        titles = [s["title"] for s in sessions.sessions]
+        assert "乙（改名）" in titles
+        assert chat.title == "乙（改名）"
+>       assert window.status_text == "已重命名"
+E       AssertionError: assert 'renamed' == '已重命名'
+E         
+E         - 已重命名
+E         + renamed
+
+app/tests/test_deva_panes.py:401: AssertionError
+____________________ test_main_window_rename_rejects_blank _____________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff7636e690>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff76781e50>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff76783650>)
+
+    def test_main_window_rename_rejects_blank(main_window):
+        window, chat, sessions, settings, vault = main_window
+        FakeInputDialog.answer = "   "
+        FakeInputDialog.accepted = True
+        try:
+            window.session_pane().buttons()["rename"].click()
+        finally:
+            FakeInputDialog.accepted = False
+        assert chat.title == "乙"
+>       assert window.status_text == "标题不能为空"
+E       AssertionError: assert 'Title cannot be empty' == '标题不能为空'
+E         
+E         - 标题不能为空
+E         + Title cannot be empty
+
+app/tests/test_deva_panes.py:413: AssertionError
+____________ test_main_window_archive_moves_off_list_and_opens_next ____________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff7687c7c0>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff767825d0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff75719f40>)
+
+    def test_main_window_archive_moves_off_list_and_opens_next(main_window):
+        window, chat, sessions, settings, vault = main_window
+        assert chat.session_id == "b"
+        window.session_pane().buttons()["archive"].click()
+>       assert "已归档" in window.status_text
+E       AssertionError: assert '已归档' in 'Archived (out of list, recoverable from data file)'
+E        +  where 'Archived (out of list, recoverable from data file)' = <mvvm.views.deva_main_window.DevaMainWindow object at 0xffff7687c7c0>.status_text
+
+app/tests/test_deva_panes.py:420: AssertionError
+___________________ test_main_window_delete_asks_and_removes ___________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff75fe6580>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff75719a70>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff75718f70>)
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_main_window_delete_asks_a0')
+
+    def test_main_window_delete_asks_and_removes(main_window, tmp_path):
+        window, chat, sessions, settings, vault = main_window
+        path = ChatSessionStore(tmp_path / "home").session_path("b")
+        assert path.exists()
+    
+        FakeMessageBox.answer = FakeMessageBox.No
+        try:
+            window.session_pane().buttons()["delete"].click()
+        finally:
+            FakeMessageBox.answer = FakeMessageBox.No
+        assert path.exists()  # 点了「否」什么都不做
+        assert chat.session_id == "b"
+    
+        FakeMessageBox.answer = FakeMessageBox.Yes
+        try:
+            window.session_pane().buttons()["delete"].click()
+        finally:
+            FakeMessageBox.answer = FakeMessageBox.No
+        assert not path.exists()
+>       assert window.status_text == "已删除"
+E       AssertionError: assert 'Deleted' == '已删除'
+E         
+E         - 已删除
+E         + Deleted
+
+app/tests/test_deva_panes.py:445: AssertionError
+____________________ test_main_window_toggles_settings_view ____________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff7570de50>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff7558c470>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff7576cb90>)
+
+    def test_main_window_toggles_settings_view(main_window):
+        window, chat, sessions, settings, vault = main_window
+        window.session_pane().buttons()["settings"].click()
+        assert window.settings_visible is True
+        assert window.chat_pane().widget().visible is False
+>       assert window.status_text == "设置"
+E       AssertionError: assert 'Settings' == '设置'
+E         
+E         - 设置
+E         + Settings
+
+app/tests/test_deva_panes.py:455: AssertionError
+_________________ test_main_window_sends_message_in_chat_pane __________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff7570ce50>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff75752e90>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff75752f30>)
+
+    def test_main_window_sends_message_in_chat_pane(main_window):
+        window, chat, sessions, settings, vault = main_window
+        pane = window.chat_pane()
+        chat.input_text_property.set_value("看一下 notes.txt")
+        pane._send_button.click()
+        assert chat.wait_idle(5.0)
+        assert chat.transcript[-1]["role"] == "assistant"
+        assert "你好" in pane._transcript.plain_text
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:471: AssertionError
+________________ test_main_window_reports_missing_fetch_gateway ________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_main_window_reports_missi0')
+settings_env = (<mvvm.services.settings_service.SettingsService object at 0xffff757711d0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff75706960>)
+fake_qt = None
+
+    def test_main_window_reports_missing_fetch_gateway(tmp_path, settings_env, fake_qt):
+        settings, vault = settings_env
+        store = ChatSessionStore(tmp_path / "home")
+        chat = ChatViewModel(store, FakeProvider(), ToolRuntime(WorkspaceGuard(), None))
+        chat.open_session("x")
+        sessions = ChatSessionsViewModel(store)
+        window = DevaMainWindow(chat, sessions, SettingsViewModel(settings, vault))
+        try:
+            window._fetch_models_async("p1")  # 没装配网关（on_fetch 为 None）
+>           assert window.status_text == "未装配模型网关，无法拉取模型清单"
+E           AssertionError: assert 'The model ga...ot be pulled.' == '未装配模型网关，无法拉取模型清单'
+E             
+E             - 未装配模型网关，无法拉取模型清单
+E             + The model gateway is not assembled and the model list cannot be pulled.
+
+app/tests/test_deva_panes.py:483: AssertionError
+______________ test_chat_window_binds_transcript_status_and_send _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_chat_window_binds_transcr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff755dae40>
+fake_qt = None
+
+    def test_chat_window_binds_transcript_status_and_send(tmp_path, monkeypatch, fake_qt):
+        """ChatWindow 的属性绑定与发送命令：输入 → ViewModel → 回合 → 界面刷新。
+    
+        原在 `test_deva_app.py` 里（那个模块测的是已移除的 `deva_app` 入口装配），
+        用例本身只碰 `ChatWindow` 与 ViewModel，随入口一起删会白白丢掉这条断言。
+        """
+        monkeypatch.setenv("DEVA_HOME", str(tmp_path / "home"))
+    
+        from mvvm.views.chat_window import ChatWindow
+    
+        (tmp_path / "notes.txt").write_text("你好\n", encoding="utf-8")
+        guard = WorkspaceGuard([tmp_path])
+        vm = ChatViewModel(
+            ChatSessionStore(tmp_path / "home"),
+            FakeProvider(),
+            ToolRuntime(guard, tmp_path),
+        )
+        vm.open_session("ui")
+        window = ChatWindow(vm)
+        window.show()
+    
+        # 输入框 → ViewModel（双向绑定），再点发送：回合跑完，界面被命令与属性推送刷新
+        window._input.setPlainText("看一下 notes.txt")
+        assert vm.input_text_property.get_value() == "看一下 notes.txt"
+        assert vm.can_send() is True
+    
+        window._send_button.click()
+        # 按钮只在后台线程起回合、立即返回；等回合结束 + 事件落地后再断言界面。
+        assert vm.wait_idle(5.0)
+    
+        assert vm.transcript[-1]["role"] == "assistant"
+        assert "你好" in window._transcript.plain_text
+>       assert window._status.text() == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:521: AssertionError
+______________ test_chat_pane_todo_capsule_expands_and_collapses _______________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_chat_pane_todo_capsule_ex0')
+fake_qt = None
+
+    def test_chat_pane_todo_capsule_expands_and_collapses(tmp_path, fake_qt):
+        chat, pane = _pane(tmp_path)
+        state = {
+            "id": "l1",
+            "title": "迁移",
+            "items": [
+                {"content": "读源码", "status": "completed"},
+                {"content": "写实现", "status": "in_progress"},
+            ],
+        }
+        chat.todos_state_property.set_value(state)
+        widgets = pane.todo_widgets()
+        assert widgets["row"].visible is True
+        assert "写实现" in widgets["pill"].text()
+>       assert "已完成 1/2" in widgets["pill"].text()
+E       AssertionError: assert '已完成 1/2' in 'To-do: 迁移|写实现 (Completed 1/2)'
+E        +  where 'To-do: 迁移|写实现 (Completed 1/2)' = text()
+E        +    where text = <fake_qt_ui.FakeLabel object at 0xffff75581670>.text
+
+app/tests/test_deva_panes.py:582: AssertionError
+_______ test_send_without_text_is_rejected_before_anything_is_persisted ________
+
+rig = <test_host_write.Rig object at 0xffff754c8910>
+
+    def test_send_without_text_is_rejected_before_anything_is_persisted(rig):
+        with pytest.raises(Exception) as excinfo:
+            rig.host.send({"sessionId": "h-empty", "text": "   "})
+>       assert "没有可发送的内容" in str(excinfo.value)
+E       AssertionError: assert '没有可发送的内容' in 'The text of chat:send is empty: there is no content to send'
+E        +  where 'The text of chat:send is empty: there is no content to send' = str(BridgeError('The text of chat:send is empty: there is no content to send'))
+E        +    where BridgeError('The text of chat:send is empty: there is no content to send') = <ExceptionInfo BridgeError('The text of chat:send is empty: there is no content to send') tblen=2>.value
+
+app/tests/test_host_write.py:194: AssertionError
+____________________ test_compact_on_missing_session_raises ____________________
+
+rig = <test_host_write.Rig object at 0xffff755f36e0>
+
+    def test_compact_on_missing_session_raises(rig):
+        with pytest.raises(Exception) as excinfo:
+            rig.host.compact({"sessionId": "nope"})
+>       assert "会话不存在" in str(excinfo.value)
+E       AssertionError: assert '会话不存在' in 'Session does not exist: nope'
+E        +  where 'Session does not exist: nope' = str(BridgeError('Session does not exist: nope'))
+E        +    where BridgeError('Session does not exist: nope') = <ExceptionInfo BridgeError('Session does not exist: nope') tblen=2>.value
+
+app/tests/test_host_write.py:388: AssertionError
+_________________________ test_about_model_round_trips _________________________
+
+    def test_about_model_round_trips():
+        from mvvm.models import AboutModel
+    
+        model = AboutModel(title="T", body="B")
+        assert model.to_dict() == {"title": "T", "body": "B"}
+>       assert "view_models" in AboutModel().body
+E       AssertionError: assert 'view_models' in 'Layering of app/src/mvvm:\n{p1}\n\nThis window is an example: MainWindow Button → CommandBinding →\nMainViewModel.show_about_command → about_visible property change → view display/close.'
+E        +  where 'Layering of app/src/mvvm:\n{p1}\n\nThis window is an example: MainWindow Button → CommandBinding →\nMainViewModel.show_about_command → about_visible property change → view display/close.' = AboutModel(id=None).body
+E        +    where AboutModel(id=None) = <class 'mvvm.models.about_model.AboutModel'>()
+
+app/tests/test_mvvm_example.py:274: AssertionError
+______________ test_the_about_button_opens_and_closes_the_window _______________
+
+fake_qt = {'windows': [<test_mvvm_example.FakeMainWindow object at 0xffff76037890>], 'dialogs': [<test_mvvm_example.FakeDialog o...<test_mvvm_example.FakeButton object at 0xffff760379d0>, <test_mvvm_example.FakeButton object at 0xffff76357360>], ...}
+
+    def test_the_about_button_opens_and_closes_the_window(fake_qt):
+        from application import AiUpperApplication
+    
+        application = AiUpperApplication()
+        application.prepare()
+    
+        viewmodel = application.mvvm_app.get_viewmodel("main")
+        window = fake_qt["windows"][0]
+        dialog = fake_qt["dialogs"][0]
+    
+        # start() 显示了主窗口，但没点按钮就不该弹出「关于」窗口
+        assert window.visible is True
+        assert window.raised is True
+        assert window.activated is True
+        assert dialog.visible is False
+    
+        # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
+        assert window.title == viewmodel.title != ""
+        assert fake_qt["labels"][0].text == "Hello from ai_upper"
+>       assert dialog.title == ABOUT_BUTTON
+E       AssertionError: assert 'About MVVM architecture' == '关于 MVVM 架构'
+E         
+E         - 关于 MVVM 架构
+E         + About MVVM architecture
+
+app/tests/test_mvvm_example.py:315: AssertionError
+______________________ test_401_still_says_check_api_key _______________________
+
+    def test_401_still_says_check_api_key():
+        err = http_error(401, "bad key")
+        assert err.kind == "auth"
+>       assert "请检查 API 密钥" in err.message
+E       AssertionError: assert '请检查 API 密钥' in 'Authentication failed (401): Please check the API key.'
+E        +  where 'Authentication failed (401): Please check the API key.' = NormalizedError(kind='auth', message='Authentication failed (401): Please check the API key.', retryable=False, status=401, retry_after_ms=None, limit=None, overflow=None).message
+
+app/tests/test_provider_headers.py:144: AssertionError
+__________________ test_no_usable_model_raises_not_configured __________________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_no_usable_model_raises_no0')
+
+    def test_no_usable_model_raises_not_configured(tmp_path):
+        settings = SettingsService(tmp_path)
+        settings.set_config({"models": {"providers": []}})
+        gw = ModelGateway(settings, SecretsVault(tmp_path), None)
+        with pytest.raises(ProviderError) as info:
+            gw.turn_provider(None, None)
+>       assert "尚未配置" in info.value.error.message
+E       AssertionError: assert '尚未配置' in 'Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page to fill in the service address, model and API key'
+E        +  where 'Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page to fill in the service address, model and API key' = NormalizedError(kind='invalid_request', message='Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page ... the service address, model and API key', retryable=False, status=None, retry_after_ms=None, limit=None, overflow=None).message
+E        +    where NormalizedError(kind='invalid_request', message='Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page ... the service address, model and API key', retryable=False, status=None, retry_after_ms=None, limit=None, overflow=None) = ProviderError('Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page to fill in the service address, model and API key').error
+E        +      where ProviderError('Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page to fill in the service address, model and API key') = <ExceptionInfo ProviderError('Not configured yet可用的模型（请在设置中选定默认模型）: Please go to the settings page to fill in the service address, model and API key') tblen=4>.value
+
+app/tests/test_provider_setup.py:85: AssertionError
+_____________ test_projection_lists_providers_models_and_selection _____________
+
+tmp_path = PosixPath('/tmp/ai-upper-i18n-close/final/test_projection_lists_provider0')
+env = (<mvvm.services.settings_service.SettingsService object at 0xffff74b81af0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff6c391550>, SettingsViewModel())
+
+    def test_projection_lists_providers_models_and_selection(tmp_path, env):
+        settings, vault, vm = env
+        assert [p["id"] for p in vm.providers] == ["p1", "p2"]
+>       assert vm.providers[0]["adapter_label"] == "Anthropic 协议"
+E       AssertionError: assert 'Anthropic Protocol' == 'Anthropic 协议'
+E         
+E         - Anthropic 协议
+E         + Anthropic Protocol
+
+app/tests/test_settings_vm.py:64: AssertionError
+_________________ test_message_property_reports_vault_failure __________________
+
+env = (<mvvm.services.settings_service.SettingsService object at 0xffff7f8ee150>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff7f94e950>, SettingsViewModel())
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff6c72a9e0>
+
+    def test_message_property_reports_vault_failure(env, monkeypatch):
+        settings, vault, vm = env
+    
+        def boom(*_args, **_kwargs):
+            raise RuntimeError("钥匙串不可用")
+    
+        monkeypatch.setattr(vault, "set_secret", boom)
+        assert vm.set_api_key("p1", "sk-x") is False
+>       assert "密钥保存失败" in vm.message
+E       AssertionError: assert '密钥保存失败' in 'Key save failed: 钥匙串不可用'
+E        +  where 'Key save failed: 钥匙串不可用' = SettingsViewModel().message
+
+app/tests/test_settings_vm.py:254: AssertionError
+________________ test_plain_message_renders_role_head_and_body _________________
+
+    def test_plain_message_renders_role_head_and_body():
+        html = transcript_html([entry("user", "你好"), entry("assistant", "在。")])
+>       assert "［你］" in html and "你好" in html
+E       assert ('［你］' in '<p style="color:#101828;"><b>［you］</b></p><p style="color:#344054;">你好</p><p style="color:#101828;"><b>［Assistant］</b></p><p style="color:#344054;">在。</p>')
+
+app/tests/test_transcript_render.py:25: AssertionError
+___________________ test_error_role_and_is_error_both_marked ___________________
+
+    def test_error_role_and_is_error_both_marked():
+        """`error` 角色本身就叫「错误」；只有普通角色带 `is_error` 才加「（失败）」。"""
+        html = transcript_html([entry("error", "网络断了"), entry("assistant", "半句", is_error=True)])
+>       assert "［错误］" in html
+E       assert '［错误］' in '<p style="color:#b42318;"><b>［mistake］</b></p><p style="color:#344054;">网络断了</p><p style="color:#b42318;"><b>［Assistant (failed)］</b></p><p style="color:#344054;">半句</p>'
+
+app/tests/test_transcript_render.py:32: AssertionError
+_____________ test_tool_entry_becomes_a_card_with_name_and_status ______________
+
+    def test_tool_entry_becomes_a_card_with_name_and_status():
+        html = transcript_html([entry("tool", "文件内容", name="read_file", summary="12 行")])
+        assert "<table" in html
+        assert "read_file · 12 行" in html
+>       assert "（成功）" in html
+E       assert '（成功）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#f8fafc; border:1px solid #e4e7ec;"><tr><td><p style="color:#475467;"><b>read_file · 12 行</b>（OK）</p><p style="color:#344054;">文件内容</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:55: AssertionError
+_______________________ test_failed_tool_card_is_marked ________________________
+
+    def test_failed_tool_card_is_marked():
+        html = transcript_html([entry("tool", "拒绝访问", name="write_file", is_error=True)])
+>       assert "（失败）" in html
+E       assert '（失败）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#fef3f2; border:1px solid #e4e7ec;"><tr><td><p style="color:#b42318;"><b>write_file</b>（Failed）</p><p style="color:#344054;">拒绝访问</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:61: AssertionError
+______________ test_tool_without_name_falls_back_to_generic_title ______________
+
+    def test_tool_without_name_falls_back_to_generic_title():
+        html = transcript_html([entry("tool", "结果")])
+>       assert "<b>工具</b>（成功）" in html
+E       assert '<b>工具</b>（成功）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#f8fafc; border:1px solid #e4e7ec;"><tr><td><p style="color:#475467;"><b>Tools</b>（OK）</p><p style="color:#344054;">结果</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:67: AssertionError
+_______________ test_tool_image_gets_placeholder_url_and_caption _______________
+
+    def test_tool_image_gets_placeholder_url_and_caption():
+        data = base64.b64encode(_png_bytes()).decode()
+        images = [{"mediaType": "image/png", "name": "shot.png", "data": data}]
+        html = transcript_html([entry("tool", "已读取图片", name="read_file", images=images)])
+        assert f'src="{IMAGE_URL_PREFIX}0"' in html
+>       assert "［图片］shot.png" in html
+E       assert '［图片］shot.png' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#f8fafc; border:1px solid #e4e7ec;"><tr><...已读取图片</p><p><img src="deva-image:0" width="360"/></p><p style=\'color:#667085;\'>［Image］shot.png</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:94: AssertionError
+________________ test_capsule_shows_in_progress_item_and_counts ________________
+
+    def test_capsule_shows_in_progress_item_and_counts():
+        text = todo_capsule_text(STATE)
+>       assert "待办：迁移工具层" in text
+E       AssertionError: assert '待办：迁移工具层' in 'To-do: 迁移工具层|写实现 (Completed 1/3)'
+
+app/tests/test_transcript_render.py:145: AssertionError
+________________ test_capsule_without_title_or_in_progress_item ________________
+
+    def test_capsule_without_title_or_in_progress_item():
+        state = {"items": [{"content": "第一步", "status": "pending"}]}
+>       assert todo_capsule_text(state) == "待办｜第一步（已完成 0/1）"
+E       AssertionError: assert 'Pending|第一步 (Completed 0/1)' == '待办｜第一步（已完成 0/1）'
+E         
+E         - 待办｜第一步（已完成 0/1）
+E         + Pending|第一步 (Completed 0/1)
+
+app/tests/test_transcript_render.py:152: AssertionError
+________________ test_capsule_falls_back_to_all_completed_title ________________
+
+    def test_capsule_falls_back_to_all_completed_title():
+        state = {"title": "收尾", "items": [{"content": "a", "status": "completed"}]}
+        assert todo_now_text(state) == ""
+>       assert todo_capsule_text(state) == "待办：收尾（已完成 1/1）"
+E       AssertionError: assert 'To-do: 收尾 (completed 1/1)' == '待办：收尾（已完成 1/1）'
+E         
+E         - 待办：收尾（已完成 1/1）
+E         + To-do: 收尾 (completed 1/1)
+
+app/tests/test_transcript_render.py:164: AssertionError
+________________ test_plain_text_projection_matches_old_format _________________
+
+    def test_plain_text_projection_matches_old_format():
+        text = transcript_plain_text(
+            [entry("user", "你好"), entry("tool", "内容", name="read_file", is_error=True)]
+        )
+>       assert text == "[你] 你好\n\n[工具（失败） read_file] 内容"
+E       AssertionError: assert '[you] 你好\n\n...read_file] 内容' == '[你] 你好\n\n[工...read_file] 内容'
+E         
+E         - [你] 你好
+E         ?  ^
+E         + [you] 你好
+E         ?  ^^^
+E           
+E         - [工具（失败） read_file] 内容
+E         + [Tools (failed) read_file] 内容
+
+app/tests/test_transcript_render.py:176: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_chat_sessions_vm.py::test_subtitle_shows_relative_time_and_empty_hint
+FAILED app/tests/test_chat_streaming.py::test_stop_cancels_the_turn_and_keeps_partial_text
+FAILED app/tests/test_chat_vm.py::test_full_slice_allowed_then_persisted_then_read_back
+FAILED app/tests/test_chat_vm.py::test_provider_failure_surfaces_as_visible_error
+FAILED app/tests/test_chat_vm.py::test_send_requires_an_open_session - Assert...
+FAILED app/tests/test_chat_vm.py::test_tool_loop_stops_when_provider_keeps_calling_tools
+FAILED app/tests/test_chat_vm_compaction.py::test_mid_turn_compaction_runs_between_tool_steps
+FAILED app/tests/test_chat_vm_compaction.py::test_compact_now_without_compaction_model_reports_failure
+FAILED app/tests/test_chat_vm_compaction.py::test_compaction_failure_does_not_block_the_turn
+FAILED app/tests/test_compaction.py::test_summarize_gives_up_after_max_retries
+FAILED app/tests/test_compaction.py::test_summarize_rejects_empty_body - Asse...
+FAILED app/tests/test_deva_panes.py::test_settings_pane_opens_on_provider_list
+FAILED app/tests/test_deva_panes.py::test_settings_pane_drill_down_and_back
+FAILED app/tests/test_deva_panes.py::test_settings_pane_edits_provider_and_persists
+FAILED app/tests/test_deva_panes.py::test_settings_pane_saves_key_and_never_echoes_it
+FAILED app/tests/test_deva_panes.py::test_settings_pane_adds_toggles_and_removes_model
+FAILED app/tests/test_deva_panes.py::test_settings_pane_effort_change_writes_config
+FAILED app/tests/test_deva_panes.py::test_settings_pane_refreshes_when_viewmodel_changes
+FAILED app/tests/test_deva_panes.py::test_main_window_starts_on_chat_with_session_list
+FAILED app/tests/test_deva_panes.py::test_main_window_switches_session - Asse...
+FAILED app/tests/test_deva_panes.py::test_main_window_refuses_switch_while_busy
+FAILED app/tests/test_deva_panes.py::test_main_window_new_session_is_lazy - A...
+FAILED app/tests/test_deva_panes.py::test_main_window_rename_updates_list_and_title
+FAILED app/tests/test_deva_panes.py::test_main_window_rename_rejects_blank - ...
+FAILED app/tests/test_deva_panes.py::test_main_window_archive_moves_off_list_and_opens_next
+FAILED app/tests/test_deva_panes.py::test_main_window_delete_asks_and_removes
+FAILED app/tests/test_deva_panes.py::test_main_window_toggles_settings_view
+FAILED app/tests/test_deva_panes.py::test_main_window_sends_message_in_chat_pane
+FAILED app/tests/test_deva_panes.py::test_main_window_reports_missing_fetch_gateway
+FAILED app/tests/test_deva_panes.py::test_chat_window_binds_transcript_status_and_send
+FAILED app/tests/test_deva_panes.py::test_chat_pane_todo_capsule_expands_and_collapses
+FAILED app/tests/test_host_write.py::test_send_without_text_is_rejected_before_anything_is_persisted
+FAILED app/tests/test_host_write.py::test_compact_on_missing_session_raises
+FAILED app/tests/test_mvvm_example.py::test_about_model_round_trips - Asserti...
+FAILED app/tests/test_mvvm_example.py::test_the_about_button_opens_and_closes_the_window
+FAILED app/tests/test_provider_headers.py::test_401_still_says_check_api_key
+FAILED app/tests/test_provider_setup.py::test_no_usable_model_raises_not_configured
+FAILED app/tests/test_settings_vm.py::test_projection_lists_providers_models_and_selection
+FAILED app/tests/test_settings_vm.py::test_message_property_reports_vault_failure
+FAILED app/tests/test_transcript_render.py::test_plain_message_renders_role_head_and_body
+FAILED app/tests/test_transcript_render.py::test_error_role_and_is_error_both_marked
+FAILED app/tests/test_transcript_render.py::test_tool_entry_becomes_a_card_with_name_and_status
+FAILED app/tests/test_transcript_render.py::test_failed_tool_card_is_marked
+FAILED app/tests/test_transcript_render.py::test_tool_without_name_falls_back_to_generic_title
+FAILED app/tests/test_transcript_render.py::test_tool_image_gets_placeholder_url_and_caption
+FAILED app/tests/test_transcript_render.py::test_capsule_shows_in_progress_item_and_counts
+FAILED app/tests/test_transcript_render.py::test_capsule_without_title_or_in_progress_item
+FAILED app/tests/test_transcript_render.py::test_capsule_falls_back_to_all_completed_title
+FAILED app/tests/test_transcript_render.py::test_plain_text_projection_matches_old_format
+49 failed, 1357 passed, 9 skipped in 350.82s (0:05:50)

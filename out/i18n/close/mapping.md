@@ -1,0 +1,729 @@
+# 文件行号到翻译键对账
+
+行号是修改前坐标；display.* 通过展示边界解析，不改工具原始记录。初筛项不等于全部已接线；实际调用以 migrated.json / extra-migrated.json 为准。
+
+- app/src/qml_shell.py:516 → `legacy.3682234e64de` → release tag missing
+- app/src/qml_shell.py:416 → `legacy.e33129d04c41` → Unknown settings operation
+- app/src/utils/qt_compat.py:77 → `legacy.60b5f3f7e216` → No Qt binding found; install one of PySide6, PyQt6, PySide2, PyQt5 (development: pip install PySide6)
+- app/src/utils/qt_compat.py:141 → `legacy.102f95aabbc6` → module {p1} has no attribute {p3}
+- app/src/utils/qt_compat.py:157 → `legacy.ab8bbfc0513e` → {p0}.QtCore provides none of {p2}
+- app/src/utils/qt_compat.py:177 → `legacy.3e4a29f8ba1d` → {p0} has no enum member {p2}
+- app/src/utils/qt_compat.py:212 → `legacy.3630ff484185` → {p0} has neither exec nor exec_ (binding {p2}, Qt {p4})
+- app/src/utils/qt_compat.py:89 → `legacy.998a243fc8e7` → {p0} has no submodule {p2}: {p4}
+- app/src/utils/qt_compat.py:115 → `legacy.7f00bfbf3768` → {p0} has no {p2} (binding {p4}, Qt {p6})
+- app/src/markdown/highlight.py:237 → `legacy.f528c08df47d` → CodeHighlighter requires a Qt binding
+- app/src/markdown/body.py:76 → `legacy.368997cd00d3` → BodyDocument requires a Qt binding
+- app/src/markdown/body.py:153 → `legacy.53f6e22fc48f` → text scale must be positive
+- app/src/mvvm/services/persona_store.py:306 → `legacy.b2fd20806334` → {p0}：{p2}
+- app/src/mvvm/services/persona_store.py:318 → `legacy.251ab7ed8779` → 无法生成不冲突的角色 id
+- app/src/mvvm/services/plugin_interactions.py:61 → `legacy.929ee7b311bd` → Interaction operation ID reused with different input
+- app/src/mvvm/services/secrets_vault.py:131 → `legacy.de9a7de2fedc` → 读取密钥文件失败：{p1}
+- app/src/mvvm/services/secrets_vault.py:140 → `legacy.4afdeab944c5` → 条目表不是对象
+- app/src/mvvm/services/secrets_vault.py:143 → `legacy.555328042b45` → 密钥文件无法解密（主密钥 {p1} 可能已被替换）：{p3}
+- app/src/mvvm/services/secrets_vault.py:184 → `legacy.f0f186a9e977` → 读取主密钥失败：{p1}
+- app/src/mvvm/services/secrets_vault.py:193 → `legacy.976390a41ffc` → 主密钥文件长度异常：{p1}
+- app/src/mvvm/services/plugin_layout.py:25 → `legacy.be87a578f3c0` → Configuration changed while starting migration
+- app/src/mvvm/services/plugin_layout.py:52 → `legacy.2753c19af247` → MCP configuration changed externally; migration stopped
+- app/src/mvvm/services/plugin_layout.py:20 → `legacy.9b7597b1735e` → Legacy file must contain a JSON object
+- app/src/mvvm/services/plugin_layout.py:47 → `legacy.c2cf5eb4a8e7` → Invalid legacy MCP entry
+- app/src/mvvm/services/provider_gateway.py:213 → `legacy.66a36e77fd00` → auth
+- app/src/mvvm/services/provider_gateway.py:214 → `legacy.b6b969217faf` → 服务商拒绝了请求（403）{p1}
+- app/src/mvvm/services/provider_gateway.py:274 → `legacy.cbe6c9b729bd` → invalid_request
+- app/src/mvvm/services/provider_gateway.py:275 → `legacy.3bd0091cb608` → 请求失败（{p1}）：{p3}
+- app/src/mvvm/services/provider_gateway.py:229 → `legacy.19a249f9753a` → output_limit
+- app/src/mvvm/services/provider_gateway.py:230 → `legacy.306bf6b480ba` → 请求的输出上限超出该模型允许范围（{p1}）{p3}
+- app/src/mvvm/services/provider_gateway.py:237 → `legacy.66a36e77fd00` → auth
+- app/src/mvvm/services/provider_gateway.py:237 → `legacy.07afcb53677a` → 鉴权失败（{p1}）：请检查 API 密钥。
+- app/src/mvvm/services/provider_gateway.py:242 → `legacy.a77fca1d26e2` → rate_limit
+- app/src/mvvm/services/provider_gateway.py:243 → `legacy.0c524ed6f364` → 触发限流（429），请稍后重试{p1}
+- app/src/mvvm/services/provider_gateway.py:251 → `legacy.db8c5063fee6` → effort_unsupported
+- app/src/mvvm/services/provider_gateway.py:252 → `legacy.124ad8199b36` → 该模型不支持所选思考等级（{p1}）{p3}
+- app/src/mvvm/services/provider_gateway.py:258 → `legacy.a7db30d5e57f` → context_length
+- app/src/mvvm/services/provider_gateway.py:259 → `legacy.f482a35f434f` → 对话长度已超出该模型的上下文上限，无法继续。请新建对话，或换用上下文更大的模型后重试。
+- app/src/mvvm/services/provider_gateway.py:267 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/provider_gateway.py:268 → `legacy.bd9dd413b087` → 服务端错误（{p1}）{p3}
+- app/src/mvvm/services/provider_gateway.py:472 → `legacy.8bc8382346d3` → provider {p1} 尚未实现：{p3}
+- app/src/mvvm/services/plugin_identity.py:18 → `legacy.c5005f5e3dd5` → Identity path must not be a symlink
+- app/src/mvvm/services/plugin_identity.py:22 → `legacy.22b834dec0d3` → Identity path must be owned by current user and not group/world writable
+- app/src/mvvm/services/plugin_identity.py:56 → `legacy.6c25f767e352` → （可选：
+- app/src/mvvm/services/plugin_identity.py:56 → `legacy.6ca210224ee2` → 未知身份：
+- app/src/mvvm/services/transport.py:145 → `legacy.f2187b0114d3` → 请求已取消
+- app/src/mvvm/services/transport.py:157 → `legacy.f2187b0114d3` → 请求已取消
+- app/src/mvvm/services/fake_provider.py:56 → `legacy.66a36e77fd00` → auth
+- app/src/mvvm/services/compaction.py:646 → `legacy.e5da8854b1c8` → 模型没有返回摘要正文（可能只输出了思维链，或被内容策略拦截）
+- app/src/mvvm/services/compaction.py:654 → `legacy.dfa494073473` → {p0}（已重试 {p2} 次）
+- app/src/mvvm/services/responses_provider.py:165 → `legacy.cbe6c9b729bd` → invalid_request
+- app/src/mvvm/services/responses_provider.py:165 → `legacy.c9abf9e85d10` → ResponsesProvider 未配置传输层：请传入 transport
+- app/src/mvvm/services/responses_provider.py:179 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/responses_provider.py:309 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/responses_provider.py:313 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/responses_provider.py:290 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/responses_provider.py:301 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/settings_service.py:85 → `legacy.2512eb63b237` → config 补丁必须是对象
+- app/src/mvvm/services/settings_service.py:94 → `legacy.fc014981cacf` → Configuration changed externally; reload before saving
+- app/src/mvvm/services/chat_session_store.py:54 → `legacy.66b637d4b6c5` → 非法会话 id：{p1}
+- app/src/mvvm/services/chat_session_store.py:351 → `legacy.c74e5394b8d9` → 会话不在内存中，未加载过：{p1}
+- app/src/mvvm/services/openai_provider.py:202 → `legacy.cbe6c9b729bd` → invalid_request
+- app/src/mvvm/services/openai_provider.py:202 → `legacy.7ed0ee3ebcac` → OpenAIProvider 未配置传输层：请传入 transport
+- app/src/mvvm/services/openai_provider.py:216 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/openai_provider.py:342 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/openai_provider.py:346 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/openai_provider.py:268 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/openai_provider.py:330 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/openai_provider.py:330 → `legacy.642b4f69c121` → 服务端推理异常（finish_reason: network_error）
+- app/src/mvvm/services/provider_registry.py:183 → `legacy.e9e8b9094c5b` → 未知的 provider adapter：{p1}
+- app/src/mvvm/services/provider_registry.py:248 → `legacy.cbe6c9b729bd` → invalid_request
+- app/src/mvvm/services/provider_registry.py:248 → `legacy.f08c47e70238` → 尚未配置{p1}：请到设置页填写服务地址、模型与 API 密钥
+- app/src/mvvm/services/mcp_runtime.py:102 → `legacy.61b329a7034e` → MCP connection is closed
+- app/src/mvvm/services/mcp_runtime.py:158 → `legacy.53bf4abaee00` → Unsupported MCP protocol version
+- app/src/mvvm/services/mcp_runtime.py:120 → `legacy.82c3b1a4e695` → MCP notification failed
+- app/src/mvvm/services/mcp_runtime.py:134 → `legacy.be14f46f4f53` → MCP cancelled or timed out; execution outcome may be unknown
+- app/src/mvvm/services/mcp_runtime.py:140 → `legacy.8a3104d19976` → MCP transport failed
+- app/src/mvvm/services/mcp_runtime.py:55 → `legacy.c2f59ad62975` → stdio credential must be a JSON environment map
+- app/src/mvvm/services/mcp_runtime.py:119 → `legacy.4cf3b8682862` → MCP notification timed out
+- app/src/mvvm/services/mcp_runtime.py:151 → `legacy.8d2569bcebf5` → MCP request rejected: 
+- app/src/mvvm/services/mcp_runtime.py:44 → `legacy.ff8404a7dd4c` → HTTP credential must be a JSON header map or bearer token
+- app/src/mvvm/services/mcp_runtime.py:214 → `legacy.8e0969d8814e` → MCP pagination loop
+- app/src/mvvm/services/plugin_settings.py:77 → `legacy.323e8e83e31a` → Invalid server ID
+- app/src/mvvm/services/plugin_settings.py:79 → `legacy.4d6a21518529` → command must be a string
+- app/src/mvvm/services/plugin_settings.py:81 → `legacy.e7bb1ea0d448` → url must be a string
+- app/src/mvvm/services/plugin_settings.py:85 → `legacy.a5ee1c446f3b` → Only url, command, args, enabled are public fields
+- app/src/mvvm/services/plugin_settings.py:87 → `legacy.811be24fda82` → Server requires url or command
+- app/src/mvvm/services/plugin_settings.py:93 → `legacy.7d624bb12924` → args must be an array of strings
+- app/src/mvvm/services/plugin_settings.py:142 → `legacy.92b863511f20` → Invalid identity ID
+- app/src/mvvm/services/plugin_settings.py:46 → `legacy.6c5e0b628b08` → Base URL must be an HTTP(S) address without credentials, query or fragment
+- app/src/mvvm/services/plugin_settings.py:48 → `legacy.b24ab84171d4` → Model name is required
+- app/src/mvvm/services/plugin_settings.py:91 → `legacy.2d8ed86e82ea` → Invalid server URL
+- app/src/mvvm/services/plugin_settings.py:60 → `legacy.e8d364844a4f` → Credential store is unavailable
+- app/src/mvvm/services/plugin_settings.py:105 → `legacy.e8d364844a4f` → Credential store is unavailable
+- app/src/mvvm/services/attachments.py:118 → `legacy.c85587c0bd2b` → {p0}未接线：需要宿主注入系统对话框
+- app/src/mvvm/services/anthropic_provider.py:207 → `legacy.cbe6c9b729bd` → invalid_request
+- app/src/mvvm/services/anthropic_provider.py:207 → `legacy.f3be68b5b69e` → AnthropicProvider 未配置传输层：请传入 transport
+- app/src/mvvm/services/anthropic_provider.py:225 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/anthropic_provider.py:323 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/anthropic_provider.py:327 → `legacy.c112e88173d4` → network
+- app/src/mvvm/services/anthropic_provider.py:315 → `legacy.3de4f901fffb` → server
+- app/src/mvvm/services/secrets_crypto.py:18 → `legacy.e72e78003988` → 密钥加密需要 cryptography 包（pip install -r app/requirements.txt）：{p1}
+- app/src/mvvm/core/base_view_model.py:61 → `legacy.29a1c43bfb79` → Error in property changed listener: {p1}
+- app/src/mvvm/core/observable.py:60 → `legacy.29a1c43bfb79` → Error in property changed listener: {p1}
+- app/src/mvvm/core/factory.py:33 → `legacy.1f9a9cd036ba` → ViewModel '{p1}' is not registered
+- app/src/mvvm/core/command.py:35 → `legacy.01df9871a51a` → Error checking command execution: {p1}
+- app/src/mvvm/core/command.py:44 → `legacy.f1a2432836b9` → Error executing command: {p1}
+- app/src/mvvm/core/command.py:96 → `legacy.01df9871a51a` → Error checking command execution: {p1}
+- app/src/mvvm/core/command.py:109 → `legacy.a510aadb09e1` → Error executing async command: {p1}
+- app/src/mvvm/core/command.py:128 → `legacy.a510aadb09e1` → Error executing async command: {p1}
+- app/src/mvvm/core/command.py:60 → `legacy.1a5854cb0837` → Error in can_execute_changed listener: {p1}
+- app/src/mvvm/core/command.py:141 → `legacy.1a5854cb0837` → Error in can_execute_changed listener: {p1}
+- app/src/mvvm/webui/host.py:168 → `legacy.a728e87a8a99` → chat:send 需要一个对象
+- app/src/mvvm/webui/host.py:171 → `legacy.264bbac62499` → chat:send 缺少 sessionId
+- app/src/mvvm/webui/host.py:206 → `legacy.455eb564fc42` → chat:send 的 text 为空：没有可发送的内容
+- app/src/mvvm/webui/host.py:325 → `legacy.b2e079b9ad36` → chat:create-session 缺少 sessionId
+- app/src/mvvm/webui/host.py:454 → `legacy.105260295be9` → chat:compact 缺少 sessionId
+- app/src/mvvm/webui/host.py:456 → `legacy.c93accfa32ee` → 会话不存在：{p1}
+- app/src/mvvm/views/base_view.py:74 → `legacy.9258fd0eb3ac` → binding {p1} has no getter: pass getter_name to add_ui_element() for two-way binding
+- app/src/mvvm/views/base_view.py:129 → `legacy.2137be04a7dc` → ViewModel not set
+- app/src/mvvm/views/base_view.py:139 → `legacy.2137be04a7dc` → ViewModel not set
+- app/src/mvvm/views/base_view.py:104 → `legacy.59db7ca1fe5e` → Error binding command: {p1}
+- app/src/mvvm/views/demo_window.py:13 → `legacy.3d81345303ab` → 重置
+- app/src/mvvm/views/demo_window.py:30 → `legacy.d6c39c5ceb4c` → MVVM 双向绑定演示
+- app/src/mvvm/views/about_window.py:7 → `legacy.6c14bd7f6f9e` → 关闭
+- app/src/mvvm/views/transcript_render.py:27 → `legacy.51991a5d111a` → 成功
+- app/src/mvvm/views/transcript_render.py:28 → `legacy.3e3c8068bb0e` → 失败
+- app/src/mvvm/views/transcript_render.py:19 → `legacy.5630b886f9cd` → 你
+- app/src/mvvm/views/transcript_render.py:20 → `legacy.9b0519a157ee` → 助手
+- app/src/mvvm/views/transcript_render.py:21 → `legacy.a72ef18d9a0e` → 工具
+- app/src/mvvm/views/transcript_render.py:22 → `legacy.b859c7be7501` → 错误
+- app/src/mvvm/views/transcript_render.py:23 → `legacy.ed4240ed1fd4` → 压缩摘要
+- app/src/mvvm/views/transcript_render.py:24 → `legacy.ab3656a956f5` → 提示
+- app/src/mvvm/views/transcript_render.py:196 → `legacy.b496542da6af` → {p0}（已完成 {p2}/{p4}）
+- app/src/mvvm/views/transcript_render.py:121 → `legacy.1c9f086d2b88` → {p0}（失败）
+- app/src/mvvm/views/transcript_render.py:193 → `legacy.3be3bbe2d941` → 待办：{p1}
+- app/src/mvvm/views/transcript_render.py:193 → `legacy.f38aef0f951a` → 待办
+- app/src/mvvm/views/transcript_render.py:195 → `legacy.1d91e5140320` → {p0}｜{p2}（已完成 {p4}/{p6}）
+- app/src/mvvm/views/transcript_render.py:59 → `legacy.a72ef18d9a0e` → 工具
+- app/src/mvvm/views/transcript_render.py:159 → `legacy.1c9f086d2b88` → {p0}（失败）
+- app/src/mvvm/views/transcript_render.py:102 → `legacy.be8da62ea113` → 图片
+- app/src/mvvm/views/main_window.py:11 → `legacy.4f2c9a32be62` → 关于 MVVM 架构
+- app/src/mvvm/views/chat_pane.py:40 → `legacy.1214d633a448` → 发送
+- app/src/mvvm/views/chat_pane.py:41 → `legacy.a17f70a8d3d6` → 停止
+- app/src/mvvm/views/chat_pane.py:42 → `legacy.fc4f2f83ab0b` → 输入消息，回车发送
+- app/src/mvvm/views/chat_pane.py:45 → `legacy.2a9ab4d435e8` → 展开清单
+- app/src/mvvm/views/chat_pane.py:46 → `legacy.e453ed23f866` → 收起清单
+- app/src/mvvm/views/chat_pane.py:47 → `legacy.d37451998387` → 取消清单
+- app/src/mvvm/views/chat_pane.py:267 → `legacy.957dc00c1d47` → [助手·输出中] {p1}
+- app/src/mvvm/views/settings_pane.py:17 → `legacy.7debf9cb0372` → 设置
+- app/src/mvvm/views/settings_pane.py:18 → `legacy.11d024154013` → 返回
+- app/src/mvvm/views/settings_pane.py:19 → `legacy.1db8fdda7b26` → 新增服务商
+- app/src/mvvm/views/settings_pane.py:20 → `legacy.2f38a9068f4b` → 删除服务商
+- app/src/mvvm/views/settings_pane.py:21 → `legacy.fadf24dbc5a9` → 保存
+- app/src/mvvm/views/settings_pane.py:22 → `legacy.23ad2816f6cd` → 拉取模型清单
+- app/src/mvvm/views/settings_pane.py:23 → `legacy.532a64e19cd2` → 添加模型
+- app/src/mvvm/views/settings_pane.py:24 → `legacy.cf24da5745f2` → 删除模型
+- app/src/mvvm/views/settings_pane.py:25 → `legacy.29e31e4ff1c1` → 编辑模型
+- app/src/mvvm/views/settings_pane.py:26 → `legacy.536a009a9b59` → 设为默认
+- app/src/mvvm/views/settings_pane.py:27 → `legacy.d4e9ca3dd494` → 启用
+- app/src/mvvm/views/settings_pane.py:28 → `legacy.d989e55188c9` → 停用
+- app/src/mvvm/views/settings_pane.py:29 → `legacy.484821eb0713` → API 密钥（保存后不回显）
+- app/src/mvvm/views/settings_pane.py:30 → `legacy.cdfb82b464c9` → 保存密钥
+- app/src/mvvm/views/settings_pane.py:31 → `legacy.b96554478025` → 清除密钥
+- app/src/mvvm/views/settings_pane.py:32 → `legacy.a1fd4bfa5d44` → 已配置密钥
+- app/src/mvvm/views/settings_pane.py:33 → `legacy.a3e7368ec053` → 未配置密钥
+- app/src/mvvm/views/settings_pane.py:34 → `legacy.e9de2f963c09` → 拉取模型清单失败：
+- app/src/mvvm/views/settings_pane.py:35 → `legacy.8d4e1e385eb6` → 恢复自动
+- app/src/mvvm/views/settings_pane.py:37 → `legacy.c8d09cf955f5` → 默认
+- app/src/mvvm/views/settings_pane.py:38 → `legacy.b9ee259b7f6c` → 低
+- app/src/mvvm/views/settings_pane.py:39 → `legacy.0869071c92c0` → 中
+- app/src/mvvm/views/settings_pane.py:40 → `legacy.b096b3f5acd6` → 高
+- app/src/mvvm/views/settings_pane.py:41 → `legacy.1cb58b7bf00f` → 很高
+- app/src/mvvm/views/settings_pane.py:42 → `legacy.2cd489b0a572` → 最高
+- app/src/mvvm/views/settings_pane.py:133 → `legacy.d7d7ce790b9a` → 配置
+- app/src/mvvm/views/settings_pane.py:156 → `legacy.20fcc553227f` → 启用该服务商
+- app/src/mvvm/views/settings_pane.py:157 → `legacy.1be7ae4fc257` → 名称
+- app/src/mvvm/views/settings_pane.py:158 → `legacy.86e118291ed4` → 服务地址
+- app/src/mvvm/views/settings_pane.py:159 → `legacy.b0c431675bce` → 协议
+- app/src/mvvm/views/settings_pane.py:180 → `legacy.c41734a4cc66` → 模型 id
+- app/src/mvvm/views/settings_pane.py:224 → `legacy.4afad877551a` → 自动
+- app/src/mvvm/views/settings_pane.py:227 → `legacy.4afad877551a` → 自动
+- app/src/mvvm/views/settings_pane.py:228 → `legacy.c10bbf5ddd2d` → 显示名
+- app/src/mvvm/views/settings_pane.py:229 → `legacy.9a1fbe0bb901` → 上下文窗口
+- app/src/mvvm/views/settings_pane.py:230 → `legacy.880c22952280` → 最大输出
+- app/src/mvvm/views/settings_pane.py:310 → `legacy.a74a5f436597` → 默认模型：{p1}
+- app/src/mvvm/views/settings_pane.py:406 → `legacy.251ea23e6514` → 自定义服务商
+- app/src/mvvm/views/settings_pane.py:409 → `legacy.ac92decf7344` → 已新增服务商：填写地址、密钥与模型后即可使用
+- app/src/mvvm/views/settings_pane.py:423 → `legacy.769ee76de92e` → 服务商已保存
+- app/src/mvvm/views/settings_pane.py:448 → `legacy.8de8c7493bfb` → 密钥已清除
+- app/src/mvvm/views/settings_pane.py:464 → `legacy.f6f756c66755` → 正在拉取模型清单…
+- app/src/mvvm/views/settings_pane.py:515 → `legacy.5a6ca3d8cdb6` → 模型已保存
+- app/src/mvvm/views/settings_pane.py:100 → `legacy.4713153f38d2` → 思考等级
+- app/src/mvvm/views/settings_pane.py:307 → `legacy.6c14bd7f6f9e` → 关闭
+- app/src/mvvm/views/settings_pane.py:327 → `legacy.25d284315063` → 已启用
+- app/src/mvvm/views/settings_pane.py:327 → `legacy.8bb38ef00ccc` → 未启用
+- app/src/mvvm/views/settings_pane.py:330 → `legacy.e59e3786cb63` → {p0} · {p2} · {p4} · {p6} 个模型
+- app/src/mvvm/views/settings_pane.py:360 → `legacy.b98bde85a892` → （默认）
+- app/src/mvvm/views/settings_pane.py:432 → `legacy.51b989540f6c` → 服务商已删除
+- app/src/mvvm/views/settings_pane.py:432 → `legacy.6b15373cad3b` → 服务商删除失败
+- app/src/mvvm/views/settings_pane.py:441 → `legacy.8216e0e26e90` → 密钥已保存
+- app/src/mvvm/views/settings_pane.py:441 → `legacy.cc150360fc59` → 密钥保存失败
+- app/src/mvvm/views/settings_pane.py:457 → `legacy.db5ac3f8f154` → 模型已添加
+- app/src/mvvm/views/settings_pane.py:457 → `legacy.5f1ea7e18069` → 模型未添加（id 为空或已存在）
+- app/src/mvvm/views/settings_pane.py:486 → `legacy.e31be7e56e3f` → 已设为默认模型
+- app/src/mvvm/views/settings_pane.py:493 → `legacy.b16386c8a910` → 模型已删除
+- app/src/mvvm/views/settings_pane.py:521 → `legacy.cff333d4e3f9` → 思考等级已更新，下一轮对话生效
+- app/src/mvvm/views/settings_pane.py:384 → `legacy.64028da77b65` → 设置已更新，下一轮对话生效
+- app/src/mvvm/views/settings_pane.py:310 → `legacy.53e2db70167f` → 未选择
+- app/src/mvvm/views/deva_main_window.py:29 → `legacy.b796f2d4ca85` → 就绪
+- app/src/mvvm/views/deva_main_window.py:37 → `legacy.01dd57ee1fb5` → 错误：{p1}
+- app/src/mvvm/views/deva_main_window.py:148 → `legacy.7debf9cb0372` → 设置
+- app/src/mvvm/views/deva_main_window.py:174 → `legacy.1b7abf96f8bc` → 新对话
+- app/src/mvvm/views/deva_main_window.py:181 → `legacy.23543b7d1ae2` → 重命名对话
+- app/src/mvvm/views/deva_main_window.py:181 → `legacy.65234c1d4f77` → 新的标题
+- app/src/mvvm/views/deva_main_window.py:193 → `legacy.dc9fe43fb71e` → 已重命名
+- app/src/mvvm/views/deva_main_window.py:204 → `legacy.f5bc1155fbff` → 已归档（在列表外，可从数据文件恢复）
+- app/src/mvvm/views/deva_main_window.py:212 → `legacy.3559dc2da370` → 删除对话
+- app/src/mvvm/views/deva_main_window.py:212 → `legacy.6279db526363` → 删除后无法恢复，确定删除这条对话吗？
+- app/src/mvvm/views/deva_main_window.py:154 → `legacy.f6a9dcdaa966` → 当前对话还在回复，停止后才能切换
+- app/src/mvvm/views/deva_main_window.py:187 → `legacy.f2d8d992fe5c` → 标题不能为空
+- app/src/mvvm/views/deva_main_window.py:224 → `legacy.fb5fe1e266c6` → 已删除
+- app/src/mvvm/views/deva_main_window.py:224 → `legacy.a597340b1005` → 删除失败（对话不存在）
+- app/src/mvvm/views/deva_main_window.py:229 → `legacy.ca9f571a40a9` → 未装配模型网关，无法拉取模型清单
+- app/src/mvvm/views/deva_main_window.py:232 → `legacy.bb113e28a86b` → 上一次拉取还没结束
+- app/src/mvvm/views/deva_main_window.py:239 → `legacy.a19c2d6d29e3` → 拉取模型清单失败：未装配模型网关
+- app/src/mvvm/views/deva_main_window.py:245 → `legacy.4f27d4a2784d` → 拉取模型清单失败：{p1}
+- app/src/mvvm/views/deva_main_window.py:241 → `legacy.70c9d64d3c44` → 已拉取 {p1} 个模型
+- app/src/mvvm/views/deva_main_window.py:243 → `legacy.4f27d4a2784d` → 拉取模型清单失败：{p1}
+- app/src/mvvm/views/session_list.py:17 → `legacy.b3e55858d9d4` → 新建对话
+- app/src/mvvm/views/session_list.py:18 → `legacy.1cd80fd7a8b3` → 重命名
+- app/src/mvvm/views/session_list.py:19 → `legacy.ddfde75bec38` → 归档
+- app/src/mvvm/views/session_list.py:20 → `legacy.3755f56f2f83` → 删除
+- app/src/mvvm/views/session_list.py:21 → `legacy.7debf9cb0372` → 设置
+- app/src/mvvm/views/session_list.py:22 → `legacy.46b23a5ba88a` → 还没有对话
+- app/src/mvvm/view_models/chat_vm.py:403 → `legacy.aa91387b01cf` → 没有可用的 provider：既没有 turn_factory 也没有缺省适配器
+- app/src/mvvm/view_models/chat_vm.py:436 → `legacy.43738492f456` → 没有打开会话：先调用 open_session()
+- app/src/mvvm/view_models/chat_vm.py:536 → `legacy.969a2eb8d325` → 没有可用的 provider
+- tools/build.py:37 → `legacy.bfec4ce35310` → Application exit code:
+- tools/build.py:47 → `legacy.ab0d461476e3` → Cleaned build/ and dist/
+- tools/build.py:52 → `legacy.b5b379cb878c` → host:
+- tools/build.py:53 → `legacy.83e75b7fd519` → target:
+- tools/build.py:54 → `legacy.bca299ecf9c5` → target-python:
+- tools/build.py:55 → `legacy.35d5d317b79a` → runtime-provider:
+- tools/build.py:56 → `legacy.36ef05bdfea0` → PBS release:
+- tools/build.py:61 → `legacy.b206933d1c87` → SDK:
+- tools/build.py:62 → `legacy.8529e3e5bcef` → runtime:
+- tools/build.py:35 → `legacy.7d146fdd72cc` → Packaged executable missing: {p1}
+- tools/build.py:58 → `legacy.ea97c9af6812` → dev-python:
+- tools/build.py:70 → `legacy.635ce45cfa9c` → toolchain:
+- tools/build.py:77 → `legacy.fd0c36279915` → doctor: FAILED, missing:
+- tools/build.py:118 → `legacy.9e8a12d793eb` → ai_upper - standalone Python application builder
+- tools/build.py:134 → `legacy.99c42b87afe8` → remove paths from site-packages; repeatable (relative glob)
+- tools/build.py:136 → `legacy.821af90ca8fc` → never remove matching site-packages paths; repeatable
+- tools/build.py:138 → `legacy.8be52bec09f6` → remove paths from the bundled runtime; repeatable
+- tools/build.py:140 → `legacy.f29fab35580f` → never remove matching runtime paths; repeatable
+- tools/build.py:143 → `legacy.c6fd2cda2739` → pack application code into an encrypted bundle archive for this build
+- tools/build.py:145 → `legacy.5490f2c8bbcd` → ship loose application files even when the project enables the egg
+- tools/build.py:147 → `legacy.3b421fff22d3` → override [tool.ai_upper.egg].key_hex (at least 16 hex bytes)
+- tools/build.py:149 → `legacy.57e54def59d6` → egg extension loader: auto, memory or extract
+- tools/build.py:200 → `legacy.4213af8a9ae5` → [1/6] Runtime + SDK
+- tools/build.py:203 → `legacy.d297eedc8c9e` → [2/6] Third-party dependencies
+- tools/build.py:205 → `legacy.cdde33d8c30a` → [3/6] Target launcher
+- tools/build.py:207 → `legacy.8cf42e666d61` → [4/6] Package + native dependency closure
+- tools/build.py:209 → `legacy.b0a4b0aceabb` → [5/6] Static verification
+- tools/build.py:212 → `legacy.821bd0b25b7e` → [6/6] Target runtime smoke
+- tools/build.py:236 → `legacy.56dad428204b` → Linux release: use your distribution signing/package system.
+- tools/build.py:252 → `legacy.68114bd60220` → macOS release requires codesign/xcrun and --identity
+- tools/build.py:60 → `legacy.90d30a83f58c` → dev-python: UNAVAILABLE:
+- tools/build.py:72 → `legacy.7ba3bdcb4c48` → toolchain: UNAVAILABLE:
+- tools/build.py:180 → `legacy.e3ec3573f9b3` → Lock written:
+- tools/build.py:185 → `legacy.8fc0da44b55c` → --run requires host target; host={p1}, target={p3}
+- tools/build.py:220 → `legacy.7b9b2ee07a29` → Release manifest:
+- tools/build.py:222 → `legacy.2db9a748ad8a` → READY:
+- tools/build.py:225 → `legacy.d59a5b3f12e7` → ERROR: command failed with exit code {p1}: {p3}
+- tools/build.py:228 → `legacy.82862f1bf8bc` → ERROR: {p1}: {p3}
+- tools/build.py:242 → `legacy.bc120a8a2434` → Windows release requires signtool and AI_UPPER_SIGN_CERT
+- tools/ci_tail.py:173 → `legacy.39c18e099daf` → path to the log file
+- tools/ci_tail.py:174 → `legacy.1ade049df091` → annotation title
+- tools/ci_tail.py:177 → `legacy.4681048c9e29` → file holding the step's exit code; exit 0 downgrades to a notice
+- tools/ci_tail.py:182 → `legacy.b3928325349a` → what to call the log when it is missing (e.g. 'build.log')
+- tools/ci_tail.py:188 → `legacy.fa8e373674f7` → force the annotation level instead of deriving it from the exit code
+- tools/ai_upper/config.py:571 → `legacy.c1f82cf5b3c6` → No development Python found. Set AI_UPPER_PYTHON or install Python.
+- tools/ai_upper/config.py:619 → `legacy.cf175ca0ebbb` → Target Python executable not found under {p1}
+- tools/ai_upper/config.py:634 → `legacy.77cdbe3f52f8` → Target Python include directory not found under {p1}
+- tools/ai_upper/config.py:82 → `legacy.a3ba010a0f39` → Unsupported target: {p1}
+- tools/ai_upper/config.py:180 → `legacy.c3520b7c688c` → [tool.ai_upper.dependencies].manylinux must not be empty
+- tools/ai_upper/config.py:210 → `legacy.8f84890cf58c` → {p0} is missing. \n Create your local configuration from the tracked template: \n     cp {p2} {p4}
+- tools/ai_upper/config.py:244 → `legacy.410a72fda1c3` → [project].version is required
+- tools/ai_upper/config.py:256 → `legacy.6575fb740b4e` → [tool.ai_upper.app].name must be a single application name
+- tools/ai_upper/config.py:263 → `legacy.c504bd9f5b3b` → [tool.ai_upper.app].identifier must not be empty
+- tools/ai_upper/config.py:276 → `legacy.7019cc030ef5` → Application entry file does not exist: {p1}
+- tools/ai_upper/config.py:320 → `legacy.220b02653296` → Unsupported host: {p1} {p3}
+- tools/ai_upper/config.py:342 → `legacy.93d49673235a` → [tool.ai_upper.runtime].python must be an exact X.Y.Z Python version
+- tools/ai_upper/config.py:349 → `legacy.bea8934666f1` → Unsupported runtime provider: {p1}; use 'pbs' or 'local'
+- tools/ai_upper/config.py:368 → `legacy.f1d167fd5278` → [tool.ai_upper.runtime].runtime is required when provider = 'local'
+- tools/ai_upper/config.py:375 → `legacy.6e7cdb15e2f4` → [tool.ai_upper.runtime].sdk is required when provider = 'local'
+- tools/ai_upper/config.py:422 → `legacy.be1ae9054874` → [tool.ai_upper.cython].merge must be one of: 
+- tools/ai_upper/config.py:466 → `legacy.584f8fd421ae` → [tool.ai_upper.native].exclude must be an array of glob patterns
+- tools/ai_upper/config.py:487 → `legacy.375d1d68d230` → {p0} must not be negative
+- tools/ai_upper/config.py:552 → `legacy.d8ae625700b7` → ai_upper build tool requires Python {p1}.{p3}+; current interpreter is {p5}.{p7}
+- tools/ai_upper/config.py:577 → `legacy.f1864334de3e` → Development Python not found: {p1}
+- tools/ai_upper/config.py:583 → `legacy.2f6c22c0f6ec` → Could not determine development Python version: {p1}
+- tools/ai_upper/config.py:586 → `legacy.9677611c241a` → Development Python {p1}.{p3} is too old; Python 3.8+ is required: {p5}
+- tools/ai_upper/config.py:654 → `legacy.a991916500fc` → Target Python {p1} does not match configured runtime Python {p3}
+- tools/ai_upper/config.py:683 → `legacy.c177f3598735` → [tool.ai_upper.build].jobs must not be negative
+- tools/ai_upper/config.py:691 → `legacy.15e5a91d4672` → [tool.ai_upper.build].incremental must be a boolean
+- tools/ai_upper/config.py:176 → `legacy.1e57affe7d3b` → [tool.ai_upper.dependencies].manylinux must be a manylinux_X_Y string or an array of them
+- tools/ai_upper/config.py:183 → `legacy.5909d01df413` → [tool.ai_upper.dependencies].manylinux must be manylinux_X_Y or manylinux2014
+- tools/ai_upper/config.py:274 → `legacy.5a24a4ab1787` → [tool.ai_upper].entry must stay under app/src
+- tools/ai_upper/config.py:485 → `legacy.07caf65db32a` → {p0} must be an integer
+- tools/ai_upper/config.py:596 → `legacy.3d6b8cbf7c40` → Windows embeddable interpreter missing: {p1}
+- tools/ai_upper/config.py:679 → `legacy.bf88c3b7a31c` → [tool.ai_upper.build].jobs must be an integer
+- tools/ai_upper/verify.py:549 → `legacy.03923e5ebf5b` → [launcher smoke]
+- tools/ai_upper/verify.py:480 → `legacy.6a69710b0c43` → SKIP target runtime smoke: cross target
+- tools/ai_upper/verify.py:540 → `legacy.b9a558abb667` → SKIP launcher smoke: cross target
+- tools/ai_upper/net.py:57 → `legacy.fed1ac0d22f9` → Network request failed (HTTP {p1}) for {p3}; retrying in {p5}s ({p7}/{p9})
+- tools/ai_upper/net.py:67 → `legacy.2de0313fff42` → Network request failed for {p1}: {p3}; retrying in {p5}s ({p7}/{p9})
+- tools/ai_upper/trim.py:147 → `legacy.987f64d06d3e` → {p0} contains an empty glob pattern
+- tools/ai_upper/trim.py:149 → `legacy.6a968a5bd748` → {p0} glob must be relative to the trim root: {p2}
+- tools/ai_upper/trim.py:152 → `legacy.d207338c2cfb` → {p0} glob must not contain empty, '.' or '..' segments: {p2}
+- tools/ai_upper/trim.py:212 → `legacy.03e7db5f4363` → [tool.ai_upper.trim].preset must be one of: {p1}
+- tools/ai_upper/trim.py:385 → `legacy.6a847c542ec6` → Trim root is not a directory: {p1}
+- tools/ai_upper/trim.py:129 → `legacy.4d5a927039ed` → {p0} must be a glob string or an array of glob strings
+- tools/ai_upper/trim.py:133 → `legacy.32b457b4bc7a` → {p0} must contain only glob strings
+- tools/ai_upper/third_party.py:277 → `legacy.289586e82c85` → Unsupported wheel data bucket {p1} in {p3}
+- tools/ai_upper/third_party.py:22 → `legacy.1a8690616c5d` → [project].dependencies must be an array of requirement strings
+- tools/ai_upper/third_party.py:31 → `legacy.b934d5e06a48` → [tool.ai_upper.dependencies].find_links must be an array
+- tools/ai_upper/third_party.py:156 → `legacy.60ec31793db3` → Could not parse dependency name: {p1}
+- tools/ai_upper/third_party.py:244 → `legacy.4446d2641a99` → Unsafe wheel member path: {p1}
+- tools/ai_upper/third_party.py:266 → `legacy.f6c295981d4f` → Invalid wheel .data member: {p1}
+- tools/ai_upper/third_party.py:407 → `legacy.e71a487890f2` → No compatible binary wheel resolved for {p1} / Python {p3}
+- tools/ai_upper/third_party.py:419 → `legacy.966a7239c972` → [tool.ai_upper.optimize].profile must be 'safe' or 'aggressive'
+- tools/ai_upper/third_party.py:484 → `legacy.444fb7db34a5` → Third-party optimization: removed {p1} files and {p3} directories
+- tools/ai_upper/third_party.py:134 → `legacy.f3aac04142e4` → Third-party resolver failed ({p1}): {p3}
+- tools/ai_upper/third_party.py:253 → `legacy.63a35d43bd39` → Wheel must contain exactly one .dist-info/METADATA: {p1}
+- tools/ai_upper/third_party.py:263 → `legacy.f6c295981d4f` → Invalid wheel .data member: {p1}
+- tools/ai_upper/third_party.py:377 → `legacy.0388a8a6a156` → Locked build has no recorded wheels for {p1}: {p3}
+- tools/ai_upper/third_party.py:380 → `legacy.1a73f42b3189` → Locked wheel set mismatch: expected {p1}, found {p3}
+- tools/ai_upper/third_party.py:454 → `legacy.b8531fb62cf4` → Qt pruning: removed {p1} file(s) and {p3} director(ies), freed {p5} MB
+- tools/ai_upper/third_party.py:118 → `legacy.bf86d52e07d1` → Target SDK Python has no pip: {p1}
+- tools/ai_upper/third_party.py:365 → `legacy.ff03cbc3fdb9` → Locked wheel manifest does not match configured target
+- tools/ai_upper/third_party.py:367 → `legacy.0b49e185468b` → Locked wheel requirements do not match app/pyproject.toml
+- tools/ai_upper/third_party.py:384 → `legacy.ed895988e213` → Wheel checksum mismatch: {p1}
+- tools/ai_upper/third_party.py:299 → `legacy.e96ebc94319e` → Wheel file collision with different content: {p1}
+- tools/ai_upper/third_party.py:374 → `legacy.0b49e185468b` → Locked wheel requirements do not match app/pyproject.toml
+- tools/ai_upper/manifest.py:32 → `legacy.413b64ddff8a` → Runtime manifest not found: {p1}
+- tools/ai_upper/manifest.py:35 → `legacy.394fadce7e01` → Invalid runtime manifest root: {p1}
+- tools/ai_upper/manifest.py:96 → `legacy.2a64f7584057` → Runtime/SDK missing for {p1}: runtime={p3} sdk={p5}
+- tools/ai_upper/manifest.py:45 → `legacy.516e7adbf6d4` → Path {p1} must not escape {p3}
+- tools/ai_upper/manifest.py:50 → `legacy.f2710f322222` → Path {p1} must be inside {p3} for a portable manifest
+- tools/ai_upper/manifest.py:94 → `legacy.05d57bbbb8a7` → Runtime manifest {p1} {p3} != {p5}
+- tools/ai_upper/manifest.py:100 → `legacy.f82705683352` → Runtime manifest {p1} must be a relative SDK path without '..'
+- tools/ai_upper/manifest.py:102 → `legacy.d12f56ca114a` → Runtime manifest {p1} does not exist: {p3}
+- tools/ai_upper/runtime.py:80 → `legacy.6e3c433b1a5c` → PBS runtime SHA256 mismatch: expected {p1}, got {p3}
+- tools/ai_upper/runtime.py:87 → `legacy.b4edb331ca3d` → Unexpected PBS runtime archive layout: {p1}
+- tools/ai_upper/runtime.py:106 → `legacy.439dcd8da297` → No Windows embeddable runtime for {p1}
+- tools/ai_upper/runtime.py:166 → `legacy.99d695cd4d94` → Local runtime/SDK missing: runtime={p1} sdk={p3}
+- tools/ai_upper/runtime.py:65 → `legacy.676eb9d79c00` → PBS full-build SDK has no install runtime tree: {p1}
+- tools/ai_upper/runtime.py:141 → `legacy.44915258dc64` → Duplicate member in Python embeddable ZIP: {p1}
+- tools/ai_upper/runtime.py:149 → `legacy.32bf51040eea` → Incomplete Python embeddable ZIP {p1}: missing {p3}
+- tools/ai_upper/runtime.py:32 → `legacy.e1a96e9e350b` → Unsafe archive path: {p1}
+- tools/ai_upper/runtime.py:129 → `legacy.489e6a4e14ce` → Python {p1} has no official embeddable ZIP for {p3} ({p5}); pin a version python.org publishes an embeddable ZIP for
+- tools/ai_upper/runtime.py:147 → `legacy.a659e1639515` → Unsafe embed archive path: {p1}
+- tools/ai_upper/pbs.py:110 → `legacy.e58f13a64356` → Unknown PBS asset kind: {p1}
+- tools/ai_upper/pbs.py:241 → `legacy.b56d9089d8c7` → No PBS {p1} asset for Python {p3} / {p5} in release {p7}. \n Requested Python: {p9} \n PBS release: {p11} \n Target: {p13} \n Available runtime Python versions: {p15} \n Available SDK Python versions: {p17} \n Set [tool.ai_upper.pbs].release to a release containing the requested exact Python version; ai_upper will not silently substitute another version.
+- tools/ai_upper/pbs.py:65 → `legacy.439dcd8da297` → No Windows embeddable runtime for {p1}
+- tools/ai_upper/pbs.py:91 → `legacy.90ccff1e8e67` → Empty PBS SHA256SUMS for release {p1}
+- tools/ai_upper/pbs.py:157 → `legacy.6569969659e6` →  \n uv moves this file between releases; update PBS_RUNTIME_METADATA_URLS in tools/ai_upper/pbs.py.
+- tools/ai_upper/pbs.py:296 → `legacy.4930db3b40d6` → No PBS runtime metadata for exact Python {p1} / {p3}
+- tools/ai_upper/pbs.py:301 → `legacy.dc7832017530` → PBS runtime metadata has no release build tag: {p1}
+- tools/ai_upper/pbs.py:357 → `legacy.2b8d631eafff` → Extracting PBS SDK requires tar on PATH
+- tools/ai_upper/pbs.py:363 → `legacy.d722543719b0` → Unable to extract {p1}: tar could not read zstd archive and zstd is not installed
+- tools/ai_upper/pbs.py:376 → `legacy.aa9ec5e138ef` → PBS full SDK has no PYTHON.json: {p1}
+- tools/ai_upper/pbs.py:403 → `legacy.3e237050c5ea` → PBS full SDK contains no Python.h: {p1}
+- tools/ai_upper/pbs.py:445 → `legacy.20e7e19f4bbe` → PBS full SDK has no python/install directory: {p1}
+- tools/ai_upper/pbs.py:478 → `legacy.8cfb269f86ec` → PBS SDK SHA256 mismatch: expected {p1}, got {p3}
+- tools/ai_upper/pbs.py:506 → `legacy.129e557d8985` → PBS SDK marker missing under {p1}
+- tools/ai_upper/pbs.py:85 → `legacy.f46539ab8683` → Invalid PBS SHA256SUMS for release {p1} at line {p3}
+- tools/ai_upper/pbs.py:88 → `legacy.77e3f31bd766` → Duplicate PBS SHA256SUMS entry for release {p1}: {p3}
+- tools/ai_upper/pbs.py:155 → `legacy.c6e636ea6cdc` → Could not fetch the uv python-build-standalone metadata index. \n 
+- tools/ai_upper/pbs.py:228 → `legacy.42da2e780bcb` → No PBS SDK asset shares the {p1} flavour of runtime {p3}. \n SDK assets offered for this release: {p5}
+- tools/ai_upper/pbs.py:287 → `legacy.8486ae0f78fe` → No PBS runtime metadata for exact Python {p1} / {p3}. \n Requested Python: {p5} \n Target: {p7} \n Available Python versions from PBS metadata for this target: {p9} \n ai_upper will not silently substitute another Python version.
+- tools/ai_upper/pbs.py:406 → `legacy.53c6f4889476` → PBS full SDK holds several Python.h and its PYTHON.json records none: 
+- tools/ai_upper/pbs.py:436 → `legacy.64d2f058b2c6` →  in 
+- tools/ai_upper/pbs.py:269 → `legacy.0acc26c43917` → PBS release {p1} publishes no SHA256SUMS. Releases before 20210724 predate that inventory; leave [tool.ai_upper.pbs].release empty so the uv metadata index can select the exact full build.
+- tools/ai_upper/pbs.py:313 → `legacy.51226f70634a` → PBS release {p1} publishes no SHA256SUMS and its metadata asset is not a full build: {p3} \n ai_upper cannot resolve a matching SDK for this release.
+- tools/ai_upper/pbs.py:434 → `legacy.a35163b0cc16` → Target Python executable not found in PBS SDK: {p1} \n PYTHON.json python_exe: {p3} \n Looked for 
+- tools/ai_upper/toolchain.py:402 → `legacy.a3ba010a0f39` → Unsupported target: {p1}
+- tools/ai_upper/toolchain.py:88 → `legacy.0cb21e440411` → vswhere failed (exit {p1}): \n {p3}
+- tools/ai_upper/toolchain.py:146 → `legacy.a3edb902baa3` → vcvarsall.bat did not initialize the MSVC environment ({p1} {p3}, exit {p5}): \n {p7}
+- tools/ai_upper/toolchain.py:170 → `legacy.cbd683727246` → No executable Zig release for host {p1}/{p3}
+- tools/ai_upper/toolchain.py:178 → `legacy.da02ea9274be` → Zig download index entry is missing a tarball or shasum
+- tools/ai_upper/toolchain.py:189 → `legacy.fe22e896ddda` → Zig {p1} is not published in {p3}; update ZIG_VERSION in tools/ai_upper/toolchain.py
+- tools/ai_upper/toolchain.py:241 → `legacy.edfba1584a23` → {p0} not found after unpacking the Zig archive under {p2}
+- tools/ai_upper/toolchain.py:291 → `legacy.ecfe905f1d9e` → Windows targets with Zig require a Windows/macOS/Linux build host, not {p1}
+- tools/ai_upper/toolchain.py:186 → `legacy.9d666e56e9b1` → Unable to resolve Zig {p1} from {p3}: {p5}
+- tools/ai_upper/toolchain.py:302 → `legacy.463c30c045cd` → Zig SHA256 mismatch for {p1}: expected {p3}, got {p5}
+- tools/ai_upper/toolchain.py:357 → `legacy.68aa690cb751` → Windows targets require a Windows/MSVC build host; set AI_UPPER_WINDOWS_TOOLCHAIN=zig to opt into executable Zig
+- tools/ai_upper/toolchain.py:363 → `legacy.bc37f85a104f` → vcvarsall.bat not found: {p1}
+- tools/ai_upper/toolchain.py:366 → `legacy.956824395f3d` → Unsupported MSVC host/target pair: {p1} -> {p3}
+- tools/ai_upper/toolchain.py:372 → `legacy.bd5994d44ec4` → macOS targets require a macOS build host
+- tools/ai_upper/toolchain.py:376 → `legacy.84b3b06a90ac` → Xcode Command Line Tools with clang/clang++ are required
+- tools/ai_upper/toolchain.py:386 → `legacy.6bf0ef199ff7` → Linux targets require a Linux build host
+- tools/ai_upper/toolchain.py:398 → `legacy.fe0d2496594b` → Linux {p1} compiler is unavailable for host {p3}
+- tools/ai_upper/toolchain.py:206 → `legacy.8ac281a2da14` → Duplicate member in Zig archive: {p1}
+- tools/ai_upper/toolchain.py:224 → `legacy.8ac281a2da14` → Duplicate member in Zig archive: {p1}
+- tools/ai_upper/toolchain.py:230 → `legacy.3869c017edd9` → Unsafe Zig archive path: {p1}
+- tools/ai_upper/toolchain.py:214 → `legacy.3869c017edd9` → Unsafe Zig archive path: {p1}
+- tools/ai_upper/qt_prune.py:700 → `legacy.decc0a5f7f83` → [tool.ai_upper.optimize].{p1} must be 'all' or an array of strings
+- tools/ai_upper/qt_prune.py:709 → `legacy.5f69d8458995` → [tool.ai_upper.optimize].{p1} must be true or false
+- tools/ai_upper/qt_prune.py:897 → `legacy.c9f5c2499d84` → Qt pruning: {p1} cannot import {p3}: \n {p5}
+- tools/ai_upper/qt_prune.py:958 → `legacy.471e2108ced0` → Qt pruning: cannot run the {p1} runtime on this host, keeping the full Qt payload
+- tools/ai_upper/qt_prune.py:97 → `legacy.a7875ab1e9ac` → Qt pruning: cannot parse {p1}: {p3}
+- tools/ai_upper/qt_prune.py:691 → `legacy.ee8528dfbfe1` → [tool.ai_upper.optimize].{p1} must not be empty
+- tools/ai_upper/qt_prune.py:696 → `legacy.aee1968a3569` → [tool.ai_upper.optimize].{p1} must be a non-empty array of strings
+- tools/ai_upper/qt_prune.py:903 → `legacy.e1544ee4193a` → Qt pruning: {p1} printed no {p3} module list for {p5}
+- tools/ai_upper/qt_prune.py:908 → `legacy.0c9f0048b2f5` → Qt pruning: %s has no %s; the application imports %s behind ImportError and starts without
+- tools/ai_upper/qt_prune.py:938 → `legacy.a296306fb20e` → [tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names
+- tools/ai_upper/qt_prune.py:941 → `legacy.9316d9bf336f` → Qt pruning: app/src does not reference a Qt binding, keeping the full Qt payload
+- tools/ai_upper/qt_prune.py:951 → `legacy.a296306fb20e` → [tool.ai_upper.optimize].qt must be 'all', 'imports', or an array of Qt module names
+- tools/ai_upper/qt_prune.py:949 → `legacy.785b2b29a882` → [tool.ai_upper.optimize].qt must not be an empty array
+- tools/ai_upper/fs.py:63 → `legacy.c0c95248a392` → File collision: {p1}
+- tools/ai_upper/fs.py:78 → `legacy.08300c05c265` → Copy source directory does not exist: {p1}
+- tools/ai_upper/fs.py:130 → `legacy.3090d43f0646` → Not a directory tree: {p1}
+- tools/ai_upper/fs.py:51 → `legacy.1de5811077bb` → {p0}: Windows still reports this tree in use after {p2} attempts (WinError {p4}). Another process holds it: close the packaged application if it is still running from an earlier build, and check for an editor, indexer, or antivirus scan that is reading or executing the tree, then run the build again.
+- tools/ai_upper/fs.py:86 → `legacy.c0c95248a392` → File collision: {p1}
+- tools/ai_upper/fs.py:95 → `legacy.c0c95248a392` → File collision: {p1}
+- tools/ai_upper/package.py:129 → `legacy.4350f4feba9e` → Launcher build did not produce {p1}
+- tools/ai_upper/package.py:153 → `legacy.61f34b311f82` → {p0} contains the C++ raw string delimiter ){p2}"
+- tools/ai_upper/package.py:155 → `legacy.e4438317757c` → {p0} contains a triple quote and cannot be embedded in the bootstrap
+- tools/ai_upper/package.py:265 → `legacy.8e3b52759c27` → Native exclusions: removed {p1} file(s) matched by [tool.ai_upper.native].exclude
+- tools/ai_upper/package.py:317 → `legacy.59e5ad53205a` → Python stage missing: {p1}
+- tools/ai_upper/package.py:319 → `legacy.78a3fe1d6db1` → Runtime missing: {p1}
+- tools/ai_upper/package.py:372 → `legacy.6074bda83d51` → Release output does not exist: {p1}
+- tools/ai_upper/egg.py:102 → `legacy.2d899cdb2de9` → [tool.ai_upper.egg] must be a table
+- tools/ai_upper/egg.py:292 → `legacy.4a50531fe7c0` → egg_loader.py contains a triple quote and cannot be embedded
+- tools/ai_upper/egg.py:294 → `legacy.69fe978c3b34` → egg_loader.py contains the C++ raw string delimiter )aiupper"
+- tools/ai_upper/egg.py:332 → `legacy.8890cde6248b` → _memimporter is only available for Windows targets
+- tools/ai_upper/egg.py:340 → `legacy.8e9148b1af70` → _memimporter must be compiled with the Zig toolchain; MSVC is not wired up. Use backend = 'extract' or install Zig.
+- tools/ai_upper/egg.py:74 → `legacy.a12b8b11db79` → [tool.ai_upper.egg].key_hex must be a hexadecimal string
+- tools/ai_upper/egg.py:76 → `legacy.274b02be0ae8` → [tool.ai_upper.egg].key_hex must contain at least 16 bytes
+- tools/ai_upper/egg.py:258 → `legacy.b34db3c46ea0` → egg input missing from site-packages: 
+- tools/ai_upper/egg.py:350 → `legacy.861585b33c07` → vendored _memimporter sources are missing: 
+- tools/ai_upper/egg.py:375 → `legacy.88286986a0af` → Zig completed but produced no _memimporter.pyd
+- tools/ai_upper/egg.py:79 → `legacy.e5ed12c721d9` → [tool.ai_upper.egg].backend must be one of: 
+- tools/ai_upper/egg.py:82 → `legacy.7128dc053518` → [tool.ai_upper.egg].compression must be one of: 
+- tools/ai_upper/egg.py:290 → `legacy.6a1df78be92a` → egg_loader.py must be pure ASCII: 
+- tools/ai_upper/egg.py:311 → `legacy.42ed6dbd054e` →  not found under the SDK tree 
+- tools/ai_upper/egg.py:315 → `legacy.38b5c2cb691b` → .lib not found in 
+- tools/ai_upper/egg.py:195 → `legacy.66baac4d0116` → egg input is missing: 
+- tools/ai_upper/egg.py:310 → `legacy.0e70298886b9` → Import library of target Python 
+- tools/ai_upper/lock.py:92 → `legacy.7fa7f36a712d` → Lock file not found: {p1}; run python tools/build.py --lock
+- tools/ai_upper/lock.py:95 → `legacy.73915115af15` → Unsupported lock format: {p1}
+- tools/ai_upper/lock.py:97 → `legacy.b505dee94c09` → Lock Python/runtime provider does not match app configuration
+- tools/ai_upper/lock.py:100 → `legacy.2adbbe8ac2c6` → Target {p1} is not present in {p3}
+- tools/ai_upper/lock.py:102 → `legacy.15f4dcb61026` → Lock dependency requirements do not match app/pyproject.toml
+- tools/ai_upper/lock.py:108 → `legacy.8d965fcc31e7` → Runtime manifest checksum mismatch for {p1}
+- tools/ai_upper/lock.py:129 → `legacy.1a73f42b3189` → Locked wheel set mismatch: expected {p1}, found {p3}
+- tools/ai_upper/lock.py:114 → `legacy.06c62855273f` → Locked Windows PBS build requires an official python.org embeddable runtime; recreate lock
+- tools/ai_upper/lock.py:132 → `legacy.685561550505` → Locked wheel checksum mismatch: {p1}
+- tools/ai_upper/lock.py:121 → `legacy.b31d726c4c2d` → Locked build requires cached PBS {p1}: {p3}
+- tools/ai_upper/lock.py:124 → `legacy.af704404e11e` → Locked PBS {p1} mismatch for {p3}: {p5}
+- tools/ai_upper/python_build.py:345 → `legacy.45324af0c4af` → Cython: {p1} of {p3} module(s) changed
+- tools/ai_upper/python_build.py:514 → `legacy.fb1934e28e20` → compile_merged_unix_extensions only supports Unix targets
+- tools/ai_upper/python_build.py:553 → `legacy.2930059b0b61` → Compile: {p1} of {p3} merged bundle(s) changed
+- tools/ai_upper/python_build.py:641 → `legacy.2930059b0b61` → Compile: {p1} of {p3} merged bundle(s) changed
+- tools/ai_upper/python_build.py:689 → `legacy.2930059b0b61` → Compile: {p1} of {p3} merged bundle(s) changed
+- tools/ai_upper/python_build.py:878 → `legacy.209e67204934` → Compile: {p1} of {p3} extension(s) changed
+- tools/ai_upper/python_build.py:933 → `legacy.209e67204934` → Compile: {p1} of {p3} extension(s) changed
+- tools/ai_upper/python_build.py:1060 → `legacy.c606b03e13f7` → Python stage ready: {p1}
+- tools/ai_upper/python_build.py:1084 → `legacy.73fac91ed892` → compile_unix_extensions only supports Unix targets
+- tools/ai_upper/python_build.py:1117 → `legacy.209e67204934` → Compile: {p1} of {p3} extension(s) changed
+- tools/ai_upper/python_build.py:342 → `legacy.ca21df0af7c6` → Cython: {p1} module(s) up to date
+- tools/ai_upper/python_build.py:445 → `legacy.55dbaf79a553` → Cython generated no PyInit entry point in the translation unit for {p1}
+- tools/ai_upper/python_build.py:449 → `legacy.fed55d51d64d` → Cython generated more than one module entry point for {p1}: {p3}
+- tools/ai_upper/python_build.py:551 → `legacy.e0fbcbcaf6f2` → Compile: {p1} merged bundle(s) up to date
+- tools/ai_upper/python_build.py:639 → `legacy.e0fbcbcaf6f2` → Compile: {p1} merged bundle(s) up to date
+- tools/ai_upper/python_build.py:686 → `legacy.e0fbcbcaf6f2` → Compile: {p1} merged bundle(s) up to date
+- tools/ai_upper/python_build.py:811 → `legacy.5696297ed39c` → Import library of target Python {p1} not found under the SDK tree {p3}; it is a compiler input and is never taken from the runtime
+- tools/ai_upper/python_build.py:816 → `legacy.cf3b9d84fe6b` → {p0}.lib not found in {p2}
+- tools/ai_upper/python_build.py:875 → `legacy.641eff7b3855` → Compile: {p1} extension(s) up to date
+- tools/ai_upper/python_build.py:930 → `legacy.641eff7b3855` → Compile: {p1} extension(s) up to date
+- tools/ai_upper/python_build.py:1059 → `legacy.ee5b699ae493` → Encrypted egg: {p1} application file(s), backend={p3}
+- tools/ai_upper/python_build.py:1114 → `legacy.641eff7b3855` → Compile: {p1} extension(s) up to date
+- tools/ai_upper/python_build.py:44 → `legacy.50671cb4e6e2` → Command failed ({p1}): {p3}
+- tools/ai_upper/python_build.py:189 → `legacy.bb3cb1499963` → Unable to bootstrap {p1} for {p3}; cache={p5}
+- tools/ai_upper/python_build.py:353 → `legacy.61103cf571d0` → Cython completed but did not generate {p1}
+- tools/ai_upper/python_build.py:475 → `legacy.c370a4ed66c5` → Cython output missing for {p1}
+- tools/ai_upper/python_build.py:524 → `legacy.50671cb4e6e2` → Command failed ({p1}): {p3}
+- tools/ai_upper/python_build.py:557 → `legacy.d81c65d46f03` → Compiler completed but did not produce {p1}
+- tools/ai_upper/python_build.py:645 → `legacy.d979166c33c3` → Zig completed but produced no {p1}
+- tools/ai_upper/python_build.py:706 → `legacy.cfd1ef35515b` → Merged target extension missing: {p1}
+- tools/ai_upper/python_build.py:883 → `legacy.4c0297829765` → Zig compiler completed but did not produce {p1}
+- tools/ai_upper/python_build.py:951 → `legacy.9cab9f10ed0c` → Target extension missing: {p1}
+- tools/ai_upper/python_build.py:1058 → `legacy.2d0c3ae81446` → warning: _memimporter unavailable ({p1}); egg falls back to extract
+- tools/ai_upper/native/deps.py:158 → `legacy.95f2a6b1f342` → Collecting Linux host libraries requires ldconfig
+- tools/ai_upper/native/deps.py:137 → `legacy.76ad0c335006` → ELF dependency inspection requires readelf or objdump (binutils)
+- tools/ai_upper/native/bundle.py:82 → `legacy.62d533f30c44` → thinning {p1} to {p3} requires lipo
+- tools/ai_upper/native/bundle.py:128 → `legacy.3ef36a1dba43` → strip failed for {p1}: {p3}
+- tools/ai_upper/native/bundle.py:138 → `legacy.04b645207320` → Bundling external Linux libraries requires patchelf
+- tools/ai_upper/native/bundle.py:68 → `legacy.853feb29e080` → codesign failed for {p1}: {p3}
+- tools/ai_upper/native/bundle.py:119 → `legacy.49ba3263160b` → strip_native=true requires llvm-strip or strip on PATH for Windows targets
+- tools/ai_upper/native/bundle.py:124 → `legacy.fb475f06cbad` → strip_native=true requires strip on PATH
+- tools/ai_upper/native/bundle.py:250 → `legacy.197c601e8c93` →  \n Optional native payloads can be dropped with [tool.ai_upper.native].exclude in app/pyproject.toml.
+- tools/ai_upper/native/bundle.py:249 → `legacy.774e102d6548` → Unresolved native dependencies: \n   
+- tools/ai_upper/native/bundle.py:222 → `legacy.dec2bd3c00b5` → Native dependency: bundled {p1} as {p3}
+- tools/ai_upper/native/bundle.py:218 → `legacy.cfb2cee62d29` → Native dependency basename collision: {p1} != {p3}
+- tools/ai_upper/native/inspect.py:196 → `legacy.f78cb8f15d64` → Unsupported or invalid native binary: {p1}
+- tools/ai_upper/native/inspect.py:98 → `legacy.5952334a238d` → Truncated Mach-O header
+- tools/ai_upper/native/inspect.py:108 → `legacy.6c1b360b6c21` → Truncated Mach-O universal header
+- tools/ai_upper/native/inspect.py:113 → `legacy.855aa6fe0dee` → Truncated Mach-O universal header: {p1} bytes
+- tools/ai_upper/native/inspect.py:207 → `legacy.c3e2d9bde7f6` → Unsupported target OS: {p1}
+- tools/ai_upper/native/inspect.py:267 → `legacy.57ccc8dc3c32` → Architecture mismatch: {p1}: {p3}, expected {p5}.
+- tools/ai_upper/native/inspect.py:134 → `legacy.59239d67e656` → Invalid Mach-O slice bounds: {p1}
+- tools/ai_upper/native/inspect.py:186 → `legacy.c630b0165f2b` → Invalid ELF byte order: {p1}
+- tools/ai_upper/native/inspect.py:261 → `legacy.625a84f22f1f` → Architecture mismatch: {p1}: universal ({p3}), expected {p5}.
+- app/src/mvvm/views/settings_pane.py:311 → `legacy.53e2db70167f` → 未选择
+- app/src/mvvm/view_models/demo_vm.py:12 → `legacy.6e197a7dbb31` → （请输入名字）
+- app/src/mvvm/view_models/demo_vm.py:50 → `legacy.20b2427a0aa7` → 你好，{p1}！
+- app/src/mvvm/view_models/chat_vm.py:172 → `legacy.b796f2d4ca85` → 就绪
+- app/src/mvvm/view_models/chat_vm.py:288 → `legacy.b796f2d4ca85` → 就绪
+- app/src/mvvm/view_models/chat_vm.py:239 → `legacy.03e273ff3b25` → 当前没有打开的会话，无法记录待办清单。
+- app/src/mvvm/view_models/chat_vm.py:239 → `legacy.946734eab024` → 无会话
+- app/src/mvvm/view_models/chat_vm.py:381 → `legacy.a6dd18c3f246` → 正在停止…
+- app/src/mvvm/view_models/chat_vm.py:452 → `legacy.a1e0818aab10` → 继续上次中断的回合。
+- app/src/mvvm/view_models/chat_vm.py:735 → `legacy.eb50f4416300` → 未配置压缩所需的模型服务
+- app/src/mvvm/view_models/chat_vm.py:777 → `legacy.3e3c8068bb0e` → 失败
+- app/src/mvvm/view_models/chat_vm.py:442 → `legacy.29653ff32b4f` → 思考中…
+- app/src/mvvm/view_models/chat_vm.py:515 → `legacy.eb4efbaeb4ad` → 回合失败：{p1}
+- app/src/mvvm/view_models/chat_vm.py:670 → `legacy.008906a3e267` → 工具调用超过 {p1} 轮，已中止
+- app/src/mvvm/view_models/chat_vm.py:673 → `legacy.72f60ab7b3ba` → 模型没有返回任何正文
+- app/src/mvvm/view_models/chat_vm.py:331 → `legacy.eb4efbaeb4ad` → 回合失败：{p1}
+- app/src/mvvm/view_models/chat_vm.py:664 → `legacy.34564c43784d` → provider 声明 tool_use 但未返回工具调用
+- app/src/mvvm/view_models/chat_vm.py:506 → `legacy.75dddf524e4c` → 已停止
+- app/src/mvvm/view_models/chat_vm.py:508 → `legacy.b796f2d4ca85` → 就绪
+- app/src/mvvm/view_models/chat_vm.py:464 → `legacy.b796f2d4ca85` → 就绪
+- app/src/mvvm/view_models/chat_vm.py:615 → `legacy.e1c6be578222` → 本轮已被用户停止，工具未执行。
+- app/src/mvvm/view_models/settings_vm.py:27 → `legacy.7a82315e72bb` → Anthropic 协议
+- app/src/mvvm/view_models/settings_vm.py:28 → `legacy.92caa3d06c03` → OpenAI Chat 协议
+- app/src/mvvm/view_models/settings_vm.py:29 → `legacy.3bcbadec45fd` → OpenAI Responses 协议
+- app/src/mvvm/view_models/settings_vm.py:228 → `legacy.7c6e601ea4ce` → 服务商已移除，但密钥删除失败（请手动清理）
+- app/src/mvvm/view_models/settings_vm.py:351 → `legacy.6cbda0c09c93` → 密钥保存失败：{p1}
+- app/src/mvvm/view_models/settings_vm.py:362 → `legacy.7f830163a197` → 未装配模型网关
+- app/src/mvvm/view_models/settings_vm.py:365 → `legacy.91228ba66bac` → 拉取模型清单失败
+- app/src/mvvm/view_models/chat_sessions_vm.py:26 → `legacy.9e636642d6d4` → 刚刚
+- app/src/mvvm/view_models/chat_sessions_vm.py:28 → `legacy.cca145fe6835` → {p0} 分钟前
+- app/src/mvvm/view_models/chat_sessions_vm.py:30 → `legacy.f43f266bd07f` → {p0} 小时前
+- app/src/mvvm/view_models/chat_sessions_vm.py:32 → `legacy.9c439091a115` → {p0} 天前
+- app/src/mvvm/view_models/chat_sessions_vm.py:39 → `legacy.8200c3d50b95` → 未命名对话
+- app/src/mvvm/models/about_model.py:7 → `legacy.4f2c9a32be62` → 关于 MVVM 架构
+- app/src/mvvm/models/about_model.py:23 → `legacy.8d570ae295b7` → app/src/mvvm 的分层： \n {p1} \n  \n 这个窗口就是例子：主窗口按钮 → CommandBinding → \n MainViewModel.show_about_command → about_visible 属性变化 → 视图显示/关闭。 \n 
+- app/src/mvvm/models/about_model.py:12 → `legacy.966cb0e44ce5` → 数据与业务规则，不 import Qt
+- app/src/mvvm/models/about_model.py:13 → `legacy.2d023774e562` → 界面状态与命令：ObservableProperty 通知、RelayCommand 执行
+- app/src/mvvm/models/about_model.py:14 → `legacy.905315dd0159` → 只做渲染与绑定，Qt 名字一律经 utils.qt_compat
+- app/src/mvvm/models/about_model.py:15 → `legacy.01a6030677d4` → 被注入的能力（通信、仓库、后端），由容器注册后取用
+- app/src/mvvm/services/tool_runtime.py:1003 → `display.b8f6500268a9` → [图片] {p1}（{p3}{p4}，{p6}{p7}）。图片内容已随本结果附上。
+- app/src/mvvm/services/tool_runtime.py:918 → `display.0278975ded8a` → 输出过长（共 {p1} 字符），完整内容已保存到：{p3} \n 需要细看时用 read_file 分段读取，或用 grep 搜索。 \n  \n 预览（开头和结尾）： \n {p5} \n [……中间省略 {p7} 字符……] \n {p9}
+- app/src/mvvm/services/tool_runtime.py:983 → `display.b31b00837174` → （空文件）
+- app/src/mvvm/services/tool_runtime.py:987 → `display.6a2ea394f48b` → 第 {p1}–{p3}/{p5} 行
+- app/src/mvvm/services/tool_runtime.py:987 → `display.40d0deeb2aa2` → {p0} 行
+- app/src/mvvm/services/tool_runtime.py:998 → `display.309bf6cf9748` → ，已缩放为 {p1}×{p3}（{p5}）发送
+- app/src/mvvm/services/tool_runtime.py:1064 → `display.6a00c431066f` → 连接失败：目标地址不可达或拒绝连接（设置了代理环境变量吗？）
+- app/src/mvvm/services/tool_runtime.py:1065 → `display.02a423cd11bd` → 经代理连接失败：请检查代理是否在运行
+- app/src/mvvm/services/tool_runtime.py:1066 → `display.7a97266a720d` → 连接超时
+- app/src/mvvm/services/tool_runtime.py:1067 → `display.e94846149523` → 读取超时：连接长时间没有数据
+- app/src/mvvm/services/tool_runtime.py:1068 → `display.dbec2a9b36e1` → 重定向次数过多
+- app/src/mvvm/services/tool_runtime.py:1069 → `display.a9d761207fd2` → URL 无效
+- app/src/mvvm/services/tool_runtime.py:586 → `display.bdf9c08ea4c1` → {p0} 项
+- app/src/mvvm/services/tool_runtime.py:610 → `display.63230988e1e3` →  \n …（共 {p1} 个，仅列前 {p3}）
+- app/src/mvvm/services/tool_runtime.py:611 → `display.62287c8b641a` → {p0} 个文件
+- app/src/mvvm/services/tool_runtime.py:653 → `display.aaf175e2be64` →  \n …（匹配过多，仅列前 {p1} 处）
+- app/src/mvvm/services/tool_runtime.py:655 → `display.211892fe84b0` → {p0}+ 处
+- app/src/mvvm/services/tool_runtime.py:717 → `display.87170ee75b6b` → 类型: {p1}
+- app/src/mvvm/services/tool_runtime.py:718 → `display.1c5ca96c44ac` → （无可读文本内容）
+- app/src/mvvm/services/tool_runtime.py:757 → `display.1df242e54087` → 已写入 {p1} 字节
+- app/src/mvvm/services/tool_runtime.py:757 → `display.ac25c00898e5` → 已写入
+- app/src/mvvm/services/tool_runtime.py:815 → `display.e08d79244772` → （已按换行规范匹配）
+- app/src/mvvm/services/tool_runtime.py:816 → `display.95731deb9826` → 已替换 {p1} 处{p3}
+- app/src/mvvm/services/tool_runtime.py:845 → `display.7c61c0852b3f` →  \n （提示：当前未挂载工作区，命令在用户主目录 {p1} 下执行。如需在某个项目下运行，请在命令里用绝对路径或先 cd，或请用户挂载该项目为工作区。）
+- app/src/mvvm/services/tool_runtime.py:885 → `display.ac4aabbc7e82` → （重复的路径已合并为一个。）
+- app/src/mvvm/services/tool_runtime.py:887 → `display.c45e4253d0d3` → 已交付 {p1} 个文件，交付卡将在本轮回复结束后显示在回复末尾。{p3}
+- app/src/mvvm/services/tool_runtime.py:889 → `display.62287c8b641a` → {p0} 个文件
+- app/src/mvvm/services/tool_runtime.py:910 → `display.bb3aa3cfea74` → 输出过长（共 {p1} 字符），且未能保存完整内容，以下只保留开头和结尾，其余已丢弃。如果工具能筛选或分页，请重新执行取需要的部分。 \n  \n {p3} \n [……中间省略 {p5} 字符……] \n {p7}
+- app/src/mvvm/services/tool_runtime.py:966 → `display.eb8a20ef9ad2` → {p0}…（本行共 {p2} 字符，已截断）
+- app/src/mvvm/services/tool_runtime.py:971 → `display.30a3a1e4f12d` → （第 {p1}–{p3} 行共约 {p5} 字符，超过单次读取上限 {p7} 字符，未返回；请用 offset/limit 缩小范围）
+- app/src/mvvm/services/tool_runtime.py:974 → `display.c7c54e06b075` → 读取范围过大
+- app/src/mvvm/services/tool_runtime.py:978 → `display.4b6fd84945fa` → 仅显示第 {p1}–{p3} 行（共 {p5} 行）；如需后续内容，用 offset={p7} 继续读取。
+- app/src/mvvm/services/tool_runtime.py:980 → `display.d07753d7015b` → 有 {p1} 行超过 {p3} 字符，已截断显示。
+- app/src/mvvm/services/tool_runtime.py:995 → `display.d4077593e897` → 图片无法发送
+- app/src/mvvm/services/tool_runtime.py:1009 → `display.83339012e8ad` → 图片 {p1}
+- app/src/mvvm/services/tool_runtime.py:1009 → `display.be8da62ea113` → 图片
+- app/src/mvvm/services/tool_runtime.py:470 → `display.a3a5d0884151` → （未知工具：{p1}）
+- app/src/mvvm/services/tool_runtime.py:470 → `display.60cd83a7135d` → 未知工具
+- app/src/mvvm/services/tool_runtime.py:473 → `display.e39ad29d5b7b` → （{p1} 的参数必须是对象）
+- app/src/mvvm/services/tool_runtime.py:473 → `display.3e64edf2ea33` → 参数错误
+- app/src/mvvm/services/tool_runtime.py:552 → `display.7dd8b26c8afa` → （图片超过 {p1}，未加载）
+- app/src/mvvm/services/tool_runtime.py:552 → `display.ea85255312d5` → 图片过大
+- app/src/mvvm/services/tool_runtime.py:554 → `display.98d62b378e57` → （文件超过 2MB，未加载；请用 grep 定位所需内容）
+- app/src/mvvm/services/tool_runtime.py:554 → `display.aeceb6771beb` → 文件过大
+- app/src/mvvm/services/tool_runtime.py:565 → `display.fff6f5bcf1f6` → （文件超过 2MB，未加载）
+- app/src/mvvm/services/tool_runtime.py:565 → `display.aeceb6771beb` → 文件过大
+- app/src/mvvm/services/tool_runtime.py:567 → `display.380f8074520a` → （疑似二进制文件，未加载）
+- app/src/mvvm/services/tool_runtime.py:567 → `display.78ff74e37b12` → 二进制
+- app/src/mvvm/services/tool_runtime.py:569 → `display.b31b00837174` → （空文件）
+- app/src/mvvm/services/tool_runtime.py:569 → `display.58ae26e31789` → 0 行
+- app/src/mvvm/services/tool_runtime.py:586 → `display.d170f2a5adf8` → （空目录）
+- app/src/mvvm/services/tool_runtime.py:593 → `display.ad6e5fdd1dd7` → 缺少 pattern 参数
+- app/src/mvvm/services/tool_runtime.py:593 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:611 → `display.0de200ee7933` → （无匹配文件）
+- app/src/mvvm/services/tool_runtime.py:618 → `display.ad6e5fdd1dd7` → 缺少 pattern 参数
+- app/src/mvvm/services/tool_runtime.py:618 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:622 → `display.10bc86e66b08` → 路径不存在：{p1}
+- app/src/mvvm/services/tool_runtime.py:622 → `display.6d97c12d5569` → 路径不存在
+- app/src/mvvm/services/tool_runtime.py:654 → `display.1c3eae54270a` → （无匹配）
+- app/src/mvvm/services/tool_runtime.py:655 → `display.2916bae4989a` → {p0} 处
+- app/src/mvvm/services/tool_runtime.py:655 → `display.cd8c79d55c31` → 无匹配
+- app/src/mvvm/services/tool_runtime.py:665 → `display.28d0b7737b22` → 缺少 url 参数
+- app/src/mvvm/services/tool_runtime.py:665 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:668 → `display.7de96f09e4dc` → 仅支持 http/https（收到 {p1}）
+- app/src/mvvm/services/tool_runtime.py:668 → `display.5e34c1081234` → 协议不支持
+- app/src/mvvm/services/tool_runtime.py:710 → `display.3dd998016e0b` → （非文本内容：{p1}，未加载）
+- app/src/mvvm/services/tool_runtime.py:710 → `display.7df67849d7d8` → 非文本
+- app/src/mvvm/services/tool_runtime.py:720 → `display.cdf53417d845` → {p0} 字符
+- app/src/mvvm/services/tool_runtime.py:748 → `display.d2dd4f8c7b2e` → 已追加 {p1} 字节
+- app/src/mvvm/services/tool_runtime.py:748 → `display.3294c64300c3` → 已追加
+- app/src/mvvm/services/tool_runtime.py:767 → `display.bdd64c66419a` → old_string 不能为空；新建文件请用 write_file
+- app/src/mvvm/services/tool_runtime.py:767 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:769 → `display.4dfac84a9057` → old_string 与 new_string 相同，无需编辑
+- app/src/mvvm/services/tool_runtime.py:769 → `display.208a9a7ed155` → 无变化
+- app/src/mvvm/services/tool_runtime.py:775 → `display.783f1ff57c9d` → （疑似二进制文件，拒绝编辑）
+- app/src/mvvm/services/tool_runtime.py:775 → `display.78ff74e37b12` → 二进制
+- app/src/mvvm/services/tool_runtime.py:792 → `display.0f9c4ffbed9a` → 未找到 old_string（需与文件内容逐字符一致，含缩进/换行）
+- app/src/mvvm/services/tool_runtime.py:792 → `display.df5ccaf09248` → 未找到
+- app/src/mvvm/services/tool_runtime.py:796 → `display.f1d54d00ad49` → old_string 匹配到 {p1} 处，不唯一。请多带上下文使其唯一，或传 replace_all。
+- app/src/mvvm/services/tool_runtime.py:798 → `display.d63ccd25f6be` → 不唯一
+- app/src/mvvm/services/tool_runtime.py:806 → `display.4ff8834ad17b` → old_string 与 new_string 仅换行符不同；换行符跟随文件原有风格，文件无变化
+- app/src/mvvm/services/tool_runtime.py:808 → `display.208a9a7ed155` → 无变化
+- app/src/mvvm/services/tool_runtime.py:816 → `display.3b5e4cbefad5` → 已替换 {p1} 处
+- app/src/mvvm/services/tool_runtime.py:816 → `display.c367766fe1ca` → 已编辑
+- app/src/mvvm/services/tool_runtime.py:823 → `display.d44ea78eca8a` → 缺少有效的 command 参数
+- app/src/mvvm/services/tool_runtime.py:823 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:829 → `display.9c6b71d94876` → （无法执行：{p1}）
+- app/src/mvvm/services/tool_runtime.py:829 → `display.63d337322d12` → 无法执行
+- app/src/mvvm/services/tool_runtime.py:856 → `display.91713ce7cb7b` → 缺少 paths 参数：请列出要交付的文件路径。
+- app/src/mvvm/services/tool_runtime.py:856 → `display.55d34909a437` → 参数无效
+- app/src/mvvm/services/tool_runtime.py:858 → `display.cf14805fd362` → 一次最多交付 {p1} 个文件，请只列出最主要的成品。
+- app/src/mvvm/services/tool_runtime.py:858 → `display.b3f25b75c1fa` → 文件过多
+- app/src/mvvm/services/tool_runtime.py:881 → `display.fc09cba669cf` → 以下路径无法交付，请修正后重新调用（本次未向用户展示任何文件）： \n {p1}
+- app/src/mvvm/services/tool_runtime.py:883 → `display.7d468855bb48` → {p0} 个路径无效
+- app/src/mvvm/services/tool_runtime.py:896 → `display.561aaffe10a7` → 当前环境不提供待办清单；请直接完成任务。
+- app/src/mvvm/services/tool_runtime.py:896 → `display.beff4a1cd1a6` → 不可用
+- app/src/mvvm/services/tool_runtime.py:1030 → `display.4443b04d2837` → （pattern 不是合法的正则：{p1}；已按纯文本搜索）
+- app/src/mvvm/services/tool_runtime.py:464 → `display.aea8064110d4` → 密封执行不能向用户提问
+- app/src/mvvm/services/tool_runtime.py:488 → `display.7c68e24d16e9` → 审批已启用但交互控制器不可用；未执行
+- app/src/mvvm/services/tool_runtime.py:490 → `display.70db26b2a543` → 审批未通过；未执行
+- app/src/mvvm/services/tool_runtime.py:497 → `display.984889517a5f` → 越界拒绝
+- app/src/mvvm/services/tool_runtime.py:499 → `display.3e64edf2ea33` → 参数错误
+- app/src/mvvm/services/tool_runtime.py:501 → `display.dc415f6d3a58` → 执行失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:501 → `display.9746cfc7d257` → 执行失败
+- app/src/mvvm/services/tool_runtime.py:526 → `display.b2c61b4ead41` → 读取失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:526 → `display.d9f607a20068` → 读取失败
+- app/src/mvvm/services/tool_runtime.py:531 → `display.2a48076d42db` → （文件超过 {p1}，未加载）
+- app/src/mvvm/services/tool_runtime.py:531 → `display.aeceb6771beb` → 文件过大
+- app/src/mvvm/services/tool_runtime.py:539 → `display.5174eee13e5e` → （无法解析这个文件：可能已加密、已损坏，或其实是旧版格式）
+- app/src/mvvm/services/tool_runtime.py:539 → `display.729fac3ea84b` → 无法解析
+- app/src/mvvm/services/tool_runtime.py:545 → `display.74cefa33685b` → 以上是从 {p1} 文件中提取的纯文字（不含格式与图片），不能用 edit_file 修改原文件。
+- app/src/mvvm/services/tool_runtime.py:558 → `display.b2c61b4ead41` → 读取失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:558 → `display.d9f607a20068` → 读取失败
+- app/src/mvvm/services/tool_runtime.py:578 → `display.f0b5f43ac5d3` → 列出失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:578 → `display.fc170da865d1` → 列出失败
+- app/src/mvvm/services/tool_runtime.py:699 → `display.1f0f7eccd2c0` → 请求超时（>{p1}s）
+- app/src/mvvm/services/tool_runtime.py:699 → `display.ff06c243d727` → 超时
+- app/src/mvvm/services/tool_runtime.py:701 → `display.adfd5c74980f` → 获取失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:701 → `display.9e0aaeed7eb8` → 获取失败
+- app/src/mvvm/services/tool_runtime.py:717 → `display.332acf6744f4` → 标题: {p1} \n 
+- app/src/mvvm/services/tool_runtime.py:730 → `display.2c95f9ff62af` → 写入失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:730 → `display.e92dc2256061` → 写入失败
+- app/src/mvvm/services/tool_runtime.py:756 → `display.2c95f9ff62af` → 写入失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:756 → `display.e92dc2256061` → 写入失败
+- app/src/mvvm/services/tool_runtime.py:773 → `display.cf67307a1db9` → 文件不存在或无法读取：{p1}
+- app/src/mvvm/services/tool_runtime.py:773 → `display.0d864b52e306` → 不存在
+- app/src/mvvm/services/tool_runtime.py:813 → `display.2c95f9ff62af` → 写入失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:813 → `display.e92dc2256061` → 写入失败
+- app/src/mvvm/services/tool_runtime.py:831 → `display.3ee18f837ff1` → （输出超过 {p1}MB，已停止命令）
+- app/src/mvvm/services/tool_runtime.py:831 → `display.0b74e80c3f71` → 输出过多
+- app/src/mvvm/services/tool_runtime.py:873 → `display.292b4eabc526` → {p0}：文件不存在
+- app/src/mvvm/services/tool_runtime.py:535 → `display.b2c61b4ead41` → 读取失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:535 → `display.d9f607a20068` → 读取失败
+- app/src/mvvm/services/tool_runtime.py:717 → `display.d9c32a4c3dda` → 未知
+- app/src/mvvm/services/tool_runtime.py:747 → `display.2c95f9ff62af` → 写入失败：{p1}
+- app/src/mvvm/services/tool_runtime.py:747 → `display.e92dc2256061` → 写入失败
+- app/src/mvvm/services/tool_runtime.py:833 → `display.ae539c74b6b9` → （已中止）
+- app/src/mvvm/services/tool_runtime.py:833 → `display.5c174784ba7d` → 已中止
+- app/src/mvvm/services/tool_runtime.py:875 → `display.f5b0a9546653` → {p0}：不是文件（目录请改为交付其中的入口文件，如 index.html）
+- app/src/mvvm/services/tool_runtime.py:710 → `display.e9649f84f93c` → 未知类型
+- app/src/mvvm/services/tool_runtime.py:835 → `display.fef0002aa27e` → （超时 >{p1}ms，已强制结束）
+- app/src/mvvm/services/tool_runtime.py:835 → `display.ff06c243d727` → 超时
+- app/src/mvvm/services/tool_runtime.py:837 → `display.d9cf14899ad7` → （退出码：{p1}）
+- app/src/mvvm/services/tool_runtime.py:837 → `display.df8ac9e9f5cb` → 退出码 {p1}
+- app/src/mvvm/services/tool_results.py:126 → `display.112f98675ee2` → 已更新
+- app/src/mvvm/services/tool_results.py:98 → `display.3e64edf2ea33` → 参数错误
+- app/src/mvvm/services/tool_results.py:110 → `display.05f89b4dad87` → 已取消当前待办清单。
+- app/src/mvvm/services/tool_results.py:110 → `display.a5ffdc95eeb0` → 已取消
+- app/src/mvvm/services/tool_results.py:104 → `display.a6275f282951` → 当前没有进行中的待办清单，无需取消。
+- app/src/mvvm/services/tool_results.py:104 → `display.27273d4bbd5b` → 无需取消
+- app/src/mvvm/services/tool_policy.py:60 → `display.19542c1456d9` → 该操作被安全策略拒绝。
+- app/src/mvvm/services/tool_policy.py:62 → `display.3ad80354763d` → 定时任务在自动执行中，无法使用「{name}」（不支持交互/创建类操作）。请改用只读或写入/执行工具完成本次任务，或在结论中说明受限之处。
+- app/src/mvvm/services/tool_policy.py:65 → `display.89eb2e87483d` → 工具「{name}」当前不可用，已拒绝。
+- app/src/mvvm/services/tool_policy.py:67 → `display.bbef77b085ba` → 未挂载工作区，无法确定相对路径「{path}」的落点，本次调用未执行。请改用**绝对路径**重试（必要时先问清用户目标目录），不要再请求挂载工作区。
+- app/src/mvvm/services/tool_policy.py:71 → `display.071cf3d30d02` → 未挂载工作区，{name} 省略 path 时没有默认根可用，本次调用未执行。请显式传入**绝对路径** path 重试，不要再请求挂载工作区。
+- app/src/mvvm/services/tool_policy.py:147 → `display.4c7c52c70655` → 已拒绝
+- app/src/mvvm/services/tool_policy.py:136 → `display.8fbb7a1a67e1` → 已拒绝（安全策略）
+- app/src/mvvm/services/tool_policy.py:185 → `display.193a5844c188` → 未挂载工作区
+- app/src/mvvm/services/todos.py:166 → `display.079866026acb` → 已更新待办清单（已完成 {p1}/{p3}）。{p5}
+- app/src/mvvm/services/todos.py:209 → `display.1c3c93bd0479` → 【待办清单提醒】此前留有一个未完成的待办清单{p1}（已完成 {p3}/{p5}）： \n {p7} \n 若本轮继续这项任务，请照常用 todo_write 更新它；若用户已转向别的事、不再进行它，请调用 todo_write 并传 cancel: true 取消。
+- app/src/mvvm/services/todos.py:220 → `display.a57cd972f033` → 【待办清单】用户已手动取消待办清单{p1}，不要再继续更新它；之后若要开始新的多步骤任务，请用 todo_write 传 new_list: true 另建清单。
+- app/src/mvvm/services/todos.py:158 → `display.369367a06ffa` → 清单已全部完成（{p1}/{p3}）。
+- app/src/mvvm/services/todos.py:161 → `display.6edc9c274e0b` → 当前没有进行中的项：开始下一项前先把它标为 in_progress。
+- app/src/mvvm/services/todos.py:188 → `display.ef03e341ec0f` → 【当前待办清单{p1}】（[x] 已完成 / [~] 进行中 / [ ] 待办；继续用 todo_write 更新）
+- app/src/mvvm/services/todos.py:88 → `display.0228e12fda7a` → todos 必须是数组：[{ content, status }]（取消清单请传 cancel: true）。
+- app/src/mvvm/services/todos.py:100 → `display.1f0a4800105a` → todos 不能为空：至少给出一项 { content, status }（取消清单请传 cancel: true）。
+- app/src/mvvm/services/todos.py:102 → `display.42a64db1b723` → 清单最多 {p1} 项，请合并为更粗粒度的步骤后重写。
+- app/src/mvvm/services/todos.py:163 → `display.432b942fa5a4` → 同一时刻只应有一项 in_progress，请收敛为一项。
+- app/src/mvvm/services/todos.py:165 → `display.ad65923cda16` → 继续推进：完成一项立即标为 completed，再开始下一项。

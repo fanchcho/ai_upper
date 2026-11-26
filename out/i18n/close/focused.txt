@@ -1,0 +1,215 @@
+................F.FF.....FF......FF......FF..FFF.........F               [100%]
+=================================== FAILURES ===================================
+____________________ test_settings_pane_drill_down_and_back ____________________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff99cd4a50>, SettingsViewModel(), <mvvm.services.settings_service.SettingsService object at 0xffff99cd4910>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99cd4b90>, [])
+
+    def test_settings_pane_drill_down_and_back(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(0)
+        widgets["open_provider"].click()
+        assert pane.page() == "provider"
+        assert pane.current_provider_id() == "p1"
+        assert widgets["name"].text() == "Anthropic"
+>       assert widgets["key_status"].text() == "未配置密钥"
+E       AssertionError: assert 'No key configured' == '未配置密钥'
+E         
+E         - 未配置密钥
+E         + No key configured
+
+app/tests/test_deva_panes.py:207: AssertionError
+_______________ test_settings_pane_saves_key_and_never_echoes_it _______________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff99cd4f50>, SettingsViewModel(), <mvvm.services.settings_servic...tingsService object at 0xffff99c52d70>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99c52fd0>, ['密钥已保存'])
+
+    def test_settings_pane_saves_key_and_never_echoes_it(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(1)
+        widgets["open_provider"].click()
+    
+        widgets["key"].setText("sk-deepseek-secret")
+        widgets["save_key"].click()
+    
+        assert vault.get_secret("p2") == "sk-deepseek-secret"
+        assert widgets["key"].text() == ""  # 输入框保存后清空
+>       assert widgets["key_status"].text() == "已配置密钥"
+E       AssertionError: assert 'Configured key' == '已配置密钥'
+E         
+E         - 已配置密钥
+E         + Configured key
+
+app/tests/test_deva_panes.py:253: AssertionError
+______________ test_settings_pane_adds_toggles_and_removes_model _______________
+
+settings_pane = (<mvvm.views.settings_pane.SettingsPane object at 0xffff99cd4cd0>, SettingsViewModel(), <mvvm.services.settings_servic...tingsService object at 0xffff99c529e0>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99c53820>, ['模型已添加'])
+
+    def test_settings_pane_adds_toggles_and_removes_model(settings_pane):
+        pane, vm, settings, vault, notices = settings_pane
+        widgets = pane.widgets()
+        widgets["provider_list"].setCurrentRow(1)
+        widgets["open_provider"].click()
+    
+        widgets["new_model"].setText("deepseek-reasoner")
+        widgets["add_model"].click()
+        assert "deepseek-reasoner" in [m["id"] for m in vm.models_of("p2")]
+        assert notices[-1] == "模型已添加"
+    
+        # 新加的模型默认启用，排在最后一行；点「停用」再点「启用」都要生效
+        assert next(m for m in vm.models_of("p2") if m["id"] == "deepseek-reasoner")["enabled"] is True
+        widgets["model_list"].setCurrentRow(1)
+>       assert widgets["toggle_model"].text() == "停用"
+E       AssertionError: assert 'deactivate' == '停用'
+E         
+E         - 停用
+E         + deactivate
+
+app/tests/test_deva_panes.py:275: AssertionError
+______________ test_main_window_starts_on_chat_with_session_list _______________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff99c367b0>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff99d16f30>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99d17020>)
+
+    def test_main_window_starts_on_chat_with_session_list(main_window):
+        window, chat, sessions, settings, vault = main_window
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:357: AssertionError
+______________________ test_main_window_switches_session _______________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff99cd4b90>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff99d15220>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99d17110>)
+
+    def test_main_window_switches_session(main_window):
+        window, chat, sessions, settings, vault = main_window
+        assert chat.session_id == "b"
+        window.session_pane().list_widget().setCurrentRow(1)  # 甲
+        assert chat.session_id == "a"
+        assert sessions.active_id == "a"
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:369: AssertionError
+____________________ test_main_window_toggles_settings_view ____________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff99c4e250>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff99beae60>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99beaf10>)
+
+    def test_main_window_toggles_settings_view(main_window):
+        window, chat, sessions, settings, vault = main_window
+        window.session_pane().buttons()["settings"].click()
+        assert window.settings_visible is True
+        assert window.chat_pane().widget().visible is False
+        assert window.status_text == "设置"
+    
+        window.settings_pane().widgets()["back"].click()
+        assert window.settings_visible is False
+        assert window.chat_pane().widget().visible is True
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:460: AssertionError
+_________________ test_main_window_sends_message_in_chat_pane __________________
+
+main_window = (<mvvm.views.deva_main_window.DevaMainWindow object at 0xffff99c4dd50>, ChatViewModel(), ChatSessionsViewModel(), <mvv...service.SettingsService object at 0xffff99bf4b90>, <mvvm.services.secrets_vault.SecretsVault object at 0xffff99bf49b0>)
+
+    def test_main_window_sends_message_in_chat_pane(main_window):
+        window, chat, sessions, settings, vault = main_window
+        pane = window.chat_pane()
+        chat.input_text_property.set_value("看一下 notes.txt")
+        pane._send_button.click()
+        assert chat.wait_idle(5.0)
+        assert chat.transcript[-1]["role"] == "assistant"
+        assert "你好" in pane._transcript.plain_text
+>       assert window.status_text == "就绪"
+E       AssertionError: assert 'Ready' == '就绪'
+E         
+E         - 就绪
+E         + Ready
+
+app/tests/test_deva_panes.py:471: AssertionError
+________________ test_plain_message_renders_role_head_and_body _________________
+
+    def test_plain_message_renders_role_head_and_body():
+        html = transcript_html([entry("user", "你好"), entry("assistant", "在。")])
+>       assert "［你］" in html and "你好" in html
+E       assert ('［你］' in '<p style="color:#101828;"><b>［you］</b></p><p style="color:#344054;">你好</p><p style="color:#101828;"><b>［Assistant］</b></p><p style="color:#344054;">在。</p>')
+
+app/tests/test_transcript_render.py:25: AssertionError
+___________________ test_error_role_and_is_error_both_marked ___________________
+
+    def test_error_role_and_is_error_both_marked():
+        """`error` 角色本身就叫「错误」；只有普通角色带 `is_error` 才加「（失败）」。"""
+        html = transcript_html([entry("error", "网络断了"), entry("assistant", "半句", is_error=True)])
+>       assert "［错误］" in html
+E       assert '［错误］' in '<p style="color:#b42318;"><b>［mistake］</b></p><p style="color:#344054;">网络断了</p><p style="color:#b42318;"><b>［Assistant（失败）］</b></p><p style="color:#344054;">半句</p>'
+
+app/tests/test_transcript_render.py:32: AssertionError
+_____________ test_tool_entry_becomes_a_card_with_name_and_status ______________
+
+    def test_tool_entry_becomes_a_card_with_name_and_status():
+        html = transcript_html([entry("tool", "文件内容", name="read_file", summary="12 行")])
+        assert "<table" in html
+        assert "read_file · 12 行" in html
+>       assert "（成功）" in html
+E       assert '（成功）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#f8fafc; border:1px solid #e4e7ec;"><tr><td><p style="color:#475467;"><b>read_file · 12 行</b>（OK）</p><p style="color:#344054;">文件内容</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:55: AssertionError
+_______________________ test_failed_tool_card_is_marked ________________________
+
+    def test_failed_tool_card_is_marked():
+        html = transcript_html([entry("tool", "拒绝访问", name="write_file", is_error=True)])
+>       assert "（失败）" in html
+E       assert '（失败）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#fef3f2; border:1px solid #e4e7ec;"><tr><td><p style="color:#b42318;"><b>write_file</b>（Failed）</p><p style="color:#344054;">拒绝访问</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:61: AssertionError
+______________ test_tool_without_name_falls_back_to_generic_title ______________
+
+    def test_tool_without_name_falls_back_to_generic_title():
+        html = transcript_html([entry("tool", "结果")])
+>       assert "<b>工具</b>（成功）" in html
+E       assert '<b>工具</b>（成功）' in '<table width="100%" cellspacing="0" cellpadding="8" style="background-color:#f8fafc; border:1px solid #e4e7ec;"><tr><td><p style="color:#475467;"><b>工具</b>（OK）</p><p style="color:#344054;">结果</p></td></tr></table>'
+
+app/tests/test_transcript_render.py:67: AssertionError
+________________ test_plain_text_projection_matches_old_format _________________
+
+    def test_plain_text_projection_matches_old_format():
+        text = transcript_plain_text(
+            [entry("user", "你好"), entry("tool", "内容", name="read_file", is_error=True)]
+        )
+>       assert text == "[你] 你好\n\n[工具（失败） read_file] 内容"
+E       AssertionError: assert '[you] 你好\n\n...read_file] 内容' == '[你] 你好\n\n[工...read_file] 内容'
+E         
+E         - [你] 你好
+E         ?  ^
+E         + [you] 你好
+E         ?  ^^^
+E           
+E         - [工具（失败） read_file] 内容...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+app/tests/test_transcript_render.py:176: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_deva_panes.py::test_settings_pane_drill_down_and_back
+FAILED app/tests/test_deva_panes.py::test_settings_pane_saves_key_and_never_echoes_it
+FAILED app/tests/test_deva_panes.py::test_settings_pane_adds_toggles_and_removes_model
+FAILED app/tests/test_deva_panes.py::test_main_window_starts_on_chat_with_session_list
+FAILED app/tests/test_deva_panes.py::test_main_window_switches_session - Asse...
+FAILED app/tests/test_deva_panes.py::test_main_window_toggles_settings_view
+FAILED app/tests/test_deva_panes.py::test_main_window_sends_message_in_chat_pane
+FAILED app/tests/test_transcript_render.py::test_plain_message_renders_role_head_and_body
+FAILED app/tests/test_transcript_render.py::test_error_role_and_is_error_both_marked
+FAILED app/tests/test_transcript_render.py::test_tool_entry_becomes_a_card_with_name_and_status
+FAILED app/tests/test_transcript_render.py::test_failed_tool_card_is_marked
+FAILED app/tests/test_transcript_render.py::test_tool_without_name_falls_back_to_generic_title
+FAILED app/tests/test_transcript_render.py::test_plain_text_projection_matches_old_format
+13 failed, 45 passed in 0.56s

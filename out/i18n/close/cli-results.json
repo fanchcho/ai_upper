@@ -1,0 +1,134 @@
+[
+  {
+    "language": "en",
+    "command": [
+      "tools/build.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-0.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "tools/build.py",
+      "--target",
+      "not-a-target"
+    ],
+    "exit": 2,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-1.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "tools/build.py",
+      "--doctor"
+    ],
+    "exit": 1,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-2.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "tools/ci_tail.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-3.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "tools/ci_tail.py"
+    ],
+    "exit": 2,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-4.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "tools/ci_tail.py",
+      "--log",
+      "/home/agent/shared_workspace/ai_upper/.tmp/i18n-close/absent.log",
+      "--title",
+      "test"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-5.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "app/src/main.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-en-6.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/build.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-0.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/build.py",
+      "--target",
+      "not-a-target"
+    ],
+    "exit": 2,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-1.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/build.py",
+      "--doctor"
+    ],
+    "exit": 1,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-2.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/ci_tail.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-3.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/ci_tail.py"
+    ],
+    "exit": 2,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-4.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "tools/ci_tail.py",
+      "--log",
+      "/home/agent/shared_workspace/ai_upper/.tmp/i18n-close/absent.log",
+      "--title",
+      "test"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-5.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "app/src/main.py",
+      "--help"
+    ],
+    "exit": 0,
+    "file": "/home/agent/shared_workspace/ai_upper/out/i18n/close/cli-zh-CN-6.txt"
+  }
+]
