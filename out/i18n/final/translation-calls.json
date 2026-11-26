@@ -5888,6 +5888,13 @@
   },
   {
     "file": "tools/ci_tail.py",
+    "line": 184,
+    "key": "finish.log",
+    "missing_key": false,
+    "missing_params": []
+  },
+  {
+    "file": "tools/ci_tail.py",
     "line": 185,
     "key": "legacy.b3928325349a",
     "missing_key": false,

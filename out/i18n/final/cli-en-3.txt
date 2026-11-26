@@ -1,4 +1,4 @@
-$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', '-c', "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"]
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', '-c', "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;assert not {'locale_runtime','application','native_i18n'}.intersection(sys.modules);\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"]
 LANG=en_US.UTF-8
 stdout:
 

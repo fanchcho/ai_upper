@@ -1,0 +1,8 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', 'tools/ci_tail.py', '--log', '.tmp/i18n-final/no-such-log', '--title', 'i18n-check']
+LANG=en_US.UTF-8
+stdout:
+::error title=i18n-check::log was not created: the step failed before it could write one.
+
+stderr:
+
+exit=0

@@ -1,0 +1,10 @@
+{
+  "legacy.99c42b87afe8": "删除匹配的 site-packages 路径；可重复指定（相对 glob 模式）",
+  "legacy.57e54def59d6": "egg 扩展加载后端：auto、memory 或 extract",
+  "legacy.66baac4d0116": "缺少 egg 输入：",
+  "legacy.2d0c3ae81446": "警告：_memimporter 不可用（{p1}）；egg 回退到 extract 后端",
+  "legacy.5490f2c8bbcd": "即使项目启用了 egg，仍发布独立的应用文件",
+  "finish.aaefed52979d": "合并包无独立文件 ",
+  "finish.9416e5a44614": "扩展无独立文件 ",
+  "finish.2a900d0a96b7": "包标记无独立文件 "
+}

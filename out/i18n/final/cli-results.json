@@ -34,7 +34,7 @@
     "command": [
       "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
       "-c",
-      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
+      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;assert not {'locale_runtime','application','native_i18n'}.intersection(sys.modules);\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
     ],
     "exit": 2,
     "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-3.txt"
@@ -58,6 +58,19 @@
     ],
     "exit": 0,
     "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-5.txt"
+  },
+  {
+    "language": "en",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/ci_tail.py",
+      "--log",
+      ".tmp/i18n-final/no-such-log",
+      "--title",
+      "i18n-check"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-en-6.txt"
   },
   {
     "language": "zh-CN",
@@ -94,7 +107,7 @@
     "command": [
       "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
       "-c",
-      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
+      "import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;assert not {'locale_runtime','application','native_i18n'}.intersection(sys.modules);\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"
     ],
     "exit": 2,
     "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-3.txt"
@@ -118,5 +131,18 @@
     ],
     "exit": 0,
     "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-5.txt"
+  },
+  {
+    "language": "zh-CN",
+    "command": [
+      "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+      "tools/ci_tail.py",
+      "--log",
+      ".tmp/i18n-final/no-such-log",
+      "--title",
+      "i18n-check"
+    ],
+    "exit": 0,
+    "path": "/home/agent/shared_workspace/ai_upper/out/i18n/final/cli-zh-CN-6.txt"
   }
 ]

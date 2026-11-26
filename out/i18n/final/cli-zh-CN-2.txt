@@ -228,22 +228,22 @@ stdout:
 通过 运行时已移除 pip/ensurepip
 通过 启动器架构=arm64
 通过 发布包：egg 合并包 _root
-通过 发布包：合并包未散装 _root
+通过 发布包：合并包无独立文件 _root
 通过 已存储合并包 ai_upper_bundles/ai_upper__root.cpython-313-aarch64-linux-gnu.so
 通过 架构包 ai_upper_bundles/ai_upper__root.cpython-313-aarch64-linux-gnu.so=arm64
 通过 发布包：合并包模块 _root=7
 通过 发布包：egg 合并包 markdown
-通过 发布包：合并包未散装 markdown
+通过 发布包：合并包无独立文件 markdown
 通过 已存储合并包 ai_upper_bundles/ai_upper_markdown.cpython-313-aarch64-linux-gnu.so
 通过 架构包 ai_upper_bundles/ai_upper_markdown.cpython-313-aarch64-linux-gnu.so=arm64
 通过 发布包：合并包模块 markdown=8
 通过 发布包：egg 合并包 mvvm
-通过 发布包：合并包未散装 mvvm
+通过 发布包：合并包无独立文件 mvvm
 通过 已存储合并包 ai_upper_bundles/ai_upper_mvvm.cpython-313-aarch64-linux-gnu.so
 通过 架构包 ai_upper_bundles/ai_upper_mvvm.cpython-313-aarch64-linux-gnu.so=arm64
 通过 发布包：合并包模块 mvvm=71
 通过 发布包：egg 合并包 utils
-通过 发布包：合并包未散装 utils
+通过 发布包：合并包无独立文件 utils
 通过 已存储合并包 ai_upper_bundles/ai_upper_utils.cpython-313-aarch64-linux-gnu.so
 通过 架构包 ai_upper_bundles/ai_upper_utils.cpython-313-aarch64-linux-gnu.so=arm64
 通过 发布包：合并包模块 utils=4
@@ -254,12 +254,12 @@ stdout:
 通过 发布包：已移除源码 locale_runtime
 通过 发布包：无逐模块扩展 locale_runtime
 失败 发布包：egg 包标记 locales
-通过 发布包：包标记未散装 locales
+通过 发布包：包标记无独立文件 locales
 通过 发布包：包标记未编译 locales
 通过 发布包：已移除源码 main
 通过 发布包：无逐模块扩展 main
 通过 发布包：egg 包标记 markdown
-通过 发布包：包标记未散装 markdown
+通过 发布包：包标记无独立文件 markdown
 通过 发布包：包标记未编译 markdown
 通过 发布包：已移除源码 markdown.body
 通过 发布包：无逐模块扩展 markdown.body
@@ -278,10 +278,10 @@ stdout:
 通过 发布包：已移除源码 markdown.viewport
 通过 发布包：无逐模块扩展 markdown.viewport
 通过 发布包：egg 包标记 mvvm
-通过 发布包：包标记未散装 mvvm
+通过 发布包：包标记无独立文件 mvvm
 通过 发布包：包标记未编译 mvvm
 通过 发布包：egg 包标记 mvvm.core
-通过 发布包：包标记未散装 mvvm.core
+通过 发布包：包标记无独立文件 mvvm.core
 通过 发布包：包标记未编译 mvvm.core
 通过 发布包：已移除源码 mvvm.core.base_view_model
 通过 发布包：无逐模块扩展 mvvm.core.base_view_model
@@ -292,7 +292,7 @@ stdout:
 通过 发布包：已移除源码 mvvm.core.observable
 通过 发布包：无逐模块扩展 mvvm.core.observable
 通过 发布包：egg 包标记 mvvm.models
-通过 发布包：包标记未散装 mvvm.models
+通过 发布包：包标记无独立文件 mvvm.models
 通过 发布包：包标记未编译 mvvm.models
 通过 发布包：已移除源码 mvvm.models.about_model
 通过 发布包：无逐模块扩展 mvvm.models.about_model
@@ -305,7 +305,7 @@ stdout:
 通过 发布包：已移除源码 mvvm.mvvm_bootstrap
 通过 发布包：无逐模块扩展 mvvm.mvvm_bootstrap
 通过 发布包：egg 包标记 mvvm.services
-通过 发布包：包标记未散装 mvvm.services
+通过 发布包：包标记无独立文件 mvvm.services
 通过 发布包：包标记未编译 mvvm.services
 通过 发布包：已移除源码 mvvm.services.anthropic_provider
 通过 发布包：无逐模块扩展 mvvm.services.anthropic_provider
@@ -396,7 +396,7 @@ stdout:
 通过 发布包：已移除源码 mvvm.services.workspace_guard
 通过 发布包：无逐模块扩展 mvvm.services.workspace_guard
 通过 发布包：egg 包标记 mvvm.view_models
-通过 发布包：包标记未散装 mvvm.view_models
+通过 发布包：包标记无独立文件 mvvm.view_models
 通过 发布包：包标记未编译 mvvm.view_models
 通过 发布包：已移除源码 mvvm.view_models.chat_sessions_vm
 通过 发布包：无逐模块扩展 mvvm.view_models.chat_sessions_vm
@@ -409,7 +409,7 @@ stdout:
 通过 发布包：已移除源码 mvvm.view_models.settings_vm
 通过 发布包：无逐模块扩展 mvvm.view_models.settings_vm
 通过 发布包：egg 包标记 mvvm.views
-通过 发布包：包标记未散装 mvvm.views
+通过 发布包：包标记无独立文件 mvvm.views
 通过 发布包：包标记未编译 mvvm.views
 通过 发布包：已移除源码 mvvm.views.about_window
 通过 发布包：无逐模块扩展 mvvm.views.about_window
@@ -432,7 +432,7 @@ stdout:
 通过 发布包：已移除源码 mvvm.views.transcript_render
 通过 发布包：无逐模块扩展 mvvm.views.transcript_render
 通过 发布包：egg 包标记 mvvm.webui
-通过 发布包：包标记未散装 mvvm.webui
+通过 发布包：包标记无独立文件 mvvm.webui
 通过 发布包：包标记未编译 mvvm.webui
 通过 发布包：已移除源码 mvvm.webui.assembly
 通过 发布包：无逐模块扩展 mvvm.webui.assembly
@@ -447,7 +447,7 @@ stdout:
 通过 发布包：已移除源码 qml_shell_sessions
 通过 发布包：无逐模块扩展 qml_shell_sessions
 通过 发布包：egg 包标记 utils
-通过 发布包：包标记未散装 utils
+通过 发布包：包标记无独立文件 utils
 通过 发布包：包标记未编译 utils
 通过 发布包：已移除源码 utils.app_home
 通过 发布包：无逐模块扩展 utils.app_home

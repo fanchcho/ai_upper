@@ -10,7 +10,7 @@
   },
   "coverage": {
     "en": {
-      "keys": 2250,
+      "keys": 2251,
       "missing": [],
       "empty": [],
       "intentional_empty": {
@@ -18,7 +18,7 @@
       }
     },
     "zh-CN": {
-      "keys": 2250,
+      "keys": 2251,
       "missing": [],
       "empty": [],
       "intentional_empty": {
@@ -26,6 +26,6 @@
       }
     }
   },
-  "python_translation_calls": 845,
+  "python_translation_calls": 846,
   "translation_call_errors": []
 }

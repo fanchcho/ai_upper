@@ -6,9 +6,10 @@ commands=[
  [sys.executable,'tools/build.py','--help'],
  [sys.executable,'tools/build.py','--invalid-option'],
  [sys.executable,'tools/build.py','--verify'],
- [sys.executable,'-c',"import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"],
+ [sys.executable,'-c',"import sys;sys.path.insert(0,'tools');from ai_upper.egg_loader import _key_bytes;assert not {'locale_runtime','application','native_i18n'}.intersection(sys.modules);\ntry:_key_bytes('invalid!')\nexcept ValueError as e:print(e,file=sys.stderr);sys.exit(2)"],
  [sys.executable,'-c',"import sys;sys.path.insert(0,'app/src');from mvvm.services.greeting import GreetingService;print(GreetingService().message())"],
  [sys.executable,'tools/ci_tail.py','--help'],
+ [sys.executable,'tools/ci_tail.py','--log','.tmp/i18n-final/no-such-log','--title','i18n-check'],
 ]
 results=[]
 for lang in ('en','zh-CN'):

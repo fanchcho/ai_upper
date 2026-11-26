@@ -181,7 +181,7 @@ def main(argv=None):
     )
     parser.add_argument(
         "--label",
-        default="log",
+        default=tr("finish.log"),
         help=tr('legacy.b3928325349a'),
     )
     parser.add_argument(

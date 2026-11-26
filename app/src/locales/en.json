@@ -2248,5 +2248,6 @@
   "display.c6db27374652": "(empty)",
   "finish.brand": "Deva",
   "finish.mcp": "MCP",
-  "display.b49edb287124": "Access denied: the path is outside the open project"
+  "display.b49edb287124": "Access denied: the path is outside the open project",
+  "finish.log": "log"
 }

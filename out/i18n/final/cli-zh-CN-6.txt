@@ -1,0 +1,8 @@
+$ ['/home/agent/shared_workspace/ai_upper/.venv/bin/python', 'tools/ci_tail.py', '--log', '.tmp/i18n-final/no-such-log', '--title', 'i18n-check']
+LANG=zh_CN.UTF-8
+stdout:
+::error title=i18n-check::未生成 日志：步骤在写入之前失败。
+
+stderr:
+
+exit=0
