@@ -1,16 +1,15 @@
-# 本次恢复执行的真实状态
+# 本轮收口清单
 
-已完成代码：490 处初轮展示迁移、39 处补充旧 ViewModel/关于文案；工具摘要 169 条来源候选接入 display.*（按展示边界转换，工具原始记录不变）。
-已验证：58 项旧界面/聊天定向回归、114 项服务与模型回归、新增语言优先级/协议保持测试 3 项通过；中英各 7 条 CLI 命令实跑。
-资源：2098 键/语言，缺键 0；Python 翻译调用缺键/插值缺参 0。
+**本轮零未解释残留已达成。** 逐条依据、命令、stdout/stderr、截图和未验证项见 REPORT.md 的 2026-11-26 小节与 final/。
 
-不能宣称全部收口的事实：
-- 全仓候选的语义复核尚未达到零未解释；scan-summary.txt 仍有 needs_review。
-- 引导器 egg_loader.py 在加载应用资源之前运行，尚未迁移其用户可见错误。
-- 构建 verify 的检查项目名称尚有英文；GreetingService 的演示问候尚有英文。
-- 深色旧 QTextBrowser 仍使用旧版固定浅色富文本样式，截图能显示但正文对比度不合格；这不是 QML Theme.qml 回退。
-- 工具卡正文原始结果仍有中文，当前仅标题摘要和卡片状态已接翻译。
-- CLI 没有现成 --json 参数和确认提示入口，不能虚构运行。验证的是现有 CI annotation 协议字段稳定。
-- macOS / Windows 原生窗口与实际发布包未验证。
+- [x] 742 条旧候选逐条复核：298 resolved / 444 out_of_scope / 0 needs_review；final/review-742.csv。
+- [x] 当前 Python/QML 全仓候选扫描：129 resolved / 1949 out_of_scope / 0 needs_review；final/current-scan.csv。重跑：AI_UPPER_HOME=/tmp/ai-upper-final .venv/bin/python out/i18n/close/scan.py。
+- [x] 工具卡正文在展示边界翻译；测试原工具对象/模型 payload/会话文件字节不变；159 个 display 模板英文展示无中文残留。
+- [x] bootstrap 最小双语路径、verify 项名、GreetingService、构建提示；中英各 7 条实际执行，final/cli-results.json。
+- [x] 旧 QWidget 主窗/设置/工具卡中英浅深 20 张截图；正文浅色16.41:1、深色13.12:1；final/screenshots.md、contrast.json。
+- [x] QML Theme.qml 无 diff；同一已打开面板中英即时切换实测通过；final/live-settings.txt。
+- [x] 每语言 2251 键，资源缺键0；Python翻译调用 846 处，缺键/缺参0。
+- [x] 全量 pytest：1414 passed, 9 skipped in 350.50s (0:05:50)；exit=0，final/pytest-final.txt。
+- [ ] macOS/Windows 原生窗口、真实发布包与真实系统 locale 更改：未验证，原因详见报告。这些不是已完成测试。
 
-以上必须在最终报告中保留，不能把字典覆盖率当作全仓文案验收。
+现有 CLI 无 --json / 确认提示入口；没有新增或虚构相应操作。CI annotation 字段和模型协议字段保留。

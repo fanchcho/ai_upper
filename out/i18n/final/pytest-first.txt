@@ -1,0 +1,378 @@
+........................................................................ [  5%]
+.........................................ss............................. [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+..........................ss..........................................F. [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+........................................................s............... [ 45%]
+........................................................................ [ 50%]
+................ssss.................................................... [ 55%]
+........................................................................ [ 60%]
+.FFFFF....FF.FFFF.............F......................................... [ 65%]
+........................................................................ [ 70%]
+........................................................................ [ 75%]
+........................................................................ [ 80%]
+........................................F...F........................... [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+.......................................................                  [100%]
+=================================== FAILURES ===================================
+_______________ test_send_raises_busy_message_when_turn_running ________________
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_send_raises_busy_message_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff856f10f0>
+
+    def test_send_raises_busy_message_when_turn_running(tmp_path, monkeypatch):
+        """同一会话已有一轮在跑时，第二次发送必须被拒绝、文案与原版一致。"""
+        monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
+        gate = threading.Event()
+        rig = Rig(tmp_path / "busy-home", gated_stream("开头", gate))
+        first = rig.host.send({"sessionId": "h-busy", "text": "第一句"})
+        assert first["turnId"]
+        assert wait_for(lambda: rig.host.is_busy("h-busy"))
+        with pytest.raises(Exception) as excinfo:
+            rig.host.send({"sessionId": "h-busy", "text": "第二句"})
+>       assert BUSY_MESSAGE in str(excinfo.value)
+E       AssertionError: assert 'finish.ui.03c306922c8f' in '这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。'
+E        +  where '这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。' = str(BridgeError('这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。'))
+E        +    where BridgeError('这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。') = <ExceptionInfo BridgeError('这个对话正在进行中（可能由手机端或定时任务发起），请等它结束后再发。') tblen=2>.value
+
+app/tests/test_host_write.py:186: AssertionError
+__________ test_send_rejects_unpicked_attachment_but_still_sends_text __________
+
+qapp = <PySide6.QtWidgets.QApplication(0x28880970) at 0xffff8a51eac0>
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_send_rejects_unpicked_att0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff89f25780>
+capsys = <_pytest.capture.CaptureFixture object at 0xffff8626e510>
+
+    def test_send_rejects_unpicked_attachment_but_still_sends_text(qapp, tmp_path, monkeypatch, capsys):
+        """没经过回形针登记（不在白名单）的路径不能变成附件；提问正文照常发送。"""
+        bridge, store, _host, _home = _rig(tmp_path, monkeypatch, session=StoredSession(id="s-1"))
+        session = store.load_session("s-1")
+        session.messages = []
+        store.save("s-1")
+        assert bridge.sendWithAttachments("只有正文", ["/etc/passwd"]) is True
+        deadline = time.time() + 10.0
+        while time.time() < deadline and not bridge.turn_finished():
+            bridge.tick()
+            time.sleep(0.02)
+        saved = store.load_session("s-1")
+        user = next(m for m in saved.messages if m.role == "user")
+        kinds = [getattr(part, "type", "") for part in user.content]
+        assert "image" not in kinds and "document" not in kinds
+        text = "".join(getattr(part, "text", "") for part in user.content)
+        assert "只有正文" in text
+>       assert "已忽略未授权文件" in text or "passwd" not in text
+E       AssertionError: assert ('已忽略未授权文件' in '只有正文\n（Ignored unauthorized file: passwd）' or 'passwd' not in '只有正文\n（Igno...ile: passwd）'
+E         
+E         'passwd' is contained here:
+E           只有正文
+E           （Ignored unauthorized file: passwd）
+E         ?                             ++++++)
+
+app/tests/test_qml_chat_files.py:426: AssertionError
+----------------------------- Captured stdout call -----------------------------
+QML SEND {"sessionId": "s-1", "text": "只有正文", "attachments": ["/etc/passwd"]}
+QML TURN 6d7b4efaf699463bb2ecb60ce18e8365
+QML STREAM {"text": "好"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+_ test_inspect_rejects_with_the_reason_the_shell_shows[bundle.zip-0-unsupported-\u6682\u4e0d\u652f\u6301\u7684\u6587\u4ef6\u7c7b\u578b] _
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_inspect_rejects_with_the_0')
+name = 'bundle.zip', size = 0, kind = 'unsupported', reason = '暂不支持的文件类型'
+
+    @pytest.mark.parametrize(
+        "name,size,kind,reason",
+        [
+            ("bundle.zip", 0, "unsupported", "暂不支持的文件类型"),
+            ("photo.png", MAX_IMAGE + 1, "image", "图片过大（>5MB）"),
+            ("manual.pdf", MAX_PDF + 1, "document", "PDF 过大（>20MB）"),
+            ("dump.txt", MAX_TEXT + 1, "text", "文本过大（>512KB）"),
+        ],
+    )
+    def test_inspect_rejects_with_the_reason_the_shell_shows(tmp_path, name, size, kind, reason):
+        """不合规的文件必须带原版的拒绝原因，而不是静默变成「只给位置」。"""
+        service = AttachmentService(tmp_path)
+        verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+        assert verdict["supported"] is False
+        assert verdict["kind"] == kind
+>       assert verdict["reason"] == reason
+E       AssertionError: assert 'Unsupported file type' == '暂不支持的文件类型'
+E         
+E         - 暂不支持的文件类型
+E         + Unsupported file type
+
+app/tests/test_qml_chat_files.py:449: AssertionError
+_ test_inspect_rejects_with_the_reason_the_shell_shows[photo.png-5242881-image-\u56fe\u7247\u8fc7\u5927\uff08>5MB\uff09] _
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_inspect_rejects_with_the_1')
+name = 'photo.png', size = 5242881, kind = 'image', reason = '图片过大（>5MB）'
+
+    @pytest.mark.parametrize(
+        "name,size,kind,reason",
+        [
+            ("bundle.zip", 0, "unsupported", "暂不支持的文件类型"),
+            ("photo.png", MAX_IMAGE + 1, "image", "图片过大（>5MB）"),
+            ("manual.pdf", MAX_PDF + 1, "document", "PDF 过大（>20MB）"),
+            ("dump.txt", MAX_TEXT + 1, "text", "文本过大（>512KB）"),
+        ],
+    )
+    def test_inspect_rejects_with_the_reason_the_shell_shows(tmp_path, name, size, kind, reason):
+        """不合规的文件必须带原版的拒绝原因，而不是静默变成「只给位置」。"""
+        service = AttachmentService(tmp_path)
+        verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+        assert verdict["supported"] is False
+        assert verdict["kind"] == kind
+>       assert verdict["reason"] == reason
+E       AssertionError: assert 'Image too large (>5MB)' == '图片过大（>5MB）'
+E         
+E         - 图片过大（>5MB）
+E         + Image too large (>5MB)
+
+app/tests/test_qml_chat_files.py:449: AssertionError
+_ test_inspect_rejects_with_the_reason_the_shell_shows[manual.pdf-20971521-document-PDF \u8fc7\u5927\uff08>20MB\uff09] _
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_inspect_rejects_with_the_2')
+name = 'manual.pdf', size = 20971521, kind = 'document'
+reason = 'PDF 过大（>20MB）'
+
+    @pytest.mark.parametrize(
+        "name,size,kind,reason",
+        [
+            ("bundle.zip", 0, "unsupported", "暂不支持的文件类型"),
+            ("photo.png", MAX_IMAGE + 1, "image", "图片过大（>5MB）"),
+            ("manual.pdf", MAX_PDF + 1, "document", "PDF 过大（>20MB）"),
+            ("dump.txt", MAX_TEXT + 1, "text", "文本过大（>512KB）"),
+        ],
+    )
+    def test_inspect_rejects_with_the_reason_the_shell_shows(tmp_path, name, size, kind, reason):
+        """不合规的文件必须带原版的拒绝原因，而不是静默变成「只给位置」。"""
+        service = AttachmentService(tmp_path)
+        verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+        assert verdict["supported"] is False
+        assert verdict["kind"] == kind
+>       assert verdict["reason"] == reason
+E       AssertionError: assert 'PDF too large (>20MB)' == 'PDF 过大（>20MB）'
+E         
+E         - PDF 过大（>20MB）
+E         + PDF too large (>20MB)
+
+app/tests/test_qml_chat_files.py:449: AssertionError
+_ test_inspect_rejects_with_the_reason_the_shell_shows[dump.txt-524289-text-\u6587\u672c\u8fc7\u5927\uff08>512KB\uff09] _
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_inspect_rejects_with_the_3')
+name = 'dump.txt', size = 524289, kind = 'text', reason = '文本过大（>512KB）'
+
+    @pytest.mark.parametrize(
+        "name,size,kind,reason",
+        [
+            ("bundle.zip", 0, "unsupported", "暂不支持的文件类型"),
+            ("photo.png", MAX_IMAGE + 1, "image", "图片过大（>5MB）"),
+            ("manual.pdf", MAX_PDF + 1, "document", "PDF 过大（>20MB）"),
+            ("dump.txt", MAX_TEXT + 1, "text", "文本过大（>512KB）"),
+        ],
+    )
+    def test_inspect_rejects_with_the_reason_the_shell_shows(tmp_path, name, size, kind, reason):
+        """不合规的文件必须带原版的拒绝原因，而不是静默变成「只给位置」。"""
+        service = AttachmentService(tmp_path)
+        verdict = service.inspect(str(tmp_path / name), size, by_path=False)
+        assert verdict["supported"] is False
+        assert verdict["kind"] == kind
+>       assert verdict["reason"] == reason
+E       AssertionError: assert 'Text too large (>512KB)' == '文本过大（>512KB）'
+E         
+E         - 文本过大（>512KB）
+E         + Text too large (>512KB)
+
+app/tests/test_qml_chat_files.py:449: AssertionError
+____ test_build_attachment_part_notes_when_the_location_only_file_vanished _____
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_not0')
+
+    def test_build_attachment_part_notes_when_the_location_only_file_vanished(tmp_path):
+        """登记成「只给位置」的文件消失后：给「文件已不存在」，不是抛异常也不是假装成功。
+    
+        注意两种白名单的语义不同：可读白名单（`allowed`）里的文件消失走的是
+        「读取失败已忽略」，只有位置白名单（`allowed_files`）才走「文件已不存在」。
+        """
+        service = AttachmentService(tmp_path)
+        gone = tmp_path / "gone.bin"
+        gone.write_bytes(b"x")
+        service.inspect(str(gone), gone.stat().st_size)  # unsupported → 只给位置
+        assert str(gone) in service.allowed_files
+        gone.unlink()
+        result = service.build_attachment_part(str(gone))
+        assert result.part is None
+>       assert result.note == "文件已不存在：gone.bin"
+E       AssertionError: assert 'File no long...sts: gone.bin' == '文件已不存在：gone.bin'
+E         
+E         - 文件已不存在：gone.bin
+E         + File no longer exists: gone.bin
+
+app/tests/test_qml_chat_files.py:497: AssertionError
+_ test_build_attachment_part_reports_a_vanished_readable_file_as_a_read_failure _
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_rep0')
+
+    def test_build_attachment_part_reports_a_vanished_readable_file_as_a_read_failure(tmp_path):
+        """可读白名单里的文件消失：报「读取失败已忽略」（与上面那条区分开）。"""
+        service = AttachmentService(tmp_path)
+        gone = tmp_path / "gone.txt"
+        gone.write_text("x", encoding="utf-8")
+        service.inspect(str(gone), gone.stat().st_size)
+        assert str(gone) in service.allowed
+        gone.unlink()
+        result = service.build_attachment_part(str(gone))
+        assert result.part is None
+>       assert result.note == "读取失败已忽略：gone.txt"
+E       AssertionError: assert 'Ignored unre...ile: gone.txt' == '读取失败已忽略：gone.txt'
+E         
+E         - 读取失败已忽略：gone.txt
+E         + Ignored unreadable file: gone.txt
+
+app/tests/test_qml_chat_files.py:510: AssertionError
+_______ test_build_attachment_part_notes_an_oversized_selected_text_file _______
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_not2')
+
+    def test_build_attachment_part_notes_an_oversized_selected_text_file(tmp_path):
+        """发送时二次判体积：即使选择时没超限，读进来超限也要给「文本过大已忽略」。"""
+        service = AttachmentService(tmp_path)
+        big = tmp_path / "big.log"
+        big.write_bytes(b"a" * (MAX_TEXT + 1))
+        service.inspect(str(big), 10)  # 选择时报的体积没超限
+        result = service.build_attachment_part(str(big))
+        assert result.part is None
+>       assert result.note == "文本过大已忽略：big.log"
+E       AssertionError: assert 'Ignored over...text: big.log' == '文本过大已忽略：big.log'
+E         
+E         - 文本过大已忽略：big.log
+E         + Ignored oversized text: big.log
+
+app/tests/test_qml_chat_files.py:535: AssertionError
+________ test_build_attachment_part_notes_an_unreadable_authorised_file ________
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_not3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff7ec55470>
+
+    def test_build_attachment_part_notes_an_unreadable_authorised_file(tmp_path, monkeypatch):
+        """已授权但读取失败：给「读取失败已忽略」，不能把 OSError 抛给界面。
+    
+        用 monkeypatch 让 `read_bytes` 抛 `OSError`，而不是靠 chmod：chmod 在 root 下无效，
+        在 Windows 上也没有 0o000 的语义，这样三个平台跑的是同一条断言。
+        """
+        service = AttachmentService(tmp_path)
+        victim = tmp_path / "locked.txt"
+        victim.write_text("x", encoding="utf-8")
+        service.allowed.add(str(victim))
+    
+        def boom(self):
+            raise OSError(13, "Permission denied")
+    
+        monkeypatch.setattr(type(victim), "read_bytes", boom, raising=True)
+        result = service.build_attachment_part(str(victim))
+        assert result.part is None
+>       assert result.note == "读取失败已忽略：locked.txt"
+E       AssertionError: assert 'Ignored unre...e: locked.txt' == '读取失败已忽略：locked.txt'
+E         
+E         - 读取失败已忽略：locked.txt
+E         + Ignored unreadable file: locked.txt
+
+app/tests/test_qml_chat_files.py:555: AssertionError
+____ test_build_attachment_part_notes_an_image_whose_bytes_exceed_the_limit ____
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_not4')
+
+    def test_build_attachment_part_notes_an_image_whose_bytes_exceed_the_limit(tmp_path):
+        """图片类型判定为 image，但读到的字节超限：给「图片过大已忽略」。"""
+        service = AttachmentService(tmp_path)
+        image = tmp_path / "huge.png"
+        image.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * MAX_IMAGE)
+        service.allowed.add(str(image))
+        result = service.build_attachment_part(str(image))
+        assert result.part is None
+>       assert result.note == "图片过大已忽略：huge.png"
+E       AssertionError: assert 'Ignored over...age: huge.png' == '图片过大已忽略：huge.png'
+E         
+E         - 图片过大已忽略：huge.png
+E         + Ignored oversized image: huge.png
+
+app/tests/test_qml_chat_files.py:566: AssertionError
+___ test_build_attachment_part_notes_a_pdf_that_openai_protocol_cannot_read ____
+
+tmp_path = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_build_attachment_part_not5')
+
+    def test_build_attachment_part_notes_a_pdf_that_openai_protocol_cannot_read(tmp_path):
+        """OpenAI 协议下 PDF 直接跳过，并说明原因（原版同样语义）。"""
+        service = AttachmentService(tmp_path)
+        pdf = tmp_path / "manual.pdf"
+        pdf.write_bytes(b"%PDF-1.4")
+        service.inspect(str(pdf), pdf.stat().st_size)
+        result = service.build_attachment_part(str(pdf), adapter="openai")
+        assert result.part is None
+>       assert "需使用 Anthropic 或 OpenAI Responses 协议" in result.note
+E       AssertionError: assert '需使用 Anthropic 或 OpenAI Responses 协议' in 'PDF manual.pdf requires a model using Anthropic or OpenAI Responses; skipped'
+E        +  where 'PDF manual.pdf requires a model using Anthropic or OpenAI Responses; skipped' = AttachmentPart(part=None, note='PDF manual.pdf requires a model using Anthropic or OpenAI Responses; skipped').note
+
+app/tests/test_qml_chat_files.py:577: AssertionError
+_____ test_transcript_markdown_keeps_a_message_that_has_only_an_attachment _____
+
+workspace = PosixPath('/home/agent/shared_workspace/ai_upper/.tmp/pytest-of-root/pytest-2/test_transcript_markdown_keeps0/work')
+
+    def test_transcript_markdown_keeps_a_message_that_has_only_an_attachment(workspace):
+        b64 = base64.b64encode((workspace / "shot.png").read_bytes()).decode("ascii")
+        messages = [
+            Message(
+                role="user",
+                content=[ImagePart(type="image", mediaType="image/png", name="shot.png", data=b64)],
+            )
+        ]
+        markdown = transcript_markdown(messages)
+>       assert "## 你" in markdown
+E       AssertionError: assert '## 你' in '## 我\n\n![shot.png](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAEElEQVR4nGP4z8AARwzEcQCukw/x0F8jngAAAABJRU5ErkJggg==)'
+
+app/tests/test_qml_chat_files_ui.py:144: AssertionError
+__________________ test_persona_upsert_blank_name_falls_back ___________________
+
+personas = <mvvm.services.persona_store.PersonaStore object at 0xffff854a4190>
+
+    def test_persona_upsert_blank_name_falls_back(personas):
+>       assert personas.upsert({"name": "   "})["name"] == "未命名提示词"
+E       AssertionError: assert 'Untitled prompt' == '未命名提示词'
+E         
+E         - 未命名提示词
+E         + Untitled prompt
+
+app/tests/test_settings_write.py:75: AssertionError
+__________ test_persona_upsert_non_object_payload_is_treated_as_empty __________
+
+personas = <mvvm.services.persona_store.PersonaStore object at 0xffff854a4f50>
+
+    def test_persona_upsert_non_object_payload_is_treated_as_empty(personas):
+        record = personas.upsert(["not", "a", "dict"])
+>       assert record["name"] == "未命名提示词"
+E       AssertionError: assert 'Untitled prompt' == '未命名提示词'
+E         
+E         - 未命名提示词
+E         + Untitled prompt
+
+app/tests/test_settings_write.py:104: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_host_write.py::test_send_raises_busy_message_when_turn_running
+FAILED app/tests/test_qml_chat_files.py::test_send_rejects_unpicked_attachment_but_still_sends_text
+FAILED app/tests/test_qml_chat_files.py::test_inspect_rejects_with_the_reason_the_shell_shows[bundle.zip-0-unsupported-\u6682\u4e0d\u652f\u6301\u7684\u6587\u4ef6\u7c7b\u578b]
+FAILED app/tests/test_qml_chat_files.py::test_inspect_rejects_with_the_reason_the_shell_shows[photo.png-5242881-image-\u56fe\u7247\u8fc7\u5927\uff08>5MB\uff09]
+FAILED app/tests/test_qml_chat_files.py::test_inspect_rejects_with_the_reason_the_shell_shows[manual.pdf-20971521-document-PDF \u8fc7\u5927\uff08>20MB\uff09]
+FAILED app/tests/test_qml_chat_files.py::test_inspect_rejects_with_the_reason_the_shell_shows[dump.txt-524289-text-\u6587\u672c\u8fc7\u5927\uff08>512KB\uff09]
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_notes_when_the_location_only_file_vanished
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_reports_a_vanished_readable_file_as_a_read_failure
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_notes_an_oversized_selected_text_file
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_notes_an_unreadable_authorised_file
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_notes_an_image_whose_bytes_exceed_the_limit
+FAILED app/tests/test_qml_chat_files.py::test_build_attachment_part_notes_a_pdf_that_openai_protocol_cannot_read
+FAILED app/tests/test_qml_chat_files_ui.py::test_transcript_markdown_keeps_a_message_that_has_only_an_attachment
+FAILED app/tests/test_settings_write.py::test_persona_upsert_blank_name_falls_back
+FAILED app/tests/test_settings_write.py::test_persona_upsert_non_object_payload_is_treated_as_empty
+15 failed, 1399 passed, 9 skipped in 351.76s (0:05:51)

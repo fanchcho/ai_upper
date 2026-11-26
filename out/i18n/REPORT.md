@@ -204,3 +204,104 @@ $ cat out/i18n/close/pytest-final.exit
 ```
 
 此前全量失败日志保留：full-tests.txt 为 49 failed / 1357 passed / 9 skipped，pytest.txt 为 10 failed / 1398 passed / 9 skipped。修复 import-time 固定语言、旧中文场景明确 locale 和遗漏插值后，最终结果如上。没有用失败运行冒充通过。
+
+
+## 2026-11-26 本轮收口：742 条审查、工具正文、启动 CLI 与旧正文深色
+
+**本轮零未解释残留已达成。** 原因并非缺少更多语言包，而是前轮迁移主要覆盖 QML 与旧控件的直接赋值，遗漏了服务层返回值、启动资源尚未可用时的错误、构建检查名称以及工具正文展示边界。字典覆盖率不能证明这些调用点已经使用翻译。
+
+本轮沿用既有 `zh-CN` / `en` 资源和语言顺序；deva 的语言能力与来源证据见前文，本轮不重做翻译生成、不改 deva。全部应用/测试运行显式设置 `AI_UPPER_HOME=/tmp/ai-upper-final*`，临时脚本与构建验证文件位于仓库 `.tmp/`。
+
+### 逐项交付与审查口径
+
+- [x] 冻结旧扫描 `/home/agent/shared_workspace/ai_upper/out/i18n/final/baseline-scan.json`，其中待审查的 **742 行**逐条保留文件、原行号、完整原文、判定、分类理由和新键；交付 `/home/agent/shared_workspace/ai_upper/out/i18n/final/review-742.csv` / `.json`。**298 resolved / 444 out_of_scope / 0 needs_review**。已迁移的源码原文若重新出现，复核脚本会失败，不会自动算作已解决。
+- [x] 当前 Python AST + QML 字符串扫描：**129 resolved / 1949 out_of_scope / 0 needs_review**；逐条清单 `/home/agent/shared_workspace/ai_upper/out/i18n/final/current-scan.csv` / `.json`。扫描范围为 `app/src/**/*.py`、`app/src/qml/**/*.qml`、`tools/**/*.py`；Python 按原扫描的中文或多词英文规则，并额外复核用户控件/print 调用中的单词字面量；QML 扫含字母/中文的全部引号字面量。测试夹具和报告里的演示输入不是生产 UI 文案。
+- [x] 所有 out_of_scope 都记录具体用途：模型 schema / prompt / 原工具结果、机器协议或编译/绘图参数、诊断日志/源码文档、第三方输出匹配。**原工具结果保留不等于展示不翻译**：已知应用生成说明在 `display_text` 展示副本里转换。用户/模型正文、文件原文、命令输出、路径和协议 ID 保留。当前代码的源码文档是 Python `__doc__` 元数据，不是执行时给用户的提示。
+- [x] 工具卡正文：`transcript_render._tool_card` 在 HTML 转义前处理展示副本；完整模板、逐行结果、嵌套错误、策略命名参数和恢复 JSON 的 reason 支持双语。原 JSON 键/status、ToolResult、发送模型的 Message 与磁盘会话字节均不写回。`test_tool_display_keeps_model_payload_and_saved_bytes` 实测磁盘文件字节前后相等。159 个 display 模板英文展示扫描，中文残留 0：`display-sweep.json`。
+- [x] `tools/ai_upper/egg_loader.py` 使用 8 项 ASCII 内嵌双语资源，测试与共享 catalog 逐键相等；运行时只需标准库，不提前导入应用。CLI 实跑进程断言 `locale_runtime/application/native_i18n` 都未被加载，再触发错误。
+- [x] verify 检查名称、GreetingService、残余构建帮助及缺失日志提示迁移。`lipo/codesign/strip` 命令名和参数不做替换；额外纠正旧译文对 `egg`、`auto/memory/extract`、glob 的误译，见 `translation-corrections.json`。
+- [x] 旧 QTextBrowser 使用 `markdown.document.LIGHT/DARK` 既有 token，ChatPane 根据实际 Qt palette 选择；QML `Theme.qml` 未修改，原文件 diff 为空（`theme-unchanged.txt`）。QML 仅将剩余自称/品牌标签接资源，原即时切换绑定不变。`live-settings.txt` 证明同一设置面板对象内中→英→中切换、导航/Send/空会话标题即时更新。
+
+迁移映射分为 `ui-mapping.json`、`tables-mapping.json`、`cli-mapping.json`、`display-mapping.json`；完整 742 行表统一关联原位置。当前翻译调用位置（文件:新行号→键）见 `translation-calls.json`，源码/测试改动清单见 `source-changes.txt`。没有对协议名、命令名或参数名做全局正则替换。
+
+### 重跑命令与实际输出
+
+统一前置环境：
+
+```bash
+cd /home/agent/shared_workspace/ai_upper
+export AI_UPPER_HOME=/tmp/ai-upper-final
+export TMPDIR="$PWD/.tmp"
+export QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software
+export LD_LIBRARY_PATH="$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu"
+.venv/bin/python out/i18n/close/scan.py
+```
+
+实际审查摘要（完整 JSON 在 `final/scan-summary.txt`）：
+
+```text
+baseline_review: resolved=298, out_of_scope=444, needs_review=0
+current_scan: resolved=129, out_of_scope=1949, needs_review=0
+en: 2251 keys, missing=[], empty=[]
+zh-CN: 2251 keys, missing=[], empty=[]
+Python translation calls: 846; missing keys / missing interpolation args: 0
+exit=0
+```
+
+`app.tagline` 是原版两种语言都为空的副标题，单独列为 intentional_empty，非漏翻译，也没有隐藏回退。未知 key 沿用原版字面 key 回退；专门测试已覆盖。Python 动态模板由调用者后续格式化的命名占位符保持原机制；静态 tr 调用的 pN 参数自动核对无缺参。
+
+### CLI 真执行（每语言 7 条，均无破坏性操作）
+
+执行器：`.venv/bin/python out/i18n/final/cli-evidence.py`。各子命令的精确 argv、LANG、stdout、stderr、退出码分别保存到 `cli-en-0.txt`…`cli-en-6.txt` 与 `cli-zh-CN-0.txt`…`cli-zh-CN-6.txt`；索引 `cli-results.json`。
+
+| 命令/入口 | en 片段 | zh-CN 片段 | 退出码 |
+|---|---|---|---|
+| `tools/build.py --help` | `usage:` / `egg extension loader: auto, memory or extract` | `用法：` / `egg 扩展加载后端：auto、memory 或 extract` | 0 |
+| `tools/build.py --invalid-option` | `error: unrecognized arguments` | `错误：无法识别的参数` | 2 |
+| `tools/build.py --verify` | `FAIL egg package marker locales` / `PASS runtime manifest format=4` | `失败 暂存目录` / `通过 运行时清单格式=4` | 1 |
+| 独立 bootstrap `_key_bytes('invalid!')` | `egg key must be a hexadecimal string` | `egg 密钥必须是十六进制字符串` | 2 |
+| `GreetingService().message()` | `Hello from ai_upper` | `来自 ai_upper 的问候` | 0 |
+| `tools/ci_tail.py --help` | `CI log annotations` | `CI 日志注释` | 0 |
+| `tools/ci_tail.py --log .tmp/i18n-final/no-such-log --title i18n-check` | `::error title=i18n-check::log was not created…` | `::error title=i18n-check::未生成 日志…` | 0 |
+
+语言选择优先级为 **`--lang` > `AI_UPPER_LANG` > 显式 AI_UPPER_HOME 下 config.json 的 locale > `LC_ALL` > `LC_MESSAGES` > `LANG` > en**。zh 前缀归一到 zh-CN，其他不支持的语言回退 en；引导器与应用/构建 CLI 相同。上述实际运行取消 AI_UPPER_LANG，以 LANG/LC_ALL 双语环境验证。自选配置/参数优先级由新增 bootstrap 测试和既有 legacy_i18n 测试验证。
+
+verify 的 exit=1 如实保留：此环境现有 staging 缺失/旧发布包与修改后的源码不匹配；本轮没有构建并验收真实发布包，不能把该运行写成发布验证通过。`ci_tail` 以 annotation 报错，自身 exit=0 是原有协议行为。CLI **无 `--json` 开关、无确认提示入口**，没有虚构这两项测试；机器输出稳定的证据是 CI annotation 前缀、协议字段和工具原始记录测试。
+
+### 真渲染与对比度
+
+真实 Linux Qt offscreen 渲染，非图片生成：`render.py` 及既有 `render-widgets*.py`。四组完整旧窗口（聊天/设置/工具卡/待办展开）共 20 张，另有 4 张正文对比图；QML 中英浅深聊天/设置 8 张也已重渲染。图片完整列表：`screenshots.md`。已目视检查中英设置和工具正文，未发现新增控件文案裁切、覆盖或重叠；会话列表长标题按原有 elide 规则省略，大图片使正文容器滚动属于原有布局。截图内的中文会话名、用户消息、模拟模型回复和待办内容是原始数据，不属于应用标签。
+
+| 样式 | 正文/主背景 | 正文/错误背景 | 错误标题/错误背景 |
+|---|---:|---:|---:|
+| 浅色 | 16.41:1 | 15.09:1 | 6.05:1 |
+| 深色 | 13.12:1 | 12.06:1 | 7.88:1 |
+
+按 WCAG sRGB 相对亮度公式计算，全部 ≥4.5:1；输入颜色与完整精度见 `contrast.json`，计算脚本在 `render.py`。
+
+### 测试与提交
+
+最终代码执行：
+
+```bash
+.venv/bin/python -m pytest app/tests -q -rs
+```
+
+```text
+1414 passed, 9 skipped in 350.50s (0:05:50)
+exit=0
+```
+
+原始输出 `/home/agent/shared_workspace/ai_upper/out/i18n/final/pytest-final.txt` 与 `.exit`；比上一轮 1409 passed 增加 5 个测试，不减少原测试。覆盖 bootstrap 语言优先级/独立资源、工具展示副本与持久化/模型 payload 不变、网络错误切换；既有测试继续覆盖 QML 即时切换、持久化、跟随系统、缺键回退。第一次全量的 15 个失败和修复过程保留在 `pytest-first.txt`、`fix-tests.txt`（131 passed），中间完整通过也保留 `pytest-interim.txt`。最终资源专项 12 passed，QML 截图专项 4 passed；不掩盖最初失败。
+
+可提交单元分别为 `218f61a`（正文/主题）、`ee0f021`（引导/CLI）、`819bcf0`（742项审查/展示补漏）、`317fc20`（命令参数原文/日志提示），恢复点 `RECOVERY.md`。最终报告证据另行提交；推送后本地 HEAD、ls-remote 原始输出与干净状态写入 `final/push.txt`，避免报告嵌入自身提交 hash 的自引用。
+
+### 明确未验证
+
+- macOS / Windows 原生窗口、原生字体和窗口系统：当前主机为 Linux，未运行这些平台。截图验证仅指 Linux Qt offscreen。
+- 当前代码的真实发布包完整 build / release / 签名 / 公证：未执行；现有包 verify 实跑 exit=1，原因已列，不宣称发布验证通过。
+- 修改真实操作系统语言设置：未执行；使用 QLocale 系统语言替身测试和 LANG/LC_ALL 子进程环境验证。
+- 任意第三方错误、模型输出、用户文件内容的自动翻译：按约束保持原文，仅翻译应用持有的显示模板。
+- `--json` 和 CLI 确认：无该入口，不是测试成功。
+
+本轮要求的四个代码收口项均有实现、对账和实际证据；以上平台/发布环境边界与“零未解释残留”分别陈述，不互相替代。

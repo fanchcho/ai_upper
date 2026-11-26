@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/ai_upper/out/i18n/live_settings_check.py", line 14, in <module>
+    w, b, ticker, engine = _build_window(base, patch, sessions=[('untitled','')])
+                           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agent/shared_workspace/ai_upper/app/tests/test_qml_window_controls.py", line 92, in _build_window
+    home.mkdir(parents=True)
+    ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 724, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: '/tmp/ai-upper-i18n-test/live-settings/home'

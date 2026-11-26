@@ -1,0 +1,3 @@
+zh-CN same settings object; navigation, send and session title updated: PASS
+en same settings object; navigation, send and session title updated: PASS
+zh-CN same settings object; navigation, send and session title updated: PASS

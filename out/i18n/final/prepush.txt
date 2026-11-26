@@ -1,0 +1,24 @@
+$ git branch --show-current
+develop
+
+
+exit=0
+$ git remote get-url origin
+git@github.com:fanchcho/ai_upper.git
+
+
+exit=0
+$ git rev-parse HEAD
+317fc20cd39f7dfc42907d871a53310b2c743878
+
+
+exit=0
+$ git ls-remote origin refs/heads/develop
+a693b919d77d81e59744f6cc90087458751038aa	refs/heads/develop
+
+
+exit=0
+$ git status --porcelain
+
+
+exit=0

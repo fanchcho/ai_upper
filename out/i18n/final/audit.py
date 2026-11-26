@@ -67,5 +67,7 @@ for name,data in [('current-scan.json',rows),('translation-calls.json',calls),('
     (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 with (OUT/'current-scan.csv').open('w',newline='') as f:
     w=csv.DictWriter(f,fieldnames=['file','line','text','status','category','key','reason'],extrasaction='ignore');w.writeheader();w.writerows(rows)
+(ROOT/'out/i18n/close/scan.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+(ROOT/'out/i18n/close/scan-summary.txt').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(result,ensure_ascii=False,indent=2))
 assert not counts['needs_review'] and not errors and all(not c['missing'] and not c['empty'] for c in coverage.values())

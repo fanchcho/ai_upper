@@ -1,0 +1,31 @@
+........................................................................ [  5%]
+.........................................ss............................. [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+..........................ss............................................ [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+........................................................s............... [ 45%]
+........................................................................ [ 50%]
+................ssss.................................................... [ 55%]
+........................................................................ [ 60%]
+........................................................................ [ 65%]
+........................................................................ [ 70%]
+........................................................................ [ 75%]
+........................................................................ [ 80%]
+........................................................................ [ 86%]
+........................................................................ [ 91%]
+........................................................................ [ 96%]
+.......................................................                  [100%]
+=========================== short test summary info ============================
+SKIPPED [1] app/tests/test_build_tool_compat.py:1704: the auto-link pragma belongs to the Windows pyconfig.h
+SKIPPED [1] app/tests/test_build_tool_compat.py:1758: handle inheritance for GUI-subsystem children belongs to Windows
+SKIPPED [1] app/tests/test_e2e_local.py:447: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] app/tests/test_e2e_local.py:488: set AI_UPPER_E2E=1 to run the full local build E2E
+SKIPPED [1] app/tests/test_native_deployment.py:177: requires cc, patchelf and readelf
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Studio user/profile: authenticated identity and profile namespace injection into the desktop runtime
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Studio approval/interaction RPC envelopes and cross-runtime resume callbacks (local QML controller is implemented and tested separately)
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 Attachments: assetId resolver, authorizedRoots, expiresAt, and delivery acknowledgment API
+SKIPPED [1] app/tests/test_plugin_host_requirements.py:11: 无应用内宿主接口，需要 SDK/installer: Studio plugin registration, RPC context, plugin lifecycle and signed release distribution
+1414 passed, 9 skipped in 350.50s (0:05:50)

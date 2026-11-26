@@ -1,0 +1,20 @@
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+status: Ready
+transcript head: ['［You］', '帮我把工作区里的笔记过一遍', '［You］']
+session count: 2
+saved: /home/agent/shared_workspace/ai_upper/out/i18n/final/en-dark/01-chat.png True (1080, 720)
+settings page: list
+saved: /home/agent/shared_workspace/ai_upper/out/i18n/final/en-dark/02-settings-list.png True (1080, 720)
+provider page: provider p1
+key status: No key configured
+models: 2
+saved: /home/agent/shared_workspace/ai_upper/out/i18n/final/en-dark/03-settings-provider.png True (1080, 720)
+explain tool session: sess_mwx07z2p_78ba78
+tool card present: True
+image resource registered: True
+todo pill: To-do: 整理工作区|读笔记 (Completed 1/3)
+saved: /home/agent/shared_workspace/ai_upper/out/i18n/final/en-dark/04-tool-card-and-todo.png True (1080, 720)
+todo details: ['[x] 看图片', '[~] 读笔记', '[ ] 写总结']
+saved: /home/agent/shared_workspace/ai_upper/out/i18n/final/en-dark/05-todo-expanded.png True (1080, 720)
+UI SHOTS PASS
