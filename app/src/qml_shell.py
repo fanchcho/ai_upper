@@ -363,6 +363,9 @@ class ShellBridge(QtCore.QObject):
         self._render_epoch = 0
         self._render_jobs = []
         self._render_executor = None
+        from markdown.cache import DisplayCache
+        self._display_cache = DisplayCache()
+        self._display_key = None
         self.rendered = 0
         self.deltas: List[str] = []
         self.stop = ""
@@ -1384,6 +1387,20 @@ class ShellBridge(QtCore.QObject):
         for _, _, job in self._render_jobs:
             job.cancel()
         source = self._markdown()
+        self._display_key = None
+        if isinstance(self._document, QtQuick.QQuickTextDocument):
+            key = self._display_cache.key(self._active, source, self._plain,
+                                          self._body.style,
+                                          (self._body.content_width, self._document.parent().width(),
+                                           self._window.devicePixelRatio() if self._window else 1.0))
+            cached = self._display_cache.get(key)
+            if cached is not None:
+                self._display_cache.activate(cached, self._document)
+                self._body = cached.body
+                self.rendered += 1
+                self._scroll_to_bottom()
+                return
+            self._display_key = key
         job = self._render_executor.submit(
             prepare_document, source, self._plain, self._body.style,
             self._body.content_width, _load_image)
@@ -1414,22 +1431,40 @@ class ShellBridge(QtCore.QObject):
                 continue
             if epoch != self._render_epoch:
                 continue
-            document = self._body.document
-            document.clear()
-            document.setDocumentMargin(0)
-            QtGui.QTextCursor(document).insertFragment(fragment)
-            kind = QtGui.QTextDocument.ResourceType.ImageResource.value
-            for url, image in images:
-                document.addResource(kind, url, image)
+            if self._display_key is not None:
+                from markdown.cache import Display
+                old = self._body
+                self._body = type(old)(style=old.style, content_width=old.content_width)
+                self._body.set_image_resolver(_load_image)
+                target = QtGui.QTextDocument()
+                previous = self._document.textDocument()
+                target.setDefaultFont(previous.defaultFont())
+                target.setDefaultTextOption(previous.defaultTextOption())
+                self._display_cache.activate(Display(self._body, target), self._document)
+            if self._display_key is None:
+                document = self._body.document
+                document.clear()
+                document.setDocumentMargin(0)
+                QtGui.QTextCursor(document).insertFragment(fragment)
+                kind = QtGui.QTextDocument.ResourceType.ImageResource.value
+                for url, image in images:
+                    document.addResource(kind, url, image)
             self._body._source = source
             self._body._plain = self._plain
             self._body._rendered_width = self._body.content_width
-            self._body.attach(self._document)
+            if self._display_key is None:
+                self._body.attach(self._document)
+            else:
+                self._body.attach(self._document, fragment=fragment, images=images)
+            if self._display_key is not None and not images and "![" not in source:
+                # External image files can change without changing Markdown.
+                self._display_cache.put(self._display_key, self._display_cache.current)
             self.rendered += 1
             self._scroll_to_bottom()
         self._render_jobs = pending
 
     def _render(self) -> None:
+        self._display_cache.invalidate_current()
         self._render_epoch += 1
         if self._document is None:
             return

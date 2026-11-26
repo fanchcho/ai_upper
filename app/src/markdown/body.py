@@ -10,8 +10,9 @@
 
 这些状态集中在这里，QML 适配层只做「把槽转发过来」。
 
-**接管方式是「渲染到自有文档 + 一次片段搬运」。** ``TextEdit`` 持有自己的
-``QTextDocument``，不能替换实例，所以内容必须落进它。
+**未缓存正文用「渲染到自有文档 + 一次片段搬运」。** Qt 6.7 起允许通过
+``QQuickTextDocument.setTextDocument`` 替换显示实例；会话缓存由壳层管理，
+命中直接复用显示实例，未命中与流式更新仍调用这里的片段搬运。
 
 早期实现是「再以目标文档重渲染一遍」，但那只在文档很小的时候成立：``QQuickTextEdit``
 把文档的 ``contentsChange`` 接到自己的 size/layout 上，**每插入一块就触发一次文档级重排**，
@@ -167,10 +168,10 @@ class BodyDocument:
         self._image_resolver = resolver
 
     # ── QML 接管 ──────────────────────────────────────────────────────────
-    def attach(self, quick_document: Any) -> Any:
+    def attach(self, quick_document: Any, fragment=None, images=None) -> Any:
         """把自有文档的内容**一次**搬进 ``QQuickTextDocument`` 的文档。
 
-        ``TextEdit`` 的文档实例由 QML 持有，不能替换，只能往里写。这里用
+        壳层可替换 ``TextEdit`` 的显示实例；这里负责向当前实例写入，用
         ``insertFragment`` 整篇替换：内容只变更一次，不会像「逐块插入」那样
         每插一块就触发一次文档级重排（实测 400 轮正文：20.5 s → 5.6 s）。
         返回目标文档。
@@ -206,7 +207,7 @@ class BodyDocument:
         # 渲染器把自有文档的页边距设成 0（正文块自己控制留白）。片段不搬运文档级的
         # ``documentMargin``，不显式对齐的话接管后四边会多出 4px 默认内边距，正文
         # 整体偏移、文档高度多 8px。
-        target.setDocumentMargin(self.document.documentMargin())
+        target.setDocumentMargin(0 if fragment is not None else self.document.documentMargin())
         if self._highlighter is not None and self._highlighter.document() is not target:
             self._highlighter.setDocument(target)
         cursor = QtGui.QTextCursor(target)
@@ -214,10 +215,16 @@ class BodyDocument:
         try:
             cursor.select(QtGui.QTextCursor.SelectionType.Document)
             cursor.removeSelectedText()
-            cursor.insertFragment(QtGui.QTextDocumentFragment(self.document))
+            cursor.insertFragment(fragment if fragment is not None
+                                  else QtGui.QTextDocumentFragment(self.document))
         finally:
             cursor.endEditBlock()
-        self._copy_images(target)
+        if images is None:
+            self._copy_images(target)
+        else:
+            kind = QtGui.QTextDocument.ResourceType.ImageResource.value
+            for url, image in images:
+                target.addResource(kind, url, image)
         # Test stubs have no QQuickItem owner; actual QML keeps one shared document.
         if isinstance(quick_document, QtCore.QObject):
             from .viewport import attach_code_viewports
