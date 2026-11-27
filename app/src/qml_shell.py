@@ -85,6 +85,19 @@ RENDER_TIMEOUT_S = 90.0
 
 # 关于页「检查更新」：原版 UpdateSection.tsx -> window.deva.update.check() 走主进程 updater，
 # 这里用同一个 GitHub releases 数据源做最小可验证实现；状态只回传界面，不自动下载安装。
+def _gio_launch(path: str) -> bool:
+    """Linux fallback for QDesktopServices::openDocument: g_app_info_launch_default_for_uri."""
+    import ctypes
+    try:
+        gio = ctypes.CDLL("libgio-2.0.so.0")
+    except OSError:
+        return False
+    gio.g_app_info_launch_default_for_uri.argtypes = [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p]
+    gio.g_app_info_launch_default_for_uri.restype = ctypes.c_int
+    uri = Path(path).resolve().as_uri().encode("utf-8")
+    error = ctypes.c_void_p()
+    return bool(gio.g_app_info_launch_default_for_uri(uri, None, None, ctypes.byref(error)))
+
 UPDATE_RELEASES_API = "https://api.github.com/repos/sqfcyily/deva/releases/latest"
 UPDATE_TIMEOUT_S = 15
 
@@ -538,7 +551,11 @@ class ShellBridge(QtCore.QObject):
         target = str(path or self._update_state.get("path") or "")
         if not target or not Path(target).is_file():
             return False
-        return bool(QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(target)))
+        if QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(target)):
+            return True
+        # Headless/Linux without xdg-open: use GIO's default application launcher
+        # (same GIO stack as xdg-open; no extra dependency).
+        return _gio_launch(target)
 
     @QtCore.Slot(result=str)
     def theme(self) -> str:
