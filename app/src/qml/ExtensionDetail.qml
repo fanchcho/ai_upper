@@ -141,6 +141,16 @@ Item {
                     id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; y: parent.height + 6; width: parent.width
                     padding: 7
                     property int activeRow: 0
+                    property string typedText: ""
+                    property double typedAt: 0
+                    function typeAhead(text) {
+                        var now = Date.now()
+                        typedText = (now - typedAt < 600 ? typedText : "") + text.toLowerCase()
+                        typedAt = now
+                        var labels = [I18n.t("extensions.rolesGeneral")].concat((root.item.personas || []).map(function(p) { return p.name }))
+                        var hit = labels.findIndex(function(label) { return label.toLowerCase().indexOf(typedText) === 0 })
+                        if (hit >= 0) activeRow = hit
+                    }
                     function pick(index) {
                         if (index === 0) { root.save("roles", null); close(); rolesTrigger.forceActiveFocus(); return }
                         var id = root.item.personas[index - 1].id
@@ -167,6 +177,7 @@ Item {
                             else if (event.key === Qt.Key_End) rolesPopup.activeRow = last
                             else if ([Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) rolesPopup.pick(rolesPopup.activeRow)
                             else if (event.key === Qt.Key_Tab) { rolesPopup.close(); return }
+                            else if (event.text.length === 1 && event.text.charCodeAt(0) >= 32 && event.text.charCodeAt(0) !== 127 && !(event.modifiers & (Qt.ControlModifier | Qt.MetaModifier | Qt.AltModifier))) rolesPopup.typeAhead(event.text)
                             else return
                             event.accepted = true
                         }
@@ -278,9 +289,13 @@ Item {
                                 if (kv.modelData.secret) kv.saveSecret()
                                 else kv.patch("value", text)
                             }
-                            Text { y: parent.height + 3; visible: kv.modelData.secret && (!!kv.saveState || kv.modelData.configured)
-                                text: I18n.t(kv.saveState === "saved" ? "extensions.secretSaved" : kv.saveState === "saving" ? "extensions.secretSaving" : "extensions.secretConfigured")
-                                color: Theme.fgSubtle; font.pixelSize: 11
+                            Row { y: parent.height + 3; spacing: 4; visible: kv.modelData.secret && (!!kv.saveState || kv.modelData.configured)
+                                Icon { anchors.verticalCenter: parent.verticalCenter; visible: kv.saveState !== "saving"; size: 12; color: Theme.success
+                                    name: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z|m9 12 2 2 4-4" }
+                                Text {
+                                    text: I18n.t(kv.saveState === "saved" ? "extensions.secretSaved" : kv.saveState === "saving" ? "extensions.secretSaving" : "extensions.secretConfigured")
+                                    color: Theme.success; font.pixelSize: 11; font.weight: Font.DemiBold
+                                }
                             }
                         }
                         Item { width: 24; height: kv.modelData.secret && (!!kv.saveState || kv.modelData.configured) ? 51.5 : 32
