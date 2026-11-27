@@ -138,9 +138,22 @@ Item {
                     if ([Qt.Key_Down, Qt.Key_Up, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) { rolesPopup.open(); event.accepted = true }
                 }
                 Popup {
-                    id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; y: parent.height + 6; width: parent.width
+                    id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; width: parent.width
+                    property real room: 320
+                    property bool opensDown: true
+                    y: opensDown ? rolesTrigger.height + 6 : -height - 6
+                    function place() {
+                        var overlay = Overlay.overlay
+                        var point = rolesTrigger.mapToItem(overlay, 0, 0)
+                        var below = overlay.height - point.y - rolesTrigger.height - 6 - 12
+                        var above = point.y - 6 - 12
+                        opensDown = below >= 220 || below >= above
+                        room = Math.max(0, opensDown ? below : above)
+                        x = Math.max(12, Math.min(point.x, overlay.width - width - 12)) - point.x
+                    }
+                    onAboutToShow: place()
                     padding: 7
-                    height: Math.min(320, rolesContent.height + 14)
+                    height: Math.min(320, room, rolesContent.height + 14)
                     onActiveRowChanged: Qt.callLater(function() {
                         var row = activeRow > 0 ? roleOptions.itemAt(activeRow - 1) : null
                         var top = row ? row.y : 0

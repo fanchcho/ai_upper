@@ -118,3 +118,21 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 |Discovered tools|614.5|614.5|0.0|
 
 两主题六个字段全部 `delta=0.0`：同数据下字段纵向布局已对齐，没有需要修的纵向实现差。此前「字段纵向布局仍有明显差异」来自非同数据 fixture，不能作为当前实现的结论。像素整体仍有差异（`compare-identical.json` dark 94.119% / light 94.729% 相等），属字体抗锯齿与水平字宽等残留，不是纵向布局错，也未加坐标补偿或改 token。结论追加于此，作为 C 的第二处边界记录。
+
+## 本轮独立复跑：字段同数据对照与边缘展开（2026-11-27）
+
+没有接受 812fd57 / a27d0c8 的完成口径。本轮执行 `AI_UPPER_HOME=/tmp/ai-upper-final-layout .venv/bin/python scripts/parity/final_port/identical_os.py`，真实私有 D-Bus + GNOME Secret Service，Qt 输入并保存后复制同一 config/mcp/skills/personas fixture 给只读原版。Electron safeStorage 返回 available=true、saved.ok=true、has=true；暗亮实际 Saved 可见。原始命令、输出在 out/final-port/layout-before.log。
+
+两端 1280×820、滚动 142，DOM 与 QML 几何都重新采集。Transport/Command/Arguments/Environment/Discovered tools 的标签顶部在两端严格等于 233.5/304/374.5/490.5/614.5；command 与 env 输入框顶部 326.5/513 也一致。当前 fixture 不再复现“字段纵向相差 63px”。字段布局没有新增修改，没有坐标补偿或 token 调整。对照图 out/final-port/same-fixture-dark.png 与 same-fixture-light.png；字段数据 deva-fields-*.json 与 *-secret-real-os-saved-geometry.json。
+
+菜单确有实现缺口：ExtensionDetail.qml 原来只有 y=parent.height+6。按原版 Select.tsx:73-75,106-124 改为 GAP=6、EDGE=12、below>=220 或 below>=above 时下展，否则上展；可用空间限制高度，同时保留 MAX_H=320。真实点击两种位置、两主题，窗口高度 820：下展 top=227.5、上展 top=333.5，height 都为 320，没有越界。证据 out/final-port/menu-edges.json、menu-{dark,light}-{up,down}.png。测试只在证据 fixture 改变触发器位置，生产代码未增加坐标补偿。
+
+相位命令 `AI_UPPER_HOME=/tmp/ai-upper-final-phase .venv/bin/python scripts/parity/closeout/phase-session.py` 与 `python scripts/parity/closeout/measure_phases.py`，原始日志 out/final-port/phase-rerun.log。结果：
+
+| 相位 | 原版文字起始行 | Qt 文字起始行 | 暗色阴影 (700,700) | 亮色阴影 (700,700) |
+|---|---|---|---|---|
+| 0 | 415,444,477,509,542,575 | 416,445,477,510,543,575 | 两端 11,11,12 | 原版 137，Qt 138 |
+| 0.5 | 416,445,478,510,543,576 | 416,445,478,510,543,576 | 两端 11,11,12 | 原版 137，Qt 138 |
+| 1 | 416,445,478,510,543,576 | 417,446,478,511,544,576 | 原版 11,11,11，Qt 11,11,12 | 两端 137 |
+
+结论：字段同数据布局对照可闭环；正文与阴影像素 **未归零**。相位变化会改变误差且 0.5 相位文字起始行重合，支持引擎栅格化/合成归因，不支持把它写成“全部像素一致”。位移只用于实验脚本，未进入生产样式。
