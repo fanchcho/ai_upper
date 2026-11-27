@@ -225,16 +225,59 @@ ApplicationWindow {
     property var contextUsage: ({})
 
     // 列表筛选：搜索框里的词（原版按标题 / 角色名 / 挂载目录 basename 过滤，大小写不敏感）。
+    property var filterRoles: []
+    property var filterFolders: []
+    readonly property var filterRolesAvailable: quickStartPersonas.filter(function(role) {
+        return filterRoles.indexOf(role.id) >= 0 || sessions.some(function(row) { return row.persona === role.id })
+    })
+    readonly property var filterFoldersAvailable: {
+        var paths = [], rows = []
+        for (var i = 0; i < sessions.length; i++) {
+            var path = sessions[i].focusRoot || ""
+            if (path && paths.indexOf(path) < 0) paths.push(path)
+        }
+        for (var j = 0; j < filterFolders.length; j++)
+            if (filterFolders[j] && paths.indexOf(filterFolders[j]) < 0) paths.push(filterFolders[j])
+        var names = paths.map(function(path) { return path.replace(/[\\/]+$/, "").split(/[\\/]/).pop() })
+        for (var k = 0; k < paths.length; k++) {
+            var parts = paths[k].replace(/[\\/]+$/, "").split(/[\\/]/)
+            parts.pop()
+            var name = names[k]
+            if (names.filter(function(n) { return n === name }).length > 1) name += " · " + parts.pop()
+            rows.push({path: paths[k], name: name})
+        }
+        if (paths.length && (sessions.some(function(row) { return !row.focusRoot }) || filterFolders.indexOf("") >= 0))
+            rows.push({path: "", name: ""})
+        return rows
+    }
+    function toggleFilter(kind, value) {
+        var values = (kind === "role" ? filterRoles : filterFolders).slice()
+        var index = values.indexOf(value)
+        if (index < 0) values.push(value)
+        else values.splice(index, 1)
+        if (kind === "role") filterRoles = values
+        else filterFolders = values
+    }
+    function filterCount(kind, value) {
+        return sessions.filter(function(row) {
+            return kind === "role"
+                ? row.persona === value && (!filterFolders.length || filterFolders.indexOf(row.focusRoot || "") >= 0)
+                : (row.focusRoot || "") === value && (!filterRoles.length || filterRoles.indexOf(row.persona) >= 0)
+        }).length
+    }
+    SessionFilter { id: sessionFilter; shell: window; x: window.railWidth + 8; y: 48 }
     readonly property string searchTerm: window.searchQuery.trim().toLowerCase()
     // 过滤后的会话行；顺序沿用 Python 给的 updatedAt 倒序，不重排。
     readonly property var visibleSessions: {
         var all = window.sessions || []
         var q = window.searchTerm
-        if (!q)
+        if (!q && !filterRoles.length && !filterFolders.length)
             return all
         var out = []
         for (var i = 0; i < all.length; i++) {
             var row = all[i]
+            if (filterRoles.length && filterRoles.indexOf(row.persona) < 0) continue
+            if (filterFolders.length && filterFolders.indexOf(row.focusRoot || "") < 0) continue
             var hay = [row.title, row.personaName, row.focusName]
             var hit = false
             for (var k = 0; k < hay.length; k++) {
@@ -582,6 +625,9 @@ ApplicationWindow {
             // 26×26 命中区、图标 15px 居中（redesign.css `.cf-search__filter`）。
             Item {
                 id: filterBtn
+                objectName: "filterBtn"
+                z: 1
+                MouseArea { anchors.fill: parent; onClicked: sessionFilter.opened ? sessionFilter.close() : sessionFilter.open() }
                 x: 3
                 y: (parent.height - 26) / 2
                 width: 26
@@ -623,7 +669,8 @@ ApplicationWindow {
             Rectangle {
                 id: clearBtn
                 objectName: "searchClear"
-                visible: searchInput.text.length > 0
+                visible: searchInput.text.length > 0 || window.filterRoles.length > 0 || window.filterFolders.length > 0
+                z: 1
                 width: 18
                 height: 18
                 radius: Theme.radiusSm
@@ -643,6 +690,8 @@ ApplicationWindow {
                     onClicked: {
                         searchInput.text = ""
                         window.searchQuery = ""
+                        window.filterRoles = []
+                        window.filterFolders = []
                     }
                 }
             }

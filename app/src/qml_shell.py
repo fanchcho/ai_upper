@@ -1780,6 +1780,7 @@ class ShellBridge(QtCore.QObject):
             row["persona"] = persona
             row["personaName"] = self._persona_name(persona)
             root = focus.get(row["id"], "")
+            row["focusRoot"] = root
             row["focusName"] = os.path.basename(root.rstrip("/\\")) if root else ""
         return rows
 
