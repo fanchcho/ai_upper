@@ -1345,6 +1345,16 @@ Item {
                 text: I18n.t("finish.mcp")
                 onClicked: root.paneRequested("mcp")
             }
+            SettingsButton {
+                objectName: "extensionsImportSkill"
+                anchors.right: parent.right; anchors.rightMargin: 100; y: 12
+                text: I18n.t("extensions.importSkill")
+                onClicked: {
+                    var result = JSON.parse(shellBridge.extensionAction("import-skill", "skill", "", "{}"))
+                    if (result.ok) extPane.refresh()
+                    else if (result.error !== "cancelled") extPane.loadError = result.error
+                }
+            }
 
             Text {
                 x: 20; y: 40; width: parent.width - 40

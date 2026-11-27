@@ -1342,6 +1342,18 @@ class ShellBridge(QtCore.QObject):
             if action == 'errors':
                 self._extension_runtime()
                 return json.dumps({'ok': True, 'errors': service.errors()})
+            if action == 'import-skill':
+                from utils.qt_compat import QtWidgets
+                path, _ = QtWidgets.QFileDialog.getOpenFileName(
+                    self._dialog_parent(), self.translate("extensions.importSkill"), "",
+                    "Skill (*.md *.zip)")
+                if not path:
+                    return json.dumps({'ok': False, 'error': 'cancelled'})
+                if self._skills is None:
+                    raise ValueError('skills unavailable')
+                result = self._skills.import_file(path)
+                self.extensionsChanged.emit()
+                return json.dumps(result)
             if action == 'retry': self._extension_runtime().retry(key)
             if action == 'update': service.update(kind, key, data)
             elif action == 'remove':

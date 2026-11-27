@@ -316,6 +316,73 @@ class SkillStore:
         self._write_section({**section, "roles": next_roles})
         return {"ok": True}
 
+    def import_file(self, path: Any) -> dict[str, Any]:
+        """从 .md / .zip 导入技能（Deva `skills.ts:627-639`），成功自动启用。"""
+        import zipfile
+        source = Path(str(path or ""))
+        lower = source.name.lower()
+        if lower.endswith(".md"):
+            try:
+                return self._write_imported(source.read_text(encoding="utf-8"), [])
+            except (OSError, UnicodeError):
+                return {"ok": False, "error": "import-failed"}
+        if lower.endswith(".zip"):
+            try:
+                with zipfile.ZipFile(source) as archive:
+                    files = {n: archive.read(n) for n in archive.namelist() if not n.endswith("/") and not n.startswith("__MACOSX/")}
+            except (OSError, zipfile.BadZipFile):
+                return {"ok": False, "error": "bad-zip"}
+            if "SKILL.md" in files:
+                base = ""
+            else:
+                depth1 = [n for n in files if re.fullmatch(r"[^/]+/SKILL\.md", n)]
+                if len(depth1) != 1:
+                    return {"ok": False, "error": "no-skill-md"}
+                base = depth1[0][:-len("SKILL.md")]
+            if len(files) > 200:
+                return {"ok": False, "error": "too-many-files"}
+            total = sum(len(v) for v in files.values())
+            if total > 20 * 1024 * 1024:
+                return {"ok": False, "error": "too-large"}
+            try:
+                raw = files[base + "SKILL.md"].decode("utf-8")
+            except (KeyError, UnicodeError):
+                return {"ok": False, "error": "no-skill-md"}
+            extra = []
+            for name, data in files.items():
+                if name == base + "SKILL.md":
+                    continue
+                rel = name[len(base):]
+                parts = rel.split("/")
+                if any(part in ("", ".", "..") or "\\" in part or ":" in part for part in parts):
+                    return {"ok": False, "error": "unsafe-path"}
+                extra.append((rel, data))
+            return self._write_imported(raw, extra)
+        return {"ok": False, "error": "unsupported-type"}
+
+    def _write_imported(self, raw: str, extra: list[tuple[str, bytes]]) -> dict[str, Any]:
+        data, _ = parse_frontmatter(raw)
+        name = fm_string(data, "name").strip()
+        if not name:
+            return {"ok": False, "error": "missing-name"}
+        slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "skill"
+        if not is_safe_id(slug) or slug in RESERVED_IDS:
+            return {"ok": False, "error": "invalid-name"}
+        folder = self.dir / slug
+        try:
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / "SKILL.md").write_text(raw, encoding="utf-8")
+            for rel, payload in extra:
+                target = (folder / rel).resolve()
+                if folder.resolve() not in target.parents:
+                    return {"ok": False, "error": "unsafe-path"}
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(payload)
+        except OSError:
+            return {"ok": False, "error": "write-failed"}
+        self.set_enabled(slug, True)
+        return {"ok": True, "id": slug, "name": name}
+
     def remove(self, skill_id: Any) -> dict[str, bool]:
         """删除自定义技能目录；内置 / 非法 id → `{ok:false}`；目录本不存在视为成功。
 

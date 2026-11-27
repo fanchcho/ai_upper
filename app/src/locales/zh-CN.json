@@ -2259,5 +2259,6 @@
   "cf.personaDescription": "角色描述",
   "cf.personaPrompt": "角色提示词",
   "cf.changeAvatar": "更换头像",
-  "cf.removeAvatar": "移除头像"
+  "cf.removeAvatar": "移除头像",
+  "extensions.importSkill": "导入技能"
 }

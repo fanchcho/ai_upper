@@ -2259,5 +2259,6 @@
   "cf.personaDescription": "Description",
   "cf.personaPrompt": "Persona prompt",
   "cf.changeAvatar": "Change avatar",
-  "cf.removeAvatar": "Remove avatar"
+  "cf.removeAvatar": "Remove avatar",
+  "extensions.importSkill": "Import skill"
 }
