@@ -121,6 +121,7 @@ Popup {
         Row {
             width: parent.width; spacing: 8
             TextField { id: branchName; objectName: "gitBranchName"; width: 140; placeholderText: "分支名"; text: root.branchName; onTextChanged: root.branchName = text; color: Theme.fg; font.pixelSize: 12 }
+            SettingsButton { objectName: "gitCheckoutBranch"; text: "切换分支"; onClicked: { var r = shellBridge.gitCheckout(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error || r.reason } }
             SettingsButton { objectName: "gitCreateBranch"; text: "新建分支"; onClicked: { var r = shellBridge.gitCreateBranch(repoRoot, root.branchName); if (r.ok) { root.branchName = ""; root.reload() } else root.notice = r.error } }
             SettingsButton { objectName: "gitMerge"; text: "合并"; onClicked: { var r = shellBridge.gitMerge(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error } }
         }
