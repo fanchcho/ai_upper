@@ -1430,9 +1430,9 @@ Item {
                                 }
                             }
 
-                            Row {
-                                anchors.right: parent.right; anchors.rightMargin: 86; anchors.verticalCenter: parent.verticalCenter; spacing: -6
-                                Repeater { model: extRow.modelData.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: (extRow.modelData.roleAvatars || {})[modelData] || ""; size: 20 } }
+                            AvatarStack {
+                                anchors.right: parent.right; anchors.rightMargin: 86; anchors.verticalCenter: parent.verticalCenter
+                                roles: extRow.modelData.roles || []; images: extRow.modelData.roleAvatars || ({})
                             }
                             Icon {
                                 visible: !extRow.modelData.builtin

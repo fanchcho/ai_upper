@@ -1049,6 +1049,18 @@ class ShellBridge(QtCore.QObject):
         record = shared_store().get(key) or {}
         return self._humation.image(key, record.get('avatar', ''), pop)
 
+    @QtCore.Slot(str, result=str)
+    def personaVeil(self, key):
+        # Use the same generated shape, including non-circular avatar specs.
+        import re
+        from urllib.parse import unquote, quote
+        svg = unquote(self.personaAvatar(key, False).split(',', 1)[1])
+        viewbox = re.search(r'viewBox="([^"]+)"', svg).group(1)
+        shape = re.search(r'<clipPath id="c"><path d="([^"]+)"', svg).group(1)
+        return 'data:image/svg+xml,' + quote(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + viewbox +
+            '"><path d="' + shape + '" fill="black" fill-opacity="0.55"/></svg>')
+
     @QtCore.Slot(str, float, bool, result=str)
     def extensionInstructions(self, source, width, dark):
         # Settings skill preview: app.css:5344-5356, smaller than chat Markdown.

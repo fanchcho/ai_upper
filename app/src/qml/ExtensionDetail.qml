@@ -115,7 +115,7 @@ Item {
                 FieldLabel { text: I18n.t("extensions.roles"); height: root.item.kind === "mcp" ? 16.5 : 17; topPadding: root.item.kind === "mcp" ? 0 : 4; verticalAlignment: Text.AlignVCenter }
             SettingsButton {
                 y: root.item.kind === "mcp" ? 22.5 : 29.5
-                id: rolesTrigger
+                id: rolesTrigger; objectName: "extensionRolesTrigger"
                 width: parent.width; height: 32; leftPadding: 9
                 background: Item {
                     Rectangle { visible: rolesPopup.opened; anchors.fill: parent; anchors.margins: -3; radius: 9; color: Theme.dark ? Qt.rgba(124/255,124/255,240/255,0.16) : Qt.rgba(91/255,91/255,214/255,0.1) }
@@ -127,16 +127,29 @@ Item {
                         width: 20; height: 20; radius: 10; color: Theme.bgSelected
                         Icon { anchors.centerIn: parent; name: IconData.users; size: 12; color: Theme.accent }
                     }
-                    Row { spacing: -6; Repeater { model: root.item.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: root.personaRecord(modelData).avatarImage || ""; size: 20 } } }
+                    AvatarStack { roles: root.item.roles || []; images: {
+                        var result = {}; (root.item.personas || []).forEach(function(p) { result[p.id] = p.avatarImage || "" }); return result
+                    } }
                     Text { text: root.rolesSummary(); color: Theme.fg; font.pixelSize: 13 }
                 }
                 Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 15; color: Theme.fgSubtle }
                 onClicked: rolesPopup.open()
+                Keys.onPressed: function(event) {
+                    if ([Qt.Key_Down, Qt.Key_Up, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) { rolesPopup.open(); event.accepted = true }
+                }
                 Popup {
-                    id: rolesPopup; focus: true; y: parent.height + 6; width: parent.width
+                    id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; y: parent.height + 6; width: parent.width
                     padding: 7
                     property int activeRow: 0
+                    function pick(index) {
+                        if (index === 0) { root.save("roles", null); close(); rolesTrigger.forceActiveFocus(); return }
+                        var id = root.item.personas[index - 1].id
+                        var roles = (root.item.roles || []).slice(); var i = roles.indexOf(id)
+                        if (i >= 0) roles.splice(i, 1); else roles.push(id)
+                        root.save("roles", roles.length ? roles : null)
+                    }
                     onOpened: {
+                        rolesContent.forceActiveFocus()
                         var picked = root.item.roles || []
                         activeRow = picked.length ? 1 + (root.item.personas || []).findIndex(function(p) { return picked.indexOf(p.id) >= 0 }) : 0
                     }
@@ -145,6 +158,18 @@ Item {
                         Rectangle { id: rolesBackground; anchors.fill: parent; color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
                     }
                     contentItem: Column {
+                        id: rolesContent; focus: true
+                        Keys.onPressed: function(event) {
+                            var last = (root.item.personas || []).length
+                            if (event.key === Qt.Key_Down) rolesPopup.activeRow = Math.min(last, rolesPopup.activeRow + 1)
+                            else if (event.key === Qt.Key_Up) rolesPopup.activeRow = Math.max(0, rolesPopup.activeRow - 1)
+                            else if (event.key === Qt.Key_Home) rolesPopup.activeRow = 0
+                            else if (event.key === Qt.Key_End) rolesPopup.activeRow = last
+                            else if ([Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) rolesPopup.pick(rolesPopup.activeRow)
+                            else if (event.key === Qt.Key_Tab) { rolesPopup.close(); return }
+                            else return
+                            event.accepted = true
+                        }
                         Item { width: parent.width; height: 48.75
                             Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === 0 ? Theme.bgHover : "transparent" }
                             Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 15; name: "M20 6 9 17l-5-5"; color: Theme.accent; visible: !root.item.roles || !root.item.roles.length }
