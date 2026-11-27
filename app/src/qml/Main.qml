@@ -578,7 +578,7 @@ ApplicationWindow {
             x: 8
             y: 724
             spacing: 4
-            RailButton { iconName: IconData.bot }
+            RailButton { objectName: "railBots"; iconName: IconData.bot; onClicked: window.page = "bots" }
             RailButton {
                 iconName: IconData.cog
                 onClicked: window.page = "settings-general"
@@ -2876,5 +2876,7 @@ ApplicationWindow {
     PersonaRoster { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "roster" }
 
     ScheduledTasks { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "tasks" }
+
+    RemoteBots { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "bots" }
 
 }

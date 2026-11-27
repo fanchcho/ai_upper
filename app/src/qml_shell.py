@@ -1591,6 +1591,13 @@ class ShellBridge(QtCore.QObject):
         return [str(path) for path in paths]
 
     @QtCore.Slot(result=QtCore.QObject)
+    def botsService(self):
+        if not hasattr(self, '_remote_bots'):
+            from mvvm.services.remote_bots import RemoteBots
+            self._remote_bots = RemoteBots(self)
+        return self._remote_bots
+
+    @QtCore.Slot(result=QtCore.QObject)
     def tasksService(self):
         if not hasattr(self, '_scheduled_tasks'):
             from mvvm.services.scheduled_tasks import ScheduledTasks
@@ -1630,6 +1637,8 @@ class ShellBridge(QtCore.QObject):
         self._notifier(title, body)
 
     def _handle(self, payload: Dict[str, Any]) -> bool:
+        if hasattr(self, "_remote_bots"):
+            self._remote_bots.turn_event(payload)
         if hasattr(self, "_scheduled_tasks"):
             self._scheduled_tasks.turn_event(payload)
         session_id = str(payload.get("sessionId") or "")
@@ -2021,6 +2030,7 @@ def run(headless: bool) -> int:
     bridge.set_notifier(tray.notify)
     bridge.bind_window(window)
     bridge.tasksService()
+    bridge.botsService()
     bridge.initial()
     _select_page(window)
 
