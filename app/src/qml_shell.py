@@ -1813,6 +1813,89 @@ class ShellBridge(QtCore.QObject):
             process.waitForFinished(500)
             process.deleteLater()
 
+    def _tool_card_rows(self, tool_name: str) -> List[Dict[str, Any]]:
+        session = self._session()
+        if session is None:
+            return []
+        rows = []
+        for message in session.messages:
+            if not isinstance(message.content, list):
+                continue
+            for part in message.content:
+                if getattr(part, "name", "") == tool_name:
+                    rows.append({"id": str(getattr(part, "id", "") or ""),
+                                 "input": dict(getattr(part, "input", None) or {})})
+        return rows
+
+    @QtCore.Slot(result="QVariantList")
+    def proposalCards(self) -> List[Dict[str, Any]]:
+        session = self._session()
+        if session is None:
+            return []
+        side = dict(getattr(session, "proposals", None) or {})
+        return [{"id": row["id"], "draft": row["input"], "status": side.get(row["id"], "pending")}
+                for row in self._tool_card_rows("propose_agent")]
+
+    @QtCore.Slot(result="QVariantList")
+    def autotaskCards(self) -> List[Dict[str, Any]]:
+        session = self._session()
+        if session is None:
+            return []
+        side = dict(getattr(session, "autotasks", None) or {})
+        return [{"id": row["id"], "draft": row["input"],
+                 "status": side.get(row["id"], {}).get("status", "pending"),
+                 "taskId": side.get(row["id"], {}).get("taskId")}
+                for row in self._tool_card_rows("create_task")]
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def resolveProposal(self, tool_use_id: str, status: str) -> Dict[str, Any]:
+        session = self._session()
+        if session is None or status not in ("accepted", "rejected"):
+            return {"ok": False, "error": "invalid"}
+        draft = next((r["input"] for r in self._tool_card_rows("propose_agent") if r["id"] == tool_use_id), None)
+        if draft is None:
+            return {"ok": False, "error": "not-found"}
+        if status == "accepted":
+            record = shared_store().upsert({"name": draft.get("name", ""), "description": draft.get("description", ""), "prompt": draft.get("prompt", ""), "enabled": True})
+            persona_id = record.get("id", "")
+        else:
+            persona_id = ""
+        session.proposals = {**dict(session.proposals or {}), tool_use_id: status}
+        session.touch(); self._store.save(session.id); self._publish()
+        return {"ok": True, "personaId": persona_id}
+
+    @QtCore.Slot(str, str, str, result="QVariantMap")
+    def resolveAutotask(self, tool_use_id: str, action: str, payload: str) -> Dict[str, Any]:
+        session = self._session()
+        if session is None or action not in ("create", "dismiss"):
+            return {"ok": False, "error": "invalid"}
+        side = dict(session.autotasks or {})
+        if side.get(tool_use_id, {}).get("status") == "created" and side[tool_use_id].get("taskId"):
+            return {"ok": True, "status": "created", "taskId": side[tool_use_id]["taskId"]}
+        if action == "dismiss":
+            side[tool_use_id] = {"status": "dismissed"}
+            session.autotasks = side; session.touch(); self._store.save(session.id); self._publish()
+            return {"ok": True, "status": "dismissed"}
+        try:
+            draft = json.loads(payload or "{}")
+            title = str(draft.get("title") or "").strip()
+            prompt = str(draft.get("prompt") or "").strip()
+            schedule = draft.get("schedule") or {}
+            kind = schedule.get("kind")
+            when = schedule.get("at") if kind == "once" else schedule.get("cron")
+            tz = schedule.get("tz") or "Asia/Shanghai"
+            persona = str((draft.get("auth") or {}).get("personaId") or "general")
+            error = self.tasksService().create(title, prompt, kind, when, tz, persona)
+            if error:
+                return {"ok": False, "error": error}
+            rows = self.tasksService().read()
+            task = rows[-1]
+            side[tool_use_id] = {"status": "created", "taskId": task["id"]}
+            session.autotasks = side; session.touch(); self._store.save(session.id); self._publish()
+            return {"ok": True, "status": "created", "taskId": task["id"]}
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+
     @QtCore.Slot(result="QVariantList")
     def planCards(self) -> List[Dict[str, Any]]:
         """当前会话的 exit_plan 卡：工具调用正文 + plans 边车决定 + 待应答交互。"""
@@ -2621,6 +2704,8 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("backgroundCapsule", self.backgroundCapsule())
         window.setProperty("backgroundTasks", self.backgroundTasks())
         window.setProperty("planCards", self.planCards())
+        window.setProperty("proposalCards", self.proposalCards())
+        window.setProperty("autotaskCards", self.autotaskCards())
         # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
         window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。

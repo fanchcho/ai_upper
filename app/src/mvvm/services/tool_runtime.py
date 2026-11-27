@@ -387,6 +387,13 @@ def tail_of(text: str, n: int) -> str:
     return text[nl + 1 if 0 <= nl < start + n / 2 else start :]
 
 
+PROPOSE_AGENT_SPEC = ToolSpec('propose_agent', '生成角色名片供用户确认；不写盘、不创建角色。', {
+    'type': 'object', 'properties': {'name': {'type': 'string'}, 'description': {'type': 'string'}, 'prompt': {'type': 'string'}}, 'required': ['name']})
+CREATE_TASK_SPEC = ToolSpec('create_task', '生成定时任务确认名片；用户确认后才创建任务。', {
+    'type': 'object', 'properties': {'title': {'type': 'string'}, 'prompt': {'type': 'string'},
+        'schedule': {'type': 'object', 'properties': {'kind': {'type': 'string'}, 'at': {'type': 'string'}, 'cron': {'type': 'string'}, 'tz': {'type': 'string'}}, 'required': ['kind']}},
+    'required': ['title', 'prompt', 'schedule']})
+
 class ToolRuntime:
     """工具注册表 + 执行入口。文件类工具一律先过 `guard.assert_inside`。"""
 
@@ -433,6 +440,8 @@ class ToolRuntime:
             (RUN_COMMAND_SPEC, self._run_command),
             (PRESENT_FILES_SPEC, self._present_files),
             (TODO_WRITE_SPEC, self._todo_write),
+            (PROPOSE_AGENT_SPEC, self._propose_agent),
+            (CREATE_TASK_SPEC, self._create_task_card),
         ):
             if spec.name not in self._tools:
                 self.register(spec, handler)
@@ -526,6 +535,18 @@ class ToolRuntime:
             return ToolResult(f"执行失败：{exc.strerror or exc}", True, "执行失败")
 
     # ── 路径与展示 ────────────────────────────────────────────────────────
+    def _propose_agent(self, arguments: dict[str, Any]) -> ToolResult:
+        name = str(arguments.get('name') or '').strip()
+        if not name:
+            return ToolResult('缺少角色 name（角色显示名）', True, '参数无效')
+        return ToolResult('已生成角色名片，等待用户在名片中查看并确认；请勿重复调用，也不要声称角色已创建。')
+
+    def _create_task_card(self, arguments: dict[str, Any]) -> ToolResult:
+        title = str(arguments.get('title') or '').strip()
+        if not title:
+            return ToolResult('缺少任务 title（任务标题）', True, '参数无效')
+        return ToolResult('已生成定时任务确认名片，等待用户核对日程并确认创建。')
+
     def _guarded(self, arguments: dict[str, Any]) -> Path:
         """解析 path 并过守卫；返回真实路径。"""
         return self.guard.assert_inside(self.resolve_path(arguments.get("path")))

@@ -189,6 +189,8 @@ ApplicationWindow {
     property var backgroundCapsule: ({})
     property var backgroundTasks: []
     property var planCards: []
+    property var proposalCards: []
+    property var autotaskCards: []
     property string suggestPrefix: "/"
     property int suggestStart: 0
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
@@ -1398,6 +1400,7 @@ ApplicationWindow {
                 }
 
                 PlanCards { width: parent.width; plans: window.planCards }
+                AgentCards { width: parent.width; proposals: window.proposalCards; autotasks: window.autotaskCards }
                 Rectangle {
                     id: deliveryCard
                     objectName: "deliveryCard"
