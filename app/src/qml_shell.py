@@ -1623,6 +1623,24 @@ class ShellBridge(QtCore.QObject):
         return rows
 
     @QtCore.Slot(result="QVariantList")
+    def attachClipboardFiles(self) -> List[Dict[str, Any]]:
+        """剪贴板里的文件 URL → 与原版 clipboard.files 同一条附件校验链路。"""
+        clipboard = QtGui.QGuiApplication.clipboard()
+        if clipboard is None:
+            return []
+        data = clipboard.mimeData()
+        if data is None or not data.hasUrls():
+            return []
+        paths = []
+        for url in data.urls():
+            local = url.toLocalFile() if isinstance(url, QtCore.QUrl) else ""
+            if local:
+                paths.append(local)
+        rows = self._attachments.inspect_paths(paths)
+        print("QML PASTE FILES", json.dumps([row.get("path") for row in rows], ensure_ascii=False), flush=True)
+        return rows
+
+    @QtCore.Slot(result="QVariantList")
     def attachClipboardImage(self) -> List[Dict[str, Any]]:
         """剪贴板里的图片 → 临时 PNG → 与选择框同一条 inspect 白名单链路。
 

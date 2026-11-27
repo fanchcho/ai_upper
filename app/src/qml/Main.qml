@@ -1718,7 +1718,13 @@ ApplicationWindow {
                         return
                     }
                     if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
-                        // 剪贴板里是图片时按附件处理（原版 Composer 的 paste 处理）；纯文本走默认粘贴。
+                        // 原版 Composer.tsx 的 paste：先 clipboard.files，再 clipboard 图片；纯文本走默认粘贴。
+                        var pastedFiles = shellBridge.attachClipboardFiles()
+                        if (pastedFiles && pastedFiles.length > 0) {
+                            window.appendPendingFiles(pastedFiles)
+                            event.accepted = true
+                            return
+                        }
                         var pasted = shellBridge.attachClipboardImage()
                         if (pasted && pasted.length > 0) {
                             window.appendPendingFiles(pasted)
