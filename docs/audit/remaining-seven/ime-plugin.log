@@ -1,0 +1,14 @@
+# F84: system fcitx5 Qt6 plugin under PySide6 Qt (Xvfb display :94)
+# installed: fcitx5, fcitx5-frontend-qt6, fcitx5-chinese-addons
+# QT_PLUGIN_PATH=/usr/lib/aarch64-linux-gnu/qt6/plugins
+# Qt plugin scanner:
+#   Ignoring QPA plugin due to mismatching Qt versions 396032 395264
+# fcitx5 loaded pinyin, but QML input stayed Latin:
+#   before '' False
+#   n 'n' False
+#   i 'ni' False
+#   h 'nih' False
+#   a 'niha' False
+#   o 'nihao' False
+#   final 'nihao'
+# No libfcitx5platforminputcontextplugin.so load; no preedit; inputMethodComposing=False.
