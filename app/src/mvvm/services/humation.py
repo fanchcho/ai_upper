@@ -2,12 +2,13 @@
 import json
 from pathlib import Path
 from urllib.parse import quote
-from utils.qt_compat import QtQml
 from utils.paths import assets_root
 
 
 class Humation:
     def __init__(self):
+        from utils.qt_compat import QtQml
+
         self.engine = QtQml.QJSEngine()
         path = assets_root() / 'humation' / 'runtime.js'
         if not path.exists(): path = Path(__file__).resolve().parents[3] / 'assets/humation/runtime.js'

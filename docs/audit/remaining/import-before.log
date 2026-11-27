@@ -1,0 +1,115 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________________________ test_every_mvvm_module_imports ________________________
+
+submodule = 'QtQml'
+
+    def _binding_module(submodule: str) -> ModuleType:
+        binding, _ = _load_binding()
+        key = f"{binding}.{submodule}"
+        if key not in _modules:
+            try:
+>               _modules[key] = importlib.import_module(key)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+app/src/utils/qt_compat.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'PySide6.QtQml', package = None
+
+    def import_module(name, package=None):
+        """Import a module.
+    
+        The 'package' argument is required when performing a relative import. It
+        specifies the package to use as the anchor point from which to resolve the
+        relative import to an absolute import.
+    
+        """
+        level = 0
+        if name.startswith('.'):
+            if not package:
+                raise TypeError("the 'package' argument is required to perform a "
+                                f"relative import for {name!r}")
+            for character in name:
+                if character != '.':
+                    break
+                level += 1
+>       return _bootstrap._gcd_import(name[level:], package, level)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ModuleNotFoundError: No module named 'PySide6.QtQml'
+
+/usr/lib/python3.13/importlib/__init__.py:88: ModuleNotFoundError
+
+The above exception was the direct cause of the following exception:
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffffb8e79ba0>
+
+    def test_every_mvvm_module_imports(monkeypatch):
+        """Every module in the tree must be importable.
+    
+        The port arrived with a models/app_model.py that imported four model modules
+        that do not exist in this repository and redefined ApplicationModel. Nothing
+        referenced it, so the only symptom was Cython compiling dead source into the
+        bundle. mvvm_bootstrap is the one module that needs Qt, hence the fake.
+    
+        No module is exempt any more. The three that needed Qt **while the class body
+        was evaluated** are gone with the web entry: ``title_bar_overlay`` (the
+        frameless WebEngine window's own title bar), ``web_shell_window`` (the
+        QWebEngineView host) and the ``DevaBridge`` QObject inside
+        ``mvvm.webui.bridge``. What remains there is a pure function, so the fake
+        binding below is enough for every module in the tree.
+        """
+        import importlib
+    
+        install_fake_binding(monkeypatch, {"PySide6": {"QtCore": {}, "QtGui": {}, "QtWidgets": {}}})
+    
+        imported = []
+        for path in sorted((SRC / "mvvm").rglob("*.py")):
+            parts = list(path.relative_to(SRC).with_suffix("").parts)
+            if parts[-1] == "__init__":
+                parts.pop()
+>           imported.append(importlib.import_module(".".join(parts)))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+app/tests/test_mvvm.py:227: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+<frozen importlib._bootstrap_external>:1026: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+app/src/mvvm/services/humation.py:5: in <module>
+    from utils.qt_compat import QtQml
+app/src/utils/qt_compat.py:139: in __getattr__
+    return _QtModule(name)
+           ^^^^^^^^^^^^^^^
+app/src/utils/qt_compat.py:107: in __init__
+    _binding_module(submodule)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+submodule = 'QtQml'
+
+    def _binding_module(submodule: str) -> ModuleType:
+        binding, _ = _load_binding()
+        key = f"{binding}.{submodule}"
+        if key not in _modules:
+            try:
+                _modules[key] = importlib.import_module(key)
+            except ImportError as exc:
+>               raise ImportError(tr('legacy.998a243fc8e7' ,p0=binding, p2=repr(submodule), p4=exc)) from exc
+E               ImportError: PySide6 没有子模块 'QtQml'：No module named 'PySide6.QtQml'
+
+app/src/utils/qt_compat.py:89: ImportError
+=========================== short test summary info ============================
+FAILED app/tests/test_mvvm.py::test_every_mvvm_module_imports - ImportError: ...
+1 failed in 0.25s
