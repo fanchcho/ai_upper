@@ -36,7 +36,9 @@ const WANTED = [
   // 设置页：面板行的右侧箭头与模型行上的告警三角。
   'chevron-right', 'chevron-left', 'alert-triangle',
   // 服务商详情页的「高级设置」入口（自定义请求头）与关于页的「检查更新」。
-  'wrench', 'refresh-cw'
+  'wrench', 'refresh-cw',
+  // 输入区停止键：原版 Composer 的停止按钮用 lucide Square（Composer.tsx:986）。
+  'square'
 ]
 
 const ELEMENT_RE = /\[\s*"(path|circle|rect|line|polyline|polygon)"\s*,\s*\{([^}]*)\}/g

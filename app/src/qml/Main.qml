@@ -1550,30 +1550,56 @@ ApplicationWindow {
                     }
                 }
 
-                // 右侧：模型 chip + 强度 chip + 发送
+                // 右侧：模型 chip + 强度 chip + 发送/停止
+                //
+                // 原版 `Composer.tsx:973-991`：回合进行中同一枚键切成停止态
+                // （`.cf-send.is-stop` 中性底色 + lucide Square 14 实心，最小宽度 68
+                // 保证两态同宽不跳动，`redesign.css:2823-2829`）。本移植版没有「回合中
+                // 插入消息」能力，所以 busy 时恒定显示停止键，不假装能发送。
                 Rectangle {
                     id: sendBtn
+                    objectName: "sendBtn"
                     anchors.right: parent.right
                     width: 69
                     height: 32
                     y: 0
                     radius: Theme.radius
-                    color: window.busy || (inputField.text.trim() === "" && window.pendingFiles.length === 0)
-                           ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.45)
-                           : Theme.accent
+                    color: window.busy
+                           ? Theme.bgHover
+                           : (inputField.text.trim() === "" && window.pendingFiles.length === 0)
+                             ? Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.45)
+                             : Theme.accent
                     Text {
                         anchors.centerIn: parent
+                        visible: !window.busy
                         text: I18n.t("cf.send")
                         color: Theme.accentFg
                         font.family: Theme.sansFamily
                         font.pixelSize: 13
                         font.weight: 600
                     }
+                    Icon {
+                        objectName: "stopGlyph"
+                        anchors.centerIn: parent
+                        visible: window.busy
+                        name: IconData.square
+                        size: 14
+                        color: Theme.fg
+                    }
                     MouseArea {
+                        id: sendMouse
                         anchors.fill: parent
-                        enabled: !window.busy
-                                 && (inputField.text.trim() !== "" || window.pendingFiles.length > 0)
-                        onClicked: window.submit()
+                        enabled: window.busy
+                                 || inputField.text.trim() !== ""
+                                 || window.pendingFiles.length > 0
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (window.busy)
+                                window.stopGeneration()
+                            else
+                                window.submit()
+                        }
                     }
                 }
 
@@ -1769,6 +1795,12 @@ ApplicationWindow {
             inputField.text = ""
             window.pendingFiles = []
         }
+    }
+
+    // 停止当前回合（原版 Composer 的停止键 → chat:abort）。没有可停回合时不假装成功。
+    function stopGeneration() {
+        if (!shellBridge.stopGeneration())
+            notify(I18n.t("native.message24"))
     }
 
     // 空态卡片点击：以该角色开一条新对话（原版 `startWith`：建会话 → 切进去）。

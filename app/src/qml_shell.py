@@ -286,6 +286,9 @@ class ShellBridge(QtCore.QObject):
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
+        # 当前在跑回合的 turnId：原版 Composer 的停止键走 `chat:abort(turnId)`；
+        # 这里保存 send() 的返回值，停止时按 id 取消，未跑回合时为空串。
+        self._turn_id = ""
         # 检查更新的状态机：idle / checking / latest / available / error。
         self._update_state: Dict[str, Any] = {"phase": "idle"}
         self._update_thread: Any = None
@@ -1288,12 +1291,34 @@ class ShellBridge(QtCore.QObject):
             )["turnId"]
         except Exception as exc:  # noqa: BLE001 - 发送失败要显式暴露，不能装作已发出
             self._turn = None
+            self._turn_id = ""
             print("QML SEND FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
             return False
+        self._turn_id = str(turn_id)
         print("QML TURN", turn_id, flush=True)
         self._render()
         self._publish()
         return True
+
+    @QtCore.Slot(result=bool)
+    def stopGeneration(self) -> bool:
+        """停止当前回合：原版 `Composer.tsx:973-991` 的停止键 → `chat:abort(turnId)`。
+
+        没有 store 的 turnId 时（例如从已有会话接续的回合），退回 `ChatHost.attach()`
+        取正在跑的 turnId；两者都没有就明确返回 False，不假称已停止。
+        """
+        turn_id = self._turn_id
+        if not turn_id and self._active:
+            try:
+                turn_id = str(self._host.attach(self._active).get("turnId") or "")
+            except Exception:  # noqa: BLE001 - 查询失败按「没有可停回合」处理
+                turn_id = ""
+        if not turn_id:
+            print("QML STOP IGNORED", json.dumps({"sessionId": self._active}), file=sys.stderr, flush=True)
+            return False
+        ok = bool(self._host.abort(turn_id).get("ok", False))
+        print("QML STOP", json.dumps({"turnId": turn_id, "ok": ok}), flush=True)
+        return ok
 
     # ── 附件与交付卡（宿主与服务共用同一套判定）────────────────────────────
     @QtCore.Slot(result=str)
@@ -1481,6 +1506,7 @@ class ShellBridge(QtCore.QObject):
             print("QML STREAM", json.dumps({"text": text}, ensure_ascii=False), flush=True)
             return self._turn.apply(event)
         if kind == "error":
+            self._turn_id = ""
             print(
                 "QML TURN ERROR",
                 json.dumps(event, ensure_ascii=False),
@@ -1503,6 +1529,7 @@ class ShellBridge(QtCore.QObject):
             # 以落盘为准：VM 在 done 之前已把用户消息与回复写进会话文件。
             self._turn = None
             self._turn_session = ""
+            self._turn_id = ""
             return True
         return False
 
