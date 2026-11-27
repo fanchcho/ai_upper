@@ -57,6 +57,7 @@ ApplicationWindow {
         }
         function openFor(mode) { turnList.mode = mode; turnList.open() }
     }
+    TerminalPanel { id: terminalPanel }
     ProfilePanel { id: profilePanel }
     InteractionPrompt { }
 
@@ -587,6 +588,7 @@ ApplicationWindow {
             MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: profilePanel.open() }
         }
 
+        SettingsButton { objectName: "terminalOpen"; x: 8; y: 680; width: 40; height: 32; text: ">_"; onClicked: terminalPanel.open() }
         Column {
             x: 8
             y: window.macChrome ? 110 : 70

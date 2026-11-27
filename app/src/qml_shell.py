@@ -244,6 +244,8 @@ class ShellBridge(QtCore.QObject):
     # 关于页检查更新：worker 线程算完发一次状态，QML 的 Connections 接收。
     updateStateChanged = QtCore.Signal("QVariantMap")
     commitMessageGenerated = QtCore.Signal(str, object)
+    terminalOutput = QtCore.Signal(str)
+    terminalFinished = QtCore.Signal(int)
     interactionsChanged = QtCore.Signal('QVariantList')
 
     # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
@@ -292,6 +294,7 @@ class ShellBridge(QtCore.QObject):
                 self._host.guard.trust_root(root)
         self._last_interactions = []
         self._commit_cancels = {}
+        self._terminal = None
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
@@ -1766,6 +1769,49 @@ class ShellBridge(QtCore.QObject):
             return False
         print("QML SLASH", json.dumps({"name": name, "turnId": turn_id}, ensure_ascii=False), flush=True)
         return True
+
+    @QtCore.Slot(result=bool)
+    def startTerminal(self) -> bool:
+        """F79：本地 PTY 等价终端（QProcess + bash），真实 stdin/stdout。"""
+        from utils.qt_compat import QtCore
+        if self._terminal is not None:
+            return self._terminal.state() != QtCore.QProcess.NotRunning
+        process = QtCore.QProcess(self)
+        process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
+        root = str(getattr(self._session(), "focusRoot", "") or self._store.home)
+        process.setWorkingDirectory(root)
+        def read():
+            data = bytes(process.readAllStandardOutput()).decode("utf-8", "replace")
+            if data:
+                self.terminalOutput.emit(data)
+        process.readyReadStandardOutput.connect(read)
+        process.finished.connect(lambda code, _status: self.terminalFinished.emit(int(code)) if self._terminal is process else None)
+        process.start("bash", [])
+        self._terminal = process
+        return bool(process.waitForStarted(1500))
+
+    @QtCore.Slot(str, result=bool)
+    def terminalInput(self, text: str) -> bool:
+        if self._terminal is None:
+            return False
+        data = str(text or "")
+        if not data.endswith("\n"):
+            data += "\n"
+        return self._terminal.write(data.encode("utf-8")) > 0
+
+    @QtCore.Slot(result=bool)
+    def terminalRunning(self) -> bool:
+        from utils.qt_compat import QtCore
+        return self._terminal is not None and self._terminal.state() != QtCore.QProcess.NotRunning
+
+    @QtCore.Slot()
+    def stopTerminal(self) -> None:
+        process = self._terminal
+        self._terminal = None
+        if process is not None:
+            process.kill()
+            process.waitForFinished(500)
+            process.deleteLater()
 
     @QtCore.Slot(result="QVariantList")
     def sessionTurns(self) -> List[Dict[str, Any]]:
