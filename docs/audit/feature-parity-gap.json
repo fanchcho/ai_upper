@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-27T23:12:06.376170+00:00",
+  "generated_at": "2026-11-27T23:33:52.709074+00:00",
   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
   "source": {
     "deva": "/home/agent/shared_workspace/deva",
     "ai_upper": "/home/agent/shared_workspace/ai_upper",
-    "head": "78687f9ab66c82c4fc4163ae023e046128b6d713"
+    "head": "d105a247504073e21fe43265044a989ddcab576d"
   },
   "features": [
     {
@@ -137,7 +137,7 @@
       "name": "全屏状态通知（macOS 红绿灯让位）",
       "deva": "apps/desktop/src/main/index.ts:158-160；preload/index.ts:631-636；redesign/ChatFirstShell.tsx:52-66",
       "status": "not_ported",
-      "evidence": "Main.qml (legacy line reference; current anchor at left),62 仅按 Qt.platform.os === 'osx' 静态加宽，无 window:fullscreen 等价信号，无 onFullScreen",
+      "evidence": "Main.qml:35-42 按 Qt.platform.os === osx 分支设置 macChrome/flags，非 macOS 使用 FramelessWindowHint。原版 main/index.ts:85-119、:163 有 macOS 原生红绿灯/全屏通知。当前 Linux 仅验证非 macOS 分支，宿主非 macOS 无法验证红绿灯成功态；环境限制不是原版能力不适用。",
       "port_anchor": "app/src/qml/Main.qml:35",
       "entry": "QML",
       "web_entry": {
@@ -1523,7 +1523,7 @@
       "name": "机器人页（Bots tab 列表/添加/详情）",
       "deva": "redesign/BotsPane.tsx:1-80；remote:get-state",
       "status": "not_ported",
-      "evidence": "真实配置列表/回复模式/范围/删除点击与写盘通过 out/final-port/bots-ui.json；Telegram 添加路径已实现但无真实凭据未验证，飞书/Web 创建和完整详情尚缺。",
+      "evidence": "已存在 RemoteBots.qml:21-64 Telegram/飞书/Web 添加、列表和管理动作；remote_bots.py action 实际落盘。docs/audit/remaining-three/feishu.md、web.md 有真实配置/浏览器证据。原版 BotsPane.tsx:447-735 另有独立详情、搜索、personas/sessions 多选范围、邀请码刷新/取消及扫码创建；当前未全量补齐，组合项仍未移植，不能提升为已实现。",
       "port_anchor": "app/src/qml/RemoteBots.qml:27",
       "entry": "QML",
       "web_entry": {
@@ -1569,7 +1569,7 @@
       "name": "手机联动（QR/设备/中转）",
       "deva": "redesign/PhonePane.tsx；services/remote/web/phone.ts；phone:*",
       "status": "not_ported",
-      "evidence": "移植版无 phone 服务/UI",
+      "evidence": "原版 PhonePane.tsx:1-220、services/remote/web/phone.ts:1-180 提供 QR、设备、LAN/relay 两通道，是可移植真功能，不是 Electron 特有。已有 web_pairing.py 本机浏览器安全配对与 RemoteBots.qml:32-34 入口，证据 remaining-three/web.md；完整 QR/LAN/relay/手机会话往返未完成。",
       "port_anchor": "app/src/qml/Main.qml:623",
       "entry": "QML",
       "web_entry": {
@@ -2079,7 +2079,7 @@
       "name": "语音输入/输入法专属功能",
       "deva": "原版无语音/听写代码（grep speech/voice 无结果）",
       "status": "not_ported",
-      "evidence": "原版没有语音/听写功能；输入法依赖系统但 Composer.tsx 有 isComposing 防误发送。QML 已补 inputMethodComposing 守卫，真实 OS 输入法合成未验证；不将输入法当作不存在。",
+      "evidence": "Main.qml:1753 已防合成态 Enter 误发送。d105a24 的 test_qml_ime_code.py 使用合成 QInputMethodEvent，只是合成 preedit/commit 证据。真实 fcitx5/Qt 输入上下文未验证，原始 ABI/上下文错误见 docs/audit/remaining-seven/ime-plugin.log。原版 Composer.tsx:669 有 isComposing，原版无语音/听写。",
       "port_anchor": "app/src/qml/Main.qml:1753",
       "entry": "QML",
       "web_entry": {
