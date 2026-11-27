@@ -2250,5 +2250,7 @@
   "finish.brand": "Deva",
   "finish.mcp": "MCP",
   "display.b49edb287124": "拒绝访问：路径不在已打开的项目内",
-  "finish.log": "日志"
+  "finish.log": "日志",
+  "common.cut": "剪切",
+  "common.paste": "粘贴"
 }

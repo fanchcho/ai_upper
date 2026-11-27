@@ -179,12 +179,43 @@ def evidence_collapse(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_context_menu(outdir: Path, theme: str):
+    from PySide6.QtCore import QObject
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-menu-{theme}-"))
+    try:
+        window, bridge, _store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        field = find_item(window.contentItem(), "inputField")
+        field.setProperty("text", "右键菜单证据文本")
+        _pump(QGuiApplication.instance(), lambda: False, 0.3)
+        item = field
+        p = item.mapToScene(__import__("PySide6.QtCore", fromlist=["QPointF"]).QPointF(40, 40))
+        QTest.mouseClick(window, Qt.RightButton, Qt.NoModifier, QPoint(round(p.x()), round(p.y())), 100)
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        menu = window.findChild(QObject, "composerMenu")
+        assert menu is not None and menu.property("visible") is True
+        png = outdir / f"edit-menu-{theme}.png"
+        size = shot(window, png)
+        rows = [{
+            "feature": "context-menu", "theme": theme, "png": str(png), "size": size,
+            "menu_visible": bool(menu.property("visible")),
+            "menu_width": menu.property("width"), "menu_height": menu.property("height"),
+            "editable": bool(menu.property("editable")),
+        }]
+        menu.close()
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     app = QGuiApplication.instance() or QGuiApplication([])
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

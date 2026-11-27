@@ -50,6 +50,21 @@ ApplicationWindow {
     // 原版 Ctrl/Cmd+B：对话页收起/展开会话列表。两个 sequence 分开写，
     // 让 Linux/Windows 用 Ctrl、macOS 用 Cmd；Qt 的 "Ctrl+B" 在 macOS 也映射 Command，
     // 但显式写 Meta+B 可读性更好。
+    // 编辑区右键菜单（原版主进程 index.ts:183-217 的原生菜单）。
+    // composer：可编辑（剪切/复制/粘贴/全选）；正文：只读（复制/全选）。
+    EditContextMenu {
+        id: composerMenu
+        objectName: "composerMenu"
+        target: inputField
+        editable: true
+    }
+    EditContextMenu {
+        id: bodyMenu
+        objectName: "bodyMenu"
+        target: bodyView
+        editable: false
+    }
+
     Shortcut {
         sequence: "Ctrl+B"
         context: Qt.ApplicationShortcut
@@ -1142,6 +1157,14 @@ ApplicationWindow {
                 // 原版正文里的 <a> 由 Chromium 直接打开；QML 的 TextEdit 必须显式接
                 // linkActivated（readOnly 时才发），再交给 ShellBridge 转系统浏览器。
                 onLinkActivated: function (link) { shellBridge.openExternal(link) }
+                TapHandler {
+                    acceptedButtons: Qt.RightButton
+                    onSingleTapped: function (eventPoint) {
+                        bodyMenu.x = eventPoint.scenePosition.x
+                        bodyMenu.y = eventPoint.scenePosition.y
+                        bodyMenu.open()
+                    }
+                }
                 Component.onCompleted: shellBridge.attach(textDocument)
             }
 
@@ -1499,6 +1522,14 @@ ApplicationWindow {
                 wrapMode: TextArea.Wrap
                 background: null
                 enabled: !window.busy
+                TapHandler {
+                    acceptedButtons: Qt.RightButton
+                    onSingleTapped: function (eventPoint) {
+                        composerMenu.x = eventPoint.scenePosition.x
+                        composerMenu.y = eventPoint.scenePosition.y
+                        composerMenu.open()
+                    }
+                }
                 Keys.onPressed: function (event) {
                     if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                         if (event.modifiers & Qt.ShiftModifier) {
