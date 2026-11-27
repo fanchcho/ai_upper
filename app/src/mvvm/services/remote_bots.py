@@ -75,6 +75,15 @@ def RemoteBots(shell):
                 self.save(rows);return ''
             except Exception as exc:return str(exc)
     
+        @Slot(result=str)
+        def webPairTicket(self):
+            bot=next((b for b in self.list() if b['platform']=='web'),None)
+            if not bot:
+                bot={'id':'web_'+uuid.uuid4().hex[:12],'name':'本地浏览器','platform':'web','enabled':True,'users':[],'bindings':{},'settings':{},'replyMode':'final','scope':{'mode':'all','personas':[],'sessions':[]}}
+                self.save(self.list()+[bot])
+            if bot['id'] not in self.workers:self.start(bot)
+            return self.workers[bot['id']].issue()
+
         @Slot(str,result=str)
         def feishuPairCode(self,identity):
             if not any(b['id']==identity and b['platform']=='feishu' for b in self.list()):return '机器人不存在'
@@ -122,7 +131,9 @@ def RemoteBots(shell):
                 self.workers[identity]=connection(self,bot,self.shell._vault,lambda state:self.delivered.emit({'kind':'state','id':identity,'state':state}),lambda event:self.delivered.emit({'kind':'feishu-event','id':identity,'event':event}))
                 return ''
             if bot.get('platform')=='web':
-                self.states[identity]='未验证：仅出站推送，外部连接尚未验证'
+                from mvvm.services.web_pairing import start
+                self.workers[identity]=start(self,bot)
+                self.states[identity]='本地配对服务已启动；外部推送未验证'
                 return ''
             if bot.get('platform')!='telegram':return '此平台的连接适配器尚未移植'
             token=self.shell._vault.get_secret('remote:'+identity+':botToken')
@@ -221,6 +232,8 @@ def RemoteBots(shell):
                 if bot.get('platform') in ('feishu','web'):
                     from mvvm.services.channel_push import push
                     users=bot.get('users',[])
+                    if bot['platform']=='web':
+                        server=self.workers.get(bot['id']);users=[u for u in users if not (server and server.visible(u['id']))]
                     if not users:reasons.append('未配置可用的已配对远程渠道');continue
                     def deliver(bot=bot,users=users):
                         for user in users:
