@@ -128,6 +128,8 @@ def needs_workspace_mount(
 
 def sealed_decision(name: str, is_mcp_tool: bool = False) -> Decision:
     """密封无头执行（无人值守）的判定：绝不弹窗、绝不挂起。"""
+    if name == 'deliver_result':
+        return Decision(allowed=True,category='edit')
     if name in SEALED_FORBIDDEN:
         return Decision(
             allowed=False,

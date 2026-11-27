@@ -162,6 +162,26 @@ def RemoteBots(shell):
             try:self.shell._host.send({'sessionId':sid,'text':text})
             except Exception as exc:self.status.emit(str(exc),'')
     
+        def publish_notice(self,sid,title,body):
+            session=self.shell._store.load_session(sid)
+            sent=0;reasons=[]
+            for bot in self.list():
+                if not bot.get('enabled'):continue
+                scope=bot.get('scope',{'mode':'all'})
+                if scope.get('mode')=='sessions' and sid not in scope.get('sessions',[]):continue
+                if scope.get('mode')=='personas' and (not session or session.personaId not in scope.get('personas',[])):continue
+                if bot.get('platform')!='telegram':reasons.append('渠道未接入');continue
+                token=self.shell._vault.get_secret('remote:'+bot['id']+':botToken')
+                if not token:reasons.append('机器人密钥不存在或系统密钥库不可用');continue
+                for user in bot.get('users',[]):
+                    chat=user.get('chatId')
+                    if not chat:continue
+                    def send(token=token,chat=chat):
+                        try:telegram(token,'sendMessage',{'chat_id':chat,'text':(title+'\n'+body)[:4000]})
+                        except Exception as exc:self.status.emit(str(exc),'')
+                    threading.Thread(target=send,daemon=True).start();sent+=1
+            return {'status':'queued' if sent else 'unverified','recipients':sent,'reason':'; '.join(reasons) or ('未配置可用的已配对远程渠道' if not sent else '')}
+
         def turn_event(self,payload):
             sid=payload.get('sessionId');event=payload.get('event',{});kind=event.get('type')
             if sid not in self.turns or kind not in ('text_delta','done','error'):return

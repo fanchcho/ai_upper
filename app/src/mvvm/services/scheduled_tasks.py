@@ -108,6 +108,25 @@ def ScheduledTasks(shell):
             except Exception as exc:return str(exc)
     
         @Slot(str,str,result=str)
+        def update(self, identity, encoded):
+            try:
+                patch=json.loads(encoded); rows=self.read(); row=next(r for r in rows if r['id']==identity)
+                if identity in self.running: raise ValueError('运行期间不能编辑任务')
+                prompt=str(patch['prompt']).strip()
+                if not prompt: raise ValueError('任务内容不能为空')
+                schedule=patch['schedule']; next_at=next_run(schedule)
+                owner=patch.get('ownerSessionId') or None
+                if owner and (owner==row['sessionId'] or self.shell._store.load_session(owner) is None): raise ValueError('主对话无效')
+                if patch.get('decision',{}).get('enabled'): raise ValueError('当前尚未接入自动决策服务')
+                row.update(title=str(patch['title']).strip() or prompt[:40],prompt=prompt,schedule=schedule,
+                           auth=patch['auth'],ownerSessionId=owner,decision=patch.get('decision'),
+                           status='active' if patch.get('enabled') else 'paused',nextRunAt=int(next_at*1000) if patch.get('enabled') else None,
+                           updatedAt=int(time.time()*1000))
+                session=self.shell._store.load_session(row['sessionId']);session.title=row['title'];session.personaId=row['auth'].get('personaId');session.model=row['auth'].get('modelRef')
+                self.shell._store.save(session.id);self.write(rows);self.shell._publish();return ''
+            except Exception as exc:return str(exc)
+
+        @Slot(str,str,result=str)
         def action(self,identity,action):
             try:
                 rows=self.read();row=next(r for r in rows if r['id']==identity)
@@ -128,8 +147,23 @@ def ScheduledTasks(shell):
             identity=row['id']
             if identity in self.running or self.shell._host.is_busy(row['sessionId']):
                 raise ValueError('任务已经在运行')
-            result=self.shell._host.send({'sessionId':row['sessionId'],'text':row['prompt']})
-            self.running[identity]={'turnId':result.get('turnId'),'startedAt':int(time.time()*1000)}
+            from mvvm.services.tool_runtime import ToolSpec, ToolResult
+            running={'startedAt':int(time.time()*1000)}
+            self.running[identity]=running
+            vm=self.shell._host.vm_for(row['sessionId']);vm.tools.interactive=False
+            def deliver(args):
+                if not row.get('ownerSessionId'):return ToolResult('任务未绑定主对话',True)
+                if 'handoff' in running:return ToolResult('本轮已经交接',True)
+                needs=args.get('needs_action')
+                if not isinstance(needs,bool):return ToolResult('needs_action 必须为布尔值',True)
+                if needs and not str(args.get('content','')).strip():return ToolResult('需要处理时 content 不能为空',True)
+                running['handoff']={'needsAction':needs,'summary':str(args.get('summary','')),'content':str(args.get('content',''))}
+                return ToolResult('交接已登记；仅告知时请在最终回复中写完整内容')
+            vm.tools.register(ToolSpec('deliver_result','向主对话交接；仅告知使用最终回复原文，需要处理则填写 content',{'type':'object','properties':{'needs_action':{'type':'boolean'},'summary':{'type':'string'},'content':{'type':'string'}},'required':['needs_action']}),deliver)
+            try:result=self.shell._host.send({'sessionId':row['sessionId'],'text':row['prompt']})
+            except Exception:
+                self.running.pop(identity,None);raise
+            running['turnId']=result.get('turnId')
             row['lastRunAt']=self.running[identity]['startedAt']
             if row['schedule']['kind']=='once':row['status']='completed';row['nextRunAt']=None
             else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
@@ -141,6 +175,18 @@ def ScheduledTasks(shell):
             for row in rows:
                 if row['sessionId']!=payload.get('sessionId') or row['id'] not in self.running:continue
                 run=self.running.pop(row['id']);run.update(endedAt=int(time.time()*1000),status=kind,error=event.get('message',''))
+                session=self.shell._store.load_session(row['sessionId'])
+                from mvvm.models.chat_models import TextPart
+                last=next((m for m in reversed(session.messages) if m.role=='assistant'),None)
+                content=last.content if last else ''
+                final=content if isinstance(content,str) else '\n'.join(p.text for p in content if isinstance(p,TextPart))
+                if kind=='done' and event.get('stopReason')=='end_turn':
+                    if run.get('handoff'):
+                        handoff=dict(run['handoff'])
+                        if not handoff['needsAction']:handoff['content']=final
+                        row['pendingHandoff']=handoff
+                    elif not row.get('ownerSessionId'):
+                        row['remoteDelivery']=self.shell.botsService().publish_notice(row['sessionId'],row['title'],final)
                 row['runs']=(row.get('runs',[])+[run])[-50:]
                 row['consecutiveErrors']=row.get('consecutiveErrors',0)+1 if kind=='error' else 0
                 if row['consecutiveErrors']>=5:row['status']='error';row['nextRunAt']=None
@@ -149,6 +195,20 @@ def ScheduledTasks(shell):
     
         def tick(self):
             rows=self.read();changed=False
+            from mvvm.models.chat_models import Message
+            for row in rows:
+                handoff=row.get('pendingHandoff');owner=row.get('ownerSessionId')
+                if not handoff or not owner or self.shell._host.is_busy(owner):continue
+                main=self.shell._store.load_session(owner)
+                if main is None:continue
+                if handoff['needsAction']:
+                    self.shell._host.send({'sessionId':owner,'text':'<定时任务交接>\n'+row['title']+'：'+handoff['summary']+'\n'+handoff['content']+'\n</定时任务交接>'})
+                else:
+                    main.messages.append(Message(role='assistant',content=row['title']+'：'+handoff['content']))
+                    self.shell._store.save(owner)
+                    row['remoteDelivery']=self.shell.botsService().publish_notice(owner,row['title'],handoff['content'])
+                    self.shell._publish()
+                row.pop('pendingHandoff',None);changed=True
             for row in rows:
                 if row['status']!='active' or row['id'] in self.running or not row.get('nextRunAt') or row['nextRunAt']>time.time()*1000:continue
                 try:self.run(row)
