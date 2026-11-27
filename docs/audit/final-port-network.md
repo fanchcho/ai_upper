@@ -29,3 +29,5 @@ PX_MODULE_PATH=$PWD/.tmp/final-port/proxy-runtime/root/usr/lib/aarch64-linux-gnu
 本项只覆盖实际使用 HttpxTransport 的调用路径；它不证明 Chromium 独立网络服务、系统 CA、所有工具自带 HTTP 客户端都已移植。
 
 API 对照：[Qt 平台代理解析](https://doc.qt.io/qt-6/qnetworkproxyfactory.html#systemProxyForQuery)、[libproxy 原生 API](https://github.com/libproxy/libproxy/blob/0.4.18/libproxy/proxy.h)。
+
+复核兼容层：Qt 系统代理分支改为通过既有 utils.qt_compat 导入，保持绑定抽象和打包扫描规则；同一真实 PAC/loopback 脚本复跑 PASS。

@@ -55,8 +55,11 @@ def system_proxy(url: str) -> str | None:
                     return None
                 finally:
                     _library.px_proxy_factory_free_proxies(proxies)
-    from PySide6.QtCore import QUrl
-    from PySide6.QtNetwork import QNetworkProxy, QNetworkProxyFactory, QNetworkProxyQuery
+    from utils.qt_compat import QtCore, QtNetwork
+    QUrl = QtCore.QUrl
+    QNetworkProxy = QtNetwork.QNetworkProxy
+    QNetworkProxyFactory = QtNetwork.QNetworkProxyFactory
+    QNetworkProxyQuery = QtNetwork.QNetworkProxyQuery
     for proxy in QNetworkProxyFactory.systemProxyForQuery(QNetworkProxyQuery(QUrl(url))):
         scheme = {QNetworkProxy.HttpProxy: 'http', QNetworkProxy.HttpCachingProxy: 'http',
                   QNetworkProxy.Socks5Proxy: 'socks5'}.get(proxy.type())
