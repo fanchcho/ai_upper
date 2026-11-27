@@ -136,3 +136,7 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 | 1 | 416,445,478,510,543,576 | 417,446,478,511,544,576 | 原版 11,11,11，Qt 11,11,12 | 两端 137 |
 
 结论：字段同数据布局对照可闭环；正文与阴影像素 **未归零**。相位变化会改变误差且 0.5 相位文字起始行重合，支持引擎栅格化/合成归因，不支持把它写成“全部像素一致”。位移只用于实验脚本，未进入生产样式。
+
+## 2026-11-28 收口复核（不改生产）
+
+F85/F56/F41 等本轮功能变更没有触碰正文/阴影 token；`git diff` 对照 `ExtensionDetail.qml`、`Theme.qml`、`SoftShadow.qml` 仍无生产样式改动。复跑 `scripts/parity/closeout/phase-session.py` 与 `measure_phases.py` 的原始结果继续为：相位 0/1 六段文字部分差 1px，0.5 相位六段重合；亮色阴影 (700,700) 137 vs 138，暗色相位相关 1 灰阶。结论维持「引擎栅格化/合成，未归零」；没有加坐标补偿、没有改 token。完整原始日志 `out/final-port/phase-rerun.log`、`out/final-port/phase-measurements.json`。

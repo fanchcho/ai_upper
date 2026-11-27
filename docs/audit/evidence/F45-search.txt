@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def pickAttachments app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1501:    def pickAttachments(self) -> List[str]:
+app/src/qml_shell.py:1519:    def pickAttachments(self) -> List[str]:

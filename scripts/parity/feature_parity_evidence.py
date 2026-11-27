@@ -383,6 +383,7 @@ def evidence_personas(outdir: Path, theme: str):
         roster_item = find_item(window.contentItem(), "personaRoster")
         detail = {}
         if rows:
+            bridge.roleMemorySave(rows[0]["id"], '{"title":"记忆证据","body":"真实角色记忆","type":"reference"}')
             QQmlExpression(QQmlEngine.contextForObject(roster_item), roster_item,
                            "openDetail('" + rows[0]["id"] + "')").evaluate()
             _pump(QGuiApplication.instance(), lambda: False, 0.4)
@@ -392,6 +393,33 @@ def evidence_personas(outdir: Path, theme: str):
         ticker.stop(); window.close(); engine.deleteLater()
         return [{"feature": "personas", "theme": theme, "list_png": str(png), "size": size,
                  "count": len(rows), "detail": detail}]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def evidence_git(outdir: Path, theme: str):
+    import subprocess
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-git-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        repo = home / "repo"; repo.mkdir()
+        subprocess.run(["git", "init", "-b", "main"], cwd=repo, check=True, capture_output=True)
+        subprocess.run(["git", "config", "user.email", "t@e.com"], cwd=repo, check=True)
+        subprocess.run(["git", "config", "user.name", "T"], cwd=repo, check=True)
+        (repo / "a.txt").write_text("one\n")
+        subprocess.run(["git", "add", "a.txt"], cwd=repo, check=True)
+        subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True, capture_output=True)
+        (repo / "a.txt").write_text("two\n")
+        session = store.load_session("s-1"); session.focusRoot = str(repo); store.save("s-1")
+        bridge.openSession("s-1"); bridge._publish(); _pump(QGuiApplication.instance(), lambda: False, 0.5)
+        from PySide6.QtQml import QQmlExpression, QQmlEngine
+        QQmlExpression(QQmlEngine.contextForObject(window), window, "gitPanel.open()").evaluate()
+        _pump(QGuiApplication.instance(), lambda: False, 0.5)
+        png = outdir / f"git-panel-{theme}.png"; size = shot(window, png)
+        ticker.stop(); window.close(); engine.deleteLater()
+        return [{"feature": "git", "theme": theme, "png": str(png), "size": size, "status": bridge.gitStatus(str(repo))}]
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -406,7 +434,7 @@ def main():
     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
     if font.exists():
         QFontDatabase.addApplicationFont(str(font))
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

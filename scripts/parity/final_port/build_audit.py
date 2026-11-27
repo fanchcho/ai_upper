@@ -39,7 +39,11 @@ patch={
 'F61':('implemented','9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。'),
 'F67':('implemented','SettingsModal.providerFetchModels -> ShellBridge.providerModels -> ModelGateway.list_models；test_provider_models_fetch.py 真实本地 HTTP 返回模型列表。'),
 'F75':('not_ported','已实现 downloadUpdate/installUpdate 和 About 按钮；真实本地下载字节校验通过，installUpdate 在 offscreen 报 QPlatformServices::openDocument 不支持，成功打开未验证，按未移植计。'),
-'F85':('not_ported','GitPanel/GitPanel.qml 已接 status/stage/commit/branches/log 常用操作并有真实临时仓库测试；25 个 git 方法中 diff/discard/merge/remote 等未接，整页未完成，按未移植计。'),
+'F41':('implemented','ComposerCapsules background list + backgroundTasks/openBackground/cancelBackground；test_background_tasks.py 真实成员会话列表/打开；取消依赖真实 busy turn。'),
+'F42':('na','浏览器操作胶囊依赖原版内置浏览器（BrowserView），F78 路线 B 无 QtWebEngine，故不适用；原版依据 features/browser/BrowserCapsule.tsx、services/browser/host.ts。'),
+'F56':('implemented','memory_store.py 实现角色记忆 v2 JSON（personas/memory/<id>.json）；PersonaRoster 资料页新增列表/添加/删除；test_role_memory.py 真实写盘读回。'),
+'F78':('na','路线 B 明确移除 QtWebEngine，原版 browser/host.ts 的 BrowserView、capturePage、live frame 与 16 条 browser:* 无可真实交互的 QML 等效；不引入新依赖，不造空壳。'),
+'F85':('not_ported','GitPanel 已接 status/stage/commit/branches/log/diff/discard/merge/remote/分支/分页常用操作并真实临时仓库测试；generate-commit-message、set-config、cancel 等剩余方法与完整原版页面未接，按未移植计。'),
 }
 
 for f in features:

@@ -1,16 +1,16 @@
 $ rg -n --glob *.qml --glob *.py selectedSessions app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:204:    // 多选：右键菜单「Select」进入；selectedSessions 只存 id，落盘仍走 ShellBridge 的会话服务。
-app/src/qml/Main.qml:206:    property var selectedSessions: []
-app/src/qml/Main.qml:835:                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
-app/src/qml/Main.qml:919:                text: window.selectedSessions.length + I18n.t("native.message0")
-app/src/qml/Main.qml:934:                    text: window.selectedSessions.length === window.listedSessions.length
-app/src/qml/Main.qml:2290:        window.selectedSessions = id ? [String(id)] : []
-app/src/qml/Main.qml:2298:        var next = window.selectedSessions
-app/src/qml/Main.qml:2304:        window.selectedSessionsChanged()
-app/src/qml/Main.qml:2309:        if (window.selectedSessions.length === all.length && all.length > 0) {
-app/src/qml/Main.qml:2310:            window.selectedSessions = []
-app/src/qml/Main.qml:2313:        window.selectedSessions = window.listedSessionIds.slice()
-app/src/qml/Main.qml:2318:        var ids = window.selectedSessions.slice()
-app/src/qml/Main.qml:2331:        window.selectedSessions = []
-app/src/qml/Main.qml:2370:        window.selectedSessions = []
+app/src/qml/Main.qml:205:    // 多选：右键菜单「Select」进入；selectedSessions 只存 id，落盘仍走 ShellBridge 的会话服务。
+app/src/qml/Main.qml:207:    property var selectedSessions: []
+app/src/qml/Main.qml:836:                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
+app/src/qml/Main.qml:920:                text: window.selectedSessions.length + I18n.t("native.message0")
+app/src/qml/Main.qml:935:                    text: window.selectedSessions.length === window.listedSessions.length
+app/src/qml/Main.qml:2291:        window.selectedSessions = id ? [String(id)] : []
+app/src/qml/Main.qml:2299:        var next = window.selectedSessions
+app/src/qml/Main.qml:2305:        window.selectedSessionsChanged()
+app/src/qml/Main.qml:2310:        if (window.selectedSessions.length === all.length && all.length > 0) {
+app/src/qml/Main.qml:2311:            window.selectedSessions = []
+app/src/qml/Main.qml:2314:        window.selectedSessions = window.listedSessionIds.slice()
+app/src/qml/Main.qml:2319:        var ids = window.selectedSessions.slice()
+app/src/qml/Main.qml:2332:        window.selectedSessions = []
+app/src/qml/Main.qml:2371:        window.selectedSessions = []
