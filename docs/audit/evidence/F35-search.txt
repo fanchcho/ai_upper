@@ -1,12 +1,12 @@
 $ rg -n --glob *.qml --glob *.py quoteText|quoteBar app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
 app/src/qml/Main.qml:21:    property string quoteText: ""
-app/src/qml/Main.qml:89:        onQuoteRequested: function(text) { window.quoteText = String(text || "").trim() }
-app/src/qml/Main.qml:1656:            id: quoteBar
-app/src/qml/Main.qml:1657:            objectName: "quoteBar"
-app/src/qml/Main.qml:1658:            visible: window.quoteText.length > 0
-app/src/qml/Main.qml:1662:            Text { x: 8; width: parent.width - 36; anchors.verticalCenter: parent.verticalCenter; text: window.quoteText; color: Theme.fg; font.pixelSize: 11; elide: Text.ElideRight }
-app/src/qml/Main.qml:1663:            SettingsButton { objectName: "quoteClose"; anchors.right: parent.right; height: 24; text: "×"; onClicked: window.quoteText = "" }
-app/src/qml/Main.qml:2166:        if (window.quoteText.length > 0)
-app/src/qml/Main.qml:2167:            text = "> " + window.quoteText.split("\n").join("\n> ") + "\n\n" + text
-app/src/qml/Main.qml:2174:            window.quoteText = ""
+app/src/qml/Main.qml:97:        onQuoteRequested: function(text) { window.quoteText = String(text || "").trim() }
+app/src/qml/Main.qml:1672:            id: quoteBar
+app/src/qml/Main.qml:1673:            objectName: "quoteBar"
+app/src/qml/Main.qml:1674:            visible: window.quoteText.length > 0
+app/src/qml/Main.qml:1678:            Text { x: 8; width: parent.width - 36; anchors.verticalCenter: parent.verticalCenter; text: window.quoteText; color: Theme.fg; font.pixelSize: 11; elide: Text.ElideRight }
+app/src/qml/Main.qml:1679:            SettingsButton { objectName: "quoteClose"; anchors.right: parent.right; height: 24; text: "×"; onClicked: window.quoteText = "" }
+app/src/qml/Main.qml:2182:        if (window.quoteText.length > 0)
+app/src/qml/Main.qml:2183:            text = "> " + window.quoteText.split("\n").join("\n> ") + "\n\n" + text
+app/src/qml/Main.qml:2190:            window.quoteText = ""

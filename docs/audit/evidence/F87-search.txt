@@ -1,3 +1,4 @@
 $ rg -n --glob *.qml --glob *.py retrySave|retry_save app/src/qml app/src/qml_shell.py app/src/mvvm
-exit=1
-(no matches)
+exit=0
+app/src/qml_shell.py:1984:    def retrySave(self) -> bool:
+app/src/qml/Main.qml:67:        SettingsButton { objectName: "saveRetry"; anchors.right: parent.right; anchors.rightMargin: 4; height: 28; text: "重试保存"; onClicked: shellBridge.retrySave() }

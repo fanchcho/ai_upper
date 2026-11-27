@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py sidebarResize|resizeSidebar|sideWidth\s*= app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:1014:        objectName: "sidebarResize"
+app/src/qml/Main.qml:1024:        objectName: "sidebarResize"

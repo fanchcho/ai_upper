@@ -58,6 +58,8 @@ patch={
 'F80':('implemented','SUBAGENT_TYPES General/Explore/Research/Plan/fork + run_subagent/send_to_subagent 工具；只读类型收窄 tools；子会话 parentId/title/model 落盘；test_subagents.py 真实派发并检查白名单。'),
 'F81':('implemented','propose_agent/create_task 惰性工具、AgentCards.qml、resolveProposal/resolveAutotask；接受写角色、创建写 tasks.json、拒绝/忽略写 proposals/autotasks 边车；test_agent_task_cards.py 重开读回。'),
 'F88':('implemented','ChatSessionStore.prune_cache(keep) + ShellBridge.pinSession/openSession；test_cache_pin.py 12 会话加载后 pin s-5，缓存≤8 且 s-5 仍在并可保存。'),
+'F86':('implemented','historyPage(cursor,from) 轮次窗口 + ShellBridge.loadEarlierHistory 滚动到顶加载更早 10 轮；初始仅最后 10 轮，revision 过期丢弃；QML bodyScroll 触发并保持 contentY；test_history_pagination.py 读回 fromTurn 20→10 与 stale 拒绝。'),
+'F87':('implemented','ShellBridge.saveError/retrySave + Main.qml saveErrorBar/saveRetry；test_save_retry.py 将真实会话路径替换为目录制造 IsADirectoryError，界面点重试后写回并清除错误。'),
 'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 
@@ -66,7 +68,8 @@ for f in features:
 # Actual disk added three bridge capabilities relative to the old inventory.
 for identity,name,source,search in [('F86','历史消息分页加载','apps/desktop/src/main/services/chat.ts:656','historyPage|history_page'),('F87','会话保存失败后重试','apps/desktop/src/main/services/chat.ts:655','retrySave|retry_save')]:
  features=[f for f in features if f['id']!=identity]
- features.append(dict(id=identity,group='磁盘新增原版能力',name=name,deva=source,status='not_ported',evidence='当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。',search=search))
+ status, evidence = patch.get(identity, ('not_ported', '当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。'))
+ features.append(dict(id=identity,group='磁盘新增原版能力',name=name,deva=source,status=status,evidence=evidence,search=search))
  mapping[identity]=['app/src/qml_shell.py','class ShellBridge']
 mapping['F88']=['app/src/qml_shell.py','def pinSession']
 searches={'F06':'onFullScreen|fullscreenChanged','F11':'Key_Escape.*sidePeek|sidePeek.*Key_Escape','F27':'sidebarResize|resizeSidebar|sideWidth\\s*=', 'F32':'planResponse|plan-response','F33':'rewindPreview|rewindApply|rewindUndo','F35':'quoteText|quoteBar','F36':'deleteTurns|delete_turns','F38':'chat:insert|insertMessage','F40':'TodoCapsule|todo_write','F41':'BackgroundTaskCapsule','F42':'BrowserCapsule','F50':'deliveryThumbnail|deliverableThumb','F52':'ProfilePanel','F54':'setAvatarImage|set_avatar_image','F55':'reorderPersonas|reorder_personas','F56':'readMemory|writeMemory','F64':'phone:|PhonePane','F67':'fetchModelList|fetchModels','F70':'importSkill|import_skill','F75':'installUpdate|downloadUpdate','F78':'BrowserView|WebEngineView','F79':'terminal:create|pty.open|pty.spawn','F80':'spawnMember|handleMentions','F81':'proposalResponse|autotaskResponse','F85':'GitWidget|gitStatus'}

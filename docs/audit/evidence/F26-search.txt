@@ -1,5 +1,5 @@
 $ rg -n --glob *.qml --glob *.py composerDrafts app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:130:    property var composerDrafts: ({})
-app/src/qml/Main.qml:134:            composerDrafts[composerSessionId] = {
-app/src/qml/Main.qml:138:        var draft = composerDrafts[activeId]
+app/src/qml/Main.qml:138:    property var composerDrafts: ({})
+app/src/qml/Main.qml:142:            composerDrafts[composerSessionId] = {
+app/src/qml/Main.qml:146:        var draft = composerDrafts[activeId]

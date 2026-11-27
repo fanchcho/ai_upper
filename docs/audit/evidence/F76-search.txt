@@ -1,4 +1,4 @@
 $ rg -n --glob *.qml --glob *.py meBtn app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:579:            id: meBtn
-app/src/qml/Main.qml:580:            objectName: "meBtn"
+app/src/qml/Main.qml:589:            id: meBtn
+app/src/qml/Main.qml:590:            objectName: "meBtn"
