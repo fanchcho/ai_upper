@@ -1750,7 +1750,7 @@ ApplicationWindow {
                     }
                 }
                 Keys.onPressed: function (event) {
-                    if (inputField.inputMethodComposing) { event.accepted = false; return }
+                    if (inputField.inputMethodComposing) { event.accepted = true; return }
                     if (window.slashOpen) {
                         if (event.key === Qt.Key_Down) {
                             window.slashCurrent = Math.min(window.slashCurrent + 1, window.slashRows.length - 1)
