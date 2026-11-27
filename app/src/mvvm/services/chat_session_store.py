@@ -567,6 +567,15 @@ class ChatSessionStore:
             self.save(session_id)
         return list(session.messages)
 
+    def prune_cache(self, keep: str, max_entries: int = 8) -> None:
+        """仅保留最近使用的缓存条目；`keep` 永不淘汰（chat:pin-session）。"""
+        for session_id in list(self._cache):
+            if session_id == keep:
+                continue
+            if len(self._cache) <= max_entries:
+                break
+            self._cache.pop(session_id, None)
+
     def delete_session(self, session_id: str) -> bool:
         """删除对话文件与其拆分文件；不存在返回 False。"""
         session_id = safe_id(session_id)

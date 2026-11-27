@@ -295,6 +295,7 @@ class ShellBridge(QtCore.QObject):
         self._last_interactions = []
         self._commit_cancels = {}
         self._terminal = None
+        self._pinned_session = ""
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
@@ -675,6 +676,7 @@ class ShellBridge(QtCore.QObject):
     def openSession(self, session_id: str) -> bool:
         """切换会话：正文按该会话落盘的消息重渲染。"""
         self._active = str(session_id or "")
+        self.pinSession(self._active)
         self._unread.discard(self._active)
         self._turn = None
         self._turn_session = ""
@@ -1967,6 +1969,15 @@ class ShellBridge(QtCore.QObject):
             return False
         self._host.delete_turns(session.id, None, [turn])
         self._render(); self._publish(); return True
+
+    @QtCore.Slot(str, result=bool)
+    def pinSession(self, session_id: str) -> bool:
+        """F88：保护当前会话缓存，其它条目按上限淘汰。"""
+        if not session_id or self._store.load_session(session_id) is None:
+            return False
+        self._pinned_session = session_id
+        self._store.prune_cache(session_id)
+        return True
 
     @QtCore.Slot(result=bool)
     def deleteLastTurn(self) -> bool:
