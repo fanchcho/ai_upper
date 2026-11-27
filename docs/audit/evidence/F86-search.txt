@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py historyPage|history_page app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:2589:    def historyPage(self, cursor: str, from_turn: int) -> Dict[str, Any]:
+app/src/qml_shell.py:2606:    def historyPage(self, cursor: str, from_turn: int) -> Dict[str, Any]:

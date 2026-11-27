@@ -1,4 +1,4 @@
 $ rg -n --glob *.qml --glob *.py importSkill|import_skill app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1363:                    self._dialog_parent(), self.translate("extensions.importSkill"), "",
+app/src/qml_shell.py:1380:                    self._dialog_parent(), self.translate("extensions.importSkill"), "",
 app/src/qml/SettingsModal.qml:1351:                text: I18n.t("extensions.importSkill")

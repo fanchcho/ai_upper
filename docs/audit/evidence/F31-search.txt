@@ -1,4 +1,4 @@
 $ rg -n --glob *.qml --glob *.py answerInteraction app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:393:    def answerInteraction(self, request_id, outcome, answer):
+app/src/qml_shell.py:406:    def answerInteraction(self, request_id, outcome, answer):
 app/src/qml/InteractionPrompt.qml:28:        if (request && shellBridge.answerInteraction(request.id, outcome, text)) {
