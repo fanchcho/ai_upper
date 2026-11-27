@@ -141,3 +141,27 @@ class Rewind:
             except (OSError,ValueError) as exc:
                 skipped.append({'path':row['path'],'reason':str(exc)})
         return skipped
+
+
+def startup_gc(home):
+    """Independent startup sweep: original index.ts:351, checkpoints.ts:332.
+
+    Inline journals retain metadata, while expired payload bytes are removed
+    even when the session never runs another tool.
+    """
+    directory = Path(home) / 'data' / 'rewind'
+    cleaned = []
+    if not directory.exists():return cleaned
+    for path in directory.glob('*.json'):
+        if path.is_symlink():continue
+        try:
+            data = json.loads(path.read_text())
+            if not isinstance(data.get('records'),list):continue
+            service = object.__new__(Rewind);service.path=path
+            before=path.read_bytes()
+            service.save(data)
+            if path.read_bytes()!=before:cleaned.append(path.name)
+        except (OSError,ValueError,KeyError,TypeError) as exc:
+            import sys
+            print('REWIND GC FAILED',path.name,str(exc),file=sys.stderr,flush=True)
+    return cleaned

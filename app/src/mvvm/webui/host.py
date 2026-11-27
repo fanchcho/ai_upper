@@ -97,6 +97,8 @@ class ChatHost:
         self.store = store
         self.guard = guard
         self.home = Path(home)
+        from mvvm.services.rewind import startup_gc
+        startup_gc(self.home)
         # 附件服务与守卫共用同一个实例：受信根、白名单才是同一份。
         self.attachments = attachments or AttachmentService(self.home, guard)
         self._emit = emit
