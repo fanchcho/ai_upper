@@ -2568,13 +2568,13 @@ class ShellBridge(QtCore.QObject):
         # the already-loaded tail (this is the original history-page append semantics).
         if self._document is not None:
             from markdown.body import BodyDocument
-            from PySide6.QtGui import QTextCursor, QTextDocumentFragment
+            from utils.qt_compat import QtGui
             temp = BodyDocument(self._body.style, self._body.content_width)
             temp.set_markdown(transcript_markdown(older, lang=self.language(), include_activity=True))
             target = self._document.textDocument()
-            cursor = QTextCursor(target)
-            cursor.movePosition(QTextCursor.MoveOperation.Start)
-            cursor.insertFragment(QTextDocumentFragment(temp.document))
+            cursor = QtGui.QTextCursor(target)
+            cursor.movePosition(QtGui.QTextCursor.MoveOperation.Start)
+            cursor.insertFragment(QtGui.QTextDocumentFragment(temp.document))
             added_blocks = temp.document.blockCount()
         else:
             self._render()
