@@ -115,7 +115,12 @@ Item {
                 FieldLabel { text: I18n.t("extensions.roles"); height: root.item.kind === "mcp" ? 16.5 : 17; topPadding: root.item.kind === "mcp" ? 0 : 4; verticalAlignment: Text.AlignVCenter }
             SettingsButton {
                 y: root.item.kind === "mcp" ? 22.5 : 29.5
+                id: rolesTrigger
                 width: parent.width; height: 32; leftPadding: 9
+                background: Item {
+                    Rectangle { visible: rolesPopup.opened; anchors.fill: parent; anchors.margins: -3; radius: 9; color: Theme.dark ? Qt.rgba(124/255,124/255,240/255,0.16) : Qt.rgba(91/255,91/255,214/255,0.1) }
+                    Rectangle { anchors.fill: parent; radius: 6; color: Theme.bgElevated; border.color: rolesPopup.opened ? Theme.accent : Theme.borderStrong }
+                }
                 contentItem: Row { spacing: 8
                     Rectangle {
                         visible: !root.item.roles || !root.item.roles.length
@@ -125,23 +130,30 @@ Item {
                     Row { spacing: -6; Repeater { model: root.item.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: root.personaRecord(modelData).avatarImage || ""; size: 20 } } }
                     Text { text: root.rolesSummary(); color: Theme.fg; font.pixelSize: 13 }
                 }
-                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; size: 12; color: Theme.fgSubtle }
+                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 12; color: Theme.fgSubtle }
                 onClicked: rolesPopup.open()
                 Popup {
                     id: rolesPopup; focus: true; y: parent.height + 6; width: parent.width
                     padding: 7
+                    property int activeRow: 0
+                    onOpened: {
+                        var picked = root.item.roles || []
+                        activeRow = picked.length ? 1 + (root.item.personas || []).findIndex(function(p) { return picked.indexOf(p.id) >= 0 }) : 0
+                    }
                     background: Item {
                         SoftShadow { target: rolesBackground }
                         Rectangle { id: rolesBackground; anchors.fill: parent; color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
                     }
                     contentItem: Column {
                         Item { width: parent.width; height: 48.75
+                            Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === 0 ? Theme.bgHover : "transparent" }
+                            Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 14; name: "M20 6 9 17l-5-5"; color: Theme.accent; visible: !root.item.roles || !root.item.roles.length }
                             Rectangle { x: 8; y: 11.375; width: 26; height: 26; radius: 13; color: Theme.bgSelected
                                 Icon { anchors.centerIn: parent; name: IconData.users; size: 14; color: Theme.accent }
                             }
                             Text { x: 44; y: 6; text: I18n.t("extensions.rolesGeneral"); color: Theme.fg; font.pixelSize: 13 }
                             Text { x: 44; y: 25.5; text: I18n.t("extensions.rolesGeneralHint"); color: Theme.fgSubtle; font.pointSize: 8.625 }
-                            MouseArea { anchors.fill: parent; onClicked: { root.save("roles", null); rolesPopup.close() } }
+                            MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = 0; onClicked: { root.save("roles", null); rolesPopup.close() } }
                         }
                         Item { width: parent.width; height: 13
                             Rectangle { x: 4; y: 6; width: parent.width - 8; height: 1; color: Theme.border }
@@ -151,12 +163,14 @@ Item {
                             model: root.item.personas || []
                             Item {
                                 required property var modelData
+                                required property int index
+                                Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === index + 1 ? Theme.bgHover : "transparent" }
                                 width: parent.width; height: modelData.desc ? 48.75 : 38
                                 Avatar { x: 8; anchors.verticalCenter: parent.verticalCenter; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 26 }
                                 Text { x: 44; y: modelData.desc ? 6 : 9.25; text: modelData.name; color: Theme.fg; font.pixelSize: 13 }
                                 Text { x: 44; y: 25.5; width: parent.width - 70; text: modelData.desc || ""; elide: Text.ElideRight; color: Theme.fgSubtle; font.pointSize: 8.625 }
-                                Text { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; text: (root.item.roles || []).indexOf(modelData.id) >= 0 ? "✓" : ""; color: Theme.accent }
-                                MouseArea { anchors.fill: parent; onClicked: {
+                                Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 14; name: "M20 6 9 17l-5-5"; visible: (root.item.roles || []).indexOf(modelData.id) >= 0; color: Theme.accent }
+                                MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = index + 1; onClicked: {
                                     var roles = (root.item.roles || []).slice(); var i = roles.indexOf(modelData.id)
                                     if (i >= 0) roles.splice(i,1); else roles.push(modelData.id)
                                     root.save("roles", roles.length ? roles : null)

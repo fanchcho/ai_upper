@@ -1,6 +1,7 @@
 """Disk-backed extension detail operations; never return secret values to QML."""
 import json
 from pathlib import Path
+from locale_runtime import tr
 from mvvm.services.chat_session_store import write_file_atomic
 from mvvm.services.persona_store import PersonaStore, is_safe_id
 from mvvm.services.skill_store import SkillStore, RESERVED_IDS
@@ -105,7 +106,8 @@ class ExtensionSettings:
         record = self.registry()[key]
         if not any(field in record.get(group, {}) for group in ['env', 'headers']): raise ValueError('Unknown secret field')
         result = self.vault.set_secret(f'mcp:{key}:{field}', value)
-        if not result.get('ok'): raise OSError('Secret could not be saved')
+        if not result.get('ok'):
+            raise OSError(tr('extensions.secretUnavailable') if not result.get('available') else 'Secret could not be saved')
 
     def remove(self, kind, key):
         self.detail(kind, key)
