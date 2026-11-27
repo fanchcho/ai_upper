@@ -299,6 +299,8 @@ class ShellBridge(QtCore.QObject):
         self._attention: set[str] = set()
         # 回复完成/错误通知：由 run() 注入 TrayController.notify；无托盘时为 None。
         self._notifier: Any = None
+        # 回合中输入的插话：原版 chat:insert；后端没有步内注入，如实排到本轮结束后的下一轮。
+        self._pending_inserts: List[str] = []
         # 检查更新的状态机：idle / checking / latest / available / error。
         self._update_state: Dict[str, Any] = {"phase": "idle"}
         self._update_thread: Any = None
@@ -1544,6 +1546,46 @@ class ShellBridge(QtCore.QObject):
         return True
 
     @QtCore.Slot(str, result=bool)
+    def insertMessage(self, text: str) -> bool:
+        """输入框在回合中按「发送」：先进入待插入队列；回合结束后按原文发给同一会话。"""
+        value = str(text or "").strip()
+        if not value or not self._active:
+            return False
+        if not self._host.is_busy(self._active):
+            return self.send(value)
+        self._pending_inserts.append(value)
+        print("QML INSERT QUEUED", json.dumps({"sessionId": self._active, "text": value}, ensure_ascii=False), flush=True)
+        self._publish()
+        return True
+
+    @QtCore.Slot(result="QVariantList")
+    def pendingInserts(self) -> List[str]:
+        return list(self._pending_inserts)
+
+    @QtCore.Slot(result="QVariantMap")
+    def backgroundCapsule(self) -> Dict[str, Any]:
+        """后台任务胶囊数据：会话边车 `background`（原版 BackgroundCapsule）。"""
+        session = self._session()
+        return dict(getattr(session, "background", None) or {}) if session is not None else {}
+
+    @QtCore.Slot(result="QVariantMap")
+    def todoCapsule(self) -> Dict[str, Any]:
+        """当前会话的 Todo 清单（原版 Composer.tsx:864 TodoCapsule）。"""
+        if not self._active:
+            return {}
+        state = self._host.todos(self._active).get("active")
+        if not state:
+            return {}
+        items = state.get("items") or []
+        return {
+            "id": state.get("id") or "",
+            "title": state.get("title") or "",
+            "items": items,
+            "done": sum(1 for item in items if item.get("status") == "completed"),
+            "total": len(items),
+        }
+
+    @QtCore.Slot(str, result=bool)
     def openExternal(self, url: str) -> bool:
         """正文里的链接点击：原版渲染层 `<a>` 由 Chromium 直接打开，QML 侧显式转系统浏览器。
 
@@ -1726,6 +1768,10 @@ class ShellBridge(QtCore.QObject):
             self._turn = None
             self._turn_session = ""
             self._turn_id = ""
+            queued = list(self._pending_inserts)
+            self._pending_inserts.clear()
+            if queued and self._active:
+                self.send("\n\n".join(queued))
             return True
         return False
 
@@ -1954,6 +2000,9 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("effortLabel", effort["label"])
         window.setProperty("activeEffort", effort["current"])
         window.setProperty("chatText", labels)
+        window.setProperty("pendingInserts", self.pendingInserts())
+        window.setProperty("todoCapsule", self.todoCapsule())
+        window.setProperty("backgroundCapsule", self.backgroundCapsule())
         # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
         window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。

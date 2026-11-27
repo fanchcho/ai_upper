@@ -166,6 +166,9 @@ ApplicationWindow {
     property var slashRows: []
     property int slashCurrent: 0
     property bool slashOpen: false
+    property var pendingInserts: []
+    property var todoCapsule: ({})
+    property var backgroundCapsule: ({})
     property string suggestPrefix: "/"
     property int suggestStart: 0
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
@@ -1581,6 +1584,14 @@ ApplicationWindow {
         // 深色 `0 8px 30px rgba(0,0,0,.5)`、浅色 `0 6px 24px rgba(0,0,0,.12)`
         // （tokens.css:149 / :82）。参数字面量集中在 SoftShadow.qml。
         SoftShadow { id: composerShadow; target: composer }
+        ComposerCapsules {
+            id: composerCapsules
+            x: composer.x + 13
+            y: composer.y - height - 6
+            width: composer.width - 26
+            todo: window.todoCapsule
+            pending: window.pendingInserts
+        }
         SlashMenu {
             id: slashMenu
             objectName: "slashMenuRoot"
@@ -1778,7 +1789,7 @@ ApplicationWindow {
                              : Theme.accent
                     Text {
                         anchors.centerIn: parent
-                        visible: !window.busy
+                        visible: !window.busy || inputField.text.trim() !== ""
                         text: I18n.t("cf.send")
                         color: Theme.accentFg
                         font.family: Theme.sansFamily
@@ -1788,7 +1799,7 @@ ApplicationWindow {
                     Icon {
                         objectName: "stopGlyph"
                         anchors.centerIn: parent
-                        visible: window.busy
+                        visible: window.busy && inputField.text.trim() === ""
                         name: IconData.square
                         size: 14
                         color: Theme.fg
@@ -1802,10 +1813,16 @@ ApplicationWindow {
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            if (window.busy)
-                                window.stopGeneration()
-                            else
+                            if (window.busy) {
+                                if (inputField.text.trim() !== "") {
+                                    if (shellBridge.insertMessage(inputField.text))
+                                        inputField.text = ""
+                                } else {
+                                    window.stopGeneration()
+                                }
+                            } else {
                                 window.submit()
+                            }
                         }
                     }
                 }

@@ -324,6 +324,45 @@ def evidence_activity(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_capsules(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-capsules-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        session = store.load_session("s-1")
+        session.todos = [{"listId": "L1", "title": "证据待办", "at": 1, "items": [
+            {"content": "第一步", "status": "completed"},
+            {"content": "第二步", "status": "in_progress"},
+        ]}]
+        session.background = {"tool-1": "running"}
+        store.save("s-1")
+        bridge.openSession("s-1")
+        bridge._pending_inserts = ["排队插话"]
+        bridge._publish()
+        _pump(QGuiApplication.instance(), lambda: False, 0.6)
+        png = outdir / f"capsules-{theme}.png"
+        size = shot(window, png)
+        texts = []
+        def walk(item):
+            try:
+                txt = item.property("text")
+                if txt: texts.append(str(txt))
+            except Exception:
+                pass
+            for child in item.childItems():
+                walk(child)
+        walk(window.contentItem())
+        rows = [{"feature": "capsules", "theme": theme, "png": str(png), "size": size,
+                 "todo": any("证据待办" in t for t in texts),
+                 "pending": any("待插入" in t for t in texts),
+                 "background": any("后台任务" in t for t in texts)}]
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
@@ -334,7 +373,7 @@ def main():
     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
     if font.exists():
         QFontDatabase.addApplicationFont(str(font))
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):
