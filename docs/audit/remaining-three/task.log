@@ -1,0 +1,17 @@
+QML SEND {"sessionId": "s-1", "text": "Ask Daily about its results", "attachments": []}
+QML TURN 3694e57ed66045daa48fbc944e861d11
+QML STREAM {"text": "DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the next task question", "attachments": []}
+QML TURN 0240d666559d4bc3b9d5c6c3af18d6d1
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Ask Daily about its results", "attachments": []}
+QML TURN 617687f6f17d4d7eba7b5fcc1989a8ef
+QML STREAM {"text": "DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the next task question", "attachments": []}
+QML TURN 093852ba23724f019e3095727b8453a6
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS actual member_send/member_stop task fallback, reopened sessions, task schedule unchanged, dark/light keyboard input

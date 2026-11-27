@@ -14,6 +14,7 @@ class Members:
     def __init__(self, host):
         self.host = host
         self.pending = {}
+        self.task_asks = {}
         self.escalations = {}
         self.lock = threading.RLock()
         self.path = Path(host.home)/'data'/'member-reports.json'
@@ -22,6 +23,33 @@ class Members:
     def save_reports(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         write_file_atomic(self.path,json.dumps(self.reports,ensure_ascii=False))
+
+    def owned_task(self, main, name):
+        path=Path(self.host.home)/'tasks.json'
+        rows=json.loads(path.read_text()).get('tasks',[]) if path.exists() else []
+        want=name.strip().lstrip('@').casefold()
+        return next((r for r in rows if r.get('ownerSessionId')==main.id and r['title'].strip().casefold()==want),None)
+
+    def task_tool(self, main, args, stop=False):
+        task=self.owned_task(main,str(args.get('member','')))
+        if not task:return ToolResult('找不到成员或所属定时任务',True)
+        sid=task['sessionId']
+        if stop:
+            turn=self.host._session_turn.get(sid)
+            if turn:self.host.abort(turn)
+            return ToolResult('已中止定时任务这一次运行' if turn else '定时任务当前没有在运行')
+        child=self.host.store.load_session(sid)
+        if child is None:return ToolResult('定时任务还没有运行过，没有可以问它的内容',True)
+        if self.host.is_busy(sid):return ToolResult('定时任务正在运行，等这次完成再转给它',True)
+        subject=str(args.get('task') or args.get('message') or '').strip()
+        if not subject:return ToolResult('缺少任务标题（task）',True)
+        child.model=task.get('auth',{}).get('modelRef') or child.model or main.model
+        self.host.store.save(sid)
+        self.task_asks[sid]={'main':main.id,'title':task['title'],'subject':subject,'wake':bool(args.get('report_to_me'))}
+        try:self.host.send({'sessionId':sid,'text':'【主角色派来的任务】'+subject+'\n'+str(args.get('message') or subject)})
+        except Exception:
+            self.task_asks.pop(sid,None);raise
+        return ToolResult('已转给定时任务「'+task['title']+'」，它在自己的对话里回答')
 
     def create(self, main, args):
         name = str(args.get('name') or '').lstrip('@').strip()
@@ -83,7 +111,7 @@ class Members:
             try:
                 ref = str(args.get('member') or args.get('name') or '')
                 member = next((m for m in main.members or [] if not m.get('removedAt') and ref in (m['id'],m['name'])),None)
-                if member is None: raise ValueError('找不到成员：'+ref)
+                if member is None:return self.task_tool(main,args)
                 text = str(args.get('message') or '').strip()
                 if not text: raise ValueError('消息不能为空')
                 sid = member['sessionId']
@@ -118,7 +146,7 @@ class Members:
             return ToolResult(json.dumps(rows,ensure_ascii=False))
         def stop(args):
             member=next((m for m in main.members or [] if m['name']==args.get('member')),None)
-            if member is None:return ToolResult('成员不存在',True)
+            if member is None:return self.task_tool(main,args,stop=True)
             turn=self.host._session_turn.get(member['sessionId'])
             if turn:self.host.abort(turn)
             return ToolResult('已请求停止' if turn else '成员未在运行')
@@ -176,6 +204,19 @@ class Members:
         return True
 
     def finished(self, sid):
+        ask=self.task_asks.pop(sid,None)
+        if ask:
+            child=self.host.store.load_session(sid)
+            turn=self.host._turns.get(self.host._session_turn.get(sid,''))
+            stopped=bool(turn and (turn.aborted or turn.stop_reason=='aborted'))
+            failed=bool(turn and turn.stop_reason=='error')
+            text=next((m.text() for m in reversed(child.messages) if m.role=='assistant'),'')
+            if stopped:text='已停止：'+ask['subject']
+            elif failed:text=turn.error_message or '定时任务回答失败'
+            with self.lock:
+                self.reports.append([ask['main'],ask['title'],text,'' if stopped else '处理任务回答' if ask['wake'] or failed else ''])
+                self.save_reports()
+            return
         if sid not in self.pending: return
         main_id,name,start = self.pending.pop(sid)
         member = self.host.store.load_session(sid)
