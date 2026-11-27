@@ -57,3 +57,21 @@ KEYRING_ITEMS [{"label":"Chrome Safe Storage Control","attrs":{"xdg:schema":"_ch
 - `compare-secret-saved.json`：pixel_equal_percent=70.821、mean_abs_rgb_sum=20.537、max_channel_diff=667。差异包含两端既有的设置弹窗版式/字段间距差，不是 safeStorage 功能差异；两端“Saved”状态与真实钥匙环写入均已分别验证。
 
 结论：C9 **闭环**——原版 Electron safeStorage 真实成功态已取得，并与移植版同状态做了同尺寸对照；不再使用上轮替身数据。
+
+## 2026-11-27 最终同数据对照（C9 收口）
+
+`scripts/parity/final_port/identical_os.py` 在同一私有 D-Bus/GNOME Secret Service 上先跑 Qt 保存密钥，再把同一份 `config.json` / `mcp.json` / `skills` / `personas` 复制到原版隔离目录，启动原版 Electron（`--password-store=gnome-libsecret`，源码只读）。两端都真实输入 `FIXTURE`，等待 600ms 自动保存并读取真实钥匙环。
+
+原始输出（`out/final-port/layout-before.log` 同份）：
+```
+REAL_OS: real QTest input -> timer -> bridge -> vault -> GNOME Secret Service; Saved visible
+EXACT_SCROLL 142.0
+REAL_ELECTRON_SAFE_STORAGE 0 {"id":1,"result":{"result":{"type":"object","value":{"available":true,"saved":{"ok":true,"available":true},"has":true}}}}
+BOTTOM dark { top: 142, max: 142 }
+BOTTOM light { top: 142, max: 142 }
+SAVED dark true
+SAVED light true
+```
+截图：`out/final-port/deva-saved-dark.png`、`deva-saved-light.png`（原版，Saved 可见）；`out/final-port/dark-secret-real-os-saved.png`、`light-secret-real-os-saved.png`（Qt，Saved 可见）。两者均 1280×820，设置弹窗裁同一区域 720×567 后 1:1 并排：`out/final-port/compare-identical-dark.png` / `compare-identical-light.png`。
+
+`compare-identical.json`：dark pixel_equal_percent=94.119、mean_abs_rgb_sum=7.436；light 94.729 / 9.063。剩余差异是字体抗锯齿/水平字宽等既有渲染差，不是 safeStorage 功能差。C9 的“原版真实成功态 + 同尺寸对照”已闭环；不再使用上轮替身数据。

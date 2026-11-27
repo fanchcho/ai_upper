@@ -103,3 +103,18 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 ### 3. 本轮未发现可证的样式错误
 
 再次对照 `deva/apps/desktop/src/renderer/src/styles/tokens.css` 与 `Theme.qml`：`--bg-selected` dark `rgba(124,124,240,.2)`、light `rgba(91,91,214,.12)`；`--accent-tint` .16/.10；阴影 light `0 6px 24px rgba(0,0,0,.12)`、dark `0 8px 30px rgba(0,0,0,.5)`，两边逐值相同。没有发现应当修复的真实样式错，因此本轮不修改生产代码。
+
+## 2026-11-27 同数据字段纵向布局核对（C 第二处边界）
+
+`scripts/parity/final_port/compare_identical.py` 在两端同一份 `config.json`/`mcp.json`/`skills`/`personas`、同一滚动偏移（Qt 与原版均 142）下，读取原版 DOM `ext-field__label` 的 `rect.y` 与 Qt 几何文件的 label y。浅色与深色结果逐项为：
+
+|字段 label|原版 y|Qt y|差|
+|---|---|---|---|
+|Available to|163|163|0.0|
+|Transport|233.5|233.5|0.0|
+|Command|304|304|0.0|
+|Arguments|374.5|374.5|0.0|
+|Environment variables|490.5|490.5|0.0|
+|Discovered tools|614.5|614.5|0.0|
+
+两主题六个字段全部 `delta=0.0`：同数据下字段纵向布局已对齐，没有需要修的纵向实现差。此前「字段纵向布局仍有明显差异」来自非同数据 fixture，不能作为当前实现的结论。像素整体仍有差异（`compare-identical.json` dark 94.119% / light 94.729% 相等），属字体抗锯齿与水平字宽等残留，不是纵向布局错，也未加坐标补偿或改 token。结论追加于此，作为 C 的第二处边界记录。

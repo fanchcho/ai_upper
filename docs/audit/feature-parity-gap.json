@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-27T23:04:00",
+ "generated_at": "2026-11-27T23:22:36",
  "source": {
   "deva": "/home/agent/shared_workspace/deva",
   "ai_upper": "/home/agent/shared_workspace/ai_upper",
@@ -1377,8 +1377,8 @@
    "group": "应用生命周期与窗口",
    "name": "单实例锁与二次启动唤起",
    "deva": "apps/desktop/src/main/index.ts:276-286",
-   "status": "not_ported",
-   "evidence": "移植版无 QLockFile/QLocalServer：`grep -rn \"QLockFile\\|QLocalServer\\|second-instance\" app/src` 无结果；main.py:1-76 只负责 QGuiApplication/QQmlApplicationEngine"
+   "status": "implemented",
+   "evidence": "app/src/mvvm/services/single_instance.py（QLockFile + QLocalServer/QLocalSocket）；qml_shell.run 先 acquire 后建窗、instance.attach(window) 唤起；app/tests/test_single_instance.py 起两个真实进程，第二个 rc=0 且第一个打印激活日志"
   },
   {
    "id": "F02",
@@ -1473,8 +1473,8 @@
    "group": "菜单与快捷键",
    "name": "输入框 / 指令联想（/compact /rewind /技能）",
    "deva": "redesign/Composer.tsx:382-420",
-   "status": "not_ported",
-   "evidence": "`grep -rn \"slash\\|/compact\\|/rewind\" app/src/qml app/src/qml_shell.py` 无联想实现；Main.qml:1440-1478 只有纯 TextArea"
+   "status": "implemented",
+   "evidence": "Main.qml SlashMenu.qml + updateSlash/runSlash；qml_shell.py slashCommands/runSlashCommand 接真实 ChatHost.compact；app/tests/test_qml_slash_menu.py 真实键盘 `/`+Enter。**仅 /compact 可用**，/rewind 与技能指令未移植，属部分补齐"
   },
   {
    "id": "F14",
@@ -1569,8 +1569,8 @@
    "group": "会话列表",
    "name": "未读/待处理状态与红点",
    "deva": "redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention",
-   "status": "not_ported",
-   "evidence": "移植版无 unread/attention 字段（grep \"unread\" app/src 无结果）；列表行只显示时间"
+   "status": "implemented",
+   "evidence": "qml_shell.py _unread（后台回合 done/error 记未读，openSession 清除）；ThreadRow.qml threadUnread 10px danger 红点；app/tests/test_qml_unread.py 真实回合+点击；暗亮截图 out/feature-parity/unread-dot-*.png。attention 仍无"
   },
   {
    "id": "F26",
@@ -2032,9 +2032,9 @@
    "id": "F82",
    "group": "其他原生能力",
    "name": "代理环境变量与系统路由",
-   "deva": "apps/desktop/src/main/http.ts:12-122（env 代理 + system/PAC 探测 + 换路由重试）",
-   "status": "not_ported",
-   "evidence": "app/src/mvvm/services/http_client.py:31-62 只做环境代理/NO_PROXY 基础解析，trust_env=False；原版 http.ts:41-107 的系统代理探测、失败换路由重试、按 origin 记忆未移植；scripts/parity/feature_review/proxy_evidence.py 实测 env 代理可用、直连可用，但语义不等价。原版无代理表单，此项只算网络路由能力"
+   "deva": "apps/desktop/src/main/http.ts:41-123,162-180（env 代理 + system/PAC 探测 + 换路由重试 + NO_PROXY/CIDR/端口/通配符）",
+   "status": "implemented",
+   "evidence": "e90dcb1：http_client.py 支持 CIDR/端口/通配符/空白分隔/IPv6；system_proxy.py 走真实 libproxy（PAC/WPAD）或 Qt 平台；transport.py 仅 ConnectError/ConnectTimeout/ProxyError 换路由并按 origin 记忆；scripts/parity/final_port/proxy_routes.py 真实 socket + 真实 PAC 复跑 PASS（7 个 NO_PROXY 边界）"
   },
   {
    "id": "F83",
@@ -2054,8 +2054,8 @@
   }
  ],
  "counts": {
-  "not_ported": 39,
-  "implemented": 39,
+  "implemented": 43,
+  "not_ported": 35,
   "na": 4,
   "ui_only": 3
  }

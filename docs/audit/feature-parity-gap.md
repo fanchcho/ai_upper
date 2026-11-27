@@ -1,6 +1,6 @@
 # 功能级未移植盘点（feature parity gap）
 
-> 生成时间：2026-11-27T23:04:00 · 盘点基线：`a5634344f050cff69871e40a0431c312b92c42dd`；本文件收口时 HEAD：`392bb1e2ed168bbfa2a36a3262e202a915a2814b`（= origin/develop），其间包含并行执行的 f4df491/92d9be2/fdb2299 等已推送补齐；本文件只对其中已复跑验证的项计入三态
+> 生成时间：2026-11-27T23:22:36 · 盘点基线：`a5634344f050cff69871e40a0431c312b92c42dd`；B 补齐后当前 HEAD：`b25dc1b7a025e807cf8e89bb6c6b989d5814e412`（= origin/develop）
 > 唯一依据：`/home/agent/shared_workspace/deva` 原版真实源码（只读，未改动）；移植版证据来自 `/home/agent/shared_workspace/ai_upper` 当前工作树。
 
 ## 0. 只读对账（原始命令与输出）
@@ -39,7 +39,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 
 | 已实现且可用 | 只有界面 | 未移植 | 不适用 | 合计 |
 |---|---|---|---|---|
-| 39 | 3 | 39 | 4 | 85 |
+| 43 | 3 | 35 | 4 | 85 |
 
 ### IPC / 桥通道计数（共 169 条：165 handle + 4 on，另有 18 条主进程→渲染层推送）
 
@@ -54,7 +54,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 
 | ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
 |---|---|---|---|---|
-| F01 | 单实例锁与二次启动唤起 | `apps/desktop/src/main/index.ts:276-286` | **未移植** | 移植版无 QLockFile/QLocalServer：`grep -rn "QLockFile\\|QLocalServer\\|second-instance" app/src` 无结果；main.py:1-76 只负责 QGuiApplication/QQmlApplicationEngine |
+| F01 | 单实例锁与二次启动唤起 | `apps/desktop/src/main/index.ts:276-286` | **已实现且可用** | app/src/mvvm/services/single_instance.py（QLockFile + QLocalServer/QLocalSocket）；qml_shell.run 先 acquire 后建窗、instance.attach(window) 唤起；app/tests/test_single_instance.py 起两个真实进程，第二个 rc=0 且第一个打印激活日志 |
 | F02 | 关窗驻留托盘（closeToTray） | `apps/desktop/src/main/index.ts:164-173；redesign/SettingsPane.tsx:101-113,165-172` | **未移植** | 移植版无托盘、无 close 事件驻留；Main.qml:2480 关闭即 window.close() |
 | F03 | 系统托盘图标与菜单（显示/定时任务/退出） | `apps/desktop/src/main/index.ts:235-272；services/tray-icon.ts` | **未移植** | `grep -rn "QSystemTrayIcon\\|Tray" app/src` 无结果 |
 | F04 | 窗口最小化/最大化/关闭 | `apps/desktop/src/main/index.ts:307-322；preload/index.ts:625-639` | **已实现且可用** | Main.qml:2462-2480 三个 WindowControlButton 接 showMinimized/showNormal\|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态 |
@@ -71,7 +71,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 | F10 | Ctrl/Cmd+B 收起/展开会话列表 | `redesign/ChatFirstShell.tsx:191-199` | **已实现且可用** | Main.qml Shortcut Ctrl+B/Meta+B → toggleSidebar；qml_shell.py sidebarCollapsed/setSidebarCollapsed 写 config.json；app/tests/test_qml_sidebar_collapse.py 真实按键 + hover peek |
 | F11 | Esc 收回浮出列表 | `redesign/ChatFirstShell.tsx:192-194` | **未移植** | 移植版没有「浮出列表」状态（列表宽度固定），无对应行为 |
 | F12 | Enter 发送 / Shift+Enter 换行 | `redesign/Composer.tsx:669-700` | **已实现且可用** | Main.qml:1452-1464 inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit() |
-| F13 | 输入框 / 指令联想（/compact /rewind /技能） | `redesign/Composer.tsx:382-420` | **未移植** | `grep -rn "slash\\|/compact\\|/rewind" app/src/qml app/src/qml_shell.py` 无联想实现；Main.qml:1440-1478 只有纯 TextArea |
+| F13 | 输入框 / 指令联想（/compact /rewind /技能） | `redesign/Composer.tsx:382-420` | **已实现且可用** | Main.qml SlashMenu.qml + updateSlash/runSlash；qml_shell.py slashCommands/runSlashCommand 接真实 ChatHost.compact；app/tests/test_qml_slash_menu.py 真实键盘 `/`+Enter。**仅 /compact 可用**，/rewind 与技能指令未移植，属部分补齐 |
 | F14 | @ 提及成员/角色 | `redesign/Composer.tsx:399-419；shared/mention.ts` | **未移植** | 移植版无 mention 解析/候选浮层（grep "mention" 无结果） |
 | F15 | 回复完成/待处理系统通知 | `services/reply-notify.ts:15-80；chat-turns.ts:801` | **未移植** | 移植版无 QSystemTrayIcon/Notification；ShellBridge 只有内部 signal，不弹系统通知 |
 
@@ -88,7 +88,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 | F22 | 会话搜索（标题/角色/挂载目录） | `redesign/Rail.tsx:600-640` | **已实现且可用** | Main.qml:159-200 visibleSessions 按 title/personaName/focusName 过滤；搜索框 Main.qml:495-575 可聚焦输入 |
 | F23 | 会话筛选面板（角色/文件夹） | `redesign/Rail.tsx:183-186,664-710` | **已实现且可用** | Main.qml:627-630 filterBtn → SessionFilter.qml；filterRoles/filterFolders/visibleSessions 同类 OR、跨类 AND；scripts/parity/feature_review/filter_evidence.py 真实点击角色+完整目录路径并读回 visibleSessions；暗亮截图 out/parity-close/filter-*.png |
 | F24 | 会话多选批量归档/删除 | `redesign/ThreadSelect.tsx` | **已实现且可用** | Main.qml:116-118,684-800,1898-1940 selectMode/selectedSessions + 批量归档/删除 |
-| F25 | 未读/待处理状态与红点 | `redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention` | **未移植** | 移植版无 unread/attention 字段（grep "unread" app/src 无结果）；列表行只显示时间 |
+| F25 | 未读/待处理状态与红点 | `redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention` | **已实现且可用** | qml_shell.py _unread（后台回合 done/error 记未读，openSession 清除）；ThreadRow.qml threadUnread 10px danger 红点；app/tests/test_qml_unread.py 真实回合+点击；暗亮截图 out/feature-parity/unread-dot-*.png。attention 仍无 |
 | F26 | 草稿按会话保留 | `redesign/Composer.tsx:109-121,755-760` | **已实现且可用** | Main.qml:102-115 composerDrafts 按 sessionId 保存 text+pendingFiles；scripts/parity/draft_evidence.py 真实键盘输入、真实拖放附件、切会话后读回；drafts.json 暗亮各一组 |
 | F27 | 会话列表宽度拖动 | `redesign/resizable.ts；ChatFirstShell.tsx:143-160` | **未移植** | Main.qml 侧栏宽固定 Theme.sideWidth（Main.qml:44-46,462-470），无拖动手柄 |
 | F27b | 会话列表收起/展开并记忆 | `redesign/ChatFirstShell.tsx:143-199` | **已实现且可用** | Main.qml sideCollapsed/sidePeek + 200/150ms 浮出定时器；qml_shell.py:515-522 落盘 config.json；真实截图 out/feature-parity/sidebar-{collapsed,peek}-{dark,light}.png |
@@ -176,7 +176,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 | F79 | 终端（PTY 会话） | `services/terminal.ts:87-108` | **不适用** | 原版渲染层无任何 terminal.* 调用（grep 无结果），属未接线的服务端能力，不构成用户可达功能 |
 | F80 | 子智能体/成员对话 | `services/subagents.ts, chat-members.ts, MemberBar.tsx；chat:remove-member` | **未移植** | 移植版 tool_runtime 只有 10 个工具（tool_runtime.py:4-6），无 subagent/member 能力 |
 | F81 | 自动任务卡/提案卡响应 | `chat:resolve-proposal / resolve-autotask；features/chat blocks` | **未移植** | 移植版无 proposals/autotasks 边车与卡片（chat_models.py 只有字段名） |
-| F82 | 代理环境变量与系统路由 | `apps/desktop/src/main/http.ts:12-122（env 代理 + system/PAC 探测 + 换路由重试）` | **未移植** | app/src/mvvm/services/http_client.py:31-62 只做环境代理/NO_PROXY 基础解析，trust_env=False；原版 http.ts:41-107 的系统代理探测、失败换路由重试、按 origin 记忆未移植；scripts/parity/feature_review/proxy_evidence.py 实测 env 代理可用、直连可用，但语义不等价。原版无代理表单，此项只算网络路由能力 |
+| F82 | 代理环境变量与系统路由 | `apps/desktop/src/main/http.ts:41-123,162-180（env 代理 + system/PAC 探测 + 换路由重试 + NO_PROXY/CIDR/端口/通配符）` | **已实现且可用** | e90dcb1：http_client.py 支持 CIDR/端口/通配符/空白分隔/IPv6；system_proxy.py 走真实 libproxy（PAC/WPAD）或 Qt 平台；transport.py 仅 ConnectError/ConnectTimeout/ProxyError 换路由并按 origin 记忆；scripts/parity/final_port/proxy_routes.py 真实 socket + 真实 PAC 复跑 PASS（7 个 NO_PROXY 边界） |
 | F83 | 日志与诊断面板 | `原版无日志 UI（仅 main 进程 console）` | **不适用** | 原版不存在此功能 |
 | F84 | 语音输入/输入法专属功能 | `原版无语音/听写代码（grep speech/voice 无结果）` | **不适用** | 原版不存在语音功能；输入法由系统提供 |
 
@@ -184,14 +184,14 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 
 1. **F30 工具调用/思考/子代理活动卡**：原版每条工具调用都有可展开卡片（`features/chat/blocks.tsx`），移植版 `transcript_markdown` 只拼 text 块、纯工具消息直接跳过——用户看不到模型在做什么。
 2. **F58-F61 定时任务整页**：原版有完整 cron/once 调度、运行历史、通知与主对话交接；移植版只有 `Main.qml:440` 一个无动作的闹钟图标。
-3. **F51-F56 角色页/角色管理**：原版花名册 tab + 资料卡 + 新建/编辑/头像/排序/记忆；移植版 `Main.qml:439` 一个无动作的 users 图标，设置里的 identities 只能改 prompt 文本。
-4. **F62-F64 机器人/手机联动**：原版 BotsPane + PhonePane（Web/飞书/Telegram 扫码、设备管理）；移植版 `Main.qml:447` 一个无动作的 bot 图标。
+3. **F62-F64 机器人/手机联动**：原版 BotsPane + PhonePane（Web/飞书/Telegram 扫码、设备管理）；移植版 `Main.qml:447` 一个无动作的 bot 图标。
+4. **F52-F56 角色资料与编辑**：资料卡、新建/编辑/删除、头像编辑、排序、角色记忆仍未移植；花名册入口只到列表/搜索/开始会话。
 5. **F33/F34/F35/F36 消息操作**：回滚、消息右键（复制/引用/选择删除）、引用条、按轮删除全部缺失。
 6. **F78 内置浏览器**：16 条 browser:* 通道与多窗口/标签/缩略图全缺。
-7. **F23 会话筛选面板**：`filterBtn`（Main.qml:499-515）只有图标没有点击动作。
-8. **F67 从服务商拉取模型列表**：原版模型设置里有「获取模型列表」，移植版只有手工输入模型 ID。
-9. **F02/F03/F15 托盘与系统通知**：原版关窗驻留托盘、回复完成/待处理通知；移植版无托盘、无通知。
-10. **F25/F26 未读状态与草稿保留**：会话行没有未读/待处理红点，切会话不保留输入框草稿。
+7. **F67 从服务商拉取模型列表**：原版模型设置里有「获取模型列表」，移植版只有手工输入模型 ID。
+8. **F14/F80 @提及与子智能体成员**：原版 @ 成员进入对话依赖 subagent/member 架构，移植版无成员注册表，@ 候选不能单独实现。
+9. **F02/F03/F15 托盘与系统通知**：代码已接线但本环境 offscreen `isSystemTrayAvailable=false`，未验证；回复通知同样依赖托盘消息。
+10. **F75 下载/安装更新**：原版 electron-updater 的 download/install 未移植，现只有检查更新。
 
 ## 4. 两个入口分开写
 
@@ -221,6 +221,13 @@ cd /home/agent/shared_workspace/ai_upper && grep -n "@QtCore.Slot" app/src/qml_s
 | F10/F27b 会话列表收起 | 9b43a24 | 9b43a244c8bbce7fdae0f4d82e4083ff0ade1c31 | test_qml_sidebar_collapse.py 真实 Ctrl+B + hover peek，config 落盘；暗亮截图 sidebar-*.png |
 | F09 编辑右键菜单 | 81eca98 | 81eca986ba52e5637af09b4bdd43ebf093834637 | test_qml_edit_menu.py 真实右键 + 点击「全选」；暗亮截图 edit-menu-*.png |
 | F46/F47 拖放与粘贴附件 | b25dc1b | b25dc1b7a025e807cf8e89bb6c6b989d5814e412 | test_qml_attachments_drop.py 真实 QDragEnterEvent/QDropEvent + Ctrl+V；暗亮截图 drop-overlay-*.png |
+| F01 单实例唤起 | 4bee356 | 4bee3567348acea1e8a6907e88edb96be2c633ad | test_single_instance.py 两个真实进程，第二个 rc=0，第一个打印 SINGLE INSTANCE ACTIVATE |
+| F25 未读红点 | dfd6c05 | dfd6c05c852eeecd7dcaf310cb3b9c2c144b131a | test_qml_unread.py 后台回合 done 后红点、点击清除；暗亮截图 unread-dot-*.png |
+| F13 指令联想（/compact） | 68abc0a | 68abc0adddd8d840ab8398e8d9841c9060ec0cea | test_qml_slash_menu.py 真实键盘 `/`+Enter 调 compact；暗亮截图 slash-menu-*.png。仅 /compact，/rewind 与技能指令未移植 |
+| F02/F03/F15 托盘+通知 | 2880334 | 28803342d4e9795a1db2ed2091fe81f1a774a631 | TrayController 接线 + closeToTray + _notify_turn；本环境 offscreen `isSystemTrayAvailable=false`，真实报错见 out/feature-parity/tray-platform.json，**未验证**，不冒充已可用 |
+| F82 代理/系统路由 | e90dcb1（并行执行） | e90dcb17759b05dbdb79b869305dc5070fcc68c2 | proxy_routes.py 真实 socket + 真实 libproxy/PAC，7 个 NO_PROXY 边界 PASS |
+
+并行执行另推送 f4df491（会话筛选）、92d9be2（角色花名册）、fdb2299（会话草稿隔离）；本盘点采用其 `out/parity-close/*.json` 真实点击证据计入 F23/F26/F51，不属于本会话产出。
 
 ## 7. 附录：169 条 IPC / 桥通道逐条判定
 
