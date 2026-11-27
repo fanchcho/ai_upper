@@ -217,7 +217,7 @@ def test_every_mvvm_module_imports(monkeypatch):
     """
     import importlib
 
-    install_fake_binding(monkeypatch, {"PySide6": {"QtCore": {}, "QtGui": {}, "QtWidgets": {}}})
+    install_fake_binding(monkeypatch, {"PySide6": {"QtCore": {}, "QtGui": {}, "QtWidgets": {}, "QtQml": {}}})
 
     imported = []
     for path in sorted((SRC / "mvvm").rglob("*.py")):
