@@ -10,12 +10,24 @@ from mvvm.services.persona_store import PersonaStore
 from mvvm.services.tool_runtime import ToolSpec, ToolResult
 
 
+SUBAGENT_TYPES = {
+    'General': {'tools': '*', 'prompt': '通用子智能体，完成独立子任务并回报结论。'},
+    'Explore': {'tools': ['read_file','list_dir','glob','grep','web_fetch','run_command'],
+                'prompt': '只读检索定位：回报路径:行号与事实，不改动、不评审。'},
+    'Research': {'tools': ['read_file','list_dir','glob','grep','web_fetch','run_command'],
+                 'prompt': '只读资料调研：一手来源优先，结论附出处；不写文件。'},
+    'Plan': {'tools': ['read_file','list_dir','glob','grep','web_fetch','run_command'],
+             'prompt': '只读方案调研：给出分步实施方案、关键文件与风险；不落笔。'},
+    'fork': {'tools': '*', 'prompt': ''},
+}
+
 class Members:
     def __init__(self, host):
         self.host = host
         self.pending = {}
         self.task_asks = {}
         self.escalations = {}
+        self.subagents = {}
         self.lock = threading.RLock()
         self.path = Path(host.home)/'data'/'member-reports.json'
         self.reports = json.loads(self.path.read_text()) if self.path.exists() else []
@@ -156,6 +168,43 @@ class Members:
             turn=self.host._session_turn.get(member['sessionId'])
             if turn:self.host.abort(turn)
             return ToolResult('已请求停止' if turn else '成员未在运行')
+        def run_subagent(args):
+            try:
+                name = str(args.get('agent') or 'General')
+                kind = next((k for k in SUBAGENT_TYPES if k.lower() == name.strip().lower()), None)
+                if kind is None: raise ValueError('未知子智能体：' + name)
+                prompt = str(args.get('prompt') or '').strip()
+                if not prompt: raise ValueError('prompt 不能为空')
+                sid = 'subagent-' + uuid.uuid4().hex
+                self.host.create_session({'sessionId': sid, 'personaId': main.personaId, 'focusRoot': main.focusRoot})
+                child = self.host.store.load_session(sid); child.parentId = main.id
+                child.title = kind + '子智能体'; child.model = main.model; child.effort = main.effort
+                self.host.store.save(sid)
+                vm_child = self.host.vm_for(sid)
+                allowed = SUBAGENT_TYPES[kind]['tools']
+                if allowed != '*':
+                    for tool in list(vm_child.tools._tools):
+                        if tool not in allowed: vm_child.tools._tools.pop(tool, None)
+                    for tool in ('create_member','member_send','member_status','member_stop'):
+                        vm_child.tools._tools.pop(tool, None)
+                text = ('【子智能体类型：' + kind + '】\n' + SUBAGENT_TYPES[kind]['prompt'] + '\n\n' + prompt).strip()
+                with self.lock:
+                    self.pending[sid] = (main.id, kind, len(child.messages))
+                    self.subagents[sid] = {'id': sid, 'name': kind, 'sessionId': sid}
+                turn = self.host.send({'sessionId': sid, 'text': text})
+                return ToolResult(json.dumps({'agent': kind, 'sessionId': sid, 'turn': turn}, ensure_ascii=False))
+            except Exception as exc: return ToolResult(str(exc), True)
+        def send_to_subagent(args):
+            ref = str(args.get('agent') or args.get('name') or '')
+            row = next((v for v in self.subagents.values() if ref in (v['name'], v['id'])), None)
+            if row is None: return ToolResult('找不到已派发的子智能体：' + ref, True)
+            if self.host.is_busy(row['sessionId']): return ToolResult('子智能体正在执行', True)
+            text = str(args.get('prompt') or args.get('message') or '').strip()
+            if not text: return ToolResult('prompt 不能为空', True)
+            self.pending[row['sessionId']] = (main.id, row['name'], len(self.host.store.load_session(row['sessionId']).messages))
+            return ToolResult(json.dumps(self.host.send({'sessionId': row['sessionId'], 'text': text}), ensure_ascii=False))
+        vm.tools.register(ToolSpec('run_subagent','派发内置子智能体（General/Explore/Research/Plan/fork）执行独立子任务',{'type':'object','properties':{'agent':{'type':'string'},'prompt':{'type':'string'}},'required':['prompt']}),run_subagent)
+        vm.tools.register(ToolSpec('send_to_subagent','向已派发的子智能体继续发消息',{'type':'object','properties':{'agent':{'type':'string'},'prompt':{'type':'string'}},'required':['agent','prompt']}),send_to_subagent)
         vm.tools.register(ToolSpec('member_status','查看成员名单、当前任务与最近结论',{'type':'object','properties':{'member':{'type':'string'}}}),status)
         vm.tools.register(ToolSpec('member_stop','停止指定成员当前回合',{'type':'object','properties':{'member':{'type':'string'}},'required':['member']}),stop)
         def read_main(args):
