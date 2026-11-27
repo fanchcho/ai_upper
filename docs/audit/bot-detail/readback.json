@@ -1,0 +1,52 @@
+[
+  {
+    "theme": "dark",
+    "web": {
+      "id": "web_c8b6b10b2d27",
+      "name": "本地浏览器",
+      "platform": "web",
+      "enabled": true,
+      "users": [],
+      "bindings": {},
+      "settings": {},
+      "replyMode": "stream",
+      "scope": {
+        "mode": "personas",
+        "personas": [
+          "detail-a-ee107d73",
+          "detail-b-bedcdb6c"
+        ],
+        "sessions": [
+          "s-1",
+          "s-2"
+        ]
+      }
+    },
+    "created_from_actual_click": true
+  },
+  {
+    "theme": "light",
+    "web": {
+      "id": "web_d2f553b3dd16",
+      "name": "本地浏览器",
+      "platform": "web",
+      "enabled": true,
+      "users": [],
+      "bindings": {},
+      "settings": {},
+      "replyMode": "stream",
+      "scope": {
+        "mode": "personas",
+        "personas": [
+          "detail-a-52adc8fa",
+          "detail-b-93f38525"
+        ],
+        "sessions": [
+          "s-1",
+          "s-2"
+        ]
+      }
+    },
+    "created_from_actual_click": true
+  }
+]

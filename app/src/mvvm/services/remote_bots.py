@@ -80,6 +80,17 @@ def RemoteBots(shell):
                 self.save(rows);return ''
             except Exception as exc:return str(exc)
     
+        @Slot(str,result='QVariantList')
+        def scopeChoices(self,kind):
+            if kind=='personas':
+                return [{'id':p['id'],'title':p['name']} for p in self.shell.personaRecords()]
+            return [{'id':s.id,'title':s.title or s.id} for s in self.shell._store.list_sessions()]
+
+        @Slot(str)
+        def cancelPair(self,identity):
+            self.pairing.pop(identity,None)
+            self.status.emit('配对邀请已取消','')
+
         @Slot(result=str)
         def webPairTicket(self):
             bot=next((b for b in self.list() if b['platform']=='web'),None)

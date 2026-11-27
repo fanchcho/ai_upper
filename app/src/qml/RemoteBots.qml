@@ -10,9 +10,13 @@ Rectangle {
     property string link: ""
     property string webLink: ""
     property string query: ""
+    property string selectedId: ""
+    property var selected: null
+    function select(id) { selectedId=id; selected=rows.find(function(r){return r.id===id}) || null }
+
     color: Theme.bg
     onVisibleChanged: if (visible) { api = shellBridge.botsService(); refresh() }
-    function refresh() { if (api) rows = api.list() }
+    function refresh() { if (api) { rows = api.list(); select(selectedId) } }
     function act(id,action,value) { error = api.action(id,action,value || ""); refresh() }
     Connections {
         target: root.api
@@ -21,7 +25,7 @@ Rectangle {
     }
     SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: root.shell.page = "chat" }
     Text { x: 120; y: 26; text: "机器人"; font.pixelSize: 20; color: Theme.fg }
-    Column { id: setup; x: 20; y: 75; width: parent.width-40; spacing: 10
+    Column { visible: !root.selected; id: setup; x: 20; y: 75; width: parent.width-40; spacing: 10
         Text { text: "Telegram · 从 @BotFather 复制 Token，然后打开配对链接认领机器人"; color: Theme.fgMuted }
         Row { spacing: 8
             SettingsField { id: token; objectName: "botToken"; width: 470; placeholderText: "Bot Token"; echoMode: TextInput.Password }
@@ -42,11 +46,12 @@ Rectangle {
 
     }
     ListView {
-        id: list; x: 20; y: setup.y+setup.height+20; width: parent.width-40; height: Math.max(0,parent.height-y-20)
+        id: list; visible: !root.selected; x: 20; y: setup.y+setup.height+20; width: parent.width-40; height: Math.max(0,parent.height-y-20)
         model: root.rows.filter(function(row) { return !root.query || String(row.name || "").toLowerCase().indexOf(root.query.toLowerCase()) >= 0 || String(row.platform || "").toLowerCase().indexOf(root.query.toLowerCase()) >= 0 }); spacing: 8; clip: true; ScrollBar.vertical: SettingsScrollBar {}
         delegate: Rectangle {
             required property var modelData
             width: list.width; height: 208; color: Theme.bgPanel; radius: Theme.radiusSm; border.color: Theme.border
+            SettingsButton { x:parent.width-100; y:10; objectName:"botDetail_"+modelData.id; text:"详情"; onClicked:root.select(modelData.id) }
             Text { x: 12; y: 12; text: modelData.name + " · " + modelData.platform; color: Theme.fg; font.pixelSize: 16 }
             Text { x: 12; y: 40; text: modelData.state + " · " + (modelData.users || []).length + " 位已配对用户"; color: Theme.fgMuted }
             Text { x: 12; y: 59; text: "回复：" + (modelData.replyMode === "final" ? "仅最终" : "流式") + " · 范围：" + (modelData.scope && modelData.scope.mode || "all"); color: Theme.fgMuted; elide: Text.ElideRight; width: parent.width-24 }
@@ -64,5 +69,14 @@ Rectangle {
                 }
             }
         }
+    }
+
+    BotDetail {
+        anchors { top:parent.top; topMargin:75; left:parent.left; leftMargin:20; right:parent.right; rightMargin:20; bottom:parent.bottom; bottomMargin:20 }
+        visible: root.selected !== null
+        bot: root.selected
+        api: root.api
+        onBack: root.select("")
+        onAction: function(action,value) { root.act(root.selectedId,action,value) }
     }
 }
