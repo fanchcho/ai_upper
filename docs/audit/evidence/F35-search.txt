@@ -2,11 +2,11 @@ $ rg -n --glob *.qml --glob *.py quoteText|quoteBar app/src/qml app/src/qml_shel
 exit=0
 app/src/qml/Main.qml:21:    property string quoteText: ""
 app/src/qml/Main.qml:89:        onQuoteRequested: function(text) { window.quoteText = String(text || "").trim() }
-app/src/qml/Main.qml:1651:            id: quoteBar
-app/src/qml/Main.qml:1652:            objectName: "quoteBar"
-app/src/qml/Main.qml:1653:            visible: window.quoteText.length > 0
-app/src/qml/Main.qml:1657:            Text { x: 8; width: parent.width - 36; anchors.verticalCenter: parent.verticalCenter; text: window.quoteText; color: Theme.fg; font.pixelSize: 11; elide: Text.ElideRight }
-app/src/qml/Main.qml:1658:            SettingsButton { objectName: "quoteClose"; anchors.right: parent.right; height: 24; text: "×"; onClicked: window.quoteText = "" }
-app/src/qml/Main.qml:2161:        if (window.quoteText.length > 0)
-app/src/qml/Main.qml:2162:            text = "> " + window.quoteText.split("\n").join("\n> ") + "\n\n" + text
-app/src/qml/Main.qml:2169:            window.quoteText = ""
+app/src/qml/Main.qml:1653:            id: quoteBar
+app/src/qml/Main.qml:1654:            objectName: "quoteBar"
+app/src/qml/Main.qml:1655:            visible: window.quoteText.length > 0
+app/src/qml/Main.qml:1659:            Text { x: 8; width: parent.width - 36; anchors.verticalCenter: parent.verticalCenter; text: window.quoteText; color: Theme.fg; font.pixelSize: 11; elide: Text.ElideRight }
+app/src/qml/Main.qml:1660:            SettingsButton { objectName: "quoteClose"; anchors.right: parent.right; height: 24; text: "×"; onClicked: window.quoteText = "" }
+app/src/qml/Main.qml:2163:        if (window.quoteText.length > 0)
+app/src/qml/Main.qml:2164:            text = "> " + window.quoteText.split("\n").join("\n> ") + "\n\n" + text
+app/src/qml/Main.qml:2171:            window.quoteText = ""

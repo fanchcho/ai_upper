@@ -1,4 +1,4 @@
 $ rg -n --glob *.qml --glob *.py id: ctxMenu app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:2567:            id: ctxMenuShadow
-app/src/qml/Main.qml:2572:            id: ctxMenu
+app/src/qml/Main.qml:2569:            id: ctxMenuShadow
+app/src/qml/Main.qml:2574:            id: ctxMenu

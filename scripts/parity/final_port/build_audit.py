@@ -54,6 +54,7 @@ patch={
 'F34':('implemented','EditContextMenu 复制/引用选中/删除最后一轮/选择删除轮次/回滚本轮；Main.qml TurnListPopup 真实轮次列表；test_qml_quote_delete.py 真实右键与轮次删除写盘。'),
 'F36':('implemented','ShellBridge.sessionTurns/deleteTurn 基于 is_genuine_user_turn；TurnListPopup 选择任意轮次调 host.delete_turns；test_qml_quote_delete.py 删除中间轮回读消息列表。'),
 'F79':('implemented','TerminalPanel.qml + QProcess bash；startTerminal/terminalInput/stopTerminal 真实 stdin/stdout；test_qml_terminal.py 输入 printf 命令读回 TERM_OK。'),
+'F32':('implemented','PLAN_SPEC exit_plan + Interactions.plan 阻塞状态机；ToolRuntime.plan_sink 写 StoredSession.plans；PlanCards.qml 展示计划并回写批准/继续完善/忽略；test_plan_flow.py 真实工具阻塞、卡片存在、决定写盘重开。'),
 'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 
