@@ -449,13 +449,14 @@ class ChatHost:
         self._emit({"turnId": "", "sessionId": key, "event": {"type": "todos", "state": self.todos(key)["active"]}})
         return display_messages(messages)
 
-    def rewind(self, session_id, action, turn=0, mode='both'):
+    def rewind(self, session_id, action, turn=0, mode='both', force=()):
         from mvvm.services.rewind import Rewind
         from mvvm.services.chat_session_store import is_genuine_user_turn
         import copy
         session = self.store.load_session(session_id)
         if session is None or self.is_busy(session_id):
             raise ValueError('会话不存在或正在运行')
+        skipped = []
         service = Rewind(self.home, session_id)
         starts = [i for i, message in enumerate(session.messages) if is_genuine_user_turn(message)]
         if not hasattr(self, '_rewind_undo'): self._rewind_undo = {}
@@ -464,7 +465,7 @@ class ChatHost:
         if action == 'undo':
             saved = self._rewind_undo.get(session_id)
             if not saved: raise ValueError('没有可撤销的回滚')
-            service.undo(saved['files'])
+            skipped = service.undo(saved['files'])
             session.__dict__.update(copy.deepcopy(saved['state'].__dict__))
             service.save(saved['journal'])
             del self._rewind_undo[session_id]
@@ -476,7 +477,8 @@ class ChatHost:
             if action != 'apply' or mode not in ('both', 'code', 'conversation'): raise ValueError('无效回滚操作')
             saved = {'state':copy.deepcopy(session), 'journal':service.read(), 'files':[]}
             if mode in ('both', 'code'):
-                saved['files'] = service.apply(turn)
+                saved['files'] = service.apply(turn, force)
+                skipped = service.skipped
                 journal = service.read()
                 restored = {r['path']:r['post'] for r in saved['files']}
                 for row in journal['records']:
@@ -491,7 +493,7 @@ class ChatHost:
             self._rewind_undo[session_id] = saved
         self.store.save(session_id)
         self._emit_sessions_changed()
-        return {'ok':True}
+        return {'ok':True, 'skipped':skipped}
 
     def todos(self, session_id: Any) -> dict[str, Any]:
         """`chat:todos`：只读当前清单。"""

@@ -3,6 +3,7 @@ import base64
 import hashlib
 import json
 import os
+import time
 from pathlib import Path
 from mvvm.services.chat_session_store import write_file_atomic, is_genuine_user_turn
 
@@ -44,6 +45,15 @@ class Rewind:
         return json.loads(self.path.read_text()) if self.path.exists() else {'turn': 0, 'records': []}
 
     def save(self, data):
+        # Payloads are inline, so atomically rewriting the journal also collects
+        # released bytes. Keep metadata, just as the original releases blobs.
+        held = sorted({r['turn'] for r in data['records'] if isinstance(r.get('pre'),str)})
+        expired = set(held[:-100])
+        for row in data['records']:
+            if isinstance(row.get('pre'),str) and (row['turn'] in expired or row.get('recordedAt',time.time()) < time.time()-30*86400):
+                row.pop('pre',None); row.pop('post',None)
+                row['released'] = True
+                row['error'] = 'blob_missing: 快照已按保留策略释放'
         self.path.parent.mkdir(parents=True, exist_ok=True)
         write_file_atomic(self.path, json.dumps(data))
 
@@ -56,7 +66,7 @@ class Rewind:
         if name not in ('write_file', 'edit_file', 'run_command'):
             return invoke()
         data = self.read()
-        record = {'turn': data['turn'], 'kind': name}
+        record = {'turn': data['turn'], 'kind': name, 'recordedAt':time.time()}
         if name == 'run_command':
             record['command'] = str(args.get('command', ''))[:500]
         else:
@@ -103,28 +113,31 @@ class Rewind:
             files.append(dict(row, status=status))
         return {'files': files, 'commands': commands}
 
-    def apply(self, turn):
+    def apply(self, turn, force=()):
         plan = self.preview(turn)
-        # Reject a conflict before touching any file; never silently clobber changes.
-        bad = [r for r in plan['files'] if r['status'] != 'ok']
-        if bad:
-            raise ValueError('; '.join(r['path'] + ': ' + r['status'] for r in bad))
         undo = []
-        try:
-            for row in plan['files']:
+        self.skipped = []
+        for row in plan['files']:
+            allowed = row['status'] == 'ok' or (row['status'].startswith('conflict:') and row['path'] in force)
+            if not allowed:
+                self.skipped.append({'path':row['path'],'reason':row['status']}); continue
+            try:
                 before = state(row['path'])
-                if before != row['post']:
+                if before != row['post'] and row['path'] not in force:
                     raise ValueError('conflict: 文件在预览后被修改')
                 restore(row['path'], row['pre'])
                 undo.append({'path':row['path'], 'pre':before, 'post':row['pre']})
-        except Exception:
-            for row in reversed(undo):
-                if state(row['path']) == row['post']: restore(row['path'], row['pre'])
-            raise
+            except (OSError,ValueError) as exc:
+                self.skipped.append({'path':row['path'],'reason':str(exc)})
         return undo
 
     def undo(self, rows):
+        skipped = []
         for row in rows:
-            if state(row['path']) != row['post']:
-                raise ValueError('conflict: 回滚后文件被修改，拒绝撤销')
-        for row in rows: restore(row['path'], row['pre'])
+            try:
+                if state(row['path']) != row['post']:
+                    raise ValueError('conflict: 回滚后文件被修改')
+                restore(row['path'], row['pre'])
+            except (OSError,ValueError) as exc:
+                skipped.append({'path':row['path'],'reason':str(exc)})
+        return skipped

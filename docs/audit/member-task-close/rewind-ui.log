@@ -1,0 +1,5 @@
+QML SEND {"sessionId": "s-1", "text": "/example", "attachments": []}
+QML TURN 7113ba849c5e401fb80b76bbdccdac36
+QML SEND {"sessionId": "s-1", "text": "/example", "attachments": []}
+QML TURN 6409dd5c59ad4899a274e9df5840d50a
+PASS [{"retention": 100, "released": 5}, {"theme": "dark", "home": "/tmp/ai-upper-rewind-12399709c54c49a2855bebd7453d4b48/home", "restored": "BEFORE", "undone": "AFTER", "conflict": "已处理；跳过：[{\"path\":\"/tmp/ai-upper-rewind-12399709c54c49a2855bebd7453d4b48/home/sample.txt\",\"reason\":\"conflict: 文件在工具写入后被修改\"}]", "disk": "EXTERNAL", "skill_host_disk": true}, {"retention": 100, "released": 5}, {"theme": "light", "home": "/tmp/ai-upper-rewind-21fdf711007d4723b859da86505af928/home", "restored": "BEFORE", "undone": "AFTER", "conflict": "已处理；跳过：[{\"path\":\"/tmp/ai-upper-rewind-21fdf711007d4723b859da86505af928/home/sample.txt\",\"reason\":\"conflict: 文件在工具写入后被修改\"}]", "disk": "EXTERNAL", "skill_host_disk": true}, {"theme": "dark", "scrollY": 2160.0, "turns": 150}, {"theme": "light", "scrollY": 2160.0, "turns": 150}]
