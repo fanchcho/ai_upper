@@ -1508,11 +1508,27 @@ class ShellBridge(QtCore.QObject):
 
         `/compact` 已接 `ChatHost.compact`；`/rewind` 没有后端，不在候选里假装可用。
         """
-        return [{
-            "name": "compact",
-            "desc": self.translate("cf.slash.compact"),
-            "hint": self.translate("cf.slash.hint"),
-        }]
+        rows = [{'name':'compact', 'desc':self.translate('cf.slash.compact'), 'kind':'command'},
+                {'name':'rewind', 'desc':self.translate('cf.slash.rewind'), 'kind':'command'}]
+        seen = {'compact', 'rewind'}
+        persona = getattr(self._session(), 'personaId', None) or 'general'
+        for skill in self._skills.list_skills() if self._skills else []:
+            name = skill['name']
+            roles = skill.get('roles')
+            if not skill.get('enabled') or (roles is not None and persona not in roles) or name.lower() in seen:
+                continue
+            seen.add(name.lower())
+            rows.append({'name':name, 'desc':skill['description'], 'kind':'skill'})
+        return rows
+
+    @QtCore.Slot(str, int, str, result='QVariantMap')
+    def rewind(self, action, turn, mode):
+        try:
+            result = self._host.rewind(self._active, action, turn, mode)
+            self._publish()
+            return result
+        except Exception as exc:
+            return {'error':str(exc)}
 
     @QtCore.Slot(str, result=bool)
     def runSlashCommand(self, name: str) -> bool:
@@ -1719,7 +1735,7 @@ class ShellBridge(QtCore.QObject):
     # ── 渲染与属性 ────────────────────────────────────────────────────────
     def _markdown_base(self) -> str:
         session = self._store.load_session(self._active) if self._active else None
-        return transcript_markdown(session.messages, lang=self.language()) if session is not None else ""
+        return transcript_markdown(session.messages, lang=self.language(), include_activity=True) if session is not None else ""
 
     def _markdown(self) -> str:
         base = self._markdown_base()

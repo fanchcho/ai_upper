@@ -112,6 +112,7 @@ class ChatHost:
         self._session_turn: dict[str, str] = {}  # sessionId → 进行中 turnId
         self._turns_lock = threading.Lock()
 
+
     # ── 装配 ──────────────────────────────────────────────────────────────
     def _default_vm(self, session_id: str) -> ChatViewModel:
         """无外部工厂时的最小 ViewModel：provider 为 None，回合以「未配置」错误收场。"""
@@ -205,6 +206,24 @@ class ChatHost:
             question = f"{question}\n（{'；'.join(notes)}）"
         if not question.strip():
             raise BridgeError(tr('legacy.455eb564fc42'))
+        # Enabled, role-scoped skill invocation is resolved at the host boundary.
+        import re
+        from mvvm.services.skill_store import SkillStore
+        from mvvm.models.chat_models import TextPart
+        names = {m.lower() for m in re.findall(r'(?:^|\s)/([^\s/]+)', text)}
+        if names:
+            seen = {'compact', 'rewind'}
+            for skill in SkillStore(self.home).list_skills():
+                name = skill['name'].lower()
+                if name in seen: continue
+                if not skill.get('enabled') or (skill.get('roles') is not None and (session.personaId or 'general') not in skill['roles']): continue
+                seen.add(name)
+                if name in names:
+                    parts.append(TextPart(text='<skill name="' + skill['name'] + '">\n' + skill['instructions'] + '\n</skill>'))
+        if session.restoreNote:
+            from mvvm.models.chat_models import TextPart
+            parts.append(TextPart(text=session.restoreNote))
+            session.restoreNote = None
         vm = self.vm_for(session_id)
         # ViewModel 的 run_turn 自己落盘用户消息并写标题；这里只为 turn_start 准备展示形态。
         turn_id = uuid.uuid4().hex
@@ -232,6 +251,8 @@ class ChatHost:
             {"turnId": turn_id, "sessionId": session_id, "event": {"type": "turn_start", "user": user_display}}
         )
 
+        from mvvm.services.rewind import Rewind
+        Rewind(self.home, session_id).begin(session)
         thread = vm.start_turn(
             text, cancel=turn.cancel, parts=parts or None, question=question
         )
@@ -422,6 +443,50 @@ class ChatHost:
             return []
         self._emit({"turnId": "", "sessionId": key, "event": {"type": "todos", "state": self.todos(key)["active"]}})
         return display_messages(messages)
+
+    def rewind(self, session_id, action, turn=0, mode='both'):
+        from mvvm.services.rewind import Rewind
+        from mvvm.services.chat_session_store import is_genuine_user_turn
+        import copy
+        session = self.store.load_session(session_id)
+        if session is None or self.is_busy(session_id):
+            raise ValueError('会话不存在或正在运行')
+        service = Rewind(self.home, session_id)
+        starts = [i for i, message in enumerate(session.messages) if is_genuine_user_turn(message)]
+        if not hasattr(self, '_rewind_undo'): self._rewind_undo = {}
+        if action == 'list':
+            return {'turns':[{'turn':i, 'text':str(session.messages[start].content)[:100]} for i,start in enumerate(starts)], 'canUndo':session_id in self._rewind_undo}
+        if action == 'undo':
+            saved = self._rewind_undo.get(session_id)
+            if not saved: raise ValueError('没有可撤销的回滚')
+            service.undo(saved['files'])
+            session.__dict__.update(copy.deepcopy(saved['state'].__dict__))
+            service.save(saved['journal'])
+            del self._rewind_undo[session_id]
+        else:
+            if type(turn) is not int or turn < 0 or turn >= len(starts): raise ValueError('无效回合')
+            if action == 'preview':
+                plan = service.preview(turn)
+                return {'files':[{k:v for k,v in row.items() if k not in ('pre','post')} for row in plan['files']], 'commands':plan['commands']}
+            if action != 'apply' or mode not in ('both', 'code', 'conversation'): raise ValueError('无效回滚操作')
+            saved = {'state':copy.deepcopy(session), 'journal':service.read(), 'files':[]}
+            if mode in ('both', 'code'):
+                saved['files'] = service.apply(turn)
+                journal = service.read()
+                restored = {r['path']:r['post'] for r in saved['files']}
+                for row in journal['records']:
+                    if row.get('path') in restored: row['post'] = restored[row['path']]
+                service.save(journal)
+                if mode == 'code' and restored:
+                    session.restoreNote = '用户已恢复文件：' + ', '.join(restored)
+
+            if mode in ('both', 'conversation'):
+                self.store.delete_turns(session_id, list(range(turn,len(starts))))
+                journal = service.read(); journal['records'] = [r for r in journal['records'] if r['turn'] < turn]; service.save(journal)
+            self._rewind_undo[session_id] = saved
+        self.store.save(session_id)
+        self._emit_sessions_changed()
+        return {'ok':True}
 
     def todos(self, session_id: Any) -> dict[str, Any]:
         """`chat:todos`：只读当前清单。"""

@@ -2038,6 +2038,8 @@ ApplicationWindow {
         onTriggered: { if (!window._sidePeekHover) window.sidePeek = false }
     }
 
+    RewindPanel { id: rewindPanel; anchors.fill: parent; z: 500 }
+
     function submit() {
         var text = inputField.text
         var files = window.pendingFiles
@@ -2062,7 +2064,7 @@ ApplicationWindow {
         window.suggestPrefix = match[2]
         window.suggestStart = before.length - match[3].length - 1
         var pool = match[2] === "@" ? shellBridge.mentionCandidates() : shellBridge.slashCommands()
-        if (match[2] === "/" && inputField.text.trim() !== before.substring(window.suggestStart)) return
+        if (match[2] === "/" && inputField.text.trim() !== before.substring(window.suggestStart)) pool = pool.filter(function(row) { return row.kind === "skill" })
         var query = match[3].toLowerCase()
         var heads = [], tails = []
         pool.forEach(function(row) {
@@ -2076,11 +2078,14 @@ ApplicationWindow {
     }
 
     function runSlash(name) {
-        if (window.suggestPrefix === "@") {
+        if (name === "rewind" && window.suggestPrefix === "/") {
+            inputField.text = ""
+            rewindPanel.openPanel()
+        } else if (window.suggestPrefix === "@" || window.slashRows.some(function(row) { return row.name === name && row.kind === "skill" })) {
             var end = inputField.cursorPosition
             while (end < inputField.text.length && !/\s/.test(inputField.text.charAt(end))) end++
             var text = inputField.text
-            var replacement = "@" + name + (end < text.length && /\s/.test(text.charAt(end)) ? "" : " ")
+            var replacement = window.suggestPrefix + name + (end < text.length && /\s/.test(text.charAt(end)) ? "" : " ")
             inputField.text = text.substring(0,window.suggestStart) + replacement + text.substring(end)
             inputField.cursorPosition = window.suggestStart + replacement.length
             inputField.forceActiveFocus()

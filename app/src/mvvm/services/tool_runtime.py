@@ -490,6 +490,10 @@ class ToolRuntime:
                 return ToolResult('审批未通过；未执行', True)
         try:
             invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
+            if self.home is not None:
+                from mvvm.services.rewind import Rewind
+                original_invoke = invoke
+                invoke = lambda: Rewind(self.home, self.session_id).execute(self, name, arguments, original_invoke)
             if self.checkpoint is not None:
                 return self.checkpoint.execute(self.session_id, tool_use_id, name, arguments, invoke)
             return invoke()

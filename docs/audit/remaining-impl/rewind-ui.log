@@ -1,0 +1,7 @@
+QML SEND {"sessionId": "s-1", "text": "/example", "attachments": []}
+QML TURN cb1c113bfbe542bfa037df9acb44a49c
+QML SEND {"sessionId": "s-1", "text": "/example", "attachments": []}
+QML TURN 8c46862835584df3b4790ae46085d1db
+QML STREAM {"text": "done"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS [{"theme": "dark", "home": "/tmp/ai-upper-rewind-5c544008b63a4becb979ce7fc334748e/home", "restored": "BEFORE", "undone": "AFTER", "conflict": "/tmp/ai-upper-rewind-5c544008b63a4becb979ce7fc334748e/home/sample.txt: conflict: 文件在工具写入后被修改", "disk": "EXTERNAL", "skill_host_disk": true}, {"theme": "light", "home": "/tmp/ai-upper-rewind-5499573e641248ba89dc0535952d4d45/home", "restored": "BEFORE", "undone": "AFTER", "conflict": "/tmp/ai-upper-rewind-5499573e641248ba89dc0535952d4d45/home/sample.txt: conflict: 文件在工具写入后被修改", "disk": "EXTERNAL", "skill_host_disk": true}]
