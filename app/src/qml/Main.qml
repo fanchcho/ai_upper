@@ -830,6 +830,7 @@ ApplicationWindow {
                 selectionMode: window.selectMode
                 selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
                 unread: modelData.unread === true
+                attention: modelData.attention === true
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton

@@ -26,6 +26,7 @@ Rectangle {
     // 未读红点：原版 Rail.tsx:1124-1156 + redesign.css:1041-1051
     // （头像右上角 10px、--danger、外圈 2px --bg-panel）。
     property bool unread: false
+    property bool attention: false
 
     height: 54
     radius: Theme.radius
@@ -70,7 +71,7 @@ Rectangle {
     }
     Rectangle {
         objectName: "threadUnread"
-        visible: row.unread && !row.active
+        visible: (row.unread || row.attention) && !row.active
         x: face.x + face.width - 9
         y: face.y - 1
         width: 10

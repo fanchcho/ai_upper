@@ -296,6 +296,7 @@ class ShellBridge(QtCore.QObject):
         self._turn_id = ""
         # 未读会话 id：原版 Rail.tsx:1124-1156 在头像右上角打红点；当前会话打开即清除。
         self._unread: set[str] = set()
+        self._attention: set[str] = set()
         # 回复完成/错误通知：由 run() 注入 TrayController.notify；无托盘时为 None。
         self._notifier: Any = None
         # 检查更新的状态机：idle / checking / latest / available / error。
@@ -1631,7 +1632,10 @@ class ShellBridge(QtCore.QObject):
         if pending != self._last_interactions:
             self._last_interactions = pending
             self.interactionsChanged.emit(pending)
-        changed = False
+        controller = getattr(self._host, 'interactions', None)
+        attention = {meta.id for meta in self._store.visible_sessions() if controller and controller.pending(meta.id)}
+        changed = attention != self._attention
+        self._attention = attention
         while True:
             try:
                 payload = self._events.get_nowait()
@@ -1668,7 +1672,7 @@ class ShellBridge(QtCore.QObject):
         if kind in ("done", "error") and session_id and session_id != self._active:
             self._unread.add(session_id)
         if session_id != self._turn_session:
-            return False
+            return kind in ("done", "error")
         if kind == "text_delta" and self._turn is not None:
             text = str(event.get("text") or "")
             self.deltas.append(text)
@@ -1879,6 +1883,7 @@ class ShellBridge(QtCore.QObject):
             row["focusRoot"] = root
             row["focusName"] = os.path.basename(root.rstrip("/\\")) if root else ""
             row["unread"] = row["id"] in self._unread
+            row["attention"] = row["id"] in self._attention
         return rows
 
     def _publish(self) -> None:
