@@ -48,8 +48,9 @@ ApplicationWindow {
     InteractionPrompt { }
 
     // 关窗驻留托盘：原版 index.ts:164-173（仅配置开启时拦截 close）。
+    property bool trayAvailable: false
     onClosing: function (close) {
-        if (shellBridge && shellBridge.closeToTray()) {
+        if (window.trayAvailable && shellBridge && shellBridge.closeToTray()) {
             close.accepted = false
             window.hide()
         }

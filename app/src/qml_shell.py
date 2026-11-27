@@ -1635,6 +1635,8 @@ class ShellBridge(QtCore.QObject):
         controller = getattr(self._host, 'interactions', None)
         attention = {meta.id for meta in self._store.visible_sessions() if controller and controller.pending(meta.id)}
         changed = attention != self._attention
+        for sid in attention - self._attention:
+            self._notify_turn(sid, "等待处理", error=True)
         self._attention = attention
         while True:
             try:
@@ -1656,6 +1658,7 @@ class ShellBridge(QtCore.QObject):
             return
         title = next((row["title"] for row in self._rows() if row["id"] == session_id), "Deva")
         body = ("回复因错误中断：" + message) if error else "回复已完成"
+        self._last_notify_session = session_id
         self._notifier(title, body)
 
     def _handle(self, payload: Dict[str, Any]) -> bool:
@@ -1672,6 +1675,8 @@ class ShellBridge(QtCore.QObject):
         if kind in ("done", "error") and session_id and session_id != self._active:
             self._unread.add(session_id)
         if session_id != self._turn_session:
+            if kind in ("done", "error"):
+                self._notify_turn(session_id, str(event.get("message") or ""), error=kind=="error")
             return kind in ("done", "error")
         if kind == "text_delta" and self._turn is not None:
             text = str(event.get("text") or "")
@@ -2049,8 +2054,10 @@ def run(headless: bool) -> int:
     instance.attach(window)
     from mvvm.services.tray import TrayController
     tray = TrayController(app, window)
-    tray.install()
+    window.setProperty("trayAvailable", tray.install())
     bridge.set_notifier(tray.notify)
+    if tray.icon is not None:
+        tray.icon.messageClicked.connect(lambda: (tray.show(), bridge.openSession(getattr(bridge, "_last_notify_session", ""))))
     bridge.bind_window(window)
     bridge.tasksService()
     bridge.botsService()

@@ -8,32 +8,33 @@ from __future__ import annotations
 import sys
 from typing import Any, Callable, Optional
 
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QMenu, QStyle, QSystemTrayIcon
+from utils.qt_compat import QtGui, QtWidgets
 
 
 class TrayController:
-    def __init__(self, app: QApplication, window: Any) -> None:
+    def __init__(self, app: "QtWidgets.QApplication", window: Any) -> None:
         self.app = app
         self.window = window
-        self.icon: Optional[QSystemTrayIcon] = None
+        self.icon: Optional[Any] = None
         self.available = False
 
     def install(self) -> bool:
-        if not QSystemTrayIcon.isSystemTrayAvailable():
+        if not QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
             print(
                 "TRAY UNAVAILABLE platform=%s isSystemTrayAvailable=False"
-                % QApplication.platformName(),
+                % QtWidgets.QApplication.platformName(),
                 file=sys.stderr,
                 flush=True,
             )
             return False
-        self.icon = QSystemTrayIcon(
-            QApplication.style().standardIcon(QStyle.SP_ComputerIcon), self.app
+        self.icon = QtWidgets.QSystemTrayIcon(
+            QtWidgets.QApplication.style().standardIcon(QtWidgets.QStyle.SP_ComputerIcon), self.app
         )
-        menu = QMenu()
+        menu = QtWidgets.QMenu()
         show_action = menu.addAction("显示 Deva")
         show_action.triggered.connect(self.show)
+        task_action = menu.addAction("定时任务")
+        task_action.triggered.connect(lambda: (self.show(), self.window.setProperty("page", "tasks")))
         menu.addSeparator()
         quit_action = menu.addAction("退出")
         quit_action.triggered.connect(self.app.quit)
@@ -44,8 +45,8 @@ class TrayController:
         self.available = True
         return True
 
-    def _activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
-        if reason == QSystemTrayIcon.Trigger:
+    def _activated(self, reason: "QtWidgets.QSystemTrayIcon.ActivationReason") -> None:
+        if reason == QtWidgets.QSystemTrayIcon.Trigger:
             if self.window.isVisible() and not self.window.isMinimized():
                 self.window.hide()
             else:
@@ -60,14 +61,14 @@ class TrayController:
 
     def notify(self, title: str, body: str) -> bool:
         """窗口失焦时弹系统通知（deva reply-notify.ts 同语义）；不可用返回 False。"""
-        if not self.available or self.icon is None or not QSystemTrayIcon.supportsMessages():
+        if not self.available or self.icon is None or not QtWidgets.QSystemTrayIcon.supportsMessages():
             print(
                 "NOTIFY UNAVAILABLE tray_available=%s supportsMessages=%s"
-                % (self.available, QSystemTrayIcon.supportsMessages()),
+                % (self.available, QtWidgets.QSystemTrayIcon.supportsMessages()),
                 file=sys.stderr,
                 flush=True,
             )
             return False
-        self.icon.showMessage(title or "Deva", body, QSystemTrayIcon.Information, 5000)
+        self.icon.showMessage(title or "Deva", body, QtWidgets.QSystemTrayIcon.Information, 5000)
         print("NOTIFY SHOWN " + title, flush=True)
         return True
