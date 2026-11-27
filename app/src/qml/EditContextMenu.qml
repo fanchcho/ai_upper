@@ -9,6 +9,8 @@ Menu {
     objectName: "editContextMenu"
     property var target: null
     property bool editable: false
+    signal quoteRequested(string text)
+    signal deleteTurnRequested()
     width: 148
     padding: 6
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -72,6 +74,26 @@ Menu {
         }
         background: Rectangle { radius: Theme.radius; color: pasteItem.highlighted ? Theme.bgHover : "transparent" }
         onTriggered: if (root.target) root.target.paste()
+    }
+    MenuItem {
+        id: quoteItem
+        objectName: "editMenuQuote"
+        text: "引用选中"
+        enabled: root.target && root.target.selectedText.length > 0
+        height: 29
+        contentItem: Text { text: quoteItem.text; color: quoteItem.enabled ? Theme.fg : Theme.fgSubtle; font.family: Theme.sansFamily; font.pixelSize: 13; leftPadding: 9; verticalAlignment: Text.AlignVCenter }
+        background: Rectangle { radius: Theme.radius; color: quoteItem.highlighted ? Theme.bgHover : "transparent" }
+        onTriggered: if (root.target) root.quoteRequested(root.target.selectedText)
+    }
+    MenuSeparator { height: 9; contentItem: Rectangle { color: Theme.border; implicitHeight: 1 } }
+    MenuItem {
+        id: deleteTurnItem
+        objectName: "editMenuDeleteTurn"
+        text: "删除最后一轮"
+        height: 29
+        contentItem: Text { text: deleteTurnItem.text; color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13; leftPadding: 9; verticalAlignment: Text.AlignVCenter }
+        background: Rectangle { radius: Theme.radius; color: deleteTurnItem.highlighted ? Theme.bgHover : "transparent" }
+        onTriggered: root.deleteTurnRequested()
     }
     MenuSeparator {
         visible: root.editable

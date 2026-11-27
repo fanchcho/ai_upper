@@ -18,6 +18,7 @@ import "."
 ApplicationWindow {
     id: window
     property string focusRoot: ""
+    property string quoteText: ""
     property int sidebarWidth: 300
     readonly property int sideWidth: Math.max(220, Math.min(sidebarWidth, 480, Math.max(220, width - railWidth - 480)))
     Dialogs.FolderDialog {
@@ -76,6 +77,8 @@ ApplicationWindow {
         objectName: "bodyMenu"
         target: bodyView
         editable: false
+        onQuoteRequested: function(text) { window.quoteText = String(text || "").trim() }
+        onDeleteTurnRequested: window.deleteLastTurn()
     }
 
     // 窗口拖放：原版 Composer.tsx:576-596 在 window 上监听 dragover/drop。
@@ -1632,6 +1635,16 @@ ApplicationWindow {
             x: composer.x
             repoRoot: window.focusRoot
         }
+        Rectangle {
+            id: quoteBar
+            objectName: "quoteBar"
+            visible: window.quoteText.length > 0
+            x: composer.x; y: composer.y - height - 6
+            width: composer.width; height: visible ? 30 : 0
+            radius: Theme.radiusSm; color: Theme.bgActive
+            Text { x: 8; width: parent.width - 36; anchors.verticalCenter: parent.verticalCenter; text: window.quoteText; color: Theme.fg; font.pixelSize: 11; elide: Text.ElideRight }
+            SettingsButton { objectName: "quoteClose"; anchors.right: parent.right; height: 24; text: "×"; onClicked: window.quoteText = "" }
+        }
         ComposerCapsules {
             id: composerCapsules
             x: composer.x + 13
@@ -2133,13 +2146,20 @@ ApplicationWindow {
         var files = window.pendingFiles
         if (window.busy || (text.trim() === "" && files.length === 0))
             return
+        if (window.quoteText.length > 0)
+            text = "> " + window.quoteText.split("\n").join("\n> ") + "\n\n" + text
         // 带附件走同一条宿主链路（ChatHost.send 的 attachments 参数），
         // 没有附件时仍走单参重载，保持既有行为。
         var sent = files.length > 0 ? shellBridge.sendWithAttachments(text, files) : shellBridge.send(text)
         if (sent) {
             inputField.text = ""
             window.pendingFiles = []
+            window.quoteText = ""
         }
+    }
+
+    function deleteLastTurn() {
+        if (shellBridge) shellBridge.deleteLastTurn()
     }
 
     // `/` 指令联想：只匹配命令名，输入空格后关闭（原版 Composer.tsx:405-420 同口径）。

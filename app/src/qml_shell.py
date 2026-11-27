@@ -1767,6 +1767,21 @@ class ShellBridge(QtCore.QObject):
         print("QML SLASH", json.dumps({"name": name, "turnId": turn_id}, ensure_ascii=False), flush=True)
         return True
 
+    @QtCore.Slot(result=bool)
+    def deleteLastTurn(self) -> bool:
+        """消息右键「删除最后一轮」：真实调 chat:delete-turns，写盘并重绘。"""
+        session = self._session()
+        if session is None or self._host.is_busy(session.id):
+            return False
+        from mvvm.services.chat_session_store import is_genuine_user_turn
+        starts = [i for i, message in enumerate(session.messages) if is_genuine_user_turn(message)]
+        if not starts:
+            return False
+        self._host.delete_turns(session.id, None, [len(starts) - 1])
+        self._render()
+        self._publish()
+        return True
+
     @QtCore.Slot(str, result=bool)
     def insertMessage(self, text: str) -> bool:
         """回合中插话：进入 VM 的下一模型边界队列，而非等回合结束再发。"""
