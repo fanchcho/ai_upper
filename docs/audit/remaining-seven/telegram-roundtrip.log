@@ -1,0 +1,5 @@
+# F63 local Telegram full roundtrip (no external account)
+# local HTTP server 127.0.0.1: getUpdates update -> RemoteBots.receive
+# -> host.send (scripted model transport) -> turn_event -> sendMessage
+# captured outbound: chat_id=99, text contains LOCAL_REPLY
+# reopened ChatSessionStore: remote-* session contains LOCAL_REPLY
