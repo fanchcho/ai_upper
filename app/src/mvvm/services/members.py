@@ -24,21 +24,25 @@ class Members:
         write_file_atomic(self.path,json.dumps(self.reports,ensure_ascii=False))
 
     def create(self, main, args):
-        name = str(args.get('name') or '').strip()
+        name = str(args.get('name') or '').lstrip('@').strip()
         if not name: raise ValueError('成员名称不能为空')
+        if len(name)>16 or '@' in name or any(c.isspace() for c in name):raise ValueError('成员名不能含空格或 @，最多16个字')
         main.members = main.members or []
         for member in main.members:
             if member['name'].casefold() == name.casefold():
+                if not member.get('removedAt'):raise ValueError('已有同名成员：'+name)
                 member.pop('removedAt',None);self.host.store.save(main.id);return member
         if len([m for m in main.members if not m.get('removedAt')]) >= 10: raise ValueError('成员已满 10 个')
         sid = 'member-' + uuid.uuid4().hex
         persona = args.get('personaId') or 'general'
         root=main.focusRoot if args.get('personaId') else None
         if args.get('folder'):
-            root=str(self.host.guard.assert_inside(Path(main.focusRoot or '.') / args['folder']))
+            folder=Path(args['folder'])
+            if folder.is_absolute() and not folder.is_dir():raise ValueError('文件夹不存在：'+str(folder))
+            root=str(self.host.guard.assert_inside(Path(main.focusRoot or '.') / folder))
             Path(root).mkdir(parents=True,exist_ok=True)
         self.host.create_session({'sessionId':sid, 'personaId':persona, 'focusRoot':root})
-        member = {'id':sid, 'sessionId':sid, 'name':name, 'personaId':persona, 'duty':str(args.get('duty') or ''), 'origin':'mention' if args.get('personaId') else 'agent'}
+        member = {'id':sid, 'sessionId':sid, 'name':name, 'personaId':persona, 'duty':str(args.get('duty') or ''), 'origin':'mention' if args.get('personaId') else 'created'}
         child = self.host.store.load_session(sid)
         child.parentId = main.id
         child.title = name
@@ -204,7 +208,7 @@ class Members:
             main = self.host.store.load_session(sid)
             if main:
                 group=row[4] if len(row)>4 else ''
-                if wake and group and any(d.get('reportToMe') and d.get('group')==group for m in main.members or [] for d in m.get('openTasks',[])):continue
+                if wake and group and any(d.get('reportToMe') and d.get('group')==group for m in main.members or [] if m['sessionId'] in self.pending for d in m.get('openTasks',[])):continue
                 grouped=[r for r in self.reports if r[0]==sid and len(r)>4 and r[3] and r[4]==group] if wake and group else [row]
                 if wake:
                     self.host.send({'sessionId':sid,'text':'\n\n'.join('成员 '+r[1]+' 请求处理：'+r[3]+'\n'+r[2] for r in grouped)})

@@ -1,0 +1,4 @@
+REFUSED 已有同名成员：Reviewer
+REFUSED 成员名不能含空格或 @，最多16个字
+REFUSED 文件夹不存在：/tmp/ai-upper-member-create-rules-b126b871dd2449698805d7ed4daef8b2/missing
+PASS duplicate refusal, relative creation, nonexistent absolute refusal, restore retained child and reopen disk
