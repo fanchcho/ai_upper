@@ -356,6 +356,15 @@ Item {
             property string view: "list"
             property string selectedId: ""
             property var detail: ({})
+            property var fetchedModels: []
+            property string fetchMessage: ""
+            function fetchModels() {
+                if (!shellBridge || selectedId === "") return
+                var result = shellBridge.providerModels(selectedId)
+                fetchedModels = result.models || []
+                fetchMessage = result.ok ? "" : (result.message || "拉取失败")
+                modelsPopup.open()
+            }
             property var headerRows: []
 
 
@@ -737,6 +746,13 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 12
 
+                        SettingsButton {
+                            objectName: "providerFetchModels"
+                            height: 30
+                            text: "拉取模型"
+                            onClicked: modPane.fetchModels()
+                        }
+
                         // `.provider-detail__del`（`app.css:4905`）：官方与自定义服务商都可删，
                         // 点按弹确认（原版 `onDeleteProvider`，`ModelSettings.tsx:195`）。
                         Rectangle {
@@ -822,6 +838,29 @@ Item {
                                                                  modPane.detail.enabled === true ? "0" : "1")
                                     modPane.reloadDetail()
                                 }
+                            }
+                        }
+                    }
+                }
+
+                Popup {
+                    id: modelsPopup
+                    objectName: "providerModelsPopup"
+                    x: parent.width - 300
+                    y: 40
+                    width: 280
+                    height: Math.min(320, 40 + (modPane.fetchedModels || []).length * 26)
+                    padding: 8
+                    background: Rectangle { color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusSm }
+                    Column {
+                        width: parent.width - 16
+                        Text { text: modPane.fetchMessage.length ? modPane.fetchMessage : "模型列表"; color: Theme.fgMuted; height: 24 }
+                        Repeater {
+                            model: modPane.fetchedModels || []
+                            delegate: Text {
+                                required property string modelData
+                                width: parent.width; height: 24
+                                text: modelData; color: Theme.fg; font.pixelSize: 12
                             }
                         }
                     }

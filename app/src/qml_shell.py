@@ -21,6 +21,7 @@ from __future__ import annotations
 from native_i18n import translate
 from locale_runtime import tr
 
+import asyncio
 import base64
 import json
 import os
@@ -1628,6 +1629,19 @@ class ShellBridge(QtCore.QObject):
     @QtCore.Slot(result="QVariantList")
     def pendingInserts(self) -> List[str]:
         return list(self._pending_inserts)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def providerModels(self, provider_id: str) -> Dict[str, Any]:
+        """设置页「拉取模型」：真实调用 ModelGateway.list_models（provider:list-models 同语义）。"""
+        if self._settings is None:
+            return {"ok": False, "models": [], "message": "settings unavailable"}
+        vault = self._vault or SecretsVault(self._store.home)
+        try:
+            from mvvm.services.provider_setup import ModelGateway
+            result = asyncio.run(ModelGateway(self._settings, vault).list_models(str(provider_id or "")))
+            return {"ok": bool(result.ok), "models": list(result.models), "message": result.message or ""}
+        except Exception as exc:  # noqa: BLE001 - 网络/配置错误要在界面显示
+            return {"ok": False, "models": [], "message": f"{type(exc).__name__}: {exc}"}
 
     @QtCore.Slot(result="QVariantMap")
     def backgroundCapsule(self) -> Dict[str, Any]:
