@@ -1769,6 +1769,36 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(str, result=bool)
     def insertMessage(self, text: str) -> bool:
+        """回合中插话：进入 VM 的下一模型边界队列，而非等回合结束再发。"""
+        value = str(text or "").strip()
+        if not value or not self._active:
+            return False
+        if not self._host.is_busy(self._active):
+            return self.send(value)
+        vm = self._host.vm_for(self._active)
+        self._pending_inserts.append(value)
+        def delivered():
+            try:
+                self._pending_inserts.remove(value)
+            except ValueError:
+                pass
+        vm.insert_message(value, delivered)
+        print("QML INSERT QUEUED", json.dumps({"sessionId": self._active, "text": value}, ensure_ascii=False), flush=True)
+        self._publish()
+        return True
+
+    @QtCore.Slot(result="QVariantList")
+    def withdrawInserts(self) -> List[str]:
+        if not self._active:
+            return []
+        taken = self._host.vm_for(self._active).withdraw_inserts()
+        if taken:
+            self._pending_inserts.clear()
+            self._publish()
+        return taken
+
+    @QtCore.Slot(str, result=bool)
+    def insertMessageLegacy(self, text: str) -> bool:
         """输入框在回合中按「发送」：先进入待插入队列；回合结束后按原文发给同一会话。"""
         value = str(text or "").strip()
         if not value or not self._active:

@@ -1641,6 +1641,7 @@ ApplicationWindow {
             pending: window.pendingInserts
             background: window.backgroundTasks
             z: 30
+            onWithdrawRequested: window.withdrawInserts()
         }
         SlashMenu {
             id: slashMenu
@@ -2191,6 +2192,16 @@ ApplicationWindow {
     }
 
     // 把 Python 判定过的附件行并入待发列表（按绝对路径去重）。
+    function withdrawInserts() {
+        if (!shellBridge) return
+        var rows = shellBridge.withdrawInserts()
+        if (rows && rows.length > 0) {
+            var existing = inputField.text.trim()
+            inputField.text = rows.join("\n") + (existing.length > 0 ? "\n" + existing : "")
+            inputField.forceActiveFocus()
+        }
+    }
+
     function appendPendingFiles(rows) {
         if (!rows || rows.length === 0)
             return 0

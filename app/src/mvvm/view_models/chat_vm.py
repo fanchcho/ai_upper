@@ -354,6 +354,15 @@ class ChatViewModel(BaseViewModel):
         """Only the turn worker writes history; member dispatches enter at a model boundary."""
         self._inserts.put((text, delivered))
 
+    def withdraw_inserts(self):
+        """Take back all not-yet-consumed mid-turn inserts (chat:withdraw-inserts)."""
+        out = []
+        while True:
+            try:
+                text, _delivered = self._inserts.get_nowait()
+            except queue.Empty:
+                return out
+            out.append(text)
     def _consume_inserts(self, session_id):
         count = 0
         while True:

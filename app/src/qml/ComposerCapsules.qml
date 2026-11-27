@@ -13,6 +13,7 @@ Item {
     property var browser: null
     property bool todoOpen: false
     property bool backgroundOpen: false
+    signal withdrawRequested()
     readonly property bool hasTodo: todo && (todo.items || []).length > 0
     readonly property bool hasPending: (pending || []).length > 0
     readonly property bool hasBackground: (background || []).length > 0
@@ -46,9 +47,10 @@ Item {
             Text {
                 id: pendingText
                 anchors.centerIn: parent
-                text: "待插入 " + (root.pending || []).length + " 条"
+                text: "待插入 " + (root.pending || []).length + " 条（点击撤回）"
                 color: Theme.accent; font.family: Theme.sansFamily; font.pixelSize: 12
             }
+            MouseArea { anchors.fill: parent; onClicked: root.withdrawRequested() }
         }
         Rectangle {
             objectName: "backgroundCapsule"
