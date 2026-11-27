@@ -210,12 +210,50 @@ def evidence_context_menu(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_attachments(outdir: Path, theme: str):
+    from PySide6.QtCore import QMimeData, QPoint, QUrl, QPointF, QCoreApplication
+    from PySide6.QtGui import QDragEnterEvent, QDropEvent
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-drop-{theme}-"))
+    try:
+        window, bridge, _store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        note = tmp / "拖放证据.txt"
+        note.write_text("drag evidence", encoding="utf-8")
+        mime = QMimeData()
+        mime.setUrls([QUrl.fromLocalFile(str(note))])
+        QCoreApplication.sendEvent(window, QDragEnterEvent(
+            QPoint(400, 400), Qt.CopyAction, mime, Qt.LeftButton, Qt.NoModifier))
+        _pump(QGuiApplication.instance(), lambda: False, 0.3)
+        png = outdir / f"drop-overlay-{theme}.png"
+        size = shot(window, png)
+        overlay = find_item(window.contentItem(), "dropOverlay")
+        rows = [{
+            "feature": "attachments", "theme": theme, "state": "drag-over", "png": str(png), "size": size,
+            "overlay_visible": bool(overlay.property("visible")) if overlay is not None else None,
+        }]
+        QCoreApplication.sendEvent(window, QDropEvent(
+            QPointF(400, 400), Qt.CopyAction, mime, Qt.LeftButton, Qt.NoModifier))
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        pending = window.property("pendingFiles")
+        if hasattr(pending, "toVariant"):
+            pending = pending.toVariant()
+        rows.append({
+            "feature": "attachments", "theme": theme, "state": "dropped", "png": None, "size": None,
+            "pending_files": pending,
+        })
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     app = QGuiApplication.instance() or QGuiApplication([])
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

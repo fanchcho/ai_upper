@@ -167,6 +167,35 @@ class AttachmentService:
             out.append(self.inspect(absolute, size))
         return out
 
+    def inspect_paths(self, raw_paths: Any) -> list[dict[str, Any]]:
+        """拖放/粘贴进来的本地路径 → 与 pick_attachments 同形状的附件行。
+
+        文件夹按原版 `fs:dropped-entries` 的语义登记为受信根（kind=folder），
+        其余路径走 `inspect()` 同一套类型/体积判定；取不到路径的条目跳过。
+        """
+        out: list[dict[str, Any]] = []
+        for raw in raw_paths or []:
+            if not isinstance(raw, str) or not raw:
+                continue
+            absolute = os.path.abspath(raw)
+            if os.path.isdir(absolute):
+                self.guard.trust_root(absolute)
+                out.append({
+                    "path": absolute,
+                    "name": os.path.basename(absolute.rstrip(os.sep)) or absolute,
+                    "ext": "",
+                    "size": None,
+                    "kind": "folder",
+                    "supported": True,
+                })
+                continue
+            try:
+                size = Path(absolute).stat().st_size
+            except OSError:
+                size = 0
+            out.append(self.inspect(absolute, size))
+        return out
+
     # ── 发送：把已授权附件读成内容块 ──────────────────────────────────────
     def build_attachment_part(self, path: Any, adapter: str = "anthropic") -> AttachmentPart:
         """附件 → 内容块（图 / PDF / 文本注入 / 只给位置）；读不进时回一条 note 拼进正文。"""

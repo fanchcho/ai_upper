@@ -1402,6 +1402,50 @@ class ShellBridge(QtCore.QObject):
         print("QML PICK", json.dumps(paths, ensure_ascii=False), flush=True)
         return paths
 
+    @QtCore.Slot("QVariantList", result="QVariantList")
+    def acceptDroppedFiles(self, urls: Any) -> List[Dict[str, Any]]:
+        """窗口拖放：QML 传 file:// URL 列表，按原版 `fs:dropped-entries` 的判定登记。
+
+        支持文件与文件夹；不支持的类型按 inspect 的 `supported=False` 原样返回，
+        QML 只把 supported 的路径加入待发列表，不静默吞掉原因。
+        """
+        paths: List[str] = []
+        for value in urls or []:
+            # QML 的 drop.urls 元素到 PySide 是 QUrl；也兼容调用方直接传字符串路径。
+            if isinstance(value, QtCore.QUrl):
+                local = value.toLocalFile()
+            else:
+                text = str(value or "")
+                if not text:
+                    continue
+                local = QtCore.QUrl(text).toLocalFile() if text.startswith("file:") else text
+            if local:
+                paths.append(local)
+        rows = self._attachments.inspect_paths(paths)
+        print("QML DROP", json.dumps([row.get("path") for row in rows], ensure_ascii=False), flush=True)
+        return rows
+
+    @QtCore.Slot(result="QVariantList")
+    def attachClipboardImage(self) -> List[Dict[str, Any]]:
+        """剪贴板里的图片 → 临时 PNG → 与选择框同一条 inspect 白名单链路。
+
+        原版 `Composer.tsx:508` 走 `fs:paste-attachment`；QML 没有该 IPC，
+        这里用 QClipboard 取图落盘后复用 AttachmentService。
+        """
+        clipboard = QtGui.QGuiApplication.clipboard()
+        if clipboard is None:
+            return []
+        image = clipboard.image()
+        if image is None or image.isNull():
+            return []
+        directory = Path(tempfile.mkdtemp(prefix="ai-upper-paste-"))
+        target = directory / "pasted.png"
+        if not image.save(str(target), "PNG"):
+            return []
+        rows = self._attachments.inspect_paths([str(target)])
+        print("QML PASTE IMAGE", json.dumps(str(target), ensure_ascii=False), flush=True)
+        return rows
+
     @QtCore.Slot(result="QVariantList")
     def attachmentChips(self) -> List[Dict[str, Any]]:
         """当前会话的用户附件贴片（名称 / 类型 / 真实体积 / 图片 data URI）。"""

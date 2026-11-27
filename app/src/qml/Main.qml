@@ -65,6 +65,24 @@ ApplicationWindow {
         editable: false
     }
 
+    // 窗口拖放：原版 Composer.tsx:576-596 在 window 上监听 dragover/drop。
+    // 真实文件由 Python AttachmentService 判定并登记白名单，QML 只收集路径。
+    DropArea {
+        id: dropArea
+        objectName: "dropArea"
+        anchors.fill: parent
+        onDropped: function (drop) { window.acceptDrop(drop.urls) }
+    }
+    Rectangle {
+        objectName: "dropOverlay"
+        anchors.fill: parent
+        visible: dropArea.containsDrag
+        color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.05)
+        border.width: 2
+        border.color: Theme.accent
+        z: 90
+    }
+
     Shortcut {
         sequence: "Ctrl+B"
         context: Qt.ApplicationShortcut
@@ -1531,6 +1549,15 @@ ApplicationWindow {
                     }
                 }
                 Keys.onPressed: function (event) {
+                    if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
+                        // 剪贴板里是图片时按附件处理（原版 Composer 的 paste 处理）；纯文本走默认粘贴。
+                        var pasted = shellBridge.attachClipboardImage()
+                        if (pasted && pasted.length > 0) {
+                            window.appendPendingFiles(pasted)
+                            event.accepted = true
+                            return
+                        }
+                    }
                     if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                         if (event.modifiers & Qt.ShiftModifier) {
                             event.accepted = false
@@ -1913,6 +1940,33 @@ ApplicationWindow {
     // 停止当前回合（原版 Composer 的停止键 → chat:abort）。没有可停回合时不假装成功。
     function stopGeneration() {
         if (!shellBridge.stopGeneration())
+            notify(I18n.t("native.message24"))
+    }
+
+    // 把 Python 判定过的附件行并入待发列表（按绝对路径去重）。
+    function appendPendingFiles(rows) {
+        if (!rows || rows.length === 0)
+            return 0
+        var merged = window.pendingFiles.slice()
+        var added = 0
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i]
+            if (!row || !row.supported || !row.path)
+                continue
+            if (merged.indexOf(row.path) < 0) {
+                merged.push(row.path)
+                added++
+            }
+        }
+        window.pendingFiles = merged
+        return added
+    }
+
+    // 拖放：QML 传 URL 列表，Python 返回逐项判定；不支持的项给一次提示。
+    function acceptDrop(urls) {
+        var rows = shellBridge.acceptDroppedFiles(urls)
+        var added = window.appendPendingFiles(rows)
+        if (added === 0 && rows && rows.length > 0)
             notify(I18n.t("native.message24"))
     }
 
