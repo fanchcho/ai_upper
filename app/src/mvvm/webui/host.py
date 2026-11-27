@@ -111,6 +111,8 @@ class ChatHost:
         self._turns: dict[str, _Turn] = {}  # turnId → 回合
         self._session_turn: dict[str, str] = {}  # sessionId → 进行中 turnId
         self._turns_lock = threading.Lock()
+        from mvvm.services.members import Members
+        self._members = Members(self)
 
 
     # ── 装配 ──────────────────────────────────────────────────────────────
@@ -128,6 +130,7 @@ class ChatHost:
         vm = self._vm_factory(session_id)
         vm.emit = lambda event, sid=session_id: self._on_vm_event(sid, event)
         vm.open_session(session_id)
+        self._members.install(vm, self.store.load_session(session_id))
         self._vms[session_id] = vm
         return vm
 
@@ -140,6 +143,7 @@ class ChatHost:
         count = 0
         for vm in list(self._vms.values()):
             count += vm.drain()
+        self._members.drain()
         return count
 
     def _on_vm_event(self, session_id: str, event: dict[str, Any]) -> None:
@@ -188,7 +192,7 @@ class ChatHost:
         attachments = request.get("attachments")
         # 附件：逐条读成内容块（排在提问正文之前），读不进的转成 note 拼在正文后的括号里。
         # 语义逐条对齐 Deva `chat.ts` sendMessage（buildAttachmentPart 的三种前缀标记）。
-        parts: list[Any] = []
+        parts: list[Any] = self._members.mentions(session, text)
         notes: list[str] = []
         adapter = _adapter_of(request.get("model"))
         if isinstance(attachments, list):
@@ -299,6 +303,7 @@ class ChatHost:
                         },
                     }
                 )
+            self._members.finished(turn.session_id)
             with self._turns_lock:
                 self._turns.pop(turn.turn_id, None)
                 if self._session_turn.get(turn.session_id) == turn.turn_id:
