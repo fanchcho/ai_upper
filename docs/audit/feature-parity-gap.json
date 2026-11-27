@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-27T21:40:38.186479+00:00",
+  "generated_at": "2026-11-27T22:03:50.451868+00:00",
   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
   "source": {
     "deva": "/home/agent/shared_workspace/deva",
     "ai_upper": "/home/agent/shared_workspace/ai_upper",
-    "head": "32324a9c4700d098ac2316613ba4ce1565394fa7"
+    "head": "9d9e4e4604d186e06f5c0e6b7d5c4e123d477d54"
   },
   "features": [
     {
@@ -37,8 +37,8 @@
       "group": "应用生命周期与窗口",
       "name": "关窗驻留托盘（closeToTray）",
       "deva": "apps/desktop/src/main/index.ts:164-173；redesign/SettingsPane.tsx:101-113,165-172",
-      "status": "not_ported",
-      "evidence": "代码已有 closeToTray，真实托盘不可用；未验证系统驻留成功态。out/final-port/tray-probe.log。",
+      "status": "implemented",
+      "evidence": "scripts/parity/tray_success.py 在 Xvfb + 真实 XEmbed _NET_SYSTEM_TRAY_S0 宿主下 tray_available=true、icon_visible=true；配置 closeToTray=true 后 w.close() 隐藏窗口，暗亮截图 out/tray/tray-*.png。",
       "port_anchor": "app/src/qml/Main.qml:74",
       "entry": "QML",
       "web_entry": {
@@ -61,8 +61,8 @@
       "group": "应用生命周期与窗口",
       "name": "系统托盘图标与菜单（显示/定时任务/退出）",
       "deva": "apps/desktop/src/main/index.ts:235-272；services/tray-icon.ts",
-      "status": "not_ported",
-      "evidence": "真实 QSystemTrayIcon + 显示/任务/退出菜单已接；宿主报 TRAY UNAVAILABLE platform=offscreen isSystemTrayAvailable=False，未验证。",
+      "status": "implemented",
+      "evidence": "同一 XEmbed 宿主下 QSystemTrayIcon.install() 返回 true 并真实 show，菜单由 TrayController 创建（显示/定时任务/退出）；tray_success.py 暗亮验证。",
       "port_anchor": "app/src/mvvm/services/tray.py:21",
       "entry": "QML",
       "web_entry": {
@@ -2164,8 +2164,8 @@
     }
   ],
   "counts": {
-    "implemented": 76,
-    "not_ported": 9,
+    "implemented": 78,
+    "not_ported": 7,
     "na": 4
   },
   "previous_59": {
@@ -2231,8 +2231,8 @@
       "F84"
     ],
     "counts": {
-      "not_ported": 6,
-      "implemented": 49,
+      "implemented": 50,
+      "not_ported": 5,
       "na": 4
     }
   },

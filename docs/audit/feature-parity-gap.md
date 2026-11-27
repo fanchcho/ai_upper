@@ -1,8 +1,8 @@
 # 功能移植全量复核
 
-全量 89 项：已实现且可用 76；只有界面 0；未移植 9；不适用 4。
+全量 89 项：已实现且可用 78；只有界面 0；未移植 7；不适用 4。
 
-上一轮 59 项未判定候选已全部判定：{'not_ported': 6, 'implemented': 49, 'na': 4}。无 pending/待判定。原 85 项 + 后发现 Git 面板 1 项 + 当前原版工作树新增协议 3 项 = 89 项。
+上一轮 59 项未判定候选已全部判定：{'implemented': 50, 'not_ported': 5, 'na': 4}。无 pending/待判定。原 85 项 + 后发现 Git 面板 1 项 + 当前原版工作树新增协议 3 项 = 89 项。
 
 组合项只要仍有原版行为未补齐，就保守记为未移植，并明确已有实现；不把部分能力升级为完整可用。只有界面专指可见而无动作入口。托盘等环境限制保留四态字段，同时在证据标未验证，不能当作原版不存在。
 
@@ -15,8 +15,8 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
 | ID / 功能分组 | 功能 | 原版依据 | QML 状态 | 当前代码 / 证据与缺口 |
 |---|---|---|---|---|
 |F01 / 应用生命周期与窗口|单实例锁与二次启动唤起|`apps/desktop/src/main/index.ts:276`|已实现且可用|`app/src/mvvm/services/single_instance.py:5`；app/src/mvvm/services/single_instance.py（QLockFile + QLocalServer/QLocalSocket）；qml_shell.run 先 acquire 后建窗、instance.attach(window) 唤起；app/tests/test_single_instance.py 起两个真实进程，第二个 rc=0 且第一个打印激活日志；搜索命令及原始结果：`docs/audit/evidence/F01-search.txt`|
-|F02 / 应用生命周期与窗口|关窗驻留托盘（closeToTray）|`apps/desktop/src/main/index.ts:164`, `apps/desktop/src/renderer/src/redesign/SettingsPane.tsx:101`|未移植|`app/src/qml/Main.qml:74`；代码已有 closeToTray，真实托盘不可用；未验证系统驻留成功态。out/final-port/tray-probe.log。；搜索命令及原始结果：`docs/audit/evidence/F02-search.txt`|
-|F03 / 应用生命周期与窗口|系统托盘图标与菜单（显示/定时任务/退出）|`apps/desktop/src/main/index.ts:235`, `apps/desktop/src/main/services/tray-icon.ts:1`|未移植|`app/src/mvvm/services/tray.py:21`；真实 QSystemTrayIcon + 显示/任务/退出菜单已接；宿主报 TRAY UNAVAILABLE platform=offscreen isSystemTrayAvailable=False，未验证。；搜索命令及原始结果：`docs/audit/evidence/F03-search.txt`|
+|F02 / 应用生命周期与窗口|关窗驻留托盘（closeToTray）|`apps/desktop/src/main/index.ts:164`, `apps/desktop/src/renderer/src/redesign/SettingsPane.tsx:101`|已实现且可用|`app/src/qml/Main.qml:74`；scripts/parity/tray_success.py 在 Xvfb + 真实 XEmbed _NET_SYSTEM_TRAY_S0 宿主下 tray_available=true、icon_visible=true；配置 closeToTray=true 后 w.close() 隐藏窗口，暗亮截图 out/tray/tray-*.png。；搜索命令及原始结果：`docs/audit/evidence/F02-search.txt`|
+|F03 / 应用生命周期与窗口|系统托盘图标与菜单（显示/定时任务/退出）|`apps/desktop/src/main/index.ts:235`, `apps/desktop/src/main/services/tray-icon.ts:1`|已实现且可用|`app/src/mvvm/services/tray.py:21`；同一 XEmbed 宿主下 QSystemTrayIcon.install() 返回 true 并真实 show，菜单由 TrayController 创建（显示/定时任务/退出）；tray_success.py 暗亮验证。；搜索命令及原始结果：`docs/audit/evidence/F03-search.txt`|
 |F04 / 应用生命周期与窗口|窗口最小化/最大化/关闭|`apps/desktop/src/main/index.ts:307`, `apps/desktop/src/preload/index.ts:625`|已实现且可用|`app/src/qml/Main.qml:2989`；Main.qml (legacy line reference; current anchor at left) 三个 WindowControlButton 接 showMinimized/showNormal\|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态；搜索命令及原始结果：`docs/audit/evidence/F04-search.txt`|
 |F05 / 应用生命周期与窗口|窗口控件叠加配色随主题|`apps/desktop/src/main/index.ts:79`|已实现且可用|`app/src/qml/Main.qml:443`；Main.qml (legacy line reference; current anchor at left) WindowControlButton.glyphColor 按 Theme.dark 取 #E8EAED/#5F6368，底色调 Theme.bgInset；注释逐值对齐 index.ts:79-97；搜索命令及原始结果：`docs/audit/evidence/F05-search.txt`|
 |F06 / 应用生命周期与窗口|全屏状态通知（macOS 红绿灯让位）|`apps/desktop/src/main/index.ts:158`, `apps/desktop/src/preload/index.ts:631`, `apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:52`|未移植|`app/src/qml/Main.qml:35`；Main.qml (legacy line reference; current anchor at left),62 仅按 Qt.platform.os === 'osx' 静态加宽，无 window:fullscreen 等价信号，无 onFullScreen；搜索命令及原始结果：`docs/audit/evidence/F06-search.txt`|
