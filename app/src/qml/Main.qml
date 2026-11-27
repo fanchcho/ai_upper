@@ -1104,6 +1104,9 @@ ApplicationWindow {
                 color: Theme.fg
                 selectionColor: Theme.bgSelected
                 selectedTextColor: Theme.fg
+                // 原版正文里的 <a> 由 Chromium 直接打开；QML 的 TextEdit 必须显式接
+                // linkActivated（readOnly 时才发），再交给 ShellBridge 转系统浏览器。
+                onLinkActivated: function (link) { shellBridge.openExternal(link) }
                 Component.onCompleted: shellBridge.attach(textDocument)
             }
 

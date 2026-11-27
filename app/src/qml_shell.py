@@ -190,6 +190,11 @@ def _load_image(src: str) -> Any:
     return image if image.load(str(path)) else None
 
 
+def _open_external(url: str) -> bool:
+    """用系统默认浏览器打开已经验证过 scheme 的链接（测试可替换此函数）。"""
+    return bool(QtGui.QDesktopServices.openUrl(QtCore.QUrl(url)))
+
+
 def _coerce_attachment_paths(attachments: Any) -> List[str]:
     """QML 传来的附件列表 → Python 字符串列表。
 
@@ -1406,6 +1411,22 @@ class ShellBridge(QtCore.QObject):
     def revealDeliverable(self, tool_use_id: str, path: str) -> bool:
         """交付卡「在文件夹中显示」：同样只认边车路径。"""
         return bool(reveal(self._session(), tool_use_id, self._delivered_index(tool_use_id, path))["ok"])
+
+    @QtCore.Slot(str, result=bool)
+    def openExternal(self, url: str) -> bool:
+        """正文里的链接点击：原版渲染层 `<a>` 由 Chromium 直接打开，QML 侧显式转系统浏览器。
+
+        只放行 http/https/mailto；`javascript:`、`file:` 等一律拒绝并返回 False。
+        """
+        value = str(url or "").strip()
+        if not value:
+            return False
+        if QtCore.QUrl(value).scheme().lower() not in ("http", "https", "mailto"):
+            print("QML OPEN EXTERNAL REJECTED", json.dumps({"url": value}, ensure_ascii=False), file=sys.stderr, flush=True)
+            return False
+        ok = _open_external(value)
+        print("QML OPEN EXTERNAL", json.dumps({"url": value, "ok": ok}, ensure_ascii=False), flush=True)
+        return ok
 
     @QtCore.Slot(str, result=bool)
     def copyDeliverablePath(self, path: str) -> bool:
