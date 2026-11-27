@@ -1,6 +1,6 @@
 $ rg -n --glob *.qml --glob *.py installUpdate|downloadUpdate app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:493:    def downloadUpdate(self, url: str = "") -> bool:
-app/src/qml_shell.py:526:    def installUpdate(self, path: str = "") -> bool:
+app/src/qml_shell.py:494:    def downloadUpdate(self, url: str = "") -> bool:
+app/src/qml_shell.py:527:    def installUpdate(self, path: str = "") -> bool:
 app/src/qml/SettingsModal.qml:1708:                        SettingsButton { objectName: "updateDownload"; height: 26; text: "下载安装包"; onClicked: shellBridge.downloadUpdate("") }
 app/src/qml/SettingsModal.qml:1720:                        SettingsButton { objectName: "updateInstall"; height: 26; text: "打开安装包"; onClicked: shellBridge.installUpdate("") }

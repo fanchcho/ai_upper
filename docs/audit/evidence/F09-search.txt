@@ -1,48 +1,11 @@
 $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1076:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
-app/src/qml_shell.py:1112:    def effortMenu(self) -> Dict[str, Any]:
-app/src/qml_shell.py:2611:        effort = self.effortMenu()
-app/src/qml_shell.py:2614:        window.setProperty("modelGroups", self.modelMenuGroups())
-app/src/qml_shell.py:2615:        window.setProperty("effortMenu", effort)
-app/src/qml/Main.qml:40:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
-app/src/qml/Main.qml:78:    EditContextMenu {
-app/src/qml/Main.qml:79:        id: composerMenu
-app/src/qml/Main.qml:80:        objectName: "composerMenu"
-app/src/qml/Main.qml:84:    EditContextMenu {
-app/src/qml/Main.qml:85:        id: bodyMenu
-app/src/qml/Main.qml:86:        objectName: "bodyMenu"
-app/src/qml/Main.qml:260:    property var effortMenu: ({})
-app/src/qml/Main.qml:867:                            window.openCtxMenu(modelData.id, modelData.title)
-app/src/qml/Main.qml:1315:                        bodyMenu.x = eventPoint.scenePosition.x
-app/src/qml/Main.qml:1316:                        bodyMenu.y = eventPoint.scenePosition.y
-app/src/qml/Main.qml:1317:                        bodyMenu.open()
-app/src/qml/Main.qml:1673:        SlashMenu {
-app/src/qml/Main.qml:1674:            id: slashMenu
-app/src/qml/Main.qml:1675:            objectName: "slashMenuRoot"
-app/src/qml/Main.qml:1728:                        composerMenu.x = eventPoint.scenePosition.x
-app/src/qml/Main.qml:1729:                        composerMenu.y = eventPoint.scenePosition.y
-app/src/qml/Main.qml:1730:                        composerMenu.open()
-app/src/qml/Main.qml:1943:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
-app/src/qml/Main.qml:1981:                        effortMenu: window.effortMenu
-app/src/qml/Main.qml:2324:    function openCtxMenu(id, title) {
-app/src/qml/Main.qml:2333:    function dismissCtxMenu() {
-app/src/qml/Main.qml:2340:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2346:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2349:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2355:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2370:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2441:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2447:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2513:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
-app/src/qml/Main.qml:2525:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
-app/src/qml/Main.qml:2527:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
-app/src/qml/Main.qml:2564:            onClicked: window.dismissCtxMenu()
-app/src/qml/Main.qml:2569:            id: ctxMenuShadow
-app/src/qml/Main.qml:2570:            target: ctxMenu
-app/src/qml/Main.qml:2574:            id: ctxMenu
-app/src/qml/Main.qml:2575:            objectName: "ctxMenu"
-app/src/qml/Main.qml:2606:                        objectName: "ctxMenuItem" + index
+app/src/qml_shell.py:1078:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
+app/src/qml_shell.py:1114:    def effortMenu(self) -> Dict[str, Any]:
+app/src/qml_shell.py:2705:        effort = self.effortMenu()
+app/src/qml_shell.py:2708:        window.setProperty("modelGroups", self.modelMenuGroups())
+app/src/qml_shell.py:2709:        window.setProperty("effortMenu", effort)
+app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
 app/src/qml/ModelPicker.qml:35:    // 模型分组：[{id, name, models:[{id, name}]}]，由 Python `modelMenuGroups()` 投影。
 app/src/qml/ModelPicker.qml:39:    // 思考等级菜单：{title, options:[{level,name,hint}], current}，由 `effortMenu()` 投影。
 app/src/qml/ModelPicker.qml:40:    property var effortMenu: ({})
@@ -51,7 +14,44 @@ app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMe
 app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
 app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
 app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
-app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
+app/src/qml/Main.qml:40:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+app/src/qml/Main.qml:78:    EditContextMenu {
+app/src/qml/Main.qml:79:        id: composerMenu
+app/src/qml/Main.qml:80:        objectName: "composerMenu"
+app/src/qml/Main.qml:84:    EditContextMenu {
+app/src/qml/Main.qml:85:        id: bodyMenu
+app/src/qml/Main.qml:86:        objectName: "bodyMenu"
+app/src/qml/Main.qml:262:    property var effortMenu: ({})
+app/src/qml/Main.qml:869:                            window.openCtxMenu(modelData.id, modelData.title)
+app/src/qml/Main.qml:1317:                        bodyMenu.x = eventPoint.scenePosition.x
+app/src/qml/Main.qml:1318:                        bodyMenu.y = eventPoint.scenePosition.y
+app/src/qml/Main.qml:1319:                        bodyMenu.open()
+app/src/qml/Main.qml:1676:        SlashMenu {
+app/src/qml/Main.qml:1677:            id: slashMenu
+app/src/qml/Main.qml:1678:            objectName: "slashMenuRoot"
+app/src/qml/Main.qml:1731:                        composerMenu.x = eventPoint.scenePosition.x
+app/src/qml/Main.qml:1732:                        composerMenu.y = eventPoint.scenePosition.y
+app/src/qml/Main.qml:1733:                        composerMenu.open()
+app/src/qml/Main.qml:1946:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
+app/src/qml/Main.qml:1984:                        effortMenu: window.effortMenu
+app/src/qml/Main.qml:2327:    function openCtxMenu(id, title) {
+app/src/qml/Main.qml:2336:    function dismissCtxMenu() {
+app/src/qml/Main.qml:2343:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2349:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2352:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2358:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2373:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2444:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2450:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2516:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
+app/src/qml/Main.qml:2528:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
+app/src/qml/Main.qml:2530:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
+app/src/qml/Main.qml:2567:            onClicked: window.dismissCtxMenu()
+app/src/qml/Main.qml:2572:            id: ctxMenuShadow
+app/src/qml/Main.qml:2573:            target: ctxMenu
+app/src/qml/Main.qml:2577:            id: ctxMenu
+app/src/qml/Main.qml:2578:            objectName: "ctxMenu"
+app/src/qml/Main.qml:2609:                        objectName: "ctxMenuItem" + index
 app/src/qml/EditContextMenu.qml:7:Menu {
 app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
 app/src/qml/EditContextMenu.qml:27:    MenuItem {

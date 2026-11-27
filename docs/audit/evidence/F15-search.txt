@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def _notify_turn app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:2326:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
+app/src/qml_shell.py:2420:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:

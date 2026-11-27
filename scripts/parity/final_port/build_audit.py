@@ -55,16 +55,20 @@ patch={
 'F36':('implemented','ShellBridge.sessionTurns/deleteTurn 基于 is_genuine_user_turn；TurnListPopup 选择任意轮次调 host.delete_turns；test_qml_quote_delete.py 删除中间轮回读消息列表。'),
 'F79':('implemented','TerminalPanel.qml + QProcess bash；startTerminal/terminalInput/stopTerminal 真实 stdin/stdout；test_qml_terminal.py 输入 printf 命令读回 TERM_OK。'),
 'F32':('implemented','PLAN_SPEC exit_plan + Interactions.plan 阻塞状态机；ToolRuntime.plan_sink 写 StoredSession.plans；PlanCards.qml 展示计划并回写批准/继续完善/忽略；test_plan_flow.py 真实工具阻塞、卡片存在、决定写盘重开。'),
+'F80':('implemented','SUBAGENT_TYPES General/Explore/Research/Plan/fork + run_subagent/send_to_subagent 工具；只读类型收窄 tools；子会话 parentId/title/model 落盘；test_subagents.py 真实派发并检查白名单。'),
+'F81':('implemented','propose_agent/create_task 惰性工具、AgentCards.qml、resolveProposal/resolveAutotask；接受写角色、创建写 tasks.json、拒绝/忽略写 proposals/autotasks 边车；test_agent_task_cards.py 重开读回。'),
+'F88':('implemented','ChatSessionStore.prune_cache(keep) + ShellBridge.pinSession/openSession；test_cache_pin.py 12 会话加载后 pin s-5，缓存≤8 且 s-5 仍在并可保存。'),
 'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 
 for f in features:
  if f['id'] in patch:f['status'],f['evidence']=patch[f['id']]
 # Actual disk added three bridge capabilities relative to the old inventory.
-for identity,name,source,search in [('F86','历史消息分页加载','apps/desktop/src/main/services/chat.ts:656','historyPage|history_page'),('F87','会话保存失败后重试','apps/desktop/src/main/services/chat.ts:655','retrySave|retry_save'),('F88','保护当前会话的缓存 pin','apps/desktop/src/main/services/chat.ts:472','pinSession|protectedSession')]:
+for identity,name,source,search in [('F86','历史消息分页加载','apps/desktop/src/main/services/chat.ts:656','historyPage|history_page'),('F87','会话保存失败后重试','apps/desktop/src/main/services/chat.ts:655','retrySave|retry_save')]:
  features=[f for f in features if f['id']!=identity]
  features.append(dict(id=identity,group='磁盘新增原版能力',name=name,deva=source,status='not_ported',evidence='当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。',search=search))
  mapping[identity]=['app/src/qml_shell.py','class ShellBridge']
+mapping['F88']=['app/src/qml_shell.py','def pinSession']
 searches={'F06':'onFullScreen|fullscreenChanged','F11':'Key_Escape.*sidePeek|sidePeek.*Key_Escape','F27':'sidebarResize|resizeSidebar|sideWidth\\s*=', 'F32':'planResponse|plan-response','F33':'rewindPreview|rewindApply|rewindUndo','F35':'quoteText|quoteBar','F36':'deleteTurns|delete_turns','F38':'chat:insert|insertMessage','F40':'TodoCapsule|todo_write','F41':'BackgroundTaskCapsule','F42':'BrowserCapsule','F50':'deliveryThumbnail|deliverableThumb','F52':'ProfilePanel','F54':'setAvatarImage|set_avatar_image','F55':'reorderPersonas|reorder_personas','F56':'readMemory|writeMemory','F64':'phone:|PhonePane','F67':'fetchModelList|fetchModels','F70':'importSkill|import_skill','F75':'installUpdate|downloadUpdate','F78':'BrowserView|WebEngineView','F79':'terminal:create|pty.open|pty.spawn','F80':'spawnMember|handleMentions','F81':'proposalResponse|autotaskResponse','F85':'GitWidget|gitStatus'}
 for f in features:
  path,term=mapping[f['id']];p=Path(path)
