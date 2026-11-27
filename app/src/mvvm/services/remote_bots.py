@@ -32,7 +32,7 @@ def RemoteBots(shell):
         delivered=Signal(object)
     
         def __init__(self,shell):
-            super().__init__(shell);self.shell=shell;self.workers={};self.states={};self.turns={};self.streams={};self.link_cancel=threading.Event()
+            super().__init__(shell);self.shell=shell;self.workers={};self.states={};self.turns={};self.streams={};self.link_cancel=threading.Event();self.pairing={}
             self.delivered.connect(self.receive,QtCore.Qt.QueuedConnection)
             QtCore.QCoreApplication.instance().aboutToQuit.connect(self.close)
             for bot in self.list():
@@ -76,6 +76,20 @@ def RemoteBots(shell):
             except Exception as exc:return str(exc)
     
         @Slot(str,result=str)
+        def feishuPairCode(self,identity):
+            if not any(b['id']==identity and b['platform']=='feishu' for b in self.list()):return '机器人不存在'
+            code=str(secrets.randbelow(1000000)).zfill(6);self.pairing[identity]={'code':code,'expires':time.time()+600,'failures':0}
+            return '向机器人发送 /pair '+code+'（10分钟有效）'
+
+        @Slot(str,str,str,result=str)
+        def linkFeishu(self,app_id,secret,domain):
+            if not app_id.strip() or not secret.strip():return '未验证：飞书 App ID 或 App Secret 未配置'
+            identity='feishu_'+uuid.uuid4().hex[:12]
+            if not self.shell._vault.set_secret('remote:'+identity+':appSecret',secret).get('ok'):return '系统密钥存储不可用'
+            bot={'id':identity,'platform':'feishu','name':app_id.strip(),'enabled':True,'replyMode':'final','scope':{'mode':'all','sessions':[],'personas':[]},'users':[],'bindings':{},'settings':{'appId':app_id.strip(),'domain':'lark' if domain=='lark' else 'feishu'}}
+            self.save(self.list()+[bot]);self.start(bot);return ''
+
+        @Slot(str,result=str)
         def linkTelegram(self,token):
             token=token.strip()
             if not re.fullmatch(r'\d+:[\w-]{20,}',token):return 'Token 格式不对，请从 @BotFather 完整复制'
@@ -103,7 +117,11 @@ def RemoteBots(shell):
     
         def start(self,bot):
             identity=bot['id']
-            if bot.get('platform') in ('feishu','web'):
+            if bot.get('platform')=='feishu':
+                from mvvm.services.feishu_inbound import connection
+                self.workers[identity]=connection(self,bot,self.shell._vault,lambda state:self.delivered.emit({'kind':'state','id':identity,'state':state}),lambda event:self.delivered.emit({'kind':'feishu-event','id':identity,'event':event}))
+                return ''
+            if bot.get('platform')=='web':
                 self.states[identity]='未验证：仅出站推送，外部连接尚未验证'
                 return ''
             if bot.get('platform')!='telegram':return '此平台的连接适配器尚未移植'
@@ -126,6 +144,23 @@ def RemoteBots(shell):
         @Slot(object)
         def receive(self,data):
             kind=data['kind']
+            if kind=='feishu-event':
+                event=data['event'].get('event',{});message=event.get('message',{});sender=event.get('sender',{}).get('sender_id',{}).get('open_id','')
+                if message.get('chat_type')!='p2p' or message.get('message_type')!='text':return
+                text=json.loads(message.get('content','{}')).get('text','');rows=self.list();bot=next((b for b in rows if b['id']==data['id']),None)
+                if not bot:return
+                if text.startswith('/pair '):
+                    pair=self.pairing.get(bot['id'])
+                    if not pair or time.time()>pair['expires']:
+                        self.pairing.pop(bot['id'],None);self.status.emit('配对码已过期或尚未生成','');return
+                    if not secrets.compare_digest(text[6:].strip(),pair['code']):
+                        pair['failures']+=1
+                        if pair['failures']>=5:self.pairing.pop(bot['id'],None)
+                        self.status.emit('配对码错误次数过多，已作废' if pair['failures']>=5 else '配对码不正确','');return
+                    self.pairing.pop(bot['id'],None)
+                    bot['users']=[u for u in bot['users'] if u['id']!=sender]+[{'id':sender,'chatId':message['chat_id'],'name':sender,'pairedAt':int(time.time()*1000)}]
+                    self.save(rows);self.status.emit('已配对','');return
+                self.receive({'kind':'message','id':bot['id'],'message':{'text':text,'chat':{'id':message.get('chat_id'),'type':'private'},'from':{'id':sender}}});return
             if kind=='push-result':
                 rows=self.list();bot=next((b for b in rows if b['id']==data['id']),None)
                 if bot:
@@ -209,6 +244,7 @@ def RemoteBots(shell):
             if sid not in self.turns or kind not in ('text_delta','done','error'):return
             identity,chat=self.turns[sid];bot=next((b for b in self.list() if b['id']==identity),None)
             if not bot or not bot.get('enabled'):return
+            if bot.get('platform')!='telegram':return
             state=self.streams.setdefault(sid,{'text':'','message_id':None,'busy':False,'sent':'','lock':threading.Lock()})
             if kind=='text_delta':
                 state['text']+=event.get('text','')
