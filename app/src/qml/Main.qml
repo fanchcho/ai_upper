@@ -47,6 +47,22 @@ ApplicationWindow {
 
     InteractionPrompt { }
 
+    // 原版 Ctrl/Cmd+B：对话页收起/展开会话列表。两个 sequence 分开写，
+    // 让 Linux/Windows 用 Ctrl、macOS 用 Cmd；Qt 的 "Ctrl+B" 在 macOS 也映射 Command，
+    // 但显式写 Meta+B 可读性更好。
+    Shortcut {
+        sequence: "Ctrl+B"
+        context: Qt.ApplicationShortcut
+        enabled: window.page === "chat"
+        onActivated: window.toggleSidebar()
+    }
+    Shortcut {
+        sequence: "Meta+B"
+        context: Qt.ApplicationShortcut
+        enabled: window.page === "chat"
+        onActivated: window.toggleSidebar()
+    }
+
     // ── Python 注入的状态 ─────────────────────────────────────────────
     property var sessions: []
     property string activeId: ""
@@ -63,6 +79,11 @@ ApplicationWindow {
     property var pendingFiles: []
     // 页名：由 Python 按环境变量选择要呈现的界面状态（设置页/搜索等，见 qml_shell.py）。
     property string page: "chat"
+    // 会话列表收起（原版 ChatFirstShell.tsx:143-160）：Ctrl/Cmd+B 切换并落盘；
+    // 收起后悬停「对话」图标 200ms 浮出列表（peek），列表盖在正文上而不改变正文宽度。
+    property bool sideCollapsed: false
+    property bool sidePeek: false
+    property bool _sidePeekHover: false
     // 空态快速开启的角色卡片（Python 每次 _publish 现读 PersonaStore 写进来）。
     property var quickStartPersonas: []
     property bool dark: Theme.dark
@@ -350,6 +371,7 @@ ApplicationWindow {
         property string iconName
         property bool active: false
         property bool dim: false
+        signal hoverChanged(bool entered)
         width: 40
         height: 40
         radius: Theme.radius
@@ -364,7 +386,10 @@ ApplicationWindow {
             color: btn.active ? Theme.accent : railHover.hovered ? Theme.fg : Theme.fgSubtle
             opacity: btn.dim ? 0.7 : 1
         }
-        HoverHandler { id: railHover }
+        HoverHandler {
+            id: railHover
+            onHoveredChanged: btn.hoverChanged(hovered)
+        }
         MouseArea {
             anchors.fill: parent
             onClicked: btn.clicked()
@@ -435,7 +460,12 @@ ApplicationWindow {
             x: 8
             y: window.macChrome ? 110 : 70
             spacing: 4
-            RailButton { iconName: IconData.messageCircle; active: true }
+            RailButton {
+                objectName: "railChats"
+                iconName: IconData.messageCircle
+                active: true
+                onHoverChanged: function (entered) { window.chatRailHover(entered) }
+            }
             RailButton { iconName: IconData.users }
             RailButton { iconName: IconData.alarmClock }
         }
@@ -455,11 +485,15 @@ ApplicationWindow {
     // ── 会话栏 ────────────────────────────────────────────────────────
     Rectangle {
         id: side
+        objectName: "sessionSide"
         x: window.railWidth
         y: 0
-        width: Theme.sideWidth
+        width: window.sideCollapsed ? (window.sidePeek ? Theme.sideWidth : 0) : Theme.sideWidth
+        visible: !window.sideCollapsed || window.sidePeek
+        z: window.sidePeek ? 20 : 0
         height: parent.height
         color: Theme.bgPanel
+        HoverHandler { onHoveredChanged: window.sideHover(hovered) }
 
         Rectangle {
             anchors.right: parent.right
@@ -835,7 +869,8 @@ ApplicationWindow {
     // ── 正文区 ────────────────────────────────────────────────────────
     Item {
         id: conv
-        x: window.railWidth + Theme.sideWidth
+        objectName: "convColumn"
+        x: window.railWidth + (window.sideCollapsed ? 0 : Theme.sideWidth)
         y: 0
         width: parent.width - x
         height: parent.height
@@ -1784,6 +1819,50 @@ ApplicationWindow {
         if (!id || id === window.activeId)
             return
         shellBridge.openSession(id)
+    }
+
+    // 收起列表：Ctrl/Cmd+B 切换（原版 ChatFirstShell.tsx:191-199），并写入 config.json。
+    function toggleSidebar() {
+        window.sideCollapsed = !window.sideCollapsed
+        window.sidePeek = false
+        if (shellBridge)
+            shellBridge.setSidebarCollapsed(window.sideCollapsed)
+    }
+
+    // 悬停「对话」图标：收起状态下 200ms 后浮出列表，离开图标/列表 150ms 后收回
+    // （原版 ChatFirstShell.tsx:160-190 的两个定时器）。
+    function chatRailHover(entered) {
+        if (!window.sideCollapsed)
+            return
+        if (entered) {
+            peekHide.stop()
+            peekShow.restart()
+        } else {
+            peekShow.stop()
+            if (!window._sidePeekHover)
+                peekHide.restart()
+        }
+    }
+    function sideHover(entered) {
+        window._sidePeekHover = entered
+        if (entered) {
+            peekHide.stop()
+            window.sidePeek = true
+        } else if (!window.sideCollapsed) {
+            window.sidePeek = false
+        } else {
+            peekHide.restart()
+        }
+    }
+    Timer {
+        id: peekShow
+        interval: 200
+        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }
+    }
+    Timer {
+        id: peekHide
+        interval: 150
+        onTriggered: { if (!window._sidePeekHover) window.sidePeek = false }
     }
 
     function submit() {

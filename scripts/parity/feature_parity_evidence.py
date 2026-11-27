@@ -55,7 +55,7 @@ def find_item(root, name):
     return None
 
 
-def build(tmp: Path, theme: str, transport):
+def build(tmp: Path, theme: str, transport, sessions=("s-1",)):
     home = tmp / "home"
     home.mkdir(parents=True)
     os.environ["AI_UPPER_HOME"] = str(home)
@@ -66,10 +66,11 @@ def build(tmp: Path, theme: str, transport):
     vault = SecretsVault(home)
     vault.set_secret("p1", "sk-test")
     store = ChatSessionStore(home)
-    store.ensure_session("s-1")
-    session = store.load_session("s-1")
-    session.title = "停止生成证据"
-    store.save("s-1")
+    for index, sid in enumerate(sessions):
+        store.ensure_session(sid)
+        session = store.load_session(sid)
+        session.title = f"会话 {index + 1}"
+        store.save(sid)
     PersonaStore(home).ensure_seeded()
     box = {}
 
@@ -138,13 +139,57 @@ def evidence_stop(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_collapse(outdir: Path, theme: str):
+    from PySide6.QtCore import QPoint
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-collapse-{theme}-"))
+    try:
+        window, bridge, _store, ticker, engine, home = build(
+            tmp, theme, text_stream("x"), sessions=("s-1", "s-2", "s-3"))
+        side = find_item(window.contentItem(), "sessionSide")
+        conv = find_item(window.contentItem(), "convColumn")
+        chats = find_item(window.contentItem(), "railChats")
+        QTest.keyClick(window, Qt.Key_B, Qt.ControlModifier)
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        png = outdir / f"sidebar-collapsed-{theme}.png"
+        size = shot(window, png)
+        rows = [{
+            "feature": "collapse", "theme": theme, "state": "collapsed", "png": str(png), "size": size,
+            "side_width": side.property("width"), "side_visible": bool(side.property("visible")),
+            "conv_x": conv.property("x"), "collapsed": bool(window.property("sideCollapsed")),
+            "config": bool(bridge.sidebarCollapsed()),
+        }]
+        # 先把指针移到远处再进图标，避免上一轮窗口关闭后指针已停在图标上、
+        # 新窗口创建时没有 hoveredChanged 事件。
+        QTest.mouseMove(window, QPoint(700, 400))
+        _pump(QGuiApplication.instance(), lambda: False, 0.2)
+        QTest.mouseMove(window, QPoint(28, 88))
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        png2 = outdir / f"sidebar-peek-{theme}.png"
+        size2 = shot(window, png2)
+        rows.append({
+            "feature": "collapse", "theme": theme, "state": "peek", "png": str(png2), "size": size2,
+            "side_width": side.property("width"), "side_visible": bool(side.property("visible")),
+            "conv_x": conv.property("x"), "peek": bool(window.property("sidePeek")),
+        })
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     app = QGuiApplication.instance() or QGuiApplication([])
-    runner = {"stop": evidence_stop}[feature]
-    rows = [runner(outdir, theme) for theme in ("dark", "light")]
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse}
+    runner = runners[feature]
+    rows = []
+    for theme in ("dark", "light"):
+        result = runner(outdir, theme)
+        rows.extend(result if isinstance(result, list) else [result])
     (outdir / f"{feature}-measurements.json").write_text(json.dumps(rows, ensure_ascii=False, indent=1))
 
 

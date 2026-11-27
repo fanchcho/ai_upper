@@ -511,6 +511,16 @@ class ShellBridge(QtCore.QObject):
         self._apply_theme()
         return True
 
+    @QtCore.Slot(result=bool)
+    def sidebarCollapsed(self) -> bool:
+        """会话列表是否收起（原版 `loadLayout().sidebarCollapsed` 落盘在 layout 里）。"""
+        return bool(self._config().get("sidebarCollapsed", False))
+
+    @QtCore.Slot(bool, result=bool)
+    def setSidebarCollapsed(self, collapsed: bool) -> bool:
+        """Ctrl/Cmd+B 的持久化：写 config.json 的 sidebarCollapsed。"""
+        return self._write_config({"sidebarCollapsed": bool(collapsed)})
+
     @QtCore.Slot(int, result=bool)
     def setTextSize(self, index: int) -> bool:
         if not isinstance(index, int) or not 0 <= index < len(CHAT_SIZE_ORDER):
@@ -1758,6 +1768,7 @@ class ShellBridge(QtCore.QObject):
         )
         busy = bool(active) and self._host.is_busy(active)
         window.setProperty("busy", busy)
+        window.setProperty("sideCollapsed", self.sidebarCollapsed())
         window.setProperty("status", self.translate("native.streaming") if busy else self.translate("native.ready"))
         # 附件贴片与交付卡：每次重绘都按当前会话现算（落盘为唯一真相源）。
         session = self._session() if active else None
