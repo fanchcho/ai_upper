@@ -41,3 +41,22 @@ scripts/parity/electron_safe_storage_session.py **保留原位、不提交、不
 - 系统代理缺口已判明，尚未实现。
 - 同fixture同滚动位置比较条件已完成；页面像素一致仍未完成。
 - 正文/阴影相位复跑完成；菜单上限真实缺口已修，剩余差异未归零。
+
+进程补充证据：本轮运行中发现另一全量pytest，参数为 `--basetemp=/tmp/ai-upper-full-regression/tests`，本轮参数为 `.tmp/parity-close/final`；两者并存记录 `out/parity-close/concurrent-pytest.txt`。没有终止非本轮进程。
+
+平台探针 `out/parity-close/platform-probe.json`：offscreen 下 tray_available=false；QLocalServer/QLocalSocket可用。只能说明当前托盘展示环境不可验收，不能将单实例或托盘实现缺口伪装成不适用。
+
+代理规则还存在确定的语义差异：原版http.ts:135起proxyUri规范化裸host、SOCKS别名并剥离认证；bypassRules按逗号/空白拆分且将CIDR、host:port等交给Chromium。Python当前_matches_no_proxy只按逗号拆分、精确域名或子域后缀匹配，不支持这些规则。实际函数探针proxy-bypass.json确认CIDR、带端口、通配符与空白分隔均仍走代理；普通域名后缀正确绕过。因此不能把环境代理支持表述为全部语义等价。
+
+## 并发提交补充（最终交付前发现）
+
+等待本轮最终回归期间，另一执行正常推送了812fd571ee0905ad12b7d6a7ffcdae78508a2731，提交八个文件，覆盖了主盘点并提交了旧safeStorage/相位脚本。该提交不是本轮工具调用产生的，也未由本轮验证。前文“不提交遗留脚本”是本执行的处置决定；当前磁盘事实已变为**该脚本被另一执行提交，保留已存在提交、不回退，仍不作为本轮验证入口**。任务协调端需停止重复写入并指定唯一审计结果来源。
+
+## 最终回归
+
+```
+AI_UPPER_HOME=/tmp/ai-upper-parity-close-final TMPDIR=$PWD/.tmp/parity-close LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software .venv/bin/python -m pytest app/tests -q --basetemp=$PWD/.tmp/parity-close/final
+1438 passed, 9 skipped in 404.37s (0:06:44)
+```
+
+0 failed，原始日志out/parity-close/pytest-final.log。git diff 45f71d1 HEAD -- app/tests为空；既有断言未改。另一执行812fd57不含app/src修改，菜单修复后的应用代码与最终回归对象一致。
