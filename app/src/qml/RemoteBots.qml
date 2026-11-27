@@ -9,6 +9,7 @@ Rectangle {
     property string error: ""
     property string link: ""
     property string webLink: ""
+    property string query: ""
     color: Theme.bg
     onVisibleChanged: if (visible) { api = shellBridge.botsService(); refresh() }
     function refresh() { if (api) rows = api.list() }
@@ -37,23 +38,27 @@ Rectangle {
         SettingsButton { objectName:"webPairTicket"; text:"生成浏览器配对票据"; onClicked:root.webLink=root.api.webPairTicket() }
         SettingsButton { objectName:"openWebPair"; visible:root.webLink.length>0; text:"打开浏览器完成安全配对"; onClicked:shellBridge.openExternal(root.webLink) }
         Text { text: root.error; visible: text.length > 0; color: Theme.danger; wrapMode: Text.Wrap; width: parent.width }
+        SettingsField { objectName: "botSearch"; width: parent.width; placeholderText: "搜索机器人"; onTextChanged: root.query = text }
+
     }
     ListView {
         id: list; x: 20; y: setup.y+setup.height+20; width: parent.width-40; height: Math.max(0,parent.height-y-20)
-        model: root.rows; spacing: 8; clip: true; ScrollBar.vertical: SettingsScrollBar {}
+        model: root.rows.filter(function(row) { return !root.query || String(row.name || "").toLowerCase().indexOf(root.query.toLowerCase()) >= 0 || String(row.platform || "").toLowerCase().indexOf(root.query.toLowerCase()) >= 0 }); spacing: 8; clip: true; ScrollBar.vertical: SettingsScrollBar {}
         delegate: Rectangle {
             required property var modelData
-            width: list.width; height: 178; color: Theme.bgPanel; radius: Theme.radiusSm; border.color: Theme.border
+            width: list.width; height: 208; color: Theme.bgPanel; radius: Theme.radiusSm; border.color: Theme.border
             Text { x: 12; y: 12; text: modelData.name + " · " + modelData.platform; color: Theme.fg; font.pixelSize: 16 }
             Text { x: 12; y: 40; text: modelData.state + " · " + (modelData.users || []).length + " 位已配对用户"; color: Theme.fgMuted }
-            Row { x: 12; y: 68; spacing: 8
+            Text { x: 12; y: 59; text: "回复：" + (modelData.replyMode === "final" ? "仅最终" : "流式") + " · 范围：" + (modelData.scope && modelData.scope.mode || "all"); color: Theme.fgMuted; elide: Text.ElideRight; width: parent.width-24 }
+            Text { x: 12; y: 77; visible: modelData.platform === "feishu"; text: "App ID：" + (modelData.settings && modelData.settings.appId || "未配置") + " · 域：" + (modelData.settings && modelData.settings.domain || "feishu"); color: Theme.fgMuted; elide: Text.ElideRight; width: parent.width-24 }
+            Row { x: 12; y: 98; spacing: 8
                 SettingsButton { visible:modelData.platform==="feishu"; objectName:"feishuPair_"+modelData.id; text:"生成配对码"; onClicked:root.error=root.api.feishuPairCode(modelData.id) }
                 SettingsButton { objectName: "botToggle_"+modelData.id; text: modelData.enabled ? "停用" : "启用"; onClicked: root.act(modelData.id,modelData.enabled ? "disable":"enable") }
                 SettingsButton { objectName: "botReply_"+modelData.id; text: "回复："+(modelData.replyMode === "final" ? "仅最终":"流式"); onClicked: root.act(modelData.id,"reply",modelData.replyMode === "final" ? "stream":"final") }
                 SettingsButton { objectName: "botScope_"+modelData.id; text: "范围："+(modelData.scope.mode === "all" ? "全部":"指定对话"); onClicked: root.act(modelData.id,"scope",JSON.stringify({mode:modelData.scope.mode === "all" ? "sessions":"all",personas:modelData.scope.personas || [],sessions:[root.shell.activeId]})) }
                 SettingsButton { objectName: "botDelete_"+modelData.id; text: "删除"; onClicked: root.act(modelData.id,"delete") }
             }
-            Row { x: 12; y: 118; spacing: 8
+            Row { x: 12; y: 148; spacing: 8
                 Repeater { model: modelData.users || []
                     SettingsButton { required property var modelData; objectName: "botUser_"+modelData.id; text: "移除用户 " + (modelData.name || modelData.id); onClicked: root.act(parent.parent.modelData.id,"remove-user",modelData.id) }
                 }

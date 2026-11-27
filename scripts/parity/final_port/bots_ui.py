@@ -19,10 +19,10 @@ for theme in ['dark','light']:
   o=find_item(w.contentItem(),name) or w.findChild(QObject,name);assert o is not None,name
   pt=o.mapToScene(QPointF(o.width()/2,o.height()/2));QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,pt.toPoint());_pump(app,lambda:False,.2)
  def row():return json.loads((h/'config.json').read_text())['remote']['bots'][0]
- click('railBots');click('botReply_bot-fixture');assert row()['replyMode']=='stream'
+ click('railBots');click('botSearch');app.clipboard().setText('telegram');QTest.keyClick(w,Qt.Key_V,Qt.ControlModifier);_pump(app,lambda:False,.2);assert find_item(w.contentItem(),'botReply_bot-fixture') is not None;click('botReply_bot-fixture');assert row()['replyMode']=='stream'
  click('botScope_bot-fixture');assert row()['scope']['sessions']==[b._active]
  click('botToggle_bot-fixture');assert row()['enabled'] is False
- shot(w,Path('out/final-port')/f'bots-{theme}.png')
+ shot(w,Path('docs/audit/parity-close')/f'bots-{theme}.png')
  results.append({'theme':theme,'home':str(h),'config':row(),'enable':'blocked: missing real credentials; not connected'})
  click('botDelete_bot-fixture');assert json.loads((h/'config.json').read_text())['remote']['bots']==[]
  b.botsService().close();t.stop();w.close();e.deleteLater();_pump(app,lambda:False,.1)

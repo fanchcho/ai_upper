@@ -1,0 +1,3 @@
+PASS configuration list/reply/scope/delete; external connection UNVERIFIED (no credentials)
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
