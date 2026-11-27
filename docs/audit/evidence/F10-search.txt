@@ -1,5 +1,5 @@
 $ rg -n --glob *.qml --glob *.py toggleSidebar app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:103:        onActivated: window.toggleSidebar()
-app/src/qml/Main.qml:109:        onActivated: window.toggleSidebar()
-app/src/qml/Main.qml:2081:    function toggleSidebar() {
+app/src/qml/Main.qml:106:        onActivated: window.toggleSidebar()
+app/src/qml/Main.qml:112:        onActivated: window.toggleSidebar()
+app/src/qml/Main.qml:2095:    function toggleSidebar() {

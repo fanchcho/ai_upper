@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py Key_Escape.*sidePeek|sidePeek.*Key_Escape app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:1724:                    if (event.key === Qt.Key_Escape && window.sidePeek) {
+app/src/qml/Main.qml:1738:                    if (event.key === Qt.Key_Escape && window.sidePeek) {

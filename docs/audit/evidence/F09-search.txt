@@ -2,47 +2,66 @@ $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/m
 exit=0
 app/src/qml_shell.py:1073:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
 app/src/qml_shell.py:1109:    def effortMenu(self) -> Dict[str, Any]:
-app/src/qml_shell.py:2448:        effort = self.effortMenu()
-app/src/qml_shell.py:2451:        window.setProperty("modelGroups", self.modelMenuGroups())
-app/src/qml_shell.py:2452:        window.setProperty("effortMenu", effort)
-app/src/qml/Main.qml:39:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
-app/src/qml/Main.qml:68:    EditContextMenu {
-app/src/qml/Main.qml:69:        id: composerMenu
-app/src/qml/Main.qml:70:        objectName: "composerMenu"
-app/src/qml/Main.qml:74:    EditContextMenu {
-app/src/qml/Main.qml:75:        id: bodyMenu
-app/src/qml/Main.qml:76:        objectName: "bodyMenu"
-app/src/qml/Main.qml:245:    property var effortMenu: ({})
-app/src/qml/Main.qml:851:                            window.openCtxMenu(modelData.id, modelData.title)
-app/src/qml/Main.qml:1299:                        bodyMenu.x = eventPoint.scenePosition.x
-app/src/qml/Main.qml:1300:                        bodyMenu.y = eventPoint.scenePosition.y
-app/src/qml/Main.qml:1301:                        bodyMenu.open()
-app/src/qml/Main.qml:1645:        SlashMenu {
-app/src/qml/Main.qml:1646:            id: slashMenu
-app/src/qml/Main.qml:1647:            objectName: "slashMenuRoot"
-app/src/qml/Main.qml:1700:                        composerMenu.x = eventPoint.scenePosition.x
-app/src/qml/Main.qml:1701:                        composerMenu.y = eventPoint.scenePosition.y
-app/src/qml/Main.qml:1702:                        composerMenu.open()
-app/src/qml/Main.qml:1915:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
-app/src/qml/Main.qml:1953:                        effortMenu: window.effortMenu
-app/src/qml/Main.qml:2275:    function openCtxMenu(id, title) {
-app/src/qml/Main.qml:2284:    function dismissCtxMenu() {
-app/src/qml/Main.qml:2291:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2297:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2300:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2306:            window.dismissCtxMenu()
-app/src/qml/Main.qml:2321:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2392:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2398:        window.dismissCtxMenu()
-app/src/qml/Main.qml:2464:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
-app/src/qml/Main.qml:2476:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
-app/src/qml/Main.qml:2478:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
-app/src/qml/Main.qml:2515:            onClicked: window.dismissCtxMenu()
-app/src/qml/Main.qml:2520:            id: ctxMenuShadow
-app/src/qml/Main.qml:2521:            target: ctxMenu
-app/src/qml/Main.qml:2525:            id: ctxMenu
-app/src/qml/Main.qml:2526:            objectName: "ctxMenu"
-app/src/qml/Main.qml:2557:                        objectName: "ctxMenuItem" + index
+app/src/qml_shell.py:2493:        effort = self.effortMenu()
+app/src/qml_shell.py:2496:        window.setProperty("modelGroups", self.modelMenuGroups())
+app/src/qml_shell.py:2497:        window.setProperty("effortMenu", effort)
+app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
+app/src/qml/EditContextMenu.qml:7:Menu {
+app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
+app/src/qml/EditContextMenu.qml:25:    MenuItem {
+app/src/qml/EditContextMenu.qml:27:        objectName: "editMenuCut"
+app/src/qml/EditContextMenu.qml:43:    MenuItem {
+app/src/qml/EditContextMenu.qml:45:        objectName: "editMenuCopy"
+app/src/qml/EditContextMenu.qml:60:    MenuItem {
+app/src/qml/EditContextMenu.qml:62:        objectName: "editMenuPaste"
+app/src/qml/EditContextMenu.qml:78:    MenuItem {
+app/src/qml/EditContextMenu.qml:80:        objectName: "editMenuQuote"
+app/src/qml/EditContextMenu.qml:88:    MenuSeparator { height: 9; contentItem: Rectangle { color: Theme.border; implicitHeight: 1 } }
+app/src/qml/EditContextMenu.qml:89:    MenuItem {
+app/src/qml/EditContextMenu.qml:91:        objectName: "editMenuDeleteTurn"
+app/src/qml/EditContextMenu.qml:98:    MenuSeparator {
+app/src/qml/EditContextMenu.qml:103:    MenuItem {
+app/src/qml/EditContextMenu.qml:105:        objectName: "editMenuSelectAll"
+app/src/qml/Main.qml:40:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+app/src/qml/Main.qml:69:    EditContextMenu {
+app/src/qml/Main.qml:70:        id: composerMenu
+app/src/qml/Main.qml:71:        objectName: "composerMenu"
+app/src/qml/Main.qml:75:    EditContextMenu {
+app/src/qml/Main.qml:76:        id: bodyMenu
+app/src/qml/Main.qml:77:        objectName: "bodyMenu"
+app/src/qml/Main.qml:248:    property var effortMenu: ({})
+app/src/qml/Main.qml:854:                            window.openCtxMenu(modelData.id, modelData.title)
+app/src/qml/Main.qml:1302:                        bodyMenu.x = eventPoint.scenePosition.x
+app/src/qml/Main.qml:1303:                        bodyMenu.y = eventPoint.scenePosition.y
+app/src/qml/Main.qml:1304:                        bodyMenu.open()
+app/src/qml/Main.qml:1659:        SlashMenu {
+app/src/qml/Main.qml:1660:            id: slashMenu
+app/src/qml/Main.qml:1661:            objectName: "slashMenuRoot"
+app/src/qml/Main.qml:1714:                        composerMenu.x = eventPoint.scenePosition.x
+app/src/qml/Main.qml:1715:                        composerMenu.y = eventPoint.scenePosition.y
+app/src/qml/Main.qml:1716:                        composerMenu.open()
+app/src/qml/Main.qml:1929:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
+app/src/qml/Main.qml:1967:                        effortMenu: window.effortMenu
+app/src/qml/Main.qml:2306:    function openCtxMenu(id, title) {
+app/src/qml/Main.qml:2315:    function dismissCtxMenu() {
+app/src/qml/Main.qml:2322:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2328:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2331:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2337:            window.dismissCtxMenu()
+app/src/qml/Main.qml:2352:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2423:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2429:        window.dismissCtxMenu()
+app/src/qml/Main.qml:2495:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
+app/src/qml/Main.qml:2507:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
+app/src/qml/Main.qml:2509:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
+app/src/qml/Main.qml:2546:            onClicked: window.dismissCtxMenu()
+app/src/qml/Main.qml:2551:            id: ctxMenuShadow
+app/src/qml/Main.qml:2552:            target: ctxMenu
+app/src/qml/Main.qml:2556:            id: ctxMenu
+app/src/qml/Main.qml:2557:            objectName: "ctxMenu"
+app/src/qml/Main.qml:2588:                        objectName: "ctxMenuItem" + index
+app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
+app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)
 app/src/qml/ModelPicker.qml:35:    // 模型分组：[{id, name, models:[{id, name}]}]，由 Python `modelMenuGroups()` 投影。
 app/src/qml/ModelPicker.qml:39:    // 思考等级菜单：{title, options:[{level,name,hint}], current}，由 `effortMenu()` 投影。
 app/src/qml/ModelPicker.qml:40:    property var effortMenu: ({})
@@ -51,17 +70,3 @@ app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMe
 app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
 app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
 app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
-app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
-app/src/qml/EditContextMenu.qml:7:Menu {
-app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
-app/src/qml/EditContextMenu.qml:23:    MenuItem {
-app/src/qml/EditContextMenu.qml:25:        objectName: "editMenuCut"
-app/src/qml/EditContextMenu.qml:41:    MenuItem {
-app/src/qml/EditContextMenu.qml:43:        objectName: "editMenuCopy"
-app/src/qml/EditContextMenu.qml:58:    MenuItem {
-app/src/qml/EditContextMenu.qml:60:        objectName: "editMenuPaste"
-app/src/qml/EditContextMenu.qml:76:    MenuSeparator {
-app/src/qml/EditContextMenu.qml:81:    MenuItem {
-app/src/qml/EditContextMenu.qml:83:        objectName: "editMenuSelectAll"
-app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
-app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)
