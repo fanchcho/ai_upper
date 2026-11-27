@@ -15,8 +15,10 @@ for theme in ['dark','light']:
  app.clipboard().setText('Ask @Rev after');QTest.keyClick(w,Qt.Key_V,Qt.ControlModifier)
  for _ in range(6):QTest.keyClick(w,Qt.Key_Left)
  _pump(app,lambda:False,.3);assert w.property('slashOpen')
+ menu=find_item(w.contentItem(),'slashMenuRoot');mp=menu.mapToScene(QPointF(20,40))
+ assert 0<mp.x()<w.width() and 0<mp.y()<w.height(),mp
  shot(w,Path('out/final-port')/f'mentions-{theme}.png')
- QTest.keyClick(w,Qt.Key_Tab);_pump(app,lambda:False,.2)
+ QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,mp.toPoint());_pump(app,lambda:False,.2)
  assert field.property('text')=='Ask @Reviewer after',field.property('text')
  assert not w.property('slashOpen')
  results.append({'theme':theme,'text':field.property('text'),'sent':len(session.messages),'candidates':b.mentionCandidates()})

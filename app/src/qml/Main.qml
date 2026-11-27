@@ -1580,22 +1580,18 @@ ApplicationWindow {
         // 阴影：原版 `.cf-box { box-shadow: var(--shadow) }`（redesign.css:2661），
         // 深色 `0 8px 30px rgba(0,0,0,.5)`、浅色 `0 6px 24px rgba(0,0,0,.12)`
         // （tokens.css:149 / :82）。参数字面量集中在 SoftShadow.qml。
-        SoftShadow {
-            SlashMenu {
-                id: slashMenu
-                objectName: "slashMenuRoot"
-                x: composer.x + 13
-                y: composer.y - height - 8
-                z: 30
-                rows: window.slashRows
-                prefix: window.suggestPrefix
-                visible: window.slashOpen && rows.length > 0
-                current: window.slashCurrent
-                onPicked: function (name) { window.runSlash(name) }
-            }
-
-            id: composerShadow
-            target: composer
+        SoftShadow { id: composerShadow; target: composer }
+        SlashMenu {
+            id: slashMenu
+            objectName: "slashMenuRoot"
+            x: composer.x + 13
+            y: composer.y - height - 8
+            z: 30
+            rows: window.slashRows
+            prefix: window.suggestPrefix
+            visible: window.slashOpen && rows.length > 0
+            current: window.slashCurrent
+            onPicked: function (name) { window.runSlash(name) }
         }
 
         Rectangle {
