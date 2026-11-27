@@ -140,6 +140,15 @@ Item {
                 Popup {
                     id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; y: parent.height + 6; width: parent.width
                     padding: 7
+                    height: Math.min(320, rolesContent.height + 14)
+                    onActiveRowChanged: Qt.callLater(function() {
+                        var row = activeRow > 0 ? roleOptions.itemAt(activeRow - 1) : null
+                        var top = row ? row.y : 0
+                        var bottom = row ? row.y + row.height : 48.75
+                        if (top < rolesScroll.contentY) rolesScroll.contentY = top
+                        else if (bottom > rolesScroll.contentY + rolesScroll.height)
+                            rolesScroll.contentY = bottom - rolesScroll.height
+                    })
                     property int activeRow: 0
                     property string typedText: ""
                     property double typedAt: 0
@@ -167,8 +176,14 @@ Item {
                         SoftShadow { target: rolesBackground }
                         Rectangle { id: rolesBackground; anchors.fill: parent; color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
                     }
-                    contentItem: Column {
-                        id: rolesContent; focus: true
+                    contentItem: Flickable {
+                        id: rolesScroll
+                        clip: true
+                        contentHeight: rolesContent.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        ScrollBar.vertical: SettingsScrollBar {}
+                        Column {
+                        id: rolesContent; focus: true; width: rolesScroll.width
                         Keys.onPressed: function(event) {
                             var last = (root.item.personas || []).length
                             if (event.key === Qt.Key_Down) rolesPopup.activeRow = Math.min(last, rolesPopup.activeRow + 1)
@@ -196,6 +211,7 @@ Item {
                         }
                         Text { text: I18n.t("extensions.rolesOnly"); color: Theme.fgSubtle; font.pixelSize: 11; height: 26.5; leftPadding: 8; topPadding: 6 }
                         Repeater {
+                            id: roleOptions
                             model: root.item.personas || []
                             Item {
                                 required property var modelData
@@ -212,6 +228,7 @@ Item {
                                     root.save("roles", roles.length ? roles : null)
                                 } }
                             }
+                        }
                         }
                     }
                 }
