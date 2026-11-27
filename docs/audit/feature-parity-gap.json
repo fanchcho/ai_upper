@@ -1523,7 +1523,7 @@
       "name": "机器人页（Bots tab 列表/添加/详情）",
       "deva": "redesign/BotsPane.tsx:1-80；remote:get-state",
       "status": "not_ported",
-      "evidence": "已存在 RemoteBots.qml:21-64 Telegram/飞书/Web 添加、列表和管理动作；remote_bots.py action 实际落盘。docs/audit/remaining-three/feishu.md、web.md 有真实配置/浏览器证据。原版 BotsPane.tsx:447-735 另有独立详情、搜索、personas/sessions 多选范围、邀请码刷新/取消及扫码创建；当前未全量补齐，组合项仍未移植，不能提升为已实现。",
+      "evidence": "已存在 RemoteBots.qml:21-64 Telegram/飞书/Web 添加、列表和管理动作；remote_bots.py action 实际落盘。docs/audit/remaining-three/feishu.md、web.md 有真实配置/浏览器证据。原版 BotsPane.tsx:447-735 另有独立详情、personas/sessions 多选范围、邀请码刷新/取消及扫码创建；当前未全量补齐，组合项仍未移植，不能提升为已实现。 本轮177b3ac补搜索/回复范围/AppID域展示；真实暗亮操作与读盘见 docs/audit/parity-close/bots.json。",
       "port_anchor": "app/src/qml/RemoteBots.qml:27",
       "entry": "QML",
       "web_entry": {

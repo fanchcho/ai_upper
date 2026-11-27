@@ -5,7 +5,7 @@
 上一轮59项候选按当前行重算：{'implemented': 52, 'not_ported': 3, 'na': 4}。全表无未判定状态。
 
 组合项只要仍有原版行为未补齐，就保守记为未移植，并明确已有实现；不把部分能力升级为完整可用。只有界面专指可见而无动作入口。托盘等环境限制保留四态字段，同时在证据标未验证，不能当作原版不存在。
-本轮按89行逐项重算仍为81/0/4，另4不适用；F62/F64已有部分实现但组合项尚未补齐，F06/F84的宿主限制不自动改为不适用。旧15/4/6/59回执不再作为当前计数。
+本轮按89行逐项重算为81/0/4，另4不适用；F62/F64已有部分实现但组合项尚未补齐，F06/F84的宿主限制不自动改为不适用。旧15/4/6/59回执不再作为当前计数。
 
 原版 deva 工作树本身存在其他执行的修改（包括新增 history-page 等），本执行只读。当前磁盘依据与旧 169 条统计不一致：172 注册 = 168 handle + 4 on。原始枚举、preload 每次调用的 文件:行号、全部 270 源文件与 1097 个非 IPC 事件声明见 evidence/source-inventory.json。动态表达式注册需人工复核，清单不把正则本身当功能验收。
 
@@ -77,7 +77,7 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
 |F59 / 定时任务|任务调度引擎（once/cron、自动触发）|`apps/desktop/src/main/services/schedule.ts:1`, `apps/desktop/src/main/services/scheduler.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:12`；真实一次任务等待 12 秒自动触发、ChatHost 回合与 history 读盘已通过，cron 解析使用五段规则/IANA 时区；out/final-port/tasks-ui.json。Python 3.8 只支持 UTC，其他时区明确报错。；搜索命令及原始结果：`docs/audit/evidence/F59-search.txt`|
 |F60 / 定时任务|任务系统通知|`apps/desktop/src/main/services/scheduler.ts:103`|已实现且可用|`app/src/qml_shell.py:2465`；任务完成通知复用同一 TrayController.notify 路径；dbus-send Notify 实测服务端收到字段，任务/回复通知不再依赖 QSystemTrayIcon.showMessage。；搜索命令及原始结果：`docs/audit/evidence/F60-search.txt`|
 |F61 / 定时任务|任务绑定主对话与结果交接|`apps/desktop/src/main/services/chat-task-handoff.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:129`；9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。；搜索命令及原始结果：`docs/audit/evidence/F61-search.txt`|
-|F62 / 机器人/手机|机器人页（Bots tab 列表/添加/详情）|`apps/desktop/src/renderer/src/redesign/BotsPane.tsx:1`|未移植|已存在 RemoteBots.qml:21-64 Telegram/飞书/Web 添加、列表和管理动作；remote_bots.py action 实际落盘。docs/audit/remaining-three/feishu.md、web.md 有真实配置/浏览器证据。原版 BotsPane.tsx:447-735 另有独立详情、搜索、personas/sessions 多选范围、邀请码刷新/取消及扫码创建；当前未全量补齐，组合项仍未移植，不能提升为已实现。|
+|F62 / 机器人/手机|机器人页（Bots tab 列表/添加/详情）|`apps/desktop/src/renderer/src/redesign/BotsPane.tsx:1`|未移植|已存在 RemoteBots.qml:21-64 Telegram/飞书/Web 添加、列表和管理动作；remote_bots.py action 实际落盘。docs/audit/remaining-three/feishu.md、web.md 有真实配置/浏览器证据。原版 BotsPane.tsx:447-735 另有独立详情、personas/sessions 多选范围、邀请码刷新/取消及扫码创建；当前未全量补齐，组合项仍未移植，不能提升为已实现。本轮177b3ac补搜索/字段，真实证据 parity-close/bots.json。|
 |F63 / 机器人/手机|远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）|`apps/desktop/src/main/index.ts:1`|已实现且可用|`app/src/mvvm/services/remote_bots.py:109`；本地 Telegram Bot API 完整往返：getUpdates 入站 -> RemoteBots.receive -> host.send -> 回合回复 -> sendMessage 出站；test_bot_roundtrip.py 回读 chat_id/text 与重开会话消息；非公网账号。；搜索命令及原始结果：`docs/audit/evidence/F63-search.txt`|
 |F64 / 机器人/手机|手机联动（QR/设备/中转）|`apps/desktop/src/renderer/src/redesign/PhonePane.tsx:1`, `apps/desktop/src/main/services/remote/web/phone.ts:1`|未移植|原版 PhonePane.tsx:1-220、services/remote/web/phone.ts:1-180 提供 QR、设备、LAN/relay 两通道，是可移植真功能，不是 Electron 特有。已有 web_pairing.py 本机浏览器安全配对与 RemoteBots.qml:32-34 入口，证据 remaining-three/web.md；完整 QR/LAN/relay/手机会话往返未完成。|
 |F65 / 设置与扩展|语言/主题/聊天字号|`apps/desktop/src/renderer/src/redesign/SettingsPane.tsx:92`|已实现且可用|`app/src/qml_shell.py:592`；SettingsModal.qml:280-345 三行 SetRow → qml_shell.py (legacy line reference; current anchor at left) setLanguage/setTheme/setTextSize（sm/md/lg/xl）；搜索命令及原始结果：`docs/audit/evidence/F65-search.txt`|

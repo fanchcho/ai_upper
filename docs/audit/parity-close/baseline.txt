@@ -1,0 +1,14 @@
+$ git log --oneline -8
+d105a24 fix: swallow Enter during IME composition and verify synthetic preedit commit
+1424504 docs: record Telegram local roundtrip and counts
+78687f9 test: verify local Telegram inbound-to-outbound roundtrip
+191dfad docs: record QLineEdit fcitx isolation
+8971540 docs: record system PySide6 6.8 IME attempt
+816161c docs: record unavailable PySide6 6.8 ABI wheel
+e301837 docs: record fcitx Qt6 plugin ABI rejection
+5f8a584 docs: record notification success and final counts
+$ git rev-parse HEAD
+d105a247504073e21fe43265044a989ddcab576d
+$ git status --porcelain
+$ git ls-remote origin refs/heads/develop
+d105a247504073e21fe43265044a989ddcab576d	refs/heads/develop
