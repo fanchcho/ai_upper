@@ -1,3 +1,5 @@
+> 历史报告已被本轮独立复核更新：以 `feature-parity-gap.md/.json`、`final-port-report.md` 和 `extensions-rounding.md` 末节为准。原 safeStorage 脚本已在 812fd57 提交且保留；下文“不提交”是当时状态，不再适用。同 fixture、同滚动 142 的字段坐标本轮已复核一致，正文/阴影仍未归零。
+
 # 本轮收口证据（整体未完成）
 
 基线45f71d16ec1637411362c8c6dca2c28bceb95292，本轮只处理原任务未完成项。
