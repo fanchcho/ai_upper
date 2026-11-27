@@ -296,6 +296,8 @@ class ShellBridge(QtCore.QObject):
         self._turn_id = ""
         # 未读会话 id：原版 Rail.tsx:1124-1156 在头像右上角打红点；当前会话打开即清除。
         self._unread: set[str] = set()
+        # 回复完成/错误通知：由 run() 注入 TrayController.notify；无托盘时为 None。
+        self._notifier: Any = None
         # 检查更新的状态机：idle / checking / latest / available / error。
         self._update_state: Dict[str, Any] = {"phase": "idle"}
         self._update_thread: Any = None
@@ -1469,6 +1471,18 @@ class ShellBridge(QtCore.QObject):
         """交付卡「在文件夹中显示」：同样只认边车路径。"""
         return bool(reveal(self._session(), tool_use_id, self._delivered_index(tool_use_id, path))["ok"])
 
+    def set_notifier(self, notifier: Any) -> None:
+        self._notifier = notifier
+
+    @QtCore.Slot(result=bool)
+    def closeToTray(self) -> bool:
+        """关窗是否驻留托盘：原版 index.ts:164-172（win32 默认开，其它平台仅显式 true）。"""
+        pref = self._config().get("closeToTray")
+        import sys as _sys
+        if _sys.platform == "win32":
+            return pref is not False
+        return pref is True
+
     @QtCore.Slot(result="QVariantList")
     def slashCommands(self) -> List[Dict[str, Any]]:
         """输入框 `/` 指令联想（原版 Composer.tsx:382-420 的内建指令子集）。
@@ -1597,6 +1611,17 @@ class ShellBridge(QtCore.QObject):
             self._publish()
         return changed
 
+    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
+        """窗口不在前台时弹回复通知（原版 reply-notify.ts:64-80）。"""
+        if self._notifier is None or self._window is None:
+            return
+        active = QtGui.QGuiApplication.focusWindow() is self._window
+        if active:
+            return
+        title = next((row["title"] for row in self._rows() if row["id"] == session_id), "Deva")
+        body = ("回复因错误中断：" + message) if error else "回复已完成"
+        self._notifier(title, body)
+
     def _handle(self, payload: Dict[str, Any]) -> bool:
         session_id = str(payload.get("sessionId") or "")
         event = payload.get("event")
@@ -1615,6 +1640,7 @@ class ShellBridge(QtCore.QObject):
             return self._turn.apply(event)
         if kind == "error":
             self._turn_id = ""
+            self._notify_turn(session_id, str(event.get("message") or ""), error=True)
             print(
                 "QML TURN ERROR",
                 json.dumps(event, ensure_ascii=False),
@@ -1626,6 +1652,7 @@ class ShellBridge(QtCore.QObject):
             return True
         if kind == "done":
             self.stop = str(event.get("stopReason") or "")
+            self._notify_turn(session_id, "", error=False)
             print(
                 "QML TURN DONE",
                 json.dumps(
@@ -1979,6 +2006,10 @@ def run(headless: bool) -> int:
         return 1
     window = roots[0]
     instance.attach(window)
+    from mvvm.services.tray import TrayController
+    tray = TrayController(app, window)
+    tray.install()
+    bridge.set_notifier(tray.notify)
     bridge.bind_window(window)
     bridge.initial()
     _select_page(window)

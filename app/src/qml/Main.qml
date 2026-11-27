@@ -47,6 +47,14 @@ ApplicationWindow {
 
     InteractionPrompt { }
 
+    // 关窗驻留托盘：原版 index.ts:164-173（仅配置开启时拦截 close）。
+    onClosing: function (close) {
+        if (shellBridge && shellBridge.closeToTray()) {
+            close.accepted = false
+            window.hide()
+        }
+    }
+
     // 原版 Ctrl/Cmd+B：对话页收起/展开会话列表。两个 sequence 分开写，
     // 让 Linux/Windows 用 Ctrl、macOS 用 Cmd；Qt 的 "Ctrl+B" 在 macOS 也映射 Command，
     // 但显式写 Meta+B 可读性更好。
