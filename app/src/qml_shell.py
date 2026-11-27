@@ -1631,6 +1631,51 @@ class ShellBridge(QtCore.QObject):
         return list(self._pending_inserts)
 
     @QtCore.Slot(str, result="QVariantMap")
+    def gitStatus(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.status(root)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitDiff(self, root: str, path: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.diff(root, path)
+
+    @QtCore.Slot(str, "QVariantList", result="QVariantMap")
+    def gitStage(self, root: str, paths: Any) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.stage(root, paths)
+
+    @QtCore.Slot(str, "QVariantList", result="QVariantMap")
+    def gitUnstage(self, root: str, paths: Any) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.unstage(root, paths)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitCommit(self, root: str, message: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.commit(root, message)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def gitBranches(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.branches(root)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitCheckout(self, root: str, ref: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.checkout(root, ref)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitCreateBranch(self, root: str, name: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.create_branch(root, name)
+
+    @QtCore.Slot(str, int, result="QVariantMap")
+    def gitLog(self, root: str, depth: int) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.log(root, depth)
+
+    @QtCore.Slot(str, result="QVariantMap")
     def providerModels(self, provider_id: str) -> Dict[str, Any]:
         """设置页「拉取模型」：真实调用 ModelGateway.list_models（provider:list-models 同语义）。"""
         if self._settings is None:
