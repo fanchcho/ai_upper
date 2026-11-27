@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-27T18:27:10.549630+00:00",
+  "generated_at": "2026-11-27T19:13:11.104643+00:00",
   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
   "source": {
     "deva": "/home/agent/shared_workspace/deva",
     "ai_upper": "/home/agent/shared_workspace/ai_upper",
-    "head": "634db76359e636d812c6bfe0f7197f70500e088b"
+    "head": "662ff86a727de76f8f1dfa3d6290a2424d53aae0"
   },
   "features": [
     {
@@ -163,7 +163,7 @@
       "deva": "apps/desktop/src/main/index.ts:175-181",
       "status": "implemented",
       "evidence": "QML bodyView.onLinkActivated 接 openExternal；test_qml_links.py 真实点击确认 URL 接线，但系统浏览器启动由测试拦截，外部浏览器效果未验证。此行判定仅限外链分派功能。",
-      "port_anchor": "app/src/qml_shell.py:1919",
+      "port_anchor": "app/src/qml_shell.py:1957",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -309,7 +309,7 @@
       "deva": "redesign/Composer.tsx:382-420",
       "status": "implemented",
       "evidence": "SlashMenu 支持 compact/rewind/技能；runSlashCommand/rewind 与真实键盘选择、回滚执行均已验证（out/remaining-impl/rewind.json）。",
-      "port_anchor": "app/src/qml_shell.py:1642",
+      "port_anchor": "app/src/qml_shell.py:1644",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -332,7 +332,7 @@
       "deva": "redesign/Composer.tsx:399-419；shared/mention.ts",
       "status": "implemented",
       "evidence": "09de966 实现 handleMentions、create_member、member_send 与后台成员回合；member_dispatch_ui.py 真实键盘 @ 选择并读回主/子会话存储。",
-      "port_anchor": "app/src/qml_shell.py:1622",
+      "port_anchor": "app/src/qml_shell.py:1624",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -356,7 +356,7 @@
       "deva": "services/reply-notify.ts:15-80；chat-turns.ts:801",
       "status": "not_ported",
       "evidence": "回复/后台完成/待处理通知代码已接，通知点击回到会话；真实宿主报 NOTIFY UNAVAILABLE tray_available=False supportsMessages=True，系统成功态未验证。",
-      "port_anchor": "app/src/qml_shell.py:2040",
+      "port_anchor": "app/src/qml_shell.py:2078",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -380,7 +380,7 @@
       "deva": "redesign/Rail.tsx:600-660（加号菜单）；preload/index.ts:805-940 chat.createSession",
       "status": "implemented",
       "evidence": "Main.qml (legacy line reference; current anchor at left) 加号 onClicked shellBridge.newSession；qml_shell.py (legacy line reference; current anchor at left) 建真实会话并落盘",
-      "port_anchor": "app/src/qml_shell.py:669",
+      "port_anchor": "app/src/qml_shell.py:671",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -406,7 +406,7 @@
       "deva": "redesign/Rail.tsx:700-760",
       "status": "implemented",
       "evidence": "Main.qml (legacy line reference; current anchor at left) 行 onClicked openSession；qml_shell.py (legacy line reference; current anchor at left) 读真实会话",
-      "port_anchor": "app/src/qml_shell.py:658",
+      "port_anchor": "app/src/qml_shell.py:660",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -431,7 +431,7 @@
       "deva": "redesign/Rail.tsx:175-182 RowMenu；chat:rename-session",
       "status": "implemented",
       "evidence": "Main.qml (legacy line reference; current anchor at left) 右键菜单 rename + 重命名弹层；qml_shell.py (legacy line reference; current anchor at left) 写盘",
-      "port_anchor": "app/src/qml_shell.py:701",
+      "port_anchor": "app/src/qml_shell.py:703",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -456,7 +456,7 @@
       "deva": "redesign/Rail.tsx:175-182；chat:delete-session",
       "status": "implemented",
       "evidence": "Main.qml 右键 delete + 确认框；qml_shell.py (legacy line reference; current anchor at left) 删会话文件",
-      "port_anchor": "app/src/qml_shell.py:681",
+      "port_anchor": "app/src/qml_shell.py:683",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -481,7 +481,7 @@
       "deva": "redesign/Rail.tsx:620-650；chat:set-archived",
       "status": "implemented",
       "evidence": "Main.qml (legacy line reference; current anchor at left) 归档横幅与右键 archive；qml_shell.py (legacy line reference; current anchor at left) archiveSession/unarchiveSession/archiveSessions",
-      "port_anchor": "app/src/qml_shell.py:717",
+      "port_anchor": "app/src/qml_shell.py:719",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -806,7 +806,7 @@
       "deva": "chat:plan-response；features/chat/blocks.tsx PlanCard",
       "status": "not_ported",
       "evidence": "只有 question/approval 的真实交互；未实现 plan-response 展示与回复。",
-      "port_anchor": "app/src/qml_shell.py:378",
+      "port_anchor": "app/src/qml_shell.py:380",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -923,7 +923,7 @@
       "deva": "redesign/Composer.tsx:973-991（busy 时空输入框显示停止键）；chat:abort",
       "status": "implemented",
       "evidence": "qml_shell.py stopGeneration → host.abort；Main.qml sendBtn busy 时切 Square 中性态；app/tests/test_qml_stop_generation.py 真实鼠标点停止并断言 stopReason=aborted；暗亮截图 out/feature-parity/stop-busy-*.png",
-      "port_anchor": "app/src/qml_shell.py:1459",
+      "port_anchor": "app/src/qml_shell.py:1461",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -971,7 +971,7 @@
       "deva": "redesign/Composer.tsx:382-386；chat:compact",
       "status": "implemented",
       "evidence": "SlashMenu -> 未替换的 ChatHost.compact -> 真实压缩服务与磁盘读回，见 out/final-port/compact-ui.json；暗亮 compact 截图。原测试替身不足，已补真实点击验证。",
-      "port_anchor": "app/src/qml_shell.py:1671",
+      "port_anchor": "app/src/qml_shell.py:1673",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1065,7 +1065,7 @@
       "deva": "redesign/ContextRing.tsx；chat:context-usage",
       "status": "implemented",
       "evidence": "qml_shell.py (legacy line reference; current anchor at left) contextUsage 真实计算；Main.qml ContextRing",
-      "port_anchor": "app/src/qml_shell.py:1128",
+      "port_anchor": "app/src/qml_shell.py:1130",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1116,7 +1116,7 @@
       "deva": "redesign/Composer.tsx:950；fs:pick-attachments",
       "status": "implemented",
       "evidence": "Main.qml (legacy line reference; current anchor at left) clipBtn → pickAttachments；qml_shell.py (legacy line reference; current anchor at left) QFileDialog + AttachmentService",
-      "port_anchor": "app/src/qml_shell.py:1519",
+      "port_anchor": "app/src/qml_shell.py:1521",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1141,7 +1141,7 @@
       "deva": "redesign/Composer.tsx:576-596；fs:dropped-entries",
       "status": "implemented",
       "evidence": "Main.qml DropArea + dropOverlay → shellBridge.acceptDroppedFiles；attachments.py inspect_paths 登记文件/文件夹；app/tests/test_qml_attachments_drop.py 用真实 QDragEnterEvent/QDropEvent 投递并断言 pendingFiles；暗亮截图 out/feature-parity/drop-overlay-*.png",
-      "port_anchor": "app/src/qml_shell.py:1546",
+      "port_anchor": "app/src/qml_shell.py:1548",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1166,7 +1166,7 @@
       "deva": "redesign/Composer.tsx:508,567；fs:paste-attachment",
       "status": "not_ported",
       "evidence": "粘贴图片已接且有真实 Ctrl+V 验证；原版包括 clipboard.files，当前只有 attachClipboardImage，没有文件 URL 粘贴附件路径。",
-      "port_anchor": "app/src/qml_shell.py:1569",
+      "port_anchor": "app/src/qml_shell.py:1571",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1214,7 +1214,7 @@
       "deva": "features/chat/DeliverablesCard.tsx；deliverables:*",
       "status": "implemented",
       "evidence": "qml_shell.py (legacy line reference; current anchor at left) deliveryItems/openDeliverable/revealDeliverable/copyDeliverablePath；Main.qml (legacy line reference; current anchor at left)",
-      "port_anchor": "app/src/qml_shell.py:1600",
+      "port_anchor": "app/src/qml_shell.py:1602",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1310,7 +1310,7 @@
       "deva": "redesign/ProfileView.tsx PersonaEditor；personas:upsert/remove",
       "status": "implemented",
       "evidence": "PersonaRoster 编辑/新建/删除；test_qml_persona_management.py 真实保存/删除并读 PersonaStore。",
-      "port_anchor": "app/src/qml_shell.py:358",
+      "port_anchor": "app/src/qml_shell.py:360",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1403,7 +1403,7 @@
       "deva": "redesign/Rail.tsx QuickStart",
       "status": "implemented",
       "evidence": "qml_shell.py (legacy line reference; current anchor at left) quickStartPersonas/startQuickStart；Main.qml 空态卡片",
-      "port_anchor": "app/src/qml_shell.py:885",
+      "port_anchor": "app/src/qml_shell.py:887",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1478,7 +1478,7 @@
       "deva": "services/scheduler.ts:103 new Notification",
       "status": "not_ported",
       "evidence": "后台任务接通现有通知，但当前宿主无托盘，任务系统通知成功态未验证。",
-      "port_anchor": "app/src/qml_shell.py:2040",
+      "port_anchor": "app/src/qml_shell.py:2078",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1524,7 +1524,7 @@
       "deva": "redesign/BotsPane.tsx:1-80；remote:get-state",
       "status": "not_ported",
       "evidence": "真实配置列表/回复模式/范围/删除点击与写盘通过 out/final-port/bots-ui.json；Telegram 添加路径已实现但无真实凭据未验证，飞书/Web 创建和完整详情尚缺。",
-      "port_anchor": "app/src/qml/RemoteBots.qml:26",
+      "port_anchor": "app/src/qml/RemoteBots.qml:27",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1547,7 +1547,7 @@
       "deva": "services/remote/*；remote:*",
       "status": "not_ported",
       "evidence": "已有 Telegram 真实 API 连接/配对代码与配置管理；外部成功态未验证，飞书/Web 适配器未移植，不再声称无任何 remote 服务。",
-      "port_anchor": "app/src/mvvm/services/remote_bots.py:79",
+      "port_anchor": "app/src/mvvm/services/remote_bots.py:109",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1594,7 +1594,7 @@
       "deva": "redesign/SettingsPane.tsx:92-176",
       "status": "implemented",
       "evidence": "SettingsModal.qml:280-345 三行 SetRow → qml_shell.py (legacy line reference; current anchor at left) setLanguage/setTheme/setTextSize（sm/md/lg/xl）",
-      "port_anchor": "app/src/qml_shell.py:560",
+      "port_anchor": "app/src/qml_shell.py:562",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1619,7 +1619,7 @@
       "deva": "features/settings/ModelSettings.tsx；preload models",
       "status": "implemented",
       "evidence": "SettingsModal modelsPane + qml_shell.py (legacy line reference; current anchor at left)/850-861 setProviderHeaders；上一轮已验收",
-      "port_anchor": "app/src/qml_shell.py:1008",
+      "port_anchor": "app/src/qml_shell.py:1010",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1668,7 +1668,7 @@
       "deva": "ModelSettings.tsx 自定义入口；provider:list-models",
       "status": "implemented",
       "evidence": "SettingsModal.qml:545 custom-model 入口 + qml_shell.py (legacy line reference; current anchor at left) addProvider/addModel",
-      "port_anchor": "app/src/qml_shell.py:979",
+      "port_anchor": "app/src/qml_shell.py:981",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1791,7 +1791,7 @@
       "deva": "SettingsPane.tsx:878-894",
       "status": "implemented",
       "evidence": "SettingsModal.qml aboutPane + qml_shell.py appVersion",
-      "port_anchor": "app/src/qml_shell.py:428",
+      "port_anchor": "app/src/qml_shell.py:430",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1816,7 +1816,7 @@
       "deva": "services/updater.ts:270-273；UpdateSection.tsx",
       "status": "implemented",
       "evidence": "qml_shell.py (legacy line reference; current anchor at left) checkForUpdates/_check_updates_worker（GitHub Releases API）",
-      "port_anchor": "app/src/qml_shell.py:438",
+      "port_anchor": "app/src/qml_shell.py:440",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1842,7 +1842,7 @@
       "deva": "services/updater.ts:270-273 download/install；UpdateSection.tsx:47-120",
       "status": "not_ported",
       "evidence": "已实现 downloadUpdate/installUpdate 和 About 按钮；真实本地下载字节校验通过，installUpdate 在 offscreen 报 QPlatformServices::openDocument 不支持，成功打开未验证，按未移植计。",
-      "port_anchor": "app/src/qml_shell.py:438",
+      "port_anchor": "app/src/qml_shell.py:440",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1890,7 +1890,7 @@
       "deva": "services/clipboard.ts:15-25",
       "status": "implemented",
       "evidence": "qml_shell.py (legacy line reference; current anchor at left) copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验",
-      "port_anchor": "app/src/qml_shell.py:1935",
+      "port_anchor": "app/src/qml_shell.py:1973",
       "entry": "QML",
       "web_entry": {
         "status": "not_ported",
@@ -1959,8 +1959,8 @@
       "group": "其他原生能力",
       "name": "Git 面板（状态/暂存/提交/分支/同步）",
       "deva": "redesign/GitWidget.tsx:169；preload git:*（25 个方法）",
-      "status": "not_ported",
-      "evidence": "GitPanel 已接 status/stage/commit/branches/log/diff/discard/merge/remote/分支/分页常用操作并真实临时仓库测试；generate-commit-message、set-config、cancel 等剩余方法与完整原版页面未接，按未移植计。",
+      "status": "implemented",
+      "evidence": "GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。",
       "port_anchor": "app/src/qml/Main.qml:18",
       "entry": "QML",
       "web_entry": {
@@ -2164,8 +2164,8 @@
     }
   ],
   "counts": {
-    "implemented": 57,
-    "not_ported": 27,
+    "implemented": 58,
+    "not_ported": 26,
     "na": 4,
     "ui_only": 1
   },

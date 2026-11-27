@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def contextUsage app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1128:    def contextUsage(self) -> Dict[str, Any]:
+app/src/qml_shell.py:1130:    def contextUsage(self) -> Dict[str, Any]:

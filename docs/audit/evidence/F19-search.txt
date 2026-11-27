@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def deleteSession app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:681:    def deleteSession(self, session_id: str) -> bool:
+app/src/qml_shell.py:683:    def deleteSession(self, session_id: str) -> bool:

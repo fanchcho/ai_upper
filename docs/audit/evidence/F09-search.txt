@@ -1,11 +1,10 @@
 $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1059:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
-app/src/qml_shell.py:1095:    def effortMenu(self) -> Dict[str, Any]:
-app/src/qml_shell.py:2325:        effort = self.effortMenu()
-app/src/qml_shell.py:2328:        window.setProperty("modelGroups", self.modelMenuGroups())
-app/src/qml_shell.py:2329:        window.setProperty("effortMenu", effort)
-app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
+app/src/qml_shell.py:1061:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
+app/src/qml_shell.py:1097:    def effortMenu(self) -> Dict[str, Any]:
+app/src/qml_shell.py:2363:        effort = self.effortMenu()
+app/src/qml_shell.py:2366:        window.setProperty("modelGroups", self.modelMenuGroups())
+app/src/qml_shell.py:2367:        window.setProperty("effortMenu", effort)
 app/src/qml/EditContextMenu.qml:7:Menu {
 app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
 app/src/qml/EditContextMenu.qml:23:    MenuItem {
@@ -17,6 +16,15 @@ app/src/qml/EditContextMenu.qml:60:        objectName: "editMenuPaste"
 app/src/qml/EditContextMenu.qml:76:    MenuSeparator {
 app/src/qml/EditContextMenu.qml:81:    MenuItem {
 app/src/qml/EditContextMenu.qml:83:        objectName: "editMenuSelectAll"
+app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
+app/src/qml/ModelPicker.qml:35:    // 模型分组：[{id, name, models:[{id, name}]}]，由 Python `modelMenuGroups()` 投影。
+app/src/qml/ModelPicker.qml:39:    // 思考等级菜单：{title, options:[{level,name,hint}], current}，由 `effortMenu()` 投影。
+app/src/qml/ModelPicker.qml:40:    property var effortMenu: ({})
+app/src/qml/ModelPicker.qml:54:                var opts = (root.effortMenu && root.effortMenu.options) || []
+app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMenu && root.effortMenu.options) || []).length || 1)
+app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
+app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
+app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
 app/src/qml/Main.qml:37:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
 app/src/qml/Main.qml:64:    EditContextMenu {
 app/src/qml/Main.qml:65:        id: composerMenu
@@ -55,13 +63,5 @@ app/src/qml/Main.qml:2469:            target: ctxMenu
 app/src/qml/Main.qml:2473:            id: ctxMenu
 app/src/qml/Main.qml:2474:            objectName: "ctxMenu"
 app/src/qml/Main.qml:2505:                        objectName: "ctxMenuItem" + index
-app/src/qml/ModelPicker.qml:35:    // 模型分组：[{id, name, models:[{id, name}]}]，由 Python `modelMenuGroups()` 投影。
-app/src/qml/ModelPicker.qml:39:    // 思考等级菜单：{title, options:[{level,name,hint}], current}，由 `effortMenu()` 投影。
-app/src/qml/ModelPicker.qml:40:    property var effortMenu: ({})
-app/src/qml/ModelPicker.qml:54:                var opts = (root.effortMenu && root.effortMenu.options) || []
-app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMenu && root.effortMenu.options) || []).length || 1)
-app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
-app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
-app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
 app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
 app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)

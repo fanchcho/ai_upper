@@ -43,7 +43,7 @@ patch={
 'F42':('na','浏览器操作胶囊依赖原版内置浏览器（BrowserView），F78 路线 B 无 QtWebEngine，故不适用；原版依据 features/browser/BrowserCapsule.tsx、services/browser/host.ts。'),
 'F56':('implemented','memory_store.py 实现角色记忆 v2 JSON（personas/memory/<id>.json）；PersonaRoster 资料页新增列表/添加/删除；test_role_memory.py 真实写盘读回。'),
 'F78':('na','路线 B 明确移除 QtWebEngine，原版 browser/host.ts 的 BrowserView、capturePage、live frame 与 16 条 browser:* 无可真实交互的 QML 等效；不引入新依赖，不造空壳。'),
-'F85':('not_ported','GitPanel 已接 status/stage/commit/branches/log/diff/discard/merge/remote/分支/分页常用操作并真实临时仓库测试；generate-commit-message、set-config、cancel 等剩余方法与完整原版页面未接，按未移植计。'),
+'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 
 for f in features:

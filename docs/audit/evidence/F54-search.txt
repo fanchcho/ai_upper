@@ -1,4 +1,4 @@
 $ rg -n --glob *.qml --glob *.py setAvatarImage|set_avatar_image app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:869:            shared_store().set_avatar_image(str(persona_id or ""), uri)
+app/src/qml_shell.py:871:            shared_store().set_avatar_image(str(persona_id or ""), uri)
 app/src/mvvm/services/persona_store.py:269:    def set_avatar_image(self, persona_id: Any, data_uri: Any) -> str:

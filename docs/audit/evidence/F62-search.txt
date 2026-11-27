@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py botLink app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/RemoteBots.qml:26:            SettingsButton { objectName: "botLink"; text: "添加 Telegram"; onClicked: root.error = root.api.linkTelegram(token.text) }
+app/src/qml/RemoteBots.qml:27:            SettingsButton { objectName: "botLink"; text: "添加 Telegram"; onClicked: root.error = root.api.linkTelegram(token.text) }
