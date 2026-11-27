@@ -169,6 +169,7 @@ ApplicationWindow {
     property var pendingInserts: []
     property var todoCapsule: ({})
     property var backgroundCapsule: ({})
+    property var backgroundTasks: []
     property string suggestPrefix: "/"
     property int suggestStart: 0
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。

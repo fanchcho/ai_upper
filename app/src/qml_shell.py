@@ -1833,6 +1833,46 @@ class ShellBridge(QtCore.QObject):
         except Exception as exc:  # noqa: BLE001 - 网络/配置错误要在界面显示
             return {"ok": False, "models": [], "message": f"{type(exc).__name__}: {exc}"}
 
+    @QtCore.Slot(result="QVariantList")
+    def backgroundTasks(self) -> List[Dict[str, Any]]:
+        """当前主对话的成员/后台任务列表（原版 BackgroundCapsule 的列表/状态/打开/取消子集）。"""
+        session = self._session()
+        if session is None:
+            return []
+        rows = []
+        for member in getattr(session, "members", None) or []:
+            if member.get("removedAt"):
+                continue
+            sid = str(member.get("sessionId") or "")
+            child = self._store.load_session(sid) if sid else None
+            if child is None:
+                continue
+            busy = self._host.is_busy(sid)
+            rows.append({"id": sid, "name": member.get("name") or sid,
+                         "sessionId": sid, "busy": busy,
+                         "status": "running" if busy else "idle",
+                         "messages": len(child.messages or [])})
+        return rows
+
+    @QtCore.Slot(str, result=bool)
+    def cancelBackground(self, session_id: str) -> bool:
+        sid = str(session_id or "")
+        if not sid or not self._host.is_busy(sid):
+            return False
+        info = self._host.attach(sid)
+        turn_id = info.get("turnId")
+        return bool(turn_id and self._host.abort(turn_id).get("ok", False))
+
+    @QtCore.Slot(str, result=bool)
+    def openBackground(self, session_id: str) -> bool:
+        sid = str(session_id or "")
+        if not sid or self._store.load_session(sid) is None:
+            return False
+        self.openSession(sid)
+        if self._window is not None:
+            self._window.setProperty("page", "chat")
+        return True
+
     @QtCore.Slot(result="QVariantMap")
     def backgroundCapsule(self) -> Dict[str, Any]:
         """后台任务胶囊数据：会话边车 `background`（原版 BackgroundCapsule）。"""
@@ -2274,6 +2314,7 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("pendingInserts", self.pendingInserts())
         window.setProperty("todoCapsule", self.todoCapsule())
         window.setProperty("backgroundCapsule", self.backgroundCapsule())
+        window.setProperty("backgroundTasks", self.backgroundTasks())
         # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
         window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。

@@ -9,12 +9,13 @@ Item {
     objectName: "composerCapsules"
     property var todo: ({})
     property var pending: []
-    property var background: ({})
+    property var background: []
     property var browser: null
     property bool todoOpen: false
+    property bool backgroundOpen: false
     readonly property bool hasTodo: todo && (todo.items || []).length > 0
     readonly property bool hasPending: (pending || []).length > 0
-    readonly property bool hasBackground: background && Object.keys(background).length > 0
+    readonly property bool hasBackground: (background || []).length > 0
     readonly property bool hasBrowser: browser && browser.open === true
     visible: hasTodo || hasPending || hasBackground || hasBrowser
     height: visible ? 30 : 0
@@ -54,7 +55,8 @@ Item {
             visible: root.hasBackground
             height: 26; radius: 13; width: bgText.implicitWidth + 22
             color: Theme.bgHover
-            Text { id: bgText; anchors.centerIn: parent; text: "后台任务 " + Object.keys(root.background).length; color: Theme.fgMuted; font.family: Theme.sansFamily; font.pixelSize: 12 }
+            Text { id: bgText; anchors.centerIn: parent; text: "后台任务 " + (root.background || []).length; color: Theme.fgMuted; font.family: Theme.sansFamily; font.pixelSize: 12 }
+            MouseArea { anchors.fill: parent; onClicked: root.backgroundOpen = !root.backgroundOpen }
         }
         Rectangle {
             objectName: "browserCapsule"
@@ -62,6 +64,26 @@ Item {
             height: 26; radius: 13; width: 88
             color: Theme.bgHover
             Text { anchors.centerIn: parent; text: "浏览器操作"; color: Theme.fgMuted; font.family: Theme.sansFamily; font.pixelSize: 12 }
+        }
+    }
+    Rectangle {
+        objectName: "backgroundCapsuleList"
+        visible: root.backgroundOpen && root.hasBackground
+        x: 0; y: 30; width: 360; height: visible ? Math.min(260, 14 + (root.background || []).length * 44) : 0
+        radius: Theme.radius; color: Theme.bgElevated; border.width: 1; border.color: Theme.border
+        z: 20
+        Column {
+            x: 8; y: 6; spacing: 2
+            Repeater {
+                model: root.background || []
+                delegate: Row {
+                    required property var modelData
+                    width: parent.width; height: 40
+                    Text { width: 150; text: modelData.name + " · " + modelData.status; color: Theme.fg; font.pixelSize: 12; elide: Text.ElideRight }
+                    SettingsButton { objectName: "bgOpen_" + modelData.id; text: "打开"; height: 24; onClicked: shellBridge.openBackground(modelData.id) }
+                    SettingsButton { objectName: "bgCancel_" + modelData.id; text: "取消"; height: 24; onClicked: { shellBridge.cancelBackground(modelData.id); root.backgroundOpen = false } }
+                }
+            }
         }
     }
     Rectangle {
