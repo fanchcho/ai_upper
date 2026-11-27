@@ -134,6 +134,6 @@ Popup {
             SettingsButton { objectName: "gitAddRemote"; text: "添加"; onClicked: { var r = shellBridge.gitAddRemote(repoRoot, root.remoteName, root.remoteUrl); if (r.ok) { root.remoteName = ""; root.remoteUrl = ""; root.reload() } else root.notice = r.error } }
             SettingsButton { objectName: "gitRemoveRemote"; text: "删除"; onClicked: { var r = shellBridge.gitRemoveRemote(repoRoot, root.remoteName); if (r.ok) root.reload(); else root.notice = r.error } }
         }
-        Text { text: root.notice; color: Theme.danger; font.pixelSize: 12; visible: text.length > 0 }
+        Text { objectName: "gitNotice"; text: root.notice; color: Theme.danger; font.pixelSize: 12; visible: text.length > 0 }
     }
 }
