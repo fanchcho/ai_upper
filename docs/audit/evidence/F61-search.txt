@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py originSessionId app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/mvvm/services/scheduled_tasks.py:103:                        'sessionId':identity,'originSessionId':self.shell._active,'createdAt':now,
+app/src/mvvm/services/scheduled_tasks.py:129:                        'sessionId':identity,'originSessionId':self.shell._active,'createdAt':now,

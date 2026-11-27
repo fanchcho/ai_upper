@@ -2,4 +2,4 @@ $ rg -n --glob *.qml --glob *.py toggleSidebar app/src/qml app/src/qml_shell.py 
 exit=0
 app/src/qml/Main.qml:99:        onActivated: window.toggleSidebar()
 app/src/qml/Main.qml:105:        onActivated: window.toggleSidebar()
-app/src/qml/Main.qml:2027:    function toggleSidebar() {
+app/src/qml/Main.qml:2029:    function toggleSidebar() {

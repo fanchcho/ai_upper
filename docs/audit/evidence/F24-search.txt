@@ -5,12 +5,12 @@ app/src/qml/Main.qml:207:    property var selectedSessions: []
 app/src/qml/Main.qml:836:                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
 app/src/qml/Main.qml:920:                text: window.selectedSessions.length + I18n.t("native.message0")
 app/src/qml/Main.qml:935:                    text: window.selectedSessions.length === window.listedSessions.length
-app/src/qml/Main.qml:2291:        window.selectedSessions = id ? [String(id)] : []
-app/src/qml/Main.qml:2299:        var next = window.selectedSessions
-app/src/qml/Main.qml:2305:        window.selectedSessionsChanged()
-app/src/qml/Main.qml:2310:        if (window.selectedSessions.length === all.length && all.length > 0) {
-app/src/qml/Main.qml:2311:            window.selectedSessions = []
-app/src/qml/Main.qml:2314:        window.selectedSessions = window.listedSessionIds.slice()
-app/src/qml/Main.qml:2319:        var ids = window.selectedSessions.slice()
-app/src/qml/Main.qml:2332:        window.selectedSessions = []
-app/src/qml/Main.qml:2371:        window.selectedSessions = []
+app/src/qml/Main.qml:2293:        window.selectedSessions = id ? [String(id)] : []
+app/src/qml/Main.qml:2301:        var next = window.selectedSessions
+app/src/qml/Main.qml:2307:        window.selectedSessionsChanged()
+app/src/qml/Main.qml:2312:        if (window.selectedSessions.length === all.length && all.length > 0) {
+app/src/qml/Main.qml:2313:            window.selectedSessions = []
+app/src/qml/Main.qml:2316:        window.selectedSessions = window.listedSessionIds.slice()
+app/src/qml/Main.qml:2321:        var ids = window.selectedSessions.slice()
+app/src/qml/Main.qml:2334:        window.selectedSessions = []
+app/src/qml/Main.qml:2373:        window.selectedSessions = []
