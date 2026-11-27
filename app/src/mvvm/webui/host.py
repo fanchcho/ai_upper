@@ -199,7 +199,7 @@ class ChatHost:
         attachments = request.get("attachments")
         # 附件：逐条读成内容块（排在提问正文之前），读不进的转成 note 拼在正文后的括号里。
         # 语义逐条对齐 Deva `chat.ts` sendMessage（buildAttachmentPart 的三种前缀标记）。
-        parts: list[Any] = self._members.mentions(session, text)
+        parts: list[Any] = self._members.mentions(session, text) + self._members.take_task_notices(session_id)
         notes: list[str] = []
         adapter = _adapter_of(request.get("model"))
         if isinstance(attachments, list):

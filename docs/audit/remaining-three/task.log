@@ -1,17 +1,29 @@
 QML SEND {"sessionId": "s-1", "text": "Ask Daily about its results", "attachments": []}
-QML TURN 3694e57ed66045daa48fbc944e861d11
+QML TURN 14191659b9ec4e27b3c609e7029fefbe
 QML STREAM {"text": "DISPATCHED"}
 QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
 QML SEND {"sessionId": "s-1", "text": "Stop the next task question", "attachments": []}
-QML TURN 0240d666559d4bc3b9d5c6c3af18d6d1
+QML TURN e613b2f583c34da19805c576b1e34516
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Continue after the stopped task", "attachments": []}
+QML TURN d3de203b9cf344c4be23b68a0c1e094e
+QML SEND {"sessionId": "s-1", "text": "Ask for an empty answer", "attachments": []}
+QML TURN 942cf727fdd64290973699319f55f269
 QML STREAM {"text": "STOPPED"}
 QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
 QML SEND {"sessionId": "s-1", "text": "Ask Daily about its results", "attachments": []}
-QML TURN 617687f6f17d4d7eba7b5fcc1989a8ef
+QML TURN 6ed31efdcfae4eae903c860f0000a793
 QML STREAM {"text": "DISPATCHED"}
 QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
 QML SEND {"sessionId": "s-1", "text": "Stop the next task question", "attachments": []}
-QML TURN 093852ba23724f019e3095727b8453a6
+QML TURN 4f595c45500141e8bd30b3f644d45bdf
 QML STREAM {"text": "STOPPED"}
 QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
-PASS actual member_send/member_stop task fallback, reopened sessions, task schedule unchanged, dark/light keyboard input
+QML SEND {"sessionId": "s-1", "text": "Continue after the stopped task", "attachments": []}
+QML TURN f7c1616138b947b99001ffaff7d6f17f
+QML SEND {"sessionId": "s-1", "text": "Ask for an empty answer", "attachments": []}
+QML TURN 3fdf319dba474e6088dc11f038eb69f7
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS actual task send/stop, unattended mode, stopped notice deferred then consumed, empty answer wakes main without replaying historical answer, reopened stores, schedule unchanged, dark/light keyboard input

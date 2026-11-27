@@ -21,7 +21,8 @@ class Wire:
  async def post(self,url,**kw):
   data=json.loads(kw['body']);self.requests.append(data);serialized=json.dumps(data['messages'])
   if 'TASK_SEED' in serialized:
-   if 'LONG_JOB' in serialized:await asyncio.sleep(1);wire=text_stream('SHOULD_ABORT')
+   if 'EMPTY_REPLY' in serialized:wire=text_stream('')
+   elif 'LONG_JOB' in serialized:await asyncio.sleep(1);wire=text_stream('SHOULD_ABORT')
    else:wire=text_stream('TASK_ANSWER')
   else:
    n=self.parent;self.parent+=1
@@ -29,6 +30,7 @@ class Wire:
    elif n==1:wire=text_stream('DISPATCHED')
    elif n==2:wire=tool_stream([('member_send',{'member':'Daily','task':'Stop test','message':'LONG_JOB'})])
    elif n==3:wire=tool_stream([('member_stop',{'member':'Daily'})])
+   elif n==6:wire=tool_stream([('member_send',{'member':'Daily','task':'Empty answer','message':'EMPTY_REPLY'})])
    else:wire=text_stream('STOPPED')
   return await wire.post(url,**kw)
 app=QGuiApplication([]);QFontDatabase.addApplicationFont('.tmp/theme-settings/NotoSansCJKsc-Regular.otf');out=Path('out/remaining-three');out.mkdir(parents=True,exist_ok=True);results=[]
@@ -52,6 +54,19 @@ for theme in ['dark','light']:
  assert 'TASK_ANSWER' in main.model_dump_json() and 'LONG_JOB' in child.model_dump_json() and 'SHOULD_ABORT' not in child.model_dump_json()
  assert (h/'tasks.json').read_bytes()==before
  assert not main.members
+ assert not b._host.vm_for(child.id).tools.interactive
+ assert 'Daily：已停止' not in main.model_dump_json()
+ assert _pump(app,lambda:any(len(r)>4 and r[4]=='task-stopped' for r in b._host._members.reports),3)
+ send('Continue after the stopped task')
+ assert _pump(app,lambda:wire.parent>=6 and not b._host.is_busy(main.id),10)
+ disk=ChatSessionStore(h);assert '用户问起时再处理' in disk.load_session(main.id).model_dump_json()
+ assert not any(len(r)>4 and r[4]=='task-stopped' for r in b._host._members.reports)
+ send('Ask for an empty answer')
+ assert _pump(app,lambda:wire.parent>=9 and not b._host.is_busy(main.id) and not b._host.is_busy(child.id),10)
+ disk=ChatSessionStore(h);main=disk.load_session(main.id);child=disk.load_session(child.id)
+ assert '模型没有返回任何正文' in main.model_dump_json()
+ assert sum(m.text()=='Daily：TASK_ANSWER' for m in main.messages)==1
+ assert (h/'tasks.json').read_bytes()==before
  results.append({'theme':theme,'main':main.model_dump(),'taskSession':child.model_dump(),'task':json.loads(before),'requests':wire.requests})
  api.timer.stop();t.stop();w.close();e.deleteLater();_pump(app,lambda:False,.2)
-(out/'task-fallback.json').write_text(json.dumps(results,ensure_ascii=False,indent=2));print('PASS actual member_send/member_stop task fallback, reopened sessions, task schedule unchanged, dark/light keyboard input')
+(out/'task-fallback.json').write_text(json.dumps(results,ensure_ascii=False,indent=2));print('PASS actual task send/stop, unattended mode, stopped notice deferred then consumed, empty answer wakes main without replaying historical answer, reopened stores, schedule unchanged, dark/light keyboard input')

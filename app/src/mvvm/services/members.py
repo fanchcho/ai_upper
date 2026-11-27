@@ -43,9 +43,15 @@ class Members:
         if self.host.is_busy(sid):return ToolResult('定时任务正在运行，等这次完成再转给它',True)
         subject=str(args.get('task') or args.get('message') or '').strip()
         if not subject:return ToolResult('缺少任务标题（task）',True)
-        child.model=task.get('auth',{}).get('modelRef') or child.model or main.model
+        vm=self.host.vm_for(sid)
+        from mvvm.services.model_resolve import resolve_ref,resolve_default_model
+        section=vm._models_section_now()
+        model=resolve_ref(task.get('auth',{}).get('modelRef'),section) or resolve_default_model(section)
+        child.model=model.ref if model else main.model
+        vm.tools.interactive=False
+        vm.tools._tools.pop('deliver_result',None)
         self.host.store.save(sid)
-        self.task_asks[sid]={'main':main.id,'title':task['title'],'subject':subject,'wake':bool(args.get('report_to_me'))}
+        self.task_asks[sid]={'main':main.id,'title':task['title'],'subject':subject,'wake':bool(args.get('report_to_me')),'start':len(child.messages)}
         try:self.host.send({'sessionId':sid,'text':'【主角色派来的任务】'+subject+'\n'+str(args.get('message') or subject)})
         except Exception:
             self.task_asks.pop(sid,None);raise
@@ -209,12 +215,13 @@ class Members:
             child=self.host.store.load_session(sid)
             turn=self.host._turns.get(self.host._session_turn.get(sid,''))
             stopped=bool(turn and (turn.aborted or turn.stop_reason=='aborted'))
-            failed=bool(turn and turn.stop_reason=='error')
-            text=next((m.text() for m in reversed(child.messages) if m.role=='assistant'),'')
+            failed=bool(turn and turn.stop_reason in ('error','max_steps','step_limit','repeated','degenerate'))
+            text='\n'.join(m.text() for m in child.messages[ask['start']:] if m.role=='assistant').strip()
+            failed=failed or not text
             if stopped:text='已停止：'+ask['subject']
-            elif failed:text=turn.error_message or '定时任务回答失败'
+            elif failed:text=(turn.error_message if turn else '') or '定时任务回答未完成'+('：'+text if text else '')
             with self.lock:
-                self.reports.append([ask['main'],ask['title'],text,'' if stopped else '处理任务回答' if ask['wake'] or failed else ''])
+                self.reports.append([ask['main'],ask['title'],text,'' if stopped else '处理任务回答' if ask['wake'] or failed else '', 'task-stopped' if stopped else ''])
                 self.save_reports()
             return
         if sid not in self.pending: return
@@ -249,6 +256,7 @@ class Members:
             main = self.host.store.load_session(sid)
             if main:
                 group=row[4] if len(row)>4 else ''
+                if group=='task-stopped':continue
                 if wake and group and any(d.get('reportToMe') and d.get('group')==group for m in main.members or [] if m['sessionId'] in self.pending for d in m.get('openTasks',[])):continue
                 grouped=[r for r in self.reports if r[0]==sid and len(r)>4 and r[3] and r[4]==group] if wake and group else [row]
                 if wake:
@@ -260,3 +268,11 @@ class Members:
                 for result in grouped if main else [row]:
                     if result in self.reports:self.reports.remove(result)
                 self.save_reports()
+
+    def take_task_notices(self, sid):
+        with self.lock:
+            rows=[r for r in self.reports if r[0]==sid and len(r)>4 and r[4]=='task-stopped']
+            if not rows:return []
+            for row in rows:self.reports.remove(row)
+            self.save_reports()
+        return [TextPart(text='定时任务「'+r[1]+'」'+r[2]+'；本次没有向用户交付回答，用户问起时再处理。') for r in rows]
