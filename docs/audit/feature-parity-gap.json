@@ -4653,5 +4653,17 @@
       "not_ported": 112
     }
   },
-  "source_inventory": "docs/audit/evidence/source-inventory.json"
+  "source_inventory": "docs/audit/evidence/source-inventory.json",
+  "validation": {
+    "full_regression": {
+      "passed": 1445,
+      "skipped": 9,
+      "failed": 0,
+      "seconds": 440.75,
+      "source_revision": "da31437ecb7229cfe10f00de0ac765384a9d0750",
+      "raw_log": "docs/audit/evidence/pytest-final.log"
+    },
+    "source_drift": "docs/audit/evidence/reference-drift.json",
+    "original_test_assertions_changed": false
+  }
 }

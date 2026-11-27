@@ -1,0 +1,10 @@
+{
+  "command": "AI_UPPER_HOME=/tmp/ai-upper-final-stable TMPDIR=$PWD/.tmp/final-port LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software .venv/bin/python -m pytest app/tests -q --basetemp=/tmp/ai-upper-final-stable-tests",
+  "exit_code": 0,
+  "passed": 1445,
+  "skipped": 9,
+  "failed": 0,
+  "seconds": 440.75,
+  "source_tree_sha": "3a61ad72e8e5b193a152acb5be6c69f9c89e179c",
+  "existing_tests_modified": false
+}

@@ -6,7 +6,7 @@
 
 组合项只要仍有原版行为未补齐，就保守记为未移植，并明确已有实现；不把部分能力升级为完整可用。只有界面专指可见而无动作入口。托盘等环境限制保留四态字段，同时在证据标未验证，不能当作原版不存在。
 
-原版 deva 工作树本身存在其他执行的修改（包括新增 history-page 等），本执行只读。当前磁盘依据与旧 169 条统计不一致：172 注册 = 168 handle + 4 on。原始枚举、preload 每次调用的 文件:行号、全部 269 源文件与 1097 个非 IPC 事件声明见 evidence/source-inventory.json。动态表达式注册需人工复核，清单不把正则本身当功能验收。
+原版 deva 工作树本身存在其他执行的修改（包括新增 history-page 等），本执行只读。当前磁盘依据与旧 169 条统计不一致：172 注册 = 168 handle + 4 on。原始枚举、preload 每次调用的 文件:行号、全部 270 源文件与 1097 个非 IPC 事件声明见 evidence/source-inventory.json。动态表达式注册需人工复核，清单不把正则本身当功能验收。
 
 web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvvm/webui 只复用 backend，每行 web_entry 均为未移植。web/host 同名 API 不计 QML 可用。
 
@@ -355,3 +355,7 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
 |F74|`app/tests/test_qml_settings_overlay.py`|
 |F77|`app/tests/test_qml_chat_files_ui.py`|
 |F82|`out/final-port/proxy-routes.json`|
+
+最终固定源码全量回归：**1445 passed / 9 skipped / 0 failed，440.75s**。命令与原始日志见 final-port-report.md、evidence/pytest-final.log。
+
+收尾原版参考又发生 4 个文件变化并新增 member-folder.ts；重新扫描源文件共 270 个，IPC/preload/hook 数未变化。证据 reference-drift.json；F14/F80/F86 仍保守记未移植，未把变化后的原版能力冒充已验收。

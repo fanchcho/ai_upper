@@ -1,0 +1,23 @@
+{
+  "changed_files": [
+    "apps/desktop/src/main/services/chat-display.ts",
+    "apps/desktop/src/main/services/chat-members.ts",
+    "apps/desktop/src/main/services/history-page.ts",
+    "apps/desktop/src/main/services/workspace-mount.ts"
+  ],
+  "before_counts": {
+    "source_files": 269,
+    "ipc_registrations": 172,
+    "preload_calls": 189,
+    "non_ipc_hook_lines": 1097
+  },
+  "after_counts": {
+    "source_files": 270,
+    "ipc_registrations": 172,
+    "preload_calls": 189,
+    "non_ipc_hook_lines": 1097
+  },
+  "ipc_added": [],
+  "ipc_removed": [],
+  "effect": "Current candidates remain conservative; member/history semantics changed in reference; not accepted as ported."
+}
