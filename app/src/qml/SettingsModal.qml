@@ -1693,6 +1693,24 @@ Item {
 
                     Row {
                         anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 8
+                        visible: aboutPaneRoot.updatePhase === "available"
+                        SettingsButton { objectName: "updateDownload"; height: 26; text: "下载安装包"; onClicked: shellBridge.downloadUpdate("") }
+                    }
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: aboutPaneRoot.updatePhase === "downloading"
+                        text: "下载中 " + String(aboutPaneRoot.updateState.percent || 0) + "%"
+                        color: Theme.fgMuted; font.pixelSize: 12
+                    }
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 8
+                        visible: aboutPaneRoot.updatePhase === "downloaded"
+                        SettingsButton { objectName: "updateInstall"; height: 26; text: "打开安装包"; onClicked: shellBridge.installUpdate("") }
+                    }
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
                         spacing: 6
                         visible: aboutPaneRoot.updatePhase === "latest"
                         Icon {

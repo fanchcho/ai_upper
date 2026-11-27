@@ -30,6 +30,7 @@ import sys
 import threading
 import tempfile
 import time
+import urllib.parse
 import urllib.request
 import uuid
 from pathlib import Path
@@ -463,10 +464,15 @@ class ShellBridge(QtCore.QObject):
             if not tag:
                 raise ValueError(tr('legacy.3682234e64de'))
             if _version_tuple(tag) > _version_tuple(app_version()):
+                assets = payload.get("assets") if isinstance(payload.get("assets"), list) else []
+                suffixes = (".exe", ".zip", ".dmg", ".appimage", ".deb")
+                chosen = next((a for a in assets if isinstance(a, dict) and str(a.get("name") or "").lower().endswith(suffixes)), None)
                 state = {
                     "phase": "available",
                     "version": tag,
                     "url": str(payload.get("html_url") or ""),
+                    "assetName": str((chosen or {}).get("name") or ""),
+                    "assetUrl": str((chosen or {}).get("browser_download_url") or ""),
                 }
             else:
                 state = {"phase": "latest", "version": app_version()}
@@ -477,6 +483,47 @@ class ShellBridge(QtCore.QObject):
         except RuntimeError:
             # 窗口已销毁时对象可能已断开，忽略这一次收尾。
             pass
+
+    @QtCore.Slot(str, result=bool)
+    def downloadUpdate(self, url: str = "") -> bool:
+        """下载更新安装包到临时目录；进度与结果写回 updateState。"""
+        target = str(url or self._update_state.get("assetUrl") or "")
+        if not target or self._update_state.get("phase") == "downloading":
+            return False
+        self._set_update_state({"phase": "downloading", "percent": 0, "assetUrl": target})
+        thread = threading.Thread(target=self._download_update_worker, args=(target,), daemon=True)
+        self._update_thread = thread
+        thread.start()
+        return True
+
+    def _download_update_worker(self, url: str) -> None:
+        try:
+            out_dir = Path(tempfile.mkdtemp(prefix="ai-upper-update-"))
+            name = os.path.basename(urllib.parse.urlsplit(url).path) or "ai-upper-installer"
+            target = out_dir / name
+            request = urllib.request.Request(url, headers={"User-Agent": f"deva/{app_version()}"})
+            with urllib.request.urlopen(request, timeout=UPDATE_TIMEOUT_S) as response:
+                total = int(response.headers.get("Content-Length") or 0)
+                done = 0
+                with open(target, "wb") as fh:
+                    while True:
+                        chunk = response.read(256 * 1024)
+                        if not chunk:
+                            break
+                        fh.write(chunk)
+                        done += len(chunk)
+                        self._set_update_state({"phase": "downloading", "percent": int(done * 100 / total) if total else 0, "assetUrl": url})
+            self._set_update_state({"phase": "downloaded", "path": str(target), "assetUrl": url})
+        except Exception as exc:  # noqa: BLE001
+            self._set_update_state({"phase": "error", "stage": "download", "message": f"{type(exc).__name__}: {exc}"})
+
+    @QtCore.Slot(str, result=bool)
+    def installUpdate(self, path: str = "") -> bool:
+        """打开已下载安装包（Electron 自动安装器在路线 B 不可用，交给系统安装器）。"""
+        target = str(path or self._update_state.get("path") or "")
+        if not target or not Path(target).is_file():
+            return False
+        return bool(QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(target)))
 
     @QtCore.Slot(result=str)
     def theme(self) -> str:
