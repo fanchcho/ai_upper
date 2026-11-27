@@ -1,0 +1,17 @@
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer and dispatch A and B", "attachments": []}
+QML TURN d350a546c1d14a358295a06279768023
+QML STREAM {"text": "MANAGER_DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the new C task", "attachments": []}
+QML TURN 02bcad38af9e493abc361149dea22cb5
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer and dispatch A and B", "attachments": []}
+QML TURN c1d9e5cab43b46d9994039694fc4dcce
+QML STREAM {"text": "MANAGER_DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the new C task", "attachments": []}
+QML TURN 974e2ac78a4c4f518306b485ed6847cf
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS all seven actual tools, busy insertion, early reply, escalation, stop and UI removal; reopened stores

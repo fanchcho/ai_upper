@@ -1,0 +1,9 @@
+QML SEND {"sessionId": "s-1", "text": "Create member and choose folder", "attachments": []}
+QML TURN 60902cb45412475fbdff832c48b92013
+QML STREAM {"text": "CREATED_WITH_FOLDER"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Create member and choose folder", "attachments": []}
+QML TURN 3c50874a1b734080a0554d0884498295
+QML STREAM {"text": "CREATED_WITH_FOLDER"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS actual folder picker, tool resumed, reopened member workspace

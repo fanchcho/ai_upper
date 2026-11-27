@@ -71,6 +71,8 @@ class _Turn:
     started_at: int = 0
     aborted: bool = False
     done_sent: bool = False
+    stop_reason: str = "error"
+    error_message: str = ""
 
 
 class ChatHost:
@@ -156,8 +158,11 @@ class ChatHost:
         payload = to_chat_event(turn_id, session_id, event)
         if payload is None:
             return
+        if turn is not None and payload['event']['type']=='error':
+            turn.error_message=payload['event'].get('message','')
         if payload["event"]["type"] == "done":
             if turn is not None:
+                turn.stop_reason=payload['event'].get('stopReason','error')
                 if turn.done_sent:
                     return
                 turn.done_sent = True

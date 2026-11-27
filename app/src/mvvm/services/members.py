@@ -90,6 +90,7 @@ class Members:
                     member['openTasks']=(member.get('openTasks',[]) if busy else [])+[dispatch]
                     member['task']=dispatch['task'];self.host.store.save(main.id)
                 message='【主角色派来的任务】'+dispatch['task']+'\n'+text
+                if member.get('duty'):message+='\n【成员职责】'+member['duty']
                 if not self.host.store.load_session(sid).messages:
                     message+='\n【主对话背景】\n'+'\n'.join(m.text() for m in main.messages[-10:])
                 if busy:
@@ -176,20 +177,22 @@ class Members:
         member = self.host.store.load_session(sid)
         main = self.host.store.load_session(main_id)
         messages = [m for m in member.messages[start:] if m.role == 'assistant']
-        if not messages or main is None: return
-        content = messages[-1].content
+        if main is None: return
+        content = messages[-1].content if messages else ''
         text = content if isinstance(content,str) else '\n'.join(p.text for p in content if isinstance(p,TextPart))
         ref=next((m for m in main.members or [] if m['sessionId']==sid),None)
         if not ref or ref.get('removedAt'):return
         turn=self.host._turns.get(self.host._session_turn.get(sid,''))
-        if turn and turn.aborted:return
+        if turn and (turn.aborted or turn.stop_reason=='aborted'):return
+        failed=bool(turn and turn.stop_reason=='error')
+        if failed:text=turn.error_message or '成员执行失败'
         with self.lock:
             closing=[d for d in ref.get('openTasks',[]) if d['delivered']]
-            ref['openTasks']=[d for d in ref.get('openTasks',[]) if not d['delivered']]
-            ref['last']={'text':text,'at':int(time.time()*1000),'status':'done'}
+            if not failed:ref['openTasks']=[d for d in ref.get('openTasks',[]) if not d['delivered']]
+            ref['last']={'text':text,'at':int(time.time()*1000),'status':'failed' if failed else 'done'}
             self.host.store.save(main_id)
             requested=next((d for d in closing if d['reportToMe']),None)
-            self.reports.append([main_id,name,text,self.escalations.pop(sid,'') or ('主角色要求汇总' if requested else ''),requested['group'] if requested else ''])
+            self.reports.append([main_id,name,text,'处理成员错误' if failed else self.escalations.pop(sid,'') or ('主角色要求汇总' if requested else ''),requested['group'] if requested and not failed else ''])
             self.save_reports()
 
     def drain(self):
