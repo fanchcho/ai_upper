@@ -8,7 +8,7 @@ app/src/qml/Main.qml:808:            y: window.archiveView ? 92 : 56
 app/src/qml/Main.qml:869:            y: window.archiveView ? 104 : 68
 app/src/qml/Main.qml:873:                                          : (window.archiveView
 app/src/qml/Main.qml:886:            visible: window.archivedSessions.length > 0 && !window.archiveView && !window.selectMode
-app/src/qml/Main.qml:2369:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
-app/src/qml/Main.qml:2381:        window.archiveView = true
-app/src/qml/Main.qml:2387:        window.archiveView = false
-app/src/qml/Main.qml:2417:        window.archiveView = false
+app/src/qml/Main.qml:2378:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
+app/src/qml/Main.qml:2390:        window.archiveView = true
+app/src/qml/Main.qml:2396:        window.archiveView = false
+app/src/qml/Main.qml:2426:        window.archiveView = false

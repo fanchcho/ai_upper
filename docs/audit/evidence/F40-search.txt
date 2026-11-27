@@ -1,11 +1,11 @@
 $ rg -n --glob *.qml --glob *.py TodoCapsule|todo_write app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
+app/src/qml_shell.py:2026:        """当前会话的 Todo 清单（原版 Composer.tsx:864 TodoCapsule）。"""
 app/src/mvvm/view_models/chat_vm.py:51:    apply_todo_write_to,
 app/src/mvvm/view_models/chat_vm.py:158:        # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
 app/src/mvvm/view_models/chat_vm.py:187:        # 当前进行中的待办清单（`todo_write` 写会话边车后同步到这里，界面画胶囊条）。
 app/src/mvvm/view_models/chat_vm.py:239:        """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
 app/src/mvvm/view_models/chat_vm.py:243:        applied = apply_todo_write_to(
-app/src/qml_shell.py:2014:        """当前会话的 Todo 清单（原版 Composer.tsx:864 TodoCapsule）。"""
 app/src/mvvm/services/todos.py:1:"""待办清单：`todo_write` 工具的快照日志与折叠视图。
 app/src/mvvm/services/todos.py:5:- 每次 `todo_write` 追加一条快照（`StoredSession.todos` 的元素），清单按 `listId` 折叠，
 app/src/mvvm/services/todos.py:82:    """解析 todo_write 入参；不合法返回 `{"error": ...}`。"""

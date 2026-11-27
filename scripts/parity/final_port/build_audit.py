@@ -47,6 +47,8 @@ patch={
 'F27':('implemented','Main.qml sidebarResize 手柄真实拖动，sidebarWidth 写入 config.json；test_qml_sidebar_resize.py QTest 按下/移动/释放并读回 bridge.sidebarWidth。'),
 'F76':('implemented','ProfilePanel.qml + ShellBridge.userProfile/userPickAvatar/userClearAvatar；头像存 <home>/profile/avatar.*，test_qml_profile.py 真实点击 meBtn/选择/清除并读盘。昵称原版 profile.ts 未提供，不凭空增加。'),
 'F47':('implemented','Main.qml Ctrl+V 先 attachClipboardFiles（QClipboard.mimeData.urls→AttachmentService.inspect_paths），再 attachClipboardImage，最后文本默认粘贴；test_qml_clipboard_files.py 真实 QClipboard + QTest Ctrl+V，读回 pendingFiles。'),
+'F50':('implemented','qml_shell_sessions.delivery_rows 为图片交付行补 data URI thumb；Main.qml 交付卡显示 40px 缩略图，非图片回落图标；test_qml_chat_files.py 读回 chart.png thumb 前缀、notes.md 空。'),
+'F70':('implemented','SkillStore.import_file 支持 .md/.zip、frontmatter name→id、zip-slip/数量/体积校验、写 SKILL.md 与资源并自动启用；SettingsModal.extensionsImportSkill 真实文件对话框；test_skill_import.py + test_qml_skill_import.py 读盘与 extensionRows。'),
 'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 
