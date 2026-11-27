@@ -53,6 +53,7 @@ def RemoteBots(shell):
                 rows=self.list();bot=next(b for b in rows if b['id']==identity)
                 if action in ('delete','disable'):
                     if identity in self.workers:self.workers.pop(identity).set()
+                    self.pairing.pop(identity,None)
                     bot['enabled']=False;self.states[identity]='off'
                     if action=='delete':
                         for field in ('botToken','appSecret','verificationToken','encryptKey'):
@@ -126,6 +127,7 @@ def RemoteBots(shell):
     
         def start(self,bot):
             identity=bot['id']
+            if identity in self.workers:return ''
             if bot.get('platform')=='feishu':
                 from mvvm.services.feishu_inbound import connection
                 self.workers[identity]=connection(self,bot,self.shell._vault,lambda state:self.delivered.emit({'kind':'state','id':identity,'state':state}),lambda event:self.delivered.emit({'kind':'feishu-event','id':identity,'event':event}))
@@ -159,7 +161,7 @@ def RemoteBots(shell):
                 event=data['event'].get('event',{});message=event.get('message',{});sender=event.get('sender',{}).get('sender_id',{}).get('open_id','')
                 if message.get('chat_type')!='p2p' or message.get('message_type')!='text':return
                 text=json.loads(message.get('content','{}')).get('text','');rows=self.list();bot=next((b for b in rows if b['id']==data['id']),None)
-                if not bot:return
+                if not bot or not bot.get('enabled') or not sender:return
                 if text.startswith('/pair '):
                     pair=self.pairing.get(bot['id'])
                     if not pair or time.time()>pair['expires']:
@@ -185,7 +187,8 @@ def RemoteBots(shell):
             if kind=='link-error':self.status.emit(data['message'],'');return
             if kind=='state':
                 self.states[data['id']]=data['state']
-                if data['state'].startswith('error'):self.workers.pop(data['id'],None)
+                # Feishu owns its reconnect timer; keep it available for disable/close.
+                if data['state'].startswith('error') and isinstance(self.workers.get(data['id']),threading.Event):self.workers.pop(data['id'],None)
                 self.changed.emit();return
             if kind=='linked':
                 me=data['me'];rows=self.list()

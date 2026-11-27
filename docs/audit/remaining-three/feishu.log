@@ -1,1 +1,2 @@
-PASS actual connect click with absent credentials refuses creation; no network success claimed; dark/light screenshots
+PASS actual keyboard config, QML connect, reopened disk/vault readback, real endpoint failure, pair code click; no external pairing/send success claimed
+["未验证：飞书 App ID 或 App Secret 未配置", "未验证：pullConnectConfig failed: code=1000040346, msg=app_id is invalid", "未验证：飞书 App ID 或 App Secret 未配置", "未验证：pullConnectConfig failed: code=1000040346, msg=app_id is invalid"]

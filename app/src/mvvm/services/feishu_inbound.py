@@ -32,8 +32,9 @@ def decode(raw):
  return rows
 
 def connection(parent,bot,vault,on_state,on_event):
- from PySide6.QtCore import QObject,Signal,QTimer,QUrl
- from PySide6.QtWebSockets import QWebSocket
+ from utils.qt_compat import QtCore,QtWebSockets,Signal
+ QObject,QTimer,QUrl=QtCore.QObject,QtCore.QTimer,QtCore.QUrl
+ QWebSocket=QtWebSockets.QWebSocket
  class Link(QObject):
   discovered=Signal(object)
   def __init__(self):

@@ -1,0 +1,154 @@
+[
+  {
+    "theme": "dark",
+    "reason": "未验证：飞书 App ID 或 App Secret 未配置",
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "dark",
+      "locale": "zh-CN"
+    },
+    "bots": []
+  },
+  {
+    "theme": "dark",
+    "reason": "未验证：pullConnectConfig failed: code=1000040346, msg=app_id is invalid",
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "dark",
+      "locale": "zh-CN",
+      "remote": {
+        "bots": [
+          {
+            "id": "feishu_8b312807ac80",
+            "platform": "feishu",
+            "name": "cli_invalid_parity",
+            "enabled": true,
+            "replyMode": "final",
+            "scope": {
+              "mode": "all",
+              "sessions": [],
+              "personas": []
+            },
+            "users": [],
+            "bindings": {},
+            "settings": {
+              "appId": "cli_invalid_parity",
+              "domain": "lark"
+            }
+          }
+        ]
+      }
+    },
+    "secret_readback": true,
+    "pair_code_issued": true,
+    "paired": false
+  },
+  {
+    "theme": "light",
+    "reason": "未验证：飞书 App ID 或 App Secret 未配置",
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "light",
+      "locale": "zh-CN"
+    },
+    "bots": []
+  },
+  {
+    "theme": "light",
+    "reason": "未验证：pullConnectConfig failed: code=1000040346, msg=app_id is invalid",
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "light",
+      "locale": "zh-CN",
+      "remote": {
+        "bots": [
+          {
+            "id": "feishu_95ea0d742a64",
+            "platform": "feishu",
+            "name": "cli_invalid_parity",
+            "enabled": true,
+            "replyMode": "final",
+            "scope": {
+              "mode": "all",
+              "sessions": [],
+              "personas": []
+            },
+            "users": [],
+            "bindings": {},
+            "settings": {
+              "appId": "cli_invalid_parity",
+              "domain": "lark"
+            }
+          }
+        ]
+      }
+    },
+    "secret_readback": true,
+    "pair_code_issued": true,
+    "paired": false
+  }
+]

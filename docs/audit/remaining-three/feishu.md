@@ -1,9 +1,15 @@
-# 飞书配置及长连接路径（部分验证）
+# 飞书入站与配对配置核验
 
-原版 services/remote/feishu.ts:74-99 注册 im.message.receive_v1 与 WSClient；SDK lib/index.js:102313-102368 发现 /callback/ws/endpoint，:102579 ping，:102665 事件分片/应答。hub.ts:166-238 配对码6位/10分钟/错5次失效，/pair加入白名单。
+原版依据：`apps/desktop/src/main/services/remote/feishu.ts:74-99` 注册 im.message.receive_v1 与 WSClient；SDK `node_modules/@larksuiteoapi/node-sdk/lib/index.js:102313-102368` 获取 /callback/ws/endpoint，:102579 ping，:102665 事件分片与应答。`services/remote/hub.ts:166-238` 是六位配对码、十分钟有效、错误五次失效及 /pair 入白名单。
 
-本轮新增 feishu_inbound.py：沿用真实HTTP transport发现wss地址，QtWebSocket连接和错误状态、protobuf二进制帧、ping、分片、重复事件过滤、应答及重连。remote_bots接p2p文本、白名单及/pair；密钥走SecretsVault，配对码只放内存。机器人页新增App ID/Secret/domain、连接与生成配对码入口。
+已实现：App ID、App Secret、feishu/lark 入口，密钥走 SecretsVault；实际 HTTP 发现、wss 连接、protobuf 帧、ping、分片、去重、应答、断线重连；p2p 文本入站和 /pair 白名单保存。停用作废待配对码并停连接；重连对象不会被错误状态丢弃。Qt 导入统一走既有兼容层。
 
-真实键鼠验证仅为：暗亮点击无凭据连接 → 明确返回“未验证：飞书 App ID 或 App Secret 未配置”，读盘未创建假机器人。日志feishu.log、out/remaining-three/feishu-missing-*.png和feishu-config.json。
+真实交互脚本 scripts/parity/feishu_config_ui.py：暗、亮分别真实鼠标点击并键盘粘贴明确无效测试值 cli_invalid_parity / invalid-not-a-credential，选择 lark，点击连接。重开配置文件和 SecretsVault 验证 App ID/domain/密钥保存，JSON 无明文 Secret，用户列表为空。真实请求 open.larksuite.com/callback/ws/endpoint 返回：
 
-未验证：有效配置保存后长连接、真实平台事件和配对；没有凭据，没有用模拟连接成功冒充。尚未完成原版扫码创建应用OAuth设备授权、卡片回调与完整双向回复；因此第2项不能整体标为完成。现有配置/入站代码路径保留，生产平台兼容性未验收。
+```
+未验证：pullConnectConfig failed: code=1000040346, msg=app_id is invalid
+```
+
+未填凭据点击返回：`未验证：飞书 App ID 或 App Secret 未配置`。真实点击生成配对码成功，未伪造入站用户或已配对成功态。日志 feishu.log；截图、读盘 JSON 在 assets/feishu-*。证据以本报告及原始日志为准，不以并发审计表结论替代。
+
+未验证：有效凭据下 wss 成功、平台真实入站事件、平台用户 /pair 成功和外部发送。当前无有效凭据，平台明确拒绝测试 App ID；没有用测试帧冒充线上成功。原版扫码创建应用 OAuth、卡片交互及完整双向回复不属于这次配置/入站闭环，仍未完成完整适配器对等。
