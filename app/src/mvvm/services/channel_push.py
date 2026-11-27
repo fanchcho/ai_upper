@@ -1,5 +1,5 @@
 """Outbound Feishu cards and encrypted RFC8291 Web Push (deva remote adapters)."""
-import asyncio,base64,json,os,time,struct
+import asyncio,base64,json,os,time,struct,re
 from urllib.parse import urlsplit
 from mvvm.services.provider_setup import build_transport
 
@@ -17,20 +17,26 @@ def web_request(vault,identity,subscription,message):
     endpoint=subscription['endpoint'];url=urlsplit(endpoint)
     if url.scheme!='https':raise ValueError('Web Push endpoint 必须为 HTTPS')
     saved=vault.get_secret('remote:'+identity+':vapid')
-    if not saved:raise ValueError('Web Push VAPID 密钥不存在；未完成浏览器配对')
+    if not saved:
+        private=ec.generate_private_key(ec.SECP256R1());numbers=private.private_numbers();public=numbers.public_numbers
+        saved=json.dumps({'kty':'EC','crv':'P-256','d':encode(numbers.private_value.to_bytes(32,'big')),'x':encode(public.x.to_bytes(32,'big')),'y':encode(public.y.to_bytes(32,'big'))})
+        if not vault.set_secret('remote:'+identity+':vapid',saved).get('ok'):raise ValueError('Web Push VAPID 密钥无法保存')
     jwk=json.loads(saved);private=ec.derive_private_key(int.from_bytes(decode(jwk['d']),'big'),ec.SECP256R1())
     public=private.public_key().public_bytes(serialization.Encoding.X962,serialization.PublicFormat.UncompressedPoint)
     header=encode(b'{"typ":"JWT","alg":"ES256"}');payload=encode(json.dumps({'aud':url.scheme+'://'+url.netloc,'exp':int(time.time())+43200,'sub':'https://github.com/sqfcyily/deva'},separators=(',',':')).encode())
     signing=(header+'.'+payload).encode();r,s=decode_dss_signature(private.sign(signing,ec.ECDSA(hashes.SHA256())))
     auth='vapid t='+signing.decode()+'.'+encode(r.to_bytes(32,'big')+s.to_bytes(32,'big'))+', k='+encode(public)
     ua=decode(subscription['keys']['p256dh']);secret=decode(subscription['keys']['auth'])
+    if len(ua)!=65 or len(secret)<16:raise ValueError('Web Push 订阅公钥或认证密钥无效')
     eph=ec.generate_private_key(ec.SECP256R1());ep=eph.public_key().public_bytes(serialization.Encoding.X962,serialization.PublicFormat.UncompressedPoint)
     shared=eph.exchange(ec.ECDH(),ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256R1(),ua))
     def hkdf(key,salt,info,n):return HKDF(algorithm=hashes.SHA256(),length=n,salt=salt,info=info).derive(key)
     ikm=hkdf(shared,secret,b'WebPush: info\0'+ua+ep,32);salt=os.urandom(16)
     key=hkdf(ikm,salt,b'Content-Encoding: aes128gcm\0',16);nonce=hkdf(ikm,salt,b'Content-Encoding: nonce\0',12)
     body=salt+struct.pack('!IB',4096,len(ep))+ep+AESGCM(key).encrypt(nonce,json.dumps(message,ensure_ascii=False).encode()+b'\x02',None)
-    return endpoint,{'authorization':auth,'content-encoding':'aes128gcm','content-type':'application/octet-stream','ttl':'86400','urgency':'high'},body
+    headers={'authorization':auth,'content-encoding':'aes128gcm','content-type':'application/octet-stream','ttl':'86400','urgency':'high'}
+    if message.get('tag'):headers['topic']=re.sub('[^A-Za-z0-9_-]','',message['tag'])[:32]
+    return endpoint,headers,body
 
 
 def push(vault,bot,user,title,body,sid):

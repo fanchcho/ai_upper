@@ -103,6 +103,9 @@ def RemoteBots(shell):
     
         def start(self,bot):
             identity=bot['id']
+            if bot.get('platform') in ('feishu','web'):
+                self.states[identity]='未验证：仅出站推送，外部连接尚未验证'
+                return ''
             if bot.get('platform')!='telegram':return '此平台的连接适配器尚未移植'
             token=self.shell._vault.get_secret('remote:'+identity+':botToken')
             if not token:return '机器人密钥不存在或系统密钥库不可用'
@@ -123,6 +126,15 @@ def RemoteBots(shell):
         @Slot(object)
         def receive(self,data):
             kind=data['kind']
+            if kind=='push-result':
+                rows=self.list();bot=next((b for b in rows if b['id']==data['id']),None)
+                if bot:
+                    bot['lastDelivery']=data['result']
+                    if data['result']['status']=='gone':
+                        for user in bot.get('users',[]):
+                            if user['id']==data['userId']:user.pop('push',None)
+                    self.save(rows)
+                self.status.emit(json.dumps(data['result'],ensure_ascii=False),'');return
             if kind=='link':self.status.emit('',data['url']);return
             if kind=='link-error':self.status.emit(data['message'],'');return
             if kind=='state':
@@ -173,12 +185,12 @@ def RemoteBots(shell):
                 if scope.get('mode')=='personas' and (not session or session.personaId not in scope.get('personas',[])):continue
                 if bot.get('platform') in ('feishu','web'):
                     from mvvm.services.channel_push import push
-                    users=bot.get('users',[]) if bot['platform']=='feishu' else bot.get('devices',[])
+                    users=bot.get('users',[])
                     if not users:reasons.append('未配置可用的已配对远程渠道');continue
                     def deliver(bot=bot,users=users):
                         for user in users:
                             result=push(self.shell._vault,bot,user,title,body,sid)
-                            self.status.emit(json.dumps(result,ensure_ascii=False),'')
+                            self.delivered.emit({'kind':'push-result','id':bot['id'],'userId':user['id'],'result':result})
                     threading.Thread(target=deliver,daemon=True).start();sent+=len(users);continue
                 if bot.get('platform')!='telegram':reasons.append('渠道未接入');continue
                 token=self.shell._vault.get_secret('remote:'+bot['id']+':botToken')

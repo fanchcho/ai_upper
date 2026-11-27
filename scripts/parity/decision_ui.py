@@ -23,8 +23,6 @@ server=ThreadingHTTPServer(('127.0.0.1',0),Server);threading.Thread(target=serve
 app=QGuiApplication([]);QFontDatabase.addApplicationFont('.tmp/theme-settings/NotoSansCJKsc-Regular.otf');out=Path('out/final-four');out.mkdir(parents=True,exist_ok=True);results=[]
 for theme in ['dark','light']:
  w,b,s,t,e,h=build(Path('/tmp/ai-upper-decision-'+uuid.uuid4().hex),theme,text_stream('EXECUTED'))
- models=b._settings.models_section();models['providers'].append({'id':'decision-local','purpose':'decision','adapter':'jev','enabled':True,'apiHost':'http://127.0.0.1:'+str(server.server_port)})
- b._settings.set_config({'models':models});b._vault.set_secret('decision-local','fixture');b._publish()
  def item(name):return find_item(w.contentItem(),name) or w.findChild(QObject,name)
  def click(name):
   o=item(name);assert o,name
@@ -33,6 +31,11 @@ for theme in ['dark','light']:
   click(name);QTest.keyClick(w,Qt.Key_A,Qt.ControlModifier);app.clipboard().setText(value);QTest.keyClick(w,Qt.Key_V,Qt.ControlModifier)
  def rows():return json.loads((h/'tasks.json').read_text())['tasks']
  click('railTasks')
+ click('taskDecisionConfig')
+ text('decisionConfigName','Loopback Jev');text('decisionConfigHost','http://127.0.0.1:'+str(server.server_port));text('decisionConfigKey','fixture');text('decisionConfigThreshold','0.65')
+ shot(w,out/f'decision-provider-{theme}.png');click('decisionConfigSave')
+ providers=json.loads((h/'config.json').read_text())['models']['providers'];provider=next(p for p in providers if p.get('purpose')=='decision')
+ assert provider['threshold']==.65 and provider['adapter']=='jev' and b._vault.get_secret(provider['id'])=='fixture'
  for mode in ['allowed','denied','timeout']:
   text('taskTitle',mode);text('taskPrompt',mode);text('taskWhen',(datetime.now(timezone.utc)+timedelta(hours=1)).replace(tzinfo=None).isoformat(timespec='seconds'));click('taskCreate')
   row=next(r for r in rows() if r['title']==mode);identity=row['id'];click('taskEdit_'+identity)

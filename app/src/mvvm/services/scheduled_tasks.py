@@ -93,6 +93,29 @@ def ScheduledTasks(shell):
         @Slot(result='QVariantList')
         def list(self):
             return sorted(self.read(),key=lambda r:r['createdAt'],reverse=True)
+
+        @Slot(result='QVariantList')
+        def decisionProviderRows(self):
+            return [p for p in self.shell._settings.models_section().get('providers',[]) if p.get('purpose')=='decision']
+
+        @Slot(str,str,str,str,float,bool,result=str)
+        def saveDecisionProvider(self,identity,name,host,key,threshold,enabled):
+            import math
+            from urllib.parse import urlsplit
+            from mvvm.services import settings_models
+            if not name.strip():return '请输入服务商名称'
+            url=urlsplit(host)
+            if url.scheme not in ('http','https') or not url.hostname:return '请输入有效的 HTTP(S) 服务地址'
+            if not math.isfinite(threshold) or not 0<=threshold<=1:return '决策阈值必须在 0 到 1 之间'
+            identity=identity or 'decision-'+uuid.uuid4().hex[:12]
+            if key and not self.shell._vault.set_secret(identity,key).get('ok'):return '系统密钥存储不可用'
+            section=self.shell._settings.models_section()
+            existing=settings_models.find_provider(section,identity)
+            if existing and existing.get('purpose')!='decision':return '此服务商不是决策服务商'
+            provider=dict(existing or {},id=identity,name=name.strip(),kind='custom',purpose='decision',adapter='jev',apiHost=host.strip().rstrip('/'),threshold=threshold,enabled=enabled)
+            if not self.shell._commit_models(settings_models.add_provider(section,provider)):return '服务商配置写入失败'
+            self.changed.emit()
+            return ''
     
         @Slot(str,str,str,str,str,str,result=str)
         def create(self,title,prompt,kind,when,tz,persona):
@@ -144,7 +167,11 @@ def ScheduledTasks(shell):
                     self.write([r for r in rows if r['id']!=identity]);return ''
                 if action=='open':
                     self.shell.openSession(row['sessionId']);self.shell._window.setProperty('page','chat');return ''
-                if action=='run':self.run(row)
+                if action=='run':
+                    if (row.get('decision') or {}).get('enabled'):
+                        if identity in self.deciding or identity in self.running:return '任务已经在运行或等待决策'
+                        self.queue_decision(row,manual=True);return ''
+                    self.run(row)
                 elif action=='pause':row['status']='paused';row['nextRunAt']=None
                 elif action=='resume':
                     row['nextRunAt']=int(next_run(row['schedule'])*1000);row['status']='active';row['consecutiveErrors']=0
@@ -152,12 +179,18 @@ def ScheduledTasks(shell):
                 row['updatedAt']=int(time.time()*1000);self.write(rows);return ''
             except Exception as exc:return str(exc)
     
-        def run(self,row):
+        def queue_decision(self,row,manual=False):
+            from mvvm.services.task_decision import evaluate
+            snapshot=json.loads(json.dumps(row));self.deciding.add(row['id'])
+            def decide():self.decisions.put((snapshot['id'],snapshot['updatedAt'],snapshot['status'],manual,evaluate(self.shell._settings,self.shell._vault,snapshot)))
+            threading.Thread(target=decide,daemon=True).start()
+
+        def run(self,row,manual=False):
             identity=row['id']
             if identity in self.running or self.shell._host.is_busy(row['sessionId']):
                 raise ValueError('任务已经在运行')
             from mvvm.services.tool_runtime import ToolSpec, ToolResult
-            running={'startedAt':int(time.time()*1000)}
+            running={'startedAt':int(time.time()*1000),'manual':manual}
             self.running[identity]=running
             vm=self.shell._host.vm_for(row['sessionId']);vm.tools.interactive=False
             def deliver(args):
@@ -174,8 +207,9 @@ def ScheduledTasks(shell):
                 self.running.pop(identity,None);raise
             running['turnId']=result.get('turnId')
             row['lastRunAt']=self.running[identity]['startedAt']
-            if row['schedule']['kind']=='once':row['status']='completed';row['nextRunAt']=None
-            else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
+            if not manual:
+                if row['schedule']['kind']=='once':row['status']='completed';row['nextRunAt']=None
+                else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
     
         def turn_event(self,payload):
             event=payload.get('event',{});kind=event.get('type')
@@ -197,8 +231,9 @@ def ScheduledTasks(shell):
                     elif not row.get('ownerSessionId'):
                         row['remoteDelivery']=self.shell.botsService().publish_notice(row['sessionId'],row['title'],final)
                 row['runs']=(row.get('runs',[])+[run])[-50:]
-                row['consecutiveErrors']=row.get('consecutiveErrors',0)+1 if kind=='error' else 0
-                if row['consecutiveErrors']>=5:row['status']='error';row['nextRunAt']=None
+                if not run.get('manual'):
+                    row['consecutiveErrors']=row.get('consecutiveErrors',0)+1 if kind=='error' else 0
+                    if row['consecutiveErrors']>=5:row['status']='error';row['nextRunAt']=None
                 changed=True
             if changed:self.write(rows)
     
@@ -206,17 +241,24 @@ def ScheduledTasks(shell):
             rows=self.read();changed=False
             from mvvm.models.chat_models import Message
             while not self.decisions.empty():
-                identity,stamp,result=self.decisions.get();self.deciding.discard(identity)
+                identity,stamp,status,manual,result=self.decisions.get();self.deciding.discard(identity)
                 row=next((r for r in rows if r['id']==identity),None)
-                if not row or row['updatedAt']!=stamp or row['status']!='active':continue
+                if not row:continue
+                if row['updatedAt']!=stamp or row['status']!=status:
+                    row['runs']=(row.get('runs',[])+[{'status':'aborted','decision':result,'endedAt':int(time.time()*1000),'summary':'决策等待期间任务已修改，本次未执行'}])[-50:];changed=True;continue
                 row['lastDecision']=result;changed=True
                 if result['status']=='allowed':
-                    try:self.run(row)
+                    try:self.run(row,manual=manual)
                     except Exception as exc:row['lastError']=str(exc)
                 else:
-                    row['runs']=(row.get('runs',[])+[{'status':'skipped','decision':result,'endedAt':int(time.time()*1000)}])[-50:]
-                    if row['schedule']['kind']=='once':row['status']='completed';row['nextRunAt']=None
-                    else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
+                    denied=result['status']=='denied'
+                    row['runs']=(row.get('runs',[])+[{'status':'skipped' if denied else 'error','decision':result,'endedAt':int(time.time()*1000)}])[-50:]
+                    if not denied:row['lastError']=result.get('message','决策失败')
+                    if not manual:
+                        row['lastRunAt']=int(time.time()*1000);row['consecutiveErrors']=0 if denied else row.get('consecutiveErrors',0)+1
+                        if row['schedule']['kind']=='once':row['status']='completed' if denied else 'error';row['nextRunAt']=None
+                        elif row['consecutiveErrors']>=5:row['status']='error';row['nextRunAt']=None
+                        else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
             for row in rows:
                 handoff=row.get('pendingHandoff');owner=row.get('ownerSessionId')
                 if not handoff or not owner or self.shell._host.is_busy(owner):continue
@@ -233,10 +275,7 @@ def ScheduledTasks(shell):
             for row in rows:
                 if row['status']!='active' or row['id'] in self.deciding or row['id'] in self.running or not row.get('nextRunAt') or row['nextRunAt']>time.time()*1000:continue
                 if (row.get('decision') or {}).get('enabled'):
-                    from mvvm.services.task_decision import evaluate
-                    snapshot=json.loads(json.dumps(row));self.deciding.add(row['id'])
-                    def decide(snapshot=snapshot):self.decisions.put((snapshot['id'],snapshot['updatedAt'],evaluate(self.shell._settings,self.shell._vault,snapshot)))
-                    threading.Thread(target=decide,daemon=True).start();continue
+                    self.queue_decision(row);continue
                 try:self.run(row)
                 except Exception as exc:
                     row['status']='error';row['nextRunAt']=None;row['lastError']=str(exc)

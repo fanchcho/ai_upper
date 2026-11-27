@@ -22,9 +22,11 @@ Rectangle {
         owner.currentIndex=0
         for(var j=0;j<owner.model.length;j++)if(owner.model[j].id===row.ownerSessionId)owner.currentIndex=j
     }
-    Connections { target: root.api; function onChanged() { root.refresh() } }
+    Connections { target: root.api; function onChanged() { root.refresh(); decisionProvider.model=root.api.decisionProviders() } }
+    DecisionProviders { id:decisionConfig; api:root.api; onClosed:decisionProvider.model=root.api.decisionProviders() }
     SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: root.shell.page = "chat" }
     Text { x: 120; y: 26; text: "定时任务"; font.pixelSize: 20; color: Theme.fg }
+    SettingsButton { objectName:"taskDecisionConfig"; x:300; y:20; text:"决策服务商"; onClicked:decisionConfig.open() }
     Column {
         x: 20; y: 75; width: parent.width-40; spacing: 8
         SettingsField { id: title; objectName: "taskTitle"; width: parent.width; placeholderText: "任务名称" }
