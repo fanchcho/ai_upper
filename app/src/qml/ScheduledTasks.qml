@@ -17,6 +17,8 @@ Rectangle {
         kind.currentIndex=row.schedule.kind==="once"?0:1;when.text=row.schedule.at||row.schedule.cron;tz.text=row.schedule.tz
         enabledTask.checked=row.status==="active";modelRef.text=row.auth.modelRef||""
         for(var i=0;i<persona.model.length;i++)if(persona.model[i].id===row.auth.personaId)persona.currentIndex=i
+        gate.checked=!!(row.decision && row.decision.enabled);threshold.text=row.decision && row.decision.threshold!==undefined?String(row.decision.threshold):"0.6"
+        for(var k=0;k<decisionProvider.model.length;k++)if(row.decision && decisionProvider.model[k].id===row.decision.providerId)decisionProvider.currentIndex=k
         owner.currentIndex=0
         for(var j=0;j<owner.model.length;j++)if(owner.model[j].id===row.ownerSessionId)owner.currentIndex=j
     }
@@ -38,13 +40,18 @@ Rectangle {
             SettingsField { id:modelRef; objectName:"taskModel"; width:250; placeholderText:"模型（留空使用默认）" }
             ComboBox { id:owner; objectName:"taskOwner"; width:300; textRole:"title"; model:[{id:"",title:"独立运行"}].concat(root.shell.sessions) }
         }
+        Row { spacing:8; visible: root.editing.length>0
+            CheckBox { id:gate; objectName:"taskDecision"; text:"执行前自动决策" }
+            ComboBox { id:decisionProvider; objectName:"taskDecisionProvider"; width:230; textRole:"id"; model:root.api?root.api.decisionProviders():[] }
+            SettingsField { id:threshold; objectName:"taskThreshold"; width:100; text:"0.6"; placeholderText:"0–1 阈值" }
+        }
         SettingsButton {
             objectName: "taskCreate"; text: root.editing ? "保存修改" : "创建任务"
             onClicked: {
                 if(root.editing) {
                     var schedule={kind:kind.currentIndex?"recurring":"once",tz:tz.text}
                     schedule[kind.currentIndex?"cron":"at"]=when.text
-                    root.error=root.api.update(root.editing,JSON.stringify({title:title.text,prompt:prompt.text,schedule:schedule,auth:{personaId:persona.currentIndex>=0?persona.model[persona.currentIndex].id:null,modelRef:modelRef.text||null},enabled:enabledTask.checked,ownerSessionId:owner.model[owner.currentIndex].id}))
+                    root.error=root.api.update(root.editing,JSON.stringify({title:title.text,prompt:prompt.text,schedule:schedule,auth:{personaId:persona.currentIndex>=0?persona.model[persona.currentIndex].id:null,modelRef:modelRef.text||null},decision:{enabled:gate.checked,providerId:decisionProvider.currentIndex>=0?decisionProvider.model[decisionProvider.currentIndex].id:"",threshold:Number(threshold.text)},enabled:enabledTask.checked,ownerSessionId:owner.model[owner.currentIndex].id}))
                 } else root.error = root.api.create(title.text,prompt.text,kind.currentIndex ? "recurring":"once",when.text,tz.text,
                     persona.currentIndex >= 0 ? persona.model[persona.currentIndex].id : "general")
                 if (!root.error) { root.editing=""; title.text = ""; prompt.text = ""; root.refresh() }
@@ -53,7 +60,7 @@ Rectangle {
         Text { text: root.error; color: Theme.danger; visible: text.length > 0 }
     }
     ListView {
-        id: list; x: 20; y: 350; width: parent.width-40; height: parent.height-y-20
+        id: list; x: 20; y: 400; width: parent.width-40; height: parent.height-y-20
         clip: true; spacing: 8; model: root.rows; ScrollBar.vertical: SettingsScrollBar {}
         delegate: Rectangle {
             required property var modelData

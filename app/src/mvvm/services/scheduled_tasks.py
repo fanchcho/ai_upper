@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import time
 import uuid
+import threading
+import queue
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -73,6 +75,7 @@ def ScheduledTasks(shell):
             self.shell = shell
             self.path = Path(shell._store.home)/'tasks.json'
             self.running = {}
+            self.deciding=set();self.decisions=queue.Queue()
             self.timer = QtCore.QTimer(self); self.timer.setInterval(1000)
             self.timer.timeout.connect(self.tick); self.timer.start()
     
@@ -107,6 +110,10 @@ def ScheduledTasks(shell):
                 self.write(self.read()+[record]);self.shell._publish();return ''
             except Exception as exc:return str(exc)
     
+        @Slot(result='QVariantList')
+        def decisionProviders(self):
+            return [p for p in self.shell._settings.models_section().get('providers',[]) if p.get('purpose')=='decision' and p.get('adapter')=='jev' and p.get('enabled')]
+
         @Slot(str,str,result=str)
         def update(self, identity, encoded):
             try:
@@ -117,7 +124,9 @@ def ScheduledTasks(shell):
                 schedule=patch['schedule']; next_at=next_run(schedule)
                 owner=patch.get('ownerSessionId') or None
                 if owner and (owner==row['sessionId'] or self.shell._store.load_session(owner) is None): raise ValueError('主对话无效')
-                if patch.get('decision',{}).get('enabled'): raise ValueError('当前尚未接入自动决策服务')
+                if patch.get('decision',{}).get('enabled'):
+                    from mvvm.services.task_decision import config
+                    config(self.shell._settings,patch['decision'])
                 row.update(title=str(patch['title']).strip() or prompt[:40],prompt=prompt,schedule=schedule,
                            auth=patch['auth'],ownerSessionId=owner,decision=patch.get('decision'),
                            status='active' if patch.get('enabled') else 'paused',nextRunAt=int(next_at*1000) if patch.get('enabled') else None,
@@ -196,6 +205,18 @@ def ScheduledTasks(shell):
         def tick(self):
             rows=self.read();changed=False
             from mvvm.models.chat_models import Message
+            while not self.decisions.empty():
+                identity,stamp,result=self.decisions.get();self.deciding.discard(identity)
+                row=next((r for r in rows if r['id']==identity),None)
+                if not row or row['updatedAt']!=stamp or row['status']!='active':continue
+                row['lastDecision']=result;changed=True
+                if result['status']=='allowed':
+                    try:self.run(row)
+                    except Exception as exc:row['lastError']=str(exc)
+                else:
+                    row['runs']=(row.get('runs',[])+[{'status':'skipped','decision':result,'endedAt':int(time.time()*1000)}])[-50:]
+                    if row['schedule']['kind']=='once':row['status']='completed';row['nextRunAt']=None
+                    else:row['nextRunAt']=int(next_run(row['schedule'])*1000)
             for row in rows:
                 handoff=row.get('pendingHandoff');owner=row.get('ownerSessionId')
                 if not handoff or not owner or self.shell._host.is_busy(owner):continue
@@ -210,7 +231,12 @@ def ScheduledTasks(shell):
                     self.shell._publish()
                 row.pop('pendingHandoff',None);changed=True
             for row in rows:
-                if row['status']!='active' or row['id'] in self.running or not row.get('nextRunAt') or row['nextRunAt']>time.time()*1000:continue
+                if row['status']!='active' or row['id'] in self.deciding or row['id'] in self.running or not row.get('nextRunAt') or row['nextRunAt']>time.time()*1000:continue
+                if (row.get('decision') or {}).get('enabled'):
+                    from mvvm.services.task_decision import evaluate
+                    snapshot=json.loads(json.dumps(row));self.deciding.add(row['id'])
+                    def decide(snapshot=snapshot):self.decisions.put((snapshot['id'],snapshot['updatedAt'],evaluate(self.shell._settings,self.shell._vault,snapshot)))
+                    threading.Thread(target=decide,daemon=True).start();continue
                 try:self.run(row)
                 except Exception as exc:
                     row['status']='error';row['nextRunAt']=None;row['lastError']=str(exc)
