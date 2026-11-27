@@ -557,7 +557,7 @@ ApplicationWindow {
                 active: true
                 onHoverChanged: function (entered) { window.chatRailHover(entered) }
             }
-            RailButton { iconName: IconData.users }
+            RailButton { objectName: "railRoster"; iconName: IconData.users; onClicked: window.page = "roster" }
             RailButton { iconName: IconData.alarmClock }
         }
 
@@ -2802,5 +2802,7 @@ ApplicationWindow {
             sourceComponent: Component { PluginSettingsPane { mode: "identities" } }
         }
     }
+
+    PersonaRoster { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "roster" }
 
 }
