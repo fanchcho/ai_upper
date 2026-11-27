@@ -30,4 +30,4 @@ def test_git_service_real_repo(tmp_path):
     assert log["ok"] and len(log["commits"]) >= 2
     assert bridge.branches(str(repo))["ok"] is True
     assert bridge.create_branch(str(repo), "feature")["ok"] is True
-    assert "feature" in bridge.branches(str(repo))["branches"]
+    assert any(b["name"] == "feature" for b in bridge.branches(str(repo))["branches"])

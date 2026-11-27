@@ -1722,6 +1722,86 @@ class ShellBridge(QtCore.QObject):
         from mvvm.services import git_service
         return git_service.log(root, depth)
 
+    @QtCore.Slot(str, str, bool, bool, result="QVariantMap")
+    def gitDiffEx(self, root: str, path: str, staged: bool, untracked: bool) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.diff(root, path, bool(staged), bool(untracked))
+
+    @QtCore.Slot(str, "QVariantList", "QVariantList", result="QVariantMap")
+    def gitDiscard(self, root: str, tracked: Any, untracked: Any) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.discard(root, tracked, untracked)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitMerge(self, root: str, ref: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.merge(root, ref)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def gitMergeAbort(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.merge_abort(root)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitCheckoutRemote(self, root: str, ref: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.checkout_remote(root, ref)
+
+    @QtCore.Slot(str, str, bool, result="QVariantMap")
+    def gitDeleteBranch(self, root: str, name: str, force: bool) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.delete_branch(root, name, bool(force))
+
+    @QtCore.Slot(str, str, str, result="QVariantMap")
+    def gitRenameBranch(self, root: str, old: str, new: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.rename_branch(root, old, new)
+
+    @QtCore.Slot(str, str, str, result="QVariantMap")
+    def gitDeleteRemoteBranch(self, root: str, remote: str, branch: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.delete_remote_branch(root, remote, branch)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def gitFetch(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.fetch(root)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def gitPull(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.pull(root)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitPush(self, root: str, branch: str = "") -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.push(root, branch or None)
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def gitRemotes(self, root: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.remotes(root)
+
+    @QtCore.Slot(str, str, str, result="QVariantMap")
+    def gitAddRemote(self, root: str, name: str, url: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.add_remote(root, name, url)
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def gitRemoveRemote(self, root: str, name: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.remove_remote(root, name)
+
+    @QtCore.Slot(str, str, str, result="QVariantMap")
+    def gitSetRemote(self, root: str, name: str, url: str) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.set_remote(root, name, url)
+
+    @QtCore.Slot(str, int, int, result="QVariantMap")
+    def gitLogPage(self, root: str, depth: int, page: int) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.log(root, depth, page)
+
     @QtCore.Slot(str, result="QVariantMap")
     def providerModels(self, provider_id: str) -> Dict[str, Any]:
         """设置页「拉取模型」：真实调用 ModelGateway.list_models（provider:list-models 同语义）。"""
