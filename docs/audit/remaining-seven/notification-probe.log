@@ -13,3 +13,9 @@ notify True
 calls []
 # raw result: the Qt tray method returned success but the registered service received
 # no Notify invocation; thus no notification success state is claimed.
+
+# 2026-11-28 follow-up: dbus-next service with standard signature
+# service exported org.freedesktop.Notifications; QtDBus QDBusMessage produced:
+#   org.freedesktop.Notifications.Notify with signature "sisssava{sv}i" could not be found
+# expected freedesktop signature: "susssasa{sv}i" (replaces_id uint32, timeout int32).
+# QSystemTrayIcon.showMessage did not issue a DBus Notify at all (calls=[]).
