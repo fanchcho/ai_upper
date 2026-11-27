@@ -16,6 +16,9 @@ Rectangle {
     property string editId: ""
     property string query: ""
     property string notice: ""
+    property var memoryRows: []
+    property string memoryTitle: ""
+    property string memoryBody: ""
 
     color: Theme.bg
 
@@ -32,7 +35,17 @@ Rectangle {
     function openDetail(id) {
         selectedId = String(id)
         selected = shellBridge.personaDetail(selectedId)
+        memoryRows = shellBridge.roleMemories(selectedId)
         mode = "detail"
+    }
+    function addMemory() {
+        var result = shellBridge.roleMemorySave(selectedId, JSON.stringify({title: memoryTitle, body: memoryBody, type: "reference"}))
+        if (result.ok) { memoryTitle = ""; memoryBody = ""; memoryRows = shellBridge.roleMemories(selectedId) }
+        else notice = result.error || "保存失败"
+    }
+    function removeMemory(id) {
+        if (!shellBridge.roleMemoryDelete(selectedId, String(id)).ok) notice = "删除失败"
+        memoryRows = shellBridge.roleMemories(selectedId)
     }
     function openEdit(row) {
         editId = row && row.id ? String(row.id) : roster.selectedId
@@ -142,10 +155,28 @@ Rectangle {
             color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13
             background: Rectangle { color: Theme.bgPanel; border.color: Theme.border; radius: 6 }
         }
-        Text { x: 20; y: 480; text: "角色记忆：未移植"; color: Theme.fgSubtle; font.pixelSize: 12 }
+        Text { x: 20; y: 478; text: "角色记忆"; color: Theme.fg; font.pixelSize: 13; font.weight: 600 }
+        Column {
+            x: 20; y: 500; width: parent.width - 40; spacing: 4
+            Repeater {
+                model: roster.memoryRows
+                delegate: Row {
+                    required property var modelData
+                    width: parent.width; height: 26
+                    Text { width: parent.width - 50; text: modelData.title; color: Theme.fg; font.pixelSize: 12; elide: Text.ElideRight; anchors.verticalCenter: parent.verticalCenter }
+                    SettingsButton { objectName: "memoryDelete_" + modelData.id; text: "删除"; height: 24; onClicked: roster.removeMemory(modelData.id) }
+                }
+            }
+            Row {
+                width: parent.width; spacing: 6
+                SettingsField { id: memoryTitleField; objectName: "memoryTitle"; width: 180; placeholderText: "记忆标题" }
+                SettingsField { id: memoryBodyField; objectName: "memoryBody"; width: parent.width - 300; placeholderText: "记忆正文" }
+                SettingsButton { objectName: "memoryAdd"; text: "添加"; onClicked: { roster.memoryTitle = memoryTitleField.text; roster.memoryBody = memoryBodyField.text; roster.addMemory(); memoryTitleField.text = ""; memoryBodyField.text = "" } }
+            }
+        }
         SettingsButton {
             objectName: "personaDelete"
-            x: 20; y: 510; destructive: true; text: I18n.t("common.delete")
+            x: 20; y: 600; destructive: true; text: I18n.t("common.delete")
             onClicked: roster.remove(roster.selected.id)
         }
         Text { x: 20; y: 548; text: roster.notice; color: Theme.danger; visible: text.length > 0 }

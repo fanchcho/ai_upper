@@ -817,6 +817,24 @@ class ShellBridge(QtCore.QObject):
         except (OSError, ValueError, TypeError, KeyError):
             return False
 
+    @QtCore.Slot(str, result="QVariantList")
+    def roleMemories(self, persona_id: str) -> List[Dict[str, Any]]:
+        from mvvm.services import memory_store
+        return memory_store.list_memories(str(persona_id or ""))
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def roleMemorySave(self, persona_id: str, payload: str) -> Dict[str, Any]:
+        from mvvm.services import memory_store
+        try:
+            return memory_store.save_memory(str(persona_id or ""), json.loads(payload or "{}"))
+        except (ValueError, TypeError) as exc:
+            return {"ok": False, "error": str(exc)}
+
+    @QtCore.Slot(str, str, result="QVariantMap")
+    def roleMemoryDelete(self, persona_id: str, entry_id: str) -> Dict[str, Any]:
+        from mvvm.services import memory_store
+        return memory_store.delete_memory(str(persona_id or ""), str(entry_id or ""))
+
     @QtCore.Slot(str, result=bool)
     def personaDelete(self, persona_id: str) -> bool:
         result = shared_store().remove(str(persona_id or ""))
