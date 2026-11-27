@@ -4,7 +4,7 @@ Reference: deva remote/index.ts, store.ts, telegram-onboard.ts. External
 connectivity is reported separately from saved configuration.
 """
 from __future__ import annotations
-import asyncio,json,re,secrets,threading,time,uuid
+import asyncio,json,os,re,secrets,threading,time,uuid
 from mvvm.services.provider_setup import build_transport
 
 
@@ -12,7 +12,8 @@ def telegram(token,method,payload):
     async def call():
         transport=build_transport()
         try:
-            response=await transport.post('https://api.telegram.org/bot'+token+'/'+method,
+            base=os.environ.get('AI_UPPER_TELEGRAM_API','https://api.telegram.org')
+            response=await transport.post(base.rstrip('/')+'/bot'+token+'/'+method,
                 headers={'Content-Type':'application/json'},body=json.dumps(payload).encode())
             result=json.loads(await response.text())
             if not result.get('ok'):raise RuntimeError(result.get('description','Telegram request failed'))
