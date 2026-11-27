@@ -1,6 +1,6 @@
 # 功能级未移植盘点（feature parity gap）
 
-> 生成时间：2026-11-27T22:50:37 · 盘点基线：`a5634344f050cff69871e40a0431c312b92c42dd`；B 补齐后当前 HEAD：`b25dc1b7a025e807cf8e89bb6c6b989d5814e412`（= origin/develop）
+> 生成时间：2026-11-27T23:04:00 · 盘点基线：`a5634344f050cff69871e40a0431c312b92c42dd`；本文件收口时 HEAD：`392bb1e2ed168bbfa2a36a3262e202a915a2814b`（= origin/develop），其间包含并行执行的 f4df491/92d9be2/fdb2299 等已推送补齐；本文件只对其中已复跑验证的项计入三态
 > 唯一依据：`/home/agent/shared_workspace/deva` 原版真实源码（只读，未改动）；移植版证据来自 `/home/agent/shared_workspace/ai_upper` 当前工作树。
 
 ## 0. 只读对账（原始命令与输出）
@@ -39,7 +39,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 
 | 已实现且可用 | 只有界面 | 未移植 | 不适用 | 合计 |
 |---|---|---|---|---|
-| 36 | 5 | 39 | 5 | 85 |
+| 39 | 3 | 39 | 4 | 85 |
 
 ### IPC / 桥通道计数（共 169 条：165 handle + 4 on，另有 18 条主进程→渲染层推送）
 
@@ -86,10 +86,10 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 | F20 | 归档/取消归档 | `redesign/Rail.tsx:620-650；chat:set-archived` | **已实现且可用** | Main.qml:800-830 归档横幅与右键 archive；qml_shell.py:643-700 archiveSession/unarchiveSession/archiveSessions |
 | F21 | 归档视图 | `redesign/Rail.tsx archiveView` | **已实现且可用** | Main.qml:600-760 archiveHeader/archiveBack，Python archivedSessions 投影 |
 | F22 | 会话搜索（标题/角色/挂载目录） | `redesign/Rail.tsx:600-640` | **已实现且可用** | Main.qml:159-200 visibleSessions 按 title/personaName/focusName 过滤；搜索框 Main.qml:495-575 可聚焦输入 |
-| F23 | 会话筛选面板（角色/文件夹） | `redesign/Rail.tsx:183-186,664-710` | **只有界面** | Main.qml:499-515 filterBtn 只有图标与 HoverHandler，无 MouseArea/onClicked；搜索框只过滤文本，无角色/目录筛选 |
+| F23 | 会话筛选面板（角色/文件夹） | `redesign/Rail.tsx:183-186,664-710` | **已实现且可用** | Main.qml:627-630 filterBtn → SessionFilter.qml；filterRoles/filterFolders/visibleSessions 同类 OR、跨类 AND；scripts/parity/feature_review/filter_evidence.py 真实点击角色+完整目录路径并读回 visibleSessions；暗亮截图 out/parity-close/filter-*.png |
 | F24 | 会话多选批量归档/删除 | `redesign/ThreadSelect.tsx` | **已实现且可用** | Main.qml:116-118,684-800,1898-1940 selectMode/selectedSessions + 批量归档/删除 |
 | F25 | 未读/待处理状态与红点 | `redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention` | **未移植** | 移植版无 unread/attention 字段（grep "unread" app/src 无结果）；列表行只显示时间 |
-| F26 | 草稿按会话保留 | `redesign/Composer.tsx:109-121,755-760` | **未移植** | `grep -rn "draft" app/src/qml app/src/qml_shell.py` 无结果；切会话后输入框内容不保留 |
+| F26 | 草稿按会话保留 | `redesign/Composer.tsx:109-121,755-760` | **已实现且可用** | Main.qml:102-115 composerDrafts 按 sessionId 保存 text+pendingFiles；scripts/parity/draft_evidence.py 真实键盘输入、真实拖放附件、切会话后读回；drafts.json 暗亮各一组 |
 | F27 | 会话列表宽度拖动 | `redesign/resizable.ts；ChatFirstShell.tsx:143-160` | **未移植** | Main.qml 侧栏宽固定 Theme.sideWidth（Main.qml:44-46,462-470），无拖动手柄 |
 | F27b | 会话列表收起/展开并记忆 | `redesign/ChatFirstShell.tsx:143-199` | **已实现且可用** | Main.qml sideCollapsed/sidePeek + 200/150ms 浮出定时器；qml_shell.py:515-522 落盘 config.json；真实截图 out/feature-parity/sidebar-{collapsed,peek}-{dark,light}.png |
 | F28 | 会话行右键菜单（新建/重命名/多选/归档/删除） | `redesign/Rail.tsx:175-182；ContextMenu.tsx` | **已实现且可用** | Main.qml:2076-2130 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发 |
@@ -125,7 +125,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 
 | ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
 |---|---|---|---|---|
-| F51 | 角色花名册 tab（列表/搜索/快速对话） | `redesign/Rail.tsx:130-170,600-744` | **只有界面** | Main.qml:439 RailButton users 只有图标无 onClicked；无 roster 列表/搜索实现 |
+| F51 | 角色花名册 tab（列表/搜索/快速对话） | `redesign/Rail.tsx:130-170,600-744` | **已实现且可用** | Main.qml:560 railRoster onClicked page=roster；PersonaRoster.qml 列表+搜索+开始会话；scripts/parity/feature_review/roster_evidence.py 真实点击入口、粘贴角色名搜索、点开始并读回会话 personaId；截图 out/parity-close/roster-*.png |
 | F52 | 角色资料卡（ProfilePanel） | `redesign/Rail.tsx:117 ProfilePanel` | **未移植** | Main.qml:414-425 meBtn 只有 Avatar，无 MouseArea；无资料卡 |
 | F53 | 新建/编辑/删除角色 | `redesign/ProfileView.tsx PersonaEditor；personas:upsert/remove` | **未移植** | PersonaStore 有 upsert/remove（persona_store.py:205-250）但 QML 无入口；Settings 的 identities 只编辑 prompt 文本 |
 | F54 | 角色头像编辑 | `redesign/AvatarEditor.tsx；personas:set-avatar-image` | **未移植** | PersonaStore.set_avatar_image 有后端（persona_store.py:269-286），QML 无头像编辑 UI |
@@ -176,7 +176,7 @@ a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 | F79 | 终端（PTY 会话） | `services/terminal.ts:87-108` | **不适用** | 原版渲染层无任何 terminal.* 调用（grep 无结果），属未接线的服务端能力，不构成用户可达功能 |
 | F80 | 子智能体/成员对话 | `services/subagents.ts, chat-members.ts, MemberBar.tsx；chat:remove-member` | **未移植** | 移植版 tool_runtime 只有 10 个工具（tool_runtime.py:4-6），无 subagent/member 能力 |
 | F81 | 自动任务卡/提案卡响应 | `chat:resolve-proposal / resolve-autotask；features/chat blocks` | **未移植** | 移植版无 proposals/autotasks 边车与卡片（chat_models.py 只有字段名） |
-| F82 | 代理与网络设置 | `apps/desktop/src/main/http.ts:12-122 仅环境变量 HTTPS_PROXY/HTTP_PROXY/ALL_PROXY/NO_PROXY` | **不适用** | 原版无代理设置 UI；不凭空造 |
+| F82 | 代理环境变量与系统路由 | `apps/desktop/src/main/http.ts:12-122（env 代理 + system/PAC 探测 + 换路由重试）` | **未移植** | app/src/mvvm/services/http_client.py:31-62 只做环境代理/NO_PROXY 基础解析，trust_env=False；原版 http.ts:41-107 的系统代理探测、失败换路由重试、按 origin 记忆未移植；scripts/parity/feature_review/proxy_evidence.py 实测 env 代理可用、直连可用，但语义不等价。原版无代理表单，此项只算网络路由能力 |
 | F83 | 日志与诊断面板 | `原版无日志 UI（仅 main 进程 console）` | **不适用** | 原版不存在此功能 |
 | F84 | 语音输入/输入法专属功能 | `原版无语音/听写代码（grep speech/voice 无结果）` | **不适用** | 原版不存在语音功能；输入法由系统提供 |
 

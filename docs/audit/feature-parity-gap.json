@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-11-27T22:50:37",
+ "generated_at": "2026-11-27T23:04:00",
  "source": {
   "deva": "/home/agent/shared_workspace/deva",
   "ai_upper": "/home/agent/shared_workspace/ai_upper",
-  "head": "b25dc1b7a025e807cf8e89bb6c6b989d5814e412",
+  "head": "392bb1e2ed168bbfa2a36a3262e202a915a2814b",
   "audit_baseline": "a5634344f050cff69871e40a0431c312b92c42dd"
  },
  "ipc": {
@@ -1553,8 +1553,8 @@
    "group": "会话列表",
    "name": "会话筛选面板（角色/文件夹）",
    "deva": "redesign/Rail.tsx:183-186,664-710",
-   "status": "ui_only",
-   "evidence": "Main.qml:499-515 filterBtn 只有图标与 HoverHandler，无 MouseArea/onClicked；搜索框只过滤文本，无角色/目录筛选"
+   "status": "implemented",
+   "evidence": "Main.qml:627-630 filterBtn → SessionFilter.qml；filterRoles/filterFolders/visibleSessions 同类 OR、跨类 AND；scripts/parity/feature_review/filter_evidence.py 真实点击角色+完整目录路径并读回 visibleSessions；暗亮截图 out/parity-close/filter-*.png"
   },
   {
    "id": "F24",
@@ -1577,8 +1577,8 @@
    "group": "会话列表",
    "name": "草稿按会话保留",
    "deva": "redesign/Composer.tsx:109-121,755-760",
-   "status": "not_ported",
-   "evidence": "`grep -rn \"draft\" app/src/qml app/src/qml_shell.py` 无结果；切会话后输入框内容不保留"
+   "status": "implemented",
+   "evidence": "Main.qml:102-115 composerDrafts 按 sessionId 保存 text+pendingFiles；scripts/parity/draft_evidence.py 真实键盘输入、真实拖放附件、切会话后读回；drafts.json 暗亮各一组"
   },
   {
    "id": "F27",
@@ -1785,8 +1785,8 @@
    "group": "角色",
    "name": "角色花名册 tab（列表/搜索/快速对话）",
    "deva": "redesign/Rail.tsx:130-170,600-744",
-   "status": "ui_only",
-   "evidence": "Main.qml:439 RailButton users 只有图标无 onClicked；无 roster 列表/搜索实现"
+   "status": "implemented",
+   "evidence": "Main.qml:560 railRoster onClicked page=roster；PersonaRoster.qml 列表+搜索+开始会话；scripts/parity/feature_review/roster_evidence.py 真实点击入口、粘贴角色名搜索、点开始并读回会话 personaId；截图 out/parity-close/roster-*.png"
   },
   {
    "id": "F52",
@@ -2031,10 +2031,10 @@
   {
    "id": "F82",
    "group": "其他原生能力",
-   "name": "代理与网络设置",
-   "deva": "apps/desktop/src/main/http.ts:12-122 仅环境变量 HTTPS_PROXY/HTTP_PROXY/ALL_PROXY/NO_PROXY",
-   "status": "na",
-   "evidence": "原版无代理设置 UI；不凭空造"
+   "name": "代理环境变量与系统路由",
+   "deva": "apps/desktop/src/main/http.ts:12-122（env 代理 + system/PAC 探测 + 换路由重试）",
+   "status": "not_ported",
+   "evidence": "app/src/mvvm/services/http_client.py:31-62 只做环境代理/NO_PROXY 基础解析，trust_env=False；原版 http.ts:41-107 的系统代理探测、失败换路由重试、按 origin 记忆未移植；scripts/parity/feature_review/proxy_evidence.py 实测 env 代理可用、直连可用，但语义不等价。原版无代理表单，此项只算网络路由能力"
   },
   {
    "id": "F83",
@@ -2055,8 +2055,8 @@
  ],
  "counts": {
   "not_ported": 39,
-  "implemented": 36,
-  "na": 5,
-  "ui_only": 5
+  "implemented": 39,
+  "na": 4,
+  "ui_only": 3
  }
 }
