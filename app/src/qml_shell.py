@@ -1484,6 +1484,24 @@ class ShellBridge(QtCore.QObject):
         return pref is True
 
     @QtCore.Slot(result="QVariantList")
+    def mentionCandidates(self):
+        session = self._session()
+        members = (getattr(session, 'members', None) or []) if session else []
+        rows = []
+        seen = set()
+        for member in members:
+            name = str(member.get('name') or '')
+            if name and name not in seen:
+                rows.append({'name':name, 'desc': '成员', 'kind':'mention'})
+                seen.add(name)
+        for persona in self.quickStartPersonas():
+            name = str(persona.get('name') or '')
+            if name and name not in seen:
+                rows.append({'name':name, 'desc':persona.get('desc',''), 'kind':'mention'})
+                seen.add(name)
+        return rows
+
+    @QtCore.Slot(result="QVariantList")
     def slashCommands(self) -> List[Dict[str, Any]]:
         """输入框 `/` 指令联想（原版 Composer.tsx:382-420 的内建指令子集）。
 
