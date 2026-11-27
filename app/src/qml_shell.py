@@ -1883,6 +1883,13 @@ def run(headless: bool) -> int:
         print("QML FAILED", f"missing={qml_main_path}", file=sys.stderr, flush=True)
         return 1
 
+    from utils.qt_compat import QtWidgets
+    from mvvm.services.single_instance import SingleInstance
+    app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+    instance = SingleInstance(app_home(), app)
+    if not instance.acquire():
+        return 0
+    app.aboutToQuit.connect(instance.close)
     home = app_home()
     settings = SettingsService(home)
     vault = SecretsVault(home)
@@ -1900,7 +1907,7 @@ def run(headless: bool) -> int:
     # mvvm/services/deliverables.py 的 `_icon_data_url`）。
     from utils.qt_compat import QtWidgets
 
-    app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
+
     bridge_box: Dict[str, ShellBridge] = {}
 
     def emit(payload: Dict[str, Any]) -> None:
@@ -1937,6 +1944,7 @@ def run(headless: bool) -> int:
         print("QML FAILED", "reason=engine loaded no root object", file=sys.stderr, flush=True)
         return 1
     window = roots[0]
+    instance.attach(window)
     bridge.bind_window(window)
     bridge.initial()
     _select_page(window)
