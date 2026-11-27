@@ -128,10 +128,7 @@ Item {
                             { key: "general", label: I18n.t("settings.general"), icon: IconData.cog },
                             { key: "models", label: I18n.t("settings.models"), icon: IconData.brain },
                             { key: "extensions", label: I18n.t("extensions.title"), icon: IconData.puzzle },
-                            { key: "about", label: I18n.t("settings.about"), icon: IconData.info },
-                            { key: "custom-model", label: I18n.t("native.message7"), icon: IconData.brain },
-                            { key: "mcp", label: I18n.t("finish.mcp"), icon: IconData.puzzle },
-                            { key: "identities", label: I18n.t("cf.filterRoles"), icon: IconData.users }
+                            { key: "about", label: I18n.t("settings.about"), icon: IconData.info }
                         ]
                         delegate: Rectangle {
                             required property var modelData
@@ -194,7 +191,10 @@ Item {
         }
     }
 
-    Component { id: pluginPane; PluginSettingsPane { mode: root.pane } }
+    Component { id: pluginPane; Item {
+        SettingsButton { objectName: "pluginBack"; x: 20; y: 12; text: I18n.t("common.back"); onClicked: root.paneRequested(root.pane === "custom-model" ? "models" : "extensions") }
+        PluginSettingsPane { anchors.fill: parent; anchors.topMargin: 48; mode: root.pane }
+    } }
 
     // ── General：语言 / 主题 / 字号（三行分段控件，实测宽 510 的设置卡）─────
     component SetRow: Item {
@@ -542,7 +542,7 @@ Item {
                         anchors.rightMargin: 8
                         height: 28
                         text: I18n.t("native.message29")
-                        onClicked: root.pane = "custom-model"
+                        onClicked: root.paneRequested("custom-model")
                     }
                 }
 
@@ -1298,6 +1298,13 @@ Item {
                 font.family: Theme.sansFamily
                 font.pixelSize: 15
                 font.weight: 700
+            }
+
+            SettingsButton {
+                objectName: "extensionsManageMcp"
+                anchors.right: parent.right; anchors.rightMargin: 20; y: 12
+                text: I18n.t("finish.mcp")
+                onClicked: root.paneRequested("mcp")
             }
 
             Text {

@@ -897,6 +897,11 @@ ApplicationWindow {
             width: parent.width
             height: parent.height - 40
 
+            SettingsButton {
+                objectName: "chatManagePersonas"; x: 20; y: 12
+                text: I18n.t("cf.filterRoles"); onClicked: window.page = "personas-editor"
+            }
+
             // `.cf-quick__inner`：max-width 780 的居中列，容器内纵向居中。
             // 宽度取内容列可用宽 740（780 - 左右各 20 的 padding）；窄窗时跟随容器。
             Column {
@@ -2522,4 +2527,13 @@ ApplicationWindow {
                 return sessions[i].personaName || I18n.t("cf.assistant")
         return I18n.t("cf.assistant")
     }
+    Rectangle {
+        anchors.fill: parent; z: 100; visible: window.page === "personas-editor"; color: Theme.bg
+        SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: window.page = "chat" }
+        Loader { anchors.fill: parent; anchors.margins: 20; anchors.topMargin: 64
+            active: window.page === "personas-editor"
+            sourceComponent: Component { PluginSettingsPane { mode: "identities" } }
+        }
+    }
+
 }
