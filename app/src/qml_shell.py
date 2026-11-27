@@ -1469,6 +1469,31 @@ class ShellBridge(QtCore.QObject):
         """交付卡「在文件夹中显示」：同样只认边车路径。"""
         return bool(reveal(self._session(), tool_use_id, self._delivered_index(tool_use_id, path))["ok"])
 
+    @QtCore.Slot(result="QVariantList")
+    def slashCommands(self) -> List[Dict[str, Any]]:
+        """输入框 `/` 指令联想（原版 Composer.tsx:382-420 的内建指令子集）。
+
+        `/compact` 已接 `ChatHost.compact`；`/rewind` 没有后端，不在候选里假装可用。
+        """
+        return [{
+            "name": "compact",
+            "desc": self.translate("cf.slash.compact"),
+            "hint": self.translate("cf.slash.hint"),
+        }]
+
+    @QtCore.Slot(str, result=bool)
+    def runSlashCommand(self, name: str) -> bool:
+        """执行选中的 `/` 指令：compact 起真实压缩回合；未知指令返回 False。"""
+        if name != "compact" or not self._active or self._host.is_busy(self._active):
+            return False
+        try:
+            turn_id = self._host.compact({"sessionId": self._active})["turnId"]
+        except Exception as exc:  # noqa: BLE001 - 压缩失败显式暴露
+            print("QML SLASH FAILED", f"{type(exc).__name__}: {exc}", file=sys.stderr, flush=True)
+            return False
+        print("QML SLASH", json.dumps({"name": name, "turnId": turn_id}, ensure_ascii=False), flush=True)
+        return True
+
     @QtCore.Slot(str, result=bool)
     def openExternal(self, url: str) -> bool:
         """正文里的链接点击：原版渲染层 `<a>` 由 Chromium 直接打开，QML 侧显式转系统浏览器。

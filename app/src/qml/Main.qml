@@ -152,6 +152,11 @@ ApplicationWindow {
     property string searchQuery: page === "search-results" ? "00"
                                : page === "search-none" ? "zzz" : ""
     property bool modelPickerOpen: page === "model-picker"
+    // `/` 指令联想：输入以 / 开头且未输入空格时显示；匹配 shellBridge.slashCommands()。
+    property var slashAll: []
+    property var slashRows: []
+    property int slashCurrent: 0
+    property bool slashOpen: false
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
     property string pickerMode: page === "model-picker" ? "model" : ""
     // 上下文容量小卡片：独立于两个 picker；任一贴片展开时必须收起。
@@ -1564,6 +1569,17 @@ ApplicationWindow {
         // 深色 `0 8px 30px rgba(0,0,0,.5)`、浅色 `0 6px 24px rgba(0,0,0,.12)`
         // （tokens.css:149 / :82）。参数字面量集中在 SoftShadow.qml。
         SoftShadow {
+            SlashMenu {
+                id: slashMenu
+                objectName: "slashMenuRoot"
+                x: composer.x + 13
+                y: composer.y - height - 8
+                z: 30
+                rows: window.slashRows
+                current: window.slashCurrent
+                onPicked: function (name) { window.runSlash(name) }
+            }
+
             id: composerShadow
             target: composer
         }
@@ -1605,6 +1621,7 @@ ApplicationWindow {
                 wrapMode: TextArea.Wrap
                 background: null
                 enabled: !window.busy
+                onTextChanged: window.updateSlash()
                 TapHandler {
                     acceptedButtons: Qt.RightButton
                     onSingleTapped: function (eventPoint) {
@@ -1614,6 +1631,23 @@ ApplicationWindow {
                     }
                 }
                 Keys.onPressed: function (event) {
+                    if (window.slashOpen) {
+                        if (event.key === Qt.Key_Down) {
+                            window.slashCurrent = Math.min(window.slashCurrent + 1, window.slashRows.length - 1)
+                            event.accepted = true; return
+                        }
+                        if (event.key === Qt.Key_Up) {
+                            window.slashCurrent = Math.max(window.slashCurrent - 1, 0)
+                            event.accepted = true; return
+                        }
+                        if (event.key === Qt.Key_Escape) {
+                            window.slashOpen = false; event.accepted = true; return
+                        }
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Tab) {
+                            if (window.slashRows.length > 0) window.runSlash(window.slashRows[window.slashCurrent].name)
+                            event.accepted = true; return
+                        }
+                    }
                     if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
                         // 剪贴板里是图片时按附件处理（原版 Composer 的 paste 处理）；纯文本走默认粘贴。
                         var pasted = shellBridge.attachClipboardImage()
@@ -2004,6 +2038,33 @@ ApplicationWindow {
             inputField.text = ""
             window.pendingFiles = []
         }
+    }
+
+    // `/` 指令联想：只匹配命令名，输入空格后关闭（原版 Composer.tsx:405-420 同口径）。
+    function updateSlash() {
+        var text = inputField.text
+        if (text.charAt(0) !== "/" || text.indexOf(" ") >= 0 || text.indexOf("\n") >= 0) {
+            window.slashOpen = false
+            window.slashRows = []
+            return
+        }
+        if (window.slashAll.length === 0 && shellBridge)
+            window.slashAll = shellBridge.slashCommands()
+        var q = text.substring(1).toLowerCase()
+        var rows = (window.slashAll || []).filter(function (row) {
+            return String(row.name).toLowerCase().indexOf(q) === 0
+        })
+        window.slashRows = rows
+        window.slashCurrent = 0
+        window.slashOpen = rows.length > 0
+    }
+
+    function runSlash(name) {
+        window.slashOpen = false
+        window.slashRows = []
+        inputField.text = ""
+        if (!shellBridge.runSlashCommand(String(name)))
+            notify(I18n.t("native.message24"))
     }
 
     // 停止当前回合（原版 Composer 的停止键 → chat:abort）。没有可停回合时不假装成功。

@@ -271,12 +271,32 @@ def evidence_unread(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_slash(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-slash-{theme}-"))
+    try:
+        window, bridge, _store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        field = find_item(window.contentItem(), "inputField")
+        field.forceActiveFocus()
+        QTest.keyClick(window, Qt.Key_Slash)
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        png = outdir / f"slash-menu-{theme}.png"
+        size = shot(window, png)
+        rows = [{"feature": "slash", "theme": theme, "png": str(png), "size": size,
+                 "open": bool(window.property("slashOpen")), "rows": window.property("slashRows").toVariant() if hasattr(window.property("slashRows"), "toVariant") else window.property("slashRows")}]
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     app = QGuiApplication.instance() or QGuiApplication([])
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):
