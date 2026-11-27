@@ -1,0 +1,15 @@
+# F15/F60: private session bus + org.freedesktop.Notifications service probe
+$ dbus-daemon --config-file=/tmp/session-dbus.conf --fork --print-address=1 --print-pid=1
+unix:path=/tmp/dbus-7dyVjxyxGw,guid=ae2945e125a321c1cd7bd45a6b0a0122
+238447
+
+# QSystemTrayIcon path under Xvfb + XEmbed tray host:
+connected True
+regsvc True
+regobj True
+tray True
+NOTIFY SHOWN Hello
+notify True
+calls []
+# raw result: the Qt tray method returned success but the registered service received
+# no Notify invocation; thus no notification success state is claimed.
