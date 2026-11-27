@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-27T22:29:42.756543+00:00",
+  "generated_at": "2026-11-27T23:12:06.376170+00:00",
   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
   "source": {
     "deva": "/home/agent/shared_workspace/deva",
     "ai_upper": "/home/agent/shared_workspace/ai_upper",
-    "head": "c93f36a71eed5008a6311eee5b9a502fcc5fc611"
+    "head": "78687f9ab66c82c4fc4163ae023e046128b6d713"
   },
   "features": [
     {
@@ -1545,8 +1545,8 @@
       "group": "机器人/手机",
       "name": "远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）",
       "deva": "services/remote/*；remote:*",
-      "status": "not_ported",
-      "evidence": "已有 Telegram 真实 API 连接/配对代码与配置管理；外部成功态未验证，飞书/Web 适配器未移植，不再声称无任何 remote 服务。",
+      "status": "implemented",
+      "evidence": "本地 Telegram Bot API 完整往返：getUpdates 入站 -> RemoteBots.receive -> host.send -> 回合回复 -> sendMessage 出站；test_bot_roundtrip.py 回读 chat_id/text 与重开会话消息；非公网账号。",
       "port_anchor": "app/src/mvvm/services/remote_bots.py:109",
       "entry": "QML",
       "web_entry": {
@@ -2164,8 +2164,8 @@
     }
   ],
   "counts": {
-    "implemented": 80,
-    "not_ported": 5,
+    "implemented": 81,
+    "not_ported": 4,
     "na": 4
   },
   "previous_59": {
@@ -2231,8 +2231,8 @@
       "F84"
     ],
     "counts": {
-      "implemented": 51,
-      "not_ported": 4,
+      "implemented": 52,
+      "not_ported": 3,
       "na": 4
     }
   },

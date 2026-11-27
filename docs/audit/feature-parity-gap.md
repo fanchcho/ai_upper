@@ -1,8 +1,8 @@
 # 功能移植全量复核
 
-全量 89 项：已实现且可用 80；只有界面 0；未移植 5；不适用 4。
+全量 89 项：已实现且可用 81；只有界面 0；未移植 4；不适用 4。
 
-上一轮 59 项未判定候选已全部判定：{'implemented': 51, 'not_ported': 4, 'na': 4}。无 pending/待判定。原 85 项 + 后发现 Git 面板 1 项 + 当前原版工作树新增协议 3 项 = 89 项。
+上一轮 59 项未判定候选已全部判定：{'implemented': 52, 'not_ported': 3, 'na': 4}。无 pending/待判定。原 85 项 + 后发现 Git 面板 1 项 + 当前原版工作树新增协议 3 项 = 89 项。
 
 组合项只要仍有原版行为未补齐，就保守记为未移植，并明确已有实现；不把部分能力升级为完整可用。只有界面专指可见而无动作入口。托盘等环境限制保留四态字段，同时在证据标未验证，不能当作原版不存在。
 
@@ -77,7 +77,7 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
 |F60 / 定时任务|任务系统通知|`apps/desktop/src/main/services/scheduler.ts:103`|已实现且可用|`app/src/qml_shell.py:2465`；任务完成通知复用同一 TrayController.notify 路径；dbus-send Notify 实测服务端收到字段，任务/回复通知不再依赖 QSystemTrayIcon.showMessage。；搜索命令及原始结果：`docs/audit/evidence/F60-search.txt`|
 |F61 / 定时任务|任务绑定主对话与结果交接|`apps/desktop/src/main/services/chat-task-handoff.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:129`；9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。；搜索命令及原始结果：`docs/audit/evidence/F61-search.txt`|
 |F62 / 机器人/手机|机器人页（Bots tab 列表/添加/详情）|`apps/desktop/src/renderer/src/redesign/BotsPane.tsx:1`|未移植|`app/src/qml/RemoteBots.qml:27`；真实配置列表/回复模式/范围/删除点击与写盘通过 out/final-port/bots-ui.json；Telegram 添加路径已实现但无真实凭据未验证，飞书/Web 创建和完整详情尚缺。；搜索命令及原始结果：`docs/audit/evidence/F62-search.txt`|
-|F63 / 机器人/手机|远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）|`apps/desktop/src/main/index.ts:1`|未移植|`app/src/mvvm/services/remote_bots.py:109`；已有 Telegram 真实 API 连接/配对代码与配置管理；外部成功态未验证，飞书/Web 适配器未移植，不再声称无任何 remote 服务。；搜索命令及原始结果：`docs/audit/evidence/F63-search.txt`|
+|F63 / 机器人/手机|远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）|`apps/desktop/src/main/index.ts:1`|已实现且可用|`app/src/mvvm/services/remote_bots.py:109`；本地 Telegram Bot API 完整往返：getUpdates 入站 -> RemoteBots.receive -> host.send -> 回合回复 -> sendMessage 出站；test_bot_roundtrip.py 回读 chat_id/text 与重开会话消息；非公网账号。；搜索命令及原始结果：`docs/audit/evidence/F63-search.txt`|
 |F64 / 机器人/手机|手机联动（QR/设备/中转）|`apps/desktop/src/renderer/src/redesign/PhonePane.tsx:1`, `apps/desktop/src/main/services/remote/web/phone.ts:1`|未移植|`app/src/qml/Main.qml:623`；移植版无 phone 服务/UI；搜索命令及原始结果：`docs/audit/evidence/F64-search.txt`|
 |F65 / 设置与扩展|语言/主题/聊天字号|`apps/desktop/src/renderer/src/redesign/SettingsPane.tsx:92`|已实现且可用|`app/src/qml_shell.py:592`；SettingsModal.qml:280-345 三行 SetRow → qml_shell.py (legacy line reference; current anchor at left) setLanguage/setTheme/setTextSize（sm/md/lg/xl）；搜索命令及原始结果：`docs/audit/evidence/F65-search.txt`|
 |F66 / 设置与扩展|模型服务商列表/详情/密钥/请求头|`apps/desktop/src/renderer/src/features/settings/ModelSettings.tsx:1`|已实现且可用|`app/src/qml_shell.py:1054`；SettingsModal modelsPane + qml_shell.py (legacy line reference; current anchor at left)/850-861 setProviderHeaders；上一轮已验收；搜索命令及原始结果：`docs/audit/evidence/F66-search.txt`|
