@@ -130,7 +130,7 @@ Item {
                     Row { spacing: -6; Repeater { model: root.item.roles || []; Avatar { required property string modelData; persona: modelData; imageSource: root.personaRecord(modelData).avatarImage || ""; size: 20 } } }
                     Text { text: root.rolesSummary(); color: Theme.fg; font.pixelSize: 13 }
                 }
-                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 12; color: Theme.fgSubtle }
+                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 15; color: Theme.fgSubtle }
                 onClicked: rolesPopup.open()
                 Popup {
                     id: rolesPopup; focus: true; y: parent.height + 6; width: parent.width
@@ -147,7 +147,7 @@ Item {
                     contentItem: Column {
                         Item { width: parent.width; height: 48.75
                             Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === 0 ? Theme.bgHover : "transparent" }
-                            Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 14; name: "M20 6 9 17l-5-5"; color: Theme.accent; visible: !root.item.roles || !root.item.roles.length }
+                            Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 15; name: "M20 6 9 17l-5-5"; color: Theme.accent; visible: !root.item.roles || !root.item.roles.length }
                             Rectangle { x: 8; y: 11.375; width: 26; height: 26; radius: 13; color: Theme.bgSelected
                                 Icon { anchors.centerIn: parent; name: IconData.users; size: 14; color: Theme.accent }
                             }
@@ -169,7 +169,7 @@ Item {
                                 Avatar { x: 8; anchors.verticalCenter: parent.verticalCenter; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 26 }
                                 Text { x: 44; y: modelData.desc ? 6 : 9.25; text: modelData.name; color: Theme.fg; font.pixelSize: 13 }
                                 Text { x: 44; y: 25.5; width: parent.width - 70; text: modelData.desc || ""; elide: Text.ElideRight; color: Theme.fgSubtle; font.pointSize: 8.625 }
-                                Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 14; name: "M20 6 9 17l-5-5"; visible: (root.item.roles || []).indexOf(modelData.id) >= 0; color: Theme.accent }
+                                Icon { anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter; size: 15; name: "M20 6 9 17l-5-5"; visible: (root.item.roles || []).indexOf(modelData.id) >= 0; color: Theme.accent }
                                 MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = index + 1; onClicked: {
                                     var roles = (root.item.roles || []).slice(); var i = roles.indexOf(modelData.id)
                                     if (i >= 0) roles.splice(i,1); else roles.push(modelData.id)

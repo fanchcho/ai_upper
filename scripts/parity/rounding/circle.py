@@ -1,0 +1,3 @@
+from pathlib import Path
+s=Path('.tmp/extensions-rounding/flat.py').read_text().replace('y: 30;', 'y: {30+offset};').replace('height: {size}; color:', 'height: {size}; radius: {size/2}; color:').replace("'out/extensions-rounding/qt-'+theme+'-flat.png'","'out/extensions-rounding/qt-'+theme+'-circle.png'");Path('.tmp/extensions-rounding/circle-run.py').write_text(s)
+s=Path('.tmp/extensions-rounding/flat-reference.py').read_text().replace('top:30px;', 'top:{30+offset}px;').replace('background:rgba(', 'border-radius:50%;background:rgba(').replace('-flat.png','-circle.png');Path('.tmp/extensions-rounding/circle-reference.py').write_text(s)
