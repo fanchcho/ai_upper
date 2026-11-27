@@ -1,0 +1,9 @@
+a7ee565 feat: retain 100 rewind turns and allow per-file conflict overrides
+9e5c29d feat: edit schedules and deliver task results to owner conversations
+355f77c feat: add a minimal real Git panel with status stage commit branches
+674ecd8 feat: fetch provider model lists in settings
+ba0debf feat: add persona profile, editing, avatars and ordering
+09de966 feat: create mentioned members and dispatch real member turns
+61c8e2d feat: add composer todo and pending-insert capsules
+9c8cf44 docs: record rewind interaction and isolated regression evidence
+b1a2f75 feat: render tool, result, thinking and subagent activity in the QML transcript

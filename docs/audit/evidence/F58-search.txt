@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py taskCreate app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/ScheduledTasks.qml:28:            objectName: "taskCreate"; text: "创建任务"
+app/src/qml/ScheduledTasks.qml:42:            objectName: "taskCreate"; text: root.editing ? "保存修改" : "创建任务"

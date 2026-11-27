@@ -1,3 +1,4 @@
 $ rg -n --glob *.qml --glob *.py rewindPreview|rewindApply|rewindUndo app/src/qml app/src/qml_shell.py app/src/mvvm
-exit=1
-(no matches)
+exit=0
+app/src/qml/RewindPanel.qml:56:                objectName: "rewindApply"; text: "应用回滚"; enabled: root.selected >= 0
+app/src/qml/RewindPanel.qml:60:                objectName: "rewindUndo"; text: "撤销回滚"

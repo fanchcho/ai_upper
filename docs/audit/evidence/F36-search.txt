@@ -1,5 +1,6 @@
 $ rg -n --glob *.qml --glob *.py deleteTurns|delete_turns app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/mvvm/webui/host.py:415:    def delete_turns(self, session_id: Any, workspace_root: Any = None, turns: Any = None) -> list[dict[str, Any]]:
-app/src/mvvm/webui/host.py:420:        messages = self.store.delete_turns(key, indices) if key else None
+app/src/mvvm/webui/host.py:441:    def delete_turns(self, session_id: Any, workspace_root: Any = None, turns: Any = None) -> list[dict[str, Any]]:
+app/src/mvvm/webui/host.py:446:        messages = self.store.delete_turns(key, indices) if key else None
+app/src/mvvm/webui/host.py:491:                self.store.delete_turns(session_id, list(range(turn,len(starts))))
 app/src/mvvm/services/chat_session_store.py:523:    def delete_turns(self, session_id: str, turns: list[int]) -> Optional[list[Message]]:

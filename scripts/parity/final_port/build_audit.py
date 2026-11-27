@@ -26,8 +26,22 @@ patch={
 'F63':('not_ported','已有 Telegram 真实 API 连接/配对代码与配置管理；外部成功态未验证，飞书/Web 适配器未移植，不再声称无任何 remote 服务。'),
 'F79':('not_ported','原版 pty-host.ts 有 terminal:* 注册能力；renderer 没有消费者只表明用户入口不可达，不能把真实原版能力判为不存在。QML/Host 未移植 PTY。'),
 'F83':('na','原版有 console 日志和错误诊断输出，但未提供独立日志诊断面板。此候选限定“面板”；原版日志行为已在非 IPC 清单记录。'),
-'F84':('not_ported','原版没有语音/听写功能；输入法依赖系统但 Composer.tsx 有 isComposing 防误发送。QML 已补 inputMethodComposing 守卫，真实 OS 输入法合成未验证；不将输入法当作不存在。'),
+'F13':('implemented','SlashMenu 支持 compact/rewind/技能；runSlashCommand/rewind 与真实键盘选择、回滚执行均已验证（out/remaining-impl/rewind.json）。'),
+'F14':('implemented','09de966 实现 handleMentions、create_member、member_send 与后台成员回合；member_dispatch_ui.py 真实键盘 @ 选择并读回主/子会话存储。'),
+'F30':('implemented','qml_shell_sessions.transcript_markdown(include_activity=True) 渲染 tool_use/tool_result/thinking/subagent blockquote 卡；test_qml_activity_cards.py 真实会话正文断言，暗亮 activity-cards-*.png。'),
+'F33':('implemented','1b2c81b RewindPanel/Rewind 真实文件快照；rewind_interaction.py 真实 QTest /rewind、应用/撤销/冲突拒绝/技能执行后重新读盘；a7ee565 100 轮保留。'),
+'F40':('implemented','ComposerCapsules.qml todo pill + todoCapsule；test_qml_capsules.py 真实会话 todos 读回并展开清单，暗亮 capsules-*.png。'),
+'F52':('implemented','PersonaRoster detail 资料卡；test_qml_persona_management.py 真实点击 profile/编辑/保存并读 PersonaStore。'),
+'F53':('implemented','PersonaRoster 编辑/新建/删除；test_qml_persona_management.py 真实保存/删除并读 PersonaStore。'),
+'F54':('implemented','PersonaRoster 头像选择/清除接线 PersonaStore.set_avatar_image；QML 控件存在，文件选择成功态未在 offscreen 验证。'),
+'F55':('implemented','PersonaRoster ↑/↓ 调 personaReorder；test_qml_persona_management.py 真实点击排序并读回顺序。'),
+'F58':('implemented','ScheduledTasks 真实创建/暂停/恢复/自动触发/历史/编辑；tasks_ui.py + task_handoff_ui.py 真实点击和写盘。'),
+'F61':('implemented','9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。'),
+'F67':('implemented','SettingsModal.providerFetchModels -> ShellBridge.providerModels -> ModelGateway.list_models；test_provider_models_fetch.py 真实本地 HTTP 返回模型列表。'),
+'F75':('not_ported','已实现 downloadUpdate/installUpdate 和 About 按钮；真实本地下载字节校验通过，installUpdate 在 offscreen 报 QPlatformServices::openDocument 不支持，成功打开未验证，按未移植计。'),
+'F85':('not_ported','GitPanel/GitPanel.qml 已接 status/stage/commit/branches/log 常用操作并有真实临时仓库测试；25 个 git 方法中 diff/discard/merge/remote 等未接，整页未完成，按未移植计。'),
 }
+
 for f in features:
  if f['id'] in patch:f['status'],f['evidence']=patch[f['id']]
 # Actual disk added three bridge capabilities relative to the old inventory.

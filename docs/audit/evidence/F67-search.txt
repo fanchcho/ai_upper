@@ -1,3 +1,4 @@
 $ rg -n --glob *.qml --glob *.py fetchModelList|fetchModels app/src/qml app/src/qml_shell.py app/src/mvvm
-exit=1
-(no matches)
+exit=0
+app/src/qml/SettingsModal.qml:361:            function fetchModels() {
+app/src/qml/SettingsModal.qml:753:                            onClicked: modPane.fetchModels()

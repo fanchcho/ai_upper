@@ -1,0 +1,1 @@
+PASS two files: conflict skipped + clean restored; explicit force; undo skips later edits; 31-day payload GC preserves metadata

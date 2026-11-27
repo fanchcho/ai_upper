@@ -1,0 +1,3 @@
+?? docs/audit/member-task-close/external-personas.diff
+?? docs/audit/member-task-close/external-status.txt
+?? docs/audit/member-task-close/targeted.log

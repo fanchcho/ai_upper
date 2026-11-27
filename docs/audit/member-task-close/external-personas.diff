@@ -1,0 +1,375 @@
+diff --git a/app/src/locales/en.json b/app/src/locales/en.json
+index be90b27..7cdaafa 100644
+--- a/app/src/locales/en.json
++++ b/app/src/locales/en.json
+@@ -988,7 +988,7 @@
+   "cf.expandList": "Expand conversation list",
+   "cf.tabRoster": "Roster",
+   "cf.tabTasks": "Tasks",
+-  "cf.addPersona": "Add persona",
++  "cf.addPersona": "New persona",
+   "cf.addByChat": "Add via chat",
+   "cf.addByChatPrompt": "I want to create a new persona. Please guide me step by step to define its role, personality, and expertise, then submit it to me as a persona card to confirm.",
+   "cf.localUser": "Local user",
+@@ -2254,5 +2254,10 @@
+   "common.cut": "Cut",
+   "common.paste": "Paste",
+   "chat.tool.call": "Tool call",
+-  "chat.tool.result": "Tool result"
++  "chat.tool.result": "Tool result",
++  "cf.personaName": "Persona name",
++  "cf.personaDescription": "Description",
++  "cf.personaPrompt": "Persona prompt",
++  "cf.changeAvatar": "Change avatar",
++  "cf.removeAvatar": "Remove avatar"
+ }
+\ No newline at end of file
+diff --git a/app/src/locales/zh-CN.json b/app/src/locales/zh-CN.json
+index 1d03523..1d9518b 100644
+--- a/app/src/locales/zh-CN.json
++++ b/app/src/locales/zh-CN.json
+@@ -989,7 +989,7 @@
+   "cf.expandList": "展开会话列表",
+   "cf.tabRoster": "角色",
+   "cf.tabTasks": "定时任务",
+-  "cf.addPersona": "添加角色",
++  "cf.addPersona": "新建角色",
+   "cf.addByChat": "通过对话添加",
+   "cf.addByChatPrompt": "我想创建一个新角色，请一步步引导我明确它的定位、性格与专长，最后用角色名片提交给我确认。",
+   "cf.localUser": "本机用户",
+@@ -2254,5 +2254,10 @@
+   "common.cut": "剪切",
+   "common.paste": "粘贴",
+   "chat.tool.call": "工具调用",
+-  "chat.tool.result": "工具结果"
++  "chat.tool.result": "工具结果",
++  "cf.personaName": "角色名称",
++  "cf.personaDescription": "角色描述",
++  "cf.personaPrompt": "角色提示词",
++  "cf.changeAvatar": "更换头像",
++  "cf.removeAvatar": "移除头像"
+ }
+\ No newline at end of file
+diff --git a/app/src/qml/PersonaRoster.qml b/app/src/qml/PersonaRoster.qml
+index dbe3699..116d05d 100644
+--- a/app/src/qml/PersonaRoster.qml
++++ b/app/src/qml/PersonaRoster.qml
+@@ -1,62 +1,194 @@
++// 角色花名册 + 资料卡 + 编辑（原版 Rail.tsx 角色 tab / ProfileView.tsx / PersonaEditor）。
++// 所有写操作经 ShellBridge → PersonaStore 落盘；这里不存第二份角色数据。
+ import QtQuick
+ import QtQuick.Controls
++import QtQuick.Layouts
+ import "."
+ 
+ Rectangle {
+     id: roster
+     objectName: "personaRoster"
+     required property var shell
+-    color: Theme.bg
++    property string mode: "list"          // list | detail | edit
++    property var rows: []
++    property var selected: ({})
++    property string selectedId: ""
++    property string editId: ""
+     property string query: ""
+-    readonly property var rows: shell.quickStartPersonas.filter(function(row) {
+-        return (row.name + " " + row.desc).toLowerCase().indexOf(query.trim().toLowerCase()) >= 0
+-    })
+-    SettingsButton {
+-        x: 20; y: 20
+-        text: I18n.t("common.back")
+-        onClicked: roster.shell.page = "chat"
+-    }
+-    SettingsButton {
+-        objectName: "rosterManage"
+-        anchors.right: parent.right; anchors.rightMargin: 116; y: 20
+-        text: I18n.t("cf.addPersona")
+-        onClicked: roster.shell.page = "personas-editor"
+-    }
+-    SettingsField {
+-        objectName: "rosterSearch"
+-        x: 20; y: 70; width: parent.width - 40
+-        placeholderText: I18n.t("cf.searchRoster")
+-        onTextChanged: roster.query = text
+-    }
+-    ListView {
+-        id: list
+-        objectName: "rosterList"
+-        x: 20; y: 120; width: parent.width - 40; height: parent.height - y - 20
+-        clip: true; spacing: 8; model: roster.rows
+-        boundsBehavior: Flickable.StopAtBounds
+-        ScrollBar.vertical: SettingsScrollBar {}
+-        delegate: Rectangle {
+-            required property var modelData
+-            width: list.width; height: 84
+-            color: Theme.bgPanel; radius: Theme.radiusSm
+-            border.color: Theme.border
+-            Text { x: 16; y: 12; width: parent.width - 150; text: modelData.name; color: Theme.fg; font.pixelSize: 16 }
+-            Text { x: 16; y: 40; width: parent.width - 150; text: modelData.desc; elide: Text.ElideRight; color: Theme.fgMuted }
+-            SettingsButton {
+-                objectName: "rosterStart_" + modelData.id
+-                anchors.right: parent.right; anchors.rightMargin: 16; anchors.verticalCenter: parent.verticalCenter
+-                text: I18n.t("cf.startChat")
+-                onClicked: {
+-                    var id = shellBridge.startQuickStart(modelData.id)
+-                    if (id) {
+-                        roster.shell.filterRoles = []
+-                        roster.shell.filterFolders = []
+-                        roster.shell.searchQuery = ""
+-                        roster.shell.page = "chat"
++    property string notice: ""
++
++    color: Theme.bg
++
++    function reload() {
++        rows = shellBridge ? shellBridge.personaRecords() : []
++    }
++    function visibleRows() {
++        var q = query.trim().toLowerCase()
++        if (!q) return rows
++        return rows.filter(function (row) {
++            return ((row.name || "") + " " + (row.description || "")).toLowerCase().indexOf(q) >= 0
++        })
++    }
++    function openDetail(id) {
++        selectedId = String(id)
++        selected = shellBridge.personaDetail(selectedId)
++        mode = "detail"
++    }
++    function openEdit(row) {
++        editId = row && row.id ? String(row.id) : roster.selectedId
++        nameField.text = row && row.name ? row.name : ""
++        descField.text = row && row.description ? row.description : ""
++        promptField.text = row && row.prompt ? row.prompt : ""
++        avatarPreview.source = row && row.avatarImage ? row.avatarImage : ""
++        mode = "edit"
++    }
++    function save() {
++        var payload = JSON.stringify({
++            id: editId,
++            name: nameField.text,
++            description: descField.text,
++            prompt: promptField.text
++        })
++        if (!shellBridge.personaSave(payload)) { notice = "保存失败"; return }
++        notice = ""
++        reload()
++        mode = "list"
++    }
++    function remove(id) {
++        if (!shellBridge.personaDelete(String(id))) { notice = "删除失败"; return }
++        reload(); mode = "list"
++    }
++    function move(id, delta) {
++        var ids = rows.map(function (r) { return r.id })
++        var at = ids.indexOf(id)
++        var to = at + delta
++        if (at < 0 || to < 0 || to >= ids.length) return
++        ids.splice(to, 0, ids.splice(at, 1)[0])
++        if (!shellBridge.personaReorder(ids)) notice = "排序失败"
++        reload()
++    }
++
++    Component.onCompleted: reload()
++    onVisibleChanged: if (visible) reload()
++
++    // ── 列表 ────────────────────────────────────────────────────────────
++    Item {
++        visible: roster.mode === "list"
++        anchors.fill: parent
++        SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: roster.shell.page = "chat" }
++        Text { x: 120; y: 22; text: I18n.t("cf.tabRoster"); color: Theme.fg; font.pixelSize: 20; font.weight: 700 }
++        SettingsButton {
++            objectName: "rosterAdd"
++            anchors.right: parent.right; anchors.rightMargin: 20; y: 20
++            text: I18n.t("cf.addPersona")
++            onClicked: roster.openEdit(null)
++        }
++        SettingsField {
++            objectName: "rosterSearch"
++            x: 20; y: 68; width: parent.width - 40
++            placeholderText: I18n.t("cf.searchRoster")
++            onTextChanged: roster.query = text
++        }
++        ListView {
++            id: list
++            objectName: "rosterList"
++            x: 20; y: 116; width: parent.width - 40; height: parent.height - y - 20
++            clip: true; spacing: 8; model: roster.visibleRows()
++            boundsBehavior: Flickable.StopAtBounds
++            ScrollBar.vertical: SettingsScrollBar {}
++            delegate: Rectangle {
++                required property var modelData
++                objectName: "personaRow_" + modelData.id
++                width: list.width; height: 84
++                color: Theme.bgPanel; radius: Theme.radiusSm; border.color: Theme.border
++                MouseArea { anchors.fill: parent; onClicked: roster.openDetail(modelData.id) }
++                Avatar { x: 12; y: 14; width: 56; height: 56; persona: modelData.id; imageSource: modelData.avatarImage || ""; size: 56 }
++                Text { x: 82; y: 12; width: parent.width - 360; text: modelData.name; color: Theme.fg; font.pixelSize: 16; font.weight: 600 }
++                Text { x: 82; y: 40; width: parent.width - 360; text: modelData.description; color: Theme.fgMuted; elide: Text.ElideRight; font.pixelSize: 12 }
++                Row {
++                    anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter
++                    spacing: 6
++                    SettingsButton { objectName: "personaProfile_" + modelData.id; text: "资料"; onClicked: roster.openDetail(modelData.id) }
++                    SettingsButton { objectName: "personaUp_" + modelData.id; text: "↑"; onClicked: roster.move(modelData.id, -1) }
++                    SettingsButton { objectName: "personaDown_" + modelData.id; text: "↓"; onClicked: roster.move(modelData.id, 1) }
++                    SettingsButton {
++                        objectName: "rosterStart_" + modelData.id
++                        text: I18n.t("cf.startChat")
++                        onClicked: {
++                            var id = shellBridge.startQuickStart(modelData.id)
++                            if (id) { roster.shell.page = "chat" }
++                        }
+                     }
+                 }
+             }
+         }
++        Text { anchors.centerIn: list; visible: roster.visibleRows().length === 0; text: I18n.t("cf.searchNoResults"); color: Theme.fgMuted }
++    }
++
++    // ── 资料卡 ──────────────────────────────────────────────────────────
++    Item {
++        visible: roster.mode === "detail"
++        anchors.fill: parent
++        SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: roster.mode = "list" }
++        SettingsButton { objectName: "personaEdit"; anchors.right: parent.right; anchors.rightMargin: 20; y: 20; text: I18n.t("cf.editPersona"); onClicked: roster.openEdit(roster.selected) }
++        Avatar { x: 20; y: 70; width: 88; height: 88; persona: roster.selected.id || "general"; imageSource: roster.selected.avatarImage || ""; size: 88 }
++        Text { x: 124; y: 74; width: parent.width - 150; text: roster.selected.name || ""; color: Theme.fg; font.pixelSize: 22; font.weight: 700 }
++        Text { x: 124; y: 108; width: parent.width - 150; text: roster.selected.description || ""; color: Theme.fgMuted; font.pixelSize: 13; wrapMode: Text.Wrap }
++        Text { x: 20; y: 180; width: 120; text: I18n.t("cf.personaPrompt"); color: Theme.fgMuted; font.pixelSize: 12 }
++        TextArea {
++            objectName: "personaPromptView"
++            x: 20; y: 204; width: parent.width - 40; height: 260
++            readOnly: true; text: roster.selected.prompt || ""
++            color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13
++            background: Rectangle { color: Theme.bgPanel; border.color: Theme.border; radius: 6 }
++        }
++        Text { x: 20; y: 480; text: "角色记忆：未移植"; color: Theme.fgSubtle; font.pixelSize: 12 }
++        SettingsButton {
++            objectName: "personaDelete"
++            x: 20; y: 510; destructive: true; text: I18n.t("common.delete")
++            onClicked: roster.remove(roster.selected.id)
++        }
++        Text { x: 20; y: 548; text: roster.notice; color: Theme.danger; visible: text.length > 0 }
++    }
++
++    // ── 编辑 ────────────────────────────────────────────────────────────
++    Item {
++        visible: roster.mode === "edit"
++        anchors.fill: parent
++        SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: roster.mode = "list" }
++        Text { x: 120; y: 22; text: roster.editId ? I18n.t("cf.editPersona") : I18n.t("cf.addPersona"); color: Theme.fg; font.pixelSize: 20; font.weight: 700 }
++        Row {
++            x: 20; y: 70; spacing: 16
++            Rectangle {
++                width: 88; height: 88; radius: 44; color: Theme.bgPanel; border.color: Theme.border
++                Image { id: avatarPreview; anchors.fill: parent; fillMode: Image.PreserveAspectCrop }
++            }
++            Column {
++                spacing: 8
++                SettingsButton {
++                    objectName: "personaPickAvatar"; text: I18n.t("cf.changeAvatar")
++                    onClicked: { var uri = shellBridge.personaPickAvatar(roster.editId); if (uri) avatarPreview.source = uri }
++                }
++                SettingsButton {
++                    objectName: "personaClearAvatar"; text: I18n.t("cf.removeAvatar")
++                    onClicked: { if (shellBridge.personaClearAvatar(roster.editId)) avatarPreview.source = "" }
++                }
++            }
++        }
++        SettingsField { id: nameField; objectName: "personaName"; x: 20; y: 180; width: parent.width - 40; placeholderText: I18n.t("cf.personaName") }
++        SettingsField { id: descField; objectName: "personaDescription"; x: 20; y: 226; width: parent.width - 40; placeholderText: I18n.t("cf.personaDescription") }
++        TextArea {
++            id: promptField; objectName: "personaPromptEdit"
++            x: 20; y: 272; width: parent.width - 40; height: 240
++            placeholderText: I18n.t("cf.personaPrompt")
++            color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13
++            background: Rectangle { color: Theme.bgPanel; border.color: Theme.border; radius: 6 }
++        }
++        Row {
++            x: 20; y: 530; spacing: 8
++            SettingsButton { objectName: "personaSave"; text: I18n.t("common.save"); onClicked: roster.save() }
++            SettingsButton { text: I18n.t("common.cancel"); onClicked: roster.mode = "list" }
++        }
++        Text { x: 20; y: 566; text: roster.notice; color: Theme.danger; visible: text.length > 0 }
+     }
+-    Text { anchors.centerIn: list; visible: roster.rows.length === 0; text: I18n.t("cf.searchNoResults"); color: Theme.fgMuted }
+ }
+diff --git a/app/src/qml_shell.py b/app/src/qml_shell.py
+index 901dce3..f28129d 100644
+--- a/app/src/qml_shell.py
++++ b/app/src/qml_shell.py
+@@ -749,6 +749,72 @@ class ShellBridge(QtCore.QObject):
+             if item.get("id")
+         ]
+ 
++    @QtCore.Slot(result="QVariantList")
++    def personaRecords(self) -> List[Dict[str, Any]]:
++        """角色管理列表：与 quickStart 同一份 PersonaStore 记录，但带完整字段。"""
++        return shared_store().list_personas()
++
++    @QtCore.Slot(str, result="QVariantMap")
++    def personaDetail(self, persona_id: str) -> Dict[str, Any]:
++        return shared_store().get(str(persona_id or "")) or {}
++
++    @QtCore.Slot(str, result=bool)
++    def personaSave(self, payload: str) -> bool:
++        """新建/编辑角色：写 frontmatter + prompt（原版 personas:upsert）。"""
++        try:
++            data = json.loads(payload or "{}")
++            shared_store().upsert(data)
++            self._publish()
++            return True
++        except (OSError, ValueError, TypeError, KeyError):
++            return False
++
++    @QtCore.Slot(str, result=bool)
++    def personaDelete(self, persona_id: str) -> bool:
++        result = shared_store().remove(str(persona_id or ""))
++        self._publish()
++        return bool(result.get("ok", True))
++
++    @QtCore.Slot(str, bool, result=bool)
++    def personaSetEnabled(self, persona_id: str, enabled: bool) -> bool:
++        result = shared_store().set_enabled(str(persona_id or ""), bool(enabled))
++        self._publish()
++        return bool(result.get("ok", True))
++
++    @QtCore.Slot("QVariantList", result=bool)
++    def personaReorder(self, ids: Any) -> bool:
++        result = shared_store().reorder([str(value) for value in (ids or [])])
++        self._publish()
++        return bool(result.get("ok", True))
++
++    @QtCore.Slot(str, result=str)
++    def personaPickAvatar(self, persona_id: str) -> str:
++        """选择图片并写入角色头像；返回 data URI（失败空串）。"""
++        from utils.qt_compat import QtWidgets
++        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
++            self._dialog_parent(), self.translate("native.pickFiles"), "",
++            self.translate("native.images") + " (*.png *.jpg *.jpeg *.gif *.webp)")
++        if not paths:
++            return ""
++        try:
++            data = Path(paths[0]).read_bytes()
++            mime = "image/png" if paths[0].lower().endswith(".png") else "image/jpeg"
++            uri = "data:%s;base64,%s" % (mime, base64.b64encode(data).decode("ascii"))
++            shared_store().set_avatar_image(str(persona_id or ""), uri)
++            self._publish()
++            return uri
++        except OSError:
++            return ""
++
++    @QtCore.Slot(str, result=bool)
++    def personaClearAvatar(self, persona_id: str) -> bool:
++        try:
++            shared_store().clear_avatar_image(str(persona_id or ""))
++            self._publish()
++            return True
++        except OSError:
++            return False
++
+     @QtCore.Slot(str, result=str)
+     def startQuickStart(self, persona_id: str) -> str:
+         """点头像开新对话：等价原版 `startWith`（`ChatFirstShell.tsx:408-411`）。

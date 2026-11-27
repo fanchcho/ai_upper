@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py rosterStart_ app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/PersonaRoster.qml:46:                objectName: "rosterStart_" + modelData.id
+app/src/qml/PersonaRoster.qml:115:                        objectName: "rosterStart_" + modelData.id
