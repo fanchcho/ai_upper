@@ -235,6 +235,8 @@ def test_scrollbars_exist_and_match_deva_tokens(tmp_path, monkeypatch, qapp):
     assert _color_name(body.property("contentItem")) == "#8a8a94"
 
     _ticker.stop()
+    window.close()
+    _engine.deleteLater()
 
 
 def test_scrollbars_scroll_with_wheel_and_drag(tmp_path, monkeypatch, qapp):
@@ -275,3 +277,5 @@ def test_scrollbars_scroll_with_wheel_and_drag(tmp_path, monkeypatch, qapp):
     assert body_scroll.property("contentY") < after_body_wheel, "正文滚动条拖动必须真的滚动"
 
     _ticker.stop()
+    window.close()
+    _engine.deleteLater()
