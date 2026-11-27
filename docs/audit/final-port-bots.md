@@ -16,3 +16,5 @@ LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu \
 `out/final-port/bots-ui.json` 保存真实 QTest 点击后读回的配置；暗亮截图 bots-dark.png / bots-light.png。截图行明确是配置管理 fixture，不是在线机器人。
 
 真实启用错误：`机器人密钥不存在或系统密钥库不可用`。本轮没有提供有效 Telegram / 飞书账号凭据，因此 Telegram 配对、外部收发、流式消息、系统密钥保存及飞书/Web 渠道均 **未验证/未完成**。本项把空入口接成可用配置动作，但完整的机器人页/远程渠道不能记为“已实现且可用”。
+
+兼容层复核：RemoteBots 只在调用入口/启动应用时构造真实 QObject，去掉并发执行引入的空 Signal/Slot 兜底；保持现有 Qt 绑定抽象。bots_ui 暗亮配置读写再次 PASS；外部渠道成功态仍未验证。
