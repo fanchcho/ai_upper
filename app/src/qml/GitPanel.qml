@@ -18,11 +18,22 @@ Popup {
     property string diffText: ""
     property string branchName: ""
     property string notice: ""
-    width: 480; height: 650; padding: 12
+    property string genReq: ""
+    property bool generating: false
+    width: 480; height: 760; padding: 12
     modal: false
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     background: Rectangle { color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
     onOpened: reload()
+    Connections {
+        target: shellBridge
+        function onCommitMessageGenerated(requestId, result) {
+            if (requestId !== root.genReq) return
+            root.generating = false
+            if (result.ok) root.message = result.text
+            else root.notice = (result.reason || "unverified") + ": " + (result.message || "")
+        }
+    }
 
     function reload() {
         if (!repoRoot) return
@@ -88,6 +99,17 @@ Popup {
             SettingsButton { objectName: "gitFetch"; text: "Fetch"; onClicked: root.runRemote("fetch") }
             SettingsButton { objectName: "gitPull"; text: "Pull"; onClicked: root.runRemote("pull") }
             SettingsButton { objectName: "gitPush"; text: "Push"; onClicked: root.runRemote("push") }
+        }
+        Row {
+            width: parent.width; spacing: 6
+            TextField { id: gitName; objectName: "gitIdentityName"; width: 120; placeholderText: "user.name"; color: Theme.fg; font.pixelSize: 12 }
+            TextField { id: gitEmail; objectName: "gitIdentityEmail"; width: 180; placeholderText: "user.email"; color: Theme.fg; font.pixelSize: 12 }
+            SettingsButton { objectName: "gitSetConfig"; text: "保存身份"; onClicked: { var r = shellBridge.gitSetConfig(repoRoot, gitName.text, gitEmail.text, false); if (!r.ok) root.notice = r.message || r.reason } }
+        }
+        Row {
+            width: parent.width; spacing: 6
+            SettingsButton { objectName: "gitGenerateMessage"; text: root.generating ? "生成中…" : "AI 提交信息"; enabled: !root.generating; onClicked: { root.genReq = "git-" + Date.now(); root.generating = true; root.notice = ""; if (!shellBridge.generateCommitMessage(repoRoot, root.genReq)) { root.generating = false; root.notice = "无法启动生成" } } }
+            SettingsButton { objectName: "gitCancelMessage"; text: "取消生成"; enabled: root.generating; onClicked: shellBridge.cancelCommitMessage(root.genReq) }
         }
         TextField {
             id: commitMessage; objectName: "gitCommitMessage"; width: parent.width

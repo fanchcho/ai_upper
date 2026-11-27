@@ -54,3 +54,18 @@ def test_full_git_operations(tmp_path):
     log = g.log(str(repo), 1, 0)
     assert log["ok"] and len(log["commits"]) == 1
     assert g.log(str(repo), 2, 1)["commits"] == []
+
+
+def test_git_identity_and_unverified_commit_message(tmp_path):
+    from mvvm.services import git_service as g
+
+    repo = tmp_path / "repo"; repo.mkdir()
+    subprocess.run(["git", "init", "-b", "main"], cwd=repo, check=True, capture_output=True)
+    (repo / "a.txt").write_text("one\n")
+    result = g.set_config(str(repo), "Real Name", "real@example.com", False)
+    assert result["ok"] is True, result
+    assert _git(repo, "config", "--local", "--get", "user.name").strip() == "Real Name"
+    assert _git(repo, "config", "--local", "--get", "user.email").strip() == "real@example.com"
+    assert g.set_config(str(repo), "", "x@y", False)["reason"] == "identity-needed"
+    result = g.generate_commit_message(None, None, str(repo))
+    assert result["ok"] is False and result["reason"] == "unverified"

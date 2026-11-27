@@ -231,3 +231,87 @@ __all__ = ["add_remote", "available", "branches", "checkout", "checkout_remote",
            "delete_branch", "delete_remote_branch", "diff", "discard", "fetch", "init", "log", "merge",
            "merge_abort", "pull", "push", "remotes", "remove_remote", "rename_branch", "set_remote", "stage",
            "status", "unstage"]
+
+
+def set_config(root: str, name: str, email: str, global_scope: bool = False) -> dict[str, Any]:
+    """保存 git identity 并回读仓库实际生效值（deva git-identity.ts）。"""
+    name = str(name or "").strip(); email = str(email or "").strip()
+    if not name or not email:
+        return {"ok": False, "reason": "identity-needed", "message": "user.name and user.email are required"}
+    scope = "--global" if global_scope else "--local"
+    for key, value in (("user.name", name), ("user.email", email)):
+        code, _, err = _run(root, ["config", scope, key, value])
+        if code != 0:
+            return {"ok": False, "reason": "identity-needed", "message": err.strip() or f"Cannot write {key}"}
+    for key, value in (("user.name", name), ("user.email", email)):
+        for args in (["config", scope, "--get", key], ["config", "--get", key]):
+            code, out, err = _run(root, args)
+            if code != 0 or out.strip() != value:
+                return {"ok": False, "reason": "identity-needed",
+                        "message": err.strip() or f"{key}: saved identity is not effective in this repository; check repository overrides"}
+    return {"ok": True}
+
+
+def generate_commit_message(settings: Any, vault: Any, root: str, model_ref: str = "", locale: str = "zh", cancel_event: Any = None) -> dict[str, Any]:
+    """用当前模型为真实 diff 生成一条提交信息；无模型/网络失败返回 unverified 原始原因。"""
+    import asyncio
+    from mvvm.models.chat_models import Message
+    from mvvm.services.provider_gateway import GenerateRequest, StreamError, TextDelta
+    from mvvm.services.provider_setup import ModelGateway
+
+    code, out, err = _run(root, ["diff", "--cached", "--no-color", "--no-ext-diff"])
+    if code == 0 and not out.strip():
+        code, out, err = _run(root, ["diff", "--no-color", "--no-ext-diff"])
+    if code != 0:
+        return {"ok": False, "reason": "error", "message": err.strip() or "git diff failed"}
+    patch = out
+    code, others, _ = _run(root, ["ls-files", "--others", "--exclude-standard", "-z"])
+    for rel in others.split("\x00") if code == 0 else []:
+        if rel:
+            path = Path(root) / rel
+            try:
+                patch += f"\ndiff --git a/{rel} b/{rel}\nnew file\n--- /dev/null\n+++ b/{rel}\n" + "\n".join("+" + line for line in path.read_text(errors="replace").splitlines()) + "\n"
+            except OSError:
+                pass
+    if not patch.strip():
+        return {"ok": False, "reason": "empty"}
+    if len(patch) > 120000:
+        patch = patch[:120000]
+    if settings is None:
+        return {"ok": False, "reason": "unverified", "message": "settings unavailable"}
+    try:
+        gateway = ModelGateway(settings, vault) if vault is not None else None
+        if gateway is None:
+            return {"ok": False, "reason": "unverified", "message": "secrets vault unavailable"}
+        provider, resolved = gateway.provider_for_turn(model_ref or None)
+    except Exception as exc:  # noqa: BLE001 - 未配置模型如实回传
+        return {"ok": False, "reason": "unverified", "message": f"{type(exc).__name__}: {exc}"}
+    system = ("你是 Git 提交信息生成器。只输出一行 Conventional Commits 风格的提交信息，"
+              "不超过 72 字符，不要解释、不要引号。")
+    if str(locale).lower().startswith("zh"):
+        system += " 使用中文。"
+    prompt = "根据以下 git diff 生成一条提交信息：\n\n" + patch
+
+    async def collect() -> str:
+        chunks = []
+        async for event in provider.stream(GenerateRequest(
+                model=resolved.model, system=system,
+                messages=[Message(role="user", content=prompt)], max_tokens=180, temperature=0.2)):
+            if cancel_event is not None and cancel_event.is_set():
+                raise RuntimeError("已取消")
+            if isinstance(event, TextDelta):
+                chunks.append(event.text)
+            elif isinstance(event, StreamError):
+                raise RuntimeError(event.error.message or event.error.kind)
+        return "".join(chunks).strip().strip('"').strip("`").splitlines()[0][:200] if "".join(chunks).strip() else ""
+
+    try:
+        text = asyncio.run(collect())
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "reason": "unverified", "message": f"{type(exc).__name__}: {exc}"}
+    if not text:
+        return {"ok": False, "reason": "unverified", "message": "模型返回空提交信息"}
+    return {"ok": True, "text": text}
+
+
+__all__ += ["generate_commit_message", "set_config"]

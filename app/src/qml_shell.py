@@ -243,6 +243,7 @@ class ShellBridge(QtCore.QObject):
 
     # 关于页检查更新：worker 线程算完发一次状态，QML 的 Connections 接收。
     updateStateChanged = QtCore.Signal("QVariantMap")
+    commitMessageGenerated = QtCore.Signal(str, object)
     interactionsChanged = QtCore.Signal('QVariantList')
 
     # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
@@ -290,6 +291,7 @@ class ShellBridge(QtCore.QObject):
             if root and Path(root).is_dir() and str(Path(root).resolve()) == root:
                 self._host.guard.trust_root(root)
         self._last_interactions = []
+        self._commit_cancels = {}
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
@@ -1751,6 +1753,42 @@ class ShellBridge(QtCore.QObject):
     def gitDiscard(self, root: str, tracked: Any, untracked: Any) -> Dict[str, Any]:
         from mvvm.services import git_service
         return git_service.discard(root, tracked, untracked)
+
+    @QtCore.Slot(str, str, str, bool, result="QVariantMap")
+    def gitSetConfig(self, root: str, name: str, email: str, global_scope: bool) -> Dict[str, Any]:
+        from mvvm.services import git_service
+        return git_service.set_config(root, name, email, bool(global_scope))
+
+    @QtCore.Slot(str, str, result=bool)
+    def generateCommitMessage(self, root: str, request_id: str) -> bool:
+        """F85：按真实 diff 调当前模型生成提交信息；无模型/网络失败通过信号回传 unverified。"""
+        if not request_id:
+            return False
+        event = threading.Event()
+        self._commit_cancels[request_id] = event
+        thread = threading.Thread(target=self._generate_commit_worker, args=(root, request_id, event), daemon=True)
+        thread.start()
+        return True
+
+    def _generate_commit_worker(self, root: str, request_id: str, event: threading.Event) -> None:
+        from mvvm.services import git_service
+        try:
+            result = git_service.generate_commit_message(
+                self._settings, self._vault, root, cancel_event=event)
+        except Exception as exc:  # noqa: BLE001
+            result = {"ok": False, "reason": "unverified", "message": f"{type(exc).__name__}: {exc}"}
+        finally:
+            self._commit_cancels.pop(request_id, None)
+        if not event.is_set():
+            self.commitMessageGenerated.emit(request_id, result)
+
+    @QtCore.Slot(str, result=bool)
+    def cancelCommitMessage(self, request_id: str) -> bool:
+        event = self._commit_cancels.pop(request_id, None)
+        if event is None:
+            return False
+        event.set()
+        return True
 
     @QtCore.Slot(str, str, result="QVariantMap")
     def gitMerge(self, root: str, ref: str) -> Dict[str, Any]:
