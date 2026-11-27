@@ -16,7 +16,9 @@
 """
 from __future__ import annotations
 
+import base64
 import json
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 from native_i18n import translate
 
@@ -420,6 +422,14 @@ def delivery_rows(session: Any) -> List[Dict[str, Any]]:
             row["sizeText"] = format_bytes(row["size"]) if row["size"] is not None else ""
             row["missing"] = row["size"] is None
             row["toolUseId"] = tool_id
+            if str(row.get("path") or "").lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp")):
+                try:
+                    mime = "image/png" if str(row["path"]).lower().endswith(".png") else "image/jpeg"
+                    row["thumb"] = "data:%s;base64,%s" % (mime, base64.b64encode(Path(str(row["path"])).read_bytes()).decode("ascii"))
+                except OSError:
+                    row["thumb"] = ""
+            else:
+                row["thumb"] = ""
             rows.append(row)
     return rows
 

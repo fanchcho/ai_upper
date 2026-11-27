@@ -310,6 +310,8 @@ def test_qml_deliverable_channels_return_real_sizes(qapp, tmp_path, monkeypatch)
     assert {row["name"] for row in rows} == {"chart.png", "notes.md", "gone.txt"}
     assert next(row for row in rows if row["name"] == "chart.png")["size"] == chart.stat().st_size
     assert next(row for row in rows if row["name"] == "notes.md")["size"] == notes.stat().st_size
+    assert next(row for row in rows if row["name"] == "chart.png")["thumb"].startswith("data:image/png;base64,")
+    assert next(row for row in rows if row["name"] == "notes.md")["thumb"] == ""
     # attachmentChips 与 _publish 的同一份投影。
     assert {row["name"] for row in bridge.attachmentChips()} == {"photo.png", "spec.txt"}
 

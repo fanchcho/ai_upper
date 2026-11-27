@@ -1449,8 +1449,17 @@ ApplicationWindow {
                                     radius: Theme.radiusSm
                                     color: Theme.bgInset
                                     opacity: modelData.missing ? 0.5 : 1
+                                    Image {
+                                        anchors.fill: parent
+                                        anchors.margins: 2
+                                        source: modelData.thumb || ""
+                                        visible: source.toString().length > 0
+                                        fillMode: Image.PreserveAspectCrop
+                                        sourceSize: Qt.size(40, 40)
+                                    }
                                     Icon {
                                         anchors.centerIn: parent
+                                        visible: (modelData.thumb || "") === ""
                                         name: IconData.folder
                                         size: 20
                                         color: Theme.fgMuted
