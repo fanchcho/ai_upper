@@ -1814,6 +1814,51 @@ class ShellBridge(QtCore.QObject):
             process.deleteLater()
 
     @QtCore.Slot(result="QVariantList")
+    def planCards(self) -> List[Dict[str, Any]]:
+        """当前会话的 exit_plan 卡：工具调用正文 + plans 边车决定 + 待应答交互。"""
+        session = self._session()
+        if session is None:
+            return []
+        decisions = dict(getattr(session, "plans", None) or {})
+        pending = {}
+        controller = getattr(self._host, "interactions", None)
+        if controller:
+            pending = {row["operation"]: row for row in controller.pending(self._active) if row.get("kind") == "plan"}
+        rows = []
+        for message in session.messages:
+            content = message.content
+            if not isinstance(content, list):
+                continue
+            for part in content:
+                if getattr(part, "name", "") != "exit_plan":
+                    continue
+                tool_id = str(getattr(part, "id", "") or "")
+                plan = str((getattr(part, "input", None) or {}).get("plan") or "")
+                decision = decisions.get(tool_id, {}).get("decision")
+                rows.append({"id": tool_id, "plan": plan, "decision": decision,
+                             "feedback": decisions.get(tool_id, {}).get("feedback", ""),
+                             "pending": tool_id in pending})
+        known = {row["id"] for row in rows}
+        for request_id, row in pending.items():
+            if request_id not in known:
+                rows.append({"id": request_id, "plan": row.get("question", ""), "decision": None,
+                             "feedback": "", "pending": True})
+        return rows
+
+    @QtCore.Slot(str, str, str, result=bool)
+    def answerPlan(self, request_id: str, decision: str, feedback: str) -> bool:
+        controller = getattr(self._host, "interactions", None)
+        if not controller:
+            return False
+        if decision not in ("approve", "keep", "ignore", "cancelled"):
+            return False
+        req = request_id if ':' in request_id else self._active + ':' + request_id
+        ok = controller.answer(self._active, req, decision, feedback)
+        if ok:
+            self._publish()
+        return ok
+
+    @QtCore.Slot(result="QVariantList")
     def sessionTurns(self) -> List[Dict[str, Any]]:
         """当前会话的用户轮次（供右键「选择删除/回滚」列表）。"""
         session = self._session()
@@ -2575,6 +2620,7 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("todoCapsule", self.todoCapsule())
         window.setProperty("backgroundCapsule", self.backgroundCapsule())
         window.setProperty("backgroundTasks", self.backgroundTasks())
+        window.setProperty("planCards", self.planCards())
         # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
         window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。

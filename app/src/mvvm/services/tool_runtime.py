@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import base64
 import html as html_module
+import json
 import os
 import random
 import re
@@ -405,6 +406,7 @@ class ToolRuntime:
         self.session_id = session_id or "_misc"
         # todo_write 的落点由会话层注入（写会话边车、推送进度），运行时本身不碰磁盘边车。
         self.todo_sink: Optional[Callable[[str, Any], ToolResult]] = None
+        self.plan_sink: Optional[Callable[[str, str, str], None]] = None
         # run_command 的取消检查：由回合层注入，返回 True 表示本轮已被用户停止。
         self.cancel_check: Optional[Callable[[], bool]] = None
         # 本轮是否交互式（有人在场）。False = 密封执行（定时任务），走 sealed_decision。
@@ -443,8 +445,8 @@ class ToolRuntime:
         if self.mcp is not None:
             specs.extend(self.mcp.specs())
         if self.interactions is not None:
-            from mvvm.services.plugin_interactions import ASK_SPEC
-            specs.append(ASK_SPEC)
+            from mvvm.services.plugin_interactions import ASK_SPEC, PLAN_SPEC
+            specs.append(ASK_SPEC); specs.append(PLAN_SPEC)
         return specs
 
     def close(self) -> None:
@@ -459,6 +461,25 @@ class ToolRuntime:
 
     def execute(self, name: str, arguments: Any, tool_use_id: str = "") -> ToolResult:
         """执行一个工具。未知工具、参数错误、越界都返回 is_error=True 的结果（不抛给上层）。"""
+        if name == 'exit_plan' and self.interactions is not None:
+            if not self.interactive:
+                return ToolResult('密封执行不能提交计划审阅', True)
+            arguments = arguments if isinstance(arguments, dict) else {}
+            result = self.interactions.plan(self.session_id, tool_use_id, arguments.get('plan', ''), self.cancel_check)
+            if result.is_error:
+                return result
+            row = json.loads(result.content)
+            decision = row.get('outcome')
+            feedback = row.get('answer', '')
+            if self.plan_sink is not None:
+                self.plan_sink(tool_use_id, decision, feedback)
+            if decision == 'approve':
+                return ToolResult('用户已批准计划。现在请按已批准的计划开始执行；多步骤先用 todo_write 列清单。')
+            if decision == 'keep':
+                return ToolResult('用户暂不批准，对计划的回复如下：\n\n' + (feedback or '请调整计划后重新提交。'))
+            if decision == 'ignore':
+                return ToolResult('用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。')
+            return ToolResult('用户取消了本次计划审阅。', True)
         if name == 'ask_user' and self.interactions is not None:
             if not self.interactive:
                 return ToolResult('密封执行不能向用户提问', True)

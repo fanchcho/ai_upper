@@ -158,6 +158,7 @@ class ChatViewModel(BaseViewModel):
         # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
         # 工具层与界面层互不认识，靠这个回调对接。
         self.tools.todo_sink = self._apply_todo
+        self.tools.plan_sink = self._apply_plan
         super().__init__()
 
     # ── 属性 ──────────────────────────────────────────────────────────────
@@ -235,6 +236,20 @@ class ChatViewModel(BaseViewModel):
         return active_todo_list(session.todos, session.todoCancelled)
 
     # ── 待办清单 ──────────────────────────────────────────────────────────
+    def _apply_plan(self, tool_use_id: str, decision: str, feedback: str) -> None:
+        """exit_plan 决定写入 `plans` 边车（chat-turns-core.ts:739-741）。"""
+        if not self._session_id:
+            return
+        session = self.store.ensure_session(self._session_id)
+        plans = dict(session.plans or {})
+        plans[tool_use_id] = {"decision": decision if decision in ("approve", "keep", "ignore") else None}
+        if feedback:
+            plans[tool_use_id]["feedback"] = str(feedback)
+        session.plans = plans
+        session.touch()
+        self.store.save(session.id)
+        self.emit({"type": "plans", "state": plans})
+
     def _apply_todo(self, tool_use_id: str, arguments: Any) -> ToolResult:
         """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
         if not self._session_id:

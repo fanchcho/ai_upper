@@ -8,6 +8,9 @@ import time
 from mvvm.services.chat_session_store import write_file_atomic
 from mvvm.services.tool_runtime import ToolSpec, ToolResult
 
+PLAN_SPEC = ToolSpec('exit_plan', '提交计划，等待用户批准、继续完善或忽略。', {
+    'type': 'object', 'properties': {'plan': {'type': 'string'}}, 'required': ['plan']})
+
 ASK_SPEC = ToolSpec('ask_user', '向用户提问并等待回答；关闭、取消、超时都不是同意。', {
     'type': 'object', 'properties': {'questions': {'type': 'array', 'minItems': 1, 'maxItems': 5,
         'items': {'type': 'object', 'properties': {'question': {'type': 'string'}, 'choices': {'type': 'array', 'maxItems': 6, 'items': {'type': 'string'}}}, 'required': ['question']}}}, 'required': ['questions']})
@@ -44,7 +47,9 @@ class Interactions:
             path = self._path(request_id)
             if not path.exists(): return False
             row = json.loads(path.read_text())
-            allowed = ('approved', 'denied', 'cancelled') if row['kind'] == 'approval' else ('answered', 'dismissed', 'cancelled')
+            allowed = (('approved', 'denied', 'cancelled') if row['kind'] == 'approval'
+                       else ('approve', 'keep', 'ignore', 'cancelled') if row['kind'] == 'plan'
+                       else ('answered', 'dismissed', 'cancelled'))
             if row['session'] != session or row['outcome'] != 'pending' or outcome not in allowed or time.time() >= row['expires']:
                 return False
             row.update(outcome=outcome, answer=str(text))
@@ -73,6 +78,14 @@ class Interactions:
                     row['outcome'] = 'timeout'; self._write(row)
                 if row['outcome'] != 'pending': return row
             time.sleep(.05)
+
+    def plan(self, session, operation, plan, cancelled):
+        """exit_plan：等待用户决定，返回 approve/keep/ignore/cancelled。"""
+        text = str(plan or '').strip()
+        if not text:
+            return ToolResult('计划正文不能为空', True)
+        row = self.request(session, operation, 'plan', text, ('approve', 'keep', 'ignore'), cancelled)
+        return ToolResult(json.dumps(row, ensure_ascii=False))
 
     def approve(self, session, operation, tool, args, cancelled):
         preview = {key: str(args[key])[:2000] for key in ('path', 'cwd', 'command', 'url', 'action') if key in args}
