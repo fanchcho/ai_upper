@@ -363,6 +363,39 @@ def evidence_capsules(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_personas(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-personas-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        from pathlib import Path as _P
+        import os as _os
+        _os.environ["DEVA_ASSETS_DIR"] = str(ROOT / "app/assets")
+        from mvvm.services.plugin_identity import shared_store
+        shared_store().ensure_seeded()
+        window.setProperty("page", "roster")
+        _pump(QGuiApplication.instance(), lambda: False, 0.6)
+        png = outdir / f"personas-list-{theme}.png"
+        size = shot(window, png)
+        rows = bridge.personaRecords()
+        from PySide6.QtQml import QQmlEngine, QQmlExpression
+        roster_item = find_item(window.contentItem(), "personaRoster")
+        detail = {}
+        if rows:
+            QQmlExpression(QQmlEngine.contextForObject(roster_item), roster_item,
+                           "openDetail('" + rows[0]["id"] + "')").evaluate()
+            _pump(QGuiApplication.instance(), lambda: False, 0.4)
+            png2 = outdir / f"persona-detail-{theme}.png"
+            size2 = shot(window, png2)
+            detail = {"id": rows[0]["id"], "name": rows[0]["name"], "png": str(png2), "size": size2}
+        ticker.stop(); window.close(); engine.deleteLater()
+        return [{"feature": "personas", "theme": theme, "list_png": str(png), "size": size,
+                 "count": len(rows), "detail": detail}]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
@@ -373,7 +406,7 @@ def main():
     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
     if font.exists():
         QFontDatabase.addApplicationFont(str(font))
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

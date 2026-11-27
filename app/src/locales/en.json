@@ -988,7 +988,7 @@
   "cf.expandList": "Expand conversation list",
   "cf.tabRoster": "Roster",
   "cf.tabTasks": "Tasks",
-  "cf.addPersona": "Add persona",
+  "cf.addPersona": "New persona",
   "cf.addByChat": "Add via chat",
   "cf.addByChatPrompt": "I want to create a new persona. Please guide me step by step to define its role, personality, and expertise, then submit it to me as a persona card to confirm.",
   "cf.localUser": "Local user",
@@ -2254,5 +2254,10 @@
   "common.cut": "Cut",
   "common.paste": "Paste",
   "chat.tool.call": "Tool call",
-  "chat.tool.result": "Tool result"
+  "chat.tool.result": "Tool result",
+  "cf.personaName": "Persona name",
+  "cf.personaDescription": "Description",
+  "cf.personaPrompt": "Persona prompt",
+  "cf.changeAvatar": "Change avatar",
+  "cf.removeAvatar": "Remove avatar"
 }

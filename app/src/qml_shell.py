@@ -749,6 +749,72 @@ class ShellBridge(QtCore.QObject):
             if item.get("id")
         ]
 
+    @QtCore.Slot(result="QVariantList")
+    def personaRecords(self) -> List[Dict[str, Any]]:
+        """角色管理列表：与 quickStart 同一份 PersonaStore 记录，但带完整字段。"""
+        return shared_store().list_personas()
+
+    @QtCore.Slot(str, result="QVariantMap")
+    def personaDetail(self, persona_id: str) -> Dict[str, Any]:
+        return shared_store().get(str(persona_id or "")) or {}
+
+    @QtCore.Slot(str, result=bool)
+    def personaSave(self, payload: str) -> bool:
+        """新建/编辑角色：写 frontmatter + prompt（原版 personas:upsert）。"""
+        try:
+            data = json.loads(payload or "{}")
+            shared_store().upsert(data)
+            self._publish()
+            return True
+        except (OSError, ValueError, TypeError, KeyError):
+            return False
+
+    @QtCore.Slot(str, result=bool)
+    def personaDelete(self, persona_id: str) -> bool:
+        result = shared_store().remove(str(persona_id or ""))
+        self._publish()
+        return bool(result.get("ok", True))
+
+    @QtCore.Slot(str, bool, result=bool)
+    def personaSetEnabled(self, persona_id: str, enabled: bool) -> bool:
+        result = shared_store().set_enabled(str(persona_id or ""), bool(enabled))
+        self._publish()
+        return bool(result.get("ok", True))
+
+    @QtCore.Slot("QVariantList", result=bool)
+    def personaReorder(self, ids: Any) -> bool:
+        result = shared_store().reorder([str(value) for value in (ids or [])])
+        self._publish()
+        return bool(result.get("ok", True))
+
+    @QtCore.Slot(str, result=str)
+    def personaPickAvatar(self, persona_id: str) -> str:
+        """选择图片并写入角色头像；返回 data URI（失败空串）。"""
+        from utils.qt_compat import QtWidgets
+        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(
+            self._dialog_parent(), self.translate("native.pickFiles"), "",
+            self.translate("native.images") + " (*.png *.jpg *.jpeg *.gif *.webp)")
+        if not paths:
+            return ""
+        try:
+            data = Path(paths[0]).read_bytes()
+            mime = "image/png" if paths[0].lower().endswith(".png") else "image/jpeg"
+            uri = "data:%s;base64,%s" % (mime, base64.b64encode(data).decode("ascii"))
+            shared_store().set_avatar_image(str(persona_id or ""), uri)
+            self._publish()
+            return uri
+        except OSError:
+            return ""
+
+    @QtCore.Slot(str, result=bool)
+    def personaClearAvatar(self, persona_id: str) -> bool:
+        try:
+            shared_store().clear_avatar_image(str(persona_id or ""))
+            self._publish()
+            return True
+        except OSError:
+            return False
+
     @QtCore.Slot(str, result=str)
     def startQuickStart(self, persona_id: str) -> str:
         """点头像开新对话：等价原版 `startWith`（`ChatFirstShell.tsx:408-411`）。
@@ -1524,9 +1590,10 @@ class ShellBridge(QtCore.QObject):
         return rows
 
     @QtCore.Slot(str, int, str, result='QVariantMap')
-    def rewind(self, action, turn, mode):
+    @QtCore.Slot(str, int, str, 'QVariantList', result='QVariantMap')
+    def rewind(self, action, turn, mode, force=None):
         try:
-            result = self._host.rewind(self._active, action, turn, mode)
+            result = self._host.rewind(self._active, action, turn, mode, force or [])
             self._publish()
             return result
         except Exception as exc:

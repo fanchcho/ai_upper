@@ -989,7 +989,7 @@
   "cf.expandList": "展开会话列表",
   "cf.tabRoster": "角色",
   "cf.tabTasks": "定时任务",
-  "cf.addPersona": "添加角色",
+  "cf.addPersona": "新建角色",
   "cf.addByChat": "通过对话添加",
   "cf.addByChatPrompt": "我想创建一个新角色，请一步步引导我明确它的定位、性格与专长，最后用角色名片提交给我确认。",
   "cf.localUser": "本机用户",
@@ -2254,5 +2254,10 @@
   "common.cut": "剪切",
   "common.paste": "粘贴",
   "chat.tool.call": "工具调用",
-  "chat.tool.result": "工具结果"
+  "chat.tool.result": "工具结果",
+  "cf.personaName": "角色名称",
+  "cf.personaDescription": "角色描述",
+  "cf.personaPrompt": "角色提示词",
+  "cf.changeAvatar": "更换头像",
+  "cf.removeAvatar": "移除头像"
 }
