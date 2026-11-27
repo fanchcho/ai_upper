@@ -39,4 +39,9 @@ def test_history_page_ranges(qapp, tmp_path):
         assert b.loadEarlierHistory()["ok"] is True
     assert b.historyState()["fromTurn"] == 10
     assert "TURN_10 question" in b._markdown() and "TURN_9 question" not in b._markdown()
+    view = find_item(w.contentItem(), "bodyView")
+    for _ in range(30):
+        qapp.processEvents(); time.sleep(.02)
+        if "TURN_10 question" in (view.property("text") or ""): break
+    assert "TURN_10 question" in view.property("text")
     t.stop(); w.close(); e.deleteLater()

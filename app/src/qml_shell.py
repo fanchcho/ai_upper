@@ -2560,11 +2560,30 @@ class ShellBridge(QtCore.QObject):
             self._history_revision = revision
             return {"ok": False, "reason": "stale"}
         new_turn = max(0, self._history_from_turn - 10)
+        new_start = starts[new_turn] if starts else 0
+        older = session.messages[new_start:self._history_start_index]
+        if not older:
+            return {"ok": False, "reason": "empty"}
+        # Prepend only the newly loaded range to the live QTextDocument; do not rerender
+        # the already-loaded tail (this is the original history-page append semantics).
+        if self._document is not None:
+            from markdown.body import BodyDocument
+            from PySide6.QtGui import QTextCursor, QTextDocumentFragment
+            temp = BodyDocument(self._body.style, self._body.content_width)
+            temp.set_markdown(transcript_markdown(older, lang=self.language(), include_activity=True))
+            target = self._document.textDocument()
+            cursor = QTextCursor(target)
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            cursor.insertFragment(QTextDocumentFragment(temp.document))
+            added_blocks = temp.document.blockCount()
+        else:
+            self._render()
+            added_blocks = 0
         self._history_from_turn = new_turn
-        self._history_start_index = starts[new_turn] if starts else 0
-        self._render()
+        self._history_start_index = new_start
         self._publish()
-        return {"ok": True, "fromTurn": new_turn, "toTurn": new_turn + 10, "revision": revision}
+        return {"ok": True, "fromTurn": new_turn, "toTurn": new_turn + 10,
+                "revision": revision, "addedBlocks": added_blocks}
 
     @QtCore.Slot(str, int, result="QVariantMap")
     def historyPage(self, cursor: str, from_turn: int) -> Dict[str, Any]:
