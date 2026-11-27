@@ -1634,6 +1634,7 @@ class ShellBridge(QtCore.QObject):
             if name and name not in seen:
                 rows.append({'name':name, 'desc':persona.get('desc',''), 'kind':'mention'})
                 seen.add(name)
+        rows.append({'name':'新建成员','desc':'按需求创建协作成员','kind':'mention'})
         return rows
 
     @QtCore.Slot(result="QVariantList")

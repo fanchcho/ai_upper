@@ -1,0 +1,9 @@
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer then review", "attachments": []}
+QML TURN 54bed98126f64472994d9a1525275255
+QML STREAM {"text": "DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer then review", "attachments": []}
+QML TURN a8f7c12ed41c44d6863c22350ed1e8a6
+QML STREAM {"text": "DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+PASS mouse selection -> role auto creation -> real member_send tool -> child turn -> reopened main and child stores
