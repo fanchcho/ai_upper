@@ -60,7 +60,7 @@ ApplicationWindow {
     TerminalPanel { id: terminalPanel }
     Rectangle {
         objectName: "saveErrorBar"
-        visible: shellBridge && shellBridge.saveError.length > 0
+        visible: shellBridge !== null && shellBridge.saveError !== undefined && shellBridge.saveError.length > 0
         x: 20; y: 50; width: parent.width - 40; height: 36
         radius: Theme.radiusSm; color: Theme.danger; opacity: 0.95; z: 300
         Text { x: 10; anchors.verticalCenter: parent.verticalCenter; width: parent.width - 120; text: shellBridge.saveError; color: "white"; font.pixelSize: 12; elide: Text.ElideRight }
@@ -199,6 +199,8 @@ ApplicationWindow {
     property var planCards: []
     property var proposalCards: []
     property var autotaskCards: []
+    property var historyState: ({hasMore: false, fromTurn: 0, revision: ""})
+    property bool historyLoading: false
     property string suggestPrefix: "/"
     property int suggestStart: 0
     // 打开的是哪一个菜单：模型列表 / 思考等级。空串 = 都关着。
@@ -1288,6 +1290,12 @@ ApplicationWindow {
             height: parent.height - 27 - 175
             clip: true
             boundsBehavior: Flickable.StopAtBounds
+            property bool historyArmed: false
+            onContentYChanged: {
+                if (contentY > 1) historyArmed = true
+                if (historyArmed && contentY <= 1 && contentHeight > height && window.historyState.hasMore && !window.historyLoading)
+                    window.loadEarlierHistory()
+            }
             contentWidth: width
             contentHeight: bodyView.y + bodyView.implicitHeight + 24
                             + (cardsCol.visible ? cardsCol.height + 20 : 0)
@@ -2249,6 +2257,18 @@ ApplicationWindow {
             inputField.text = rows.join("\n") + (existing.length > 0 ? "\n" + existing : "")
             inputField.forceActiveFocus()
         }
+    }
+
+    function loadEarlierHistory() {
+        if (!shellBridge || window.historyLoading || !window.historyState.hasMore) return
+        window.historyLoading = true
+        var before = bodyScroll.contentHeight
+        var result = shellBridge.loadEarlierHistory()
+        if (result.ok) {
+            window.historyState = shellBridge.historyState()
+            bodyScroll.contentY = Math.max(0, bodyScroll.contentHeight - before)
+        }
+        window.historyLoading = false
     }
 
     function appendPendingFiles(rows) {

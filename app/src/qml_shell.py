@@ -302,6 +302,9 @@ class ShellBridge(QtCore.QObject):
         self._commit_cancels = {}
         self._terminal = None
         self._pinned_session = ""
+        self._history_start_index = 0
+        self._history_from_turn = 0
+        self._history_revision = ""
         self._pump: Any = None
         self._turn: Any = None  # qml_shell_sessions.TurnState | None
         self._turn_session = ""
@@ -683,6 +686,7 @@ class ShellBridge(QtCore.QObject):
         """切换会话：正文按该会话落盘的消息重渲染。"""
         self._active = str(session_id or "")
         self.pinSession(self._active)
+        self._reset_history()
         self._unread.discard(self._active)
         self._turn = None
         self._turn_session = ""
@@ -2515,7 +2519,65 @@ class ShellBridge(QtCore.QObject):
     # ── 渲染与属性 ────────────────────────────────────────────────────────
     def _markdown_base(self) -> str:
         session = self._store.load_session(self._active) if self._active else None
-        return transcript_markdown(session.messages, lang=self.language(), include_activity=True) if session is not None else ""
+        if session is None:
+            return ""
+        return transcript_markdown(session.messages[self._history_start_index:], lang=self.language(), include_activity=True)
+
+    def _turn_starts(self, session):
+        from mvvm.services.chat_session_store import is_genuine_user_turn
+        return [i for i, message in enumerate(session.messages) if is_genuine_user_turn(message)]
+
+    def _reset_history(self) -> None:
+        session = self._store.load_session(self._active) if self._active else None
+        if session is None:
+            self._history_start_index = self._history_from_turn = 0
+            self._history_revision = ""
+            return
+        starts = self._turn_starts(session)
+        self._history_from_turn = max(0, len(starts) - 10)
+        self._history_start_index = starts[self._history_from_turn] if starts else 0
+        import hashlib
+        self._history_revision = hashlib.sha256(repr(session.messages).encode()).hexdigest()[:16]
+
+    @QtCore.Slot(result="QVariantMap")
+    def historyState(self) -> Dict[str, Any]:
+        return {"fromTurn": self._history_from_turn, "revision": self._history_revision,
+                "hasMore": self._history_from_turn > 0, "startIndex": self._history_start_index}
+
+    @QtCore.Slot(result="QVariantMap")
+    def loadEarlierHistory(self) -> Dict[str, Any]:
+        if not self._active:
+            return {"ok": False, "reason": "no-session"}
+        session = self._store.load_session(self._active)
+        if session is None:
+            return {"ok": False, "reason": "no-session"}
+        starts = self._turn_starts(session)
+        if self._history_from_turn <= 0:
+            return {"ok": False, "reason": "no-more"}
+        import hashlib
+        revision = hashlib.sha256(repr(session.messages).encode()).hexdigest()[:16]
+        if revision != self._history_revision:
+            self._history_revision = revision
+            return {"ok": False, "reason": "stale"}
+        new_turn = max(0, self._history_from_turn - 10)
+        self._history_from_turn = new_turn
+        self._history_start_index = starts[new_turn] if starts else 0
+        self._render()
+        self._publish()
+        return {"ok": True, "fromTurn": new_turn, "toTurn": new_turn + 10, "revision": revision}
+
+    @QtCore.Slot(str, int, result="QVariantMap")
+    def historyPage(self, cursor: str, from_turn: int) -> Dict[str, Any]:
+        session = self._store.load_session(self._active) if self._active else None
+        if session is None or cursor != self._history_revision or from_turn < 0:
+            return {"ok": False, "reason": "stale"}
+        starts = self._turn_starts(session)
+        to_turn = min(from_turn + 10, len(starts))
+        start = starts[from_turn] if from_turn < len(starts) else len(session.messages)
+        end = starts[to_turn] if to_turn < len(starts) else len(session.messages)
+        from mvvm.webui.bridge import display_messages
+        return {"ok": True, "from": from_turn, "to": to_turn,
+                "messages": display_messages(session.messages[start:end], index_base=start)}
 
     def _markdown(self) -> str:
         base = self._markdown_base()
@@ -2741,6 +2803,7 @@ class ShellBridge(QtCore.QObject):
         window.setProperty("planCards", self.planCards())
         window.setProperty("proposalCards", self.proposalCards())
         window.setProperty("autotaskCards", self.autotaskCards())
+        window.setProperty("historyState", self.historyState())
         # 快速开启的角色卡片：空态直接绑这个属性，重绘即刷新（与列表同一拍）。
         window.setProperty("quickStartPersonas", self.quickStartPersonas())
         # 上下文圆环：读数缺失（新对话 / 无模型）时 used=None，QML 据此整个不画。
