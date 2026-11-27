@@ -538,7 +538,7 @@ ApplicationWindow {
         y: 0
         width: window.sideCollapsed ? (window.sidePeek ? Theme.sideWidth : 0) : Theme.sideWidth
         visible: !window.sideCollapsed || window.sidePeek
-        z: window.sidePeek ? 20 : 0
+        z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
         height: parent.height
         color: Theme.bgPanel
         HoverHandler { onHoveredChanged: window.sideHover(hovered) }
@@ -1905,7 +1905,7 @@ ApplicationWindow {
     // 悬停「对话」图标：收起状态下 200ms 后浮出列表，离开图标/列表 150ms 后收回
     // （原版 ChatFirstShell.tsx:160-190 的两个定时器）。
     function chatRailHover(entered) {
-        if (!window.sideCollapsed)
+        if (!window.sideCollapsed || window.settingsOpen)
             return
         if (entered) {
             peekHide.stop()
@@ -1918,6 +1918,10 @@ ApplicationWindow {
     }
     function sideHover(entered) {
         window._sidePeekHover = entered
+        if (!window.sideCollapsed || window.settingsOpen) {
+            window.sidePeek = false
+            return
+        }
         if (entered) {
             peekHide.stop()
             window.sidePeek = true
