@@ -1,0 +1,9 @@
+{
+ "command": "AI_UPPER_HOME=/tmp/ai-upper-final4 LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software .venv/bin/python -m pytest app/tests -q --basetemp=/tmp/ai-upper-final4/tests",
+ "exit_code": 0,
+ "passed": 1453,
+ "skipped": 9,
+ "failed": 0,
+ "seconds": 447.48,
+ "head": "98b5f698d5905a7f8569767305757100c789d569"
+}
