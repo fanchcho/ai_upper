@@ -687,8 +687,8 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "kEggKeyMask" in text
     assert "kEggKeyLength" in text
     # A packaged launcher refuses an archive with no authentication tag.
-    assert "embedded_egg_requires_auth()" in text
-    assert "EGG_REQUIRE_AUTH" in text
+    assert "pyupper::read_egg(egg, embedded_egg_key(), /*require_auth=*/true)" in text
+    assert 'globals().pop("_py_upper_opened_egg")' in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "PY_UPPER_APP_NAME" in cmake
     assert "PY_UPPER_EMBEDDED_SOURCE" in cmake
@@ -713,7 +713,7 @@ def test_launcher_egg_reader_verifies_the_authentication_tag():
     assert "equal_constant_time" in egg_bundles
     # The tag doubles as the cache key, which is what keeps authentication from
     # costing an extra pass over the payload.
-    assert "cache_key = detail::hex(tag, 16)" in egg_bundles
+    assert "cache_key = detail::hex(tag, kTagSize)" in egg_bundles
     sha3 = (headers / "sha3.h").read_text(encoding="utf-8")
     # Lane-wise absorb/squeeze instead of the byte loop: the byte version ran at
     # ~150 MB/s and made the authenticated format measurably slower than the

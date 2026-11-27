@@ -109,20 +109,22 @@ def selected_sources() -> list[Path]:
     return result
 
 
-def merged_groups(sources: list[Path]) -> dict[str, list[Path]]:
-    """Leaf modules grouped by the top-level directory they live under.
+def merged_groups(sources: list[Path], mode: str) -> dict[str, list[Path]]:
+    """The same native bundle layout for building and static verification.
 
     Package markers are deliberately absent: a built-in module is not a
     package, so ``__init__.py`` has to stay a real file for ``from . import`` to
-    work. Root modules (``main.py``, ``application.py``) have no directory and
-    share one group.
+    work. In directory mode, root modules share their own group.
     """
     groups: dict[str, list[Path]] = {}
     for source in sources:
         if source.name == "__init__.py":
             continue
         name = module_name(source)
-        group = name.split(".", 1)[0] if "." in name else "_root"
+        if mode == "all":
+            group = "_all"
+        else:
+            group = name.split(".", 1)[0] if "." in name else "_root"
         groups.setdefault(group, []).append(source)
     return {group: sorted(paths, key=module_name) for group, paths in sorted(groups.items())}
 
@@ -769,7 +771,8 @@ def build_target_extensions(target: Target, sources: list[Path]) -> list[Path]:
     if not sources:
         return []
     host_python = require_local_python()
-    merge = cython_merge_mode() == "directory"
+    mode = cython_merge_mode()
+    merge = mode != "none"
     # Package markers cannot become built-in modules: a built-in has no
     # __path__ and ``from . import`` would fail with "'pkg' is not a package".
     # They keep shipping as source files while only the leaves are linked.
@@ -778,7 +781,7 @@ def build_target_extensions(target: Target, sources: list[Path]) -> list[Path]:
         return []
     generated = cythonize_to_c(compiled_sources, host_python)
     if merge:
-        return build_merged_extensions(target, merged_groups(compiled_sources), generated, host_python)
+        return build_merged_extensions(target, merged_groups(compiled_sources, mode), generated, host_python)
     if target.os != "windows":
         return compile_unix_extensions(target, generated)
     return compile_windows_extensions(target, generated, compiled_sources, host_python)
@@ -1015,7 +1018,7 @@ def build_python_package(target: Target, trim=None, egg=None) -> Path:
     sources = selected_sources()
     outputs = build_target_extensions(target, sources)
     copy_native_outputs(outputs, site, target)
-    merge = cython_merge_mode() == "directory"
+    merge = cython_merge_mode() != "none"
     # The merged layout only replaces leaf modules; package markers stay as
     # source files because CPython cannot make a built-in module a package.
     remove_compiled_source_py(site, [source for source in sources if source.name != "__init__.py"] if merge else sources)

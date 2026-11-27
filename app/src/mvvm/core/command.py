@@ -4,7 +4,6 @@ Command system for MVVM
 """
 
 from typing import Callable, Any, Optional, Coroutine
-import asyncio
 
 
 class RelayCommand:
@@ -115,7 +114,8 @@ class AsyncRelayCommand:
         """同步执行异步命令（需要在事件循环中运行）"""
         if not self.can_execute(parameter):
             return
-        
+        import asyncio
+
         try:
             loop = asyncio.get_event_loop()
             if loop.is_running():

@@ -368,7 +368,7 @@ def cython_config() -> dict:
     return value if isinstance(value, dict) else {}
 
 
-MERGE_MODES = ("none", "directory")
+MERGE_MODES = ("none", "directory", "all")
 
 # Merged extension bundles live under this directory. The build packs them into
 # the egg as stored entries and the launcher extracts and registers them before
@@ -379,14 +379,9 @@ BUNDLE_DIR = "py_upper_bundles"
 def cython_merge_mode() -> str:
     """How application modules are packaged as native extensions.
 
-    ``none`` keeps one extension per module, which is the historical layout and
-    the right default for projects that do not care about startup cost.
-    ``directory`` links every leaf module of a top-level package (and the root
-    modules together) into one extension. macOS charges a kernel code-signing
-    check for every Mach-O image a process maps, so a bundle of a thousand
-    extensions costs minutes on a cold start while three bundles cost seconds;
-    the registration half of that layout lives in the launcher and in
-    ``python_build.build_merged_extensions``.
+    ``none`` keeps one extension per module. ``directory`` links leaf modules by
+    top-level package so localized changes only rebuild that bundle.
+    ``all`` links all leaves into one image to minimize native loads at startup.
     """
     value = cython_config().get("merge", "none")
     if isinstance(value, bool):
@@ -396,6 +391,8 @@ def cython_merge_mode() -> str:
         return "none"
     if text in ("directory", "dir", "package", "on", "true", "yes", "1"):
         return "directory"
+    if text == "all":
+        return text
     raise RuntimeError(
         "[tool.py_upper.cython].merge must be one of: " + ", ".join(MERGE_MODES)
     )

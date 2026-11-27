@@ -187,34 +187,25 @@ jobs:
       - name: Doctor
         run: python tools/build.py --doctor --target ${{ matrix.target }}
 
-      - name: Full integration build
-        run: python tools/build.py --target ${{ matrix.target }}
-
-      - name: Full integration run
-        if: matrix.run == true
+      - name: Full integration build and optional GUI run
+        shell: bash
         env:
+          PY_UPPER_CI_TARGET: ${{ matrix.target }}
+          PY_UPPER_CI_APP_RUN: ${{ matrix.run }}
           PY_UPPER_HEADLESS: '1'
           # A failed launcher must exit non-zero, never block the job on a
           # native error dialog that nobody can dismiss.
           PY_UPPER_NO_DIALOG: '1'
         run: |
-          python tools/build.py --run --target ${{ matrix.target }} > run.log 2>&1
-          python -c "import pathlib, sys; text = pathlib.Path('run.log').read_text(encoding='utf-8', errors='replace'); print(text[-3000:]); sys.exit(0 if 'GUI OK' in text else 1)"
-
-      - name: Validate packaged release manifest inputs
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import hashlib
-          root = Path('dist')
-          files = [p for p in root.rglob('*') if p.is_file()]
-          assert files, 'dist is empty'
-          for p in files:
-              h = hashlib.sha256(p.read_bytes()).hexdigest()
-              assert len(h) == 64
-          print(f'validated {len(files)} packaged files')
-          PY
+          set -o pipefail
+          args=(--target "$PY_UPPER_CI_TARGET")
+          if [[ "$PY_UPPER_CI_APP_RUN" == "true" ]]; then
+            args+=(--run)
+          fi
+          python tools/build.py "${args[@]}" 2>&1 | tee run.log
+          if [[ "$PY_UPPER_CI_APP_RUN" == "true" ]]; then
+            grep -Fq 'GUI OK' run.log || { echo "Packaged GUI did not report readiness" >&2; exit 1; }
+          fi
 
       - name: Upload packaged artifact
         uses: actions/upload-artifact@v4

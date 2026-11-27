@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import errno
 import importlib
 import importlib.machinery
 import io
 import os
+import subprocess
 import sys
+import tempfile
 import types
 import zipfile
 from pathlib import Path
@@ -12,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from py_upper import egg as egg_module
+from py_upper import egg_loader
 from py_upper.egg import (
     DEFAULT_KEY_HEX, EGG_DIR, EGG_META_NAME, EGG_NAME, EggConfig, application_files,
     egg_authenticated, egg_config, egg_loader_source, pack_egg, read_egg_members,
@@ -268,6 +272,65 @@ def test_extract_cache_reuses_a_complete_directory(tmp_path, monkeypatch):
     monkeypatch.setattr(EncryptedEggImporter, "_extract_into", unexpected_extract)
     second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
     assert second.extract_root == first.extract_root
+
+
+@pytest.mark.parametrize("backend", ["extract", "memory"])
+def test_launcher_handoff_uses_the_open_archive_and_existing_cache_key(tmp_path, monkeypatch, backend):
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    key = bytes.fromhex(KEY)
+    payload, digest = open_egg(egg.read_bytes(), key, require_auth=True)
+    if backend == "memory":
+        fake_memimporter(monkeypatch)
+    else:
+        existing_root = EncryptedEggImporter(egg, key, backend, require_auth=True).extract_root
+    egg.unlink()
+    monkeypatch.setattr(sys, "path", sys.path[:])
+    monkeypatch.setattr(sys, "meta_path", sys.meta_path[:])
+
+    importer = egg_loader.install_from_launcher(egg, payload, digest, backend)
+
+    assert importer.backend == backend
+    assert importer.digest == digest
+    assert importer.read_data("mod.py") == b"VALUE = 1\n"
+    if backend == "extract":
+        assert importer.extract_root == existing_root
+
+
+@pytest.mark.parametrize("error", [errno.EACCES, errno.EROFS, errno.EIO])
+def test_extract_handles_unwritable_cache_without_hiding_io_errors(tmp_path, monkeypatch, error):
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    mkdtemp = tempfile.mkdtemp
+
+    def make_directory(*args, **kwargs):
+        if kwargs.get("dir") == str(cache):
+            raise OSError(error, os.strerror(error))
+        return mkdtemp(*args, **kwargs)
+
+    monkeypatch.setattr(tempfile, "mkdtemp", make_directory)
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path))
+    if error == errno.EIO:
+        with pytest.raises(OSError) as failure:
+            EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+        assert failure.value.errno == errno.EIO
+    else:
+        importer = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+        root = Path(importer.extract_root)
+        assert root.parent == tmp_path
+        assert (root / "mod.py").read_text(encoding="utf-8") == "VALUE = 1\n"
+    assert not list(cache.iterdir())
+
+
+def test_embedded_egg_loader_import_does_not_load_importlib_resources():
+    result = subprocess.run(
+        [sys.executable, "-IS", "-c",
+         "import sys; exec(compile(sys.stdin.read(), '<egg loader>', 'exec')); "
+         "assert 'importlib.abc' not in sys.modules; "
+         "assert 'importlib.resources' not in sys.modules"],
+        input=egg_loader_source(), capture_output=True, text=True, timeout=10,
+    )
+    assert result.returncode == 0, result.stderr
 
 
 def test_extract_cache_rebuilds_an_incomplete_directory(tmp_path):

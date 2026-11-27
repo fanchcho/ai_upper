@@ -211,7 +211,7 @@ exclude = [                       # 丢弃无法在包内满足依赖的可选�
 [tool.py_upper.cython]
 include = ["*"]                   # 相对 app/src 的模块名 glob
 exclude = []
-merge = "directory"               # none = 一模块一扩展；directory = 按顶层目录合并
+merge = "all"                     # all = 单 bundle；directory = 按顶层目录；none = 每模块一个扩展
 
 [tool.py_upper.build]
 jobs = 0                          # 并行编译任务数；0 = 每 CPU 一个
@@ -320,7 +320,7 @@ PY_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较�
 
 所以只有真正变化的模块会重新 Cython 化并编译，其余直接从缓存复制。两层是链式的：改一个 `.py` 只会让它的 `.c` 和它自己的扩展失效，删掉或改名的模块不会留下会被打包的旧产物（staging 只处理当前源码）。
 
-`merge = "directory"` 时，缓存分成两层：第一步仍按模块缓存生成的 `.c`；第二步按顶层目录把该组所有 `.c` 加上生成的 `register.c` 链接成一个 bundle，缓存 key（`py_upper-merged-native-1`）包含每个翻译单元的内容、链接命令和 MSVC 环境。改一个模块只会让它所在的 bundle 失效，其他组继续复用。
+合并模式仍按模块缓存生成的 `.c`，然后把组内的 `.c` 与生成的 `register.c` 一起构建为一个 bundle。缓存 key（`py_upper-merged-native-1`）包含翻译单元内容、链接命令和 MSVC 环境。`directory` 只重建改动所在的组；`all` 则需重建这个唯一的 bundle，但没改过的模块不必重新生成 `.c`。频繁迭代的大型项目可按需保留 `directory`。
 
 Cython 与编译器调用都在线程池里并发执行，并行度由 `[tool.py_upper.build].jobs` 控制（默认 `0` = 每 CPU 一个任务）。
 
@@ -604,9 +604,11 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 一律要求认证，v1 归档（只有 `MAGIC`）与手搓普通 zip 都被拒绝；构建期工具仍可用
 `require_auth=False` 读取旧归档做诊断。
 
-**性能**：认证不会拖慢启动。TAG 直接充当 extract 缓存键，取代了原本“解密后再
-对整个明文做一遍哈希”的那次遍历，所以净开销为零；`sha3.h` 的 absorb/squeeze 也从
-逐字节改为按 64 位 lane 批量处理。实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`）：
+**性能**：launcher 在初始化 CPython 前读取、验证 TAG 并解密一次，再在进程内把
+同一份 ZIP 字节和 TAG 交给 Python loader。两个阶段不再各自读盘和解密，也不会额外
+写一份明文 ZIP；已有 extract 缓存键不变。构建期单独调用 loader 仍自行打开归档。
+TAG 取代了旧格式解密后的全量缓存哈希，`sha3.h` 也改为按 64 位 lane 处理。
+历史实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`）：
 
 | 版本 | egg 读取 | 启动总耗时 |
 | --- | --- | --- |
@@ -648,7 +650,9 @@ compression = "deflated"  # deflated | stored | lzma
   缓存根默认是 `~/Library/Caches/py_upper/eggs`（macOS）、
   `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），
-  `PY_UPPER_EGG_CACHE` 可覆盖；目录不可写时回退到 `py_upper_egg_*` 临时目录。
+  `PY_UPPER_EGG_CACHE` 可覆盖；目录无法创建，或现有目录因权限、只读文件系统无法
+  创建解压 staging 时，Python loader 改用系统的 `py_upper_egg_*` 临时目录。
+  归档读取、解压及其他写入错误不会按权限问题隐藏。
   缓存目录名就是认证 TAG，因此每次发布都会产生新目录；loader 发布新条目后会删掉
   更早的条目，只保留当前和上一版（`CACHE_KEEP = 2`），上一版留着是为了回滚时仍能
   热启动。launcher 的 `merged-<tag>` 缓存同理（保留当前 + 最新一个旧条目）。删除是
@@ -659,20 +663,22 @@ compression = "deflated"  # deflated | stored | lzma
 - `auto`：Windows 且 `_memimporter` 能导入时用 memory，否则 extract。Windows
   上编译失败只打印 warning；显式 `memory` 则报错。
 
-**合并扩展（`merge = "directory"`）**：每个顶层目录下的叶子模块链接成一个
-bundle，文件名是 `py_upper_<group><扩展后缀>`，统一放在
+**合并扩展**：模板使用 `merge = "all"`，把选中的应用叶子模块链接为一个
+`py_upper__all<扩展后缀>`，启动时只加载一个应用原生 bundle。
+`merge = "directory"` 仍按顶层目录分组，根目录模块单独成组；已有配置不会自动迁移。
+两种模式的 bundle 都放在
 `site-packages/py_upper_bundles/`，再以 **`ZIP_STORED`** 写进 `py_upper.dat`
 （launcher 在 `Py_Initialize` 之前读归档，没有 zlib/lzma 可用，所以这些 entry
 不能压缩）。`__init__.py` 不参与合并，仍以 `.py` 包标记进入 egg。launcher
 启动时从 egg 取出 bundle 到内容寻址缓存
-（`<cache>/eggs/merged-<shake256(payload)[:16]>/`），`dlopen` 后调用
+（`<cache>/eggs/merged-<TAG 前 16 字节的十六进制>/`），`dlopen` 后调用
 `py_upper_register_modules()`，由它用 `PyImport_ExtendInittab` 在解释器初始化
 前注册所有模块名。Python 层的 egg loader 会跳过 `py_upper_bundles/`，不会重复
 解压。`--verify` 会检查 bundle 在 egg 内、`site-packages` 没有散落副本、entry
 是 `ZIP_STORED`、架构与 target 一致。
 
 launcher 内嵌 loader 源码、key 与 backend，并在运行入口前调用
-`install(EGG_PATH, key_hex, backend)`；`PY_UPPER_EGG` 指向包内的
+`install_from_launcher()` 交接已认证的归档；`PY_UPPER_EGG` 指向包内的
 `bundle/py_upper.dat`
 （Windows/Linux 在可执行文件旁，macOS 在 `Contents/Resources/`）。stage 下的
 `egg.json` 记录本次构建实际使用的 key/backend/compression；`--verify` 和冒烟
@@ -759,6 +765,8 @@ AboutWindow 的「关闭」按钮 ─CommandBinding→ MainViewModel.hide_about_
 ```
 
 `about_visible` 是唯一真相源：主窗口和「关于」窗口都不自己存可见状态，谁都不需要知道对方存在。主窗口拿到的「关于」窗口是构造参数（`MainWindow(viewmodel, about_window)`），不是自己 new 的。
+「关于」视图照常注册，但首次显示才创建 Qt 控件并读取最新的 ViewModel 内容。同步命令
+不加载异步运行时；`AsyncRelayCommand.execute()` 首次调度时才导入 `asyncio`。
 
 ---
 
@@ -811,7 +819,7 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 
 - 致命错误（入口缺失、runtime 加载失败、解释器初始化失败、应用抛未捕获异常）先写 stderr，再按需弹**原生对话框**：Windows `MessageBoxW`、macOS `CFUserNotification`、Linux `zenity`（退回 `xmessage`）。macOS 的对话框有 120 s 超时，无人值守不会挂死。
 - 已经能看到 stderr 时不弹窗：设置了 `PY_UPPER_NO_DIALOG`，或 stdout/stderr 是 tty。**CI 与 smoke 必须设 `PY_UPPER_NO_DIALOG=1`**。
-- 应用抛未捕获异常时，bootstrap 先把 traceback 写进 `TMPDIR/py_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件。
+- 应用抛未捕获异常时，bootstrap 按需导入 traceback 并将错误写进 `TMPDIR/py_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件；正常的内嵌入口也不会导入仅文件入口使用的 `runpy`。
 - 退出码：1 无 argv / 未捕获异常，3 入口缺失，4 libpython 加载失败，5 符号缺失，6 配置失败，7 初始化失败，8 `PyRun_SimpleString` 缺失，9 launcher 内部异常。
 
 ### 10.4 平台差异
@@ -830,7 +838,7 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 
 两道门：
 
-1. **静态校验**（`--verify`）：文件存在、架构匹配、扩展 ABI 后缀、依赖清单、包布局。可重复执行（幂等）。
+1. **静态校验**（`--verify`）：文件存在、架构匹配、扩展 ABI 后缀、依赖清单、包布局。staging 和成品分别验签解密一次，各项归档检查复用这一份 ZIP；再次运行会重新读取并检查文件。
 2. **真 import smoke**（`--run` 之前自动执行）：
    - 用 bundled Python 导入入口模块 + 所有直接声明的第三方依赖；
    - 用打包好的 launcher 再导入一次（`PY_UPPER_SMOKE=1`）；
@@ -842,7 +850,7 @@ CI（`.github/workflows/validate.yml`）在**每个原生平台**都跑：
 
 ```
 单元测试 → 本地端到端构建（第三方 wheel、应用自带 native 库、lock/--locked）
-→ doctor → 完整 PBS 构建 → 集成运行（headless，断言 GUI OK）
+→ doctor → 一次完整 PBS 构建（支持 GUI 的目标用 --run 在构建后直接运行，断言 GUI OK）
 ```
 
 原生集成 job 从模板生成 `app/pyproject.toml` 时会把仓库自身示例应用的依赖集合填进 `[project] dependencies`（模板里是空列表），否则集成运行没有 PySide6 可用；纯测试与聚合 job 只需要文件存在，直接复制模板。E2E 夹具同样自己重写这一段依赖。

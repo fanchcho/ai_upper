@@ -140,13 +140,12 @@ compression = "deflated"
 include = ["*"]
 exclude = []
 # none: one extension per module (historical layout).
-# directory: link every leaf module of a top-level package into one extension
-#            and register them with the launcher before Py_Initialize. Package
-#            markers stay as .py files. Bundles are packed as stored entries in
-#            bundle/py_upper.dat and extracted to a cache by the launcher, so no
-#            loose copy ships in site-packages. On macOS this cuts a cold start
-#            with a thousand extensions from minutes to seconds.
-merge = "directory"
+# directory: one bundle per top-level package, for smaller incremental rebuilds.
+# all: one native bundle for all selected leaf modules, for fewer startup loads.
+# Both merged modes keep __init__.py package markers and register modules in
+# the launcher before Py_Initialize. With an egg, bundles are stored in the
+# archive and extracted into a cache, not shipped loose in site-packages.
+merge = "all"
 
 [tool.py_upper.build]
 # 同时编译的模块数；0（默认）= 每 CPU 一个任务。

@@ -91,6 +91,8 @@ constexpr const char* kEggFile = "py_upper.dat";
 // built-in modules while the interpreter is still unborn.
 constexpr const char* kBundlesDir = "py_upper_bundles";
 constexpr const char* kBundlesPrefix = "py_upper_bundles/";
+// Keep the existing 16-byte tag prefix for native cache directories.
+constexpr std::size_t kBundleCacheKeyLength = 32;
 
 // Fatal errors must be visible: on Windows the launcher is a GUI-subsystem
 // binary and a macOS bundle started from Finder has no terminal, so a broken
@@ -346,19 +348,6 @@ std::string embedded_egg_key() {
 #endif
 }
 
-// Whether a shipped launcher must refuse an archive that carries no
-// authentication tag. A packaged launcher always does: an egg without a tag is
-// either a pre-2 format build or an archive someone rebuilt, and neither should
-// be executed from a release. A launcher built by hand has no embedded loader
-// and never reaches this path.
-bool embedded_egg_requires_auth() {
-#ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
-    return py_upper_embedded::kEggKeyLength != 0;
-#else
-    return false;
-#endif
-}
-
 const char* embedded_egg_backend() {
 #ifdef PY_UPPER_HAS_EMBEDDED_SOURCE
     return py_upper_embedded::kEggBackend;
@@ -419,10 +408,7 @@ std::string py_quote(const std::string& s) {
 // console, and a traceback that would otherwise be written where nobody looks.
 const char* kBootstrapBody = R"PYUPPER(
 import os
-import runpy
 import sys
-import traceback
-import linecache
 
 
 def _py_upper_streams():
@@ -449,6 +435,11 @@ def _py_upper_streams():
 
 
 def _py_upper_report():
+    import traceback
+    if ENTRY_SOURCE is not None:
+        import linecache
+        linecache.cache[ENTRY_FILE] = (
+            len(ENTRY_SOURCE), None, ENTRY_SOURCE.splitlines(True), ENTRY_FILE)
     try:
         with open(CRASH_REPORT, "w", encoding="utf-8", errors="replace") as handle:
             traceback.print_exc(file=handle)
@@ -470,22 +461,20 @@ def _py_upper_run():
         }
         exec(compile(ENTRY_SOURCE, ENTRY_FILE, "exec"), namespace)
     else:
+        import runpy
         runpy.run_path(ENTRY_SCRIPT, run_name="__main__")
 
 
 def _py_upper_install_egg():
-    if EGG_LOADER_SOURCE is None or not EGG_PATH or not os.path.isfile(EGG_PATH):
+    if EGG_LOADER_SOURCE is None:
         return
     namespace = {"__name__": "py_upper_eggloader", "__file__": EGG_PATH}
     exec(compile(EGG_LOADER_SOURCE, "<py_upper_eggloader>", "exec"), namespace)
-    namespace["install"](EGG_PATH, key_hex=EGG_KEY_HEX, backend=EGG_BACKEND,
-                         require_auth=EGG_REQUIRE_AUTH)
+    namespace["install_from_launcher"](
+        EGG_PATH, globals().pop("_py_upper_opened_egg"), EGG_CACHE_KEY, EGG_BACKEND)
 
 
 _py_upper_streams()
-if ENTRY_SOURCE is not None:
-    linecache.cache[ENTRY_FILE] = (
-        len(ENTRY_SOURCE), None, ENTRY_SOURCE.splitlines(True), ENTRY_FILE)
 # The launcher exports the bundle paths through SetEnvironmentVariableW on
 # Windows. Python's os.environ is a snapshot of the CRT environment, which that
 # API does not refresh, so publish the same values inside the interpreter too.
@@ -504,8 +493,8 @@ except BaseException:
 // the binary, or as a file next to it. The bootstrap below carries whichever
 // applies as a literal, so the Python side stays one program with one branch.
 std::string bootstrap(const fs::path& script, const fs::path& entry_file, const char* source,
-                      const fs::path& egg_path, const char* egg_loader, const std::string& egg_key,
-                      const char* egg_backend, bool require_auth, const fs::path& crash_report,
+                      const fs::path& egg_path, const char* egg_loader, const std::string& egg_cache_key,
+                      const char* egg_backend, const fs::path& crash_report,
                       const std::string& launcher_env) {
     std::string text = launcher_env;
     text += "ENTRY_FILE = " + py_quote(path_to_utf8(entry_file)) + "\n"
@@ -513,9 +502,8 @@ std::string bootstrap(const fs::path& script, const fs::path& entry_file, const 
         "ENTRY_SCRIPT = None\n"
         "CRASH_REPORT = " + py_quote(path_to_utf8(crash_report)) + "\n"
         "EGG_PATH = " + py_quote(path_to_utf8(egg_path)) + "\n"
-        "EGG_KEY_HEX = " + py_quote(egg_key) + "\n"
+        "EGG_CACHE_KEY = " + py_quote(egg_cache_key) + "\n"
         "EGG_BACKEND = " + py_quote(egg_backend ? egg_backend : "auto") + "\n"
-        "EGG_REQUIRE_AUTH = " + (require_auth ? "True" : "False") + "\n"
         "EGG_LOADER_SOURCE = None\n";
     if (egg_loader != nullptr && *egg_loader != '\0') {
         // Same carrier as the entry: a raw literal whose payload the generator
@@ -753,20 +741,19 @@ std::string publish_bundle_cache(const std::vector<pyupper::EggBundleFile>& file
 // Load every merged bundle and hand its module table to CPython. This has to
 // run before Py_InitializeFromConfig: after initialization the inittab is
 // frozen and the modules would stay invisible to the import system.
-std::string load_module_bundles(const fs::path& site, const fs::path& egg, RuntimeGuard& guard) {
+std::string load_module_bundles(const fs::path& site, const pyupper::EggContents& egg, RuntimeGuard& guard) {
     fs::path directory = site / kBundlesDir;
     std::error_code ec;
-    if (fs::is_regular_file(egg, ec)) {
+    if (egg.ok) {
         std::vector<pyupper::EggBundleFile> packed;
-        std::string cache_key;
         std::string error;
-        if (!pyupper::read_egg_bundles(egg, embedded_egg_key(), kBundlesPrefix, packed, cache_key,
-                                       error, embedded_egg_requires_auth())) {
-            return "Could not read merged bundles from " + path_to_utf8(egg) + ": " + error;
+        if (!pyupper::read_bundles_from_payload(egg.payload, kBundlesPrefix, packed, error)) {
+            return "Could not read merged bundles from the egg: " + error;
         }
         if (!packed.empty()) {
             fs::path root;
-            const std::string cache_error = publish_bundle_cache(packed, cache_key, root);
+            const std::string cache_error =
+                publish_bundle_cache(packed, egg.cache_key.substr(0, kBundleCacheKeyLength), root);
             if (!cache_error.empty()) return cache_error;
             directory = root / kBundlesDir;
         }
@@ -807,6 +794,27 @@ std::string load_module_bundles(const fs::path& site, const fs::path& egg, Runti
         }
     }
     return std::string();
+}
+
+// Transfer ownership to the interpreter. The moved native buffer is freed
+// on return and the bootstrap consumes the Python global before the entry.
+bool publish_egg_payload(void* handle, std::vector<std::uint8_t> payload) {
+    auto add_module = reinterpret_cast<decltype(&PyImport_AddModule)>(
+        symbol(handle, "PyImport_AddModule"));
+    auto make_bytes = reinterpret_cast<decltype(&PyBytes_FromStringAndSize)>(
+        symbol(handle, "PyBytes_FromStringAndSize"));
+    auto set_attr = reinterpret_cast<decltype(&PyObject_SetAttrString)>(
+        symbol(handle, "PyObject_SetAttrString"));
+    auto decref = reinterpret_cast<decltype(&Py_DecRef)>(symbol(handle, "Py_DecRef"));
+    if (!add_module || !make_bytes || !set_attr || !decref) return false;
+    PyObject* main = add_module("__main__");  // Borrowed reference.
+    if (!main) return false;
+    PyObject* data = make_bytes(reinterpret_cast<const char*>(payload.data()),
+                                static_cast<Py_ssize_t>(payload.size()));
+    if (!data) return false;
+    const int result = set_attr(main, "_py_upper_opened_egg", data);
+    decref(data);
+    return result == 0;
 }
 
 RuntimeLoad load_python(const fs::path& home) {
@@ -938,8 +946,9 @@ int PyUpper::run(const std::vector<std::string>& argv) {
 
         // The loader embedded in the launcher looks for the archive in the
         // bundle root (Contents/Resources on macOS), which is where packaging
-        // copies it. It is simply absent when the project ships loose files.
+        // copies it. A build that ships loose files has no embedded egg loader.
         const fs::path egg = entry_dir / kEggDir / kEggFile;
+        const char* egg_loader = embedded_egg_loader();
 
         const char* smoke = std::getenv("PY_UPPER_SMOKE");
         const bool smoke_mode = smoke && std::string(smoke) == "1";
@@ -988,7 +997,7 @@ int PyUpper::run(const std::vector<std::string>& argv) {
         // carries its entry, and naming a path that does not exist would be
         // worse than saying nothing.
         if (!script.empty()) export_env("PY_UPPER_SCRIPT", path_to_utf8(script));
-        if (fs::exists(egg)) export_env("PY_UPPER_EGG", path_to_utf8(egg));
+        if (egg_loader) export_env("PY_UPPER_EGG", path_to_utf8(egg));
         export_env("PY_UPPER_EXECUTABLE", exe);
 #ifdef PY_UPPER_APP_NAME
         export_env("PY_UPPER_APP_NAME", PY_UPPER_APP_NAME);
@@ -1011,7 +1020,15 @@ int PyUpper::run(const std::vector<std::string>& argv) {
             return 4;
         }
 
-        const std::string bundle_error = load_module_bundles(site, egg, runtime);
+        pyupper::EggContents egg_contents;
+        if (egg_loader) {
+            egg_contents = pyupper::read_egg(egg, embedded_egg_key(), /*require_auth=*/true);
+            if (!egg_contents.ok) {
+                report_fatal("Could not open " + path_to_utf8(egg) + ": " + egg_contents.error);
+                return 10;
+            }
+        }
+        const std::string bundle_error = load_module_bundles(site, egg_contents, runtime);
         if (!bundle_error.empty()) {
             report_fatal(bundle_error);
             return 10;
@@ -1103,13 +1120,19 @@ int PyUpper::run(const std::vector<std::string>& argv) {
             report_fatal("The bundled CPython runtime is missing PyRun_SimpleString");
             return 8;
         }
+        if (egg_loader && !publish_egg_payload(loaded.handle, std::move(egg_contents.payload))) {
+            finalize();
+            finalize = nullptr;
+            report_fatal("Could not pass the authenticated egg to the embedded runtime");
+            return 8;
+        }
 
         // A compiled-in entry reports the launcher as its own location, a file
         // entry reports the file.
         const fs::path entry_file = script.empty() ? path_from_utf8(exe) : script;
         const std::string source = bootstrap(
-            script, entry_file, embedded, egg, embedded_egg_loader(), embedded_egg_key(),
-            embedded_egg_backend(), embedded_egg_requires_auth(), crash_report, launcher_env);
+            script, entry_file, embedded, egg, egg_loader, egg_contents.cache_key,
+            embedded_egg_backend(), crash_report, launcher_env);
         int rc = run_simple(source.c_str());
         int frc = finalize();
         finalize = nullptr;

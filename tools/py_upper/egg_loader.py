@@ -10,10 +10,8 @@
 #   ciphertext = XOR(zip bytes, SHAKE-256(key + SALT) key stream)
 #   TAG        = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]
 #
-# The tag makes the archive authenticated: a rebuilt or edited archive no longer
-# loads, because the tag only matches bytes this build produced. It costs one
-# extra hash pass over the ciphertext (~1.3 ms/MB), while the XOR pass it sits
-# next to already costs ~6.7 ms/MB, so startup time is unchanged in practice.
+# A packaged startup authenticates and decrypts once in the launcher, then
+# hands the opened archive and its tag to this loader in memory.
 #
 # Layout v1 (MAGIC only, no tag) is still readable when require_auth is false,
 # which is what keeps hand-made archives and the test fixtures working. A
@@ -43,9 +41,9 @@
 
 import _imp
 import atexit
+import errno
 import hashlib
 import hmac
-import importlib.abc
 import importlib.machinery
 import importlib.util
 import io
@@ -53,7 +51,6 @@ import json
 import os
 import shutil
 import sys
-import tempfile
 import threading
 import zipfile
 
@@ -252,7 +249,9 @@ def _memimporter_module():
 #
 # This finder runs after the egg importer, so a loose module shipped in the egg
 # still wins, and before BuiltinImporter, which cannot see the name.
-class BuiltinSubmoduleFinder(importlib.abc.MetaPathFinder):
+# The import machinery calls find_spec/create_module/exec_module directly.
+# Inheriting the ABCs would also import the unused importlib.resources stack.
+class BuiltinSubmoduleFinder:
 
     def find_spec(self, fullname, path=None, target=None):
         if path is None or '.' not in fullname:
@@ -274,24 +273,23 @@ def _install_builtin_submodule_finder():
     sys.meta_path.insert(index, BuiltinSubmoduleFinder())
 
 
-class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
-    def __init__(self, egg_path, key, backend='auto', require_auth=False):
+class EncryptedEggImporter:
+    def __init__(self, egg_path, key, backend='auto', require_auth=False, *, _opened_egg=None):
         backend = str(backend or 'auto').strip().lower()
         if backend not in BACKENDS:
             raise ValueError('egg backend must be one of: ' + ', '.join(BACKENDS))
         self.egg_path = os.path.abspath(egg_path)
-        self.key = key
         self.requested_backend = backend
         self.lock = threading.Lock()
-        with open(self.egg_path, 'rb') as handle:
-            raw = handle.read()
-        if not raw:
-            raise ValueError('egg is empty: ' + self.egg_path)
+        if _opened_egg is None:
+            with open(self.egg_path, 'rb') as handle:
+                raw = handle.read()
         try:
-            payload, self.digest = open_egg(raw, key, require_auth=require_auth)
+            if _opened_egg is None:
+                _opened_egg = open_egg(raw, key, require_auth=require_auth)
+            payload, self.digest = _opened_egg
             self.archive = zipfile.ZipFile(io.BytesIO(payload))
             self.names = frozenset(self.archive.namelist())
-            self.payload = payload
         except Exception as exc:
             raise ValueError('bad egg, not a zip or wrong key: ' + self.egg_path + ': ' + str(exc))
         self.manifest = self._read_manifest()
@@ -394,18 +392,22 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         shutil.rmtree(staging, ignore_errors=True)
         raise RuntimeError('cannot publish egg cache: ' + final)
 
+    def _extract_temporary(self):
+        import tempfile
+
+        root = tempfile.mkdtemp(prefix='py_upper_egg_')
+        try:
+            self._extract_into(root)
+        except Exception:
+            shutil.rmtree(root, ignore_errors=True)
+            raise
+        self.extract_root = root
+        atexit.register(shutil.rmtree, root, True)
+
     def _extract(self):
         cache_root = _cache_root()
         if cache_root is None:
-            root = tempfile.mkdtemp(prefix='py_upper_egg_')
-            try:
-                self._extract_into(root)
-            except Exception:
-                shutil.rmtree(root, ignore_errors=True)
-                raise
-            self.extract_root = root
-            atexit.register(shutil.rmtree, root, True)
-            return
+            return self._extract_temporary()
         final = os.path.join(cache_root, CACHE_PREFIX + self.digest)
         marker = os.path.join(final, CACHE_MARKER)
         if os.path.isfile(marker):
@@ -415,7 +417,17 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
             # A cached directory that no longer matches the archive is dropped
             # and rebuilt; leaving it in place would run edited code.
             shutil.rmtree(final, ignore_errors=True)
-        staging = tempfile.mkdtemp(prefix='.egg-' + self.digest + '-', dir=cache_root)
+        # mkdir(exist_ok=True) only proves the root exists, not that we can
+        # write inside it. Check the real staging operation, with no probe on
+        # a warm start and no fallback for unexpected I/O or extraction errors.
+        import tempfile
+
+        try:
+            staging = tempfile.mkdtemp(prefix='.egg-' + self.digest + '-', dir=cache_root)
+        except OSError as exc:
+            if not isinstance(exc, PermissionError) and exc.errno != errno.EROFS:
+                raise
+            return self._extract_temporary()
         try:
             self._extract_into(staging)
             _write_marker(os.path.join(staging, CACHE_MARKER), self.digest)
@@ -513,9 +525,7 @@ class EncryptedEggImporter(importlib.abc.MetaPathFinder, importlib.abc.Loader):
         exec(code, module.__dict__)
 
 
-def install(egg_path, key_hex=None, backend='auto', require_auth=False):
-    key = _key_bytes(key_hex)
-    importer = EncryptedEggImporter(egg_path, key, backend, require_auth=require_auth)
+def _install(importer):
     _install_builtin_submodule_finder()
     if importer.backend == 'extract':
         root = importer.extract_root
@@ -528,3 +538,15 @@ def install(egg_path, key_hex=None, backend='auto', require_auth=False):
             return importer
     sys.meta_path.insert(0, importer)
     return importer
+
+
+def install(egg_path, key_hex=None, backend='auto', require_auth=False):
+    key = _key_bytes(key_hex)
+    return _install(EncryptedEggImporter(egg_path, key, backend, require_auth=require_auth))
+
+
+def install_from_launcher(egg_path, payload, digest, backend):
+    # Not a loader mode: the launcher has already verified the archive and
+    # hands over the original tag, preserving the extract cache key.
+    return _install(EncryptedEggImporter(
+        egg_path, None, backend, _opened_egg=(payload, digest)))

@@ -255,23 +255,24 @@ def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
     return destination
 
 
-def read_egg_members(egg_path: Path, key_hex: str, require_auth: bool = False) -> tuple:
-    """Decrypt an egg in the build process and return its member names."""
+def open_egg_archive(egg_path: Path, key_hex: str, *, require_auth: bool) -> zipfile.ZipFile:
+    """Open an egg once for all build-side ZIP reads of this file."""
     from .egg_loader import open_egg
 
     key = bytes.fromhex(str(key_hex).strip())
     payload, _digest = open_egg(Path(egg_path).read_bytes(), key, require_auth=require_auth)
-    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+    return zipfile.ZipFile(io.BytesIO(payload))
+
+
+def read_egg_members(egg_path: Path, key_hex: str, require_auth: bool = False) -> tuple:
+    """Decrypt an egg in the build process and return its member names."""
+    with open_egg_archive(egg_path, key_hex, require_auth=require_auth) as archive:
         return tuple(sorted(archive.namelist()))
 
 
 def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
     """The member digests recorded in an egg, or an empty mapping for a v1 egg."""
-    from .egg_loader import open_egg
-
-    key = bytes.fromhex(str(key_hex).strip())
-    payload, _digest = open_egg(Path(egg_path).read_bytes(), key)
-    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+    with open_egg_archive(egg_path, key_hex, require_auth=False) as archive:
         if MANIFEST_NAME not in archive.namelist():
             return {}
         data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
@@ -280,17 +281,10 @@ def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
 
 
 def egg_authenticated(egg_path: Path, key_hex: str) -> bool:
-    """Whether an egg carries a tag that matches its own ciphertext.
-
-    This is the check ``--verify`` uses: a v1 archive still opens with its key
-    but has no tag at all, and a shipped bundle must not be one of those.
-    """
-    raw = Path(egg_path).read_bytes()
-    if raw[:len(MAGIC2)] != MAGIC2:
-        return False
+    """Whether the file opens as an authenticated ZIP egg."""
     try:
         read_egg_members(egg_path, key_hex, require_auth=True)
-    except Exception:
+    except (OSError, ValueError, zipfile.BadZipFile):
         return False
     return True
 

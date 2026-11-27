@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 from py_upper.config import TARGETS, runtime_spec
 
 def test_targets_and_abi():
@@ -44,3 +46,11 @@ def test_target_extension_suffix_matches_cpython_importer_conventions():
     assert target_extension_suffix(TARGETS["linux-arm64"], "3.13", "cp313") == ".cpython-313-aarch64-linux-gnu.so"
     assert target_extension_suffix(TARGETS["macos-arm64"], "3.13", "cp313") == ".cpython-313-darwin.so"
     assert target_extension_suffix(TARGETS["macos-x86_64"], "3.13", "cp313") == ".cpython-313-darwin.so"
+
+
+@pytest.mark.parametrize(("value", "mode"), [("all", "all"), ("directory", "directory"), (True, "directory"), (False, "none")])
+def test_cython_merge_mode_preserves_existing_config_values(monkeypatch, value, mode):
+    from py_upper import config
+
+    monkeypatch.setattr(config, "cython_config", lambda: {"merge": value})
+    assert config.cython_merge_mode() == mode

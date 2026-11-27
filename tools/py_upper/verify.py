@@ -1,7 +1,6 @@
 """Verification: static package checks plus the target-runtime and launcher smoke tests."""
 from __future__ import annotations
 
-import io
 import json
 import os
 import subprocess
@@ -16,10 +15,9 @@ from .config import (
     staging_dir, target_extension_suffix, target_runtime_dir,
 )
 from .egg import (
-    EGG_DIR, EGG_NAME, egg_authenticated, egg_config, egg_loader_source,
-    read_egg_manifest, read_egg_members, read_egg_meta,
+    EGG_DIR, EGG_NAME, egg_config, egg_loader_source, open_egg_archive, read_egg_meta,
 )
-from .egg_loader import MAGIC, MAGIC2, MANIFEST_NAME, _safe_member, keystream_xor
+from .egg_loader import MANIFEST_NAME, _safe_member
 from .manifest import read_manifest, validate_manifest
 from .native.deps import _system_dependency, dependency_names
 from .native.inspect import (
@@ -33,9 +31,7 @@ from .runtime import runtime_pip_payloads
 from .third_party import WHEEL_MANIFEST, dependency_specs, wheel_dir
 
 
-def _expected_extension(site: Path, source: Path, target: Target) -> Path:
-    spec = runtime_spec(target)
-    suffix = target_extension_suffix(target, spec.major_minor, spec.abi_tag)
+def _expected_extension(site: Path, source: Path, suffix: str) -> Path:
     rel = source.relative_to(APP / "src").with_suffix("")
     return site.joinpath(*rel.parts[:-1], rel.name + suffix)
 
@@ -56,48 +52,7 @@ def _stage_egg_config(stage) -> "EggConfig":
     return egg_config(enabled=(stage / EGG_DIR / EGG_NAME).is_file())
 
 
-# Verification reads the same archive many times: once for the member list,
-# once per merged bundle, and once more for the packaged copy. Decrypting a
-# 1 MB egg costs ~3.6 ms, so the naive path paid that cost per lookup. The cache
-# is keyed on the file's identity (path, mtime, size) so an archive rewritten
-# mid-run is never served stale bytes.
-_EGG_CACHE: dict = {}
-
-
-def _egg_payload(egg_path: Path, key_hex: str) -> bytes:
-    """The decrypted zip bytes of an egg, through the same opener as the loader.
-
-    Going through open_egg instead of a local reimplementation is what keeps
-    --verify honest: it verifies the tag, so a build that produced an archive
-    the runtime would refuse fails verification instead of passing it.
-    """
-    from .egg_loader import open_egg
-
-    path = Path(egg_path)
-    stat = path.stat()
-    cache_key = (str(path.resolve()), stat.st_mtime_ns, stat.st_size, str(key_hex).lower())
-    cached = _EGG_CACHE.get(cache_key)
-    if cached is not None:
-        return cached
-    payload, _digest = open_egg(path.read_bytes(), bytes.fromhex(str(key_hex).strip()))
-    # One entry is enough: verification walks one stage and then one package.
-    _EGG_CACHE.clear()
-    _EGG_CACHE[cache_key] = payload
-    return payload
-
-
-def _egg_archive(egg_path: Path, key_hex: str) -> zipfile.ZipFile:
-    """A ZipFile over the decrypted payload, reused across member lookups."""
-    return zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex)))
-
-
-def _egg_member(egg_path: Path, key_hex: str, name: str) -> tuple[int, bytes]:
-    with _egg_archive(egg_path, key_hex) as archive:
-        info = archive.getinfo(name)
-        return info.compress_type, archive.read(name)
-
-
-def _egg_manifest_checks(egg_path: Path, key_hex: str, members) -> list[tuple[bool, str]]:
+def _egg_manifest_checks(archive: zipfile.ZipFile, members: set[str]) -> list[tuple[bool, str]]:
     """The archive records a digest per member, so a cache can be validated.
 
     Without it the plaintext extract cache has no way to tell an untouched
@@ -105,21 +60,14 @@ def _egg_manifest_checks(egg_path: Path, key_hex: str, members) -> list[tuple[bo
     not the files a previous run unpacked from it.
     """
     try:
-        # Read from the already-decrypted archive instead of read_egg_manifest:
-        # that helper decrypts again, and verification would pay the cost twice
-        # for the same file.
-        with _egg_archive(egg_path, key_hex) as archive:
-            if MANIFEST_NAME not in archive.namelist():
-                manifest = {}
-            else:
-                data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
-                files = data.get("files") if isinstance(data, dict) else None
-                manifest = dict(files) if isinstance(files, dict) else {}
+        data = json.loads(archive.read(MANIFEST_NAME)) if MANIFEST_NAME in members else {}
+        files = data.get("files") if isinstance(data, dict) else None
+        manifest = files if isinstance(files, dict) else {}
     except Exception as exc:
         return [(False, f"egg manifest: {exc}")]
     if not manifest:
         return [(False, "egg manifest records per-member digests")]
-    covered = {name for name in members if not name.endswith("/") and name != "py_upper_manifest.json"}
+    covered = {name for name in members if not name.endswith("/") and name != MANIFEST_NAME}
     missing = sorted(covered - set(manifest))
     checks = [(not missing, "egg manifest covers every member" + (f": missing {missing[0]}" if missing else ""))]
     malformed = sorted(name for name, digest in manifest.items() if len(str(digest)) != 64)
@@ -128,17 +76,17 @@ def _egg_manifest_checks(egg_path: Path, key_hex: str, members) -> list[tuple[bo
 
 
 def _verify_egg_bundle(
-    egg_path: Path,
-    key_hex: str,
+    archive: zipfile.ZipFile,
     member: str,
     target: Target,
 ) -> list[tuple[bool, str]]:
     """Check the stored method and architecture of a bundle inside an egg."""
     try:
-        method, data = _egg_member(egg_path, key_hex, member)
+        info = archive.getinfo(member)
+        data = archive.read(info)
     except Exception as exc:
         return [(False, f"merged bundle in egg: {exc}")]
-    checks = [(method == zipfile.ZIP_STORED, f"merged bundle stored {member}")]
+    checks = [(info.compress_type == zipfile.ZIP_STORED, f"merged bundle stored {member}")]
     with tempfile.TemporaryDirectory(prefix="py_upper-verify-") as tmp:
         probe = Path(tmp) / Path(member).name
         probe.write_bytes(data)
@@ -150,7 +98,7 @@ def _verify_egg_bundle(
     return checks
 
 
-def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target,
+def _verify_egg_native_dependencies(archive: zipfile.ZipFile, target: Target,
                                     runtime: Path) -> list[tuple[bool, str]]:
     """Packed extensions load from a cache, outside the bundle's native tree.
 
@@ -175,14 +123,14 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
                            if dep.lower() in libraries and dep.lower() not in preloaded)
     with tempfile.TemporaryDirectory(prefix="py_upper-egg-check-") as tmp:
         root = Path(tmp)
-        with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
-            for member in archive.infolist():
-                if member.is_dir():
-                    continue
-                destination = root / _safe_member(member.filename)
-                destination.resolve().relative_to(root.resolve())
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                destination.write_bytes(archive.read(member))
+        resolved_root = root.resolve()
+        for member in archive.infolist():
+            if member.is_dir():
+                continue
+            destination = root / _safe_member(member.filename)
+            destination.resolve().relative_to(resolved_root)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(archive.read(member))
         for binary in native_files(root, target):
             verify_arch(binary, target)
             for name in dependency_names(binary):
@@ -198,28 +146,35 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
     return checks
 
 
-def _application_source_checks(
+def _application_payload_checks(
     site: Path,
     sources,
     target: Target,
-    egg_members,
     prefix: str,
-    egg_path: Path | None = None,
-    egg_key: str | None = None,
+    *,
+    archive: zipfile.ZipFile | None = None,
 ) -> list[tuple[bool, str]]:
-    """Checks for the application's own files in either native layout.
+    """Check archive metadata and the application's own files.
 
     The per-module layout has one extension per source. The merged layout has
-    one bundle per top-level group. Bundles ship as stored entries inside the
-    egg; the launcher extracts them before ``Py_Initialize`` and registers them,
-    so site-packages carries no loose copy.
+    bundles selected by the same grouping logic as the build. Bundles inside an
+    egg ship as stored entries; the launcher extracts and registers them before
+    ``Py_Initialize``, so site-packages carries no loose copy in that case.
     """
     spec = runtime_spec(target)
     suffix = target_extension_suffix(target, spec.major_minor, spec.abi_tag)
     checks: list[tuple[bool, str]] = []
-    if cython_merge_mode() != "directory":
+    mode = cython_merge_mode()
+    egg_members = None
+    if archive is not None:
+        label = f"{prefix or 'encrypted '}egg"
+        egg_members = set(archive.namelist())
+        checks.extend([(True, f"{label} authenticated"),
+                       (bool(egg_members), f"{label} members={len(egg_members)}")])
+        checks.extend(_egg_manifest_checks(archive, egg_members))
+    if mode == "none":
         for source in sources:
-            expected = _expected_extension(site, source, target)
+            expected = _expected_extension(site, source, suffix)
             name = module_name(source)
             if egg_members is None:
                 checks.append((expected.is_file(), f"{prefix}extension {name}"))
@@ -236,8 +191,7 @@ def _application_source_checks(
             checks.append((not (site / source.relative_to(APP / "src")).exists(), f"{prefix}source removed {name}"))
         return checks
 
-    leaves = [source for source in sources if source.name != "__init__.py"]
-    for group, grouped in merged_groups(leaves).items():
+    for group, grouped in merged_groups(sources, mode).items():
         relative = merged_bundle_relative(group, suffix)
         bundle = site / relative
         if egg_members is None:
@@ -252,14 +206,14 @@ def _application_source_checks(
             present = relative in egg_members
             checks.append((present, f"{prefix}egg merged bundle {group}"))
             checks.append((not bundle.is_file(), f"{prefix}merged bundle not loose {group}"))
-            if present and egg_path is not None and egg_key is not None:
-                checks.extend(_verify_egg_bundle(egg_path, egg_key, relative, target))
+            if present and archive is not None:
+                checks.extend(_verify_egg_bundle(archive, relative, target))
         checks.append((bool(grouped), f"{prefix}merged bundle modules {group}={len(grouped)}"))
 
     for source in sources:
         name = module_name(source)
         relative = source.relative_to(APP / "src")
-        expected = _expected_extension(site, source, target)
+        expected = _expected_extension(site, source, suffix)
         if source.name == "__init__.py":
             if egg_members is None:
                 checks.append(((site / relative).is_file(), f"{prefix}package marker {name}"))
@@ -270,6 +224,30 @@ def _application_source_checks(
         else:
             checks.append((not (site / relative).exists(), f"{prefix}source removed {name}"))
             checks.append((not expected.is_file(), f"{prefix}no per-module extension {name}"))
+    return checks
+
+
+def _checks_for_application(
+    site: Path,
+    sources: list[Path],
+    target: Target,
+    *,
+    prefix: str = "",
+    egg_input: tuple[Path, str] | None = None,
+    runtime: Path | None = None,
+) -> list[tuple[bool, str]]:
+    if egg_input is None:
+        return _application_payload_checks(site, sources, target, prefix)
+
+    label = f"{prefix or 'encrypted '}egg"
+    try:
+        archive = open_egg_archive(*egg_input, require_auth=True)
+    except (OSError, ValueError, zipfile.BadZipFile) as exc:
+        return [(False, f"{label}: {exc}")]
+    with archive:
+        checks = _application_payload_checks(site, sources, target, prefix, archive=archive)
+        if runtime is not None:
+            checks.extend(_verify_egg_native_dependencies(archive, target, runtime))
     return checks
 
 
@@ -292,28 +270,18 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
     checks.append((entry_module() in selected_modules, f"entry module Cythonized: {entry_module()}"))
 
     egg = _stage_egg_config(stage)
-    egg_members = None
+    egg_input = None
     if egg.enabled:
         egg_path = stage / EGG_DIR / EGG_NAME
-        checks.append((egg_path.is_file(), f"encrypted egg {EGG_NAME}"))
-        if egg_path.is_file():
-            try:
-                checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "encrypted egg magic v2"))
-                checks.append((egg_authenticated(egg_path, egg.key_hex), "encrypted egg authenticated"))
-                egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
-                checks.append((bool(egg_members), f"encrypted egg members={len(egg_members)}"))
-                checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
-            except Exception as exc:
-                checks.append((False, f"encrypted egg members: {exc}"))
+        exists = egg_path.is_file()
+        checks.append((exists, f"encrypted egg {EGG_NAME}"))
+        if exists:
+            egg_input = (egg_path, egg.key_hex)
         if target.os == "windows" and egg.backend == "memory":
             checks.append(((site / "_memimporter.pyd").is_file(),
                            "egg memory backend helper _memimporter"))
 
-    checks.extend(_application_source_checks(
-        site, sources, target, egg_members, "",
-        egg_path=stage / EGG_DIR / EGG_NAME,
-        egg_key=egg.key_hex,
-    ))
+    checks.extend(_checks_for_application(site, sources, target, egg_input=egg_input))
 
     leftovers = [path for path in site.rglob("*") if path.is_file() and path.suffix.lower() in {".c", ".cpp", ".pyc", ".pyo"}]
     checks.append((not leftovers, "no generated source/cache files in site-packages"))
@@ -383,14 +351,15 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     # copy of the entry.
     sidecars = sorted(path.relative_to(root).as_posix() for path in entry_dir.glob("*.int"))
     checks.append((not sidecars, "no entry sidecar next to the launcher" + (f": {', '.join(sidecars)}" if sidecars else "")))
-    if executable.is_file():
+    binary = executable.read_bytes() if executable.is_file() else None
+    if binary is not None:
         # The entry is the one thing the launcher cannot get from anywhere else,
         # and the packaging step compiles it in: reading the bytes back out
         # proves the binary that was built carries the entry the configuration
         # names, which a file-based check silently stopped doing the moment the
         # two sides could disagree.
         embedded = entry_source().encode("utf-8")
-        checks.append((embedded in executable.read_bytes(), f"embedded entry {entry_module()}"))
+        checks.append((embedded in binary, f"embedded entry {entry_module()}"))
 
     # The package is the contract: an egg that is present must be readable with
     # the key of the build that produced it. Stage verification is what proves
@@ -398,28 +367,13 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     # unconditionally, so an absent archive here means a loose build.
     egg_path = entry_dir / EGG_DIR / EGG_NAME
     egg = read_egg_meta(staging_dir(target)) or egg_config()
-    egg_members = None
-    if egg_path.is_file():
-        try:
-            checks.append((egg_path.read_bytes()[:len(MAGIC2)] == MAGIC2, "packaged egg magic v2"))
-            checks.append((egg_authenticated(egg_path, egg.key_hex), "packaged egg authenticated"))
-            egg_members = set(read_egg_members(egg_path, egg.key_hex, require_auth=True))
-            checks.append((bool(egg_members), f"packaged egg members={len(egg_members)}"))
-            checks.extend(_egg_manifest_checks(egg_path, egg.key_hex, egg_members))
-        except Exception as exc:
-            checks.append((False, f"packaged egg members: {exc}"))
-        if executable.is_file():
-            # The archive is useless without the loader, and the loader is only
-            # reachable when it was compiled into this launcher.
-            loader = egg_loader_source().encode("utf-8")
-            binary = executable.read_bytes()
-            checks.append((loader in binary, "embedded egg loader"))
-            # The key has to be in the binary, but it must not be readable: a
-            # plain hexadecimal string is what `strings` finds in two seconds.
-            checks.append((egg.key_hex.encode("ascii") not in binary, "egg key not stored as plain hex"))
+    egg_input = (egg_path, egg.key_hex) if egg_path.is_file() else None
+    if egg_input is not None and binary is not None:
+        # The archive is useless unless the launcher carries its loader.
+        loader = egg_loader_source().encode("utf-8")
+        checks.append((loader in binary, "embedded egg loader"))
+        checks.append((egg.key_hex.encode("ascii") not in binary, "egg key not stored as plain hex"))
     runtime_root = resources / "runtime" if target.os == "macos" else root / "runtime"
-    if egg_members is not None:
-        checks.extend(_verify_egg_native_dependencies(egg_path, egg.key_hex, target, runtime_root))
     if bool(optimize_config().get("remove_runtime_pip", True)):
         checks.append((not runtime_pip_payloads(runtime_root), "runtime pip/ensurepip removed"))
     if target.os == "windows" and runtime_spec(target).provider == "pbs":
@@ -437,10 +391,8 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         if target.os == "windows":
             checks.append(_launcher_subsystem_check(executable))
 
-    checks.extend(_application_source_checks(
-        site, selected_sources(), target, egg_members, "packaged ",
-        egg_path=egg_path,
-        egg_key=egg.key_hex,
+    checks.extend(_checks_for_application(
+        site, selected_sources(), target, prefix="packaged ", egg_input=egg_input, runtime=runtime_root,
     ))
 
     # Only binaries the target OS can actually load are part of the native ABI
@@ -512,7 +464,7 @@ def smoke_modules(target: Target, include_entry: bool = True) -> list[str]:
 
 
 def write_smoke_script(target: Target, destination: Path) -> Path:
-    merged = cython_merge_mode() == "directory"
+    merged = cython_merge_mode() != "none"
     modules = smoke_modules(target, include_entry=not merged)
     destination.parent.mkdir(parents=True, exist_ok=True)
     # The target interpreter is started with the stage on PYTHONPATH, not
