@@ -159,6 +159,7 @@ class ChatViewModel(BaseViewModel):
         # 工具层与界面层互不认识，靠这个回调对接。
         self.tools.todo_sink = self._apply_todo
         self.tools.plan_sink = self._apply_plan
+        self.tools.enable_card_tools()
         super().__init__()
 
     # ── 属性 ──────────────────────────────────────────────────────────────

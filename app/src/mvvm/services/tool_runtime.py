@@ -440,11 +440,14 @@ class ToolRuntime:
             (RUN_COMMAND_SPEC, self._run_command),
             (PRESENT_FILES_SPEC, self._present_files),
             (TODO_WRITE_SPEC, self._todo_write),
-            (PROPOSE_AGENT_SPEC, self._propose_agent),
-            (CREATE_TASK_SPEC, self._create_task_card),
         ):
             if spec.name not in self._tools:
                 self.register(spec, handler)
+
+    def enable_card_tools(self) -> None:
+        """ChatViewModel 专用：角色名片/定时任务名片工具，不进入基础 10 工具清单。"""
+        self.register(PROPOSE_AGENT_SPEC, self._propose_agent)
+        self.register(CREATE_TASK_SPEC, self._create_task_card)
 
     def register(self, spec: ToolSpec, handler: Callable[..., ToolResult]) -> None:
         self._tools[spec.name] = (spec, handler)
