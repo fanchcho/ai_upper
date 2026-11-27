@@ -1,0 +1,2 @@
+feishu {'status': 'unverified', 'reason': '飞书 App ID 或 App Secret 未配置'}
+web {'status': 'unverified', 'reason': 'Web Push 浏览器订阅不存在；未完成配对'}

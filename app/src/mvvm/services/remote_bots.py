@@ -171,6 +171,15 @@ def RemoteBots(shell):
                 scope=bot.get('scope',{'mode':'all'})
                 if scope.get('mode')=='sessions' and sid not in scope.get('sessions',[]):continue
                 if scope.get('mode')=='personas' and (not session or session.personaId not in scope.get('personas',[])):continue
+                if bot.get('platform') in ('feishu','web'):
+                    from mvvm.services.channel_push import push
+                    users=bot.get('users',[]) if bot['platform']=='feishu' else bot.get('devices',[])
+                    if not users:reasons.append('未配置可用的已配对远程渠道');continue
+                    def deliver(bot=bot,users=users):
+                        for user in users:
+                            result=push(self.shell._vault,bot,user,title,body,sid)
+                            self.status.emit(json.dumps(result,ensure_ascii=False),'')
+                    threading.Thread(target=deliver,daemon=True).start();sent+=len(users);continue
                 if bot.get('platform')!='telegram':reasons.append('渠道未接入');continue
                 token=self.shell._vault.get_secret('remote:'+bot['id']+':botToken')
                 if not token:reasons.append('机器人密钥不存在或系统密钥库不可用');continue

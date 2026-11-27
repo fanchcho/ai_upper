@@ -1,0 +1,1 @@
+PASS native cryptography RFC8291 payload roundtrip; key persisted/read via vault; no external HTTP attempted
