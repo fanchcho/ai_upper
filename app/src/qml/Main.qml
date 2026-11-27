@@ -99,6 +99,21 @@ ApplicationWindow {
     // ── Python 注入的状态 ─────────────────────────────────────────────
     property var sessions: []
     property string activeId: ""
+    // Composer.tsx keeps drafts in memory per session, including pending attachments.
+    property var composerDrafts: ({})
+    property string composerSessionId: ""
+    onActiveIdChanged: {
+        if (composerSessionId) {
+            composerDrafts[composerSessionId] = {
+                text: inputField.text, files: pendingFiles.slice()
+            }
+        }
+        var draft = composerDrafts[activeId]
+        inputField.clear()
+        inputField.text = draft ? draft.text : ""
+        pendingFiles = draft ? draft.files.slice() : []
+        composerSessionId = activeId
+    }
     property string activeTitle: ""
     property string activePersona: I18n.t("finish.brand")
     property bool busy: false
