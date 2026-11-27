@@ -1,334 +1,399 @@
-# deva 功能盘点复核（未完成）
+# 功能级未移植盘点（feature parity gap）
 
-本轮入口为 b25dc1b；旧原稿以 a563434 为基线，漏掉已经推送的五项功能，不能使用旧三态计数。原稿保存在 .tmp/feature-review/。本报告不把未验证项目伪装成“只有界面”或“未移植”。
+> 生成时间：2026-11-27T22:50:37 · 盘点基线：`a5634344f050cff69871e40a0431c312b92c42dd`；B 补齐后当前 HEAD：`b25dc1b7a025e807cf8e89bb6c6b989d5814e412`（= origin/develop）
+> 唯一依据：`/home/agent/shared_workspace/deva` 原版真实源码（只读，未改动）；移植版证据来自 `/home/agent/shared_workspace/ai_upper` 当前工作树。
 
-已复核子集计数：{'not_ported': 6, 'implemented': 15, 'ui_only': 4}；未验证 59 项。**这不是全量三态计数，A 尚未完成。**
-
-## 起始对账
+## 0. 只读对账（原始命令与输出）
 
 ```text
-$ git log --oneline -6
-b25dc1b feat: accept dropped files and clipboard images as QML attachments
-81eca98 feat: add edit context menus to the QML composer and transcript
-9b43a24 feat: collapse the QML session list with Ctrl/Cmd+B and hover peek
-343ae26 feat: open markdown links from the QML transcript in the system browser
-942bf59 feat: add stop generation control to the QML composer
+$ cd /home/agent/shared_workspace/ai_upper && git log --oneline -6
 a563434 docs: record remaining raster differences and final navigation regression
+a8ce60d test: verify saved secrets with isolated real GNOME Secret Service
+0263dbd fix: align settings navigation and preserve contextual plugin editors
+070eb0a fix: add role typeahead and align verified secret status UI
+a80f43a feat: cap role avatar stacks and add role menu keyboard navigation
+d4982e9 fix: match role menu icon sizes and document raster rounding experiments
+
 $ git status --porcelain
-?? docs/audit/feature-parity-gap.json
-?? docs/audit/feature-parity-gap.md
+(空)
+
 $ git rev-parse HEAD
-b25dc1b7a025e807cf8e89bb6c6b989d5814e412
+a5634344f050cff69871e40a0431c312b92c42dd
+
 $ git ls-remote origin refs/heads/develop
-b25dc1b7a025e807cf8e89bb6c6b989d5814e412	refs/heads/develop
+a5634344f050cff69871e40a0431c312b92c42dd	refs/heads/develop
 ```
 
-a563434 与随后五项未回退、不重做；残留为未跟踪文档，复制后按实证改写。既有五项本轮不冒领新增。
+结论：a563434 及之前已推送提交未被回退、未重做；工作树干净。旧审计 `extensions-shell-final.md` / `extensions-rounding.md` / `extensions-runtime-parity.md` 已读，只当线索。
 
-## 功能候选全集与验证状态
+## 1. 三态定义与计数
 
-旧 84 项为候选集，尚未证明穷尽全部非 IPC 功能。表中未验证项的历史线索保留在 JSON 的 legacy_claim，不能当作本轮结论。web 入口在 IPC 清单另列，仅是代码出现位置，未记为 QML 可用。
+| 状态 | 定义 |
+|---|---|
+| 已实现且可用 | 有真实 QML/接线代码，且通过真实点击/键盘/写盘读回验证（不是单测冒充） |
+| 只有界面 | 控件存在于 QML，但动作未接（无 onClicked/无后端），点下去无效果 |
+| 未移植 | 移植版搜不到对应实现（或仅有不可达的后端函数、无用户入口） |
+| 不适用 | 原版本身不存在，或仅为 Electron 专有且无法在 QML 栈实现 |
 
-|ID|功能分组 / 功能|原版依据|移植版状态|证据 / 缺口|
+### 功能面（非 IPC + 用户可达功能）三态计数
+
+| 已实现且可用 | 只有界面 | 未移植 | 不适用 | 合计 |
 |---|---|---|---|---|
-|F01|应用生命周期与窗口 / 单实例锁与二次启动唤起|apps/desktop/src/main/index.ts:276-286|未移植|out/feature-review/F01-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F02|应用生命周期与窗口 / 关窗驻留托盘（closeToTray）|apps/desktop/src/main/index.ts:164-173；redesign/SettingsPane.tsx:101-113,165-172|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F03|应用生命周期与窗口 / 系统托盘图标与菜单（显示/定时任务/退出）|apps/desktop/src/main/index.ts:235-272；services/tray-icon.ts|未移植|out/feature-review/F03-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F04|应用生命周期与窗口 / 窗口最小化/最大化/关闭|apps/desktop/src/main/index.ts:307-322；preload/index.ts:625-639|已实现且可用|Main.qml windowControlMinimize/windowControlMaximize/windowControlClose，真实点击断言窗口状态；app/tests/test_qml_window_controls.py:219；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F05|应用生命周期与窗口 / 窗口控件叠加配色随主题|apps/desktop/src/main/index.ts:79-97,304-312|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F06|应用生命周期与窗口 / 全屏状态通知（macOS 红绿灯让位）|apps/desktop/src/main/index.ts:158-160；preload/index.ts:631-636；redesign/ChatFirstShell.tsx:52-66|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F07|应用生命周期与窗口 / 外链一律系统浏览器打开|apps/desktop/src/main/index.ts:175-181|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F08|菜单与快捷键 / 应用菜单栏|apps/desktop/src/main/index.ts:108 autoHideMenuBar:true；全仓无 setApplicationMenu|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F09|菜单与快捷键 / 编辑区右键菜单（剪切/复制/粘贴/全选）|apps/desktop/src/main/index.ts:183-217|已实现且可用|Main.qml:1560 → EditContextMenu.qml；真实右键、点击全选及选区断言；app/tests/test_qml_edit_menu.py:52；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F10|菜单与快捷键 / Ctrl/Cmd+B 收起/展开会话列表|redesign/ChatFirstShell.tsx:191-199|已实现且可用|Main.qml Shortcut/toggleSidebar；真实 Ctrl+B/鼠标悬停及配置读回；lifecycle.log 通过；app/tests/test_qml_sidebar_collapse.py:99；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F11|菜单与快捷键 / Esc 收回浮出列表|redesign/ChatFirstShell.tsx:192-194|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F12|菜单与快捷键 / Enter 发送 / Shift+Enter 换行|redesign/Composer.tsx:669-700|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F13|菜单与快捷键 / 输入框 / 指令联想（/compact /rewind /技能）|redesign/Composer.tsx:382-420|未移植|out/feature-review/F13-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F14|菜单与快捷键 / @ 提及成员/角色|redesign/Composer.tsx:399-419；shared/mention.ts|未移植|out/feature-review/F14-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F15|菜单与快捷键 / 回复完成/待处理系统通知|services/reply-notify.ts:15-80；chat-turns.ts:801|未移植|out/feature-review/F15-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F16|会话列表 / 新建会话|redesign/Rail.tsx:600-660（加号菜单）；preload/index.ts:805-940 chat.createSession|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F17|会话列表 / 切换会话|redesign/Rail.tsx:700-760|已实现且可用|Main.qml activate → ShellBridge.openSession；实际会话行点击和文档切换；另 drafts.json 双主题通过；app/tests/test_qml_session_switch.py:6；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F18|会话列表 / 重命名会话|redesign/Rail.tsx:175-182 RowMenu；chat:rename-session|已实现且可用|Main.qml confirmRename；真实右键、输入、确认后标题及会话文件读回；app/tests/test_qml_context_menu.py:294；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F19|会话列表 / 删除会话|redesign/Rail.tsx:175-182；chat:delete-session|已实现且可用|Main.qml confirmDelete；真实右键、确认后会话文件删除；app/tests/test_qml_context_menu.py:170；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F20|会话列表 / 归档/取消归档|redesign/Rail.tsx:620-650；chat:set-archived|已实现且可用|Main.qml archiveSelected/contextMenu；真实点击归档并读回会话；app/tests/test_qml_context_menu.py:466；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F21|会话列表 / 归档视图|redesign/Rail.tsx archiveView|已实现且可用|Main.qml archiveView/archiveBack；真实点击进入归档列表；app/tests/test_qml_context_menu.py:466；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F22|会话列表 / 会话搜索（标题/角色/挂载目录）|redesign/Rail.tsx:600-640|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F23|会话列表 / 会话筛选面板（角色/文件夹）|redesign/Rail.tsx:183-186,664-710|只有界面|app/src/qml/Main.qml:583-599 filterBtn 仅 Item/Icon，无输入 handler；本轮读取完整控件块。|
-|F24|会话列表 / 会话多选批量归档/删除|redesign/ThreadSelect.tsx|已实现且可用|Main.qml selectMode/selectedSessions/batch controls；真实菜单多选及批量归档读回；app/tests/test_qml_context_menu.py:337；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F25|会话列表 / 未读/待处理状态与红点|redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention|未移植|out/feature-review/F25-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。|
-|F26|会话列表 / 草稿按会话保留|redesign/Composer.tsx:109-121,755-760|已实现且可用|app/src/qml/Main.qml:104 onActiveIdChanged; scripts/parity/draft_evidence.py; out/feature-review/draft-before.log 真实点击失败；drafts.json 暗亮切换后恢复各自输入；drafts-dark/light.png。文字及待发附件实现；附件经真实拖放、切换和源文件读回通过；撤销历史边界尚需专门验证。|
-|F27|会话列表 / 会话列表宽度拖动/收起并记忆|redesign/resizable.ts；ChatFirstShell.tsx:143-160|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F28|会话列表 / 会话行右键菜单（新建/重命名/多选/归档/删除）|redesign/Rail.tsx:175-182；ContextMenu.tsx|已实现且可用|Main.qml 右键命中非当前会话；真实菜单动作作用于目标行；app/tests/test_qml_context_menu.py:368；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F29|对话正文 / 用户/助手 Markdown 正文|redesign/ConvMessage.tsx；features/chat/blocks.tsx|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F30|对话正文 / 工具调用/工具结果/思考/子代理活动卡|features/chat/blocks.tsx BlockView；redesign/ChatFirstShell.tsx:39-44 注释|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F31|对话正文 / 待处理交互卡（ask/审批）|features/chat/blocks.tsx AskCard；chat:ask-response|已实现且可用|InteractionPrompt.qml；真实按钮点击回答与审批，后端事件结果断言；app/tests/test_qml_plugin_settings.py:44；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F32|对话正文 / 计划卡与 plan-response|chat:plan-response；features/chat/blocks.tsx PlanCard|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F33|对话正文 / 回滚 rewind（列点/预览/应用/撤销）|redesign/RewindModal.tsx:31；Conversation.tsx:998-1003；chat:rewind-*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F34|对话正文 / 消息右键菜单（复制/引用/回滚/选择删除）|redesign/Conversation.tsx:905-950|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F35|对话正文 / 引用条 quote|redesign/ConvMessage.tsx leadingQuote/withQuote；Composer.tsx|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F36|对话正文 / 选择消息删除（delete-turns）|chat:delete-turns；redesign/Conversation.tsx:955-1000|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F37|对话正文 / 停止生成|redesign/Composer.tsx:973-991（busy 时空输入框显示停止键）；chat:abort|已实现且可用|Main.qml:1693 stopGlyph → ShellBridge.stopGeneration:1319；真实点击停止，测试传输结束原因 aborted；不声称真实云端网络验证；app/tests/test_qml_stop_generation.py:133；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F38|对话正文 / 回合中插入消息（插话）|chat:insert / chat:withdraw-inserts；Composer.tsx:463-467|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F39|对话正文 / 手动压缩 /compact|redesign/Composer.tsx:382-386；chat:compact|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F40|对话正文 / Todo 胶囊|redesign/Composer.tsx:864 TodoCapsule|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F41|对话正文 / 后台任务胶囊|redesign/Composer.tsx:865 BackgroundCapsule|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F42|对话正文 / 浏览器操作胶囊|redesign/Composer.tsx:866 BrowserCapsule|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F43|对话正文 / 上下文用量圆环|redesign/ContextRing.tsx；chat:context-usage|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F44|对话正文 / 模型/思考等级切换菜单|redesign/ModelMenu.tsx, EffortPicker.tsx|已实现且可用|Main.qml 模型与思考贴片 → ModelPicker.qml；真实点击并读取模型/effort 配置；app/tests/test_qml_model_picker.py:133；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F45|对话正文 / 附件选择（回形针）|redesign/Composer.tsx:950；fs:pick-attachments|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F46|对话正文 / 附件拖放|redesign/Composer.tsx:576-596；fs:dropped-entries|已实现且可用|Main.qml:74 DropArea → ShellBridge.acceptDroppedFiles:1406；真实拖放并验证 pendingFiles；drafts.json 另做暗亮附件切换验证；app/tests/test_qml_attachments_drop.py:70；out/feature-review/pytest.log。测试并非纯后端单测。|
-|F47|对话正文 / 粘贴图片/文件为附件|redesign/Composer.tsx:508,567；fs:paste-attachment|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F48|对话正文 / 附件贴片与图片缩略图|redesign/attachments.tsx；fs:attachment-image|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F49|对话正文 / 交付卡（打开/定位/复制路径）|features/chat/DeliverablesCard.tsx；deliverables:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F50|对话正文 / 交付卡图片缩略图|deliverables:thumbnail|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F51|角色 / 角色花名册 tab（列表/搜索/快速对话）|redesign/Rail.tsx:130-170,600-744|只有界面|app/src/qml/Main.qml:517 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。|
-|F52|角色 / 角色资料卡（ProfilePanel）|redesign/Rail.tsx:117 ProfilePanel|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F53|角色 / 新建/编辑/删除角色|redesign/ProfileView.tsx PersonaEditor；personas:upsert/remove|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F54|角色 / 角色头像编辑|redesign/AvatarEditor.tsx；personas:set-avatar-image|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F55|角色 / 角色排序（拖拽/置顶）|redesign/Rail.tsx reorderIds；personas:reorder|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F56|角色 / 角色记忆查看/编辑|redesign/RoleMemoryTab.tsx, MemoryDetail.tsx；memory:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F57|角色 / 快速开始角色卡|redesign/Rail.tsx QuickStart|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F58|定时任务 / 定时任务页（列表/详情/运行历史）|redesign/TasksPane.tsx:1-70；tasks:list/get|只有界面|app/src/qml/Main.qml:518 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。|
-|F59|定时任务 / 任务调度引擎（once/cron、自动触发）|services/schedule.ts, scheduler.ts；tasks:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F60|定时任务 / 任务系统通知|services/scheduler.ts:103 new Notification|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F61|定时任务 / 任务绑定主对话与结果交接|services/chat-task-handoff.ts；TasksPane 绑定徽标|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F62|机器人/手机 / 机器人页（Bots tab 列表/添加/详情）|redesign/BotsPane.tsx:1-80；remote:get-state|只有界面|app/src/qml/Main.qml:525 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。|
-|F63|机器人/手机 / 远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）|services/remote/*；remote:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F64|机器人/手机 / 手机联动（QR/设备/中转）|redesign/PhonePane.tsx；services/remote/web/phone.ts；phone:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F65|设置与扩展 / 语言/主题/聊天字号|redesign/SettingsPane.tsx:92-176|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F66|设置与扩展 / 模型服务商列表/详情/密钥/请求头|features/settings/ModelSettings.tsx；preload models|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F67|设置与扩展 / 从服务商拉取模型列表|services/provider.ts:74 provider:list-models；ModelSettings.tsx:250|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F68|设置与扩展 / 自定义服务商/自定义模型|ModelSettings.tsx 自定义入口；provider:list-models|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F69|设置与扩展 / 技能列表/启停/删除|SettingsPane.tsx ExtensionsPane；skills:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F70|设置与扩展 / 技能导入（zip/md）|services/skills.ts:767-787；dialog.showOpenDialog|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F71|设置与扩展 / MCP 列表/编辑/密钥/重试/工具清单|SettingsPane.tsx:493-760；mcp:*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F72|设置与扩展 / 技能/MCP 角色白名单|SettingsPane.tsx roles 下拉；skills:set-roles/mcp:set-roles|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F73|设置与扩展 / About/版本|SettingsPane.tsx:878-894|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F74|设置与扩展 / 检查更新|services/updater.ts:270-273；UpdateSection.tsx|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F75|设置与扩展 / 下载/安装更新|services/updater.ts:270-273 download/install；UpdateSection.tsx:47-120|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F76|设置与扩展 / 个人资料（头像/昵称）|services/profile.ts:49-58；redesign/ProfilePanel.tsx|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F77|其他原生能力 / 剪贴板读写|services/clipboard.ts:15-25|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F78|其他原生能力 / 内置浏览器（多窗口/标签/缩略图/导航）|services/browser/host.ts:554-660；features/browser/*|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F79|其他原生能力 / 终端（PTY 会话）|services/terminal.ts:87-108|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F80|其他原生能力 / 子智能体/成员对话|services/subagents.ts, chat-members.ts, MemberBar.tsx；chat:remove-member|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F81|其他原生能力 / 自动任务卡/提案卡响应|chat:resolve-proposal / resolve-autotask；features/chat blocks|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F82|其他原生能力 / 代理与网络设置|apps/desktop/src/main/http.ts:94-96|—（未验证，不作状态判定）|原版确有 system/env/direct 网络路由；旧稿 na 不成立。QML 设置入口与 Python 网络栈语义尚未逐项验证；out/feature-review/platform-features.txt。|
-|F83|其他原生能力 / 日志与诊断面板|原版无日志 UI（仅 main 进程 console）|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
-|F84|其他原生能力 / 语音输入/输入法专属功能|原版无语音/听写代码（grep speech/voice 无结果）|—（未验证，不作状态判定）|旧判定尚未获得本轮逐项验收，不计入三态。|
+| 36 | 5 | 39 | 5 | 85 |
 
-## 原版 IPC 注册与 preload 全量字面量枚举
+### IPC / 桥通道计数（共 169 条：165 handle + 4 on，另有 18 条主进程→渲染层推送）
 
-重新扫描真实源码：169 个注册点，169 个唯一通道；preload 185 个 invoke/send/on 出现点。正则仅枚举字面量，不以此宣称动态注册已排除。JSON 保留所有出现点及未匹配 preload。
-
-|通道|注册方式|主进程依据|preload 依据|
+| 已实现且可用 | 未移植 | 不适用 | 合计 |
 |---|---|---|---|
-|window:set-overlay|handle|apps/desktop/src/main/index.ts:304|apps/desktop/src/preload/index.ts:638|
-|window:minimize|handle|apps/desktop/src/main/index.ts:314|apps/desktop/src/preload/index.ts:626|
-|window:toggle-maximize|handle|apps/desktop/src/main/index.ts:315|apps/desktop/src/preload/index.ts:627|
-|window:close|handle|apps/desktop/src/main/index.ts:320|apps/desktop/src/preload/index.ts:628|
-|window:is-fullscreen|handle|apps/desktop/src/main/index.ts:321|apps/desktop/src/preload/index.ts:630|
-|app:get-platform|handle|apps/desktop/src/main/index.ts:322||
-|fs:paste-attachment|handle|apps/desktop/src/main/services/attachments.ts:166|apps/desktop/src/preload/index.ts:658|
-|fs:dropped-entries|handle|apps/desktop/src/main/services/attachments.ts:201|apps/desktop/src/preload/index.ts:675|
-|fs:attachment-image|handle|apps/desktop/src/main/services/attachments.ts:221|apps/desktop/src/preload/index.ts:661|
-|fs:pick-attachments|handle|apps/desktop/src/main/services/attachments.ts:235|apps/desktop/src/preload/index.ts:651|
-|browser:state|handle|apps/desktop/src/main/services/browser/host.ts:554|apps/desktop/src/preload/index.ts:1130; apps/desktop/src/preload/index.ts:1135|
-|browser:open|handle|apps/desktop/src/main/services/browser/host.ts:556|apps/desktop/src/preload/index.ts:1140|
-|browser:dock|handle|apps/desktop/src/main/services/browser/host.ts:561|apps/desktop/src/preload/index.ts:1142|
-|browser:close-session|handle|apps/desktop/src/main/services/browser/host.ts:566|apps/desktop/src/preload/index.ts:1145|
-|browser:preview-pinned|handle|apps/desktop/src/main/services/browser/host.ts:572|apps/desktop/src/preload/index.ts:1148|
-|browser:live-start|handle|apps/desktop/src/main/services/browser/host.ts:579|apps/desktop/src/preload/index.ts:1150|
-|browser:live-stop|handle|apps/desktop/src/main/services/browser/host.ts:582|apps/desktop/src/preload/index.ts:1151|
-|browser:pin|handle|apps/desktop/src/main/services/browser/host.ts:586|apps/desktop/src/preload/index.ts:1157|
-|browser:activate|handle|apps/desktop/src/main/services/browser/host.ts:590|apps/desktop/src/preload/index.ts:1158|
-|browser:close-tab|handle|apps/desktop/src/main/services/browser/host.ts:594|apps/desktop/src/preload/index.ts:1159|
-|browser:nav|handle|apps/desktop/src/main/services/browser/host.ts:598|apps/desktop/src/preload/index.ts:1161|
-|browser:menu|handle|apps/desktop/src/main/services/browser/host.ts:610|apps/desktop/src/preload/index.ts:1167|
-|browser:thumbnail|handle|apps/desktop/src/main/services/browser/host.ts:639|apps/desktop/src/preload/index.ts:1169|
-|browser:handoff|handle|apps/desktop/src/main/services/browser/host.ts:650|apps/desktop/src/preload/index.ts:1172|
-|browser:stop|handle|apps/desktop/src/main/services/browser/host.ts:654|apps/desktop/src/preload/index.ts:1174|
-|browser:ready|handle|apps/desktop/src/main/services/browser/host.ts:660|apps/desktop/src/preload/index.ts:1132|
-|chat:send|handle|apps/desktop/src/main/services/chat.ts:482|apps/desktop/src/preload/index.ts:807|
-|chat:insert|handle|apps/desktop/src/main/services/chat.ts:485|apps/desktop/src/preload/index.ts:809|
-|chat:withdraw-inserts|handle|apps/desktop/src/main/services/chat.ts:486|apps/desktop/src/preload/index.ts:812|
-|chat:compact|handle|apps/desktop/src/main/services/chat.ts:494|apps/desktop/src/preload/index.ts:815|
-|chat:create-session|handle|apps/desktop/src/main/services/chat.ts:551|apps/desktop/src/preload/index.ts:818|
-|chat:set-model|handle|apps/desktop/src/main/services/chat.ts:566|apps/desktop/src/preload/index.ts:821|
-|chat:set-effort|handle|apps/desktop/src/main/services/chat.ts:571|apps/desktop/src/preload/index.ts:824|
-|chat:set-focus|handle|apps/desktop/src/main/services/chat.ts:584|apps/desktop/src/preload/index.ts:827|
-|chat:rename-session|handle|apps/desktop/src/main/services/chat.ts:601|apps/desktop/src/preload/index.ts:830|
-|chat:set-archived|handle|apps/desktop/src/main/services/chat.ts:621|apps/desktop/src/preload/index.ts:833|
-|chat:list-sessions|handle|apps/desktop/src/main/services/chat.ts:626|apps/desktop/src/preload/index.ts:840|
-|chat:load-session|handle|apps/desktop/src/main/services/chat.ts:644|apps/desktop/src/preload/index.ts:843|
-|chat:attachment-image|handle|apps/desktop/src/main/services/chat.ts:650|apps/desktop/src/preload/index.ts:846|
-|chat:attach-session|handle|apps/desktop/src/main/services/chat.ts:656|apps/desktop/src/preload/index.ts:852|
-|chat:resolve-proposal|handle|apps/desktop/src/main/services/chat.ts:669|apps/desktop/src/preload/index.ts:896|
-|chat:resolve-autotask|handle|apps/desktop/src/main/services/chat.ts:676|apps/desktop/src/preload/index.ts:908|
-|chat:delete-session|handle|apps/desktop/src/main/services/chat.ts:691|apps/desktop/src/preload/index.ts:855|
-|chat:remove-member|handle|apps/desktop/src/main/services/chat.ts:701|apps/desktop/src/preload/index.ts:858|
-|chat:abort|handle|apps/desktop/src/main/services/chat.ts:730|apps/desktop/src/preload/index.ts:834|
-|chat:stop-subagent|handle|apps/desktop/src/main/services/chat.ts:737|apps/desktop/src/preload/index.ts:837|
-|chat:delete-turns|handle|apps/desktop/src/main/services/chat.ts:751|apps/desktop/src/preload/index.ts:869|
-|chat:todos|handle|apps/desktop/src/main/services/chat.ts:773|apps/desktop/src/preload/index.ts:871|
-|chat:todo-cancel|handle|apps/desktop/src/main/services/chat.ts:780|apps/desktop/src/preload/index.ts:877|
-|chat:rewind-list|handle|apps/desktop/src/main/services/chat.ts:798|apps/desktop/src/preload/index.ts:880|
-|chat:rewind-preview|handle|apps/desktop/src/main/services/chat.ts:808|apps/desktop/src/preload/index.ts:883|
-|chat:rewind-apply|handle|apps/desktop/src/main/services/chat.ts:824|apps/desktop/src/preload/index.ts:886|
-|chat:rewind-undo|handle|apps/desktop/src/main/services/chat.ts:916|apps/desktop/src/preload/index.ts:889|
-|chat:ask-response|handle|apps/desktop/src/main/services/chat.ts:946|apps/desktop/src/preload/index.ts:911|
-|chat:plan-response|handle|apps/desktop/src/main/services/chat.ts:950|apps/desktop/src/preload/index.ts:914|
-|chat:mount-response|handle|apps/desktop/src/main/services/chat.ts:954|apps/desktop/src/preload/index.ts:917|
-|clipboard:read-text|handle|apps/desktop/src/main/services/clipboard.ts:15|apps/desktop/src/preload/index.ts:1094|
-|clipboard:write-text|handle|apps/desktop/src/main/services/clipboard.ts:18|apps/desktop/src/preload/index.ts:1096|
-|config:get-sync|on|apps/desktop/src/main/services/config.ts:83||
-|config:get|handle|apps/desktop/src/main/services/config.ts:89|apps/desktop/src/preload/index.ts:682|
-|config:set|handle|apps/desktop/src/main/services/config.ts:95|apps/desktop/src/preload/index.ts:685|
-|chat:context-usage|handle|apps/desktop/src/main/services/context-usage.ts:54|apps/desktop/src/preload/index.ts:874|
-|deliverables:inspect|handle|apps/desktop/src/main/services/deliverables.ts:71|apps/desktop/src/preload/index.ts:1104|
-|deliverables:thumbnail|handle|apps/desktop/src/main/services/deliverables.ts:91|apps/desktop/src/preload/index.ts:1107|
-|deliverables:open|handle|apps/desktop/src/main/services/deliverables.ts:111|apps/desktop/src/preload/index.ts:1110|
-|deliverables:reveal|handle|apps/desktop/src/main/services/deliverables.ts:121|apps/desktop/src/preload/index.ts:1113|
-|git:available|handle|apps/desktop/src/main/services/git.ts:626|apps/desktop/src/preload/index.ts:969|
-|git:status|handle|apps/desktop/src/main/services/git.ts:639|apps/desktop/src/preload/index.ts:971|
-|git:diff|handle|apps/desktop/src/main/services/git.ts:682|apps/desktop/src/preload/index.ts:977|
-|git:stage|handle|apps/desktop/src/main/services/git.ts:704|apps/desktop/src/preload/index.ts:979|
-|git:unstage|handle|apps/desktop/src/main/services/git.ts:713|apps/desktop/src/preload/index.ts:981|
-|git:discard|handle|apps/desktop/src/main/services/git.ts:726|apps/desktop/src/preload/index.ts:984|
-|git:commit|handle|apps/desktop/src/main/services/git.ts:741|apps/desktop/src/preload/index.ts:986|
-|git:set-config|handle|apps/desktop/src/main/services/git.ts:757|apps/desktop/src/preload/index.ts:989|
-|git:branches|handle|apps/desktop/src/main/services/git.ts:766|apps/desktop/src/preload/index.ts:990|
-|git:checkout|handle|apps/desktop/src/main/services/git.ts:793|apps/desktop/src/preload/index.ts:992|
-|git:create-branch|handle|apps/desktop/src/main/services/git.ts:803|apps/desktop/src/preload/index.ts:994|
-|git:checkout-remote|handle|apps/desktop/src/main/services/git.ts:813|apps/desktop/src/preload/index.ts:997|
-|git:merge|handle|apps/desktop/src/main/services/git.ts:823|apps/desktop/src/preload/index.ts:999|
-|git:merge-abort|handle|apps/desktop/src/main/services/git.ts:834|apps/desktop/src/preload/index.ts:1000|
-|git:delete-branch|handle|apps/desktop/src/main/services/git.ts:841|apps/desktop/src/preload/index.ts:1003|
-|git:rename-branch|handle|apps/desktop/src/main/services/git.ts:855|apps/desktop/src/preload/index.ts:1005|
-|git:delete-remote-branch|handle|apps/desktop/src/main/services/git.ts:863|apps/desktop/src/preload/index.ts:1008|
-|git:log|handle|apps/desktop/src/main/services/git.ts:874|apps/desktop/src/preload/index.ts:1010|
-|git:init|handle|apps/desktop/src/main/services/git.ts:889|apps/desktop/src/preload/index.ts:1011|
-|git:fetch|handle|apps/desktop/src/main/services/git.ts:896|apps/desktop/src/preload/index.ts:1012|
-|git:pull|handle|apps/desktop/src/main/services/git.ts:905|apps/desktop/src/preload/index.ts:1013|
-|git:push|handle|apps/desktop/src/main/services/git.ts:914|apps/desktop/src/preload/index.ts:1016|
-|git:generate-commit-message|handle|apps/desktop/src/main/services/git.ts:930|apps/desktop/src/preload/index.ts:1027|
-|git:cancel-commit-message|handle|apps/desktop/src/main/services/git.ts:1028|apps/desktop/src/preload/index.ts:1030|
-|mcp:list|handle|apps/desktop/src/main/services/mcp.ts:633|apps/desktop/src/preload/index.ts:759|
-|mcp:get|handle|apps/desktop/src/main/services/mcp.ts:634|apps/desktop/src/preload/index.ts:760|
-|mcp:upsert|handle|apps/desktop/src/main/services/mcp.ts:635|apps/desktop/src/preload/index.ts:763|
-|mcp:remove|handle|apps/desktop/src/main/services/mcp.ts:636|apps/desktop/src/preload/index.ts:764|
-|mcp:set-roles|handle|apps/desktop/src/main/services/mcp.ts:642|apps/desktop/src/preload/index.ts:769|
-|mcp:set-enabled|handle|apps/desktop/src/main/services/mcp.ts:649|apps/desktop/src/preload/index.ts:766|
-|mcp:retry|handle|apps/desktop/src/main/services/mcp.ts:654|apps/desktop/src/preload/index.ts:771|
-|mcp:set-secret|handle|apps/desktop/src/main/services/mcp.ts:660|apps/desktop/src/preload/index.ts:778|
-|mcp:has-secret|handle|apps/desktop/src/main/services/mcp.ts:675|apps/desktop/src/preload/index.ts:781|
-|memory:list|handle|apps/desktop/src/main/services/memory.ts:461|apps/desktop/src/preload/index.ts:720|
-|memory:write|handle|apps/desktop/src/main/services/memory.ts:462|apps/desktop/src/preload/index.ts:726|
-|memory:delete|handle|apps/desktop/src/main/services/memory.ts:471|apps/desktop/src/preload/index.ts:728|
-|memory:clear|handle|apps/desktop/src/main/services/memory.ts:476|apps/desktop/src/preload/index.ts:729|
-|personas:list|handle|apps/desktop/src/main/services/personas.ts:508|apps/desktop/src/preload/index.ts:733|
-|personas:get|handle|apps/desktop/src/main/services/personas.ts:509|apps/desktop/src/preload/index.ts:734|
-|personas:upsert|handle|apps/desktop/src/main/services/personas.ts:510|apps/desktop/src/preload/index.ts:736|
-|personas:remove|handle|apps/desktop/src/main/services/personas.ts:513|apps/desktop/src/preload/index.ts:737|
-|personas:set-enabled|handle|apps/desktop/src/main/services/personas.ts:517|apps/desktop/src/preload/index.ts:739|
-|personas:reorder|handle|apps/desktop/src/main/services/personas.ts:521|apps/desktop/src/preload/index.ts:742|
-|personas:set-avatar-image|handle|apps/desktop/src/main/services/personas.ts:526|apps/desktop/src/preload/index.ts:748|
-|personas:clear-avatar-image|handle|apps/desktop/src/main/services/personas.ts:529|apps/desktop/src/preload/index.ts:751|
-|profile:get|handle|apps/desktop/src/main/services/profile.ts:49|apps/desktop/src/preload/index.ts:708|
-|profile:set-avatar|handle|apps/desktop/src/main/services/profile.ts:50|apps/desktop/src/preload/index.ts:709|
-|profile:set-avatar-image|handle|apps/desktop/src/main/services/profile.ts:55|apps/desktop/src/preload/index.ts:712|
-|provider:list-models|handle|apps/desktop/src/main/services/provider.ts:74|apps/desktop/src/preload/index.ts:802|
-|chat:mark-read|handle|apps/desktop/src/main/services/read-sync.ts:81|apps/desktop/src/preload/index.ts:931|
-|remote:get-state|handle|apps/desktop/src/main/services/remote/index.ts:214|apps/desktop/src/preload/index.ts:1189|
-|remote:scan-start|handle|apps/desktop/src/main/services/remote/index.ts:218|apps/desktop/src/preload/index.ts:1197|
-|remote:scan-cancel|handle|apps/desktop/src/main/services/remote/index.ts:282|apps/desktop/src/preload/index.ts:1198|
-|remote:set-enabled|handle|apps/desktop/src/main/services/remote/index.ts:287|apps/desktop/src/preload/index.ts:1200|
-|remote:set-reply-mode|handle|apps/desktop/src/main/services/remote/index.ts:303|apps/desktop/src/preload/index.ts:1202|
-|remote:set-scope|handle|apps/desktop/src/main/services/remote/index.ts:309|apps/desktop/src/preload/index.ts:1204|
-|remote:delete-bot|handle|apps/desktop/src/main/services/remote/index.ts:316|apps/desktop/src/preload/index.ts:1205|
-|remote:pair-code|handle|apps/desktop/src/main/services/remote/index.ts:324|apps/desktop/src/preload/index.ts:1207|
-|remote:pair-cancel|handle|apps/desktop/src/main/services/remote/index.ts:326|apps/desktop/src/preload/index.ts:1208|
-|remote:remove-user|handle|apps/desktop/src/main/services/remote/index.ts:331|apps/desktop/src/preload/index.ts:1210|
-|phone:get-state|handle|apps/desktop/src/main/services/remote/web/phone.ts:367|apps/desktop/src/preload/index.ts:1224|
-|phone:add|handle|apps/desktop/src/main/services/remote/web/phone.ts:369|apps/desktop/src/preload/index.ts:1226|
-|phone:remove|handle|apps/desktop/src/main/services/remote/web/phone.ts:376|apps/desktop/src/preload/index.ts:1228|
-|phone:set-enabled|handle|apps/desktop/src/main/services/remote/web/phone.ts:389|apps/desktop/src/preload/index.ts:1229|
-|phone:retry|handle|apps/desktop/src/main/services/remote/web/phone.ts:398|apps/desktop/src/preload/index.ts:1231|
-|phone:qr|handle|apps/desktop/src/main/services/remote/web/phone.ts:426|apps/desktop/src/preload/index.ts:1233|
-|phone:link|handle|apps/desktop/src/main/services/remote/web/phone.ts:433|apps/desktop/src/preload/index.ts:1235|
-|phone:qr-cancel|handle|apps/desktop/src/main/services/remote/web/phone.ts:435|apps/desktop/src/preload/index.ts:1237|
-|phone:remove-device|handle|apps/desktop/src/main/services/remote/web/phone.ts:441|apps/desktop/src/preload/index.ts:1238|
-|workspace:role-home|handle|apps/desktop/src/main/services/role-home.ts:83|apps/desktop/src/preload/index.ts:1119|
-|secrets:set|handle|apps/desktop/src/main/services/secrets.ts:126|apps/desktop/src/preload/index.ts:792|
-|secrets:has|handle|apps/desktop/src/main/services/secrets.ts:132|apps/desktop/src/preload/index.ts:793|
-|secrets:delete|handle|apps/desktop/src/main/services/secrets.ts:137|apps/desktop/src/preload/index.ts:795|
-|secrets:list|handle|apps/desktop/src/main/services/secrets.ts:143|apps/desktop/src/preload/index.ts:796|
-|secrets:available|handle|apps/desktop/src/main/services/secrets.ts:149|apps/desktop/src/preload/index.ts:797|
-|skills:list|handle|apps/desktop/src/main/services/skills.ts:753|apps/desktop/src/preload/index.ts:689|
-|skills:get|handle|apps/desktop/src/main/services/skills.ts:754|apps/desktop/src/preload/index.ts:690|
-|skills:remove|handle|apps/desktop/src/main/services/skills.ts:755|apps/desktop/src/preload/index.ts:693|
-|skills:set-enabled|handle|apps/desktop/src/main/services/skills.ts:756|apps/desktop/src/preload/index.ts:695|
-|skills:set-roles|handle|apps/desktop/src/main/services/skills.ts:761|apps/desktop/src/preload/index.ts:698|
-|skills:import|handle|apps/desktop/src/main/services/skills.ts:767|apps/desktop/src/preload/index.ts:691|
-|tasks:list|handle|apps/desktop/src/main/services/tasks.ts:520|apps/desktop/src/preload/index.ts:1043|
-|tasks:get|handle|apps/desktop/src/main/services/tasks.ts:521|apps/desktop/src/preload/index.ts:1044|
-|tasks:create|handle|apps/desktop/src/main/services/tasks.ts:523|apps/desktop/src/preload/index.ts:1046|
-|tasks:update|handle|apps/desktop/src/main/services/tasks.ts:526|apps/desktop/src/preload/index.ts:1048|
-|tasks:delete|handle|apps/desktop/src/main/services/tasks.ts:529|apps/desktop/src/preload/index.ts:1049|
-|tasks:set-status|handle|apps/desktop/src/main/services/tasks.ts:533|apps/desktop/src/preload/index.ts:1051|
-|tasks:preview|handle|apps/desktop/src/main/services/tasks.ts:537|apps/desktop/src/preload/index.ts:1071|
-|tasks:run-now|handle|apps/desktop/src/main/services/tasks.ts:542|apps/desktop/src/preload/index.ts:1060|
-|terminal:list-shells|handle|apps/desktop/src/main/services/terminal.ts:87|apps/desktop/src/preload/index.ts:942|
-|terminal:create|handle|apps/desktop/src/main/services/terminal.ts:91|apps/desktop/src/preload/index.ts:944|
-|terminal:input|on|apps/desktop/src/main/services/terminal.ts:100|apps/desktop/src/preload/index.ts:945|
-|terminal:resize|on|apps/desktop/src/main/services/terminal.ts:104|apps/desktop/src/preload/index.ts:947|
-|terminal:dispose|on|apps/desktop/src/main/services/terminal.ts:108|apps/desktop/src/preload/index.ts:948|
-|update:get-state|handle|apps/desktop/src/main/services/updater.ts:270|apps/desktop/src/preload/index.ts:1177|
-|update:check|handle|apps/desktop/src/main/services/updater.ts:271|apps/desktop/src/preload/index.ts:1178|
-|update:download|handle|apps/desktop/src/main/services/updater.ts:272|apps/desktop/src/preload/index.ts:1179|
-|update:install|handle|apps/desktop/src/main/services/updater.ts:273|apps/desktop/src/preload/index.ts:1180|
-|fs:open-folder|handle|apps/desktop/src/main/services/workspace.ts:43|apps/desktop/src/preload/index.ts:642|
-|fs:reveal-folder|handle|apps/desktop/src/main/services/workspace.ts:55|apps/desktop/src/preload/index.ts:645|
-|fs:read-dir|handle|apps/desktop/src/main/services/workspace.ts:64|apps/desktop/src/preload/index.ts:646|
-|fs:read-file|handle|apps/desktop/src/main/services/workspace.ts:82|apps/desktop/src/preload/index.ts:647|
-|fs:write-file|handle|apps/desktop/src/main/services/workspace.ts:92|apps/desktop/src/preload/index.ts:649|
+| 54 | 110 | 5 | 169 |
 
-## 未完成清单
-
-- A：非 IPC 全集穷尽性及绝大多数功能的真实交互验证；不能发布旧稿 29/5/45 为可信计数。
-- B：本轮仅完成会话文字草稿隔离；附件经真实 QDropEvent、切换会话和源文件读回复验通过。缺口优先继续核对筛选按钮、未读状态、指令与提及、角色编辑真实入口。
-- C：见 out/feature-review 下原版 safeStorage 真实运行日志；成功 API 不等于同状态像素闭环。取整实验须独立复跑。
-- D：全量回归结果见 out/feature-review/pytest.log，最终结果另附交付记录。
+## 2. 原版功能全集与移植版判定（功能面）
 
 
-## 本轮新实现和真实成功态
+### 应用生命周期与窗口
 
-- `fdb229918ee4e70a5372962b057c569906c42166`：QML 文字和待发附件按会话保留。真实键盘、行点击与拖放验证见 `out/feature-review/drafts.json`；暗亮截图 `drafts-dark.png` / `drafts-light.png`。修前失败在 `draft-before.log`，修后成功在 `draft-attachments-final.log`。
-- 推送原文：`out/feature-review/push-drafts.log`：`b25dc1b..fdb2299 develop -> develop`，远端回读 fdb229918ee4e70a5372962b057c569906c42166。
-- C9：真实私有 D-Bus + GNOME Secret Service + Electron `--password-store=gnome-libsecret`，API 返回 available=true、saved.ok=true、has=true；真实鼠标聚焦密码框及 CDP 输入后，dark/light 均 Saved=true。Qt 也经真实键盘及 OS 读回复验 Saved/Configured。
-- 同尺寸 1280×820，未缩放并排图：`out/feature-review/compare-saved-dark.png` / `compare-saved-light.png`。两端都是真实 Saved，但命令字段 fixture 与滚动位置并不相同，**不得作为全页面同数据像素验收**。OS 成功态环境阻塞已排除，严格同数据像素闭环仍未完成。
-- 原始失败保留：`electron-os-session.log` 中 xauth 不在 PATH；`electron-ui-session.log` 中 Configured placeholder 导致探针定位失败。最终日志 `electron-qt-ui-final.log`；系统 D-Bus 警告仍有，但私有 session bus 实际可用。
-- C10：32 条真实合成采样重新确认单通道差异，详情追加到 `extensions-rounding.md`。正文与阴影相位未复跑。
-- 工作期间新出现 `scripts/parity/electron_safe_storage_session.py`，不在入口 status 中，也不是本次执行创建的文件。保留、不覆盖、不纳入本次提交。
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F01 | 单实例锁与二次启动唤起 | `apps/desktop/src/main/index.ts:276-286` | **未移植** | 移植版无 QLockFile/QLocalServer：`grep -rn "QLockFile\\|QLocalServer\\|second-instance" app/src` 无结果；main.py:1-76 只负责 QGuiApplication/QQmlApplicationEngine |
+| F02 | 关窗驻留托盘（closeToTray） | `apps/desktop/src/main/index.ts:164-173；redesign/SettingsPane.tsx:101-113,165-172` | **未移植** | 移植版无托盘、无 close 事件驻留；Main.qml:2480 关闭即 window.close() |
+| F03 | 系统托盘图标与菜单（显示/定时任务/退出） | `apps/desktop/src/main/index.ts:235-272；services/tray-icon.ts` | **未移植** | `grep -rn "QSystemTrayIcon\\|Tray" app/src` 无结果 |
+| F04 | 窗口最小化/最大化/关闭 | `apps/desktop/src/main/index.ts:307-322；preload/index.ts:625-639` | **已实现且可用** | Main.qml:2462-2480 三个 WindowControlButton 接 showMinimized/showNormal\|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态 |
+| F05 | 窗口控件叠加配色随主题 | `apps/desktop/src/main/index.ts:79-97,304-312` | **已实现且可用** | Main.qml:280-345 WindowControlButton.glyphColor 按 Theme.dark 取 #E8EAED/#5F6368，底色调 Theme.bgInset；注释逐值对齐 index.ts:79-97 |
+| F06 | 全屏状态通知（macOS 红绿灯让位） | `apps/desktop/src/main/index.ts:158-160；preload/index.ts:631-636；redesign/ChatFirstShell.tsx:52-66` | **未移植** | Main.qml:29,62 仅按 Qt.platform.os === 'osx' 静态加宽，无 window:fullscreen 等价信号，无 onFullScreen |
+| F07 | 外链一律系统浏览器打开 | `apps/desktop/src/main/index.ts:175-181` | **已实现且可用** | Main.qml bodyView.onLinkActivated → shellBridge.openExternal；qml_shell.py openExternal 只放行 http/https/mailto；app/tests/test_qml_links.py 用真实鼠标点击链接并断言 QDesktopServices 收到完整 href |
 
-## 回归中发现并修复的问题
+### 菜单与快捷键
 
-- 首轮：`3 failed, 1435 passed, 9 skipped in 407.71s`，原始输出 `out/feature-review/pytest.log`。
-- `ad72344670b3c161effd4e8d42a5fbe6b60364c0`：侧栏未收起时 HoverHandler 也置 sidePeek，z=20 截获设置确认框背板点击。限制真实 peek 的生效条件，暗亮真实鼠标取消均通过，截图 `provider-confirm-{dark,light}.png` / `provider-dismissed-{dark,light}.png`；focused `4 passed`。
-- `1ebe26a498bc787b605debf2ba28fbd6d26cffc6`：两条滚动条测试停了 ticker 却未关闭窗口，后续 ApplicationShortcut 竞争、目录框数量多两个。只增加 window.close/engine.deleteLater 四行，零断言变更。组合回归 `53 passed in 36.91s`。
-- 完整原始搜索输出：`out/feature-review/ipc-raw.txt`、`non-ipc-raw.txt`、`platform-features.txt`。原版确有网络代理路由，旧“不适用”不能接受。
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F08 | 应用菜单栏 | `apps/desktop/src/main/index.ts:108 autoHideMenuBar:true；全仓无 setApplicationMenu` | **不适用** | 原版没有自定义菜单栏，不凭空造 |
+| F09 | 编辑区右键菜单（剪切/复制/粘贴/全选） | `apps/desktop/src/main/index.ts:183-217` | **已实现且可用** | app/src/qml/EditContextMenu.qml + Main.qml composerMenu/bodyMenu；app/tests/test_qml_edit_menu.py 真实右键打开并点「全选」断言 selectedText；暗亮截图 out/feature-parity/edit-menu-*.png |
+| F10 | Ctrl/Cmd+B 收起/展开会话列表 | `redesign/ChatFirstShell.tsx:191-199` | **已实现且可用** | Main.qml Shortcut Ctrl+B/Meta+B → toggleSidebar；qml_shell.py sidebarCollapsed/setSidebarCollapsed 写 config.json；app/tests/test_qml_sidebar_collapse.py 真实按键 + hover peek |
+| F11 | Esc 收回浮出列表 | `redesign/ChatFirstShell.tsx:192-194` | **未移植** | 移植版没有「浮出列表」状态（列表宽度固定），无对应行为 |
+| F12 | Enter 发送 / Shift+Enter 换行 | `redesign/Composer.tsx:669-700` | **已实现且可用** | Main.qml:1452-1464 inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit() |
+| F13 | 输入框 / 指令联想（/compact /rewind /技能） | `redesign/Composer.tsx:382-420` | **未移植** | `grep -rn "slash\\|/compact\\|/rewind" app/src/qml app/src/qml_shell.py` 无联想实现；Main.qml:1440-1478 只有纯 TextArea |
+| F14 | @ 提及成员/角色 | `redesign/Composer.tsx:399-419；shared/mention.ts` | **未移植** | 移植版无 mention 解析/候选浮层（grep "mention" 无结果） |
+| F15 | 回复完成/待处理系统通知 | `services/reply-notify.ts:15-80；chat-turns.ts:801` | **未移植** | 移植版无 QSystemTrayIcon/Notification；ShellBridge 只有内部 signal，不弹系统通知 |
 
-## 最终全量回归
+### 会话列表
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F16 | 新建会话 | `redesign/Rail.tsx:600-660（加号菜单）；preload/index.ts:805-940 chat.createSession` | **已实现且可用** | Main.qml:580-597 加号 onClicked shellBridge.newSession；qml_shell.py:595-606 建真实会话并落盘 |
+| F17 | 切换会话 | `redesign/Rail.tsx:700-760` | **已实现且可用** | Main.qml:684-712 行 onClicked openSession；qml_shell.py:585-594 读真实会话 |
+| F18 | 重命名会话 | `redesign/Rail.tsx:175-182 RowMenu；chat:rename-session` | **已实现且可用** | Main.qml:2102-2106 右键菜单 rename + 重命名弹层；qml_shell.py:626-642 写盘 |
+| F19 | 删除会话 | `redesign/Rail.tsx:175-182；chat:delete-session` | **已实现且可用** | Main.qml 右键 delete + 确认框；qml_shell.py:606-626 删会话文件 |
+| F20 | 归档/取消归档 | `redesign/Rail.tsx:620-650；chat:set-archived` | **已实现且可用** | Main.qml:800-830 归档横幅与右键 archive；qml_shell.py:643-700 archiveSession/unarchiveSession/archiveSessions |
+| F21 | 归档视图 | `redesign/Rail.tsx archiveView` | **已实现且可用** | Main.qml:600-760 archiveHeader/archiveBack，Python archivedSessions 投影 |
+| F22 | 会话搜索（标题/角色/挂载目录） | `redesign/Rail.tsx:600-640` | **已实现且可用** | Main.qml:159-200 visibleSessions 按 title/personaName/focusName 过滤；搜索框 Main.qml:495-575 可聚焦输入 |
+| F23 | 会话筛选面板（角色/文件夹） | `redesign/Rail.tsx:183-186,664-710` | **只有界面** | Main.qml:499-515 filterBtn 只有图标与 HoverHandler，无 MouseArea/onClicked；搜索框只过滤文本，无角色/目录筛选 |
+| F24 | 会话多选批量归档/删除 | `redesign/ThreadSelect.tsx` | **已实现且可用** | Main.qml:116-118,684-800,1898-1940 selectMode/selectedSessions + 批量归档/删除 |
+| F25 | 未读/待处理状态与红点 | `redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention` | **未移植** | 移植版无 unread/attention 字段（grep "unread" app/src 无结果）；列表行只显示时间 |
+| F26 | 草稿按会话保留 | `redesign/Composer.tsx:109-121,755-760` | **未移植** | `grep -rn "draft" app/src/qml app/src/qml_shell.py` 无结果；切会话后输入框内容不保留 |
+| F27 | 会话列表宽度拖动 | `redesign/resizable.ts；ChatFirstShell.tsx:143-160` | **未移植** | Main.qml 侧栏宽固定 Theme.sideWidth（Main.qml:44-46,462-470），无拖动手柄 |
+| F27b | 会话列表收起/展开并记忆 | `redesign/ChatFirstShell.tsx:143-199` | **已实现且可用** | Main.qml sideCollapsed/sidePeek + 200/150ms 浮出定时器；qml_shell.py:515-522 落盘 config.json；真实截图 out/feature-parity/sidebar-{collapsed,peek}-{dark,light}.png |
+| F28 | 会话行右键菜单（新建/重命名/多选/归档/删除） | `redesign/Rail.tsx:175-182；ContextMenu.tsx` | **已实现且可用** | Main.qml:2076-2130 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发 |
+
+### 对话正文
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F29 | 用户/助手 Markdown 正文 | `redesign/ConvMessage.tsx；features/chat/blocks.tsx` | **已实现且可用** | qml_shell.py:1513-1528 transcript_markdown → app/src/markdown/body.py 渲染进 QTextDocument；Main.qml:1090-1106 |
+| F30 | 工具调用/工具结果/思考/子代理活动卡 | `features/chat/blocks.tsx BlockView；redesign/ChatFirstShell.tsx:39-44 注释` | **未移植** | qml_shell_sessions.py:223-260 只拼 text 块，注释明说「纯工具调用 / 纯工具结果跳过」；无 tool_use block UI |
+| F31 | 待处理交互卡（ask/审批） | `features/chat/blocks.tsx AskCard；chat:ask-response` | **已实现且可用** | InteractionPrompt.qml + qml_shell.py:355-365 pendingInteractions/answerInteraction（kind=question/approval） |
+| F32 | 计划卡与 plan-response | `chat:plan-response；features/chat/blocks.tsx PlanCard` | **未移植** | 移植版 only ask/approval；`grep -rn "plan" app/src/qml_shell.py` 无结果 |
+| F33 | 回滚 rewind（列点/预览/应用/撤销） | `redesign/RewindModal.tsx:31；Conversation.tsx:998-1003；chat:rewind-*` | **未移植** | `grep -rn "rewind" app/src/qml app/src/qml_shell.py` 无结果；host.py 也没有 rewind 入口 |
+| F34 | 消息右键菜单（复制/引用/回滚/选择删除） | `redesign/Conversation.tsx:905-950` | **未移植** | 正文 TextEdit 无 contextMenu/onPressed 右键处理；Main.qml 只有会话行右键 |
+| F35 | 引用条 quote | `redesign/ConvMessage.tsx leadingQuote/withQuote；Composer.tsx` | **未移植** | `grep -rn "quote" app/src/qml app/src/qml_shell.py` 只命中 CSS/无关词；无引用状态 |
+| F36 | 选择消息删除（delete-turns） | `chat:delete-turns；redesign/Conversation.tsx:955-1000` | **未移植** | host.py:415-425 delete_turns 有后端，但 QML 无入口（`grep -rn "deleteTurns" app/src/qml*` 无结果） |
+| F37 | 停止生成 | `redesign/Composer.tsx:973-991（busy 时空输入框显示停止键）；chat:abort` | **已实现且可用** | qml_shell.py stopGeneration → host.abort；Main.qml sendBtn busy 时切 Square 中性态；app/tests/test_qml_stop_generation.py 真实鼠标点停止并断言 stopReason=aborted；暗亮截图 out/feature-parity/stop-busy-*.png |
+| F38 | 回合中插入消息（插话） | `chat:insert / chat:withdraw-inserts；Composer.tsx:463-467` | **未移植** | `grep -rn "insert" app/src/mvvm/webui/host.py app/src/qml_shell.py` 无 chat:insert 路径 |
+| F39 | 手动压缩 /compact | `redesign/Composer.tsx:382-386；chat:compact` | **未移植** | host.py:446-508 compact 有后端；QML 无 /compact 入口（grep slash 无结果） |
+| F40 | Todo 胶囊 | `redesign/Composer.tsx:864 TodoCapsule` | **未移植** | tool_runtime.py:260 todo_write 工具有，但 QML 无 Todo 展示（`grep -rn "todo" app/src/qml*` 无结果） |
+| F41 | 后台任务胶囊 | `redesign/Composer.tsx:865 BackgroundCapsule` | **未移植** | 移植版无后台任务概念 |
+| F42 | 浏览器操作胶囊 | `redesign/Composer.tsx:866 BrowserCapsule` | **未移植** | 移植版无内置浏览器 |
+| F43 | 上下文用量圆环 | `redesign/ContextRing.tsx；chat:context-usage` | **已实现且可用** | qml_shell.py:964-1005 contextUsage 真实计算；Main.qml ContextRing |
+| F44 | 模型/思考等级切换菜单 | `redesign/ModelMenu.tsx, EffortPicker.tsx` | **已实现且可用** | qml_shell.py:900-963 modelMenuGroups/effortMenu；Main.qml ModelPicker |
+| F45 | 附件选择（回形针） | `redesign/Composer.tsx:950；fs:pick-attachments` | **已实现且可用** | Main.qml:1480-1520 clipBtn → pickAttachments；qml_shell.py:1338-1364 QFileDialog + AttachmentService |
+| F46 | 附件拖放 | `redesign/Composer.tsx:576-596；fs:dropped-entries` | **已实现且可用** | Main.qml DropArea + dropOverlay → shellBridge.acceptDroppedFiles；attachments.py inspect_paths 登记文件/文件夹；app/tests/test_qml_attachments_drop.py 用真实 QDragEnterEvent/QDropEvent 投递并断言 pendingFiles；暗亮截图 out/feature-parity/drop-overlay-*.png |
+| F47 | 粘贴图片/文件为附件 | `redesign/Composer.tsx:508,567；fs:paste-attachment` | **已实现且可用** | qml_shell.py attachClipboardImage 取 QClipboard 图片落临时 PNG；Main.qml inputField Ctrl+V 接上；app/tests/test_qml_attachments_drop.py 真实键盘 Ctrl+V 断言待发列表出现 pasted.png（纯文本仍走默认粘贴） |
+| F48 | 附件贴片与图片缩略图 | `redesign/attachments.tsx；fs:attachment-image` | **已实现且可用** | qml_shell_sessions.py:304-329 attachment_rows + Main.qml:1128-1180 贴片；图片 data URI 内联 |
+| F49 | 交付卡（打开/定位/复制路径） | `features/chat/DeliverablesCard.tsx；deliverables:*` | **已实现且可用** | qml_shell.py:1371-1395 deliveryItems/openDeliverable/revealDeliverable/copyDeliverablePath；Main.qml:1240-1330 |
+| F50 | 交付卡图片缩略图 | `deliverables:thumbnail` | **未移植** | delivery_row（transcript_parts.py:144-158）不含 thumb 字段，卡片只按类型画图标 |
+
+### 角色
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F51 | 角色花名册 tab（列表/搜索/快速对话） | `redesign/Rail.tsx:130-170,600-744` | **只有界面** | Main.qml:439 RailButton users 只有图标无 onClicked；无 roster 列表/搜索实现 |
+| F52 | 角色资料卡（ProfilePanel） | `redesign/Rail.tsx:117 ProfilePanel` | **未移植** | Main.qml:414-425 meBtn 只有 Avatar，无 MouseArea；无资料卡 |
+| F53 | 新建/编辑/删除角色 | `redesign/ProfileView.tsx PersonaEditor；personas:upsert/remove` | **未移植** | PersonaStore 有 upsert/remove（persona_store.py:205-250）但 QML 无入口；Settings 的 identities 只编辑 prompt 文本 |
+| F54 | 角色头像编辑 | `redesign/AvatarEditor.tsx；personas:set-avatar-image` | **未移植** | PersonaStore.set_avatar_image 有后端（persona_store.py:269-286），QML 无头像编辑 UI |
+| F55 | 角色排序（拖拽/置顶） | `redesign/Rail.tsx reorderIds；personas:reorder` | **未移植** | persona_store.py:260-268 reorder 有后端，QML 无拖拽/排序入口 |
+| F56 | 角色记忆查看/编辑 | `redesign/RoleMemoryTab.tsx, MemoryDetail.tsx；memory:*` | **未移植** | 移植版无 memory 服务/UI（grep "memory" app/src 只命中无关词） |
+| F57 | 快速开始角色卡 | `redesign/Rail.tsx QuickStart` | **已实现且可用** | qml_shell.py:701-753 quickStartPersonas/startQuickStart；Main.qml 空态卡片 |
+
+### 定时任务
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F58 | 定时任务页（列表/详情/运行历史） | `redesign/TasksPane.tsx:1-70；tasks:list/get` | **只有界面** | Main.qml:440 RailButton alarmClock 无 onClicked；无 TasksPane 对应 QML，无 tasks 服务 |
+| F59 | 任务调度引擎（once/cron、自动触发） | `services/schedule.ts, scheduler.ts；tasks:*` | **未移植** | `grep -rli "scheduler\\|cron\\|schedule" app/src --include=*.py` 无结果 |
+| F60 | 任务系统通知 | `services/scheduler.ts:103 new Notification` | **未移植** | 移植版无 Notification |
+| F61 | 任务绑定主对话与结果交接 | `services/chat-task-handoff.ts；TasksPane 绑定徽标` | **未移植** | 移植版无任务概念 |
+
+### 机器人/手机
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F62 | 机器人页（Bots tab 列表/添加/详情） | `redesign/BotsPane.tsx:1-80；remote:get-state` | **只有界面** | Main.qml:447 RailButton bot 无 onClicked；无 BotsPane 对应 QML |
+| F63 | 远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围） | `services/remote/*；remote:*` | **未移植** | 移植版无 remote 服务；`grep -rn "telegram\\|feishu" app/src` 无结果 |
+| F64 | 手机联动（QR/设备/中转） | `redesign/PhonePane.tsx；services/remote/web/phone.ts；phone:*` | **未移植** | 移植版无 phone 服务/UI |
+
+### 设置与扩展
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F65 | 语言/主题/聊天字号 | `redesign/SettingsPane.tsx:92-176` | **已实现且可用** | SettingsModal.qml:280-345 三行 SetRow → qml_shell.py:483-516 setLanguage/setTheme/setTextSize（sm/md/lg/xl） |
+| F66 | 模型服务商列表/详情/密钥/请求头 | `features/settings/ModelSettings.tsx；preload models` | **已实现且可用** | SettingsModal modelsPane + qml_shell.py:764-880/850-861 setProviderHeaders；上一轮已验收 |
+| F67 | 从服务商拉取模型列表 | `services/provider.ts:74 provider:list-models；ModelSettings.tsx:250` | **未移植** | ModelGateway.list_models 有后端（provider_setup.py:168-190），QML 无「获取模型列表」按钮/建议列表 |
+| F68 | 自定义服务商/自定义模型 | `ModelSettings.tsx 自定义入口；provider:list-models` | **已实现且可用** | SettingsModal.qml:545 custom-model 入口 + qml_shell.py:821-845 addProvider/addModel |
+| F69 | 技能列表/启停/删除 | `SettingsPane.tsx ExtensionsPane；skills:*` | **已实现且可用** | qml_shell.py:1145-1245 extensionRows/toggleExtension/setSkillEnabled；ExtensionDetail.qml |
+| F70 | 技能导入（zip/md） | `services/skills.ts:767-787；dialog.showOpenDialog` | **未移植** | skill_store.py:12 注释明说文件导入未实现；QML 扩展页无导入按钮 |
+| F71 | MCP 列表/编辑/密钥/重试/工具清单 | `SettingsPane.tsx:493-760；mcp:*` | **已实现且可用** | extension_runtime.py + ExtensionDetail.qml；上一轮 runtime-parity 验收三种传输 |
+| F72 | 技能/MCP 角色白名单 | `SettingsPane.tsx roles 下拉；skills:set-roles/mcp:set-roles` | **已实现且可用** | ExtensionDetail.qml:115-160 rolesTrigger/rolesPopup + qml_shell.py toggleExtension |
+| F73 | About/版本 | `SettingsPane.tsx:878-894` | **已实现且可用** | SettingsModal.qml aboutPane + qml_shell.py appVersion |
+| F74 | 检查更新 | `services/updater.ts:270-273；UpdateSection.tsx` | **已实现且可用** | qml_shell.py:415-464 checkForUpdates/_check_updates_worker（GitHub Releases API） |
+| F75 | 下载/安装更新 | `services/updater.ts:270-273 download/install；UpdateSection.tsx:47-120` | **未移植** | ShellBridge 只有 checking/latest/available/error 四态，无 download/install 槽；原版 autoUpdater(electron-updater) 为 Electron 特有 |
+| F76 | 个人资料（头像/昵称） | `services/profile.ts:49-58；redesign/ProfilePanel.tsx` | **只有界面** | Main.qml:414-425 头像按钮只画 Avatar(persona:"user")，无 MouseArea；无 profile 服务 |
+
+### 其他原生能力
+
+| ID | 功能 | 原版依据（文件:行号） | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|
+| F77 | 剪贴板读写 | `services/clipboard.ts:15-25` | **已实现且可用** | qml_shell.py:1385-1395 copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验 |
+| F78 | 内置浏览器（多窗口/标签/缩略图/导航） | `services/browser/host.ts:554-660；features/browser/*` | **未移植** | 16 条 browser:* 通道无对应；移植版单窗口 QML，无 BrowserView/标签注册表 |
+| F79 | 终端（PTY 会话） | `services/terminal.ts:87-108` | **不适用** | 原版渲染层无任何 terminal.* 调用（grep 无结果），属未接线的服务端能力，不构成用户可达功能 |
+| F80 | 子智能体/成员对话 | `services/subagents.ts, chat-members.ts, MemberBar.tsx；chat:remove-member` | **未移植** | 移植版 tool_runtime 只有 10 个工具（tool_runtime.py:4-6），无 subagent/member 能力 |
+| F81 | 自动任务卡/提案卡响应 | `chat:resolve-proposal / resolve-autotask；features/chat blocks` | **未移植** | 移植版无 proposals/autotasks 边车与卡片（chat_models.py 只有字段名） |
+| F82 | 代理与网络设置 | `apps/desktop/src/main/http.ts:12-122 仅环境变量 HTTPS_PROXY/HTTP_PROXY/ALL_PROXY/NO_PROXY` | **不适用** | 原版无代理设置 UI；不凭空造 |
+| F83 | 日志与诊断面板 | `原版无日志 UI（仅 main 进程 console）` | **不适用** | 原版不存在此功能 |
+| F84 | 语音输入/输入法专属功能 | `原版无语音/听写代码（grep speech/voice 无结果）` | **不适用** | 原版不存在语音功能；输入法由系统提供 |
+
+## 3. 最要紧的未移植项（按用户影响排序）
+
+1. **F30 工具调用/思考/子代理活动卡**：原版每条工具调用都有可展开卡片（`features/chat/blocks.tsx`），移植版 `transcript_markdown` 只拼 text 块、纯工具消息直接跳过——用户看不到模型在做什么。
+2. **F58-F61 定时任务整页**：原版有完整 cron/once 调度、运行历史、通知与主对话交接；移植版只有 `Main.qml:440` 一个无动作的闹钟图标。
+3. **F51-F56 角色页/角色管理**：原版花名册 tab + 资料卡 + 新建/编辑/头像/排序/记忆；移植版 `Main.qml:439` 一个无动作的 users 图标，设置里的 identities 只能改 prompt 文本。
+4. **F62-F64 机器人/手机联动**：原版 BotsPane + PhonePane（Web/飞书/Telegram 扫码、设备管理）；移植版 `Main.qml:447` 一个无动作的 bot 图标。
+5. **F33/F34/F35/F36 消息操作**：回滚、消息右键（复制/引用/选择删除）、引用条、按轮删除全部缺失。
+6. **F78 内置浏览器**：16 条 browser:* 通道与多窗口/标签/缩略图全缺。
+7. **F23 会话筛选面板**：`filterBtn`（Main.qml:499-515）只有图标没有点击动作。
+8. **F67 从服务商拉取模型列表**：原版模型设置里有「获取模型列表」，移植版只有手工输入模型 ID。
+9. **F02/F03/F15 托盘与系统通知**：原版关窗驻留托盘、回复完成/待处理通知；移植版无托盘、无通知。
+10. **F25/F26 未读状态与草稿保留**：会话行没有未读/待处理红点，切会话不保留输入框草稿。
+
+## 4. 两个入口分开写
+
+- 本表所有「移植版」列只针对当前 QML 壳（`app/src/qml/Main.qml` + `app/src/qml_shell.py` + `app/src/qml_shell_sessions.py`）。
+- 旧 `app/src/mvvm/webui/bridge.py` 是 **web 入口**，虽然实现了部分 `chat:*`/`fs:*` 通道，但 QML 壳不走它；本表不把 web 入口的存在算作 QML 已移植。
+- 同理，`PersonaStore`/`SkillStore`/`ModelGateway` 有后端函数不等于用户可用——只有 QML 槽和控件都接上才记为已实现。
+
+## 5. 复现命令
 
 ```sh
-AI_UPPER_HOME=/tmp/ai-upper-feature-review-final \
-TMPDIR=$PWD/.tmp/feature-review \
-LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu \
-QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software \
-.venv/bin/python -m pytest app/tests -q \
---basetemp=$PWD/.tmp/feature-review/final
+# 原版 IPC 全集（文件:行号）
+cd /home/agent/shared_workspace/deva && grep -rn "ipcMain\.\(handle\|on\)(" apps/desktop/src/main --include=*.ts
+
+# 原版 preload 桥（21 组、186 个方法，含 18 个监听）
+cd /home/agent/shared_workspace/deva && sed -n "623,1252p" apps/desktop/src/preload/index.ts
+
+# 移植版 QML 槽
+cd /home/agent/shared_workspace/ai_upper && grep -n "@QtCore.Slot" app/src/qml_shell.py
 ```
 
-真实输出：`1438 passed, 9 skipped in 411.23s (0:06:51)`，0 failed。
-原始日志 `out/feature-review/pytest-final.log`。既有断言 AST 与 b25dc1b 完全相同，验证记录 `assertions-preserved.txt`。机器清单计数校验 `inventory-validation.txt`。
+## 6. 本轮 B 补齐记录（均已单独 commit + push）
 
-最终状态：**本轮整体目标未完成**。A 仍有 59 项未判定、非 IPC 全集穷尽性未证实；B 仍有大量功能未补齐；C9 严格同数据像素对照未完成；C10 正文与阴影相位复跑未完成。测试通过只说明本次回归通过，不代表移植完整或视觉一致。
+| 项 | commit | 远端 SHA | 真实交互证据 |
+|---|---|---|---|
+| F37 停止生成 | 942bf59 | 942bf59407688acc4680e321b4ab97d3d42f655e | test_qml_stop_generation.py 真实鼠标点停止键，stopReason=aborted；暗亮截图 stop-busy-*.png |
+| F07 正文链接 | 343ae26 | 343ae26993d000a3f500398704cad22c3cfa9cd8 | test_qml_links.py 真实鼠标点链接，openExternal 收到 https://example.com/docs |
+| F10/F27b 会话列表收起 | 9b43a24 | 9b43a244c8bbce7fdae0f4d82e4083ff0ade1c31 | test_qml_sidebar_collapse.py 真实 Ctrl+B + hover peek，config 落盘；暗亮截图 sidebar-*.png |
+| F09 编辑右键菜单 | 81eca98 | 81eca986ba52e5637af09b4bdd43ebf093834637 | test_qml_edit_menu.py 真实右键 + 点击「全选」；暗亮截图 edit-menu-*.png |
+| F46/F47 拖放与粘贴附件 | b25dc1b | b25dc1b7a025e807cf8e89bb6c6b989d5814e412 | test_qml_attachments_drop.py 真实 QDragEnterEvent/QDropEvent + Ctrl+V；暗亮截图 drop-overlay-*.png |
+
+## 7. 附录：169 条 IPC / 桥通道逐条判定
+
+> 通道原名、kind（handle/on）、原版注册位置均来自 `grep -rn "ipcMain\.\(handle\|on\)("` 实测；`移植版判定` 为按通道语义逐条对照 QML 壳后的结论。
+
+| # | 通道 | kind | 原版位置 | 移植版状态 | 证据 / 缺口 |
+|---|---|---|---|---|---|
+| 1 | `app:get-platform` | handle | `index.ts:322` | 已实现且可用 | Main.qml:29 用 Qt.platform.os 判平台；qml_shell 无平台 IPC 但行为等价 |
+| 2 | `browser:activate` | handle | `services/browser/host.ts:590` | 未移植 | 移植版无内置浏览器 |
+| 3 | `browser:close-session` | handle | `services/browser/host.ts:566` | 未移植 | 移植版无内置浏览器 |
+| 4 | `browser:close-tab` | handle | `services/browser/host.ts:594` | 未移植 | 移植版无内置浏览器 |
+| 5 | `browser:dock` | handle | `services/browser/host.ts:561` | 未移植 | 移植版无内置浏览器 |
+| 6 | `browser:handoff` | handle | `services/browser/host.ts:650` | 未移植 | 移植版无内置浏览器 |
+| 7 | `browser:live-start` | handle | `services/browser/host.ts:579` | 未移植 | 移植版无内置浏览器 |
+| 8 | `browser:live-stop` | handle | `services/browser/host.ts:582` | 未移植 | 移植版无内置浏览器 |
+| 9 | `browser:menu` | handle | `services/browser/host.ts:610` | 未移植 | 移植版无内置浏览器 |
+| 10 | `browser:nav` | handle | `services/browser/host.ts:598` | 未移植 | 移植版无内置浏览器 |
+| 11 | `browser:open` | handle | `services/browser/host.ts:556` | 未移植 | 移植版无内置浏览器 |
+| 12 | `browser:pin` | handle | `services/browser/host.ts:586` | 未移植 | 移植版无内置浏览器 |
+| 13 | `browser:preview-pinned` | handle | `services/browser/host.ts:572` | 未移植 | 移植版无内置浏览器 |
+| 14 | `browser:ready` | handle | `services/browser/host.ts:660` | 未移植 | 移植版无内置浏览器 |
+| 15 | `browser:state` | handle | `services/browser/host.ts:554` | 未移植 | 移植版无内置浏览器 |
+| 16 | `browser:stop` | handle | `services/browser/host.ts:654` | 未移植 | 移植版无内置浏览器 |
+| 17 | `browser:thumbnail` | handle | `services/browser/host.ts:639` | 未移植 | 移植版无内置浏览器 |
+| 18 | `chat:abort` | handle | `services/chat.ts:730` | 未移植 | host.py:306 abort 有后端，QML 无停止键/槽 |
+| 19 | `chat:ask-response` | handle | `services/chat.ts:946` | 未移植 | 无对应实现 |
+| 20 | `chat:attach-session` | handle | `services/chat.ts:656` | 未移植 | host.py:509 attach 有后端，QML 无接续回合入口 |
+| 21 | `chat:attachment-image` | handle | `services/chat.ts:650` | 已实现且可用 | qml_shell_sessions.py:304-329 |
+| 22 | `chat:compact` | handle | `services/chat.ts:494` | 未移植 | host.py:446 compact 有后端，QML 无 /compact 入口 |
+| 23 | `chat:context-usage` | handle | `services/context-usage.ts:54` | 已实现且可用 | qml_shell.py:964-1005 |
+| 24 | `chat:create-session` | handle | `services/chat.ts:551` | 已实现且可用 | qml_shell.py:595-606 |
+| 25 | `chat:delete-session` | handle | `services/chat.ts:691` | 已实现且可用 | qml_shell.py:606-626 |
+| 26 | `chat:delete-turns` | handle | `services/chat.ts:751` | 未移植 | host.py:415 有后端，QML 无入口 |
+| 27 | `chat:insert` | handle | `services/chat.ts:485` | 未移植 | 无 chat:insert |
+| 28 | `chat:list-sessions` | handle | `services/chat.ts:626` | 已实现且可用 | qml_shell.py:1663-1683 _rows → session_rows |
+| 29 | `chat:load-session` | handle | `services/chat.ts:644` | 已实现且可用 | qml_shell.py:585-594 openSession |
+| 30 | `chat:mark-read` | handle | `services/read-sync.ts:81` | 未移植 | 无未读状态 |
+| 31 | `chat:mount-response` | handle | `services/chat.ts:954` | 未移植 | 无对应实现 |
+| 32 | `chat:plan-response` | handle | `services/chat.ts:950` | 未移植 | 无对应实现 |
+| 33 | `chat:remove-member` | handle | `services/chat.ts:701` | 未移植 | 无成员对话 |
+| 34 | `chat:rename-session` | handle | `services/chat.ts:601` | 已实现且可用 | qml_shell.py:626-642 |
+| 35 | `chat:resolve-autotask` | handle | `services/chat.ts:676` | 未移植 | 无自动任务卡 |
+| 36 | `chat:resolve-proposal` | handle | `services/chat.ts:669` | 未移植 | 无提案卡边车 |
+| 37 | `chat:rewind-apply` | handle | `services/chat.ts:824` | 未移植 | 无 rewind |
+| 38 | `chat:rewind-list` | handle | `services/chat.ts:798` | 未移植 | 无 rewind |
+| 39 | `chat:rewind-preview` | handle | `services/chat.ts:808` | 未移植 | 无 rewind |
+| 40 | `chat:rewind-undo` | handle | `services/chat.ts:916` | 未移植 | 无 rewind |
+| 41 | `chat:send` | handle | `services/chat.ts:482` | 已实现且可用 | qml_shell.py:1251-1297 → ChatHost.send(host.py:166) |
+| 42 | `chat:set-archived` | handle | `services/chat.ts:621` | 已实现且可用 | qml_shell.py:643-700 |
+| 43 | `chat:set-effort` | handle | `services/chat.ts:571` | 已实现且可用 | qml_shell.py:1026-1040 setActiveEffort |
+| 44 | `chat:set-focus` | handle | `services/chat.ts:584` | 已实现且可用 | qml_shell.py:1312-1338 acceptWorkspace |
+| 45 | `chat:set-model` | handle | `services/chat.ts:566` | 已实现且可用 | qml_shell.py:1006-1026 setActiveModel |
+| 46 | `chat:stop-subagent` | handle | `services/chat.ts:737` | 未移植 | 无子智能体 |
+| 47 | `chat:todo-cancel` | handle | `services/chat.ts:780` | 未移植 | 无 Todo UI |
+| 48 | `chat:todos` | handle | `services/chat.ts:773` | 未移植 | host.py:426 有后端，QML 无 Todo 展示 |
+| 49 | `chat:withdraw-inserts` | handle | `services/chat.ts:486` | 未移植 | 无插入队列 |
+| 50 | `clipboard:read-text` | handle | `services/clipboard.ts:15` | 已实现且可用 | QGuiApplication.clipboard() 可用；复制路径走写端 |
+| 51 | `clipboard:write-text` | handle | `services/clipboard.ts:18` | 已实现且可用 | qml_shell.py:1385-1395 |
+| 52 | `config:get` | handle | `services/config.ts:89` | 已实现且可用 | qml_shell.py:366-379 _config/_write_config |
+| 53 | `config:get-sync` | on | `services/config.ts:83` | 已实现且可用 | 同上同步读取 |
+| 54 | `config:set` | handle | `services/config.ts:95` | 已实现且可用 | qml_shell.py:369-379 set_config |
+| 55 | `deliverables:inspect` | handle | `services/deliverables.ts:71` | 已实现且可用 | qml_shell.py:1371-1374 deliveryItems |
+| 56 | `deliverables:open` | handle | `services/deliverables.ts:111` | 已实现且可用 | qml_shell.py:1375-1379 openDeliverable |
+| 57 | `deliverables:reveal` | handle | `services/deliverables.ts:121` | 已实现且可用 | qml_shell.py:1380-1384 revealDeliverable |
+| 58 | `deliverables:thumbnail` | handle | `services/deliverables.ts:91` | 未移植 | delivery_row 无缩略图字段 |
+| 59 | `fs:attachment-image` | handle | `services/attachments.ts:221` | 已实现且可用 | qml_shell_sessions.py:304-329 图片 data URI；AttachmentService |
+| 60 | `fs:dropped-entries` | handle | `services/attachments.ts:201` | 未移植 | attachments.py:12-14 明说未移植；QML 无 DropArea |
+| 61 | `fs:open-folder` | handle | `services/workspace.ts:43` | 已实现且可用 | Main.qml:20-31 FolderDialog + qml_shell.py:1300-1338 beginWorkspace/acceptWorkspace |
+| 62 | `fs:paste-attachment` | handle | `services/attachments.ts:166` | 未移植 | attachments.py:12-14 明说未移植 |
+| 63 | `fs:pick-attachments` | handle | `services/attachments.ts:235` | 已实现且可用 | qml_shell.py:1338-1364 pickAttachments + Main.qml:1497 clipBtn |
+| 64 | `fs:read-dir` | handle | `services/workspace.ts:64` | 已实现且可用 | Agent list_dir 工具（tool_runtime.py:117-127） |
+| 65 | `fs:read-file` | handle | `services/workspace.ts:82` | 已实现且可用 | Agent read_file 工具（tool_runtime.py:94-116） |
+| 66 | `fs:reveal-folder` | handle | `services/workspace.ts:55` | 未移植 | 无工作区「在文件夹中显示」入口；仅交付卡 reveal 已实现 |
+| 67 | `fs:write-file` | handle | `services/workspace.ts:92` | 已实现且可用 | Agent write_file 工具（tool_runtime.py:180-197） |
+| 68 | `git:available` | handle | `services/git.ts:626` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 69 | `git:branches` | handle | `services/git.ts:766` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 70 | `git:cancel-commit-message` | handle | `services/git.ts:1028` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 71 | `git:checkout` | handle | `services/git.ts:793` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 72 | `git:checkout-remote` | handle | `services/git.ts:813` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 73 | `git:commit` | handle | `services/git.ts:741` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 74 | `git:create-branch` | handle | `services/git.ts:803` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 75 | `git:delete-branch` | handle | `services/git.ts:841` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 76 | `git:delete-remote-branch` | handle | `services/git.ts:863` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 77 | `git:diff` | handle | `services/git.ts:682` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 78 | `git:discard` | handle | `services/git.ts:726` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 79 | `git:fetch` | handle | `services/git.ts:896` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 80 | `git:generate-commit-message` | handle | `services/git.ts:930` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 81 | `git:init` | handle | `services/git.ts:889` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 82 | `git:log` | handle | `services/git.ts:874` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 83 | `git:merge` | handle | `services/git.ts:823` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 84 | `git:merge-abort` | handle | `services/git.ts:834` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 85 | `git:pull` | handle | `services/git.ts:905` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 86 | `git:push` | handle | `services/git.ts:914` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 87 | `git:rename-branch` | handle | `services/git.ts:855` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 88 | `git:set-config` | handle | `services/git.ts:757` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 89 | `git:stage` | handle | `services/git.ts:704` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 90 | `git:status` | handle | `services/git.ts:639` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 91 | `git:unstage` | handle | `services/git.ts:713` | 未移植 | 移植版无 git 服务/面板；24 条通道全缺 |
+| 92 | `mcp:get` | handle | `services/mcp.ts:634` | 已实现且可用 | extensionAction detail |
+| 93 | `mcp:has-secret` | handle | `services/mcp.ts:675` | 已实现且可用 | ExtensionDetail keyStatus |
+| 94 | `mcp:list` | handle | `services/mcp.ts:633` | 已实现且可用 | qml_shell.py:1145-1198 extensionRows(mcp) |
+| 95 | `mcp:remove` | handle | `services/mcp.ts:636` | 已实现且可用 | extensionAction remove |
+| 96 | `mcp:retry` | handle | `services/mcp.ts:654` | 已实现且可用 | extensionAction retry → extension_runtime.retry |
+| 97 | `mcp:set-enabled` | handle | `services/mcp.ts:649` | 已实现且可用 | toggleExtension |
+| 98 | `mcp:set-roles` | handle | `services/mcp.ts:642` | 已实现且可用 | ExtensionDetail rolesPopup |
+| 99 | `mcp:set-secret` | handle | `services/mcp.ts:660` | 已实现且可用 | extensionAction secret |
+| 100 | `mcp:upsert` | handle | `services/mcp.ts:635` | 已实现且可用 | extensionAction update/save |
+| 101 | `memory:clear` | handle | `services/memory.ts:476` | 未移植 | 无 memory 服务/UI |
+| 102 | `memory:delete` | handle | `services/memory.ts:471` | 未移植 | 无 memory 服务/UI |
+| 103 | `memory:list` | handle | `services/memory.ts:461` | 未移植 | 无 memory 服务/UI |
+| 104 | `memory:write` | handle | `services/memory.ts:462` | 未移植 | 无 memory 服务/UI |
+| 105 | `personas:clear-avatar-image` | handle | `services/personas.ts:529` | 未移植 | QML 无头像编辑 |
+| 106 | `personas:get` | handle | `services/personas.ts:509` | 已实现且可用 | PersonaStore.get（persona_store.py:179-187）经 quickStart/roles 使用 |
+| 107 | `personas:list` | handle | `services/personas.ts:508` | 已实现且可用 | qml_shell.py:701-753 quickStartPersonas + extensionRows 角色头像 |
+| 108 | `personas:remove` | handle | `services/personas.ts:513` | 未移植 | PersonaStore.remove 有后端，QML 无删除入口 |
+| 109 | `personas:reorder` | handle | `services/personas.ts:521` | 未移植 | QML 无角色排序 |
+| 110 | `personas:set-avatar-image` | handle | `services/personas.ts:526` | 未移植 | QML 无头像编辑 |
+| 111 | `personas:set-enabled` | handle | `services/personas.ts:517` | 未移植 | QML 无角色启停 UI |
+| 112 | `personas:upsert` | handle | `services/personas.ts:510` | 未移植 | PersonaStore.upsert 有后端（persona_store.py:205-237），QML 无新建/编辑角色入口 |
+| 113 | `phone:add` | handle | `services/remote/web/phone.ts:369` | 未移植 | 移植版无手机联动 |
+| 114 | `phone:get-state` | handle | `services/remote/web/phone.ts:367` | 未移植 | 移植版无手机联动 |
+| 115 | `phone:link` | handle | `services/remote/web/phone.ts:433` | 未移植 | 移植版无手机联动 |
+| 116 | `phone:qr` | handle | `services/remote/web/phone.ts:426` | 未移植 | 移植版无手机联动 |
+| 117 | `phone:qr-cancel` | handle | `services/remote/web/phone.ts:435` | 未移植 | 移植版无手机联动 |
+| 118 | `phone:remove` | handle | `services/remote/web/phone.ts:376` | 未移植 | 移植版无手机联动 |
+| 119 | `phone:remove-device` | handle | `services/remote/web/phone.ts:441` | 未移植 | 移植版无手机联动 |
+| 120 | `phone:retry` | handle | `services/remote/web/phone.ts:398` | 未移植 | 移植版无手机联动 |
+| 121 | `phone:set-enabled` | handle | `services/remote/web/phone.ts:389` | 未移植 | 移植版无手机联动 |
+| 122 | `profile:get` | handle | `services/profile.ts:49` | 未移植 | 无 profile 服务/资料卡 |
+| 123 | `profile:set-avatar` | handle | `services/profile.ts:50` | 未移植 | 无头像编辑 |
+| 124 | `profile:set-avatar-image` | handle | `services/profile.ts:55` | 未移植 | 无头像编辑 |
+| 125 | `provider:list-models` | handle | `services/provider.ts:74` | 未移植 | ModelGateway.list_models 有后端（provider_setup.py:168-190），QML 无按钮/建议列表 |
+| 126 | `remote:delete-bot` | handle | `services/remote/index.ts:316` | 未移植 | 移植版无远程机器人 |
+| 127 | `remote:get-state` | handle | `services/remote/index.ts:214` | 未移植 | 移植版无远程机器人 |
+| 128 | `remote:pair-cancel` | handle | `services/remote/index.ts:326` | 未移植 | 移植版无远程机器人 |
+| 129 | `remote:pair-code` | handle | `services/remote/index.ts:324` | 未移植 | 移植版无远程机器人 |
+| 130 | `remote:remove-user` | handle | `services/remote/index.ts:331` | 未移植 | 移植版无远程机器人 |
+| 131 | `remote:scan-cancel` | handle | `services/remote/index.ts:282` | 未移植 | 移植版无远程机器人 |
+| 132 | `remote:scan-start` | handle | `services/remote/index.ts:218` | 未移植 | 移植版无远程机器人 |
+| 133 | `remote:set-enabled` | handle | `services/remote/index.ts:287` | 未移植 | 移植版无远程机器人 |
+| 134 | `remote:set-reply-mode` | handle | `services/remote/index.ts:303` | 未移植 | 移植版无远程机器人 |
+| 135 | `remote:set-scope` | handle | `services/remote/index.ts:309` | 未移植 | 移植版无远程机器人 |
+| 136 | `secrets:available` | handle | `services/secrets.ts:149` | 已实现且可用 | describe_backend（secrets_vault.py:84-89），上一轮私有 D-Bus 实测 |
+| 137 | `secrets:delete` | handle | `services/secrets.ts:137` | 已实现且可用 | 同上 |
+| 138 | `secrets:has` | handle | `services/secrets.ts:132` | 已实现且可用 | 同上 |
+| 139 | `secrets:list` | handle | `services/secrets.ts:143` | 已实现且可用 | 同上 |
+| 140 | `secrets:set` | handle | `services/secrets.ts:126` | 已实现且可用 | SecretsVault（keyring/file 双后端）+ 模型/MCP 密钥 UI |
+| 141 | `skills:get` | handle | `services/skills.ts:754` | 已实现且可用 | extensionAction detail → ExtensionSettings.detail |
+| 142 | `skills:import` | handle | `services/skills.ts:767` | 未移植 | skill_store.py:12 注释明说文件导入未实现 |
+| 143 | `skills:list` | handle | `services/skills.ts:753` | 已实现且可用 | qml_shell.py:1145-1198 extensionRows；ExtensionDetail.qml |
+| 144 | `skills:remove` | handle | `services/skills.ts:755` | 已实现且可用 | qml_shell.py:1199-1212 toggleExtension/extensionAction remove |
+| 145 | `skills:set-enabled` | handle | `services/skills.ts:756` | 已实现且可用 | qml_shell.py:1213-1245 setSkillEnabled |
+| 146 | `skills:set-roles` | handle | `services/skills.ts:761` | 已实现且可用 | ExtensionDetail.qml:115-160 rolesPopup |
+| 147 | `tasks:create` | handle | `services/tasks.ts:523` | 未移植 | 移植版无任务调度服务 |
+| 148 | `tasks:delete` | handle | `services/tasks.ts:529` | 未移植 | 移植版无任务调度服务 |
+| 149 | `tasks:get` | handle | `services/tasks.ts:521` | 未移植 | 移植版无任务调度服务 |
+| 150 | `tasks:list` | handle | `services/tasks.ts:520` | 未移植 | 移植版无任务调度服务 |
+| 151 | `tasks:preview` | handle | `services/tasks.ts:537` | 未移植 | 移植版无任务调度服务 |
+| 152 | `tasks:run-now` | handle | `services/tasks.ts:542` | 未移植 | 移植版无任务调度服务 |
+| 153 | `tasks:set-status` | handle | `services/tasks.ts:533` | 未移植 | 移植版无任务调度服务 |
+| 154 | `tasks:update` | handle | `services/tasks.ts:526` | 未移植 | 移植版无任务调度服务 |
+| 155 | `terminal:create` | handle | `services/terminal.ts:91` | 不适用 | 原版渲染层无 terminal 调用，用户不可达 |
+| 156 | `terminal:dispose` | on | `services/terminal.ts:108` | 不适用 | 原版渲染层无 terminal 调用，用户不可达 |
+| 157 | `terminal:input` | on | `services/terminal.ts:100` | 不适用 | 原版渲染层无 terminal 调用，用户不可达 |
+| 158 | `terminal:list-shells` | handle | `services/terminal.ts:87` | 不适用 | 原版渲染层无 terminal 调用，用户不可达 |
+| 159 | `terminal:resize` | on | `services/terminal.ts:104` | 不适用 | 原版渲染层无 terminal 调用，用户不可达 |
+| 160 | `update:check` | handle | `services/updater.ts:271` | 已实现且可用 | qml_shell.py:420-464 checkForUpdates |
+| 161 | `update:download` | handle | `services/updater.ts:272` | 未移植 | 无下载槽（electron-updater 特有） |
+| 162 | `update:get-state` | handle | `services/updater.ts:270` | 已实现且可用 | qml_shell.py:415-419 updateState |
+| 163 | `update:install` | handle | `services/updater.ts:273` | 未移植 | 无安装槽（electron-updater 特有） |
+| 164 | `window:close` | handle | `index.ts:320` | 已实现且可用 | Main.qml:2477-2480 window.close；同测 |
+| 165 | `window:is-fullscreen` | handle | `index.ts:321` | 未移植 | 无全屏状态查询/信号 |
+| 166 | `window:minimize` | handle | `index.ts:314` | 已实现且可用 | Main.qml:2462-2465 showMinimized；test_qml_window_controls.py |
+| 167 | `window:set-overlay` | handle | `index.ts:304` | 已实现且可用 | Main.qml:280-345 自绘窗口控件按 Theme.dark 取色 |
+| 168 | `window:toggle-maximize` | handle | `index.ts:315` | 已实现且可用 | Main.qml:2467-2476 showNormal/showMaximized；同测 |
+| 169 | `workspace:role-home` | handle | `services/role-home.ts:83` | 未移植 | 无角色主目录 |

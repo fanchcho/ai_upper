@@ -70,3 +70,36 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 - dark 20% 圆形：20px 时 Chromium `(58,58,84)`、Qt `(59,59,85)`；40px 两者一致。
 
 这些新证据支持**合成量化/覆盖路径差异，未归零**，不支持改颜色 token。正文和菜单阴影的相位实验本轮未复跑，前文属于历史证据；不可把本次纯色图元实验外推成它们的新验收。C10 因此仅推进合成部分，整体未完成。
+
+## 2026-11-27 续做：更细相位与图元矩阵（C10）
+
+起点对账：HEAD=origin/develop=b25dc1b，工作树干净；本轮未回退 4e4ee73 / 99387aa / 4cb98879 / a563434。生产源文件 `ExtensionDetail.qml`、`Theme.qml`、`SoftShadow.qml` 与 a563434 零差异；未改任何 token、未加坐标补偿。新增的只是探针脚本与 `out/extensions-rounding/*.json`。
+
+### 1. 正文：0.25/0.33/0.5/0.66/0.75/1.0 相位扫描
+
+`scripts/parity/rounding/phase_sweep.py` 仍是「只移动真实生产 TextEdit 的 y」，不改字体、字号、block margin、lineHeight。浅色实测（`out/extensions-rounding/phase-sweep.json`）：
+
+|delta|scene_y|六块墨迹起点（正文六段）|
+|---|---|---|
+|0|411.0|416,445,477,510,543|
+|0.25|411.25|416,445,478,510,543|
+|0.33|411.33|416,445,478,510,543|
+|0.5|411.5|416,445,478,510,543|
+|0.66|411.66|417,445,478,511,543|
+|0.75|411.75|417,445,478,511,543|
+|1.0|412.0|417,446,478,511,544|
+
+同一文本、同一 token，仅亚像素相位变化就让不同段落分别跳 0 或 1px，且跳变点不一致；这不是固定样式偏移（固定偏移会在所有相位保持同一差值）。结论维持「引擎取整，未归零」，且不把该 fixture 外推到所有字体/所有 Markdown。
+
+### 2. 圆底/外环：尺寸×相位×alpha 矩阵
+
+`scripts/parity/rounding/shape_sweep.py`：矩形与圆形、尺寸 18/20/22/40px、坐标相位 0/0.25/0.5、dark alpha .20/.16、light .12/.10。结果（`out/extensions-rounding/shape-sweep.json`）：Qt 对同一 alpha 的全部 24 个组合输出**完全相同**：
+
+- dark：59,59,85（alpha .20）与 55,55,77（alpha .16），24/24 组合一致；
+- light：235,235,250（.12）与 238,238,250（.10），24/24 组合一致。
+
+而旧 `composite-matrix.json` 里 Chromium 同 token 会随图元尺寸/相位变化（dark 圆 20px 为 58,58,84，40px 为 59,59,85；.16 的 40px 蓝通道 78 vs Qt 77）。这组新证据说明：生产页面圆底/外环残留的 1 通道差不可能靠改 token 或改尺寸修好——Qt 在该矩阵内对 token 是常量响应，Chromium 不是；差异属 RGBA 栅格合成路径。实际页面采样仍是原版 #3b3b55 / Qt #3b3b54、外环 #37374e / #37374d、light 阴影尾部 #fcfcfc / #fbfbfb，**未归零**，生产未改。
+
+### 3. 本轮未发现可证的样式错误
+
+再次对照 `deva/apps/desktop/src/renderer/src/styles/tokens.css` 与 `Theme.qml`：`--bg-selected` dark `rgba(124,124,240,.2)`、light `rgba(91,91,214,.12)`；`--accent-tint` .16/.10；阴影 light `0 6px 24px rgba(0,0,0,.12)`、dark `0 8px 30px rgba(0,0,0,.5)`，两边逐值相同。没有发现应当修复的真实样式错，因此本轮不修改生产代码。
