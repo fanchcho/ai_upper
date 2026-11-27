@@ -1,6 +1,6 @@
 $ rg -n --glob *.qml --glob *.py sideCollapsed app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:2781:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
+app/src/qml_shell.py:2800:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
 app/src/qml/Main.qml:167:    property bool sideCollapsed: false
 app/src/qml/Main.qml:637:        width: window.sideCollapsed ? (window.sidePeek ? window.sideWidth : 0) : window.sideWidth
 app/src/qml/Main.qml:638:        visible: !window.sideCollapsed || window.sidePeek

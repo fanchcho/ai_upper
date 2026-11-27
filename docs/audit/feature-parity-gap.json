@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-27T21:06:14.392474+00:00",
+  "generated_at": "2026-11-27T21:37:57.005523+00:00",
   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
   "source": {
     "deva": "/home/agent/shared_workspace/deva",
     "ai_upper": "/home/agent/shared_workspace/ai_upper",
-    "head": "6006a711c6ceeecffee1ee19e68a8bacb5bd693c"
+    "head": "ac1093f987be4a07eaa3c72d6ddd99d831169be9"
   },
   "features": [
     {

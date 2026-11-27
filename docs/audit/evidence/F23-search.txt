@@ -1,5 +1,16 @@
 $ rg -n --glob *.qml --glob *.py Popup app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
+app/src/qml/EditContextMenu.qml:18:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+app/src/qml/PluginSettingsPane.qml:57:            popup: Popup {
+app/src/qml/SettingsModal.qml:366:                modelsPopup.open()
+app/src/qml/SettingsModal.qml:846:                Popup {
+app/src/qml/SettingsModal.qml:847:                    id: modelsPopup
+app/src/qml/SettingsModal.qml:848:                    objectName: "providerModelsPopup"
+app/src/qml/SessionFilter.qml:5:Popup {
+app/src/qml/SessionFilter.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+app/src/qml/DecisionProviders.qml:4:Popup {
+app/src/qml/ProfilePanel.qml:6:Popup {
+app/src/qml/ProfilePanel.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 app/src/qml/GitPanel.qml:6:Popup {
 app/src/qml/GitPanel.qml:25:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 app/src/qml/ExtensionDetail.qml:121:                    Rectangle { visible: rolesPopup.opened; anchors.fill: parent; anchors.margins: -3; radius: 9; color: Theme.dark ? Qt.rgba(124/255,124/255,240/255,0.16) : Qt.rgba(91/255,91/255,214/255,0.1) }
@@ -22,18 +33,7 @@ app/src/qml/ExtensionDetail.qml:232:                                Rectangle { 
 app/src/qml/ExtensionDetail.qml:238:                                MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = index + 1; onClicked: {
 app/src/qml/TerminalPanel.qml:6:Popup {
 app/src/qml/TerminalPanel.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-app/src/qml/EditContextMenu.qml:18:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-app/src/qml/ProfilePanel.qml:6:Popup {
-app/src/qml/ProfilePanel.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-app/src/qml/PluginSettingsPane.qml:57:            popup: Popup {
-app/src/qml/SettingsModal.qml:366:                modelsPopup.open()
-app/src/qml/SettingsModal.qml:846:                Popup {
-app/src/qml/SettingsModal.qml:847:                    id: modelsPopup
-app/src/qml/SettingsModal.qml:848:                    objectName: "providerModelsPopup"
-app/src/qml/SessionFilter.qml:5:Popup {
-app/src/qml/SessionFilter.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-app/src/qml/Main.qml:52:    TurnListPopup {
-app/src/qml/DecisionProviders.qml:4:Popup {
 app/src/qml/TurnListPopup.qml:6:Popup {
 app/src/qml/TurnListPopup.qml:8:    objectName: "turnListPopup"
 app/src/qml/TurnListPopup.qml:14:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+app/src/qml/Main.qml:52:    TurnListPopup {

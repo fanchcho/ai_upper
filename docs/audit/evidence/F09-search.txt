@@ -2,9 +2,9 @@ $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/m
 exit=0
 app/src/qml_shell.py:1088:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
 app/src/qml_shell.py:1124:    def effortMenu(self) -> Dict[str, Any]:
-app/src/qml_shell.py:2791:        effort = self.effortMenu()
-app/src/qml_shell.py:2794:        window.setProperty("modelGroups", self.modelMenuGroups())
-app/src/qml_shell.py:2795:        window.setProperty("effortMenu", effort)
+app/src/qml_shell.py:2810:        effort = self.effortMenu()
+app/src/qml_shell.py:2813:        window.setProperty("modelGroups", self.modelMenuGroups())
+app/src/qml_shell.py:2814:        window.setProperty("effortMenu", effort)
 app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
 app/src/qml/EditContextMenu.qml:7:Menu {
 app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
