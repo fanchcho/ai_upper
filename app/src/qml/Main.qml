@@ -1708,6 +1708,11 @@ ApplicationWindow {
                             event.accepted = true; return
                         }
                     }
+                    if (event.key === Qt.Key_Escape && window.sidePeek) {
+                        window.sidePeek = false
+                        event.accepted = true
+                        return
+                    }
                     if ((event.modifiers & Qt.ControlModifier) && event.key === Qt.Key_V) {
                         // 剪贴板里是图片时按附件处理（原版 Composer 的 paste 处理）；纯文本走默认粘贴。
                         var pasted = shellBridge.attachClipboardImage()
