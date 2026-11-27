@@ -57,3 +57,16 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 全量命令：AI_UPPER_HOME=/tmp/ai-upper-round-tests LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software .venv/bin/python -m pytest app/tests -q --basetemp=/tmp/ai-upper-round-tests/tests
 
 最终全量：1429 passed, 9 skipped in 365.85s (0:06:05)，0 failed。git diff --check通过，既有测试/SettingsModal/Main零改动。正常推送后SHA与远端回读保存out/extensions-rounding/git-verification.json，整体目标因新增已登记行为差异继续open。
+
+
+## 开发工程师复核：2026-11-27，本轮 fdb2299 后
+
+重新运行真实 Electron 与 Qt 的矩形/圆形合成矩阵，未改生产 token 或增加坐标补偿。
+脚本：`scripts/parity/feature_review/rounding_session.py`；日志：`out/feature-review/rounding-session.log`。
+原始图与 32 条采样保存在 `out/feature-review/rounding/`，覆盖两主题、矩形/圆形、20/40px、0/0.5px 相位。
+
+- dark 16% 矩形：Chromium `(55,55,78)`、Qt `(55,55,77)`，四组合均复现。
+- light 10% 矩形：Chromium `(238,238,251)`、Qt `(238,238,250)`，四组合均复现。
+- dark 20% 圆形：20px 时 Chromium `(58,58,84)`、Qt `(59,59,85)`；40px 两者一致。
+
+这些新证据支持**合成量化/覆盖路径差异，未归零**，不支持改颜色 token。正文和菜单阴影的相位实验本轮未复跑，前文属于历史证据；不可把本次纯色图元实验外推成它们的新验收。C10 因此仅推进合成部分，整体未完成。

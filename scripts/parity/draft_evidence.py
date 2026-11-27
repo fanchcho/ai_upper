@@ -4,7 +4,8 @@ sys.path[:0]=['scripts/parity','app/src','app/tests']
 from feature_parity_evidence import *
 from test_qml_shell import text_stream
 from qml_shell import _pump
-from PySide6.QtCore import QPointF
+from PySide6.QtCore import QPointF, QMimeData, QCoreApplication
+from PySide6.QtGui import QDragEnterEvent, QDropEvent
 app=QGuiApplication([])
 rows=[]
 for theme in ['dark','light']:
@@ -22,15 +23,24 @@ for theme in ['dark','light']:
  first=w.property('activeId')
  p=field.mapToScene(QPointF(30,25));click(round(p.x()),round(p.y()))
  type_text('draft one');_pump(app,lambda:False,.1)
+ note=tmp/'draft-attachment.txt';note.write_text('draft attachment evidence')
+ mime=QMimeData();mime.setUrls([QUrl.fromLocalFile(str(note))])
+ QCoreApplication.sendEvent(w,QDragEnterEvent(QPoint(400,400),Qt.CopyAction,mime,Qt.LeftButton,Qt.NoModifier))
+ QCoreApplication.sendEvent(w,QDropEvent(QPointF(400,400),Qt.CopyAction,mime,Qt.LeftButton,Qt.NoModifier))
+ _pump(app,lambda:False,.2)
  rowclick(1)
+ assert not w.property('pendingFiles').toVariant()
  second=w.property('activeId')
  assert first and second and first!=second,(first,second)
  empty=field.property('text')
  click(round(p.x()),round(p.y()));type_text('draft two')
  rowclick(0)
  restored=field.property('text')
+ files=w.property('pendingFiles').toVariant()
+ assert len(files)==1 and Path(files[0]).name=='draft-attachment.txt',files
+ assert note.read_text()=='draft attachment evidence'
  shot(w,Path('out/feature-review')/f'drafts-{theme}.png')
- rows.append(dict(theme=theme,first=first,second=second,second_initial=empty,restored=restored))
+ rows.append(dict(theme=theme,first=first,second=second,second_initial=empty,restored=restored,attachment=files))
  t.stop();w.close();e.deleteLater()
 Path('out/feature-review/drafts.json').write_text(json.dumps(rows,indent=2))
 assert all(r['second_initial']=='' and r['restored']=='draft one' for r in rows),rows

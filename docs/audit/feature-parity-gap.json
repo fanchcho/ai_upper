@@ -1,0 +1,6748 @@
+{
+  "scope": "部分复核；未完成全量功能判定，null 表示尚未验证，不是第四种功能状态",
+  "source": {
+    "deva": "/home/agent/shared_workspace/deva",
+    "head": "fdb229918ee4e70a5372962b057c569906c42166",
+    "baseline": "b25dc1b7a025e807cf8e89bb6c6b989d5814e412"
+  },
+  "ipc": {
+    "registrations": [
+      {
+        "channel": "window:set-overlay",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 304,
+        "preload": [
+          {
+            "channel": "window:set-overlay",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 638
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "window:set-overlay",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 304,
+          "status": "implemented",
+          "note": "Main.qml:280-345 自绘窗口控件按 Theme.dark 取色"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "window:minimize",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 314,
+        "preload": [
+          {
+            "channel": "window:minimize",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 626
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "window:minimize",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 314,
+          "status": "implemented",
+          "note": "Main.qml:2462-2465 showMinimized；test_qml_window_controls.py"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "window:toggle-maximize",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 315,
+        "preload": [
+          {
+            "channel": "window:toggle-maximize",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 627
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "window:toggle-maximize",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 315,
+          "status": "implemented",
+          "note": "Main.qml:2467-2476 showNormal/showMaximized；同测"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "window:close",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 320,
+        "preload": [
+          {
+            "channel": "window:close",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 628
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "window:close",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 320,
+          "status": "implemented",
+          "note": "Main.qml:2477-2480 window.close；同测"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "window:is-fullscreen",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 321,
+        "preload": [
+          {
+            "channel": "window:is-fullscreen",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 630
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "window:is-fullscreen",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 321,
+          "status": "not_ported",
+          "note": "无全屏状态查询/信号"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "app:get-platform",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/index.ts",
+        "line": 322,
+        "preload": [],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "app:get-platform",
+          "kind": "handle",
+          "file": "index.ts",
+          "line": 322,
+          "status": "implemented",
+          "note": "Main.qml:29 用 Qt.platform.os 判平台；qml_shell 无平台 IPC 但行为等价"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:paste-attachment",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/attachments.ts",
+        "line": 166,
+        "preload": [
+          {
+            "channel": "fs:paste-attachment",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 658
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:paste-attachment",
+          "kind": "handle",
+          "file": "services/attachments.ts",
+          "line": 166,
+          "status": "not_ported",
+          "note": "attachments.py:12-14 明说未移植"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:dropped-entries",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/attachments.ts",
+        "line": 201,
+        "preload": [
+          {
+            "channel": "fs:dropped-entries",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 675
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:dropped-entries",
+          "kind": "handle",
+          "file": "services/attachments.ts",
+          "line": 201,
+          "status": "not_ported",
+          "note": "attachments.py:12-14 明说未移植；QML 无 DropArea"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:attachment-image",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/attachments.ts",
+        "line": 221,
+        "preload": [
+          {
+            "channel": "fs:attachment-image",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 661
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:attachment-image",
+          "kind": "handle",
+          "file": "services/attachments.ts",
+          "line": 221,
+          "status": "implemented",
+          "note": "qml_shell_sessions.py:304-329 图片 data URI；AttachmentService"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:pick-attachments",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/attachments.ts",
+        "line": 235,
+        "preload": [
+          {
+            "channel": "fs:pick-attachments",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 651
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:pick-attachments",
+          "kind": "handle",
+          "file": "services/attachments.ts",
+          "line": 235,
+          "status": "implemented",
+          "note": "qml_shell.py:1338-1364 pickAttachments + Main.qml:1497 clipBtn"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:state",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 554,
+        "preload": [
+          {
+            "channel": "browser:state",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1130
+          },
+          {
+            "channel": "browser:state",
+            "kind": "on",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1135
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:state",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 554,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:open",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 556,
+        "preload": [
+          {
+            "channel": "browser:open",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1140
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:open",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 556,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:dock",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 561,
+        "preload": [
+          {
+            "channel": "browser:dock",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1142
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:dock",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 561,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:close-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 566,
+        "preload": [
+          {
+            "channel": "browser:close-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1145
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:close-session",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 566,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:preview-pinned",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 572,
+        "preload": [
+          {
+            "channel": "browser:preview-pinned",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1148
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:preview-pinned",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 572,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:live-start",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 579,
+        "preload": [
+          {
+            "channel": "browser:live-start",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1150
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:live-start",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 579,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:live-stop",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 582,
+        "preload": [
+          {
+            "channel": "browser:live-stop",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1151
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:live-stop",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 582,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:pin",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 586,
+        "preload": [
+          {
+            "channel": "browser:pin",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1157
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:pin",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 586,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:activate",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 590,
+        "preload": [
+          {
+            "channel": "browser:activate",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1158
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:activate",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 590,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:close-tab",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 594,
+        "preload": [
+          {
+            "channel": "browser:close-tab",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1159
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:close-tab",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 594,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:nav",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 598,
+        "preload": [
+          {
+            "channel": "browser:nav",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1161
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:nav",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 598,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:menu",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 610,
+        "preload": [
+          {
+            "channel": "browser:menu",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1167
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:menu",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 610,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:thumbnail",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 639,
+        "preload": [
+          {
+            "channel": "browser:thumbnail",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1169
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:thumbnail",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 639,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:handoff",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 650,
+        "preload": [
+          {
+            "channel": "browser:handoff",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1172
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:handoff",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 650,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:stop",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 654,
+        "preload": [
+          {
+            "channel": "browser:stop",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1174
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:stop",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 654,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "browser:ready",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/browser/host.ts",
+        "line": 660,
+        "preload": [
+          {
+            "channel": "browser:ready",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1132
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "browser:ready",
+          "kind": "handle",
+          "file": "services/browser/host.ts",
+          "line": 660,
+          "status": "not_ported",
+          "note": "移植版无内置浏览器"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:send",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 482,
+        "preload": [
+          {
+            "channel": "chat:send",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 807
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:send",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 482,
+          "status": "implemented",
+          "note": "qml_shell.py:1251-1297 → ChatHost.send(host.py:166)"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:14: - `chat:send` 同步返回 `{turnId}`，回合本身在后台线程跑（与 Deva `sendMessage` 一致）；",
+          "app/src/mvvm/webui/host.py:165: # ── chat:send ─────────────────────────────────────────────────────────",
+          "app/src/mvvm/webui/host.py:167: \"\"\"`chat:send`：落盘用户消息 → 推 turn_start → 后台起回合 → 立即返回 turnId。\"\"\"",
+          "app/src/mvvm/webui/host.py:583: \"\"\"`chat:send` 入参里的适配器名；缺省按 anthropic（原版 model.adapter 必填）。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:insert",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 485,
+        "preload": [
+          {
+            "channel": "chat:insert",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 809
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:insert",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 485,
+          "status": "not_ported",
+          "note": "无 chat:insert"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:withdraw-inserts",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 486,
+        "preload": [
+          {
+            "channel": "chat:withdraw-inserts",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 812
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:withdraw-inserts",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 486,
+          "status": "not_ported",
+          "note": "无插入队列"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:compact",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 494,
+        "preload": [
+          {
+            "channel": "chat:compact",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 815
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:compact",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 494,
+          "status": "not_ported",
+          "note": "host.py:446 compact 有后端，QML 无 /compact 入口"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:445: # ── chat:compact ──────────────────────────────────────────────────────",
+          "app/src/mvvm/webui/host.py:447: \"\"\"`chat:compact`：立即返回 turnId，压缩在后台跑（原版同语义）。"
+        ]
+      },
+      {
+        "channel": "chat:create-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 551,
+        "preload": [
+          {
+            "channel": "chat:create-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 818
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:create-session",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 551,
+          "status": "implemented",
+          "note": "qml_shell.py:595-606"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:322: \"\"\"`chat:create-session`：立即落盘，空对话跨重启存活。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:set-model",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 566,
+        "preload": [
+          {
+            "channel": "chat:set-model",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 821
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:set-model",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 566,
+          "status": "implemented",
+          "note": "qml_shell.py:1006-1026 setActiveModel"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:set-effort",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 571,
+        "preload": [
+          {
+            "channel": "chat:set-effort",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 824
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:set-effort",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 571,
+          "status": "implemented",
+          "note": "qml_shell.py:1026-1040 setActiveEffort"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:set-focus",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 584,
+        "preload": [
+          {
+            "channel": "chat:set-focus",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 827
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:set-focus",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 584,
+          "status": "implemented",
+          "note": "qml_shell.py:1312-1338 acceptWorkspace"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:rename-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 601,
+        "preload": [
+          {
+            "channel": "chat:rename-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 830
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:rename-session",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 601,
+          "status": "implemented",
+          "note": "qml_shell.py:626-642"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:361: \"\"\"`chat:rename-session`：空标题恢复自动标题；未建档返回 null。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:set-archived",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 621,
+        "preload": [
+          {
+            "channel": "chat:set-archived",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 833
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:set-archived",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 621,
+          "status": "implemented",
+          "note": "qml_shell.py:643-700"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:380: \"\"\"`chat:set-archived`：忙碌会话拒绝归档（渲染层据此复原清单）。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:list-sessions",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 626,
+        "preload": [
+          {
+            "channel": "chat:list-sessions",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 840
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:list-sessions",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 626,
+          "status": "implemented",
+          "note": "qml_shell.py:1663-1683 _rows → session_rows"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:load-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 644,
+        "preload": [
+          {
+            "channel": "chat:load-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 843
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:load-session",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 644,
+          "status": "implemented",
+          "note": "qml_shell.py:585-594 openSession"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:attachment-image",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 650,
+        "preload": [
+          {
+            "channel": "chat:attachment-image",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 846
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:attachment-image",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 650,
+          "status": "implemented",
+          "note": "qml_shell_sessions.py:304-329"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:attach-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 656,
+        "preload": [
+          {
+            "channel": "chat:attach-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 852
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:attach-session",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 656,
+          "status": "not_ported",
+          "note": "host.py:509 attach 有后端，QML 无接续回合入口"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:16: - `chat:attach-session` 在会话有进行中回合时回该 turnId，否则 `null`。",
+          "app/src/mvvm/webui/host.py:510: \"\"\"`chat:attach-session`：历史 + 进行中回合（同一时刻取出）。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:resolve-proposal",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 669,
+        "preload": [
+          {
+            "channel": "chat:resolve-proposal",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 896
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:resolve-proposal",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 669,
+          "status": "not_ported",
+          "note": "无提案卡边车"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:resolve-autotask",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 676,
+        "preload": [
+          {
+            "channel": "chat:resolve-autotask",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 908
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:resolve-autotask",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 676,
+          "status": "not_ported",
+          "note": "无自动任务卡"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:delete-session",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 691,
+        "preload": [
+          {
+            "channel": "chat:delete-session",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 855
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:delete-session",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 691,
+          "status": "implemented",
+          "note": "qml_shell.py:606-626"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:394: \"\"\"`chat:delete-session`：先中止该会话的进行中回合，再删文件。恒回 ok:true。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:remove-member",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 701,
+        "preload": [
+          {
+            "channel": "chat:remove-member",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 858
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:remove-member",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 701,
+          "status": "not_ported",
+          "note": "无成员对话"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:abort",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 730,
+        "preload": [
+          {
+            "channel": "chat:abort",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 834
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:abort",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 730,
+          "status": "not_ported",
+          "note": "host.py:306 abort 有后端，QML 无停止键/槽"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:15: - `chat:abort(turnId)` 按 turnId 找会话再 `cancel()`；未知 turnId 恒 `{ok:true}` 且无副作用；",
+          "app/src/mvvm/webui/host.py:297: # ── chat:abort ────────────────────────────────────────────────────────",
+          "app/src/mvvm/webui/host.py:307: \"\"\"`chat:abort`：按 turnId 取消对应回合；未知 turnId 无副作用（原版恒回 ok:true）。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:stop-subagent",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 737,
+        "preload": [
+          {
+            "channel": "chat:stop-subagent",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 837
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:stop-subagent",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 737,
+          "status": "not_ported",
+          "note": "无子智能体"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:delete-turns",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 751,
+        "preload": [
+          {
+            "channel": "chat:delete-turns",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 869
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:delete-turns",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 751,
+          "status": "not_ported",
+          "note": "host.py:415 有后端，QML 无入口"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:416: \"\"\"`chat:delete-turns`：按轮删消息，返回重建后的 DisplayMessage[]。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:todos",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 773,
+        "preload": [
+          {
+            "channel": "chat:todos",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 871
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:todos",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 773,
+          "status": "not_ported",
+          "note": "host.py:426 有后端，QML 无 Todo 展示"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:427: \"\"\"`chat:todos`：只读当前清单。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:todo-cancel",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 780,
+        "preload": [
+          {
+            "channel": "chat:todo-cancel",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 877
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:todo-cancel",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 780,
+          "status": "not_ported",
+          "note": "无 Todo UI"
+        },
+        "web_evidence": [
+          "app/src/mvvm/webui/host.py:435: \"\"\"`chat:todo-cancel`：不忙时才受理；返回最新状态。\"\"\""
+        ]
+      },
+      {
+        "channel": "chat:rewind-list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 798,
+        "preload": [
+          {
+            "channel": "chat:rewind-list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 880
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:rewind-list",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 798,
+          "status": "not_ported",
+          "note": "无 rewind"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:rewind-preview",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 808,
+        "preload": [
+          {
+            "channel": "chat:rewind-preview",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 883
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:rewind-preview",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 808,
+          "status": "not_ported",
+          "note": "无 rewind"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:rewind-apply",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 824,
+        "preload": [
+          {
+            "channel": "chat:rewind-apply",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 886
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:rewind-apply",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 824,
+          "status": "not_ported",
+          "note": "无 rewind"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:rewind-undo",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 916,
+        "preload": [
+          {
+            "channel": "chat:rewind-undo",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 889
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:rewind-undo",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 916,
+          "status": "not_ported",
+          "note": "无 rewind"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:ask-response",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 946,
+        "preload": [
+          {
+            "channel": "chat:ask-response",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 911
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:ask-response",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 946,
+          "status": "not_ported",
+          "note": "无对应实现"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:plan-response",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 950,
+        "preload": [
+          {
+            "channel": "chat:plan-response",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 914
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:plan-response",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 950,
+          "status": "not_ported",
+          "note": "无对应实现"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:mount-response",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/chat.ts",
+        "line": 954,
+        "preload": [
+          {
+            "channel": "chat:mount-response",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 917
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:mount-response",
+          "kind": "handle",
+          "file": "services/chat.ts",
+          "line": 954,
+          "status": "not_ported",
+          "note": "无对应实现"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "clipboard:read-text",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/clipboard.ts",
+        "line": 15,
+        "preload": [
+          {
+            "channel": "clipboard:read-text",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1094
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "clipboard:read-text",
+          "kind": "handle",
+          "file": "services/clipboard.ts",
+          "line": 15,
+          "status": "implemented",
+          "note": "QGuiApplication.clipboard() 可用；复制路径走写端"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "clipboard:write-text",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/clipboard.ts",
+        "line": 18,
+        "preload": [
+          {
+            "channel": "clipboard:write-text",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1096
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "clipboard:write-text",
+          "kind": "handle",
+          "file": "services/clipboard.ts",
+          "line": 18,
+          "status": "implemented",
+          "note": "qml_shell.py:1385-1395"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "config:get-sync",
+        "kind": "on",
+        "file": "apps/desktop/src/main/services/config.ts",
+        "line": 83,
+        "preload": [],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "config:get-sync",
+          "kind": "on",
+          "file": "services/config.ts",
+          "line": 83,
+          "status": "implemented",
+          "note": "同上同步读取"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "config:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/config.ts",
+        "line": 89,
+        "preload": [
+          {
+            "channel": "config:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 682
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "config:get",
+          "kind": "handle",
+          "file": "services/config.ts",
+          "line": 89,
+          "status": "implemented",
+          "note": "qml_shell.py:366-379 _config/_write_config"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "config:set",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/config.ts",
+        "line": 95,
+        "preload": [
+          {
+            "channel": "config:set",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 685
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "config:set",
+          "kind": "handle",
+          "file": "services/config.ts",
+          "line": 95,
+          "status": "implemented",
+          "note": "qml_shell.py:369-379 set_config"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:context-usage",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/context-usage.ts",
+        "line": 54,
+        "preload": [
+          {
+            "channel": "chat:context-usage",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 874
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:context-usage",
+          "kind": "handle",
+          "file": "services/context-usage.ts",
+          "line": 54,
+          "status": "implemented",
+          "note": "qml_shell.py:964-1005"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "deliverables:inspect",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/deliverables.ts",
+        "line": 71,
+        "preload": [
+          {
+            "channel": "deliverables:inspect",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1104
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "deliverables:inspect",
+          "kind": "handle",
+          "file": "services/deliverables.ts",
+          "line": 71,
+          "status": "implemented",
+          "note": "qml_shell.py:1371-1374 deliveryItems"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "deliverables:thumbnail",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/deliverables.ts",
+        "line": 91,
+        "preload": [
+          {
+            "channel": "deliverables:thumbnail",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1107
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "deliverables:thumbnail",
+          "kind": "handle",
+          "file": "services/deliverables.ts",
+          "line": 91,
+          "status": "not_ported",
+          "note": "delivery_row 无缩略图字段"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "deliverables:open",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/deliverables.ts",
+        "line": 111,
+        "preload": [
+          {
+            "channel": "deliverables:open",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1110
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "deliverables:open",
+          "kind": "handle",
+          "file": "services/deliverables.ts",
+          "line": 111,
+          "status": "implemented",
+          "note": "qml_shell.py:1375-1379 openDeliverable"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "deliverables:reveal",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/deliverables.ts",
+        "line": 121,
+        "preload": [
+          {
+            "channel": "deliverables:reveal",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1113
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "deliverables:reveal",
+          "kind": "handle",
+          "file": "services/deliverables.ts",
+          "line": 121,
+          "status": "implemented",
+          "note": "qml_shell.py:1380-1384 revealDeliverable"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:available",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 626,
+        "preload": [
+          {
+            "channel": "git:available",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 969
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:available",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 626,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:status",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 639,
+        "preload": [
+          {
+            "channel": "git:status",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 971
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:status",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 639,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:diff",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 682,
+        "preload": [
+          {
+            "channel": "git:diff",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 977
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:diff",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 682,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:stage",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 704,
+        "preload": [
+          {
+            "channel": "git:stage",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 979
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:stage",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 704,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:unstage",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 713,
+        "preload": [
+          {
+            "channel": "git:unstage",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 981
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:unstage",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 713,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:discard",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 726,
+        "preload": [
+          {
+            "channel": "git:discard",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 984
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:discard",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 726,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:commit",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 741,
+        "preload": [
+          {
+            "channel": "git:commit",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 986
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:commit",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 741,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:set-config",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 757,
+        "preload": [
+          {
+            "channel": "git:set-config",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 989
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:set-config",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 757,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:branches",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 766,
+        "preload": [
+          {
+            "channel": "git:branches",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 990
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:branches",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 766,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:checkout",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 793,
+        "preload": [
+          {
+            "channel": "git:checkout",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 992
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:checkout",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 793,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:create-branch",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 803,
+        "preload": [
+          {
+            "channel": "git:create-branch",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 994
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:create-branch",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 803,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:checkout-remote",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 813,
+        "preload": [
+          {
+            "channel": "git:checkout-remote",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 997
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:checkout-remote",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 813,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:merge",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 823,
+        "preload": [
+          {
+            "channel": "git:merge",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 999
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:merge",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 823,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:merge-abort",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 834,
+        "preload": [
+          {
+            "channel": "git:merge-abort",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1000
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:merge-abort",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 834,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:delete-branch",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 841,
+        "preload": [
+          {
+            "channel": "git:delete-branch",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1003
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:delete-branch",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 841,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:rename-branch",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 855,
+        "preload": [
+          {
+            "channel": "git:rename-branch",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1005
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:rename-branch",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 855,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:delete-remote-branch",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 863,
+        "preload": [
+          {
+            "channel": "git:delete-remote-branch",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1008
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:delete-remote-branch",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 863,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:log",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 874,
+        "preload": [
+          {
+            "channel": "git:log",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1010
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:log",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 874,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:init",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 889,
+        "preload": [
+          {
+            "channel": "git:init",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1011
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:init",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 889,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:fetch",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 896,
+        "preload": [
+          {
+            "channel": "git:fetch",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1012
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:fetch",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 896,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:pull",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 905,
+        "preload": [
+          {
+            "channel": "git:pull",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1013
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:pull",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 905,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:push",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 914,
+        "preload": [
+          {
+            "channel": "git:push",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1016
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:push",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 914,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:generate-commit-message",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 930,
+        "preload": [
+          {
+            "channel": "git:generate-commit-message",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1027
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:generate-commit-message",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 930,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "git:cancel-commit-message",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/git.ts",
+        "line": 1028,
+        "preload": [
+          {
+            "channel": "git:cancel-commit-message",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1030
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "git:cancel-commit-message",
+          "kind": "handle",
+          "file": "services/git.ts",
+          "line": 1028,
+          "status": "not_ported",
+          "note": "移植版无 git 服务/面板；24 条通道全缺"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 633,
+        "preload": [
+          {
+            "channel": "mcp:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 759
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:list",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 633,
+          "status": "implemented",
+          "note": "qml_shell.py:1145-1198 extensionRows(mcp)"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 634,
+        "preload": [
+          {
+            "channel": "mcp:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 760
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:get",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 634,
+          "status": "implemented",
+          "note": "extensionAction detail"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:upsert",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 635,
+        "preload": [
+          {
+            "channel": "mcp:upsert",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 763
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:upsert",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 635,
+          "status": "implemented",
+          "note": "extensionAction update/save"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:remove",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 636,
+        "preload": [
+          {
+            "channel": "mcp:remove",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 764
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:remove",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 636,
+          "status": "implemented",
+          "note": "extensionAction remove"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:set-roles",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 642,
+        "preload": [
+          {
+            "channel": "mcp:set-roles",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 769
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:set-roles",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 642,
+          "status": "implemented",
+          "note": "ExtensionDetail rolesPopup"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:set-enabled",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 649,
+        "preload": [
+          {
+            "channel": "mcp:set-enabled",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 766
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:set-enabled",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 649,
+          "status": "implemented",
+          "note": "toggleExtension"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:retry",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 654,
+        "preload": [
+          {
+            "channel": "mcp:retry",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 771
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:retry",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 654,
+          "status": "implemented",
+          "note": "extensionAction retry → extension_runtime.retry"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:set-secret",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 660,
+        "preload": [
+          {
+            "channel": "mcp:set-secret",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 778
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:set-secret",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 660,
+          "status": "implemented",
+          "note": "extensionAction secret"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "mcp:has-secret",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/mcp.ts",
+        "line": 675,
+        "preload": [
+          {
+            "channel": "mcp:has-secret",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 781
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "mcp:has-secret",
+          "kind": "handle",
+          "file": "services/mcp.ts",
+          "line": 675,
+          "status": "implemented",
+          "note": "ExtensionDetail keyStatus"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "memory:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/memory.ts",
+        "line": 461,
+        "preload": [
+          {
+            "channel": "memory:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 720
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "memory:list",
+          "kind": "handle",
+          "file": "services/memory.ts",
+          "line": 461,
+          "status": "not_ported",
+          "note": "无 memory 服务/UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "memory:write",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/memory.ts",
+        "line": 462,
+        "preload": [
+          {
+            "channel": "memory:write",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 726
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "memory:write",
+          "kind": "handle",
+          "file": "services/memory.ts",
+          "line": 462,
+          "status": "not_ported",
+          "note": "无 memory 服务/UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "memory:delete",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/memory.ts",
+        "line": 471,
+        "preload": [
+          {
+            "channel": "memory:delete",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 728
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "memory:delete",
+          "kind": "handle",
+          "file": "services/memory.ts",
+          "line": 471,
+          "status": "not_ported",
+          "note": "无 memory 服务/UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "memory:clear",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/memory.ts",
+        "line": 476,
+        "preload": [
+          {
+            "channel": "memory:clear",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 729
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "memory:clear",
+          "kind": "handle",
+          "file": "services/memory.ts",
+          "line": 476,
+          "status": "not_ported",
+          "note": "无 memory 服务/UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 508,
+        "preload": [
+          {
+            "channel": "personas:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 733
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:list",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 508,
+          "status": "implemented",
+          "note": "qml_shell.py:701-753 quickStartPersonas + extensionRows 角色头像"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 509,
+        "preload": [
+          {
+            "channel": "personas:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 734
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:get",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 509,
+          "status": "implemented",
+          "note": "PersonaStore.get（persona_store.py:179-187）经 quickStart/roles 使用"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:upsert",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 510,
+        "preload": [
+          {
+            "channel": "personas:upsert",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 736
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:upsert",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 510,
+          "status": "not_ported",
+          "note": "PersonaStore.upsert 有后端（persona_store.py:205-237），QML 无新建/编辑角色入口"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:remove",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 513,
+        "preload": [
+          {
+            "channel": "personas:remove",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 737
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:remove",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 513,
+          "status": "not_ported",
+          "note": "PersonaStore.remove 有后端，QML 无删除入口"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:set-enabled",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 517,
+        "preload": [
+          {
+            "channel": "personas:set-enabled",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 739
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:set-enabled",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 517,
+          "status": "not_ported",
+          "note": "QML 无角色启停 UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:reorder",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 521,
+        "preload": [
+          {
+            "channel": "personas:reorder",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 742
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:reorder",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 521,
+          "status": "not_ported",
+          "note": "QML 无角色排序"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:set-avatar-image",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 526,
+        "preload": [
+          {
+            "channel": "personas:set-avatar-image",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 748
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:set-avatar-image",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 526,
+          "status": "not_ported",
+          "note": "QML 无头像编辑"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "personas:clear-avatar-image",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/personas.ts",
+        "line": 529,
+        "preload": [
+          {
+            "channel": "personas:clear-avatar-image",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 751
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "personas:clear-avatar-image",
+          "kind": "handle",
+          "file": "services/personas.ts",
+          "line": 529,
+          "status": "not_ported",
+          "note": "QML 无头像编辑"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "profile:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/profile.ts",
+        "line": 49,
+        "preload": [
+          {
+            "channel": "profile:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 708
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "profile:get",
+          "kind": "handle",
+          "file": "services/profile.ts",
+          "line": 49,
+          "status": "not_ported",
+          "note": "无 profile 服务/资料卡"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "profile:set-avatar",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/profile.ts",
+        "line": 50,
+        "preload": [
+          {
+            "channel": "profile:set-avatar",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 709
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "profile:set-avatar",
+          "kind": "handle",
+          "file": "services/profile.ts",
+          "line": 50,
+          "status": "not_ported",
+          "note": "无头像编辑"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "profile:set-avatar-image",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/profile.ts",
+        "line": 55,
+        "preload": [
+          {
+            "channel": "profile:set-avatar-image",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 712
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "profile:set-avatar-image",
+          "kind": "handle",
+          "file": "services/profile.ts",
+          "line": 55,
+          "status": "not_ported",
+          "note": "无头像编辑"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "provider:list-models",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/provider.ts",
+        "line": 74,
+        "preload": [
+          {
+            "channel": "provider:list-models",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 802
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "provider:list-models",
+          "kind": "handle",
+          "file": "services/provider.ts",
+          "line": 74,
+          "status": "not_ported",
+          "note": "ModelGateway.list_models 有后端（provider_setup.py:168-190），QML 无按钮/建议列表"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "chat:mark-read",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/read-sync.ts",
+        "line": 81,
+        "preload": [
+          {
+            "channel": "chat:mark-read",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 931
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "chat:mark-read",
+          "kind": "handle",
+          "file": "services/read-sync.ts",
+          "line": 81,
+          "status": "not_ported",
+          "note": "无未读状态"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:get-state",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 214,
+        "preload": [
+          {
+            "channel": "remote:get-state",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1189
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:get-state",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 214,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:scan-start",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 218,
+        "preload": [
+          {
+            "channel": "remote:scan-start",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1197
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:scan-start",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 218,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:scan-cancel",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 282,
+        "preload": [
+          {
+            "channel": "remote:scan-cancel",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1198
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:scan-cancel",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 282,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:set-enabled",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 287,
+        "preload": [
+          {
+            "channel": "remote:set-enabled",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1200
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:set-enabled",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 287,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:set-reply-mode",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 303,
+        "preload": [
+          {
+            "channel": "remote:set-reply-mode",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1202
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:set-reply-mode",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 303,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:set-scope",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 309,
+        "preload": [
+          {
+            "channel": "remote:set-scope",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1204
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:set-scope",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 309,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:delete-bot",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 316,
+        "preload": [
+          {
+            "channel": "remote:delete-bot",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1205
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:delete-bot",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 316,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:pair-code",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 324,
+        "preload": [
+          {
+            "channel": "remote:pair-code",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1207
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:pair-code",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 324,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:pair-cancel",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 326,
+        "preload": [
+          {
+            "channel": "remote:pair-cancel",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1208
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:pair-cancel",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 326,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "remote:remove-user",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/index.ts",
+        "line": 331,
+        "preload": [
+          {
+            "channel": "remote:remove-user",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1210
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "remote:remove-user",
+          "kind": "handle",
+          "file": "services/remote/index.ts",
+          "line": 331,
+          "status": "not_ported",
+          "note": "移植版无远程机器人"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:get-state",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 367,
+        "preload": [
+          {
+            "channel": "phone:get-state",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1224
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:get-state",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 367,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:add",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 369,
+        "preload": [
+          {
+            "channel": "phone:add",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1226
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:add",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 369,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:remove",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 376,
+        "preload": [
+          {
+            "channel": "phone:remove",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1228
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:remove",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 376,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:set-enabled",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 389,
+        "preload": [
+          {
+            "channel": "phone:set-enabled",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1229
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:set-enabled",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 389,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:retry",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 398,
+        "preload": [
+          {
+            "channel": "phone:retry",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1231
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:retry",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 398,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:qr",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 426,
+        "preload": [
+          {
+            "channel": "phone:qr",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1233
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:qr",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 426,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:link",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 433,
+        "preload": [
+          {
+            "channel": "phone:link",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1235
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:link",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 433,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:qr-cancel",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 435,
+        "preload": [
+          {
+            "channel": "phone:qr-cancel",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1237
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:qr-cancel",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 435,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "phone:remove-device",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/remote/web/phone.ts",
+        "line": 441,
+        "preload": [
+          {
+            "channel": "phone:remove-device",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1238
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "phone:remove-device",
+          "kind": "handle",
+          "file": "services/remote/web/phone.ts",
+          "line": 441,
+          "status": "not_ported",
+          "note": "移植版无手机联动"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "workspace:role-home",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/role-home.ts",
+        "line": 83,
+        "preload": [
+          {
+            "channel": "workspace:role-home",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1119
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "workspace:role-home",
+          "kind": "handle",
+          "file": "services/role-home.ts",
+          "line": 83,
+          "status": "not_ported",
+          "note": "无角色主目录"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "secrets:set",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/secrets.ts",
+        "line": 126,
+        "preload": [
+          {
+            "channel": "secrets:set",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 792
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "secrets:set",
+          "kind": "handle",
+          "file": "services/secrets.ts",
+          "line": 126,
+          "status": "implemented",
+          "note": "SecretsVault（keyring/file 双后端）+ 模型/MCP 密钥 UI"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "secrets:has",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/secrets.ts",
+        "line": 132,
+        "preload": [
+          {
+            "channel": "secrets:has",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 793
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "secrets:has",
+          "kind": "handle",
+          "file": "services/secrets.ts",
+          "line": 132,
+          "status": "implemented",
+          "note": "同上"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "secrets:delete",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/secrets.ts",
+        "line": 137,
+        "preload": [
+          {
+            "channel": "secrets:delete",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 795
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "secrets:delete",
+          "kind": "handle",
+          "file": "services/secrets.ts",
+          "line": 137,
+          "status": "implemented",
+          "note": "同上"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "secrets:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/secrets.ts",
+        "line": 143,
+        "preload": [
+          {
+            "channel": "secrets:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 796
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "secrets:list",
+          "kind": "handle",
+          "file": "services/secrets.ts",
+          "line": 143,
+          "status": "implemented",
+          "note": "同上"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "secrets:available",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/secrets.ts",
+        "line": 149,
+        "preload": [
+          {
+            "channel": "secrets:available",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 797
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "secrets:available",
+          "kind": "handle",
+          "file": "services/secrets.ts",
+          "line": 149,
+          "status": "implemented",
+          "note": "describe_backend（secrets_vault.py:84-89），上一轮私有 D-Bus 实测"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 753,
+        "preload": [
+          {
+            "channel": "skills:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 689
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:list",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 753,
+          "status": "implemented",
+          "note": "qml_shell.py:1145-1198 extensionRows；ExtensionDetail.qml"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 754,
+        "preload": [
+          {
+            "channel": "skills:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 690
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:get",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 754,
+          "status": "implemented",
+          "note": "extensionAction detail → ExtensionSettings.detail"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:remove",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 755,
+        "preload": [
+          {
+            "channel": "skills:remove",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 693
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:remove",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 755,
+          "status": "implemented",
+          "note": "qml_shell.py:1199-1212 toggleExtension/extensionAction remove"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:set-enabled",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 756,
+        "preload": [
+          {
+            "channel": "skills:set-enabled",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 695
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:set-enabled",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 756,
+          "status": "implemented",
+          "note": "qml_shell.py:1213-1245 setSkillEnabled"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:set-roles",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 761,
+        "preload": [
+          {
+            "channel": "skills:set-roles",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 698
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:set-roles",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 761,
+          "status": "implemented",
+          "note": "ExtensionDetail.qml:115-160 rolesPopup"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "skills:import",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/skills.ts",
+        "line": 767,
+        "preload": [
+          {
+            "channel": "skills:import",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 691
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "skills:import",
+          "kind": "handle",
+          "file": "services/skills.ts",
+          "line": 767,
+          "status": "not_ported",
+          "note": "skill_store.py:12 注释明说文件导入未实现"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:list",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 520,
+        "preload": [
+          {
+            "channel": "tasks:list",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1043
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:list",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 520,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:get",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 521,
+        "preload": [
+          {
+            "channel": "tasks:get",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1044
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:get",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 521,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:create",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 523,
+        "preload": [
+          {
+            "channel": "tasks:create",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1046
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:create",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 523,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:update",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 526,
+        "preload": [
+          {
+            "channel": "tasks:update",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1048
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:update",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 526,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:delete",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 529,
+        "preload": [
+          {
+            "channel": "tasks:delete",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1049
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:delete",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 529,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:set-status",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 533,
+        "preload": [
+          {
+            "channel": "tasks:set-status",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1051
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:set-status",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 533,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:preview",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 537,
+        "preload": [
+          {
+            "channel": "tasks:preview",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1071
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:preview",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 537,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "tasks:run-now",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/tasks.ts",
+        "line": 542,
+        "preload": [
+          {
+            "channel": "tasks:run-now",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1060
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "tasks:run-now",
+          "kind": "handle",
+          "file": "services/tasks.ts",
+          "line": 542,
+          "status": "not_ported",
+          "note": "移植版无任务调度服务"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "terminal:list-shells",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/terminal.ts",
+        "line": 87,
+        "preload": [
+          {
+            "channel": "terminal:list-shells",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 942
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "terminal:list-shells",
+          "kind": "handle",
+          "file": "services/terminal.ts",
+          "line": 87,
+          "status": "na",
+          "note": "原版渲染层无 terminal 调用，用户不可达"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "terminal:create",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/terminal.ts",
+        "line": 91,
+        "preload": [
+          {
+            "channel": "terminal:create",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 944
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "terminal:create",
+          "kind": "handle",
+          "file": "services/terminal.ts",
+          "line": 91,
+          "status": "na",
+          "note": "原版渲染层无 terminal 调用，用户不可达"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "terminal:input",
+        "kind": "on",
+        "file": "apps/desktop/src/main/services/terminal.ts",
+        "line": 100,
+        "preload": [
+          {
+            "channel": "terminal:input",
+            "kind": "send",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 945
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "terminal:input",
+          "kind": "on",
+          "file": "services/terminal.ts",
+          "line": 100,
+          "status": "na",
+          "note": "原版渲染层无 terminal 调用，用户不可达"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "terminal:resize",
+        "kind": "on",
+        "file": "apps/desktop/src/main/services/terminal.ts",
+        "line": 104,
+        "preload": [
+          {
+            "channel": "terminal:resize",
+            "kind": "send",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 947
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "terminal:resize",
+          "kind": "on",
+          "file": "services/terminal.ts",
+          "line": 104,
+          "status": "na",
+          "note": "原版渲染层无 terminal 调用，用户不可达"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "terminal:dispose",
+        "kind": "on",
+        "file": "apps/desktop/src/main/services/terminal.ts",
+        "line": 108,
+        "preload": [
+          {
+            "channel": "terminal:dispose",
+            "kind": "send",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 948
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "terminal:dispose",
+          "kind": "on",
+          "file": "services/terminal.ts",
+          "line": 108,
+          "status": "na",
+          "note": "原版渲染层无 terminal 调用，用户不可达"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "update:get-state",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/updater.ts",
+        "line": 270,
+        "preload": [
+          {
+            "channel": "update:get-state",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1177
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "update:get-state",
+          "kind": "handle",
+          "file": "services/updater.ts",
+          "line": 270,
+          "status": "implemented",
+          "note": "qml_shell.py:415-419 updateState"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "update:check",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/updater.ts",
+        "line": 271,
+        "preload": [
+          {
+            "channel": "update:check",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1178
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "update:check",
+          "kind": "handle",
+          "file": "services/updater.ts",
+          "line": 271,
+          "status": "implemented",
+          "note": "qml_shell.py:420-464 checkForUpdates"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "update:download",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/updater.ts",
+        "line": 272,
+        "preload": [
+          {
+            "channel": "update:download",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1179
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "update:download",
+          "kind": "handle",
+          "file": "services/updater.ts",
+          "line": 272,
+          "status": "not_ported",
+          "note": "无下载槽（electron-updater 特有）"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "update:install",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/updater.ts",
+        "line": 273,
+        "preload": [
+          {
+            "channel": "update:install",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 1180
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "update:install",
+          "kind": "handle",
+          "file": "services/updater.ts",
+          "line": 273,
+          "status": "not_ported",
+          "note": "无安装槽（electron-updater 特有）"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:open-folder",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/workspace.ts",
+        "line": 43,
+        "preload": [
+          {
+            "channel": "fs:open-folder",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 642
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:open-folder",
+          "kind": "handle",
+          "file": "services/workspace.ts",
+          "line": 43,
+          "status": "implemented",
+          "note": "Main.qml:20-31 FolderDialog + qml_shell.py:1300-1338 beginWorkspace/acceptWorkspace"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:reveal-folder",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/workspace.ts",
+        "line": 55,
+        "preload": [
+          {
+            "channel": "fs:reveal-folder",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 645
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:reveal-folder",
+          "kind": "handle",
+          "file": "services/workspace.ts",
+          "line": 55,
+          "status": "not_ported",
+          "note": "无工作区「在文件夹中显示」入口；仅交付卡 reveal 已实现"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:read-dir",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/workspace.ts",
+        "line": 64,
+        "preload": [
+          {
+            "channel": "fs:read-dir",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 646
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:read-dir",
+          "kind": "handle",
+          "file": "services/workspace.ts",
+          "line": 64,
+          "status": "implemented",
+          "note": "Agent list_dir 工具（tool_runtime.py:117-127）"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:read-file",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/workspace.ts",
+        "line": 82,
+        "preload": [
+          {
+            "channel": "fs:read-file",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 647
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:read-file",
+          "kind": "handle",
+          "file": "services/workspace.ts",
+          "line": 82,
+          "status": "implemented",
+          "note": "Agent read_file 工具（tool_runtime.py:94-116）"
+        },
+        "web_evidence": []
+      },
+      {
+        "channel": "fs:write-file",
+        "kind": "handle",
+        "file": "apps/desktop/src/main/services/workspace.ts",
+        "line": 92,
+        "preload": [
+          {
+            "channel": "fs:write-file",
+            "kind": "invoke",
+            "file": "apps/desktop/src/preload/index.ts",
+            "line": 649
+          }
+        ],
+        "status": null,
+        "verification": "未验证",
+        "legacy_claim": {
+          "channel": "fs:write-file",
+          "kind": "handle",
+          "file": "services/workspace.ts",
+          "line": 92,
+          "status": "implemented",
+          "note": "Agent write_file 工具（tool_runtime.py:180-197）"
+        },
+        "web_evidence": []
+      }
+    ],
+    "preload_occurrences": [
+      {
+        "channel": "window:minimize",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 626
+      },
+      {
+        "channel": "window:toggle-maximize",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 627
+      },
+      {
+        "channel": "window:close",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 628
+      },
+      {
+        "channel": "window:is-fullscreen",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 630
+      },
+      {
+        "channel": "window:fullscreen",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 633
+      },
+      {
+        "channel": "window:set-overlay",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 638
+      },
+      {
+        "channel": "fs:open-folder",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 642
+      },
+      {
+        "channel": "fs:reveal-folder",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 645
+      },
+      {
+        "channel": "fs:read-dir",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 646
+      },
+      {
+        "channel": "fs:read-file",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 647
+      },
+      {
+        "channel": "fs:write-file",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 649
+      },
+      {
+        "channel": "fs:pick-attachments",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 651
+      },
+      {
+        "channel": "fs:paste-attachment",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 658
+      },
+      {
+        "channel": "fs:attachment-image",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 661
+      },
+      {
+        "channel": "fs:dropped-entries",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 675
+      },
+      {
+        "channel": "config:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 682
+      },
+      {
+        "channel": "config:set",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 685
+      },
+      {
+        "channel": "skills:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 689
+      },
+      {
+        "channel": "skills:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 690
+      },
+      {
+        "channel": "skills:import",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 691
+      },
+      {
+        "channel": "skills:remove",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 693
+      },
+      {
+        "channel": "skills:set-enabled",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 695
+      },
+      {
+        "channel": "skills:set-roles",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 698
+      },
+      {
+        "channel": "skills:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 702
+      },
+      {
+        "channel": "profile:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 708
+      },
+      {
+        "channel": "profile:set-avatar",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 709
+      },
+      {
+        "channel": "profile:set-avatar-image",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 712
+      },
+      {
+        "channel": "memory:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 720
+      },
+      {
+        "channel": "memory:write",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 726
+      },
+      {
+        "channel": "memory:delete",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 728
+      },
+      {
+        "channel": "memory:clear",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 729
+      },
+      {
+        "channel": "personas:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 733
+      },
+      {
+        "channel": "personas:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 734
+      },
+      {
+        "channel": "personas:upsert",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 736
+      },
+      {
+        "channel": "personas:remove",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 737
+      },
+      {
+        "channel": "personas:set-enabled",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 739
+      },
+      {
+        "channel": "personas:reorder",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 742
+      },
+      {
+        "channel": "personas:set-avatar-image",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 748
+      },
+      {
+        "channel": "personas:clear-avatar-image",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 751
+      },
+      {
+        "channel": "mcp:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 759
+      },
+      {
+        "channel": "mcp:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 760
+      },
+      {
+        "channel": "mcp:upsert",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 763
+      },
+      {
+        "channel": "mcp:remove",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 764
+      },
+      {
+        "channel": "mcp:set-enabled",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 766
+      },
+      {
+        "channel": "mcp:set-roles",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 769
+      },
+      {
+        "channel": "mcp:retry",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 771
+      },
+      {
+        "channel": "mcp:set-secret",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 778
+      },
+      {
+        "channel": "mcp:has-secret",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 781
+      },
+      {
+        "channel": "mcp:status",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 785
+      },
+      {
+        "channel": "secrets:set",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 792
+      },
+      {
+        "channel": "secrets:has",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 793
+      },
+      {
+        "channel": "secrets:delete",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 795
+      },
+      {
+        "channel": "secrets:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 796
+      },
+      {
+        "channel": "secrets:available",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 797
+      },
+      {
+        "channel": "provider:list-models",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 802
+      },
+      {
+        "channel": "chat:send",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 807
+      },
+      {
+        "channel": "chat:insert",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 809
+      },
+      {
+        "channel": "chat:withdraw-inserts",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 812
+      },
+      {
+        "channel": "chat:compact",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 815
+      },
+      {
+        "channel": "chat:create-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 818
+      },
+      {
+        "channel": "chat:set-model",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 821
+      },
+      {
+        "channel": "chat:set-effort",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 824
+      },
+      {
+        "channel": "chat:set-focus",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 827
+      },
+      {
+        "channel": "chat:rename-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 830
+      },
+      {
+        "channel": "chat:set-archived",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 833
+      },
+      {
+        "channel": "chat:abort",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 834
+      },
+      {
+        "channel": "chat:stop-subagent",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 837
+      },
+      {
+        "channel": "chat:list-sessions",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 840
+      },
+      {
+        "channel": "chat:load-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 843
+      },
+      {
+        "channel": "chat:attachment-image",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 846
+      },
+      {
+        "channel": "chat:attach-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 852
+      },
+      {
+        "channel": "chat:delete-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 855
+      },
+      {
+        "channel": "chat:remove-member",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 858
+      },
+      {
+        "channel": "chat:delete-turns",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 869
+      },
+      {
+        "channel": "chat:todos",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 871
+      },
+      {
+        "channel": "chat:context-usage",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 874
+      },
+      {
+        "channel": "chat:todo-cancel",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 877
+      },
+      {
+        "channel": "chat:rewind-list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 880
+      },
+      {
+        "channel": "chat:rewind-preview",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 883
+      },
+      {
+        "channel": "chat:rewind-apply",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 886
+      },
+      {
+        "channel": "chat:rewind-undo",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 889
+      },
+      {
+        "channel": "chat:resolve-proposal",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 896
+      },
+      {
+        "channel": "chat:resolve-autotask",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 908
+      },
+      {
+        "channel": "chat:ask-response",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 911
+      },
+      {
+        "channel": "chat:plan-response",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 914
+      },
+      {
+        "channel": "chat:mount-response",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 917
+      },
+      {
+        "channel": "chat:event",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 921
+      },
+      {
+        "channel": "chat:sessions-changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 927
+      },
+      {
+        "channel": "chat:mark-read",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 931
+      },
+      {
+        "channel": "chat:remote-change",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 935
+      },
+      {
+        "channel": "terminal:list-shells",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 942
+      },
+      {
+        "channel": "terminal:create",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 944
+      },
+      {
+        "channel": "terminal:input",
+        "kind": "send",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 945
+      },
+      {
+        "channel": "terminal:resize",
+        "kind": "send",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 947
+      },
+      {
+        "channel": "terminal:dispose",
+        "kind": "send",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 948
+      },
+      {
+        "channel": "terminal:data",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 952
+      },
+      {
+        "channel": "terminal:exit",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 958
+      },
+      {
+        "channel": "git:available",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 969
+      },
+      {
+        "channel": "git:status",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 971
+      },
+      {
+        "channel": "git:diff",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 977
+      },
+      {
+        "channel": "git:stage",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 979
+      },
+      {
+        "channel": "git:unstage",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 981
+      },
+      {
+        "channel": "git:discard",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 984
+      },
+      {
+        "channel": "git:commit",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 986
+      },
+      {
+        "channel": "git:set-config",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 989
+      },
+      {
+        "channel": "git:branches",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 990
+      },
+      {
+        "channel": "git:checkout",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 992
+      },
+      {
+        "channel": "git:create-branch",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 994
+      },
+      {
+        "channel": "git:checkout-remote",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 997
+      },
+      {
+        "channel": "git:merge",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 999
+      },
+      {
+        "channel": "git:merge-abort",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1000
+      },
+      {
+        "channel": "git:delete-branch",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1003
+      },
+      {
+        "channel": "git:rename-branch",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1005
+      },
+      {
+        "channel": "git:delete-remote-branch",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1008
+      },
+      {
+        "channel": "git:log",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1010
+      },
+      {
+        "channel": "git:init",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1011
+      },
+      {
+        "channel": "git:fetch",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1012
+      },
+      {
+        "channel": "git:pull",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1013
+      },
+      {
+        "channel": "git:push",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1016
+      },
+      {
+        "channel": "git:generate-commit-message",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1027
+      },
+      {
+        "channel": "git:cancel-commit-message",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1030
+      },
+      {
+        "channel": "git:commit-gen-delta",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1034
+      },
+      {
+        "channel": "tasks:list",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1043
+      },
+      {
+        "channel": "tasks:get",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1044
+      },
+      {
+        "channel": "tasks:create",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1046
+      },
+      {
+        "channel": "tasks:update",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1048
+      },
+      {
+        "channel": "tasks:delete",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1049
+      },
+      {
+        "channel": "tasks:set-status",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1051
+      },
+      {
+        "channel": "tasks:run-now",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1060
+      },
+      {
+        "channel": "tasks:preview",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1071
+      },
+      {
+        "channel": "tasks:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1075
+      },
+      {
+        "channel": "tasks:navigate",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1085
+      },
+      {
+        "channel": "clipboard:read-text",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1094
+      },
+      {
+        "channel": "clipboard:write-text",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1096
+      },
+      {
+        "channel": "deliverables:inspect",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1104
+      },
+      {
+        "channel": "deliverables:thumbnail",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1107
+      },
+      {
+        "channel": "deliverables:open",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1110
+      },
+      {
+        "channel": "deliverables:reveal",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1113
+      },
+      {
+        "channel": "workspace:role-home",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1119
+      },
+      {
+        "channel": "browser:state",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1130
+      },
+      {
+        "channel": "browser:ready",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1132
+      },
+      {
+        "channel": "browser:state",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1135
+      },
+      {
+        "channel": "browser:open",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1140
+      },
+      {
+        "channel": "browser:dock",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1142
+      },
+      {
+        "channel": "browser:close-session",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1145
+      },
+      {
+        "channel": "browser:preview-pinned",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1148
+      },
+      {
+        "channel": "browser:live-start",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1150
+      },
+      {
+        "channel": "browser:live-stop",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1151
+      },
+      {
+        "channel": "browser:live-frame",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1154
+      },
+      {
+        "channel": "browser:pin",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1157
+      },
+      {
+        "channel": "browser:activate",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1158
+      },
+      {
+        "channel": "browser:close-tab",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1159
+      },
+      {
+        "channel": "browser:nav",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1161
+      },
+      {
+        "channel": "browser:menu",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1167
+      },
+      {
+        "channel": "browser:thumbnail",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1169
+      },
+      {
+        "channel": "browser:handoff",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1172
+      },
+      {
+        "channel": "browser:stop",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1174
+      },
+      {
+        "channel": "update:get-state",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1177
+      },
+      {
+        "channel": "update:check",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1178
+      },
+      {
+        "channel": "update:download",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1179
+      },
+      {
+        "channel": "update:install",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1180
+      },
+      {
+        "channel": "update:state",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1183
+      },
+      {
+        "channel": "remote:get-state",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1189
+      },
+      {
+        "channel": "remote:scan-start",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1197
+      },
+      {
+        "channel": "remote:scan-cancel",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1198
+      },
+      {
+        "channel": "remote:set-enabled",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1200
+      },
+      {
+        "channel": "remote:set-reply-mode",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1202
+      },
+      {
+        "channel": "remote:set-scope",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1204
+      },
+      {
+        "channel": "remote:delete-bot",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1205
+      },
+      {
+        "channel": "remote:pair-code",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1207
+      },
+      {
+        "channel": "remote:pair-cancel",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1208
+      },
+      {
+        "channel": "remote:remove-user",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1210
+      },
+      {
+        "channel": "remote:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1213
+      },
+      {
+        "channel": "remote:scan",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1218
+      },
+      {
+        "channel": "phone:get-state",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1224
+      },
+      {
+        "channel": "phone:add",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1226
+      },
+      {
+        "channel": "phone:remove",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1228
+      },
+      {
+        "channel": "phone:set-enabled",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1229
+      },
+      {
+        "channel": "phone:retry",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1231
+      },
+      {
+        "channel": "phone:qr",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1233
+      },
+      {
+        "channel": "phone:link",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1235
+      },
+      {
+        "channel": "phone:qr-cancel",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1237
+      },
+      {
+        "channel": "phone:remove-device",
+        "kind": "invoke",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1238
+      },
+      {
+        "channel": "phone:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1241
+      },
+      {
+        "channel": "phone:paired",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1246
+      }
+    ],
+    "registration_count": 169,
+    "unique_channels": 169,
+    "counts": {
+      "handle": 165,
+      "on": 4
+    },
+    "unmatched_preload": [
+      {
+        "channel": "window:fullscreen",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 633
+      },
+      {
+        "channel": "skills:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 702
+      },
+      {
+        "channel": "mcp:status",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 785
+      },
+      {
+        "channel": "chat:event",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 921
+      },
+      {
+        "channel": "chat:sessions-changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 927
+      },
+      {
+        "channel": "chat:remote-change",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 935
+      },
+      {
+        "channel": "terminal:data",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 952
+      },
+      {
+        "channel": "terminal:exit",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 958
+      },
+      {
+        "channel": "git:commit-gen-delta",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1034
+      },
+      {
+        "channel": "tasks:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1075
+      },
+      {
+        "channel": "tasks:navigate",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1085
+      },
+      {
+        "channel": "browser:live-frame",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1154
+      },
+      {
+        "channel": "update:state",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1183
+      },
+      {
+        "channel": "remote:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1213
+      },
+      {
+        "channel": "remote:scan",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1218
+      },
+      {
+        "channel": "phone:changed",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1241
+      },
+      {
+        "channel": "phone:paired",
+        "kind": "on",
+        "file": "apps/desktop/src/preload/index.ts",
+        "line": 1246
+      }
+    ]
+  },
+  "features": [
+    {
+      "id": "F01",
+      "group": "应用生命周期与窗口",
+      "name": "单实例锁与二次启动唤起",
+      "deva": "apps/desktop/src/main/index.ts:276-286",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 QLockFile/QLocalServer：`grep -rn \"QLockFile\\|QLocalServer\\|second-instance\" app/src` 无结果；main.py:1-76 只负责 QGuiApplication/QQmlApplicationEngine"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F01-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F02",
+      "group": "应用生命周期与窗口",
+      "name": "关窗驻留托盘（closeToTray）",
+      "deva": "apps/desktop/src/main/index.ts:164-173；redesign/SettingsPane.tsx:101-113,165-172",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无托盘、无 close 事件驻留；Main.qml:2480 关闭即 window.close()"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F03",
+      "group": "应用生命周期与窗口",
+      "name": "系统托盘图标与菜单（显示/定时任务/退出）",
+      "deva": "apps/desktop/src/main/index.ts:235-272；services/tray-icon.ts",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"QSystemTrayIcon\\|Tray\" app/src` 无结果"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F03-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F04",
+      "group": "应用生命周期与窗口",
+      "name": "窗口最小化/最大化/关闭",
+      "deva": "apps/desktop/src/main/index.ts:307-322；preload/index.ts:625-639",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:2462-2480 三个 WindowControlButton 接 showMinimized/showNormal|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F05",
+      "group": "应用生命周期与窗口",
+      "name": "窗口控件叠加配色随主题",
+      "deva": "apps/desktop/src/main/index.ts:79-97,304-312",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:280-345 WindowControlButton.glyphColor 按 Theme.dark 取 #E8EAED/#5F6368，底色调 Theme.bgInset；注释逐值对齐 index.ts:79-97"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F06",
+      "group": "应用生命周期与窗口",
+      "name": "全屏状态通知（macOS 红绿灯让位）",
+      "deva": "apps/desktop/src/main/index.ts:158-160；preload/index.ts:631-636；redesign/ChatFirstShell.tsx:52-66",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "Main.qml:29,62 仅按 Qt.platform.os === 'osx' 静态加宽，无 window:fullscreen 等价信号，无 onFullScreen"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F07",
+      "group": "应用生命周期与窗口",
+      "name": "外链一律系统浏览器打开",
+      "deva": "apps/desktop/src/main/index.ts:175-181",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "Markdown 渲染已写入 href（app/src/markdown/document.py:1108-1113），但 Main.qml:1090-1106 的 TextEdit 无 onLinkActivated / Qt.openUrlExternally，链接点不动"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F08",
+      "group": "菜单与快捷键",
+      "name": "应用菜单栏",
+      "deva": "apps/desktop/src/main/index.ts:108 autoHideMenuBar:true；全仓无 setApplicationMenu",
+      "legacy_claim": {
+        "status": "na",
+        "evidence": "原版没有自定义菜单栏，不凭空造"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F09",
+      "group": "菜单与快捷键",
+      "name": "编辑区右键菜单（剪切/复制/粘贴/全选）",
+      "deva": "apps/desktop/src/main/index.ts:183-217",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -n \"Menu {\" app/src/qml/*.qml` 无结果；TextArea/TextEdit 均无右键处理，Qt Quick Controls 不内建编辑菜单"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F10",
+      "group": "菜单与快捷键",
+      "name": "Ctrl/Cmd+B 收起/展开会话列表",
+      "deva": "redesign/ChatFirstShell.tsx:191-199",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"Key_B\\|Ctrl+B\\|Shortcut\" app/src/qml app/src/qml_shell.py` 无结果"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F11",
+      "group": "菜单与快捷键",
+      "name": "Esc 收回浮出列表",
+      "deva": "redesign/ChatFirstShell.tsx:192-194",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版没有「浮出列表」状态（列表宽度固定），无对应行为"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F12",
+      "group": "菜单与快捷键",
+      "name": "Enter 发送 / Shift+Enter 换行",
+      "deva": "redesign/Composer.tsx:669-700",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:1452-1464 inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit()"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F13",
+      "group": "菜单与快捷键",
+      "name": "输入框 / 指令联想（/compact /rewind /技能）",
+      "deva": "redesign/Composer.tsx:382-420",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"slash\\|/compact\\|/rewind\" app/src/qml app/src/qml_shell.py` 无联想实现；Main.qml:1440-1478 只有纯 TextArea"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F13-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F14",
+      "group": "菜单与快捷键",
+      "name": "@ 提及成员/角色",
+      "deva": "redesign/Composer.tsx:399-419；shared/mention.ts",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 mention 解析/候选浮层（grep \"mention\" 无结果）"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F14-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F15",
+      "group": "菜单与快捷键",
+      "name": "回复完成/待处理系统通知",
+      "deva": "services/reply-notify.ts:15-80；chat-turns.ts:801",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 QSystemTrayIcon/Notification；ShellBridge 只有内部 signal，不弹系统通知"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F15-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F16",
+      "group": "会话列表",
+      "name": "新建会话",
+      "deva": "redesign/Rail.tsx:600-660（加号菜单）；preload/index.ts:805-940 chat.createSession",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:580-597 加号 onClicked shellBridge.newSession；qml_shell.py:595-606 建真实会话并落盘"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F17",
+      "group": "会话列表",
+      "name": "切换会话",
+      "deva": "redesign/Rail.tsx:700-760",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:684-712 行 onClicked openSession；qml_shell.py:585-594 读真实会话"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F18",
+      "group": "会话列表",
+      "name": "重命名会话",
+      "deva": "redesign/Rail.tsx:175-182 RowMenu；chat:rename-session",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:2102-2106 右键菜单 rename + 重命名弹层；qml_shell.py:626-642 写盘"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F19",
+      "group": "会话列表",
+      "name": "删除会话",
+      "deva": "redesign/Rail.tsx:175-182；chat:delete-session",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml 右键 delete + 确认框；qml_shell.py:606-626 删会话文件"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F20",
+      "group": "会话列表",
+      "name": "归档/取消归档",
+      "deva": "redesign/Rail.tsx:620-650；chat:set-archived",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:800-830 归档横幅与右键 archive；qml_shell.py:643-700 archiveSession/unarchiveSession/archiveSessions"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F21",
+      "group": "会话列表",
+      "name": "归档视图",
+      "deva": "redesign/Rail.tsx archiveView",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:600-760 archiveHeader/archiveBack，Python archivedSessions 投影"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F22",
+      "group": "会话列表",
+      "name": "会话搜索（标题/角色/挂载目录）",
+      "deva": "redesign/Rail.tsx:600-640",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:159-200 visibleSessions 按 title/personaName/focusName 过滤；搜索框 Main.qml:495-575 可聚焦输入"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F23",
+      "group": "会话列表",
+      "name": "会话筛选面板（角色/文件夹）",
+      "deva": "redesign/Rail.tsx:183-186,664-710",
+      "legacy_claim": {
+        "status": "ui_only",
+        "evidence": "Main.qml:499-515 filterBtn 只有图标与 HoverHandler，无 MouseArea/onClicked；搜索框只过滤文本，无角色/目录筛选"
+      },
+      "status": "ui_only",
+      "verification": "已验证",
+      "evidence": "app/src/qml/Main.qml:583-599 filterBtn 仅 Item/Icon，无输入 handler；本轮读取完整控件块。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F24",
+      "group": "会话列表",
+      "name": "会话多选批量归档/删除",
+      "deva": "redesign/ThreadSelect.tsx",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:116-118,684-800,1898-1940 selectMode/selectedSessions + 批量归档/删除"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F25",
+      "group": "会话列表",
+      "name": "未读/待处理状态与红点",
+      "deva": "redesign/Rail.tsx:116-129；store/chat.tsx sessionStates.unread/attention",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 unread/attention 字段（grep \"unread\" app/src 无结果）；列表行只显示时间"
+      },
+      "status": "not_ported",
+      "verification": "源码搜索无实现，功能搜索覆盖边界见日志",
+      "evidence": "out/feature-review/F25-search.txt; scope QML + ShellBridge; 原版依据需继续逐段复核，不能外推 web 入口。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F26",
+      "group": "会话列表",
+      "name": "草稿按会话保留",
+      "deva": "redesign/Composer.tsx:109-121,755-760",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"draft\" app/src/qml app/src/qml_shell.py` 无结果；切会话后输入框内容不保留"
+      },
+      "status": "implemented",
+      "verification": "已验证",
+      "evidence": "app/src/qml/Main.qml:104 onActiveIdChanged; scripts/parity/draft_evidence.py; out/feature-review/draft-before.log 真实点击失败；drafts.json 暗亮切换后恢复各自输入；drafts-dark/light.png。文字及待发附件实现；附件经真实拖放、切换和源文件读回通过；撤销历史边界尚需专门验证。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F27",
+      "group": "会话列表",
+      "name": "会话列表宽度拖动/收起并记忆",
+      "deva": "redesign/resizable.ts；ChatFirstShell.tsx:143-160",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "Main.qml 侧栏宽固定 Theme.sideWidth（Main.qml:44-46,462-470），无拖动手柄/收起状态"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F28",
+      "group": "会话列表",
+      "name": "会话行右键菜单（新建/重命名/多选/归档/删除）",
+      "deva": "redesign/Rail.tsx:175-182；ContextMenu.tsx",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:2076-2130 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F29",
+      "group": "对话正文",
+      "name": "用户/助手 Markdown 正文",
+      "deva": "redesign/ConvMessage.tsx；features/chat/blocks.tsx",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:1513-1528 transcript_markdown → app/src/markdown/body.py 渲染进 QTextDocument；Main.qml:1090-1106"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F30",
+      "group": "对话正文",
+      "name": "工具调用/工具结果/思考/子代理活动卡",
+      "deva": "features/chat/blocks.tsx BlockView；redesign/ChatFirstShell.tsx:39-44 注释",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "qml_shell_sessions.py:223-260 只拼 text 块，注释明说「纯工具调用 / 纯工具结果跳过」；无 tool_use block UI"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F31",
+      "group": "对话正文",
+      "name": "待处理交互卡（ask/审批）",
+      "deva": "features/chat/blocks.tsx AskCard；chat:ask-response",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "InteractionPrompt.qml + qml_shell.py:355-365 pendingInteractions/answerInteraction（kind=question/approval）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F32",
+      "group": "对话正文",
+      "name": "计划卡与 plan-response",
+      "deva": "chat:plan-response；features/chat/blocks.tsx PlanCard",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版 only ask/approval；`grep -rn \"plan\" app/src/qml_shell.py` 无结果"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F33",
+      "group": "对话正文",
+      "name": "回滚 rewind（列点/预览/应用/撤销）",
+      "deva": "redesign/RewindModal.tsx:31；Conversation.tsx:998-1003；chat:rewind-*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"rewind\" app/src/qml app/src/qml_shell.py` 无结果；host.py 也没有 rewind 入口"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F34",
+      "group": "对话正文",
+      "name": "消息右键菜单（复制/引用/回滚/选择删除）",
+      "deva": "redesign/Conversation.tsx:905-950",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "正文 TextEdit 无 contextMenu/onPressed 右键处理；Main.qml 只有会话行右键"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F35",
+      "group": "对话正文",
+      "name": "引用条 quote",
+      "deva": "redesign/ConvMessage.tsx leadingQuote/withQuote；Composer.tsx",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"quote\" app/src/qml app/src/qml_shell.py` 只命中 CSS/无关词；无引用状态"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F36",
+      "group": "对话正文",
+      "name": "选择消息删除（delete-turns）",
+      "deva": "chat:delete-turns；redesign/Conversation.tsx:955-1000",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "host.py:415-425 delete_turns 有后端，但 QML 无入口（`grep -rn \"deleteTurns\" app/src/qml*` 无结果）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F37",
+      "group": "对话正文",
+      "name": "停止生成",
+      "deva": "redesign/Composer.tsx:973-991（busy 时空输入框显示停止键）；chat:abort",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "host.py:306-320 abort 有后端；Main.qml:1555-1575 发送按钮 busy 时只置灰，无停止槽/停止键"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F38",
+      "group": "对话正文",
+      "name": "回合中插入消息（插话）",
+      "deva": "chat:insert / chat:withdraw-inserts；Composer.tsx:463-467",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"insert\" app/src/mvvm/webui/host.py app/src/qml_shell.py` 无 chat:insert 路径"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F39",
+      "group": "对话正文",
+      "name": "手动压缩 /compact",
+      "deva": "redesign/Composer.tsx:382-386；chat:compact",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "host.py:446-508 compact 有后端；QML 无 /compact 入口（grep slash 无结果）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F40",
+      "group": "对话正文",
+      "name": "Todo 胶囊",
+      "deva": "redesign/Composer.tsx:864 TodoCapsule",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "tool_runtime.py:260 todo_write 工具有，但 QML 无 Todo 展示（`grep -rn \"todo\" app/src/qml*` 无结果）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F41",
+      "group": "对话正文",
+      "name": "后台任务胶囊",
+      "deva": "redesign/Composer.tsx:865 BackgroundCapsule",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无后台任务概念"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F42",
+      "group": "对话正文",
+      "name": "浏览器操作胶囊",
+      "deva": "redesign/Composer.tsx:866 BrowserCapsule",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无内置浏览器"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F43",
+      "group": "对话正文",
+      "name": "上下文用量圆环",
+      "deva": "redesign/ContextRing.tsx；chat:context-usage",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:964-1005 contextUsage 真实计算；Main.qml ContextRing"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F44",
+      "group": "对话正文",
+      "name": "模型/思考等级切换菜单",
+      "deva": "redesign/ModelMenu.tsx, EffortPicker.tsx",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:900-963 modelMenuGroups/effortMenu；Main.qml ModelPicker"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F45",
+      "group": "对话正文",
+      "name": "附件选择（回形针）",
+      "deva": "redesign/Composer.tsx:950；fs:pick-attachments",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "Main.qml:1480-1520 clipBtn → pickAttachments；qml_shell.py:1338-1364 QFileDialog + AttachmentService"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F46",
+      "group": "对话正文",
+      "name": "附件拖放",
+      "deva": "redesign/Composer.tsx:576-596；fs:dropped-entries",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rn \"DropArea\\|onDropped\" app/src/qml` 无结果；attachments.py 只实现 pick_attachments（文件头注释说明 paste/dropped 未移植）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F47",
+      "group": "对话正文",
+      "name": "粘贴图片/文件为附件",
+      "deva": "redesign/Composer.tsx:508,567；fs:paste-attachment",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "attachments.py:12-14 明说 paste/dropped/attachment-image 三通道未移植；无剪贴板读取"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F48",
+      "group": "对话正文",
+      "name": "附件贴片与图片缩略图",
+      "deva": "redesign/attachments.tsx；fs:attachment-image",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell_sessions.py:304-329 attachment_rows + Main.qml:1128-1180 贴片；图片 data URI 内联"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F49",
+      "group": "对话正文",
+      "name": "交付卡（打开/定位/复制路径）",
+      "deva": "features/chat/DeliverablesCard.tsx；deliverables:*",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:1371-1395 deliveryItems/openDeliverable/revealDeliverable/copyDeliverablePath；Main.qml:1240-1330"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F50",
+      "group": "对话正文",
+      "name": "交付卡图片缩略图",
+      "deva": "deliverables:thumbnail",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "delivery_row（transcript_parts.py:144-158）不含 thumb 字段，卡片只按类型画图标"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F51",
+      "group": "角色",
+      "name": "角色花名册 tab（列表/搜索/快速对话）",
+      "deva": "redesign/Rail.tsx:130-170,600-744",
+      "legacy_claim": {
+        "status": "ui_only",
+        "evidence": "Main.qml:439 RailButton users 只有图标无 onClicked；无 roster 列表/搜索实现"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F52",
+      "group": "角色",
+      "name": "角色资料卡（ProfilePanel）",
+      "deva": "redesign/Rail.tsx:117 ProfilePanel",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "Main.qml:414-425 meBtn 只有 Avatar，无 MouseArea；无资料卡"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F53",
+      "group": "角色",
+      "name": "新建/编辑/删除角色",
+      "deva": "redesign/ProfileView.tsx PersonaEditor；personas:upsert/remove",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "PersonaStore 有 upsert/remove（persona_store.py:205-250）但 QML 无入口；Settings 的 identities 只编辑 prompt 文本"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F54",
+      "group": "角色",
+      "name": "角色头像编辑",
+      "deva": "redesign/AvatarEditor.tsx；personas:set-avatar-image",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "PersonaStore.set_avatar_image 有后端（persona_store.py:269-286），QML 无头像编辑 UI"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F55",
+      "group": "角色",
+      "name": "角色排序（拖拽/置顶）",
+      "deva": "redesign/Rail.tsx reorderIds；personas:reorder",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "persona_store.py:260-268 reorder 有后端，QML 无拖拽/排序入口"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F56",
+      "group": "角色",
+      "name": "角色记忆查看/编辑",
+      "deva": "redesign/RoleMemoryTab.tsx, MemoryDetail.tsx；memory:*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 memory 服务/UI（grep \"memory\" app/src 只命中无关词）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F57",
+      "group": "角色",
+      "name": "快速开始角色卡",
+      "deva": "redesign/Rail.tsx QuickStart",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:701-753 quickStartPersonas/startQuickStart；Main.qml 空态卡片"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F58",
+      "group": "定时任务",
+      "name": "定时任务页（列表/详情/运行历史）",
+      "deva": "redesign/TasksPane.tsx:1-70；tasks:list/get",
+      "legacy_claim": {
+        "status": "ui_only",
+        "evidence": "Main.qml:440 RailButton alarmClock 无 onClicked；无 TasksPane 对应 QML，无 tasks 服务"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F59",
+      "group": "定时任务",
+      "name": "任务调度引擎（once/cron、自动触发）",
+      "deva": "services/schedule.ts, scheduler.ts；tasks:*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "`grep -rli \"scheduler\\|cron\\|schedule\" app/src --include=*.py` 无结果"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F60",
+      "group": "定时任务",
+      "name": "任务系统通知",
+      "deva": "services/scheduler.ts:103 new Notification",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 Notification"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F61",
+      "group": "定时任务",
+      "name": "任务绑定主对话与结果交接",
+      "deva": "services/chat-task-handoff.ts；TasksPane 绑定徽标",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无任务概念"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F62",
+      "group": "机器人/手机",
+      "name": "机器人页（Bots tab 列表/添加/详情）",
+      "deva": "redesign/BotsPane.tsx:1-80；remote:get-state",
+      "legacy_claim": {
+        "status": "ui_only",
+        "evidence": "Main.qml:447 RailButton bot 无 onClicked；无 BotsPane 对应 QML"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F63",
+      "group": "机器人/手机",
+      "name": "远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）",
+      "deva": "services/remote/*；remote:*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 remote 服务；`grep -rn \"telegram\\|feishu\" app/src` 无结果"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F64",
+      "group": "机器人/手机",
+      "name": "手机联动（QR/设备/中转）",
+      "deva": "redesign/PhonePane.tsx；services/remote/web/phone.ts；phone:*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 phone 服务/UI"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F65",
+      "group": "设置与扩展",
+      "name": "语言/主题/聊天字号",
+      "deva": "redesign/SettingsPane.tsx:92-176",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "SettingsModal.qml:280-345 三行 SetRow → qml_shell.py:483-516 setLanguage/setTheme/setTextSize（sm/md/lg/xl）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F66",
+      "group": "设置与扩展",
+      "name": "模型服务商列表/详情/密钥/请求头",
+      "deva": "features/settings/ModelSettings.tsx；preload models",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "SettingsModal modelsPane + qml_shell.py:764-880/850-861 setProviderHeaders；上一轮已验收"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F67",
+      "group": "设置与扩展",
+      "name": "从服务商拉取模型列表",
+      "deva": "services/provider.ts:74 provider:list-models；ModelSettings.tsx:250",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "ModelGateway.list_models 有后端（provider_setup.py:168-190），QML 无「获取模型列表」按钮/建议列表"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F68",
+      "group": "设置与扩展",
+      "name": "自定义服务商/自定义模型",
+      "deva": "ModelSettings.tsx 自定义入口；provider:list-models",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "SettingsModal.qml:545 custom-model 入口 + qml_shell.py:821-845 addProvider/addModel"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F69",
+      "group": "设置与扩展",
+      "name": "技能列表/启停/删除",
+      "deva": "SettingsPane.tsx ExtensionsPane；skills:*",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:1145-1245 extensionRows/toggleExtension/setSkillEnabled；ExtensionDetail.qml"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F70",
+      "group": "设置与扩展",
+      "name": "技能导入（zip/md）",
+      "deva": "services/skills.ts:767-787；dialog.showOpenDialog",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "skill_store.py:12 注释明说文件导入未实现；QML 扩展页无导入按钮"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F71",
+      "group": "设置与扩展",
+      "name": "MCP 列表/编辑/密钥/重试/工具清单",
+      "deva": "SettingsPane.tsx:493-760；mcp:*",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "extension_runtime.py + ExtensionDetail.qml；上一轮 runtime-parity 验收三种传输"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F72",
+      "group": "设置与扩展",
+      "name": "技能/MCP 角色白名单",
+      "deva": "SettingsPane.tsx roles 下拉；skills:set-roles/mcp:set-roles",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "ExtensionDetail.qml:115-160 rolesTrigger/rolesPopup + qml_shell.py toggleExtension"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F73",
+      "group": "设置与扩展",
+      "name": "About/版本",
+      "deva": "SettingsPane.tsx:878-894",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "SettingsModal.qml aboutPane + qml_shell.py appVersion"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F74",
+      "group": "设置与扩展",
+      "name": "检查更新",
+      "deva": "services/updater.ts:270-273；UpdateSection.tsx",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:415-464 checkForUpdates/_check_updates_worker（GitHub Releases API）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F75",
+      "group": "设置与扩展",
+      "name": "下载/安装更新",
+      "deva": "services/updater.ts:270-273 download/install；UpdateSection.tsx:47-120",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "ShellBridge 只有 checking/latest/available/error 四态，无 download/install 槽；原版 autoUpdater(electron-updater) 为 Electron 特有"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F76",
+      "group": "设置与扩展",
+      "name": "个人资料（头像/昵称）",
+      "deva": "services/profile.ts:49-58；redesign/ProfilePanel.tsx",
+      "legacy_claim": {
+        "status": "ui_only",
+        "evidence": "Main.qml:414-425 头像按钮只画 Avatar(persona:\"user\")，无 MouseArea；无 profile 服务"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F77",
+      "group": "其他原生能力",
+      "name": "剪贴板读写",
+      "deva": "services/clipboard.ts:15-25",
+      "legacy_claim": {
+        "status": "implemented",
+        "evidence": "qml_shell.py:1385-1395 copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F78",
+      "group": "其他原生能力",
+      "name": "内置浏览器（多窗口/标签/缩略图/导航）",
+      "deva": "services/browser/host.ts:554-660；features/browser/*",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "16 条 browser:* 通道无对应；移植版单窗口 QML，无 BrowserView/标签注册表"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F79",
+      "group": "其他原生能力",
+      "name": "终端（PTY 会话）",
+      "deva": "services/terminal.ts:87-108",
+      "legacy_claim": {
+        "status": "na",
+        "evidence": "原版渲染层无任何 terminal.* 调用（grep 无结果），属未接线的服务端能力，不构成用户可达功能"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F80",
+      "group": "其他原生能力",
+      "name": "子智能体/成员对话",
+      "deva": "services/subagents.ts, chat-members.ts, MemberBar.tsx；chat:remove-member",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版 tool_runtime 只有 10 个工具（tool_runtime.py:4-6），无 subagent/member 能力"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F81",
+      "group": "其他原生能力",
+      "name": "自动任务卡/提案卡响应",
+      "deva": "chat:resolve-proposal / resolve-autotask；features/chat blocks",
+      "legacy_claim": {
+        "status": "not_ported",
+        "evidence": "移植版无 proposals/autotasks 边车与卡片（chat_models.py 只有字段名）"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F82",
+      "group": "其他原生能力",
+      "name": "代理与网络设置",
+      "deva": "apps/desktop/src/main/http.ts:12-122 仅环境变量 HTTPS_PROXY/HTTP_PROXY/ALL_PROXY/NO_PROXY",
+      "legacy_claim": {
+        "status": "na",
+        "evidence": "原版无代理设置 UI；不凭空造"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F83",
+      "group": "其他原生能力",
+      "name": "日志与诊断面板",
+      "deva": "原版无日志 UI（仅 main 进程 console）",
+      "legacy_claim": {
+        "status": "na",
+        "evidence": "原版不存在此功能"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    },
+    {
+      "id": "F84",
+      "group": "其他原生能力",
+      "name": "语音输入/输入法专属功能",
+      "deva": "原版无语音/听写代码（grep speech/voice 无结果）",
+      "legacy_claim": {
+        "status": "na",
+        "evidence": "原版不存在语音功能；输入法由系统提供"
+      },
+      "status": null,
+      "verification": "未验证",
+      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "entry": "QML",
+      "web_status": null
+    }
+  ],
+  "counts": {
+    "not_ported": 6,
+    "ui_only": 1,
+    "implemented": 1
+  },
+  "unverified": 76
+}
