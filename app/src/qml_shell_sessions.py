@@ -16,6 +16,7 @@
 """
 from __future__ import annotations
 
+import json
 from typing import Any, Dict, List, Optional
 from native_i18n import translate
 
@@ -220,11 +221,118 @@ def _attachment_lines(parts: List[Any], msg_index: int, lang: str = "zh") -> Lis
     return lines
 
 
+# 工具名 → 原版 i18n 的中文/英文标签（deva Composer/blocks 的 chat.tool.* 同名键）。
+_TOOL_LABEL_KEYS = {
+    "read_file": "chat.tool.readFile",
+    "list_dir": "chat.tool.listDir",
+    "glob": "chat.tool.glob",
+    "grep": "chat.tool.grep",
+    "web_fetch": "chat.tool.webFetch",
+    "write_file": "chat.tool.writeFile",
+    "edit_file": "chat.tool.editFile",
+    "run_command": "chat.tool.runCommand",
+    "ask_user": "chat.tool.askUser",
+    "create_skill": "chat.tool.createSkill",
+    "create_mcp": "chat.tool.createMcp",
+    "memory_read": "chat.tool.memoryRead",
+    "memory_write": "chat.tool.memoryWrite",
+    "memory_delete": "chat.tool.memoryDelete",
+    "todo_write": "chat.tool.todoWrite",
+    "present_files": "chat.tool.presentFiles",
+    "mount_workspace": "chat.tool.mountWorkspace",
+    "create_member": "chat.tool.createMember",
+    "member_send": "chat.tool.memberSend",
+    "member_stop": "chat.tool.memberStop",
+    "member_status": "chat.tool.memberStatus",
+    "read_main": "chat.tool.readMain",
+    "report_to_main": "chat.tool.reportToMain",
+    "reply_task": "chat.tool.replyTask",
+    "skill": "chat.tool.skill",
+    "tool_search": "chat.tool.toolSearch",
+    "create_task": "chat.tool.createTask",
+    "propose_agent": "chat.tool.proposeAgent",
+    "browser": "chat.tool.browser",
+}
+_MEMBER_TOOLS = {"create_member", "member_send", "member_stop", "member_status", "read_main", "report_to_main", "reply_task"}
+_SUBAGENT_TOOLS = {"run_subagent", "subagent", "run_subagent_batch"}
+
+
+def _locale(lang: str) -> str:
+    return "en" if lang == "en" else "zh-CN"
+
+
+def _tool_label(name: str, lang: str) -> str:
+    key = _TOOL_LABEL_KEYS.get(name)
+    if key:
+        return translate(_locale(lang), key)
+    return name or translate(_locale(lang), "chat.tool.unknown")
+
+
+def _activity_label(part: Any, lang: str) -> str:
+    kind = str(getattr(part, "type", "") or "")
+    name = str(getattr(part, "name", "") or (getattr(part, "toolUseId", "") if kind == "tool_result" else "") or "")
+    if kind == "thinking":
+        return translate(_locale(lang), "chat.thinking")
+    if kind == "tool_result":
+        return translate(_locale(lang), "chat.tool.result") + " · " + _tool_label(name, lang)
+    if name in _MEMBER_TOOLS or name in _SUBAGENT_TOOLS:
+        return translate(_locale(lang), "chat.work.subagent") + " · " + _tool_label(name, lang)
+    return translate(_locale(lang), "chat.tool.call") + " · " + _tool_label(name, lang)
+
+
+def _clip_activity(text: Any, limit: int = 1200) -> str:
+    value = " ".join(str(text or "").replace("\r", " ").replace("\n", " ").split())
+    return value[:limit] + ("…" if len(value) > limit else "")
+
+
+def _activity_markdown(part: Any, lang: str, result_names: Optional[Dict[str, str]] = None) -> str:
+    """一个工具/思考/子代理块 → QTextDocument 能渲染的引用卡。
+
+    原版是时间线卡片；QTextDocument 的 Markdown 渲染器没有可折叠卡片，改用
+    blockquote（左侧竖条 + 缩进）承载标题与摘要，信息等价且不依赖 QtWebEngine。
+    """
+    kind = str(getattr(part, "type", "") or "")
+    if kind == "thinking":
+        return "> **%s**\n>\n> %s" % (
+            translate(_locale(lang), "chat.thinking"),
+            _clip_activity(getattr(part, "text", "") or getattr(part, "thinking", "")),
+        )
+    if kind == "tool_use":
+        name = str(getattr(part, "name", "") or "")
+        args = getattr(part, "input", None)
+        detail = _clip_activity(json.dumps(args, ensure_ascii=False, sort_keys=True) if args is not None else "")
+        return "> **%s** · `%s`\n>\n> %s" % (_activity_label(part, lang), name, detail or "—")
+    if kind == "tool_result":
+        tool_id = str(getattr(part, "toolUseId", "") or "")
+        name = (result_names or {}).get(tool_id, tool_id)
+        state = "失败" if bool(getattr(part, "isError", False)) else "成功"
+        if lang == "en":
+            state = "failed" if bool(getattr(part, "isError", False)) else "ok"
+        return "> **%s** · `%s` · %s\n>\n> %s" % (
+            _activity_label(part, lang), name, state,
+            _clip_activity(getattr(part, "content", "") or ""),
+        )
+    return ""
+
+
+def _tool_result_names(messages: List[Any]) -> Dict[str, str]:
+    names: Dict[str, str] = {}
+    for message in messages or []:
+        content = getattr(message, "content", None)
+        if not isinstance(content, list):
+            continue
+        for part in content:
+            if str(getattr(part, "type", "") or "") == "tool_use":
+                names[str(getattr(part, "id", "") or "")] = str(getattr(part, "name", "") or "")
+    return names
+
+
 def transcript_markdown(
     messages: List[Any],
     pending_user: Optional[str] = None,
     streaming: Optional[str] = None,
     lang: str = "zh",
+    include_activity: bool = False,
 ) -> str:
     """落盘消息（+ 本轮进行中的用户消息与流式增量）→ 一份正文 Markdown。
 
@@ -236,17 +344,32 @@ def transcript_markdown(
     文档/文本/文件夹/只给位置的附件各一行「附件：名 · 体积」。
     """
     blocks: List[str] = []
+    result_names = _tool_result_names(messages or []) if include_activity else {}
     for msg_index, message in enumerate(messages or []):
         text = message_body(message)
         attachment_lines: List[str] = []
         content = getattr(message, "content", None)
         if str(getattr(message, "role", "")) == "user" and not isinstance(content, str):
             attachment_lines = _attachment_lines(list(content or []), msg_index, lang)
-        if not text.strip() and not attachment_lines:
-            continue
         pieces = list(attachment_lines)
-        if text.strip():
+        if include_activity and isinstance(content, list):
+            # 按内容块真实顺序：正文、tool_use、tool_result、thinking 各自成段。
+            for part in content or []:
+                kind = str(getattr(part, "type", "") or "")
+                if kind == "text":
+                    part_text = str(getattr(part, "text", "") or "")
+                    if part_text.startswith(_ATTACH_PREFIXES):
+                        continue
+                    if part_text.strip():
+                        pieces.append(part_text.strip())
+                else:
+                    card = _activity_markdown(part, lang, result_names)
+                    if card:
+                        pieces.append(card)
+        elif text.strip():
             pieces.append(text.strip())
+        if not text.strip() and not pieces:
+            continue
         blocks.append("%s\n\n%s" % (_role_heading(str(getattr(message, "role", "")), lang), "\n\n".join(pieces)))
     if pending_user and pending_user.strip():
         blocks.append("%s\n\n%s" % (_role_heading("user", lang), pending_user.strip()))
@@ -343,11 +466,34 @@ class TurnState:
         self.finished = False
         self.stop = ""
         self.error = ""
+        # 真实活动块：thinking / tool_call / tool_result，按事件顺序保存。
+        self.activities: List[Dict[str, Any]] = []
+
+    def _append_activity(self, kind: str, text: str) -> None:
+        if self.activities and self.activities[-1].get("kind") == kind:
+            self.activities[-1]["text"] += text
+        else:
+            self.activities.append({"kind": kind, "text": text})
 
     def apply(self, event: Dict[str, Any]) -> bool:
         kind = event.get("type")
         if kind == "text_delta":
             self.stream += str(event.get("text") or "")
+            self._append_activity("text", str(event.get("text") or ""))
+            return True
+        if kind == "thinking_delta":
+            self._append_activity("thinking", str(event.get("text") or ""))
+            return True
+        if kind == "tool_call":
+            self._append_activity("tool_call", json.dumps({
+                "name": event.get("name") or "", "args": event.get("args") or {},
+            }, ensure_ascii=False))
+            return True
+        if kind == "tool_result":
+            self._append_activity("tool_result", json.dumps({
+                "name": event.get("name") or "", "summary": event.get("summary") or "",
+                "isError": bool(event.get("isError")),
+            }, ensure_ascii=False))
             return True
         if kind == "done":
             self.finished = True
@@ -360,11 +506,43 @@ class TurnState:
         return False
 
     def markdown(self, lang: str = "zh") -> str:
-        """整篇正文：落盘历史（已是 Markdown）+ 本轮用户消息 + 已收到的增量。"""
-        tail = transcript_markdown([], pending_user=self.pending_user, streaming=self.stream, lang=lang)
+        """整篇正文：落盘历史 + 本轮用户消息 + 活动块/流式增量。"""
+        if not self.activities:
+            tail = transcript_markdown([], pending_user=self.pending_user, streaming=self.stream, lang=lang)
+            pieces = [self.base] if self.base.strip() else []
+            if tail.strip():
+                pieces.append(tail)
+            return "\n\n".join(pieces)
         pieces = [self.base] if self.base.strip() else []
-        if tail.strip():
-            pieces.append(tail)
+        if self.pending_user and self.pending_user.strip():
+            pieces.append("%s\n\n%s" % (_role_heading("user", lang), self.pending_user.strip()))
+        body = []
+        for item in self.activities:
+            kind = item["kind"]
+            text = item["text"]
+            if kind == "text":
+                body.append(text)
+            elif kind == "thinking":
+                body.append("> **%s**\n>\n> %s" % (translate(_locale(lang), "chat.thinking"), _clip_activity(text)))
+            elif kind == "tool_call":
+                try:
+                    payload = json.loads(text)
+                except Exception:
+                    payload = {"name": text, "args": {}}
+                body.append("> **%s** · `%s`\n>\n> %s" % (
+                    _tool_label(str(payload.get("name") or ""), lang), str(payload.get("name") or ""),
+                    _clip_activity(json.dumps(payload.get("args") or {}, ensure_ascii=False, sort_keys=True))))
+            elif kind == "tool_result":
+                try:
+                    payload = json.loads(text)
+                except Exception:
+                    payload = {"name": text, "summary": "", "isError": False}
+                state = ("失败" if payload.get("isError") else "成功") if lang != "en" else ("failed" if payload.get("isError") else "ok")
+                body.append("> **%s** · `%s` · %s\n>\n> %s" % (
+                    translate(_locale(lang), "chat.tool.result"), str(payload.get("name") or ""), state,
+                    _clip_activity(payload.get("summary") or "")))
+        if body:
+            pieces.append("%s\n\n%s" % (_role_heading("assistant", lang), "\n\n".join(body)))
         return "\n\n".join(pieces)
 
 

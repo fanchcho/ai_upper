@@ -1504,7 +1504,9 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(result="QVariantList")
     def slashCommands(self) -> List[Dict[str, Any]]:
-        """输入框指令：内建优先，随后为当前角色已启用的技能。
+        """输入框 `/` 指令联想（原版 Composer.tsx:382-420 的内建指令子集）。
+
+        `/compact` 已接 `ChatHost.compact`；`/rewind` 没有后端，不在候选里假装可用。
         """
         rows = [{'name':'compact', 'desc':self.translate('cf.slash.compact'), 'kind':'command'},
                 {'name':'rewind', 'desc':self.translate('cf.slash.rewind'), 'kind':'command'}]
@@ -1733,7 +1735,7 @@ class ShellBridge(QtCore.QObject):
     # ── 渲染与属性 ────────────────────────────────────────────────────────
     def _markdown_base(self) -> str:
         session = self._store.load_session(self._active) if self._active else None
-        return transcript_markdown(session.messages, lang=self.language()) if session is not None else ""
+        return transcript_markdown(session.messages, lang=self.language(), include_activity=True) if session is not None else ""
 
     def _markdown(self) -> str:
         base = self._markdown_base()

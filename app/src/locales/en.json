@@ -2252,5 +2252,7 @@
   "display.b49edb287124": "Access denied: the path is outside the open project",
   "finish.log": "log",
   "common.cut": "Cut",
-  "common.paste": "Paste"
+  "common.paste": "Paste",
+  "chat.tool.call": "Tool call",
+  "chat.tool.result": "Tool result"
 }

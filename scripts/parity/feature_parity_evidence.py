@@ -291,12 +291,50 @@ def evidence_slash(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_activity(outdir: Path, theme: str):
+    from mvvm.models.chat_models import Message, TextPart, ToolResultPart, ToolUsePart
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-activity-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        session = store.load_session("s-1")
+        session.messages = [
+            Message(role="user", content="检查文件并让子代理审查"),
+            Message(role="assistant", content=[TextPart(text="先读取文件。"),
+                                               ToolUsePart(id="t1", name="read_file", input={"path": "/tmp/spec.md"})]),
+            Message(role="user", content=[ToolResultPart(toolUseId="t1", content="文件内容 ABC", isError=False)]),
+            Message(role="assistant", content=[ToolUsePart(id="t2", name="run_subagent", input={"task": "审查 spec"})]),
+            Message(role="user", content=[ToolResultPart(toolUseId="t2", content="子代理完成：无问题", isError=False)]),
+            Message(role="assistant", content="审查完成。"),
+        ]
+        store.save("s-1")
+        assert bridge.openSession("s-1") is True
+        _pump(QGuiApplication.instance(), lambda: False, 0.8)
+        png = outdir / f"activity-cards-{theme}.png"
+        size = shot(window, png)
+        body = find_item(window.contentItem(), "bodyView")
+        text = body.property("textDocument").textDocument().toPlainText()
+        rows = [{"feature": "activity", "theme": theme, "png": str(png), "size": size,
+                 "has_tool": "read_file" in text, "has_result": "文件内容 ABC" in text,
+                 "has_subagent": "run_subagent" in text}]
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
-    app = QGuiApplication.instance() or QGuiApplication([])
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash}
+    from PySide6.QtWidgets import QApplication
+    app = QApplication.instance() or QApplication([])
+    from PySide6.QtGui import QFontDatabase
+    font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
+    if font.exists():
+        QFontDatabase.addApplicationFont(str(font))
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

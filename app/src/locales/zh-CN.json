@@ -2252,5 +2252,7 @@
   "display.b49edb287124": "拒绝访问：路径不在已打开的项目内",
   "finish.log": "日志",
   "common.cut": "剪切",
-  "common.paste": "粘贴"
+  "common.paste": "粘贴",
+  "chat.tool.call": "工具调用",
+  "chat.tool.result": "工具结果"
 }
