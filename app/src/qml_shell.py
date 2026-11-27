@@ -1590,6 +1590,13 @@ class ShellBridge(QtCore.QObject):
         )
         return [str(path) for path in paths]
 
+    @QtCore.Slot(result=QtCore.QObject)
+    def tasksService(self):
+        if not hasattr(self, '_scheduled_tasks'):
+            from mvvm.services.scheduled_tasks import ScheduledTasks
+            self._scheduled_tasks = ScheduledTasks(self)
+        return self._scheduled_tasks
+
     # ── 事件回写（GUI 线程）───────────────────────────────────────────────
     def tick(self) -> bool:
         """GUI 线程周期调用：drain 回合线程的界面写入，再把事件落到正文上。"""
@@ -1623,6 +1630,8 @@ class ShellBridge(QtCore.QObject):
         self._notifier(title, body)
 
     def _handle(self, payload: Dict[str, Any]) -> bool:
+        if hasattr(self, "_scheduled_tasks"):
+            self._scheduled_tasks.turn_event(payload)
         session_id = str(payload.get("sessionId") or "")
         event = payload.get("event")
         if not isinstance(event, dict):
@@ -2011,6 +2020,7 @@ def run(headless: bool) -> int:
     tray.install()
     bridge.set_notifier(tray.notify)
     bridge.bind_window(window)
+    bridge.tasksService()
     bridge.initial()
     _select_page(window)
 

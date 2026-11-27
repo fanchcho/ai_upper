@@ -571,7 +571,7 @@ ApplicationWindow {
                 onHoverChanged: function (entered) { window.chatRailHover(entered) }
             }
             RailButton { objectName: "railRoster"; iconName: IconData.users; onClicked: window.page = "roster" }
-            RailButton { iconName: IconData.alarmClock }
+            RailButton { objectName: "railTasks"; iconName: IconData.alarmClock; onClicked: window.page = "tasks" }
         }
 
         Column {
@@ -2874,5 +2874,7 @@ ApplicationWindow {
     }
 
     PersonaRoster { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "roster" }
+
+    ScheduledTasks { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "tasks" }
 
 }
