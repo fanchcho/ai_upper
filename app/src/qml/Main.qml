@@ -49,6 +49,14 @@ ApplicationWindow {
     color: Theme.bg
 
     Component.onCompleted: if (shellBridge) sidebarWidth = shellBridge.sidebarWidth()
+    TurnListPopup {
+        id: turnList
+        onChosen: function(turn) {
+            if (turnList.mode === "delete") window.deleteTurn(turn)
+            else { rewindPanel.openPanel() }
+        }
+        function openFor(mode) { turnList.mode = mode; turnList.open() }
+    }
     ProfilePanel { id: profilePanel }
     InteractionPrompt { }
 
@@ -79,6 +87,8 @@ ApplicationWindow {
         editable: false
         onQuoteRequested: function(text) { window.quoteText = String(text || "").trim() }
         onDeleteTurnRequested: window.deleteLastTurn()
+        onChooseDeleteRequested: turnList.openFor("delete")
+        onChooseRewindRequested: turnList.openFor("rewind")
     }
 
     // 窗口拖放：原版 Composer.tsx:576-596 在 window 上监听 dragover/drop。
@@ -2160,6 +2170,10 @@ ApplicationWindow {
 
     function deleteLastTurn() {
         if (shellBridge) shellBridge.deleteLastTurn()
+    }
+
+    function deleteTurn(turn) {
+        if (shellBridge) shellBridge.deleteTurn(turn)
     }
 
     // `/` 指令联想：只匹配命令名，输入空格后关闭（原版 Composer.tsx:405-420 同口径）。

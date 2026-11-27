@@ -1767,6 +1767,33 @@ class ShellBridge(QtCore.QObject):
         print("QML SLASH", json.dumps({"name": name, "turnId": turn_id}, ensure_ascii=False), flush=True)
         return True
 
+    @QtCore.Slot(result="QVariantList")
+    def sessionTurns(self) -> List[Dict[str, Any]]:
+        """当前会话的用户轮次（供右键「选择删除/回滚」列表）。"""
+        session = self._session()
+        if session is None:
+            return []
+        from mvvm.services.chat_session_store import is_genuine_user_turn
+        rows = []
+        turn = 0
+        for index, message in enumerate(session.messages):
+            if is_genuine_user_turn(message):
+                text = message.text() if hasattr(message, "text") else str(message.content)
+                rows.append({"turn": turn, "index": index, "label": (text or "").strip().replace("\n", " ")[:80]})
+                turn += 1
+        return rows
+
+    @QtCore.Slot(int, result=bool)
+    def deleteTurn(self, turn: int) -> bool:
+        session = self._session()
+        if session is None or self._host.is_busy(session.id):
+            return False
+        rows = self.sessionTurns()
+        if not isinstance(turn, int) or not 0 <= turn < len(rows):
+            return False
+        self._host.delete_turns(session.id, None, [turn])
+        self._render(); self._publish(); return True
+
     @QtCore.Slot(result=bool)
     def deleteLastTurn(self) -> bool:
         """消息右键「删除最后一轮」：真实调 chat:delete-turns，写盘并重绘。"""

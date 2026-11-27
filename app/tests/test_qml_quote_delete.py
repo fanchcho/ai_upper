@@ -40,3 +40,22 @@ def test_quote_and_delete_last_turn(qapp, tmp_path, monkeypatch):
     reread = s.load_session("s-1")
     assert [m.role for m in reread.messages] == ["user", "assistant"]
     t.stop(); w.close(); e.deleteLater()
+
+
+def test_delete_arbitrary_turn(qapp, tmp_path):
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts" / "parity"))
+    from feature_parity_evidence import build
+    from test_qml_shell import text_stream
+    from mvvm.models.chat_models import Message
+    w, b, s, t, e, h = build(tmp_path, "light", text_stream("x"))
+    session = s.load_session("s-1")
+    session.messages = [Message(role="user", content="A"), Message(role="assistant", content="a"),
+                        Message(role="user", content="B"), Message(role="assistant", content="b"),
+                        Message(role="user", content="C"), Message(role="assistant", content="c")]
+    s.save("s-1"); b.openSession("s-1")
+    turns = b.sessionTurns(); assert [r["label"] for r in turns] == ["A", "B", "C"]
+    assert b.deleteTurn(1) is True
+    reread = s.load_session("s-1")
+    assert [m.content for m in reread.messages] == ["A", "a", "C", "c"]
+    t.stop(); w.close(); e.deleteLater()

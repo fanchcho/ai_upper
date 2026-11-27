@@ -11,6 +11,8 @@ Menu {
     property bool editable: false
     signal quoteRequested(string text)
     signal deleteTurnRequested()
+    signal chooseDeleteRequested()
+    signal chooseRewindRequested()
     width: 148
     padding: 6
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -86,6 +88,22 @@ Menu {
         onTriggered: if (root.target) root.quoteRequested(root.target.selectedText)
     }
     MenuSeparator { height: 9; contentItem: Rectangle { color: Theme.border; implicitHeight: 1 } }
+    MenuItem {
+        objectName: "editMenuChooseDelete"
+        text: "选择删除轮次"
+        height: 29
+        contentItem: Text { text: "选择删除轮次"; color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13; leftPadding: 9; verticalAlignment: Text.AlignVCenter }
+        background: Rectangle { radius: Theme.radius; color: parent.highlighted ? Theme.bgHover : "transparent" }
+        onTriggered: root.chooseDeleteRequested()
+    }
+    MenuItem {
+        objectName: "editMenuRewind"
+        text: "回滚本轮"
+        height: 29
+        contentItem: Text { text: "回滚本轮"; color: Theme.fg; font.family: Theme.sansFamily; font.pixelSize: 13; leftPadding: 9; verticalAlignment: Text.AlignVCenter }
+        background: Rectangle { radius: Theme.radius; color: parent.highlighted ? Theme.bgHover : "transparent" }
+        onTriggered: root.chooseRewindRequested()
+    }
     MenuItem {
         id: deleteTurnItem
         objectName: "editMenuDeleteTurn"
