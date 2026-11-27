@@ -1,0 +1,16 @@
+[
+  {
+    "theme": "dark",
+    "platform": "linux",
+    "macChrome": false,
+    "flags": 2049,
+    "home": "/tmp/ai-upper-nonmac-e5ccc6a977054b2b93a3d734c88624c8/home"
+  },
+  {
+    "theme": "light",
+    "platform": "linux",
+    "macChrome": false,
+    "flags": 2049,
+    "home": "/tmp/ai-upper-nonmac-2928d58247474eadb9065bedb8c5bb56/home"
+  }
+]
