@@ -246,6 +246,8 @@ class ShellBridge(QtCore.QObject):
     commitMessageGenerated = QtCore.Signal(str, object)
     terminalOutput = QtCore.Signal(str)
     terminalFinished = QtCore.Signal(int)
+    saveErrorChanged = QtCore.Signal()
+    _saveError = ""
     interactionsChanged = QtCore.Signal('QVariantList')
 
     # 深浅主题：QML 侧 `Theme.dark` 绑这个属性（Main.qml 里一条 Binding）。
@@ -257,6 +259,10 @@ class ShellBridge(QtCore.QObject):
     darkModeChanged = QtCore.Signal()
     themeChoiceChanged = QtCore.Signal()
     _preparedReady = QtCore.Signal()
+
+    @QtCore.Property(str, notify=saveErrorChanged)
+    def saveError(self) -> str:
+        return self._saveError
 
     @QtCore.Property(bool, notify=darkModeChanged)
     def darkMode(self) -> bool:
@@ -1969,6 +1975,24 @@ class ShellBridge(QtCore.QObject):
             return False
         self._host.delete_turns(session.id, None, [turn])
         self._render(); self._publish(); return True
+
+    @QtCore.Slot(result=bool)
+    def retrySave(self) -> bool:
+        """F87：真实重跑当前会话落盘；失败保留原始异常给界面。"""
+        if not self._active:
+            self._set_save_error("没有活动会话")
+            return False
+        try:
+            self._store.save(self._active)
+        except Exception as exc:  # noqa: BLE001 - 磁盘/权限错误要原样显示
+            self._set_save_error(f"{type(exc).__name__}: {exc}")
+            return False
+        self._set_save_error("")
+        return True
+
+    def _set_save_error(self, message: str) -> None:
+        self._saveError = str(message or "")
+        self.saveErrorChanged.emit()
 
     @QtCore.Slot(str, result=bool)
     def pinSession(self, session_id: str) -> bool:

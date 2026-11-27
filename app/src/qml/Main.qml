@@ -58,6 +58,14 @@ ApplicationWindow {
         function openFor(mode) { turnList.mode = mode; turnList.open() }
     }
     TerminalPanel { id: terminalPanel }
+    Rectangle {
+        objectName: "saveErrorBar"
+        visible: shellBridge && shellBridge.saveError.length > 0
+        x: 20; y: 50; width: parent.width - 40; height: 36
+        radius: Theme.radiusSm; color: Theme.danger; opacity: 0.95; z: 300
+        Text { x: 10; anchors.verticalCenter: parent.verticalCenter; width: parent.width - 120; text: shellBridge.saveError; color: "white"; font.pixelSize: 12; elide: Text.ElideRight }
+        SettingsButton { objectName: "saveRetry"; anchors.right: parent.right; anchors.rightMargin: 4; height: 28; text: "重试保存"; onClicked: shellBridge.retrySave() }
+    }
     ProfilePanel { id: profilePanel }
     InteractionPrompt { }
 
