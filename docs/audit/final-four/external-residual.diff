@@ -1,0 +1,763 @@
+diff --git a/docs/audit/evidence/F03-search.txt b/docs/audit/evidence/F03-search.txt
+index 4f587a8..0d01de7 100644
+--- a/docs/audit/evidence/F03-search.txt
++++ b/docs/audit/evidence/F03-search.txt
+@@ -1,5 +1,5 @@
+ $ rg -n --glob *.qml --glob *.py def install app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+ app/src/qml_shell.py:521:    def installUpdate(self, path: str = "") -> bool:
+-app/src/mvvm/services/members.py:57:    def install(self, vm, main):
++app/src/mvvm/services/members.py:68:    def install(self, vm, main):
+ app/src/mvvm/services/tray.py:21:    def install(self) -> bool:
+diff --git a/docs/audit/evidence/F04-search.txt b/docs/audit/evidence/F04-search.txt
+index c148726..3db39ed 100644
+--- a/docs/audit/evidence/F04-search.txt
++++ b/docs/audit/evidence/F04-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py windowControlMinimize app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml/Main.qml:2855:                objectName: "windowControlMinimize"
++app/src/qml/Main.qml:2857:                objectName: "windowControlMinimize"
+diff --git a/docs/audit/evidence/F05-search.txt b/docs/audit/evidence/F05-search.txt
+index 58cccbe..7111d66 100644
+--- a/docs/audit/evidence/F05-search.txt
++++ b/docs/audit/evidence/F05-search.txt
+@@ -1,6 +1,6 @@
+ $ rg -n --glob *.qml --glob *.py WindowControlButton app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+ app/src/qml/Main.qml:412:    component WindowControlButton: Rectangle {
+-app/src/qml/Main.qml:2854:            WindowControlButton {
+-app/src/qml/Main.qml:2859:            WindowControlButton {
+-app/src/qml/Main.qml:2869:            WindowControlButton {
++app/src/qml/Main.qml:2856:            WindowControlButton {
++app/src/qml/Main.qml:2861:            WindowControlButton {
++app/src/qml/Main.qml:2871:            WindowControlButton {
+diff --git a/docs/audit/evidence/F07-search.txt b/docs/audit/evidence/F07-search.txt
+index 19d4b38..4646c37 100644
+--- a/docs/audit/evidence/F07-search.txt
++++ b/docs/audit/evidence/F07-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def openExternal app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1900:    def openExternal(self, url: str) -> bool:
++app/src/qml_shell.py:1919:    def openExternal(self, url: str) -> bool:
+diff --git a/docs/audit/evidence/F09-search.txt b/docs/audit/evidence/F09-search.txt
+index 793b464..a4753c2 100644
+--- a/docs/audit/evidence/F09-search.txt
++++ b/docs/audit/evidence/F09-search.txt
+@@ -2,9 +2,21 @@ $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/m
+ exit=0
+ app/src/qml_shell.py:1059:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
+ app/src/qml_shell.py:1095:    def effortMenu(self) -> Dict[str, Any]:
+-app/src/qml_shell.py:2306:        effort = self.effortMenu()
+-app/src/qml_shell.py:2309:        window.setProperty("modelGroups", self.modelMenuGroups())
+-app/src/qml_shell.py:2310:        window.setProperty("effortMenu", effort)
++app/src/qml_shell.py:2325:        effort = self.effortMenu()
++app/src/qml_shell.py:2328:        window.setProperty("modelGroups", self.modelMenuGroups())
++app/src/qml_shell.py:2329:        window.setProperty("effortMenu", effort)
++app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
++app/src/qml/EditContextMenu.qml:7:Menu {
++app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
++app/src/qml/EditContextMenu.qml:23:    MenuItem {
++app/src/qml/EditContextMenu.qml:25:        objectName: "editMenuCut"
++app/src/qml/EditContextMenu.qml:41:    MenuItem {
++app/src/qml/EditContextMenu.qml:43:        objectName: "editMenuCopy"
++app/src/qml/EditContextMenu.qml:58:    MenuItem {
++app/src/qml/EditContextMenu.qml:60:        objectName: "editMenuPaste"
++app/src/qml/EditContextMenu.qml:76:    MenuSeparator {
++app/src/qml/EditContextMenu.qml:81:    MenuItem {
++app/src/qml/EditContextMenu.qml:83:        objectName: "editMenuSelectAll"
+ app/src/qml/Main.qml:37:             | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
+ app/src/qml/Main.qml:64:    EditContextMenu {
+ app/src/qml/Main.qml:65:        id: composerMenu
+@@ -17,34 +29,32 @@ app/src/qml/Main.qml:844:                            window.openCtxMenu(modelDat
+ app/src/qml/Main.qml:1267:                        bodyMenu.x = eventPoint.scenePosition.x
+ app/src/qml/Main.qml:1268:                        bodyMenu.y = eventPoint.scenePosition.y
+ app/src/qml/Main.qml:1269:                        bodyMenu.open()
+-app/src/qml/Main.qml:1602:        SlashMenu {
+-app/src/qml/Main.qml:1603:            id: slashMenu
+-app/src/qml/Main.qml:1604:            objectName: "slashMenuRoot"
+-app/src/qml/Main.qml:1657:                        composerMenu.x = eventPoint.scenePosition.x
+-app/src/qml/Main.qml:1658:                        composerMenu.y = eventPoint.scenePosition.y
+-app/src/qml/Main.qml:1659:                        composerMenu.open()
+-app/src/qml/Main.qml:1861:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
+-app/src/qml/Main.qml:1899:                        effortMenu: window.effortMenu
+-app/src/qml/Main.qml:2221:    function openCtxMenu(id, title) {
+-app/src/qml/Main.qml:2230:    function dismissCtxMenu() {
+-app/src/qml/Main.qml:2237:            window.dismissCtxMenu()
+-app/src/qml/Main.qml:2243:            window.dismissCtxMenu()
+-app/src/qml/Main.qml:2246:            window.dismissCtxMenu()
+-app/src/qml/Main.qml:2252:            window.dismissCtxMenu()
+-app/src/qml/Main.qml:2267:        window.dismissCtxMenu()
+-app/src/qml/Main.qml:2338:        window.dismissCtxMenu()
+-app/src/qml/Main.qml:2344:        window.dismissCtxMenu()
+-app/src/qml/Main.qml:2410:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
+-app/src/qml/Main.qml:2422:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
+-app/src/qml/Main.qml:2424:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
+-app/src/qml/Main.qml:2461:            onClicked: window.dismissCtxMenu()
+-app/src/qml/Main.qml:2466:            id: ctxMenuShadow
+-app/src/qml/Main.qml:2467:            target: ctxMenu
+-app/src/qml/Main.qml:2471:            id: ctxMenu
+-app/src/qml/Main.qml:2472:            objectName: "ctxMenu"
+-app/src/qml/Main.qml:2503:                        objectName: "ctxMenuItem" + index
+-app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
+-app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)
++app/src/qml/Main.qml:1604:        SlashMenu {
++app/src/qml/Main.qml:1605:            id: slashMenu
++app/src/qml/Main.qml:1606:            objectName: "slashMenuRoot"
++app/src/qml/Main.qml:1659:                        composerMenu.x = eventPoint.scenePosition.x
++app/src/qml/Main.qml:1660:                        composerMenu.y = eventPoint.scenePosition.y
++app/src/qml/Main.qml:1661:                        composerMenu.open()
++app/src/qml/Main.qml:1863:                    visible: ((window.effortMenu && window.effortMenu.options) || []).length > 0
++app/src/qml/Main.qml:1901:                        effortMenu: window.effortMenu
++app/src/qml/Main.qml:2223:    function openCtxMenu(id, title) {
++app/src/qml/Main.qml:2232:    function dismissCtxMenu() {
++app/src/qml/Main.qml:2239:            window.dismissCtxMenu()
++app/src/qml/Main.qml:2245:            window.dismissCtxMenu()
++app/src/qml/Main.qml:2248:            window.dismissCtxMenu()
++app/src/qml/Main.qml:2254:            window.dismissCtxMenu()
++app/src/qml/Main.qml:2269:        window.dismissCtxMenu()
++app/src/qml/Main.qml:2340:        window.dismissCtxMenu()
++app/src/qml/Main.qml:2346:        window.dismissCtxMenu()
++app/src/qml/Main.qml:2412:        var rows = shellBridge.modelMenuGroups ? shellBridge.modelMenuGroups() : []
++app/src/qml/Main.qml:2424:    // 档位名来自 Python 发布的 effortMenu.options（与原版 `chat.effort.levels.*` 同一份文案）。
++app/src/qml/Main.qml:2426:        var rows = window.effortMenu && window.effortMenu.options ? window.effortMenu.options : []
++app/src/qml/Main.qml:2463:            onClicked: window.dismissCtxMenu()
++app/src/qml/Main.qml:2468:            id: ctxMenuShadow
++app/src/qml/Main.qml:2469:            target: ctxMenu
++app/src/qml/Main.qml:2473:            id: ctxMenu
++app/src/qml/Main.qml:2474:            objectName: "ctxMenu"
++app/src/qml/Main.qml:2505:                        objectName: "ctxMenuItem" + index
+ app/src/qml/ModelPicker.qml:35:    // 模型分组：[{id, name, models:[{id, name}]}]，由 Python `modelMenuGroups()` 投影。
+ app/src/qml/ModelPicker.qml:39:    // 思考等级菜单：{title, options:[{level,name,hint}], current}，由 `effortMenu()` 投影。
+ app/src/qml/ModelPicker.qml:40:    property var effortMenu: ({})
+@@ -53,15 +63,5 @@ app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMe
+ app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
+ app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
+ app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
+-app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
+-app/src/qml/EditContextMenu.qml:7:Menu {
+-app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
+-app/src/qml/EditContextMenu.qml:23:    MenuItem {
+-app/src/qml/EditContextMenu.qml:25:        objectName: "editMenuCut"
+-app/src/qml/EditContextMenu.qml:41:    MenuItem {
+-app/src/qml/EditContextMenu.qml:43:        objectName: "editMenuCopy"
+-app/src/qml/EditContextMenu.qml:58:    MenuItem {
+-app/src/qml/EditContextMenu.qml:60:        objectName: "editMenuPaste"
+-app/src/qml/EditContextMenu.qml:76:    MenuSeparator {
+-app/src/qml/EditContextMenu.qml:81:    MenuItem {
+-app/src/qml/EditContextMenu.qml:83:        objectName: "editMenuSelectAll"
++app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
++app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)
+diff --git a/docs/audit/evidence/F10-search.txt b/docs/audit/evidence/F10-search.txt
+index 778254c..2b11d88 100644
+--- a/docs/audit/evidence/F10-search.txt
++++ b/docs/audit/evidence/F10-search.txt
+@@ -2,4 +2,4 @@ $ rg -n --glob *.qml --glob *.py toggleSidebar app/src/qml app/src/qml_shell.py
+ exit=0
+ app/src/qml/Main.qml:99:        onActivated: window.toggleSidebar()
+ app/src/qml/Main.qml:105:        onActivated: window.toggleSidebar()
+-app/src/qml/Main.qml:2027:    function toggleSidebar() {
++app/src/qml/Main.qml:2029:    function toggleSidebar() {
+diff --git a/docs/audit/evidence/F12-search.txt b/docs/audit/evidence/F12-search.txt
+index 23da499..81e0ec1 100644
+--- a/docs/audit/evidence/F12-search.txt
++++ b/docs/audit/evidence/F12-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py inputMethodComposing app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml/Main.qml:1663:                    if (inputField.inputMethodComposing) { event.accepted = false; return }
++app/src/qml/Main.qml:1665:                    if (inputField.inputMethodComposing) { event.accepted = false; return }
+diff --git a/docs/audit/evidence/F13-search.txt b/docs/audit/evidence/F13-search.txt
+index 30e351c..a8cafca 100644
+--- a/docs/audit/evidence/F13-search.txt
++++ b/docs/audit/evidence/F13-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def slashCommands app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1640:    def slashCommands(self) -> List[Dict[str, Any]]:
++app/src/qml_shell.py:1642:    def slashCommands(self) -> List[Dict[str, Any]]:
+diff --git a/docs/audit/evidence/F15-search.txt b/docs/audit/evidence/F15-search.txt
+index ff15529..8855c40 100644
+--- a/docs/audit/evidence/F15-search.txt
++++ b/docs/audit/evidence/F15-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def _notify_turn app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:2021:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
++app/src/qml_shell.py:2040:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
+diff --git a/docs/audit/evidence/F21-search.txt b/docs/audit/evidence/F21-search.txt
+index 803374a..fac3dd1 100644
+--- a/docs/audit/evidence/F21-search.txt
++++ b/docs/audit/evidence/F21-search.txt
+@@ -8,7 +8,7 @@ app/src/qml/Main.qml:801:            y: window.archiveView ? 92 : 56
+ app/src/qml/Main.qml:862:            y: window.archiveView ? 104 : 68
+ app/src/qml/Main.qml:866:                                          : (window.archiveView
+ app/src/qml/Main.qml:879:            visible: window.archivedSessions.length > 0 && !window.archiveView && !window.selectMode
+-app/src/qml/Main.qml:2324:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
+-app/src/qml/Main.qml:2336:        window.archiveView = true
+-app/src/qml/Main.qml:2342:        window.archiveView = false
+-app/src/qml/Main.qml:2372:        window.archiveView = false
++app/src/qml/Main.qml:2326:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
++app/src/qml/Main.qml:2338:        window.archiveView = true
++app/src/qml/Main.qml:2344:        window.archiveView = false
++app/src/qml/Main.qml:2374:        window.archiveView = false
+diff --git a/docs/audit/evidence/F23-search.txt b/docs/audit/evidence/F23-search.txt
+index 779bf18..6eeb47e 100644
+--- a/docs/audit/evidence/F23-search.txt
++++ b/docs/audit/evidence/F23-search.txt
+@@ -2,8 +2,6 @@ $ rg -n --glob *.qml --glob *.py Popup app/src/qml app/src/qml_shell.py app/src/
+ exit=0
+ app/src/qml/SessionFilter.qml:5:Popup {
+ app/src/qml/SessionFilter.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+-app/src/qml/GitPanel.qml:6:Popup {
+-app/src/qml/GitPanel.qml:19:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+ app/src/qml/ExtensionDetail.qml:121:                    Rectangle { visible: rolesPopup.opened; anchors.fill: parent; anchors.margins: -3; radius: 9; color: Theme.dark ? Qt.rgba(124/255,124/255,240/255,0.16) : Qt.rgba(91/255,91/255,214/255,0.1) }
+ app/src/qml/ExtensionDetail.qml:122:                    Rectangle { anchors.fill: parent; radius: 6; color: Theme.bgElevated; border.color: rolesPopup.opened ? Theme.accent : Theme.borderStrong }
+ app/src/qml/ExtensionDetail.qml:135:                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 15; color: Theme.fgSubtle }
+@@ -22,7 +20,10 @@ app/src/qml/ExtensionDetail.qml:213:                            Rectangle { anch
+ app/src/qml/ExtensionDetail.qml:220:                            MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = 0; onClicked: { root.save("roles", null); rolesPopup.close() } }
+ app/src/qml/ExtensionDetail.qml:232:                                Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === index + 1 ? Theme.bgHover : "transparent" }
+ app/src/qml/ExtensionDetail.qml:238:                                MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = index + 1; onClicked: {
++app/src/qml/DecisionProviders.qml:4:Popup {
+ app/src/qml/EditContextMenu.qml:14:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
++app/src/qml/GitPanel.qml:6:Popup {
++app/src/qml/GitPanel.qml:23:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+ app/src/qml/PluginSettingsPane.qml:57:            popup: Popup {
+ app/src/qml/SettingsModal.qml:366:                modelsPopup.open()
+ app/src/qml/SettingsModal.qml:846:                Popup {
+diff --git a/docs/audit/evidence/F24-search.txt b/docs/audit/evidence/F24-search.txt
+index 04c4bf5..a74ca04 100644
+--- a/docs/audit/evidence/F24-search.txt
++++ b/docs/audit/evidence/F24-search.txt
+@@ -5,12 +5,12 @@ app/src/qml/Main.qml:207:    property var selectedSessions: []
+ app/src/qml/Main.qml:836:                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
+ app/src/qml/Main.qml:920:                text: window.selectedSessions.length + I18n.t("native.message0")
+ app/src/qml/Main.qml:935:                    text: window.selectedSessions.length === window.listedSessions.length
+-app/src/qml/Main.qml:2291:        window.selectedSessions = id ? [String(id)] : []
+-app/src/qml/Main.qml:2299:        var next = window.selectedSessions
+-app/src/qml/Main.qml:2305:        window.selectedSessionsChanged()
+-app/src/qml/Main.qml:2310:        if (window.selectedSessions.length === all.length && all.length > 0) {
+-app/src/qml/Main.qml:2311:            window.selectedSessions = []
+-app/src/qml/Main.qml:2314:        window.selectedSessions = window.listedSessionIds.slice()
+-app/src/qml/Main.qml:2319:        var ids = window.selectedSessions.slice()
+-app/src/qml/Main.qml:2332:        window.selectedSessions = []
+-app/src/qml/Main.qml:2371:        window.selectedSessions = []
++app/src/qml/Main.qml:2293:        window.selectedSessions = id ? [String(id)] : []
++app/src/qml/Main.qml:2301:        var next = window.selectedSessions
++app/src/qml/Main.qml:2307:        window.selectedSessionsChanged()
++app/src/qml/Main.qml:2312:        if (window.selectedSessions.length === all.length && all.length > 0) {
++app/src/qml/Main.qml:2313:            window.selectedSessions = []
++app/src/qml/Main.qml:2316:        window.selectedSessions = window.listedSessionIds.slice()
++app/src/qml/Main.qml:2321:        var ids = window.selectedSessions.slice()
++app/src/qml/Main.qml:2334:        window.selectedSessions = []
++app/src/qml/Main.qml:2373:        window.selectedSessions = []
+diff --git a/docs/audit/evidence/F27b-search.txt b/docs/audit/evidence/F27b-search.txt
+index 407a2d3..b89a44f 100644
+--- a/docs/audit/evidence/F27b-search.txt
++++ b/docs/audit/evidence/F27b-search.txt
+@@ -1,14 +1,14 @@
+ $ rg -n --glob *.qml --glob *.py sideCollapsed app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:2296:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
++app/src/qml_shell.py:2315:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
+ app/src/qml/Main.qml:141:    property bool sideCollapsed: false
+ app/src/qml/Main.qml:602:        width: window.sideCollapsed ? (window.sidePeek ? Theme.sideWidth : 0) : Theme.sideWidth
+ app/src/qml/Main.qml:603:        visible: !window.sideCollapsed || window.sidePeek
+ app/src/qml/Main.qml:604:        z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
+ app/src/qml/Main.qml:992:        x: window.railWidth + (window.sideCollapsed ? 0 : Theme.sideWidth)
+-app/src/qml/Main.qml:2028:        window.sideCollapsed = !window.sideCollapsed
+-app/src/qml/Main.qml:2031:            shellBridge.setSidebarCollapsed(window.sideCollapsed)
+-app/src/qml/Main.qml:2037:        if (!window.sideCollapsed || window.settingsOpen)
+-app/src/qml/Main.qml:2050:        if (!window.sideCollapsed || window.settingsOpen) {
+-app/src/qml/Main.qml:2057:        } else if (!window.sideCollapsed) {
+-app/src/qml/Main.qml:2066:        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }
++app/src/qml/Main.qml:2030:        window.sideCollapsed = !window.sideCollapsed
++app/src/qml/Main.qml:2033:            shellBridge.setSidebarCollapsed(window.sideCollapsed)
++app/src/qml/Main.qml:2039:        if (!window.sideCollapsed || window.settingsOpen)
++app/src/qml/Main.qml:2052:        if (!window.sideCollapsed || window.settingsOpen) {
++app/src/qml/Main.qml:2059:        } else if (!window.sideCollapsed) {
++app/src/qml/Main.qml:2068:        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }
+diff --git a/docs/audit/evidence/F28-search.txt b/docs/audit/evidence/F28-search.txt
+index 2a6cfa3..d6e9bba 100644
+--- a/docs/audit/evidence/F28-search.txt
++++ b/docs/audit/evidence/F28-search.txt
+@@ -1,4 +1,4 @@
+ $ rg -n --glob *.qml --glob *.py id: ctxMenu app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml/Main.qml:2466:            id: ctxMenuShadow
+-app/src/qml/Main.qml:2471:            id: ctxMenu
++app/src/qml/Main.qml:2468:            id: ctxMenuShadow
++app/src/qml/Main.qml:2473:            id: ctxMenu
+diff --git a/docs/audit/evidence/F31-search.txt b/docs/audit/evidence/F31-search.txt
+index 14efbc5..19b5427 100644
+--- a/docs/audit/evidence/F31-search.txt
++++ b/docs/audit/evidence/F31-search.txt
+@@ -1,4 +1,4 @@
+ $ rg -n --glob *.qml --glob *.py answerInteraction app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+ app/src/qml_shell.py:378:    def answerInteraction(self, request_id, outcome, answer):
+-app/src/qml/InteractionPrompt.qml:19:        if (request && shellBridge.answerInteraction(request.id, outcome, text)) {
++app/src/qml/InteractionPrompt.qml:28:        if (request && shellBridge.answerInteraction(request.id, outcome, text)) {
+diff --git a/docs/audit/evidence/F36-search.txt b/docs/audit/evidence/F36-search.txt
+index 8c2535d..969b826 100644
+--- a/docs/audit/evidence/F36-search.txt
++++ b/docs/audit/evidence/F36-search.txt
+@@ -1,6 +1,6 @@
+ $ rg -n --glob *.qml --glob *.py deleteTurns|delete_turns app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/mvvm/webui/host.py:441:    def delete_turns(self, session_id: Any, workspace_root: Any = None, turns: Any = None) -> list[dict[str, Any]]:
+-app/src/mvvm/webui/host.py:446:        messages = self.store.delete_turns(key, indices) if key else None
+-app/src/mvvm/webui/host.py:491:                self.store.delete_turns(session_id, list(range(turn,len(starts))))
++app/src/mvvm/webui/host.py:448:    def delete_turns(self, session_id: Any, workspace_root: Any = None, turns: Any = None) -> list[dict[str, Any]]:
++app/src/mvvm/webui/host.py:453:        messages = self.store.delete_turns(key, indices) if key else None
++app/src/mvvm/webui/host.py:498:                self.store.delete_turns(session_id, list(range(turn,len(starts))))
+ app/src/mvvm/services/chat_session_store.py:523:    def delete_turns(self, session_id: str, turns: list[int]) -> Optional[list[Message]]:
+diff --git a/docs/audit/evidence/F38-search.txt b/docs/audit/evidence/F38-search.txt
+index ed56a96..ee54e6e 100644
+--- a/docs/audit/evidence/F38-search.txt
++++ b/docs/audit/evidence/F38-search.txt
+@@ -1,5 +1,5 @@
+ $ rg -n --glob *.qml --glob *.py chat:insert|insertMessage app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+ app/src/qml_shell.py:304:        # 回合中输入的插话：原版 chat:insert；后端没有步内注入，如实排到本轮结束后的下一轮。
+-app/src/qml_shell.py:1682:    def insertMessage(self, text: str) -> bool:
+-app/src/qml/Main.qml:1834:                                    if (shellBridge.insertMessage(inputField.text))
++app/src/qml_shell.py:1684:    def insertMessage(self, text: str) -> bool:
++app/src/qml/Main.qml:1836:                                    if (shellBridge.insertMessage(inputField.text))
+diff --git a/docs/audit/evidence/F39-search.txt b/docs/audit/evidence/F39-search.txt
+index 5ac4f70..416611c 100644
+--- a/docs/audit/evidence/F39-search.txt
++++ b/docs/audit/evidence/F39-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def runSlashCommand app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1669:    def runSlashCommand(self, name: str) -> bool:
++app/src/qml_shell.py:1671:    def runSlashCommand(self, name: str) -> bool:
+diff --git a/docs/audit/evidence/F40-search.txt b/docs/audit/evidence/F40-search.txt
+index 18a66e8..db3fd74 100644
+--- a/docs/audit/evidence/F40-search.txt
++++ b/docs/audit/evidence/F40-search.txt
+@@ -1,18 +1,11 @@
+ $ rg -n --glob *.qml --glob *.py TodoCapsule|todo_write app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1884:        """当前会话的 Todo 清单（原版 Composer.tsx:864 TodoCapsule）。"""
++app/src/qml_shell.py:1903:        """当前会话的 Todo 清单（原版 Composer.tsx:864 TodoCapsule）。"""
+ app/src/mvvm/view_models/chat_vm.py:51:    apply_todo_write_to,
+-app/src/mvvm/view_models/chat_vm.py:157:        # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
+-app/src/mvvm/view_models/chat_vm.py:186:        # 当前进行中的待办清单（`todo_write` 写会话边车后同步到这里，界面画胶囊条）。
+-app/src/mvvm/view_models/chat_vm.py:238:        """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
+-app/src/mvvm/view_models/chat_vm.py:242:        applied = apply_todo_write_to(
+-app/src/mvvm/services/tool_runtime.py:5:`write_file`、`edit_file`、`run_command`、`present_files`、`todo_write`。其余 9 个
+-app/src/mvvm/services/tool_runtime.py:261:    name="todo_write",
+-app/src/mvvm/services/tool_runtime.py:406:        # todo_write 的落点由会话层注入（写会话边车、推送进度），运行时本身不碰磁盘边车。
+-app/src/mvvm/services/tool_runtime.py:433:            (TODO_WRITE_SPEC, self._todo_write),
+-app/src/mvvm/services/tool_runtime.py:492:            invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
+-app/src/mvvm/services/tool_runtime.py:897:    # ── todo_write ────────────────────────────────────────────────────────
+-app/src/mvvm/services/tool_runtime.py:898:    def _todo_write(self, arguments: dict[str, Any], tool_use_id: str) -> ToolResult:
++app/src/mvvm/view_models/chat_vm.py:158:        # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
++app/src/mvvm/view_models/chat_vm.py:187:        # 当前进行中的待办清单（`todo_write` 写会话边车后同步到这里，界面画胶囊条）。
++app/src/mvvm/view_models/chat_vm.py:239:        """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
++app/src/mvvm/view_models/chat_vm.py:243:        applied = apply_todo_write_to(
+ app/src/mvvm/services/todos.py:1:"""待办清单：`todo_write` 工具的快照日志与折叠视图。
+ app/src/mvvm/services/todos.py:5:- 每次 `todo_write` 追加一条快照（`StoredSession.todos` 的元素），清单按 `listId` 折叠，
+ app/src/mvvm/services/todos.py:82:    """解析 todo_write 入参；不合法返回 `{"error": ...}`。"""
+@@ -25,6 +18,13 @@ app/src/mvvm/services/todos.py:212:        "请调用 todo_write 并传 cancel:
+ app/src/mvvm/services/todos.py:221:        "之后若要开始新的多步骤任务，请用 todo_write 传 new_list: true 另建清单。"
+ app/src/mvvm/services/todos.py:231:    "apply_todo_write",
+ app/src/mvvm/services/tool_policy.py:35:        "todo_write",
++app/src/mvvm/services/tool_runtime.py:5:`write_file`、`edit_file`、`run_command`、`present_files`、`todo_write`。其余 9 个
++app/src/mvvm/services/tool_runtime.py:261:    name="todo_write",
++app/src/mvvm/services/tool_runtime.py:406:        # todo_write 的落点由会话层注入（写会话边车、推送进度），运行时本身不碰磁盘边车。
++app/src/mvvm/services/tool_runtime.py:433:            (TODO_WRITE_SPEC, self._todo_write),
++app/src/mvvm/services/tool_runtime.py:492:            invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
++app/src/mvvm/services/tool_runtime.py:897:    # ── todo_write ────────────────────────────────────────────────────────
++app/src/mvvm/services/tool_runtime.py:898:    def _todo_write(self, arguments: dict[str, Any], tool_use_id: str) -> ToolResult:
+ app/src/mvvm/services/tool_results.py:1:"""工具结果的两处落盘形态：`tool_result` 消息，与 `todo_write` 的会话边车应用。
+ app/src/mvvm/services/tool_results.py:10:`apply_todo_write_to` 对应 Deva `chat.ts` 里 `todo_write` 的执行分支（约 5729 行）：
+ app/src/mvvm/services/tool_results.py:22:    apply_todo_write,
+diff --git a/docs/audit/evidence/F58-search.txt b/docs/audit/evidence/F58-search.txt
+index d7ff477..8da0793 100644
+--- a/docs/audit/evidence/F58-search.txt
++++ b/docs/audit/evidence/F58-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py taskCreate app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml/ScheduledTasks.qml:42:            objectName: "taskCreate"; text: root.editing ? "保存修改" : "创建任务"
++app/src/qml/ScheduledTasks.qml:51:            objectName: "taskCreate"; text: root.editing ? "保存修改" : "创建任务"
+diff --git a/docs/audit/evidence/F59-search.txt b/docs/audit/evidence/F59-search.txt
+index 3e340a5..eea555b 100644
+--- a/docs/audit/evidence/F59-search.txt
++++ b/docs/audit/evidence/F59-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def next_run app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/mvvm/services/scheduled_tasks.py:10:def next_run(schedule, now=None):
++app/src/mvvm/services/scheduled_tasks.py:12:def next_run(schedule, now=None):
+diff --git a/docs/audit/evidence/F60-search.txt b/docs/audit/evidence/F60-search.txt
+index ff15529..8855c40 100644
+--- a/docs/audit/evidence/F60-search.txt
++++ b/docs/audit/evidence/F60-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def _notify_turn app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:2021:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
++app/src/qml_shell.py:2040:    def _notify_turn(self, session_id: str, message: str, *, error: bool) -> None:
+diff --git a/docs/audit/evidence/F61-search.txt b/docs/audit/evidence/F61-search.txt
+index 04e32b8..c86106d 100644
+--- a/docs/audit/evidence/F61-search.txt
++++ b/docs/audit/evidence/F61-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py originSessionId app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/mvvm/services/scheduled_tasks.py:103:                        'sessionId':identity,'originSessionId':self.shell._active,'createdAt':now,
++app/src/mvvm/services/scheduled_tasks.py:129:                        'sessionId':identity,'originSessionId':self.shell._active,'createdAt':now,
+diff --git a/docs/audit/evidence/F77-search.txt b/docs/audit/evidence/F77-search.txt
+index 20b77cb..14148f8 100644
+--- a/docs/audit/evidence/F77-search.txt
++++ b/docs/audit/evidence/F77-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py def copyDeliverablePath app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1916:    def copyDeliverablePath(self, path: str) -> bool:
++app/src/qml_shell.py:1935:    def copyDeliverablePath(self, path: str) -> bool:
+diff --git a/docs/audit/evidence/F84-search.txt b/docs/audit/evidence/F84-search.txt
+index 23da499..81e0ec1 100644
+--- a/docs/audit/evidence/F84-search.txt
++++ b/docs/audit/evidence/F84-search.txt
+@@ -1,3 +1,3 @@
+ $ rg -n --glob *.qml --glob *.py inputMethodComposing app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml/Main.qml:1663:                    if (inputField.inputMethodComposing) { event.accepted = false; return }
++app/src/qml/Main.qml:1665:                    if (inputField.inputMethodComposing) { event.accepted = false; return }
+diff --git a/docs/audit/evidence/F85-search.txt b/docs/audit/evidence/F85-search.txt
+index 65e5663..5ddd123 100644
+--- a/docs/audit/evidence/F85-search.txt
++++ b/docs/audit/evidence/F85-search.txt
+@@ -1,5 +1,5 @@
+ $ rg -n --glob *.qml --glob *.py GitWidget|gitStatus app/src/qml app/src/qml_shell.py app/src/mvvm
+ exit=0
+-app/src/qml_shell.py:1699:    def gitStatus(self, root: str) -> Dict[str, Any]:
++app/src/qml_shell.py:1701:    def gitStatus(self, root: str) -> Dict[str, Any]:
+ app/src/qml/GitPanel.qml:1:// Git 面板最小子集：状态/暂存/提交/分支/日志（原版 GitWidget.tsx 的常用操作）。
+-app/src/qml/GitPanel.qml:25:        status = shellBridge.gitStatus(repoRoot)
++app/src/qml/GitPanel.qml:29:        status = shellBridge.gitStatus(repoRoot)
+diff --git a/docs/audit/feature-parity-gap.json b/docs/audit/feature-parity-gap.json
+index bcd874f..b42a877 100644
+--- a/docs/audit/feature-parity-gap.json
++++ b/docs/audit/feature-parity-gap.json
+@@ -1,10 +1,10 @@
+ {
+-  "generated_at": "2026-11-27T17:51:51.244800+00:00",
++  "generated_at": "2026-11-27T18:27:10.549630+00:00",
+   "scope": "QML acceptance; partial feature bundles conservatively not_ported; source has read-only external edits",
+   "source": {
+     "deva": "/home/agent/shared_workspace/deva",
+     "ai_upper": "/home/agent/shared_workspace/ai_upper",
+-    "head": "0d057b9ee09dfce508885219aee4b3ed5c80816d"
++    "head": "634db76359e636d812c6bfe0f7197f70500e088b"
+   },
+   "features": [
+     {
+@@ -87,7 +87,7 @@
+       "deva": "apps/desktop/src/main/index.ts:307-322；preload/index.ts:625-639",
+       "status": "implemented",
+       "evidence": "Main.qml (legacy line reference; current anchor at left) 三个 WindowControlButton 接 showMinimized/showNormal|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态",
+-      "port_anchor": "app/src/qml/Main.qml:2855",
++      "port_anchor": "app/src/qml/Main.qml:2857",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -163,7 +163,7 @@
+       "deva": "apps/desktop/src/main/index.ts:175-181",
+       "status": "implemented",
+       "evidence": "QML bodyView.onLinkActivated 接 openExternal；test_qml_links.py 真实点击确认 URL 接线，但系统浏览器启动由测试拦截，外部浏览器效果未验证。此行判定仅限外链分派功能。",
+-      "port_anchor": "app/src/qml_shell.py:1900",
++      "port_anchor": "app/src/qml_shell.py:1919",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -284,7 +284,7 @@
+       "deva": "redesign/Composer.tsx:669-700",
+       "status": "implemented",
+       "evidence": "Main.qml (legacy line reference; current anchor at left) inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit()",
+-      "port_anchor": "app/src/qml/Main.qml:1663",
++      "port_anchor": "app/src/qml/Main.qml:1665",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -309,7 +309,7 @@
+       "deva": "redesign/Composer.tsx:382-420",
+       "status": "implemented",
+       "evidence": "SlashMenu 支持 compact/rewind/技能；runSlashCommand/rewind 与真实键盘选择、回滚执行均已验证（out/remaining-impl/rewind.json）。",
+-      "port_anchor": "app/src/qml_shell.py:1640",
++      "port_anchor": "app/src/qml_shell.py:1642",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -356,7 +356,7 @@
+       "deva": "services/reply-notify.ts:15-80；chat-turns.ts:801",
+       "status": "not_ported",
+       "evidence": "回复/后台完成/待处理通知代码已接，通知点击回到会话；真实宿主报 NOTIFY UNAVAILABLE tray_available=False supportsMessages=True，系统成功态未验证。",
+-      "port_anchor": "app/src/qml_shell.py:2021",
++      "port_anchor": "app/src/qml_shell.py:2040",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -705,7 +705,7 @@
+       "deva": "redesign/Rail.tsx:175-182；ContextMenu.tsx",
+       "status": "implemented",
+       "evidence": "Main.qml (legacy line reference; current anchor at left) 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发",
+-      "port_anchor": "app/src/qml/Main.qml:2466",
++      "port_anchor": "app/src/qml/Main.qml:2468",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -781,7 +781,7 @@
+       "deva": "features/chat/blocks.tsx AskCard；chat:ask-response",
+       "status": "implemented",
+       "evidence": "InteractionPrompt.qml + qml_shell.py (legacy line reference; current anchor at left) pendingInteractions/answerInteraction（kind=question/approval）",
+-      "port_anchor": "app/src/qml/InteractionPrompt.qml:19",
++      "port_anchor": "app/src/qml/InteractionPrompt.qml:28",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -829,7 +829,7 @@
+       "deva": "redesign/RewindModal.tsx:31；Conversation.tsx:998-1003；chat:rewind-*",
+       "status": "implemented",
+       "evidence": "1b2c81b RewindPanel/Rewind 真实文件快照；rewind_interaction.py 真实 QTest /rewind、应用/撤销/冲突拒绝/技能执行后重新读盘；a7ee565 100 轮保留。",
+-      "port_anchor": "app/src/mvvm/webui/host.py:441",
++      "port_anchor": "app/src/mvvm/webui/host.py:448",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -900,7 +900,7 @@
+       "deva": "chat:delete-turns；redesign/Conversation.tsx:955-1000",
+       "status": "not_ported",
+       "evidence": "host.py:415-425 delete_turns 有后端，但 QML 无入口（`grep -rn \"deleteTurns\" app/src/qml*` 无结果）",
+-      "port_anchor": "app/src/mvvm/webui/host.py:441",
++      "port_anchor": "app/src/mvvm/webui/host.py:448",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -948,7 +948,7 @@
+       "deva": "chat:insert / chat:withdraw-inserts；Composer.tsx:463-467",
+       "status": "not_ported",
+       "evidence": "`grep -rn \"insert\" app/src/mvvm/webui/host.py app/src/qml_shell.py` 无 chat:insert 路径",
+-      "port_anchor": "app/src/qml/Main.qml:1651",
++      "port_anchor": "app/src/qml/Main.qml:1653",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -971,7 +971,7 @@
+       "deva": "redesign/Composer.tsx:382-386；chat:compact",
+       "status": "implemented",
+       "evidence": "SlashMenu -> 未替换的 ChatHost.compact -> 真实压缩服务与磁盘读回，见 out/final-port/compact-ui.json；暗亮 compact 截图。原测试替身不足，已补真实点击验证。",
+-      "port_anchor": "app/src/qml_shell.py:1669",
++      "port_anchor": "app/src/qml_shell.py:1671",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -996,7 +996,7 @@
+       "deva": "redesign/Composer.tsx:864 TodoCapsule",
+       "status": "implemented",
+       "evidence": "ComposerCapsules.qml todo pill + todoCapsule；test_qml_capsules.py 真实会话 todos 读回并展开清单，暗亮 capsules-*.png。",
+-      "port_anchor": "app/src/mvvm/webui/host.py:498",
++      "port_anchor": "app/src/mvvm/webui/host.py:505",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1428,7 +1428,7 @@
+       "deva": "redesign/TasksPane.tsx:1-70；tasks:list/get",
+       "status": "implemented",
+       "evidence": "ScheduledTasks 真实创建/暂停/恢复/自动触发/历史/编辑；tasks_ui.py + task_handoff_ui.py 真实点击和写盘。",
+-      "port_anchor": "app/src/qml/ScheduledTasks.qml:42",
++      "port_anchor": "app/src/qml/ScheduledTasks.qml:51",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1451,7 +1451,7 @@
+       "deva": "services/schedule.ts, scheduler.ts；tasks:*",
+       "status": "implemented",
+       "evidence": "真实一次任务等待 12 秒自动触发、ChatHost 回合与 history 读盘已通过，cron 解析使用五段规则/IANA 时区；out/final-port/tasks-ui.json。Python 3.8 只支持 UTC，其他时区明确报错。",
+-      "port_anchor": "app/src/mvvm/services/scheduled_tasks.py:10",
++      "port_anchor": "app/src/mvvm/services/scheduled_tasks.py:12",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1478,7 +1478,7 @@
+       "deva": "services/scheduler.ts:103 new Notification",
+       "status": "not_ported",
+       "evidence": "后台任务接通现有通知，但当前宿主无托盘，任务系统通知成功态未验证。",
+-      "port_anchor": "app/src/qml_shell.py:2021",
++      "port_anchor": "app/src/qml_shell.py:2040",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1501,7 +1501,7 @@
+       "deva": "services/chat-task-handoff.ts；TasksPane 绑定徽标",
+       "status": "implemented",
+       "evidence": "9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。",
+-      "port_anchor": "app/src/mvvm/services/scheduled_tasks.py:103",
++      "port_anchor": "app/src/mvvm/services/scheduled_tasks.py:129",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1890,7 +1890,7 @@
+       "deva": "services/clipboard.ts:15-25",
+       "status": "implemented",
+       "evidence": "qml_shell.py (legacy line reference; current anchor at left) copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验",
+-      "port_anchor": "app/src/qml_shell.py:1916",
++      "port_anchor": "app/src/qml_shell.py:1935",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -1938,7 +1938,7 @@
+       "deva": "services/terminal.ts:87-108",
+       "status": "not_ported",
+       "evidence": "原版 pty-host.ts 有 terminal:* 注册能力；renderer 没有消费者只表明用户入口不可达，不能把真实原版能力判为不存在。QML/Host 未移植 PTY。",
+-      "port_anchor": "app/src/mvvm/webui/host.py:76",
++      "port_anchor": "app/src/mvvm/webui/host.py:78",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+@@ -2080,7 +2080,7 @@
+       "deva": "原版无语音/听写代码（grep speech/voice 无结果）",
+       "status": "not_ported",
+       "evidence": "原版没有语音/听写功能；输入法依赖系统但 Composer.tsx 有 isComposing 防误发送。QML 已补 inputMethodComposing 守卫，真实 OS 输入法合成未验证；不将输入法当作不存在。",
+-      "port_anchor": "app/src/qml/Main.qml:1663",
++      "port_anchor": "app/src/qml/Main.qml:1665",
+       "entry": "QML",
+       "web_entry": {
+         "status": "not_ported",
+diff --git a/docs/audit/feature-parity-gap.md b/docs/audit/feature-parity-gap.md
+index c8651da..b07c449 100644
+--- a/docs/audit/feature-parity-gap.md
++++ b/docs/audit/feature-parity-gap.md
+@@ -17,18 +17,18 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
+ |F01 / 应用生命周期与窗口|单实例锁与二次启动唤起|`apps/desktop/src/main/index.ts:276`|已实现且可用|`app/src/mvvm/services/single_instance.py:5`；app/src/mvvm/services/single_instance.py（QLockFile + QLocalServer/QLocalSocket）；qml_shell.run 先 acquire 后建窗、instance.attach(window) 唤起；app/tests/test_single_instance.py 起两个真实进程，第二个 rc=0 且第一个打印激活日志；搜索命令及原始结果：`docs/audit/evidence/F01-search.txt`|
+ |F02 / 应用生命周期与窗口|关窗驻留托盘（closeToTray）|`apps/desktop/src/main/index.ts:164`, `apps/desktop/src/renderer/src/redesign/SettingsPane.tsx:101`|未移植|`app/src/qml/Main.qml:52`；代码已有 closeToTray，真实托盘不可用；未验证系统驻留成功态。out/final-port/tray-probe.log。；搜索命令及原始结果：`docs/audit/evidence/F02-search.txt`|
+ |F03 / 应用生命周期与窗口|系统托盘图标与菜单（显示/定时任务/退出）|`apps/desktop/src/main/index.ts:235`, `apps/desktop/src/main/services/tray-icon.ts:1`|未移植|`app/src/mvvm/services/tray.py:21`；真实 QSystemTrayIcon + 显示/任务/退出菜单已接；宿主报 TRAY UNAVAILABLE platform=offscreen isSystemTrayAvailable=False，未验证。；搜索命令及原始结果：`docs/audit/evidence/F03-search.txt`|
+-|F04 / 应用生命周期与窗口|窗口最小化/最大化/关闭|`apps/desktop/src/main/index.ts:307`, `apps/desktop/src/preload/index.ts:625`|已实现且可用|`app/src/qml/Main.qml:2855`；Main.qml (legacy line reference; current anchor at left) 三个 WindowControlButton 接 showMinimized/showNormal\|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态；搜索命令及原始结果：`docs/audit/evidence/F04-search.txt`|
++|F04 / 应用生命周期与窗口|窗口最小化/最大化/关闭|`apps/desktop/src/main/index.ts:307`, `apps/desktop/src/preload/index.ts:625`|已实现且可用|`app/src/qml/Main.qml:2857`；Main.qml (legacy line reference; current anchor at left) 三个 WindowControlButton 接 showMinimized/showNormal\|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态；搜索命令及原始结果：`docs/audit/evidence/F04-search.txt`|
+ |F05 / 应用生命周期与窗口|窗口控件叠加配色随主题|`apps/desktop/src/main/index.ts:79`|已实现且可用|`app/src/qml/Main.qml:412`；Main.qml (legacy line reference; current anchor at left) WindowControlButton.glyphColor 按 Theme.dark 取 #E8EAED/#5F6368，底色调 Theme.bgInset；注释逐值对齐 index.ts:79-97；搜索命令及原始结果：`docs/audit/evidence/F05-search.txt`|
+ |F06 / 应用生命周期与窗口|全屏状态通知（macOS 红绿灯让位）|`apps/desktop/src/main/index.ts:158`, `apps/desktop/src/preload/index.ts:631`, `apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:52`|未移植|`app/src/qml/Main.qml:32`；Main.qml (legacy line reference; current anchor at left),62 仅按 Qt.platform.os === 'osx' 静态加宽，无 window:fullscreen 等价信号，无 onFullScreen；搜索命令及原始结果：`docs/audit/evidence/F06-search.txt`|
+-|F07 / 应用生命周期与窗口|外链一律系统浏览器打开|`apps/desktop/src/main/index.ts:175`|已实现且可用|`app/src/qml_shell.py:1900`；QML bodyView.onLinkActivated 接 openExternal；test_qml_links.py 真实点击确认 URL 接线，但系统浏览器启动由测试拦截，外部浏览器效果未验证。此行判定仅限外链分派功能。；搜索命令及原始结果：`docs/audit/evidence/F07-search.txt`|
++|F07 / 应用生命周期与窗口|外链一律系统浏览器打开|`apps/desktop/src/main/index.ts:175`|已实现且可用|`app/src/qml_shell.py:1919`；QML bodyView.onLinkActivated 接 openExternal；test_qml_links.py 真实点击确认 URL 接线，但系统浏览器启动由测试拦截，外部浏览器效果未验证。此行判定仅限外链分派功能。；搜索命令及原始结果：`docs/audit/evidence/F07-search.txt`|
+ |F08 / 菜单与快捷键|应用菜单栏|`apps/desktop/src/main/index.ts:108`|不适用|`app/src/qml/Main.qml:18`；原版没有自定义菜单栏，不凭空造；搜索命令及原始结果：`docs/audit/evidence/F08-search.txt`|
+ |F09 / 菜单与快捷键|编辑区右键菜单（剪切/复制/粘贴/全选）|`apps/desktop/src/main/index.ts:183`|已实现且可用|`app/src/qml/EditContextMenu.qml:7`；app/src/qml/EditContextMenu.qml + Main.qml composerMenu/bodyMenu；app/tests/test_qml_edit_menu.py 真实右键打开并点「全选」断言 selectedText；暗亮截图 out/feature-parity/edit-menu-*.png；搜索命令及原始结果：`docs/audit/evidence/F09-search.txt`|
+ |F10 / 菜单与快捷键|Ctrl/Cmd+B 收起/展开会话列表|`apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:191`|已实现且可用|`app/src/qml/Main.qml:99`；Main.qml Shortcut Ctrl+B/Meta+B → toggleSidebar；qml_shell.py sidebarCollapsed/setSidebarCollapsed 写 config.json；app/tests/test_qml_sidebar_collapse.py 真实按键 + hover peek；搜索命令及原始结果：`docs/audit/evidence/F10-search.txt`|
+ |F11 / 菜单与快捷键|Esc 收回浮出列表|`apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:192`|未移植|`app/src/qml/Main.qml:142`；sidePeek 与浮出计时器已存在；缺的是 Esc 收回浮出列表，不能继续说无浮出列表。；搜索命令及原始结果：`docs/audit/evidence/F11-search.txt`|
+-|F12 / 菜单与快捷键|Enter 发送 / Shift+Enter 换行|`apps/desktop/src/renderer/src/redesign/Composer.tsx:669`|已实现且可用|`app/src/qml/Main.qml:1663`；Main.qml (legacy line reference; current anchor at left) inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit()；搜索命令及原始结果：`docs/audit/evidence/F12-search.txt`|
+-|F13 / 菜单与快捷键|输入框 / 指令联想（/compact /rewind /技能）|`apps/desktop/src/renderer/src/redesign/Composer.tsx:382`|已实现且可用|`app/src/qml_shell.py:1640`；SlashMenu 支持 compact/rewind/技能；runSlashCommand/rewind 与真实键盘选择、回滚执行均已验证（out/remaining-impl/rewind.json）。；搜索命令及原始结果：`docs/audit/evidence/F13-search.txt`|
++|F12 / 菜单与快捷键|Enter 发送 / Shift+Enter 换行|`apps/desktop/src/renderer/src/redesign/Composer.tsx:669`|已实现且可用|`app/src/qml/Main.qml:1665`；Main.qml (legacy line reference; current anchor at left) inputField.Keys.onPressed：Return/Enter 且带 Shift 时放行，否则 window.submit()；搜索命令及原始结果：`docs/audit/evidence/F12-search.txt`|
++|F13 / 菜单与快捷键|输入框 / 指令联想（/compact /rewind /技能）|`apps/desktop/src/renderer/src/redesign/Composer.tsx:382`|已实现且可用|`app/src/qml_shell.py:1642`；SlashMenu 支持 compact/rewind/技能；runSlashCommand/rewind 与真实键盘选择、回滚执行均已验证（out/remaining-impl/rewind.json）。；搜索命令及原始结果：`docs/audit/evidence/F13-search.txt`|
+ |F14 / 菜单与快捷键|@ 提及成员/角色|`apps/desktop/src/renderer/src/redesign/Composer.tsx:399`, `apps/desktop/src/shared/mention.ts:1`|已实现且可用|`app/src/qml_shell.py:1622`；09de966 实现 handleMentions、create_member、member_send 与后台成员回合；member_dispatch_ui.py 真实键盘 @ 选择并读回主/子会话存储。；搜索命令及原始结果：`docs/audit/evidence/F14-search.txt`|
+-|F15 / 菜单与快捷键|回复完成/待处理系统通知|`apps/desktop/src/main/services/reply-notify.ts:15`, `apps/desktop/src/main/services/chat-turns.ts:801`|未移植|`app/src/qml_shell.py:2021`；回复/后台完成/待处理通知代码已接，通知点击回到会话；真实宿主报 NOTIFY UNAVAILABLE tray_available=False supportsMessages=True，系统成功态未验证。；搜索命令及原始结果：`docs/audit/evidence/F15-search.txt`|
++|F15 / 菜单与快捷键|回复完成/待处理系统通知|`apps/desktop/src/main/services/reply-notify.ts:15`, `apps/desktop/src/main/services/chat-turns.ts:801`|未移植|`app/src/qml_shell.py:2040`；回复/后台完成/待处理通知代码已接，通知点击回到会话；真实宿主报 NOTIFY UNAVAILABLE tray_available=False supportsMessages=True，系统成功态未验证。；搜索命令及原始结果：`docs/audit/evidence/F15-search.txt`|
+ |F16 / 会话列表|新建会话|`apps/desktop/src/renderer/src/redesign/Rail.tsx:600`, `apps/desktop/src/preload/index.ts:805`|已实现且可用|`app/src/qml_shell.py:669`；Main.qml (legacy line reference; current anchor at left) 加号 onClicked shellBridge.newSession；qml_shell.py (legacy line reference; current anchor at left) 建真实会话并落盘；搜索命令及原始结果：`docs/audit/evidence/F16-search.txt`|
+ |F17 / 会话列表|切换会话|`apps/desktop/src/renderer/src/redesign/Rail.tsx:700`|已实现且可用|`app/src/qml_shell.py:658`；Main.qml (legacy line reference; current anchor at left) 行 onClicked openSession；qml_shell.py (legacy line reference; current anchor at left) 读真实会话；搜索命令及原始结果：`docs/audit/evidence/F17-search.txt`|
+ |F18 / 会话列表|重命名会话|`apps/desktop/src/renderer/src/redesign/Rail.tsx:175`|已实现且可用|`app/src/qml_shell.py:701`；Main.qml (legacy line reference; current anchor at left) 右键菜单 rename + 重命名弹层；qml_shell.py (legacy line reference; current anchor at left) 写盘；搜索命令及原始结果：`docs/audit/evidence/F18-search.txt`|
+@@ -42,19 +42,19 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
+ |F26 / 会话列表|草稿按会话保留|`apps/desktop/src/renderer/src/redesign/Composer.tsx:109`|已实现且可用|`app/src/qml/Main.qml:112`；Main.qml (legacy line reference; current anchor at left) composerDrafts 按 sessionId 保存 text+pendingFiles；scripts/parity/draft_evidence.py 真实键盘输入、真实拖放附件、切会话后读回；drafts.json 暗亮各一组；搜索命令及原始结果：`docs/audit/evidence/F26-search.txt`|
+ |F27 / 会话列表|会话列表宽度拖动|`apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:143`|未移植|`app/src/qml/Main.qml:602`；Main.qml 侧栏宽固定 Theme.sideWidth（Main.qml (legacy line reference; current anchor at left),462-470），无拖动手柄；搜索命令及原始结果：`docs/audit/evidence/F27-search.txt`|
+ |F27b / 会话列表|会话列表收起/展开并记忆|`apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:143`|已实现且可用|`app/src/qml/Main.qml:141`；Main.qml sideCollapsed/sidePeek + 200/150ms 浮出定时器；qml_shell.py (legacy line reference; current anchor at left) 落盘 config.json；真实截图 out/feature-parity/sidebar-{collapsed,peek}-{dark,light}.png；搜索命令及原始结果：`docs/audit/evidence/F27b-search.txt`|
+-|F28 / 会话列表|会话行右键菜单（新建/重命名/多选/归档/删除）|`apps/desktop/src/renderer/src/redesign/Rail.tsx:175`, `apps/desktop/src/renderer/src/redesign/ContextMenu.tsx:1`|已实现且可用|`app/src/qml/Main.qml:2466`；Main.qml (legacy line reference; current anchor at left) 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发；搜索命令及原始结果：`docs/audit/evidence/F28-search.txt`|
++|F28 / 会话列表|会话行右键菜单（新建/重命名/多选/归档/删除）|`apps/desktop/src/renderer/src/redesign/Rail.tsx:175`, `apps/desktop/src/renderer/src/redesign/ContextMenu.tsx:1`|已实现且可用|`app/src/qml/Main.qml:2468`；Main.qml (legacy line reference; current anchor at left) 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发；搜索命令及原始结果：`docs/audit/evidence/F28-search.txt`|
+ |F29 / 对话正文|用户/助手 Markdown 正文|`apps/desktop/src/renderer/src/redesign/ConvMessage.tsx:1`, `apps/desktop/src/renderer/src/features/chat/blocks.tsx:1`|已实现且可用|`app/src/qml_shell_sessions.py:330`；qml_shell.py (legacy line reference; current anchor at left) transcript_markdown → app/src/markdown/body.py 渲染进 QTextDocument；Main.qml (legacy line reference; current anchor at left)；搜索命令及原始结果：`docs/audit/evidence/F29-search.txt`|
+ |F30 / 对话正文|工具调用/工具结果/思考/子代理活动卡|`apps/desktop/src/renderer/src/features/chat/blocks.tsx:1`, `apps/desktop/src/renderer/src/redesign/ChatFirstShell.tsx:39`|已实现且可用|`app/src/qml_shell_sessions.py:330`；qml_shell_sessions.transcript_markdown(include_activity=True) 渲染 tool_use/tool_result/thinking/subagent blockquote 卡；test_qml_activity_cards.py 真实会话正文断言，暗亮 activity-cards-*.png。；搜索命令及原始结果：`docs/audit/evidence/F30-search.txt`|
+-|F31 / 对话正文|待处理交互卡（ask/审批）|`apps/desktop/src/renderer/src/features/chat/blocks.tsx:1`|已实现且可用|`app/src/qml/InteractionPrompt.qml:19`；InteractionPrompt.qml + qml_shell.py (legacy line reference; current anchor at left) pendingInteractions/answerInteraction（kind=question/approval）；搜索命令及原始结果：`docs/audit/evidence/F31-search.txt`|
++|F31 / 对话正文|待处理交互卡（ask/审批）|`apps/desktop/src/renderer/src/features/chat/blocks.tsx:1`|已实现且可用|`app/src/qml/InteractionPrompt.qml:28`；InteractionPrompt.qml + qml_shell.py (legacy line reference; current anchor at left) pendingInteractions/answerInteraction（kind=question/approval）；搜索命令及原始结果：`docs/audit/evidence/F31-search.txt`|
+ |F32 / 对话正文|计划卡与 plan-response|`apps/desktop/src/renderer/src/features/chat/blocks.tsx:1`|未移植|`app/src/qml_shell.py:378`；只有 question/approval 的真实交互；未实现 plan-response 展示与回复。；搜索命令及原始结果：`docs/audit/evidence/F32-search.txt`|
+-|F33 / 对话正文|回滚 rewind（列点/预览/应用/撤销）|`apps/desktop/src/renderer/src/redesign/RewindModal.tsx:31`, `apps/desktop/src/renderer/src/redesign/Conversation.tsx:998`|已实现且可用|`app/src/mvvm/webui/host.py:441`；1b2c81b RewindPanel/Rewind 真实文件快照；rewind_interaction.py 真实 QTest /rewind、应用/撤销/冲突拒绝/技能执行后重新读盘；a7ee565 100 轮保留。；搜索命令及原始结果：`docs/audit/evidence/F33-search.txt`|
++|F33 / 对话正文|回滚 rewind（列点/预览/应用/撤销）|`apps/desktop/src/renderer/src/redesign/RewindModal.tsx:31`, `apps/desktop/src/renderer/src/redesign/Conversation.tsx:998`|已实现且可用|`app/src/mvvm/webui/host.py:448`；1b2c81b RewindPanel/Rewind 真实文件快照；rewind_interaction.py 真实 QTest /rewind、应用/撤销/冲突拒绝/技能执行后重新读盘；a7ee565 100 轮保留。；搜索命令及原始结果：`docs/audit/evidence/F33-search.txt`|
+ |F34 / 对话正文|消息右键菜单（复制/引用/回滚/选择删除）|`apps/desktop/src/renderer/src/redesign/Conversation.tsx:905`|未移植|`app/src/qml/Main.qml:71`；正文已有 EditContextMenu 的复制/全选；缺少消息级引用/回滚/选择删除，旧“正文无右键”描述错误。；搜索命令及原始结果：`docs/audit/evidence/F34-search.txt`|
+ |F35 / 对话正文|引用条 quote|`apps/desktop/src/renderer/src/redesign/ConvMessage.tsx:1`, `apps/desktop/src/renderer/src/redesign/Composer.tsx:1`|未移植|`app/src/qml/Main.qml:67`；`grep -rn "quote" app/src/qml app/src/qml_shell.py` 只命中 CSS/无关词；无引用状态；搜索命令及原始结果：`docs/audit/evidence/F35-search.txt`|
+-|F36 / 对话正文|选择消息删除（delete-turns）|`apps/desktop/src/renderer/src/redesign/Conversation.tsx:955`|未移植|`app/src/mvvm/webui/host.py:441`；host.py:415-425 delete_turns 有后端，但 QML 无入口（`grep -rn "deleteTurns" app/src/qml*` 无结果）；搜索命令及原始结果：`docs/audit/evidence/F36-search.txt`|
++|F36 / 对话正文|选择消息删除（delete-turns）|`apps/desktop/src/renderer/src/redesign/Conversation.tsx:955`|未移植|`app/src/mvvm/webui/host.py:448`；host.py:415-425 delete_turns 有后端，但 QML 无入口（`grep -rn "deleteTurns" app/src/qml*` 无结果）；搜索命令及原始结果：`docs/audit/evidence/F36-search.txt`|
+ |F37 / 对话正文|停止生成|`apps/desktop/src/renderer/src/redesign/Composer.tsx:973`|已实现且可用|`app/src/qml_shell.py:1459`；qml_shell.py stopGeneration → host.abort；Main.qml sendBtn busy 时切 Square 中性态；app/tests/test_qml_stop_generation.py 真实鼠标点停止并断言 stopReason=aborted；暗亮截图 out/feature-parity/stop-busy-*.png；搜索命令及原始结果：`docs/audit/evidence/F37-search.txt`|
+-|F38 / 对话正文|回合中插入消息（插话）|`apps/desktop/src/renderer/src/redesign/Composer.tsx:463`|未移植|`app/src/qml/Main.qml:1651`；`grep -rn "insert" app/src/mvvm/webui/host.py app/src/qml_shell.py` 无 chat:insert 路径；搜索命令及原始结果：`docs/audit/evidence/F38-search.txt`|
+-|F39 / 对话正文|手动压缩 /compact|`apps/desktop/src/renderer/src/redesign/Composer.tsx:382`|已实现且可用|`app/src/qml_shell.py:1669`；SlashMenu -> 未替换的 ChatHost.compact -> 真实压缩服务与磁盘读回，见 out/final-port/compact-ui.json；暗亮 compact 截图。原测试替身不足，已补真实点击验证。；搜索命令及原始结果：`docs/audit/evidence/F39-search.txt`|
+-|F40 / 对话正文|Todo 胶囊|`apps/desktop/src/renderer/src/redesign/Composer.tsx:864`|已实现且可用|`app/src/mvvm/webui/host.py:498`；ComposerCapsules.qml todo pill + todoCapsule；test_qml_capsules.py 真实会话 todos 读回并展开清单，暗亮 capsules-*.png。；搜索命令及原始结果：`docs/audit/evidence/F40-search.txt`|
++|F38 / 对话正文|回合中插入消息（插话）|`apps/desktop/src/renderer/src/redesign/Composer.tsx:463`|未移植|`app/src/qml/Main.qml:1653`；`grep -rn "insert" app/src/mvvm/webui/host.py app/src/qml_shell.py` 无 chat:insert 路径；搜索命令及原始结果：`docs/audit/evidence/F38-search.txt`|
++|F39 / 对话正文|手动压缩 /compact|`apps/desktop/src/renderer/src/redesign/Composer.tsx:382`|已实现且可用|`app/src/qml_shell.py:1671`；SlashMenu -> 未替换的 ChatHost.compact -> 真实压缩服务与磁盘读回，见 out/final-port/compact-ui.json；暗亮 compact 截图。原测试替身不足，已补真实点击验证。；搜索命令及原始结果：`docs/audit/evidence/F39-search.txt`|
++|F40 / 对话正文|Todo 胶囊|`apps/desktop/src/renderer/src/redesign/Composer.tsx:864`|已实现且可用|`app/src/mvvm/webui/host.py:505`；ComposerCapsules.qml todo pill + todoCapsule；test_qml_capsules.py 真实会话 todos 读回并展开清单，暗亮 capsules-*.png。；搜索命令及原始结果：`docs/audit/evidence/F40-search.txt`|
+ |F41 / 对话正文|后台任务胶囊|`apps/desktop/src/renderer/src/redesign/Composer.tsx:865`|已实现且可用|`app/src/qml/Main.qml:63`；ComposerCapsules background list + backgroundTasks/openBackground/cancelBackground；test_background_tasks.py 真实成员会话列表/打开；取消依赖真实 busy turn。；搜索命令及原始结果：`docs/audit/evidence/F41-search.txt`|
+ |F42 / 对话正文|浏览器操作胶囊|`apps/desktop/src/renderer/src/redesign/Composer.tsx:866`|不适用|`app/src/qml/Main.qml:63`；浏览器操作胶囊依赖原版内置浏览器（BrowserView），F78 路线 B 无 QtWebEngine，故不适用；原版依据 features/browser/BrowserCapsule.tsx、services/browser/host.ts。；搜索命令及原始结果：`docs/audit/evidence/F42-search.txt`|
+ |F43 / 对话正文|上下文用量圆环|`apps/desktop/src/renderer/src/redesign/ContextRing.tsx:1`|已实现且可用|`app/src/qml_shell.py:1128`；qml_shell.py (legacy line reference; current anchor at left) contextUsage 真实计算；Main.qml ContextRing；搜索命令及原始结果：`docs/audit/evidence/F43-search.txt`|
+@@ -72,10 +72,10 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
+ |F55 / 角色|角色排序（拖拽/置顶）|`apps/desktop/src/renderer/src/redesign/Rail.tsx:1`|已实现且可用|`app/src/mvvm/services/persona_store.py:260`；PersonaRoster ↑/↓ 调 personaReorder；test_qml_persona_management.py 真实点击排序并读回顺序。；搜索命令及原始结果：`docs/audit/evidence/F55-search.txt`|
+ |F56 / 角色|角色记忆查看/编辑|`apps/desktop/src/renderer/src/redesign/RoleMemoryTab.tsx:1`, `apps/desktop/src/renderer/src/redesign/MemoryDetail.tsx:1`|已实现且可用|`app/src/mvvm/services/persona_store.py:79`；memory_store.py 实现角色记忆 v2 JSON（personas/memory/<id>.json）；PersonaRoster 资料页新增列表/添加/删除；test_role_memory.py 真实写盘读回。；搜索命令及原始结果：`docs/audit/evidence/F56-search.txt`|
+ |F57 / 角色|快速开始角色卡|`apps/desktop/src/renderer/src/redesign/Rail.tsx:1`|已实现且可用|`app/src/qml_shell.py:885`；qml_shell.py (legacy line reference; current anchor at left) quickStartPersonas/startQuickStart；Main.qml 空态卡片；搜索命令及原始结果：`docs/audit/evidence/F57-search.txt`|
+-|F58 / 定时任务|定时任务页（列表/详情/运行历史）|`apps/desktop/src/renderer/src/redesign/TasksPane.tsx:1`|已实现且可用|`app/src/qml/ScheduledTasks.qml:42`；ScheduledTasks 真实创建/暂停/恢复/自动触发/历史/编辑；tasks_ui.py + task_handoff_ui.py 真实点击和写盘。；搜索命令及原始结果：`docs/audit/evidence/F58-search.txt`|
+-|F59 / 定时任务|任务调度引擎（once/cron、自动触发）|`apps/desktop/src/main/services/schedule.ts:1`, `apps/desktop/src/main/services/scheduler.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:10`；真实一次任务等待 12 秒自动触发、ChatHost 回合与 history 读盘已通过，cron 解析使用五段规则/IANA 时区；out/final-port/tasks-ui.json。Python 3.8 只支持 UTC，其他时区明确报错。；搜索命令及原始结果：`docs/audit/evidence/F59-search.txt`|
+-|F60 / 定时任务|任务系统通知|`apps/desktop/src/main/services/scheduler.ts:103`|未移植|`app/src/qml_shell.py:2021`；后台任务接通现有通知，但当前宿主无托盘，任务系统通知成功态未验证。；搜索命令及原始结果：`docs/audit/evidence/F60-search.txt`|
+-|F61 / 定时任务|任务绑定主对话与结果交接|`apps/desktop/src/main/services/chat-task-handoff.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:103`；9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。；搜索命令及原始结果：`docs/audit/evidence/F61-search.txt`|
++|F58 / 定时任务|定时任务页（列表/详情/运行历史）|`apps/desktop/src/renderer/src/redesign/TasksPane.tsx:1`|已实现且可用|`app/src/qml/ScheduledTasks.qml:51`；ScheduledTasks 真实创建/暂停/恢复/自动触发/历史/编辑；tasks_ui.py + task_handoff_ui.py 真实点击和写盘。；搜索命令及原始结果：`docs/audit/evidence/F58-search.txt`|
++|F59 / 定时任务|任务调度引擎（once/cron、自动触发）|`apps/desktop/src/main/services/schedule.ts:1`, `apps/desktop/src/main/services/scheduler.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:12`；真实一次任务等待 12 秒自动触发、ChatHost 回合与 history 读盘已通过，cron 解析使用五段规则/IANA 时区；out/final-port/tasks-ui.json。Python 3.8 只支持 UTC，其他时区明确报错。；搜索命令及原始结果：`docs/audit/evidence/F59-search.txt`|
++|F60 / 定时任务|任务系统通知|`apps/desktop/src/main/services/scheduler.ts:103`|未移植|`app/src/qml_shell.py:2040`；后台任务接通现有通知，但当前宿主无托盘，任务系统通知成功态未验证。；搜索命令及原始结果：`docs/audit/evidence/F60-search.txt`|
++|F61 / 定时任务|任务绑定主对话与结果交接|`apps/desktop/src/main/services/chat-task-handoff.ts:1`|已实现且可用|`app/src/mvvm/services/scheduled_tasks.py:129`；9e5c29d ownerSessionId、deliver_result 主对话交接；task_handoff_ui.py 告知 0 次/唤醒 1 次并读回主会话。；搜索命令及原始结果：`docs/audit/evidence/F61-search.txt`|
+ |F62 / 机器人/手机|机器人页（Bots tab 列表/添加/详情）|`apps/desktop/src/renderer/src/redesign/BotsPane.tsx:1`|未移植|`app/src/qml/RemoteBots.qml:26`；真实配置列表/回复模式/范围/删除点击与写盘通过 out/final-port/bots-ui.json；Telegram 添加路径已实现但无真实凭据未验证，飞书/Web 创建和完整详情尚缺。；搜索命令及原始结果：`docs/audit/evidence/F62-search.txt`|
+ |F63 / 机器人/手机|远程渠道（Web/飞书/Telegram 扫码配对、回复模式/范围）|`apps/desktop/src/main/index.ts:1`|未移植|`app/src/mvvm/services/remote_bots.py:79`；已有 Telegram 真实 API 连接/配对代码与配置管理；外部成功态未验证，飞书/Web 适配器未移植，不再声称无任何 remote 服务。；搜索命令及原始结果：`docs/audit/evidence/F63-search.txt`|
+ |F64 / 机器人/手机|手机联动（QR/设备/中转）|`apps/desktop/src/renderer/src/redesign/PhonePane.tsx:1`, `apps/desktop/src/main/services/remote/web/phone.ts:1`|未移植|`app/src/qml/Main.qml:588`；移植版无 phone 服务/UI；搜索命令及原始结果：`docs/audit/evidence/F64-search.txt`|
+@@ -91,15 +91,15 @@ web 入口单独判定：app/src/main.py:1-13 已移除 QtWebEngine/web UI；mvv
+ |F74 / 设置与扩展|检查更新|`apps/desktop/src/main/services/updater.ts:270`, `apps/desktop/src/renderer/src/redesign/UpdateSection.tsx:1`|已实现且可用|`app/src/qml_shell.py:438`；qml_shell.py (legacy line reference; current anchor at left) checkForUpdates/_check_updates_worker（GitHub Releases API）；搜索命令及原始结果：`docs/audit/evidence/F74-search.txt`|
+ |F75 / 设置与扩展|下载/安装更新|`apps/desktop/src/main/services/updater.ts:270`, `apps/desktop/src/renderer/src/redesign/UpdateSection.tsx:47`|未移植|`app/src/qml_shell.py:438`；已实现 downloadUpdate/installUpdate 和 About 按钮；真实本地下载字节校验通过，installUpdate 在 offscreen 报 QPlatformServices::openDocument 不支持，成功打开未验证，按未移植计。；搜索命令及原始结果：`docs/audit/evidence/F75-search.txt`|
+ |F76 / 设置与扩展|个人资料（头像/昵称）|`apps/desktop/src/main/services/profile.ts:49`, `apps/desktop/src/renderer/src/redesign/ProfilePanel.tsx:1`|只有界面|`app/src/qml/Main.qml:558`；Main.qml (legacy line reference; current anchor at left) 头像按钮只画 Avatar(persona:"user")，无 MouseArea；无 profile 服务；搜索命令及原始结果：`docs/audit/evidence/F76-search.txt`|
+-|F77 / 其他原生能力|剪贴板读写|`apps/desktop/src/main/services/clipboard.ts:15`|已实现且可用|`app/src/qml_shell.py:1916`；qml_shell.py (legacy line reference; current anchor at left) copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验；搜索命令及原始结果：`docs/audit/evidence/F77-search.txt`|
++|F77 / 其他原生能力|剪贴板读写|`apps/desktop/src/main/services/clipboard.ts:15`|已实现且可用|`app/src/qml_shell.py:1935`；qml_shell.py (legacy line reference; current anchor at left) copyDeliverablePath 用 QGuiApplication.clipboard() 写并回读校验；搜索命令及原始结果：`docs/audit/evidence/F77-search.txt`|
+ |F78 / 其他原生能力|内置浏览器（多窗口/标签/缩略图/导航）|`apps/desktop/src/main/services/browser/host.ts:554`|不适用|`app/src/main.py:8`；路线 B 明确移除 QtWebEngine，原版 browser/host.ts 的 BrowserView、capturePage、live frame 与 16 条 browser:* 无可真实交互的 QML 等效；不引入新依赖，不造空壳。；搜索命令及原始结果：`docs/audit/evidence/F78-search.txt`|
+-|F79 / 其他原生能力|终端（PTY 会话）|`apps/desktop/src/main/services/terminal.ts:87`|未移植|`app/src/mvvm/webui/host.py:76`；原版 pty-host.ts 有 terminal:* 注册能力；renderer 没有消费者只表明用户入口不可达，不能把真实原版能力判为不存在。QML/Host 未移植 PTY。；搜索命令及原始结果：`docs/audit/evidence/F79-search.txt`|
++|F79 / 其他原生能力|终端（PTY 会话）|`apps/desktop/src/main/services/terminal.ts:87`|未移植|`app/src/mvvm/webui/host.py:78`；原版 pty-host.ts 有 terminal:* 注册能力；renderer 没有消费者只表明用户入口不可达，不能把真实原版能力判为不存在。QML/Host 未移植 PTY。；搜索命令及原始结果：`docs/audit/evidence/F79-search.txt`|
+ |F85 / 其他原生能力|Git 面板（状态/暂存/提交/分支/同步）|`apps/desktop/src/renderer/src/redesign/GitWidget.tsx:169`|未移植|`app/src/qml/Main.qml:18`；GitPanel 已接 status/stage/commit/branches/log/diff/discard/merge/remote/分支/分页常用操作并真实临时仓库测试；generate-commit-message、set-config、cancel 等剩余方法与完整原版页面未接，按未移植计。；搜索命令及原始结果：`docs/audit/evidence/F85-search.txt`|
+ |F80 / 其他原生能力|子智能体/成员对话|`apps/desktop/src/main/services/subagents.ts:1`, `apps/desktop/src/main/services/chat-members.ts:1`, `apps/desktop/src/renderer/src/redesign/MemberBar.tsx:1`|未移植|`app/src/mvvm/services/tool_runtime.py:77`；移植版 tool_runtime 只有 10 个工具（tool_runtime.py:4-6），无 subagent/member 能力；搜索命令及原始结果：`docs/audit/evidence/F80-search.txt`|
+ |F81 / 其他原生能力|自动任务卡/提案卡响应|`apps/desktop/src/main/index.ts:1`|未移植|`app/src/mvvm/models/chat_models.py:150`；移植版无 proposals/autotasks 边车与卡片（chat_models.py 只有字段名）；搜索命令及原始结果：`docs/audit/evidence/F81-search.txt`|
+ |F82 / 其他原生能力|代理环境变量与系统路由|`apps/desktop/src/main/http.ts:41`|已实现且可用|`app/src/mvvm/services/system_proxy.py:21`；e90dcb1：http_client.py 支持 CIDR/端口/通配符/空白分隔/IPv6；system_proxy.py 走真实 libproxy（PAC/WPAD）或 Qt 平台；transport.py 仅 ConnectError/ConnectTimeout/ProxyError 换路由并按 origin 记忆；scripts/parity/final_port/proxy_routes.py 真实 socket + 真实 PAC 复跑 PASS（7 个 NO_PROXY 边界）；搜索命令及原始结果：`docs/audit/evidence/F82-search.txt`|
+ |F83 / 其他原生能力|日志与诊断面板|`apps/desktop/src/main/index.ts:1`|不适用|`app/src/main.py:65`；原版有 console 日志和错误诊断输出，但未提供独立日志诊断面板。此候选限定“面板”；原版日志行为已在非 IPC 清单记录。；搜索命令及原始结果：`docs/audit/evidence/F83-search.txt`|
+-|F84 / 其他原生能力|语音输入/输入法专属功能|`apps/desktop/src/renderer/src/redesign/Composer.tsx:669`|未移植|`app/src/qml/Main.qml:1663`；原版没有语音/听写功能；输入法依赖系统但 Composer.tsx 有 isComposing 防误发送。QML 已补 inputMethodComposing 守卫，真实 OS 输入法合成未验证；不将输入法当作不存在。；搜索命令及原始结果：`docs/audit/evidence/F84-search.txt`|
++|F84 / 其他原生能力|语音输入/输入法专属功能|`apps/desktop/src/renderer/src/redesign/Composer.tsx:669`|未移植|`app/src/qml/Main.qml:1665`；原版没有语音/听写功能；输入法依赖系统但 Composer.tsx 有 isComposing 防误发送。QML 已补 inputMethodComposing 守卫，真实 OS 输入法合成未验证；不将输入法当作不存在。；搜索命令及原始结果：`docs/audit/evidence/F84-search.txt`|
+ |F86 / 磁盘新增原版能力|历史消息分页加载|`apps/desktop/src/main/services/chat.ts:656`|未移植|`app/src/qml_shell.py:241`；当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。；搜索命令及原始结果：`docs/audit/evidence/F86-search.txt`|
+ |F87 / 磁盘新增原版能力|会话保存失败后重试|`apps/desktop/src/main/services/chat.ts:655`|未移植|`app/src/qml_shell.py:241`；当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。；搜索命令及原始结果：`docs/audit/evidence/F87-search.txt`|
+ |F88 / 磁盘新增原版能力|保护当前会话的缓存 pin|`apps/desktop/src/main/services/chat.ts:472`|未移植|`app/src/qml_shell.py:241`；当前原版工作树真实注册并由 renderer/store/chat.tsx 调用；QML 对应协议未移植。；搜索命令及原始结果：`docs/audit/evidence/F88-search.txt`|
+diff --git a/scripts/parity/feature_parity_evidence.py b/scripts/parity/feature_parity_evidence.py
+index f3f8c91..0392d02 100644
+--- a/scripts/parity/feature_parity_evidence.py
++++ b/scripts/parity/feature_parity_evidence.py
+@@ -424,6 +424,28 @@ def evidence_git(outdir: Path, theme: str):
+         shutil.rmtree(tmp, ignore_errors=True)
+ 
+ 
++def evidence_background(outdir: Path, theme: str):
++    from test_qml_shell import text_stream
++
++    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-background-{theme}-"))
++    try:
++        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
++        child_id = "member-bg"
++        bridge._host.create_session({"sessionId": child_id, "personaId": "general"})
++        session = store.load_session("s-1")
++        session.members = [{"id": child_id, "sessionId": child_id, "name": "Reviewer", "personaId": "general"}]
++        store.save("s-1")
++        bridge.openSession("s-1"); bridge._publish(); _pump(QGuiApplication.instance(), lambda: False, 0.5)
++        png = outdir / f"background-tasks-{theme}.png"
++        size = shot(window, png)
++        rows = [{"feature": "background", "theme": theme, "png": str(png), "size": size,
++                 "tasks": bridge.backgroundTasks()}]
++        ticker.stop(); window.close(); engine.deleteLater()
++        return rows
++    finally:
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
+ def main():
+     feature = sys.argv[1]
+     outdir = Path(sys.argv[2])
+@@ -434,7 +456,7 @@ def main():
+     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
+     if font.exists():
+         QFontDatabase.addApplicationFont(str(font))
+-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git}
++    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background}
+     runner = runners[feature]
+     rows = []
+     for theme in ("dark", "light"):

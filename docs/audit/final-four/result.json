@@ -1,0 +1,78 @@
+{
+  "baseline": "7c20b324f3a22c59b26a3427bca5c316100c94db",
+  "tested_sha": "bd9b46312ec65903d28f5c5dd02c9f2ce6b118c4",
+  "own_commits": [
+    "5e98ccf",
+    "e71e03c",
+    "012dfb1",
+    "5f17215",
+    "52db4ec",
+    "634db76",
+    "c105390",
+    "bd9b463"
+  ],
+  "external_commits": [
+    "41cbfeb",
+    "00fa741"
+  ],
+  "items": [
+    {
+      "id": "members",
+      "status": "部分完成",
+      "verified": [
+        "七工具正常成员执行",
+        "新建候选",
+        "目录选择",
+        "移除",
+        "parentId和分派回写读盘"
+      ],
+      "unfinished": [
+        "member_send/member_stop对定时任务回退"
+      ],
+      "unverified": [
+        "外部模型自主建人"
+      ]
+    },
+    {
+      "id": "startup_gc",
+      "status": "已验证",
+      "metadata": 106,
+      "released": 7
+    },
+    {
+      "id": "decision",
+      "status": "已验证本地执行路径",
+      "states": [
+        "allowed",
+        "denied",
+        "timeout"
+      ],
+      "unverified": [
+        "外部Jev账号服务"
+      ]
+    },
+    {
+      "id": "channels",
+      "status": "部分完成",
+      "verified": [
+        "出站代码路径无凭据明确报错",
+        "Web负载加密解密与密钥持久化"
+      ],
+      "unfinished": [
+        "飞书入站与配对",
+        "Web安全配对/订阅入口和前台状态抑制"
+      ],
+      "unverified": [
+        "外部真实送达"
+      ]
+    }
+  ],
+  "regression": {
+    "status": "passed",
+    "passed": 1457,
+    "skipped": 9,
+    "failed": 0,
+    "seconds": 451.26,
+    "tested_sha": "bd9b46312ec65903d28f5c5dd02c9f2ce6b118c4"
+  }
+}

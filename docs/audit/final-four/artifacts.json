@@ -1,0 +1,137 @@
+[
+  {
+    "path": "out/final-four/decision-dark-allowed.png",
+    "sha256": "59ddd9508868d09b6592dc79518e5ae77d6780ceb3b99563141efe2b71a1ad17",
+    "bytes": 52202
+  },
+  {
+    "path": "out/final-four/decision-dark-denied.png",
+    "sha256": "d87605e761cb98b4b7157e892241508b719402ade2afdc8a2cec5d457ee06eb6",
+    "bytes": 65567
+  },
+  {
+    "path": "out/final-four/decision-dark-timeout.png",
+    "sha256": "1d58470c9f5e5bbe4bce57fe1663cb6d08085d4591b70021f04f91c224a3281a",
+    "bytes": 78644
+  },
+  {
+    "path": "out/final-four/decision-light-allowed.png",
+    "sha256": "0a9f3512cf66e31d4d89f9a31793ee27cb8c3dbaaa4aa3e2bb569e4bfc6fe833",
+    "bytes": 51937
+  },
+  {
+    "path": "out/final-four/decision-light-denied.png",
+    "sha256": "99453ca487c83b4c544016d06c1843e6ebbd07073a0bfcb557c82df14e5713ab",
+    "bytes": 65007
+  },
+  {
+    "path": "out/final-four/decision-light-timeout.png",
+    "sha256": "b7792ae0c2b72bdfeefd43bf2e22d25f4af3953a8de5cfb269dc219a6dc37d0b",
+    "bytes": 77888
+  },
+  {
+    "path": "out/final-four/decision-manual-dark.png",
+    "sha256": "fe417b4a03458acb8364a62087c18518f8082373339a0e9c341e38be5dcbd15c",
+    "bytes": 44899
+  },
+  {
+    "path": "out/final-four/decision-manual-light.png",
+    "sha256": "c91b54e15daec158cdb22cb4af482ef489c60d9b8cea54628d7250f821dcb6dc",
+    "bytes": 44599
+  },
+  {
+    "path": "out/final-four/decision-provider-dark.png",
+    "sha256": "478f8773210e616371aa512b9b86c287bd7241c8a55e2d81cb716be29167885f",
+    "bytes": 47811
+  },
+  {
+    "path": "out/final-four/decision-provider-light.png",
+    "sha256": "18741d9f4f0a44318287edb9b7087ec873936486bbc6b3752876747e397a6ba2",
+    "bytes": 47718
+  },
+  {
+    "path": "out/final-four/member-candidate-dark.png",
+    "sha256": "1c872c9c4803a255ac264a229cae33bba36ef7837535a94a3bf2b3efd7247033",
+    "bytes": 36424
+  },
+  {
+    "path": "out/final-four/member-candidate-light.png",
+    "sha256": "c2c7738538930100832f547e6adf480136fcc9600b4f1c3225ab4c76aa2c8cdb",
+    "bytes": 36060
+  },
+  {
+    "path": "out/final-four/member-folder-picker-dark.png",
+    "sha256": "06a059b75e96611e5a3dace24e7116499234591beda1a1867d6e0f551677ae78",
+    "bytes": 15651
+  },
+  {
+    "path": "out/final-four/member-folder-picker-light.png",
+    "sha256": "ce1689a4ac21fe24479869c8557cdd0708923257e6975d2d2290f88e53e76231",
+    "bytes": 15218
+  },
+  {
+    "path": "out/final-four/member-folder-prompt-dark.png",
+    "sha256": "275127d6baf1f03cedd578bea9310e64c7442d257c93c199246953cf4d2174d3",
+    "bytes": 44396
+  },
+  {
+    "path": "out/final-four/member-folder-prompt-light.png",
+    "sha256": "5b659aa83ee83a7ee447ede9ac8527a7bd277f7c4ea633a1e37a8b28adc09eaf",
+    "bytes": 44067
+  },
+  {
+    "path": "out/final-four/member-remove-dark.png",
+    "sha256": "86f025b49b41a183d13eac6b0d4bdcabade4e4f5696fec4fe91d00fa6430b544",
+    "bytes": 90332
+  },
+  {
+    "path": "out/final-four/member-remove-light.png",
+    "sha256": "bdcd12cfd8cb56911d14bb709c5a795227e49258e511c5e22b62cc5da512616e",
+    "bytes": 89657
+  },
+  {
+    "path": "out/final-four/member-result-dark.png",
+    "sha256": "7c2543fb057f71c10a904d8f6d2c0d833cc711e7de0441730c57166755e5490c",
+    "bytes": 100931
+  },
+  {
+    "path": "out/final-four/member-result-light.png",
+    "sha256": "503f9c3cf993e10eeb75e788570feb0382aaa82d6219936055fcb4cadb017faa",
+    "bytes": 104552
+  },
+  {
+    "path": "out/final-four/member-tools-dark.png",
+    "sha256": "1f75a4d64db2e244323decdc07e2482ff7a0ca3c43f92d554a92609a294c5568",
+    "bytes": 109972
+  },
+  {
+    "path": "out/final-four/member-tools-light.png",
+    "sha256": "1a8f430125a0dc38d5bc347b29f39c9ac59e7738ad4a47fcc453b5779e8390d8",
+    "bytes": 117491
+  },
+  {
+    "path": "out/final-four/decision-manual.json",
+    "sha256": "b321c03aeeb806cccc27aaa7fa302c71d9a582ad08d2d646456ff2c5dd818b46",
+    "bytes": 3130
+  },
+  {
+    "path": "out/final-four/decision.json",
+    "sha256": "5d2145dfe666281521635ab8fcf8ade2934a7255012ab0362e644c0b23936e62",
+    "bytes": 10891
+  },
+  {
+    "path": "out/final-four/member-folder.json",
+    "sha256": "8109d45eaca6e7b4b194b361a7e8dfb18cf681d0b92add2a4cdda6e22d8553cc",
+    "bytes": 7341
+  },
+  {
+    "path": "out/final-four/member-tools.json",
+    "sha256": "e04396a2ed8941053d52d04c8bb811a358349b114a371009ddc84415b091d013",
+    "bytes": 533735
+  },
+  {
+    "path": "out/final-four/members.json",
+    "sha256": "6273306c5da44749518aad0ab8a96719d2633f1521cbb995aed29ac97ccc7d67",
+    "bytes": 10825
+  }
+]

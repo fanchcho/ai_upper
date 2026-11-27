@@ -1,0 +1,44 @@
+ M docs/audit/evidence/F03-search.txt
+ M docs/audit/evidence/F04-search.txt
+ M docs/audit/evidence/F05-search.txt
+ M docs/audit/evidence/F07-search.txt
+ M docs/audit/evidence/F09-search.txt
+ M docs/audit/evidence/F10-search.txt
+ M docs/audit/evidence/F12-search.txt
+ M docs/audit/evidence/F13-search.txt
+ M docs/audit/evidence/F15-search.txt
+ M docs/audit/evidence/F21-search.txt
+ M docs/audit/evidence/F23-search.txt
+ M docs/audit/evidence/F24-search.txt
+ M docs/audit/evidence/F27b-search.txt
+ M docs/audit/evidence/F28-search.txt
+ M docs/audit/evidence/F31-search.txt
+ M docs/audit/evidence/F36-search.txt
+ M docs/audit/evidence/F38-search.txt
+ M docs/audit/evidence/F39-search.txt
+ M docs/audit/evidence/F40-search.txt
+ M docs/audit/evidence/F58-search.txt
+ M docs/audit/evidence/F59-search.txt
+ M docs/audit/evidence/F60-search.txt
+ M docs/audit/evidence/F61-search.txt
+ M docs/audit/evidence/F77-search.txt
+ M docs/audit/evidence/F84-search.txt
+ M docs/audit/evidence/F85-search.txt
+ M docs/audit/feature-parity-gap.json
+ M docs/audit/feature-parity-gap.md
+ M docs/audit/final-four/gc.md
+ M docs/audit/final-four/member-inventory.md
+ M scripts/parity/feature_parity_evidence.py
+?? docs/audit/final-four/artifacts.json
+?? docs/audit/final-four/baseline.md
+?? docs/audit/final-four/external-residual.diff
+?? docs/audit/final-four/import-alone.log
+?? docs/audit/final-four/missing-model.log
+?? docs/audit/final-four/pre-report-status.txt
+?? docs/audit/final-four/pushes.md
+?? docs/audit/final-four/regression-634db76-interrupted.log
+?? docs/audit/final-four/regression-final.log
+?? docs/audit/final-four/regression-sha.txt
+?? docs/audit/final-four/report.md
+?? docs/audit/final-four/ui-evidence.zip
+?? scripts/parity/missing_model_evidence.py
