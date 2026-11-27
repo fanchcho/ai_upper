@@ -26,3 +26,11 @@
 # but with fcitx5 running (pinyin addon loaded) the QML TextInput still received Latin:
 #   TEXT n COMPOSING false ... FINAL 'nihao' False
 # Plugin was subsequently unloaded; no preedit/inputMethodComposing=True was obtained.
+
+# 2026-11-28 minimal QLineEdit isolation (system PySide6 6.8.2, Xvfb :93):
+# plugin loader: libfcitx5platforminputcontextplugin.so loaded library
+# QGuiApplication.inputMethod().isVisible() = False
+# QInputMethodEvent count = 0
+# QLineEdit text after nihao = 'nihao' (Latin; no preedit)
+# fcitx5 Controller1.State = int32 0, CurrentInputMethod = ''
+# => environment-side fcitx controller/input context did not activate; not QML-specific.
