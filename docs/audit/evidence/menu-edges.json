@@ -1,0 +1,30 @@
+[
+  {
+    "theme": "dark",
+    "direction": "down",
+    "top": 227.5,
+    "height": 320.0,
+    "window": 820
+  },
+  {
+    "theme": "dark",
+    "direction": "up",
+    "top": 333.5,
+    "height": 320.0,
+    "window": 820
+  },
+  {
+    "theme": "light",
+    "direction": "down",
+    "top": 227.5,
+    "height": 320.0,
+    "window": 820
+  },
+  {
+    "theme": "light",
+    "direction": "up",
+    "top": 333.5,
+    "height": 320.0,
+    "window": 820
+  }
+]

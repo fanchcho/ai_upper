@@ -1,0 +1,323 @@
+diff --git a/app/tests/test_qml_slash_menu.py b/app/tests/test_qml_slash_menu.py
+new file mode 100644
+index 0000000..d4e4647
+--- /dev/null
++++ b/app/tests/test_qml_slash_menu.py
+@@ -0,0 +1,66 @@
++"""输入框 `/` 指令联想：真实键盘输入 `/` 打开，Enter 执行 compact。
++
++判据来源（只读）：deva `redesign/Composer.tsx:382-420`（slashCommands 内建 /compact、
++/rewind + 技能；:671-700 键盘选择）；本移植版只接可用的 /compact，/rewind 无后端不列出。
++"""
++from __future__ import annotations
++
++import os
++import sys
++
++os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
++
++import pytest
++
++ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++
++
++@pytest.fixture(scope="module")
++def qapp():
++    from PySide6.QtGui import QGuiApplication
++
++    application = QGuiApplication.instance() or QGuiApplication([])
++    yield application
++
++
++def _find_item(root, name):
++    try:
++        if root.objectName() == name:
++            return root
++    except Exception:
++        pass
++    for child in root.childItems():
++        found = _find_item(child, name)
++        if found is not None:
++            return found
++    return None
++
++
++def test_slash_menu_opens_on_slash_and_enter_runs_compact(qapp, tmp_path, monkeypatch):
++    from PySide6.QtCore import Qt
++    from PySide6.QtTest import QTest
++    from qml_shell import _pump
++    from test_qml_sidebar_collapse import _build
++
++    window, bridge, _settings, ticker, engine = _build(tmp_path, monkeypatch)
++    try:
++        calls = []
++        bridge._host.compact = lambda request: calls.append(request) or {"turnId": "compact-test"}
++        field = _find_item(window.contentItem(), "inputField")
++        field.forceActiveFocus()
++        QTest.keyClick(window, Qt.Key_Slash)
++        _pump(qapp, lambda: False, 0.3)
++        assert window.property("slashOpen") is True
++        menu = _find_item(window.contentItem(), "slashMenuRoot")
++        assert menu is not None and menu.property("visible") is True
++        # 再输入 c：仍匹配 compact。
++        QTest.keyClick(window, Qt.Key_C)
++        _pump(qapp, lambda: False, 0.2)
++        assert window.property("slashOpen") is True
++        QTest.keyClick(window, Qt.Key_Return)
++        _pump(qapp, lambda: False, 0.4)
++        assert calls == [{"sessionId": bridge._active}]
++        assert field.property("text") == ""
++        assert window.property("slashOpen") is False
++    finally:
++        ticker.stop(); window.close(); engine.deleteLater()
+diff --git a/app/tests/test_qml_tray.py b/app/tests/test_qml_tray.py
+new file mode 100644
+index 0000000..6c36420
+--- /dev/null
++++ b/app/tests/test_qml_tray.py
+@@ -0,0 +1,77 @@
++"""托盘/通知：无托盘平台必须打印真实不可用原因，不伪造成功（deva index.ts:235-272）。"""
++from __future__ import annotations
++
++import os
++
++os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
++
++import pytest
++
++
++@pytest.fixture(scope="module")
++def qapp():
++    from PySide6.QtWidgets import QApplication
++
++    application = QApplication.instance() or QApplication([])
++    yield application
++
++
++def test_tray_reports_offscreen_unavailable(qapp, capsys):
++    from mvvm.services.tray import TrayController
++
++    tray = TrayController(qapp, window=None)
++    assert tray.install() is False
++    err = capsys.readouterr().err
++    assert "TRAY UNAVAILABLE" in err
++    assert "isSystemTrayAvailable=False" in err
++
++
++def test_close_to_tray_setting_is_read_from_config(tmp_path, monkeypatch):
++    from mvvm.services.chat_session_store import ChatSessionStore
++    from mvvm.services.secrets_vault import SecretsVault
++    from mvvm.services.settings_service import SettingsService
++    from mvvm.services.skill_store import SkillStore
++    from mvvm.services.workspace_guard import WorkspaceGuard
++    from mvvm.webui.assembly import build_chat_host
++    from qml_shell import ShellBridge
++
++    monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
++    settings = SettingsService(tmp_path)
++    host, _ = build_chat_host(settings=settings, vault=SecretsVault(tmp_path),
++                              store=ChatSessionStore(tmp_path), guard=WorkspaceGuard(),
++                              home=tmp_path, emit=lambda p: None,
++                              emit_sessions_changed=lambda: None)
++    bridge = ShellBridge(host=host, store=ChatSessionStore(tmp_path), plain=True,
++                         settings=settings, skills=SkillStore(tmp_path))
++    assert bridge.closeToTray() is False
++    settings.set_config({"closeToTray": True})
++    assert bridge.closeToTray() is True
++    settings.set_config({"closeToTray": False})
++    assert bridge.closeToTray() is False
++
++
++def test_turn_notification_uses_injected_notifier_when_window_unfocused(tmp_path, monkeypatch):
++    from mvvm.services.chat_session_store import ChatSessionStore
++    from mvvm.services.secrets_vault import SecretsVault
++    from mvvm.services.settings_service import SettingsService
++    from mvvm.services.skill_store import SkillStore
++    from mvvm.services.workspace_guard import WorkspaceGuard
++    from mvvm.webui.assembly import build_chat_host
++    from qml_shell import ShellBridge
++
++    monkeypatch.setenv("DEVA_SECRETS_BACKEND", "file")
++    home = tmp_path
++    settings = SettingsService(home)
++    store = ChatSessionStore(home)
++    store.ensure_session("s-1")
++    session = store.load_session("s-1"); session.title = "后台会话"; store.save("s-1")
++    host, _ = build_chat_host(settings=settings, vault=SecretsVault(home), store=store,
++                              guard=WorkspaceGuard(), home=home, emit=lambda p: None,
++                              emit_sessions_changed=lambda: None)
++    bridge = ShellBridge(host=host, store=store, plain=True, settings=settings,
++                         skills=SkillStore(home))
++    calls = []
++    bridge.set_notifier(lambda title, body: calls.append((title, body)) or True)
++    bridge._window = object()
++    bridge._notify_turn("s-1", "", error=False)
++    assert calls == [("后台会话", "回复已完成")]
+diff --git a/app/tests/test_qml_unread.py b/app/tests/test_qml_unread.py
+new file mode 100644
+index 0000000..7d47ffb
+--- /dev/null
++++ b/app/tests/test_qml_unread.py
+@@ -0,0 +1,92 @@
++"""未读红点：回合在非当前会话结束时标未读，打开该会话即清除。
++
++判据来源（只读）：deva `redesign/Rail.tsx:1124-1156`（头像右上角红点，
++`unread`/`attention` 仅在非当前、非归档会话显示）与 `redesign.css:1041-1051`
++（10px、--danger、外圈 2px --bg-panel）。
++"""
++from __future__ import annotations
++
++import os
++import sys
++
++os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
++
++import pytest
++
++ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++
++
++@pytest.fixture(scope="module")
++def qapp():
++    from PySide6.QtGui import QGuiApplication
++
++    application = QGuiApplication.instance() or QGuiApplication([])
++    yield application
++
++
++def _find_item(root, name):
++    try:
++        if root.objectName() == name:
++            return root
++    except Exception:
++        pass
++    for child in root.childItems():
++        found = _find_item(child, name)
++        if found is not None:
++            return found
++    return None
++
++
++def test_background_turn_marks_unread_and_open_clears(qapp, tmp_path, monkeypatch):
++    from test_qml_shell import _bridge, text_stream
++
++    bridge, store, _host = _bridge(
++        tmp_path, monkeypatch, text_stream("回"), sessions=[("s-1", "一"), ("s-2", "二")]
++    )
++    assert bridge.openSession("s-1") is True
++    assert bridge.send("问题") is True
++    # 回合进行中切到另一个会话：s-1 的 done 落在后台。
++    assert bridge.openSession("s-2") is True
++    from test_qml_shell import _tick_until
++    assert _tick_until(bridge, lambda: "s-1" in bridge._unread, 10)
++    rows = {row["id"]: row for row in bridge._rows()}
++    assert rows["s-1"]["unread"] is True
++    assert rows["s-2"]["unread"] is False
++    # 打开 s-1 清除未读。
++    assert bridge.openSession("s-1") is True
++    assert {row["id"]: row for row in bridge._rows()}["s-1"]["unread"] is False
++
++
++def test_unread_dot_visible_in_qml_and_click_clears(qapp, tmp_path, monkeypatch):
++    from PySide6.QtTest import QTest
++    from PySide6.QtCore import Qt, QPointF
++    from qml_shell import _pump
++    from test_qml_sidebar_collapse import _build
++
++    window, bridge, _settings, ticker, engine = _build(tmp_path, monkeypatch)
++    try:
++        # 模拟两个会话 + 后台回合：直接走 bridge 的真实状态机。
++        store = bridge._store
++        store.ensure_session("s-1"); store.ensure_session("s-2")
++        bridge._publish()
++        _pump(qapp, lambda: False, 0.3)
++        bridge._active = "s-1"
++        bridge.send("问题")
++        bridge._active = "s-2"
++        bridge._publish()
++        _pump(qapp, lambda: "s-1" in bridge._unread, 10)
++        bridge._publish()
++        _pump(qapp, lambda: False, 0.3)
++        dot = _find_item(window.contentItem(), "threadUnread")
++        assert dot is not None and dot.property("visible") is True
++        # 点 s-1 行：未读清除、红点消失。
++        ids = [row["id"] for row in bridge._rows()]
++        index = ids.index("s-1")
++        row = _find_item(window.contentItem(), "threadRow" + str(index))
++        assert row is not None
++        pt = row.mapToScene(QPointF(40, 20))
++        QTest.mouseClick(window, Qt.LeftButton, Qt.NoModifier, pt.toPoint())
++        _pump(qapp, lambda: False, 0.4)
++        assert {row["id"]: row for row in bridge._rows()}["s-1"]["unread"] is False
++    finally:
++        ticker.stop(); window.close(); engine.deleteLater()
+diff --git a/app/tests/test_single_instance.py b/app/tests/test_single_instance.py
+new file mode 100644
+index 0000000..ce8fb18
+--- /dev/null
++++ b/app/tests/test_single_instance.py
+@@ -0,0 +1,64 @@
++"""单实例锁：第二个进程只唤起既有窗口后退出（deva main/index.ts:276-286）。
++
++用两个真实进程跑，不用 mock：第一个保持运行，第二个必须 rc=0 且在数秒内退出，
++第一个进程打印出激活日志。
++"""
++from __future__ import annotations
++
++import os
++import subprocess
++import sys
++import time
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[2]
++
++
++def _env(home: Path) -> dict:
++    env = os.environ.copy()
++    env.update(
++        AI_UPPER_HOME=str(home),
++        DEVA_ASSETS_DIR=str(ROOT / "app" / "assets"),
++        QT_QPA_PLATFORM="offscreen",
++        QT_QUICK_BACKEND="software",
++        PYTHONUNBUFFERED="1",
++    )
++    return env
++
++
++def test_second_process_activates_first_and_exits(tmp_path):
++    home = tmp_path / "home"
++    home.mkdir()
++    cmd = [sys.executable, str(ROOT / "app" / "src" / "main.py")]
++    first = subprocess.Popen(cmd, env=_env(home), cwd=str(ROOT), stdout=subprocess.PIPE,
++                             stderr=subprocess.STDOUT, text=True)
++    try:
++        deadline = time.time() + 25
++        while time.time() < deadline and not (home / "instance.lock").exists():
++            if first.poll() is not None:
++                raise AssertionError("first instance exited early: " + first.stdout.read())
++            time.sleep(0.1)
++        assert (home / "instance.lock").exists(), "first instance did not take the lock"
++        # 等 QLocalServer 真正 listen 后再起第二个，避免启动窗口期误报。
++        time.sleep(0.8)
++        second = subprocess.run(cmd, env=_env(home), cwd=str(ROOT), capture_output=True,
++                                text=True, timeout=15)
++        assert second.returncode == 0, (second.returncode, second.stdout, second.stderr)
++        assert "Traceback" not in (second.stdout + second.stderr)
++        # first 仍活着，并在收到激活后打印日志。
++        deadline = time.time() + 8
++        seen = False
++        while time.time() < deadline and not seen:
++            line = first.stdout.readline()
++            if not line:
++                time.sleep(0.05)
++                continue
++            if "SINGLE INSTANCE ACTIVATE" in line:
++                seen = True
++        assert seen, "first instance never reported activation"
++    finally:
++        first.terminate()
++        try:
++            first.wait(timeout=10)
++        except subprocess.TimeoutExpired:
++            first.kill()

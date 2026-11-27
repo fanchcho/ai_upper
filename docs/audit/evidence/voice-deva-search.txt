@@ -1,0 +1,3 @@
+$ rg -n SpeechRecognition|speechSynthesis|MediaRecorder /home/agent/shared_workspace/deva/apps/desktop/src
+exit=1
+(no matches)

@@ -1,0 +1,74 @@
+[
+  {
+    "log": "out/final-port/push-bots-compat.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   19479eb..34b9132  develop -> develop\n",
+    "sha": "34b91329cdecabe146e36fb69e510f1403d69710",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-bots.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   11839f8..1c64ffd  develop -> develop\n",
+    "sha": "1c64ffda7889d2662fe2de5125081d087bd7ab0b",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-layout.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   7a9aeb3..8c85c29  develop -> develop\n",
+    "sha": "8c85c29c8431f59d4a2de11c7c011d89c2692b6e",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-mentions.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   1c64ffd..7a9aeb3  develop -> develop\n",
+    "sha": "7a9aeb33fb99cd4b3d43b8473c6409b4e6a69b71",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-proxy-compat.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   2c0c086..1ab1b28  develop -> develop\n",
+    "sha": "1ab1b28a05dde9d2e24fcd5d6d5abd9bdd3a2332",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-proxy.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   dfd6c05..e90dcb1  develop -> develop\n",
+    "sha": "e90dcb17759b05dbdb79b869305dc5070fcc68c2",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-single-compat.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   34b9132..aa82640  develop -> develop\n",
+    "sha": "aa826409bef2851e6459de2f7298ebe078ad9fec",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-suggestions-visible.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   aa82640..da31437  develop -> develop\n",
+    "sha": "da31437ecb7229cfe10f00de0ac765384a9d0750",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-tasks-compat.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   1ab1b28..19479eb  develop -> develop\n",
+    "sha": "19479eb07d998063a2d7aab4c1dc6e295ff5420f",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-tasks.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   a27d0c8..11839f8  develop -> develop\n",
+    "sha": "11839f8a743db506111fafd1ef47bcc6f858c588",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-tray.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   2c78f34..2c0c086  develop -> develop\n",
+    "sha": "2c0c0867ec10c21966cff6d88b4be8dd10e93132",
+    "contained_in_origin_develop": true
+  },
+  {
+    "log": "out/final-port/push-unread.log",
+    "output": "To github.com:fanchcho/ai_upper.git\n   8c85c29..2c78f34  develop -> develop\n",
+    "sha": "2c78f343e4ed773217c078b9a7bb42c321fd3d0e",
+    "contained_in_origin_develop": true
+  }
+]

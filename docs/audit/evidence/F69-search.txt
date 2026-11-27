@@ -1,0 +1,7 @@
+$ rg -n --glob *.qml --glob *.py root.call("remove" app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=2
+(no matches)
+rg: regex parse error:
+    (?:root.call("remove")
+    ^
+error: unclosed group

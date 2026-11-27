@@ -1,0 +1,4 @@
+$ rg -n --glob *.qml --glob *.py visibleSessions app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml/Main.qml:287:    readonly property var visibleSessions: {
+app/src/qml/Main.qml:334:    readonly property var listedSessions: window.archiveView ? archivedVisibleSessions : visibleSessions

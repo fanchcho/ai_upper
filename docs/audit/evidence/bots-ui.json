@@ -1,0 +1,48 @@
+[
+  {
+    "theme": "dark",
+    "home": "/tmp/ai-upper-bots-2b994c168ade4bc1aaea1d742fbb2e41/home",
+    "config": {
+      "id": "bot-fixture",
+      "name": "配置管理验证",
+      "platform": "telegram",
+      "enabled": false,
+      "replyMode": "stream",
+      "createdAt": 1,
+      "scope": {
+        "mode": "sessions",
+        "personas": [],
+        "sessions": [
+          "s-1"
+        ]
+      },
+      "users": [],
+      "bindings": {},
+      "settings": {}
+    },
+    "enable": "blocked: missing real credentials; not connected"
+  },
+  {
+    "theme": "light",
+    "home": "/tmp/ai-upper-bots-afba36e8b6984d94ba276a9c455a1dfa/home",
+    "config": {
+      "id": "bot-fixture",
+      "name": "配置管理验证",
+      "platform": "telegram",
+      "enabled": false,
+      "replyMode": "stream",
+      "createdAt": 1,
+      "scope": {
+        "mode": "sessions",
+        "personas": [],
+        "sessions": [
+          "s-1"
+        ]
+      },
+      "users": [],
+      "bindings": {},
+      "settings": {}
+    },
+    "enable": "blocked: missing real credentials; not connected"
+  }
+]

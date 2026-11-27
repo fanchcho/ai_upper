@@ -1,0 +1,24 @@
+$ rg -n --glob *.qml --glob *.py Popup app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml/SessionFilter.qml:5:Popup {
+app/src/qml/SessionFilter.qml:12:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+app/src/qml/ExtensionDetail.qml:121:                    Rectangle { visible: rolesPopup.opened; anchors.fill: parent; anchors.margins: -3; radius: 9; color: Theme.dark ? Qt.rgba(124/255,124/255,240/255,0.16) : Qt.rgba(91/255,91/255,214/255,0.1) }
+app/src/qml/ExtensionDetail.qml:122:                    Rectangle { anchors.fill: parent; radius: 6; color: Theme.bgElevated; border.color: rolesPopup.opened ? Theme.accent : Theme.borderStrong }
+app/src/qml/ExtensionDetail.qml:135:                Icon { anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter; name: IconData.chevronDown; rotation: rolesPopup.opened ? 180 : 0; size: 15; color: Theme.fgSubtle }
+app/src/qml/ExtensionDetail.qml:136:                onClicked: rolesPopup.open()
+app/src/qml/ExtensionDetail.qml:138:                    if ([Qt.Key_Down, Qt.Key_Up, Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) { rolesPopup.open(); event.accepted = true }
+app/src/qml/ExtensionDetail.qml:140:                Popup {
+app/src/qml/ExtensionDetail.qml:141:                    id: rolesPopup; objectName: "extensionRolesPopup"; focus: true; width: parent.width
+app/src/qml/ExtensionDetail.qml:202:                            if (event.key === Qt.Key_Down) rolesPopup.activeRow = Math.min(last, rolesPopup.activeRow + 1)
+app/src/qml/ExtensionDetail.qml:203:                            else if (event.key === Qt.Key_Up) rolesPopup.activeRow = Math.max(0, rolesPopup.activeRow - 1)
+app/src/qml/ExtensionDetail.qml:204:                            else if (event.key === Qt.Key_Home) rolesPopup.activeRow = 0
+app/src/qml/ExtensionDetail.qml:205:                            else if (event.key === Qt.Key_End) rolesPopup.activeRow = last
+app/src/qml/ExtensionDetail.qml:206:                            else if ([Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].indexOf(event.key) >= 0) rolesPopup.pick(rolesPopup.activeRow)
+app/src/qml/ExtensionDetail.qml:207:                            else if (event.key === Qt.Key_Tab) { rolesPopup.close(); return }
+app/src/qml/ExtensionDetail.qml:208:                            else if (event.text.length === 1 && event.text.charCodeAt(0) >= 32 && event.text.charCodeAt(0) !== 127 && !(event.modifiers & (Qt.ControlModifier | Qt.MetaModifier | Qt.AltModifier))) rolesPopup.typeAhead(event.text)
+app/src/qml/ExtensionDetail.qml:213:                            Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === 0 ? Theme.bgHover : "transparent" }
+app/src/qml/ExtensionDetail.qml:220:                            MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = 0; onClicked: { root.save("roles", null); rolesPopup.close() } }
+app/src/qml/ExtensionDetail.qml:232:                                Rectangle { anchors.fill: parent; radius: 8; color: rolesPopup.activeRow === index + 1 ? Theme.bgHover : "transparent" }
+app/src/qml/ExtensionDetail.qml:238:                                MouseArea { anchors.fill: parent; hoverEnabled: true; onPositionChanged: rolesPopup.activeRow = index + 1; onClicked: {
+app/src/qml/EditContextMenu.qml:14:    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+app/src/qml/PluginSettingsPane.qml:57:            popup: Popup {

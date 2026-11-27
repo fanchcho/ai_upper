@@ -1,0 +1,3 @@
+QML SLASH {"name": "compact", "turnId": "0572ece84df94c7ea192d4bf9195d7e4"}
+QML SLASH {"name": "compact", "turnId": "77c9bce93ae54e1ba30f16c5ebeaba6f"}
+PASS real click -> unmodified ChatHost.compact -> persisted compaction summary; model transport fixture only

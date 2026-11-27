@@ -1,0 +1,4 @@
+$ rg -n --glob *.qml --glob *.py def archiveSession app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml_shell.py:667:    def archiveSession(self, session_id: str) -> bool:
+app/src/qml_shell.py:701:    def archiveSessions(self, session_ids: list, archived: bool) -> int:

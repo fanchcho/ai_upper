@@ -1,0 +1,2 @@
+ACTUAL_SECONDS_TO_NEXT_MINUTE 42.53818702697754
+PASS real cron timer, persisted history, weekday/DST and invalid-zone rejection

@@ -1,0 +1,14 @@
+[
+  {
+    "theme": "dark",
+    "attention_cleared": true,
+    "background_unread_published": true,
+    "answer": "yes"
+  },
+  {
+    "theme": "light",
+    "attention_cleared": true,
+    "background_unread_published": true,
+    "answer": "yes"
+  }
+]

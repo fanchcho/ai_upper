@@ -1,0 +1,9 @@
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:105:28: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:111:20: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:111:20: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:105:28: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:105:28: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:111:20: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:111:20: Unable to assign [undefined] to bool
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ExtensionDetail.qml:105:28: Unable to assign [undefined] to bool
+[{'theme': 'dark', 'direction': 'down', 'top': 227.5, 'height': 320.0, 'window': 820}, {'theme': 'dark', 'direction': 'up', 'top': 333.5, 'height': 320.0, 'window': 820}, {'theme': 'light', 'direction': 'down', 'top': 227.5, 'height': 320.0, 'window': 820}, {'theme': 'light', 'direction': 'up', 'top': 333.5, 'height': 320.0, 'window': 820}]

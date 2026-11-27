@@ -1,0 +1,3 @@
+TRAY UNAVAILABLE platform=offscreen isSystemTrayAvailable=False
+NOTIFY UNAVAILABLE tray_available=False supportsMessages=True
+{"installed": false, "notify": false}

@@ -1,0 +1,16 @@
+$ rg -n --glob *.qml --glob *.py selectedSessions app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml/Main.qml:201:    // 多选：右键菜单「Select」进入；selectedSessions 只存 id，落盘仍走 ShellBridge 的会话服务。
+app/src/qml/Main.qml:203:    property var selectedSessions: []
+app/src/qml/Main.qml:832:                selected: window.allListedSelected || window.selectedSessions.indexOf(modelData.id) >= 0
+app/src/qml/Main.qml:916:                text: window.selectedSessions.length + I18n.t("native.message0")
+app/src/qml/Main.qml:931:                    text: window.selectedSessions.length === window.listedSessions.length
+app/src/qml/Main.qml:2253:        window.selectedSessions = id ? [String(id)] : []
+app/src/qml/Main.qml:2261:        var next = window.selectedSessions
+app/src/qml/Main.qml:2267:        window.selectedSessionsChanged()
+app/src/qml/Main.qml:2272:        if (window.selectedSessions.length === all.length && all.length > 0) {
+app/src/qml/Main.qml:2273:            window.selectedSessions = []
+app/src/qml/Main.qml:2276:        window.selectedSessions = window.listedSessionIds.slice()
+app/src/qml/Main.qml:2281:        var ids = window.selectedSessions.slice()
+app/src/qml/Main.qml:2294:        window.selectedSessions = []
+app/src/qml/Main.qml:2333:        window.selectedSessions = []

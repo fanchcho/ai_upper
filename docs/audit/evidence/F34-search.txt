@@ -1,0 +1,7 @@
+$ rg -n --glob *.qml --glob *.py bodyMenu app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml/Main.qml:71:        id: bodyMenu
+app/src/qml/Main.qml:72:        objectName: "bodyMenu"
+app/src/qml/Main.qml:1263:                        bodyMenu.x = eventPoint.scenePosition.x
+app/src/qml/Main.qml:1264:                        bodyMenu.y = eventPoint.scenePosition.y
+app/src/qml/Main.qml:1265:                        bodyMenu.open()

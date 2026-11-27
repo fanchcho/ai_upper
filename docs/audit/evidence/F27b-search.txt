@@ -1,0 +1,14 @@
+$ rg -n --glob *.qml --glob *.py sideCollapsed app/src/qml app/src/qml_shell.py app/src/mvvm
+exit=0
+app/src/qml_shell.py:1923:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
+app/src/qml/Main.qml:141:    property bool sideCollapsed: false
+app/src/qml/Main.qml:598:        width: window.sideCollapsed ? (window.sidePeek ? Theme.sideWidth : 0) : Theme.sideWidth
+app/src/qml/Main.qml:599:        visible: !window.sideCollapsed || window.sidePeek
+app/src/qml/Main.qml:600:        z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
+app/src/qml/Main.qml:988:        x: window.railWidth + (window.sideCollapsed ? 0 : Theme.sideWidth)
+app/src/qml/Main.qml:1995:        window.sideCollapsed = !window.sideCollapsed
+app/src/qml/Main.qml:1998:            shellBridge.setSidebarCollapsed(window.sideCollapsed)
+app/src/qml/Main.qml:2004:        if (!window.sideCollapsed || window.settingsOpen)
+app/src/qml/Main.qml:2017:        if (!window.sideCollapsed || window.settingsOpen) {
+app/src/qml/Main.qml:2024:        } else if (!window.sideCollapsed) {
+app/src/qml/Main.qml:2033:        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }

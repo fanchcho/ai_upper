@@ -1,0 +1,42 @@
+[http] http://127.0.0.1:34223: default failed before delivery; using system
+[http] http://127.0.0.1:34223: system failed before delivery; using default
+{
+  "calls": [
+    [
+      "proxy",
+      "http://destination.invalid/env",
+      "fixture"
+    ],
+    [
+      "target",
+      "/direct",
+      "fixture"
+    ],
+    [
+      "pac",
+      "/routes.pac"
+    ],
+    [
+      "proxy",
+      "http://127.0.0.1:34223/fallback",
+      "fixture"
+    ],
+    [
+      "proxy",
+      "http://127.0.0.1:34223/remembered",
+      "fixture"
+    ],
+    [
+      "recovered",
+      "/reverse",
+      "fixture"
+    ],
+    [
+      "recovered",
+      "/delivered-reset",
+      "fixture"
+    ]
+  ],
+  "no_proxy_cases": 7,
+  "result": "PASS"
+}

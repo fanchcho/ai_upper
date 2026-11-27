@@ -1,0 +1,48 @@
+{
+  "real_clock_delay": 42.53818702697754,
+  "row": {
+    "id": "task-f253923fbc8a4280",
+    "title": "Cron evidence",
+    "prompt": "Run at the real next minute",
+    "schedule": {
+      "kind": "recurring",
+      "tz": "UTC",
+      "cron": "* * * * *"
+    },
+    "auth": {
+      "personaId": "general"
+    },
+    "status": "active",
+    "sessionId": "task-f253923fbc8a4280",
+    "originSessionId": "s-1",
+    "createdAt": 1795794677452,
+    "updatedAt": 1795794677452,
+    "nextRunAt": 1795794780000,
+    "consecutiveErrors": 0,
+    "runs": [
+      {
+        "turnId": "64b4277a89624cdfad52dc7b317c59b8",
+        "startedAt": 1795794720457,
+        "endedAt": 1795794720479,
+        "status": "done",
+        "error": ""
+      }
+    ],
+    "lastRunAt": 1795794720457
+  },
+  "calendar_checks": [
+    [
+      "weekday",
+      "2026-11-30T10:00:00+00:00"
+    ],
+    [
+      "dst_gap",
+      "2026-03-09T06:30:00+00:00"
+    ],
+    [
+      "dst_fold",
+      "2026-11-01T05:30:00+00:00"
+    ]
+  ],
+  "invalid_zone_rejected": true
+}

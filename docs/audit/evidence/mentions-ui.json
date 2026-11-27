@@ -1,0 +1,26 @@
+[
+  {
+    "theme": "dark",
+    "text": "Ask @Reviewer after",
+    "sent": 0,
+    "candidates": [
+      {
+        "name": "Reviewer",
+        "desc": "成员",
+        "kind": "mention"
+      }
+    ]
+  },
+  {
+    "theme": "light",
+    "text": "Ask @Reviewer after",
+    "sent": 0,
+    "candidates": [
+      {
+        "name": "Reviewer",
+        "desc": "成员",
+        "kind": "mention"
+      }
+    ]
+  }
+]

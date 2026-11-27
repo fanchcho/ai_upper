@@ -1,0 +1,74 @@
+[
+  {
+    "theme": "dark",
+    "home": "/tmp/ai-upper-tasks-8a9120c91be740219474b358da33d183/home",
+    "created": {
+      "id": "task-b8b995eb8a6848ff",
+      "title": "Task evidence",
+      "prompt": "scheduled fixture request",
+      "schedule": {
+        "kind": "once",
+        "tz": "UTC",
+        "at": "2026-11-27T15:58:42"
+      },
+      "auth": {
+        "personaId": "general"
+      },
+      "status": "completed",
+      "sessionId": "task-b8b995eb8a6848ff",
+      "originSessionId": "s-1",
+      "createdAt": 1795795110880,
+      "updatedAt": 1795795111452,
+      "nextRunAt": null,
+      "consecutiveErrors": 0,
+      "runs": [
+        {
+          "turnId": "e5f50e1880f54e6da44ab9c293569f6b",
+          "startedAt": 1795795122452,
+          "endedAt": 1795795122479,
+          "status": "done",
+          "error": ""
+        }
+      ],
+      "lastRunAt": 1795795122452
+    },
+    "message_count": 2,
+    "deleted": true
+  },
+  {
+    "theme": "light",
+    "home": "/tmp/ai-upper-tasks-7e998e1d845046838da3aac7ee45bd88/home",
+    "created": {
+      "id": "task-5c777f11b61a4571",
+      "title": "Task evidence",
+      "prompt": "scheduled fixture request",
+      "schedule": {
+        "kind": "once",
+        "tz": "UTC",
+        "at": "2026-11-27T15:59:01"
+      },
+      "auth": {
+        "personaId": "general"
+      },
+      "status": "completed",
+      "sessionId": "task-5c777f11b61a4571",
+      "originSessionId": "s-1",
+      "createdAt": 1795795129590,
+      "updatedAt": 1795795130191,
+      "nextRunAt": null,
+      "consecutiveErrors": 0,
+      "runs": [
+        {
+          "turnId": "07d6242311df4d348441e5948ee60fc7",
+          "startedAt": 1795795141957,
+          "endedAt": 1795795141963,
+          "status": "done",
+          "error": ""
+        }
+      ],
+      "lastRunAt": 1795795141957
+    },
+    "message_count": 2,
+    "deleted": true
+  }
+]

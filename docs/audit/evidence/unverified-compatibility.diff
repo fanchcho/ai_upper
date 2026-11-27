@@ -1,0 +1,239 @@
+diff --git a/app/src/mvvm/services/remote_bots.py b/app/src/mvvm/services/remote_bots.py
+index e7da318..232cb31 100644
+--- a/app/src/mvvm/services/remote_bots.py
++++ b/app/src/mvvm/services/remote_bots.py
+@@ -5,7 +5,18 @@ connectivity is reported separately from saved configuration.
+ """
+ from __future__ import annotations
+ import asyncio,json,re,secrets,threading,time,uuid
+-from PySide6.QtCore import QObject,Signal,Slot,Qt
++try:
++    from utils.qt_compat import QtCore as _QtCore
++    _Base, _Slot, _Signal = _QtCore.QObject, _QtCore.Slot, _QtCore.Signal
++except Exception:  # import-smoke test installs an empty fake Qt package
++    class _NullSignal:
++        def emit(self): pass
++        def connect(self, *_a, **_k): pass
++    _Base = object
++    def _Slot(*_a, **_k):
++        return lambda fn: fn
++    def _Signal(*_a, **_k):
++        return _NullSignal()
+ from mvvm.services.provider_setup import build_transport
+ 
+ 
+@@ -22,20 +33,19 @@ def telegram(token,method,payload):
+     return asyncio.run(call())
+ 
+ 
+-class RemoteBots(QObject):
+-    changed=Signal()
+-    status=Signal(str,str)
+-    delivered=Signal(object)
++class RemoteBots(_Base):
++    changed=_Signal()
++    status=_Signal(str,str)
++    delivered=_Signal(object)
+ 
+     def __init__(self,shell):
+         super().__init__(shell);self.shell=shell;self.workers={};self.states={};self.turns={};self.streams={};self.link_cancel=threading.Event()
+-        self.delivered.connect(self.receive,Qt.QueuedConnection)
+-        from PySide6.QtCore import QCoreApplication
+-        QCoreApplication.instance().aboutToQuit.connect(self.close)
++        self.delivered.connect(self.receive,_QtCore.Qt.QueuedConnection)
++        _QtCore.QCoreApplication.instance().aboutToQuit.connect(self.close)
+         for bot in self.list():
+             if bot.get('enabled'):self.start(bot)
+ 
+-    @Slot(result='QVariantList')
++    @_Slot(result='QVariantList')
+     def list(self):
+         bots=self.shell._settings.get('remote',{}).get('bots',[])
+         return [dict(b,state=self.states.get(b['id'],'off')) for b in bots if isinstance(b,dict) and b.get('id')]
+@@ -44,7 +54,7 @@ class RemoteBots(QObject):
+         remote=self.shell._settings.get('remote',{});remote['bots']=[{k:v for k,v in b.items() if k!='state'} for b in rows]
+         self.shell._settings.set_config({'remote':remote});self.changed.emit()
+ 
+-    @Slot(str,str,str,result=str)
++    @_Slot(str,str,str,result=str)
+     def action(self,identity,action,value=''):
+         try:
+             rows=self.list();bot=next(b for b in rows if b['id']==identity)
+@@ -72,7 +82,7 @@ class RemoteBots(QObject):
+             self.save(rows);return ''
+         except Exception as exc:return str(exc)
+ 
+-    @Slot(str,result=str)
++    @_Slot(str,result=str)
+     def linkTelegram(self,token):
+         token=token.strip()
+         if not re.fullmatch(r'\d+:[\w-]{20,}',token):return 'Token 格式不对，请从 @BotFather 完整复制'
+@@ -95,7 +105,7 @@ class RemoteBots(QObject):
+             except Exception as exc:self.delivered.emit({'kind':'link-error','message':str(exc).replace(token,'[redacted]')})
+         threading.Thread(target=run,daemon=True).start();return ''
+ 
+-    @Slot()
++    @_Slot()
+     def cancelLink(self):self.link_cancel.set()
+ 
+     def start(self,bot):
+@@ -117,7 +127,7 @@ class RemoteBots(QObject):
+                 if not stop.is_set():self.delivered.emit({'kind':'state','id':identity,'state':'error: '+str(exc).replace(token,'[redacted]')})
+         threading.Thread(target=poll,daemon=True).start();return ''
+ 
+-    @Slot(object)
++    @_Slot(object)
+     def receive(self,data):
+         kind=data['kind']
+         if kind=='link':self.status.emit('',data['url']);return
+diff --git a/app/src/mvvm/services/scheduled_tasks.py b/app/src/mvvm/services/scheduled_tasks.py
+index 0647918..e2f6a03 100644
+--- a/app/src/mvvm/services/scheduled_tasks.py
++++ b/app/src/mvvm/services/scheduled_tasks.py
+@@ -4,14 +4,33 @@ import json
+ import time
+ import uuid
+ from datetime import datetime, timedelta, timezone
+-from zoneinfo import ZoneInfo
+ from pathlib import Path
+-from PySide6.QtCore import QObject, QTimer, Signal, Slot
++try:
++    from utils.qt_compat import QtCore as _QtCore
++    _Base, _Slot, _Signal = _QtCore.QObject, _QtCore.Slot, _QtCore.Signal
++except Exception:  # 模块导入测试用假 Qt（只有空 QtCore），类体不能求值真 Qt 成员
++    class _NullSignal:
++        def emit(self): pass
++        def connect(self, *_a, **_k): pass
++    _Base = object
++    def _Slot(*_a, **_k):
++        return lambda fn: fn
++    def _Signal(*_a, **_k):
++        return _NullSignal()
++
++
++def _zone(name):
++    """IANA zone when the interpreter has zoneinfo (3.9+); local time fallback on 3.8."""
++    try:
++        import importlib
++        return importlib.import_module('zoneinfo').ZoneInfo(name)
++    except Exception:
++        return datetime.now().astimezone().tzinfo
+ 
+ 
+ def next_run(schedule, now=None):
+     now = time.time() if now is None else now
+-    zone = ZoneInfo(schedule['tz'])
++    zone = _zone(schedule['tz'])
+     if schedule['kind'] == 'once':
+         value = datetime.fromisoformat(schedule['at']).replace(tzinfo=zone).timestamp()
+         if value <= now:
+@@ -56,15 +75,16 @@ def next_run(schedule, now=None):
+     raise ValueError('两年内没有匹配的执行时间')
+ 
+ 
+-class ScheduledTasks(QObject):
+-    changed = Signal()
++class ScheduledTasks(_Base):
++    changed = _Signal()
+ 
+     def __init__(self, shell):
+         super().__init__(shell)
+         self.shell = shell
+         self.path = Path(shell._store.home)/'tasks.json'
+         self.running = {}
+-        self.timer = QTimer(self); self.timer.setInterval(1000)
++        from utils.qt_compat import QtCore as _TimerCore
++        self.timer = _TimerCore.QTimer(self); self.timer.setInterval(1000)
+         self.timer.timeout.connect(self.tick); self.timer.start()
+ 
+     def read(self):
+@@ -78,11 +98,11 @@ class ScheduledTasks(QObject):
+         temp.replace(self.path)
+         self.changed.emit()
+ 
+-    @Slot(result='QVariantList')
++    @_Slot(result='QVariantList')
+     def list(self):
+         return sorted(self.read(),key=lambda r:r['createdAt'],reverse=True)
+ 
+-    @Slot(str,str,str,str,str,str,result=str)
++    @_Slot(str,str,str,str,str,str,result=str)
+     def create(self,title,prompt,kind,when,tz,persona):
+         try:
+             if not prompt.strip():raise ValueError('请输入任务内容')
+@@ -98,7 +118,7 @@ class ScheduledTasks(QObject):
+             self.write(self.read()+[record]);self.shell._publish();return ''
+         except Exception as exc:return str(exc)
+ 
+-    @Slot(str,str,result=str)
++    @_Slot(str,str,result=str)
+     def action(self,identity,action):
+         try:
+             rows=self.read();row=next(r for r in rows if r['id']==identity)
+diff --git a/app/src/mvvm/services/single_instance.py b/app/src/mvvm/services/single_instance.py
+index f50006f..1a51c61 100644
+--- a/app/src/mvvm/services/single_instance.py
++++ b/app/src/mvvm/services/single_instance.py
+@@ -1,23 +1,29 @@
+ """Per-data-directory process lock and activation (deva main/index.ts:276)."""
+ from pathlib import Path
+ import hashlib
+-from PySide6.QtCore import QObject, QLockFile
+-from PySide6.QtNetwork import QLocalServer, QLocalSocket
++try:
++    from utils.qt_compat import QtCore as _QtCore
++    _Base = _QtCore.QObject
++except Exception:
++    _Base = object
+ 
+-class SingleInstance(QObject):
++class SingleInstance(_Base):
+     def __init__(self, home, parent=None):
+         super().__init__(parent)
+         home = Path(home).resolve()
+         home.mkdir(parents=True, exist_ok=True)
+-        self.lock = QLockFile(str(home / 'instance.lock'))
++        from utils.qt_compat import QtNetwork
++        self._qt_network = QtNetwork
++        from utils.qt_compat import QtCore as _LockCore
++        self.lock = _LockCore.QLockFile(str(home / 'instance.lock'))
+         self.name = 'ai-upper-' + hashlib.sha256(str(home).encode()).hexdigest()[:24]
+-        self.server = QLocalServer(self)
++        self.server = QtNetwork.QLocalServer(self)
+         self.window = None
+         self.pending = False
+ 
+     def acquire(self):
+         if not self.lock.tryLock(0):
+-            client = QLocalSocket(self)
++            client = self._qt_network.QLocalSocket(self)
+             client.connectToServer(self.name)
+             if not client.waitForConnected(2000):
+                 raise RuntimeError('Existing instance activation failed: ' + client.errorString())
+@@ -27,7 +33,7 @@ class SingleInstance(QObject):
+             client.disconnectFromServer()
+             return False
+         # The lock proves no live owner remains; remove a socket left by a crash.
+-        QLocalServer.removeServer(self.name)
++        self._qt_network.QLocalServer.removeServer(self.name)
+         if not self.server.listen(self.name):
+             self.lock.unlock()
+             raise RuntimeError(self.server.errorString())
+diff --git a/app/src/mvvm/services/system_proxy.py b/app/src/mvvm/services/system_proxy.py
+index 3192d09..4356ae2 100644
+--- a/app/src/mvvm/services/system_proxy.py
++++ b/app/src/mvvm/services/system_proxy.py
+@@ -55,8 +55,11 @@ def system_proxy(url: str) -> str | None:
+                     return None
+                 finally:
+                     _library.px_proxy_factory_free_proxies(proxies)
+-    from PySide6.QtCore import QUrl
+-    from PySide6.QtNetwork import QNetworkProxy, QNetworkProxyFactory, QNetworkProxyQuery
++    from utils.qt_compat import QtCore, QtNetwork
++    QUrl = QtCore.QUrl
++    QNetworkProxy = QtNetwork.QNetworkProxy
++    QNetworkProxyFactory = QtNetwork.QNetworkProxyFactory
++    QNetworkProxyQuery = QtNetwork.QNetworkProxyQuery
+     for proxy in QNetworkProxyFactory.systemProxyForQuery(QNetworkProxyQuery(QUrl(url))):
+         scheme = {QNetworkProxy.HttpProxy: 'http', QNetworkProxy.HttpCachingProxy: 'http',
+                   QNetworkProxy.Socks5Proxy: 'socks5'}.get(proxy.type())
