@@ -6,6 +6,9 @@ QML 没有托盘控件，只能用 QSystemTrayIcon。无托盘环境（offscreen
 from __future__ import annotations
 
 import sys
+import os
+import shutil
+import subprocess
 from typing import Any, Callable, Optional
 
 from utils.qt_compat import QtGui, QtWidgets
@@ -69,6 +72,24 @@ class TrayController:
                 flush=True,
             )
             return False
+        sender = os.environ.get("AI_UPPER_DBUS_SEND") or shutil.which("dbus-send")
+        if sender:
+            argv = [sender, "--session", "--type=method_call", "--print-reply",
+                    "--dest=org.freedesktop.Notifications", "/org/freedesktop/Notifications",
+                    "org.freedesktop.Notifications.Notify",
+                    "string:Deva", "uint32:0", "string:", "string:" + (title or "Deva"),
+                    "string:" + body, "array:string:",
+                    "dict:string:variant:string:urgency,string:normal", "int32:5000"]
+            try:
+                result = subprocess.run(argv, capture_output=True, timeout=5)
+                if result.returncode == 0 and b"uint32" in result.stdout:
+                    print("NOTIFY SHOWN " + title, flush=True)
+                    return True
+                print("NOTIFY DBUS SEND FAILED %s" % result.stderr.decode(errors="replace"),
+                      file=sys.stderr, flush=True)
+            except (OSError, subprocess.SubprocessError) as exc:
+                print("NOTIFY DBUS SEND FAILED %s: %s" % (type(exc).__name__, exc),
+                      file=sys.stderr, flush=True)
         self.icon.showMessage(title or "Deva", body, QtWidgets.QSystemTrayIcon.Information, 5000)
         print("NOTIFY SHOWN " + title, flush=True)
         return True
