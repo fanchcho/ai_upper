@@ -4,6 +4,7 @@ import threading
 from pathlib import Path
 from mvvm.services.chat_session_store import write_file_atomic
 import uuid
+import time
 from mvvm.models.chat_models import Message, TextPart
 from mvvm.services.persona_store import PersonaStore
 from mvvm.services.tool_runtime import ToolSpec, ToolResult
@@ -32,16 +33,17 @@ class Members:
         if len([m for m in main.members if not m.get('removedAt')]) >= 10: raise ValueError('成员已满 10 个')
         sid = 'member-' + uuid.uuid4().hex
         persona = args.get('personaId') or 'general'
-        if args.get('pick_folder'):raise ValueError('成员目录选择尚未接入，请先由用户在会话中选择目录')
         root=main.focusRoot if args.get('personaId') else None
         if args.get('folder'):
             root=str(self.host.guard.assert_inside(Path(main.focusRoot or '.') / args['folder']))
             Path(root).mkdir(parents=True,exist_ok=True)
         self.host.create_session({'sessionId':sid, 'personaId':persona, 'focusRoot':root})
-        member = {'id':sid, 'sessionId':sid, 'name':name, 'personaId':persona, 'duty':str(args.get('duty') or ''), 'origin':'mention'}
+        member = {'id':sid, 'sessionId':sid, 'name':name, 'personaId':persona, 'duty':str(args.get('duty') or ''), 'origin':'mention' if args.get('personaId') else 'agent'}
         child = self.host.store.load_session(sid)
         child.parentId = main.id
         child.title = name
+        child.model = main.model
+        child.effort = main.effort
         self.host.store.save(sid)
         self.install(self.host.vm_for(sid),child)
         main.members.append(member)
@@ -53,7 +55,7 @@ class Members:
         own = '\n'.join(line for line in text.splitlines() if not line.lstrip().startswith('>'))
         if '@' not in own: return []
         roles = sorted(PersonaStore(self.host.home / 'deva').list_personas(), key=lambda p:len(p['name']), reverse=True)
-        selected = [m for m in (main.members or []) if '@'+m['name'] in own]
+        selected = [m for m in (main.members or []) if not m.get('removedAt') and '@'+m['name'] in own]
         for role in roles:
             if not role.get('enabled',True) or role['id'] == main.personaId or '@'+role['name'] not in own: continue
             if any(role['name'] in m['name'] for m in selected): continue
@@ -65,25 +67,41 @@ class Members:
 
     def install(self, vm, main):
         def create(args):
-            try: return ToolResult(json.dumps(self.create(main,args),ensure_ascii=False))
+            try:
+                if args.get('pick_folder') and not args.get('folder'):
+                    controller=getattr(self.host,'interactions',None)
+                    if not controller or not vm.tools.interactive:raise ValueError('目录选择交互不可用')
+                    row=controller.request(main.id,'member-folder-'+uuid.uuid4().hex,'mount','选择成员 '+str(args.get('name',''))+' 的工作目录',cancelled=vm.tools.cancel_check)
+                    if row['outcome']=='answered':args=dict(args,folder=row['answer'])
+                return ToolResult(json.dumps(self.create(main,args),ensure_ascii=False))
             except Exception as exc: return ToolResult(str(exc),True)
         def send(args):
             try:
                 ref = str(args.get('member') or args.get('name') or '')
-                member = next((m for m in main.members or [] if ref in (m['id'],m['name'])),None)
+                member = next((m for m in main.members or [] if not m.get('removedAt') and ref in (m['id'],m['name'])),None)
                 if member is None: raise ValueError('找不到成员：'+ref)
                 text = str(args.get('message') or '').strip()
                 if not text: raise ValueError('消息不能为空')
                 sid = member['sessionId']
-                if self.host.is_busy(sid): raise ValueError('成员正在执行')
-                self.pending[sid] = (main.id,member['name'],len(self.host.store.load_session(sid).messages))
-                if args.get('report_to_me'):self.escalations[sid]='主角色要求汇总'
-                member['task']=str(args.get('task') or text[:80]);self.host.store.save(main.id)
-                turn = self.host.send({'sessionId':sid,'text':text})
+                busy=self.host.is_busy(sid)
+                dispatch={'id':uuid.uuid4().hex,'task':str(args.get('task') or text[:80]),'delivered':not busy,'reportToMe':bool(args.get('report_to_me')),'group':self.host._session_turn.get(main.id,'')}
+                with self.lock:
+                    if not busy:self.pending[sid] = (main.id,member['name'],len(self.host.store.load_session(sid).messages))
+                    member['openTasks']=(member.get('openTasks',[]) if busy else [])+[dispatch]
+                    member['task']=dispatch['task'];self.host.store.save(main.id)
+                message='【主角色派来的任务】'+dispatch['task']+'\n'+text
+                if not self.host.store.load_session(sid).messages:
+                    message+='\n【主对话背景】\n'+'\n'.join(m.text() for m in main.messages[-10:])
+                if busy:
+                    def delivered():
+                        with self.lock:dispatch['delivered']=True;self.host.store.save(main.id)
+                    self.host.vm_for(sid).insert_message(message,delivered)
+                    turn={'inserted':True,'task':dispatch['task']}
+                else:turn = self.host.send({'sessionId':sid,'text':message})
                 return ToolResult(json.dumps(turn))
             except Exception as exc: return ToolResult(str(exc),True)
-        vm.tools.register(ToolSpec('create_member','在当前对话创建协作成员',{'type':'object','properties':{'name':{'type':'string'},'duty':{'type':'string'},'personaId':{'type':'string'}},'required':['name']}),create)
-        vm.tools.register(ToolSpec('member_send','给成员分派具体任务',{'type':'object','properties':{'member':{'type':'string'},'message':{'type':'string'}},'required':['member','message']}),send)
+        vm.tools.register(ToolSpec('create_member','按用户要求或持续的不同工作块创建成员；一次性任务不建成员',{'type':'object','properties':{'name':{'type':'string'},'duty':{'type':'string'},'folder':{'type':'string'},'pick_folder':{'type':'boolean'}},'required':['name','duty']}),create)
+        vm.tools.register(ToolSpec('member_send','给成员分派任务；忙碌时插入；默认直接回复用户，需要汇总时 report_to_me',{'type':'object','properties':{'member':{'type':'string'},'message':{'type':'string'},'task':{'type':'string'},'report_to_me':{'type':'boolean'}},'required':['member','task','message']}),send)
 
         def status(args):
             rows=[]
@@ -122,10 +140,35 @@ class Members:
             if not reason:return ToolResult('reason 不能为空',True)
             self.escalations[main.id]=reason
             return ToolResult('最终结论将交主角色处理')
+        def reply(args):
+            parent=self.host.store.load_session(main.parentId) if main.parentId else None
+            ref=next((m for m in parent.members or [] if m['sessionId']==main.id and not m.get('removedAt')),None) if parent else None
+            if not ref:return ToolResult('已不在主对话的成员名单里',True)
+            with self.lock:
+                tasks=ref.get('openTasks',[])
+                if len(tasks)<2:return ToolResult('只剩一项或没有派来的任务，请直接写最终回复',True)
+                normalize=lambda v:''.join(str(v).strip('「」').split()).casefold()
+                hit=next((d for d in tasks if d['delivered'] and normalize(d['task'])==normalize(args.get('task',''))),None)
+                if not hit:return ToolResult('没有已送达且未交回的同名任务',True)
+                conclusion=str(args.get('conclusion','')).strip()
+                if not conclusion:return ToolResult('conclusion 不能为空',True)
+                tasks.remove(hit);self.host.store.save(parent.id)
+                self.reports.append([parent.id,ref['name'],conclusion,'主角色要求汇总' if hit['reportToMe'] else '',hit['group']]);self.save_reports()
+            return ToolResult('已交回 '+hit['task']+'，接着做其余任务，最终回复不重复本项')
         if main.parentId:
             for name in ('create_member','member_send','member_status','member_stop'):vm.tools._tools.pop(name,None)
             vm.tools.register(ToolSpec('read_main','分页读取主对话正文',{'type':'object','properties':{k:{'type':'integer'} for k in ('before','round','offset')}}),read_main)
             vm.tools.register(ToolSpec('report_to_main','最终结论交主角色处理',{'type':'object','properties':{'reason':{'type':'string'}},'required':['reason']}),report)
+            vm.tools.register(ToolSpec('reply_task','同时有几项任务时，提前交回其中一项独立任务的结论',{'type':'object','properties':{'task':{'type':'string'},'conclusion':{'type':'string'}},'required':['task','conclusion']}),reply)
+
+    def remove(self, main, sid):
+        ref=next((m for m in main.members or [] if m['sessionId']==sid),None)
+        if not ref:return False
+        ref['removedAt']=int(time.time()*1000)
+        turn=self.host._session_turn.get(sid)
+        if turn:self.host.abort(turn)
+        self.host.store.save(main.id);self.host._emit_sessions_changed()
+        return True
 
     def finished(self, sid):
         if sid not in self.pending: return
@@ -136,23 +179,36 @@ class Members:
         if not messages or main is None: return
         content = messages[-1].content
         text = content if isinstance(content,str) else '\n'.join(p.text for p in content if isinstance(p,TextPart))
-        # Main may still be generating: wait until its turn finishes before appending.
+        ref=next((m for m in main.members or [] if m['sessionId']==sid),None)
+        if not ref or ref.get('removedAt'):return
+        turn=self.host._turns.get(self.host._session_turn.get(sid,''))
+        if turn and turn.aborted:return
         with self.lock:
-            self.reports.append([main_id,name,text,self.escalations.pop(sid,'')])
+            closing=[d for d in ref.get('openTasks',[]) if d['delivered']]
+            ref['openTasks']=[d for d in ref.get('openTasks',[]) if not d['delivered']]
+            ref['last']={'text':text,'at':int(time.time()*1000),'status':'done'}
+            self.host.store.save(main_id)
+            requested=next((d for d in closing if d['reportToMe']),None)
+            self.reports.append([main_id,name,text,self.escalations.pop(sid,'') or ('主角色要求汇总' if requested else ''),requested['group'] if requested else ''])
             self.save_reports()
 
     def drain(self):
         for row in list(self.reports):
+            if row not in self.reports:continue
             sid,name,text = row[:3]
             wake=row[3] if len(row)>3 else ""
             if self.host.is_busy(sid): continue
             main = self.host.store.load_session(sid)
             if main:
+                group=row[4] if len(row)>4 else ''
+                if wake and group and any(d.get('reportToMe') and d.get('group')==group for m in main.members or [] for d in m.get('openTasks',[])):continue
+                grouped=[r for r in self.reports if r[0]==sid and len(r)>4 and r[3] and r[4]==group] if wake and group else [row]
                 if wake:
-                    self.host.send({'sessionId':sid,'text':'成员 '+name+' 请求处理：'+wake+'\n'+text})
+                    self.host.send({'sessionId':sid,'text':'\n\n'.join('成员 '+r[1]+' 请求处理：'+r[3]+'\n'+r[2] for r in grouped)})
                 else:main.messages.append(Message(role='assistant',content=name+'：'+text))
                 self.host.store.save(sid);self.host._emit_sessions_changed()
                 self.host._emit({'turnId':'','sessionId':sid,'event':{'type':'done','stopReason':'end_turn','durationMs':0}})
             with self.lock:
-                self.reports.remove(row)
+                for result in grouped if main else [row]:
+                    if result in self.reports:self.reports.remove(result)
                 self.save_reports()

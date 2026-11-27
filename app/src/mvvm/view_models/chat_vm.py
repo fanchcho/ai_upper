@@ -152,6 +152,7 @@ class ChatViewModel(BaseViewModel):
         # 回合线程只往队列里放「到 UI 线程再执行」的属性写入；UI 线程用 drain() 取走执行。
         # 这样 Qt 控件与可观察属性永远只被一个线程碰（见模块开头的线程说明）。
         self._events: queue.Queue[Callable[[], None]] = queue.Queue()
+        self._inserts: queue.Queue = queue.Queue()
         self._worker_ident: Optional[int] = None
         self.emit: Callable[[dict[str, Any]], None] = lambda event: None
         # `todo_write` 的落点：写会话边车并推给界面（Deva 的胶囊条数据源）。
@@ -349,6 +350,22 @@ class ChatViewModel(BaseViewModel):
         self.drain()
         return True
 
+    def insert_message(self, text, delivered):
+        """Only the turn worker writes history; member dispatches enter at a model boundary."""
+        self._inserts.put((text, delivered))
+
+    def _consume_inserts(self, session_id):
+        count = 0
+        while True:
+            try:
+                text, delivered = self._inserts.get_nowait()
+            except queue.Empty:
+                return count
+            self.store.append_message(session_id, Message(role='user', content=text))
+            delivered()
+            self._append_display('user', text)
+            count += 1
+
     def drain(self) -> int:
         """在 UI 线程执行回合线程攒下的状态更新。返回执行了几条。
 
@@ -538,6 +555,7 @@ class ChatViewModel(BaseViewModel):
             raise RuntimeError(tr('legacy.969a2eb8d325'))
         model = model or self.model
         for step in range(MAX_TOOL_STEPS + 1):
+            self._consume_inserts(session_id)
             session = self.store.ensure_session(session_id)
             if step > 0:
                 # 轮中压缩：上一步的工具结果已回灌，历史里没有悬空的 tool_use，可以安全改写。
@@ -665,6 +683,11 @@ class ChatViewModel(BaseViewModel):
                     _normalized("invalid_request", tr('legacy.34564c43784d'))
                 )
             answer = text
+            if not self._inserts.empty():
+                if text:
+                    self.store.append_message(session_id, Message(role='assistant', content=text))
+                    self._append_display('assistant', text)
+                continue
             break
         else:
             raise ProviderError(

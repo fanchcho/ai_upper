@@ -1,0 +1,42 @@
+diff --git a/scripts/parity/feature_parity_evidence.py b/scripts/parity/feature_parity_evidence.py
+index f3f8c91..0392d02 100644
+--- a/scripts/parity/feature_parity_evidence.py
++++ b/scripts/parity/feature_parity_evidence.py
+@@ -424,6 +424,28 @@ def evidence_git(outdir: Path, theme: str):
+         shutil.rmtree(tmp, ignore_errors=True)
+ 
+ 
++def evidence_background(outdir: Path, theme: str):
++    from test_qml_shell import text_stream
++
++    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-background-{theme}-"))
++    try:
++        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
++        child_id = "member-bg"
++        bridge._host.create_session({"sessionId": child_id, "personaId": "general"})
++        session = store.load_session("s-1")
++        session.members = [{"id": child_id, "sessionId": child_id, "name": "Reviewer", "personaId": "general"}]
++        store.save("s-1")
++        bridge.openSession("s-1"); bridge._publish(); _pump(QGuiApplication.instance(), lambda: False, 0.5)
++        png = outdir / f"background-tasks-{theme}.png"
++        size = shot(window, png)
++        rows = [{"feature": "background", "theme": theme, "png": str(png), "size": size,
++                 "tasks": bridge.backgroundTasks()}]
++        ticker.stop(); window.close(); engine.deleteLater()
++        return rows
++    finally:
++        shutil.rmtree(tmp, ignore_errors=True)
++
++
+ def main():
+     feature = sys.argv[1]
+     outdir = Path(sys.argv[2])
+@@ -434,7 +456,7 @@ def main():
+     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
+     if font.exists():
+         QFontDatabase.addApplicationFont(str(font))
+-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git}
++    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background}
+     runner = runners[feature]
+     rows = []
+     for theme in ("dark", "light"):

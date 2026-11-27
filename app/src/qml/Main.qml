@@ -1598,6 +1598,8 @@ ApplicationWindow {
             width: composer.width - 26
             todo: window.todoCapsule
             pending: window.pendingInserts
+            background: window.backgroundTasks
+            z: 30
         }
         SlashMenu {
             id: slashMenu

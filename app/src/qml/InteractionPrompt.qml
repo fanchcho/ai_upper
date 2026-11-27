@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs as Dialogs
 import "."
 
 Rectangle {
@@ -15,6 +16,14 @@ Rectangle {
     radius: 12
     z: 2000
     anchors.centerIn: parent
+    Dialogs.FolderDialog {
+        id: memberFolder
+        objectName: "memberFolderDialog"
+        onAccepted: {
+            if (prompt.request && shellBridge.acceptMemberFolder(prompt.request.id,selectedFolder)) prompt.request=null
+        }
+        onRejected: prompt.respond("dismissed", "")
+    }
     function respond(outcome, text) {
         if (request && shellBridge.answerInteraction(request.id, outcome, text)) {
             request = null
@@ -43,7 +52,7 @@ Rectangle {
         }
         TextField { id: answer; objectName: "interactionAnswer"; visible: prompt.request && prompt.request.kind === "question"; placeholderText: I18n.t("native.message22"); Layout.fillWidth: true }
         RowLayout {
-            Button { objectName: "interactionAccept"; text: prompt.request && prompt.request.kind === "approval" ? I18n.t("native.message18") : I18n.t("native.submit"); onClicked: prompt.respond(prompt.request.kind === "approval" ? "approved" : "answered", answer.text) }
+            Button { objectName: "interactionAccept"; text: prompt.request && prompt.request.kind === "mount" ? "选择文件夹" : prompt.request && prompt.request.kind === "approval" ? I18n.t("native.message18") : I18n.t("native.submit"); onClicked: { if(prompt.request.kind==="mount")memberFolder.open();else prompt.respond(prompt.request.kind === "approval" ? "approved" : "answered", answer.text) } }
             Button { objectName: "interactionReject"; text: prompt.request && prompt.request.kind === "approval" ? I18n.t("cf.reject") : I18n.t("cf.close"); onClicked: prompt.respond(prompt.request.kind === "approval" ? "denied" : "dismissed", "") }
         }
     }

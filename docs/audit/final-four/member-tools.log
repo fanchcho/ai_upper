@@ -1,0 +1,19 @@
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer and dispatch A and B", "attachments": []}
+QML TURN 4703df04e7f6465a88f7f4ed3a5f6de5
+QML STREAM {"text": "MANAGER_DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the new C task", "attachments": []}
+QML TURN 81b483f9fdd94fcdadf23d34900e7c91
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ComposerCapsules.qml:85: ReferenceError: root is not defined
+QML SEND {"sessionId": "s-1", "text": "@新建成员 create Reviewer and dispatch A and B", "attachments": []}
+QML TURN 3c18275e879e4c10bf9c57d9c460fa2f
+QML STREAM {"text": "MANAGER_DISPATCHED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+QML SEND {"sessionId": "s-1", "text": "Stop the new C task", "attachments": []}
+QML TURN 8d61e3a8e28445c28650dc8e51085382
+QML STREAM {"text": "STOPPED"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/ComposerCapsules.qml:85: ReferenceError: root is not defined
+PASS all seven actual tools, busy insertion, early reply, escalation, stop and UI removal; reopened stores

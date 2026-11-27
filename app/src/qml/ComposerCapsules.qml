@@ -69,11 +69,11 @@ Item {
     Rectangle {
         objectName: "backgroundCapsuleList"
         visible: root.backgroundOpen && root.hasBackground
-        x: 0; y: 30; width: 360; height: visible ? Math.min(260, 14 + (root.background || []).length * 44) : 0
+        x: 0; y: -height - 4; width: 390; height: visible ? Math.min(260, 14 + (root.background || []).length * 44) : 0
         radius: Theme.radius; color: Theme.bgElevated; border.width: 1; border.color: Theme.border
         z: 20
         Column {
-            x: 8; y: 6; spacing: 2
+            x: 8; y: 6; width: parent.width - 16; spacing: 2
             Repeater {
                 model: root.background || []
                 delegate: Row {
@@ -82,6 +82,7 @@ Item {
                     Text { width: 150; text: modelData.name + " · " + modelData.status; color: Theme.fg; font.pixelSize: 12; elide: Text.ElideRight }
                     SettingsButton { objectName: "bgOpen_" + modelData.id; text: "打开"; height: 24; onClicked: shellBridge.openBackground(modelData.id) }
                     SettingsButton { objectName: "bgCancel_" + modelData.id; text: "取消"; height: 24; onClicked: { shellBridge.cancelBackground(modelData.id); root.backgroundOpen = false } }
+                    SettingsButton { objectName: "bgRemove_" + modelData.id; text: "移除"; height: 24; onClicked: { root.backgroundOpen = false; shellBridge.removeMember(modelData.id) } }
                 }
             }
         }

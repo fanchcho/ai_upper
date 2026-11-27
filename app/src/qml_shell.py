@@ -1625,6 +1625,7 @@ class ShellBridge(QtCore.QObject):
         rows = []
         seen = set()
         for member in members:
+            if member.get('removedAt'):continue
             name = str(member.get('name') or '')
             if name and name not in seen:
                 rows.append({'name':name, 'desc': '成员', 'kind':'mention'})
@@ -1873,6 +1874,23 @@ class ShellBridge(QtCore.QObject):
         if self._window is not None:
             self._window.setProperty("page", "chat")
         return True
+
+    @QtCore.Slot(str, result=bool)
+    def removeMember(self, session_id: str) -> bool:
+        session = self._session()
+        ok = bool(session and self._host._members.remove(session, session_id))
+        if ok:self._publish()
+        return ok
+
+    @QtCore.Slot(str, QtCore.QUrl, result=bool)
+    def acceptMemberFolder(self, request_id, url):
+        controller = getattr(self._host, 'interactions', None)
+        row = next((r for r in controller.pending(self._active) if r['id']==request_id and r['kind']=='mount'),None) if controller else None
+        if not row or not url.isLocalFile() or url.host():return False
+        root = Path(url.toLocalFile()).resolve(strict=True)
+        if not root.is_dir():return False
+        self._host.guard.trust_root(root)
+        return controller.answer(self._active,request_id,'answered',str(root))
 
     @QtCore.Slot(result="QVariantMap")
     def backgroundCapsule(self) -> Dict[str, Any]:
