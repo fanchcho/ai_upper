@@ -248,12 +248,35 @@ def evidence_attachments(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_unread(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-unread-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"), sessions=("s-1", "s-2"))
+        bridge._unread.add("s-1")
+        bridge._publish()
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        png = outdir / f"unread-dot-{theme}.png"
+        size = shot(window, png)
+        rows = [{"feature": "unread", "theme": theme, "png": str(png), "size": size,
+                 "rows": [{"id": r["id"], "unread": r["unread"]} for r in bridge._rows()]}]
+        bridge.openSession("s-1"); bridge._publish()
+        _pump(QGuiApplication.instance(), lambda: False, 0.2)
+        rows.append({"feature": "unread", "theme": theme, "state": "opened",
+                     "rows": [{"id": r["id"], "unread": r["unread"]} for r in bridge._rows()]})
+        ticker.stop(); window.close(); engine.deleteLater()
+        return rows
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     app = QGuiApplication.instance() or QGuiApplication([])
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

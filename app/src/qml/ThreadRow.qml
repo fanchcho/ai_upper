@@ -23,6 +23,9 @@ Rectangle {
     // 多选态：右键「Select」进入后显示左侧勾选框，点击整行即切换选中。
     property bool selectionMode: false
     property bool selected: false
+    // 未读红点：原版 Rail.tsx:1124-1156 + redesign.css:1041-1051
+    // （头像右上角 10px、--danger、外圈 2px --bg-panel）。
+    property bool unread: false
 
     height: 54
     radius: Theme.radius
@@ -64,6 +67,18 @@ Rectangle {
         size: 38
         x: row.selectionMode ? 30 : 12
         y: 8
+    }
+    Rectangle {
+        objectName: "threadUnread"
+        visible: row.unread && !row.active
+        x: face.x + face.width - 9
+        y: face.y - 1
+        width: 10
+        height: 10
+        radius: 5
+        color: Theme.danger
+        border.width: 2
+        border.color: Theme.bgPanel
     }
 
     // 主列：标题行 17px（13/600）+ 角色名 13px（11px）

@@ -294,6 +294,8 @@ class ShellBridge(QtCore.QObject):
         # 当前在跑回合的 turnId：原版 Composer 的停止键走 `chat:abort(turnId)`；
         # 这里保存 send() 的返回值，停止时按 id 取消，未跑回合时为空串。
         self._turn_id = ""
+        # 未读会话 id：原版 Rail.tsx:1124-1156 在头像右上角打红点；当前会话打开即清除。
+        self._unread: set[str] = set()
         # 检查更新的状态机：idle / checking / latest / available / error。
         self._update_state: Dict[str, Any] = {"phase": "idle"}
         self._update_thread: Any = None
@@ -603,6 +605,7 @@ class ShellBridge(QtCore.QObject):
     def openSession(self, session_id: str) -> bool:
         """切换会话：正文按该会话落盘的消息重渲染。"""
         self._active = str(session_id or "")
+        self._unread.discard(self._active)
         self._turn = None
         self._turn_session = ""
         self._publish()
@@ -1572,9 +1575,14 @@ class ShellBridge(QtCore.QObject):
     def _handle(self, payload: Dict[str, Any]) -> bool:
         session_id = str(payload.get("sessionId") or "")
         event = payload.get("event")
-        if session_id != self._turn_session or not isinstance(event, dict):
+        if not isinstance(event, dict):
             return False
         kind = event.get("type")
+        # 回合在别的会话结束时给它记未读（当前正在看的会话不打红点）。
+        if kind in ("done", "error") and session_id and session_id != self._active:
+            self._unread.add(session_id)
+        if session_id != self._turn_session:
+            return False
         if kind == "text_delta" and self._turn is not None:
             text = str(event.get("text") or "")
             self.deltas.append(text)
@@ -1782,6 +1790,7 @@ class ShellBridge(QtCore.QObject):
             root = focus.get(row["id"], "")
             row["focusRoot"] = root
             row["focusName"] = os.path.basename(root.rstrip("/\\")) if root else ""
+            row["unread"] = row["id"] in self._unread
         return rows
 
     def _publish(self) -> None:
