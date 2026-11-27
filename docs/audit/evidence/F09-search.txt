@@ -1,5 +1,6 @@
 $ rg -n --glob *.qml --glob *.py Menu app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
+app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
 app/src/qml_shell.py:1105:    def modelMenuGroups(self) -> List[Dict[str, Any]]:
 app/src/qml_shell.py:1141:    def effortMenu(self) -> Dict[str, Any]:
 app/src/qml_shell.py:2827:        effort = self.effortMenu()
@@ -51,7 +52,6 @@ app/src/qml/ModelPicker.qml:104:                ? 2 + 10 + 44 * (((root.effortMe
 app/src/qml/ModelPicker.qml:251:            readonly property var options: (root.effortMenu && root.effortMenu.options) || []
 app/src/qml/ModelPicker.qml:252:            readonly property string current: (root.effortMenu && root.effortMenu.current)
 app/src/qml/ModelPicker.qml:253:                                              ? String(root.effortMenu.current) : "default"
-app/src/qml/SlashMenu.qml:7:    objectName: "slashMenu"
 app/src/qml/EditContextMenu.qml:7:Menu {
 app/src/qml/EditContextMenu.qml:9:    objectName: "editContextMenu"
 app/src/qml/EditContextMenu.qml:27:    MenuItem {
@@ -72,5 +72,5 @@ app/src/qml/EditContextMenu.qml:109:        objectName: "editMenuDeleteTurn"
 app/src/qml/EditContextMenu.qml:116:    MenuSeparator {
 app/src/qml/EditContextMenu.qml:121:    MenuItem {
 app/src/qml/EditContextMenu.qml:123:        objectName: "editMenuSelectAll"
-app/src/mvvm/services/tray.py:33:        menu = QtWidgets.QMenu()
-app/src/mvvm/services/tray.py:41:        self.icon.setContextMenu(menu)
+app/src/mvvm/services/tray.py:36:        menu = QtWidgets.QMenu()
+app/src/mvvm/services/tray.py:44:        self.icon.setContextMenu(menu)

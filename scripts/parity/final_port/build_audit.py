@@ -63,6 +63,8 @@ patch={
 'F75':('implemented','downloadUpdate 真实下载；installUpdate 先 QDesktopServices，失败回退 libgio g_app_info_launch_default_for_uri；test_update_install_gio.py 用真实 XDG .desktop handler 启动并读回文件路径。'),
 'F02':('implemented','scripts/parity/tray_success.py 在 Xvfb + 真实 XEmbed _NET_SYSTEM_TRAY_S0 宿主下 tray_available=true、icon_visible=true；配置 closeToTray=true 后 w.close() 隐藏窗口，暗亮截图 out/tray/tray-*.png。'),
 'F03':('implemented','同一 XEmbed 宿主下 QSystemTrayIcon.install() 返回 true 并真实 show，菜单由 TrayController 创建（显示/定时任务/退出）；tray_success.py 暗亮验证。'),
+'F15':('implemented','TrayController.notify 在 showMessage 前走 dbus-send 标准 freedesktop Notify（uint32/int32/array/dict），自建 session bus+通知服务收到 summary=Hello、body=Body text；日志 docs/audit/remaining-seven/notification-success.log。'),
+'F60':('implemented','任务完成通知复用同一 TrayController.notify 路径；dbus-send Notify 实测服务端收到字段，任务/回复通知不再依赖 QSystemTrayIcon.showMessage。'),
 'F85':('implemented','GitPanel 接 status/diff/stage/unstage/discard/commit/fetch/pull/push/merge/merge-abort/branches(含切换/新建/远程)/remote add-remove-set/log 分页；generate-commit-message 按真实 diff 调当前模型，无模型回 unverified，cancel 中断；set-config 写后回读 local/global 实际值。test_git_full.py + test_qml_git_panel.py 真实临时仓库/QML 键鼠，读回 git config 与面板提示。'),
 }
 

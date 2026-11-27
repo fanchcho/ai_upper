@@ -6,22 +6,6 @@ app/src/mvvm/view_models/chat_vm.py:158:        # `todo_write` 的落点：写�
 app/src/mvvm/view_models/chat_vm.py:189:        # 当前进行中的待办清单（`todo_write` 写会话边车后同步到这里，界面画胶囊条）。
 app/src/mvvm/view_models/chat_vm.py:255:        """`todo_write` 的执行落点：写会话边车（todos / todoCancelled）并推给界面。"""
 app/src/mvvm/view_models/chat_vm.py:259:        applied = apply_todo_write_to(
-app/src/mvvm/services/tool_results.py:1:"""工具结果的两处落盘形态：`tool_result` 消息，与 `todo_write` 的会话边车应用。
-app/src/mvvm/services/tool_results.py:10:`apply_todo_write_to` 对应 Deva `chat.ts` 里 `todo_write` 的执行分支（约 5729 行）：
-app/src/mvvm/services/tool_results.py:22:    apply_todo_write,
-app/src/mvvm/services/tool_results.py:71:    """一次 `todo_write` 的结果与新的边车状态（调用方负责写回会话）。"""
-app/src/mvvm/services/tool_results.py:85:def apply_todo_write_to(
-app/src/mvvm/services/tool_results.py:92:    """把一次 `todo_write` 应用到边车状态。语义逐条对齐 Deva（取消 / 追加 / 恢复 / 已全部完成）。"""
-app/src/mvvm/services/tool_results.py:95:    outcome = apply_todo_write(current_entries, current_cancelled, tool_use_id, raw_input, now)
-app/src/mvvm/services/tool_results.py:136:    "apply_todo_write_to",
-app/src/mvvm/services/tool_runtime.py:5:`write_file`、`edit_file`、`run_command`、`present_files`、`todo_write`。其余 9 个
-app/src/mvvm/services/tool_runtime.py:262:    name="todo_write",
-app/src/mvvm/services/tool_runtime.py:414:        # todo_write 的落点由会话层注入（写会话边车、推送进度），运行时本身不碰磁盘边车。
-app/src/mvvm/services/tool_runtime.py:442:            (TODO_WRITE_SPEC, self._todo_write),
-app/src/mvvm/services/tool_runtime.py:489:                return ToolResult('用户已批准计划。现在请按已批准的计划开始执行；多步骤先用 todo_write 列清单。')
-app/src/mvvm/services/tool_runtime.py:525:            invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
-app/src/mvvm/services/tool_runtime.py:942:    # ── todo_write ────────────────────────────────────────────────────────
-app/src/mvvm/services/tool_runtime.py:943:    def _todo_write(self, arguments: dict[str, Any], tool_use_id: str) -> ToolResult:
 app/src/mvvm/services/todos.py:1:"""待办清单：`todo_write` 工具的快照日志与折叠视图。
 app/src/mvvm/services/todos.py:5:- 每次 `todo_write` 追加一条快照（`StoredSession.todos` 的元素），清单按 `listId` 折叠，
 app/src/mvvm/services/todos.py:82:    """解析 todo_write 入参；不合法返回 `{"error": ...}`。"""
@@ -34,3 +18,19 @@ app/src/mvvm/services/todos.py:212:        "请调用 todo_write 并传 cancel: 
 app/src/mvvm/services/todos.py:221:        "之后若要开始新的多步骤任务，请用 todo_write 传 new_list: true 另建清单。"
 app/src/mvvm/services/todos.py:231:    "apply_todo_write",
 app/src/mvvm/services/tool_policy.py:35:        "todo_write",
+app/src/mvvm/services/tool_runtime.py:5:`write_file`、`edit_file`、`run_command`、`present_files`、`todo_write`。其余 9 个
+app/src/mvvm/services/tool_runtime.py:262:    name="todo_write",
+app/src/mvvm/services/tool_runtime.py:414:        # todo_write 的落点由会话层注入（写会话边车、推送进度），运行时本身不碰磁盘边车。
+app/src/mvvm/services/tool_runtime.py:442:            (TODO_WRITE_SPEC, self._todo_write),
+app/src/mvvm/services/tool_runtime.py:489:                return ToolResult('用户已批准计划。现在请按已批准的计划开始执行；多步骤先用 todo_write 列清单。')
+app/src/mvvm/services/tool_runtime.py:525:            invoke = (lambda: self._todo_write(arguments, tool_use_id)) if name == 'todo_write' else (lambda: handler(arguments))
+app/src/mvvm/services/tool_runtime.py:942:    # ── todo_write ────────────────────────────────────────────────────────
+app/src/mvvm/services/tool_runtime.py:943:    def _todo_write(self, arguments: dict[str, Any], tool_use_id: str) -> ToolResult:
+app/src/mvvm/services/tool_results.py:1:"""工具结果的两处落盘形态：`tool_result` 消息，与 `todo_write` 的会话边车应用。
+app/src/mvvm/services/tool_results.py:10:`apply_todo_write_to` 对应 Deva `chat.ts` 里 `todo_write` 的执行分支（约 5729 行）：
+app/src/mvvm/services/tool_results.py:22:    apply_todo_write,
+app/src/mvvm/services/tool_results.py:71:    """一次 `todo_write` 的结果与新的边车状态（调用方负责写回会话）。"""
+app/src/mvvm/services/tool_results.py:85:def apply_todo_write_to(
+app/src/mvvm/services/tool_results.py:92:    """把一次 `todo_write` 应用到边车状态。语义逐条对齐 Deva（取消 / 追加 / 恢复 / 已全部完成）。"""
+app/src/mvvm/services/tool_results.py:95:    outcome = apply_todo_write(current_entries, current_cancelled, tool_use_id, raw_input, now)
+app/src/mvvm/services/tool_results.py:136:    "apply_todo_write_to",

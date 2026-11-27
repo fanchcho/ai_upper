@@ -2,4 +2,4 @@ $ rg -n --glob *.qml --glob *.py def install app/src/qml app/src/qml_shell.py ap
 exit=0
 app/src/qml_shell.py:549:    def installUpdate(self, path: str = "") -> bool:
 app/src/mvvm/services/members.py:118:    def install(self, vm, main):
-app/src/mvvm/services/tray.py:21:    def install(self) -> bool:
+app/src/mvvm/services/tray.py:24:    def install(self) -> bool:
