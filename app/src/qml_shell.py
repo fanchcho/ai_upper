@@ -1214,6 +1214,49 @@ class ShellBridge(QtCore.QObject):
         cleaned = {key: value for key, value in models.items() if value is not None}
         return self._write_config({"models": cleaned})
 
+    @QtCore.Slot(result="QVariantMap")
+    def userProfile(self) -> Dict[str, Any]:
+        """本机用户资料：头像图片存 `<home>/profile/avatar.<ext>`（原版 profile.ts）。"""
+        directory = self._store.home / "profile"
+        for suffix in (".png", ".jpg", ".jpeg", ".gif", ".webp"):
+            path = directory / ("avatar" + suffix)
+            if path.is_file():
+                mime = "image/png" if suffix == ".png" else "image/jpeg"
+                try:
+                    return {"image": "data:%s;base64,%s" % (mime, base64.b64encode(path.read_bytes()).decode("ascii"))}
+                except OSError:
+                    break
+        return {"image": ""}
+
+    @QtCore.Slot(result=str)
+    def userPickAvatar(self) -> str:
+        from utils.qt_compat import QtWidgets
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self._dialog_parent(), self.translate("native.pickFiles"), "",
+            self.translate("native.images") + " (*.png *.jpg *.jpeg *.gif *.webp)")
+        if not path:
+            return ""
+        try:
+            data = Path(path).read_bytes()
+            suffix = ".png" if path.lower().endswith(".png") else ".jpg"
+            directory = self._store.home / "profile"; directory.mkdir(parents=True, exist_ok=True)
+            for old in directory.glob("avatar.*"):
+                old.unlink(missing_ok=True)
+            (directory / ("avatar" + suffix)).write_bytes(data)
+            return "data:image/%s;base64,%s" % ("png" if suffix == ".png" else "jpeg", base64.b64encode(data).decode("ascii"))
+        except OSError:
+            return ""
+
+    @QtCore.Slot(result=bool)
+    def userClearAvatar(self) -> bool:
+        directory = self._store.home / "profile"
+        try:
+            for path in directory.glob("avatar.*"):
+                path.unlink()
+            return True
+        except OSError:
+            return False
+
     @QtCore.Slot(str, bool, result=str)
     def personaAvatar(self, key, pop):
         from mvvm.services.humation import Humation

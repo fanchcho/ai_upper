@@ -463,6 +463,23 @@ def evidence_sidebar(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_profile(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-profile-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        from PySide6.QtQml import QQmlExpression, QQmlEngine
+        panel = window.findChild(__import__("PySide6.QtCore", fromlist=["QObject"]).QObject, "profilePanel")
+        QQmlExpression(QQmlEngine.contextForObject(panel), panel, "open()").evaluate()
+        _pump(QGuiApplication.instance(), lambda: False, 0.5)
+        png = outdir / f"profile-{theme}.png"; size = shot(window, png)
+        ticker.stop(); window.close(); engine.deleteLater()
+        return [{"feature": "profile", "theme": theme, "png": str(png), "size": size, "profile": bridge.userProfile()}]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
@@ -473,7 +490,7 @@ def main():
     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
     if font.exists():
         QFontDatabase.addApplicationFont(str(font))
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background, "sidebar": evidence_sidebar}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background, "sidebar": evidence_sidebar, "profile": evidence_profile}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

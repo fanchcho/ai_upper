@@ -48,6 +48,7 @@ ApplicationWindow {
     color: Theme.bg
 
     Component.onCompleted: if (shellBridge) sidebarWidth = shellBridge.sidebarWidth()
+    ProfilePanel { id: profilePanel }
     InteractionPrompt { }
 
     // 关窗驻留托盘：原版 index.ts:164-173（仅配置开启时拦截 close）。
@@ -559,6 +560,7 @@ ApplicationWindow {
         // 头像按钮：实测外框 38×38 于 (8.5, 20)，内部 34×34 的圆。
         Item {
             id: meBtn
+            objectName: "meBtn"
             x: 9
             y: window.macChrome ? 60 : 20
             width: 38
@@ -567,7 +569,9 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 persona: "user"
                 size: 34
+                imageSource: profilePanel.profile.image || ""
             }
+            MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: profilePanel.open() }
         }
 
         Column {
