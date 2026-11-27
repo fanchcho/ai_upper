@@ -7,9 +7,12 @@ from qml_shell import _pump
 from PySide6.QtCore import QPointF, QMimeData, QCoreApplication
 from PySide6.QtGui import QDragEnterEvent, QDropEvent
 app=QGuiApplication([])
+from PySide6.QtGui import QFontDatabase
+QFontDatabase.addApplicationFont(str(ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"))
 rows=[]
+evidence_home=Path(os.environ["AI_UPPER_HOME"])
 for theme in ['dark','light']:
- tmp=Path(os.environ['AI_UPPER_HOME'])/theme
+ tmp=evidence_home/theme
  w,b,s,t,e,h=build(tmp,theme,text_stream('ok'),sessions=('s-1','s-2'))
  field=find_item(w.contentItem(),'inputField')
  def click(x,y):

@@ -5532,9 +5532,9 @@
         "status": "implemented",
         "evidence": "Main.qml:2462-2480 三个 WindowControlButton 接 showMinimized/showNormal|showMaximized/close；app/tests/test_qml_window_controls.py 用 QTest 真实点击并断言窗口状态"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml windowControlMinimize/windowControlMaximize/windowControlClose，真实点击断言窗口状态；app/tests/test_qml_window_controls.py:219；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5607,9 +5607,9 @@
         "status": "not_ported",
         "evidence": "`grep -n \"Menu {\" app/src/qml/*.qml` 无结果；TextArea/TextEdit 均无右键处理，Qt Quick Controls 不内建编辑菜单"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml:1560 → EditContextMenu.qml；真实右键、点击全选及选区断言；app/tests/test_qml_edit_menu.py:52；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5622,9 +5622,9 @@
         "status": "not_ported",
         "evidence": "`grep -rn \"Key_B\\|Ctrl+B\\|Shortcut\" app/src/qml app/src/qml_shell.py` 无结果"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml Shortcut/toggleSidebar；真实 Ctrl+B/鼠标悬停及配置读回；lifecycle.log 通过；app/tests/test_qml_sidebar_collapse.py:99；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5727,9 +5727,9 @@
         "status": "implemented",
         "evidence": "Main.qml:684-712 行 onClicked openSession；qml_shell.py:585-594 读真实会话"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml activate → ShellBridge.openSession；实际会话行点击和文档切换；另 drafts.json 双主题通过；app/tests/test_qml_session_switch.py:6；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5742,9 +5742,9 @@
         "status": "implemented",
         "evidence": "Main.qml:2102-2106 右键菜单 rename + 重命名弹层；qml_shell.py:626-642 写盘"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml confirmRename；真实右键、输入、确认后标题及会话文件读回；app/tests/test_qml_context_menu.py:294；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5757,9 +5757,9 @@
         "status": "implemented",
         "evidence": "Main.qml 右键 delete + 确认框；qml_shell.py:606-626 删会话文件"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml confirmDelete；真实右键、确认后会话文件删除；app/tests/test_qml_context_menu.py:170；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5772,9 +5772,9 @@
         "status": "implemented",
         "evidence": "Main.qml:800-830 归档横幅与右键 archive；qml_shell.py:643-700 archiveSession/unarchiveSession/archiveSessions"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml archiveSelected/contextMenu；真实点击归档并读回会话；app/tests/test_qml_context_menu.py:466；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5787,9 +5787,9 @@
         "status": "implemented",
         "evidence": "Main.qml:600-760 archiveHeader/archiveBack，Python archivedSessions 投影"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml archiveView/archiveBack；真实点击进入归档列表；app/tests/test_qml_context_menu.py:466；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5832,9 +5832,9 @@
         "status": "implemented",
         "evidence": "Main.qml:116-118,684-800,1898-1940 selectMode/selectedSessions + 批量归档/删除"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml selectMode/selectedSessions/batch controls；真实菜单多选及批量归档读回；app/tests/test_qml_context_menu.py:337；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5892,9 +5892,9 @@
         "status": "implemented",
         "evidence": "Main.qml:2076-2130 自绘 contextMenu，动作齐全；test_qml_context_menu.py 真实右键触发"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml 右键命中非当前会话；真实菜单动作作用于目标行；app/tests/test_qml_context_menu.py:368；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -5937,9 +5937,9 @@
         "status": "implemented",
         "evidence": "InteractionPrompt.qml + qml_shell.py:355-365 pendingInteractions/answerInteraction（kind=question/approval）"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "InteractionPrompt.qml；真实按钮点击回答与审批，后端事件结果断言；app/tests/test_qml_plugin_settings.py:44；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -6027,9 +6027,9 @@
         "status": "not_ported",
         "evidence": "host.py:306-320 abort 有后端；Main.qml:1555-1575 发送按钮 busy 时只置灰，无停止槽/停止键"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml:1693 stopGlyph → ShellBridge.stopGeneration:1319；真实点击停止，测试传输结束原因 aborted；不声称真实云端网络验证；app/tests/test_qml_stop_generation.py:133；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -6132,9 +6132,9 @@
         "status": "implemented",
         "evidence": "qml_shell.py:900-963 modelMenuGroups/effortMenu；Main.qml ModelPicker"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml 模型与思考贴片 → ModelPicker.qml；真实点击并读取模型/effort 配置；app/tests/test_qml_model_picker.py:133；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -6162,9 +6162,9 @@
         "status": "not_ported",
         "evidence": "`grep -rn \"DropArea\\|onDropped\" app/src/qml` 无结果；attachments.py 只实现 pick_attachments（文件头注释说明 paste/dropped 未移植）"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "implemented",
+      "verification": "首轮全量中对应真实 QML 交互用例通过；最终全量复跑日志另附",
+      "evidence": "Main.qml:74 DropArea → ShellBridge.acceptDroppedFiles:1406；真实拖放并验证 pendingFiles；drafts.json 另做暗亮附件切换验证；app/tests/test_qml_attachments_drop.py:70；out/feature-review/pytest.log。测试并非纯后端单测。",
       "entry": "QML",
       "web_status": null
     },
@@ -6237,9 +6237,9 @@
         "status": "ui_only",
         "evidence": "Main.qml:439 RailButton users 只有图标无 onClicked；无 roster 列表/搜索实现"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "ui_only",
+      "verification": "已复核控件",
+      "evidence": "app/src/qml/Main.qml:517 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。",
       "entry": "QML",
       "web_status": null
     },
@@ -6342,9 +6342,9 @@
         "status": "ui_only",
         "evidence": "Main.qml:440 RailButton alarmClock 无 onClicked；无 TasksPane 对应 QML，无 tasks 服务"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "ui_only",
+      "verification": "已复核控件",
+      "evidence": "app/src/qml/Main.qml:518 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。",
       "entry": "QML",
       "web_status": null
     },
@@ -6402,9 +6402,9 @@
         "status": "ui_only",
         "evidence": "Main.qml:447 RailButton bot 无 onClicked；无 BotsPane 对应 QML"
       },
-      "status": null,
-      "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "status": "ui_only",
+      "verification": "已复核控件",
+      "evidence": "app/src/qml/Main.qml:525 RailButton 只有 iconName，无 onClicked；组件默认仅发 clicked 信号，无页面接线。",
       "entry": "QML",
       "web_status": null
     },
@@ -6697,14 +6697,14 @@
       "id": "F82",
       "group": "其他原生能力",
       "name": "代理与网络设置",
-      "deva": "apps/desktop/src/main/http.ts:12-122 仅环境变量 HTTPS_PROXY/HTTP_PROXY/ALL_PROXY/NO_PROXY",
+      "deva": "apps/desktop/src/main/http.ts:94-96",
       "legacy_claim": {
         "status": "na",
         "evidence": "原版无代理设置 UI；不凭空造"
       },
       "status": null,
       "verification": "未验证",
-      "evidence": "旧判定尚未获得本轮逐项验收，不计入三态。",
+      "evidence": "原版确有 system/env/direct 网络路由；旧稿 na 不成立。QML 设置入口与 Python 网络栈语义尚未逐项验证；out/feature-review/platform-features.txt。",
       "entry": "QML",
       "web_status": null
     },
@@ -6741,8 +6741,16 @@
   ],
   "counts": {
     "not_ported": 6,
-    "ui_only": 1,
-    "implemented": 1
+    "implemented": 15,
+    "ui_only": 4
   },
-  "unverified": 76
+  "unverified": 59,
+  "validation": {
+    "passed": 1438,
+    "skipped": 9,
+    "failed": 0,
+    "seconds": 411.23,
+    "log": "out/feature-review/pytest-final.log",
+    "overall_complete": false
+  }
 }
