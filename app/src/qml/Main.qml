@@ -18,6 +18,8 @@ import "."
 ApplicationWindow {
     id: window
     property string focusRoot: ""
+    property int sidebarWidth: 300
+    readonly property int sideWidth: Math.max(220, Math.min(sidebarWidth, 480, Math.max(220, width - railWidth - 480)))
     Dialogs.FolderDialog {
         id: workspaceDialog
         objectName: "workspaceDialog"
@@ -45,6 +47,7 @@ ApplicationWindow {
     title: I18n.t("finish.brand")
     color: Theme.bg
 
+    Component.onCompleted: if (shellBridge) sidebarWidth = shellBridge.sidebarWidth()
     InteractionPrompt { }
 
     // 关窗驻留托盘：原版 index.ts:164-173（仅配置开启时拦截 close）。
@@ -599,7 +602,7 @@ ApplicationWindow {
         objectName: "sessionSide"
         x: window.railWidth
         y: 0
-        width: window.sideCollapsed ? (window.sidePeek ? Theme.sideWidth : 0) : Theme.sideWidth
+        width: window.sideCollapsed ? (window.sidePeek ? window.sideWidth : 0) : window.sideWidth
         visible: !window.sideCollapsed || window.sidePeek
         z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
         height: parent.height
@@ -799,7 +802,7 @@ ApplicationWindow {
             objectName: "sessionList"
             x: 0
             y: window.archiveView ? 92 : 56
-            width: Theme.sideWidth - 1
+            width: window.sideWidth - 1
             height: parent.height - y - 8
             clip: true
             leftMargin: 8
@@ -985,11 +988,36 @@ ApplicationWindow {
         }
     }
 
+    Item {
+        objectName: "sidebarResize"
+        x: window.railWidth + window.sideWidth - 4
+        y: 0
+        width: 8
+        height: parent.height
+        z: 15
+        visible: !window.sideCollapsed
+        property real startGlobalX: 0
+        property int startWidth: 0
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.SizeHorCursor
+            onPressed: {
+                parent.startGlobalX = mapToItem(null, mouse.x, 0).x
+                parent.startWidth = window.sidebarWidth
+            }
+            onPositionChanged: if (pressed) {
+                var gx = mapToItem(null, mouse.x, 0).x
+                window.sidebarWidth = Math.max(220, Math.min(480, parent.startWidth + (gx - parent.startGlobalX)))
+            }
+            onReleased: if (shellBridge) shellBridge.setSidebarWidth(window.sidebarWidth)
+        }
+    }
+
     // ── 正文区 ────────────────────────────────────────────────────────
     Item {
         id: conv
         objectName: "convColumn"
-        x: window.railWidth + (window.sideCollapsed ? 0 : Theme.sideWidth)
+        x: window.railWidth + (window.sideCollapsed ? 0 : window.sideWidth)
         y: 0
         width: parent.width - x
         height: parent.height

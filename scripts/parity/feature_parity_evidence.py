@@ -446,6 +446,23 @@ def evidence_background(outdir: Path, theme: str):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def evidence_sidebar(outdir: Path, theme: str):
+    from test_qml_shell import text_stream
+
+    tmp = Path(tempfile.mkdtemp(prefix=f"ai-upper-feature-sidebar-{theme}-"))
+    try:
+        window, bridge, store, ticker, engine, home = build(tmp, theme, text_stream("x"))
+        bridge.setSidebarWidth(380)
+        window.setProperty("sidebarWidth", 380)
+        _pump(QGuiApplication.instance(), lambda: False, 0.4)
+        png = outdir / f"sidebar-resize-{theme}.png"
+        size = shot(window, png)
+        ticker.stop(); window.close(); engine.deleteLater()
+        return [{"feature": "sidebar", "theme": theme, "png": str(png), "size": size, "width": bridge.sidebarWidth()}]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     feature = sys.argv[1]
     outdir = Path(sys.argv[2])
@@ -456,7 +473,7 @@ def main():
     font = ROOT / ".tmp/theme-settings/NotoSansCJKsc-Regular.otf"
     if font.exists():
         QFontDatabase.addApplicationFont(str(font))
-    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background}
+    runners = {"stop": evidence_stop, "collapse": evidence_collapse, "context-menu": evidence_context_menu, "attachments": evidence_attachments, "unread": evidence_unread, "slash": evidence_slash, "activity": evidence_activity, "capsules": evidence_capsules, "personas": evidence_personas, "gitpanel": evidence_git, "background": evidence_background, "sidebar": evidence_sidebar}
     runner = runners[feature]
     rows = []
     for theme in ("dark", "light"):

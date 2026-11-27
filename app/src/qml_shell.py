@@ -568,6 +568,18 @@ class ShellBridge(QtCore.QObject):
         self._apply_theme()
         return True
 
+    @QtCore.Slot(result=int)
+    def sidebarWidth(self) -> int:
+        try:
+            width = int(self._config().get("sidebarWidth", 300))
+        except (TypeError, ValueError):
+            width = 300
+        return max(220, min(480, width))
+
+    @QtCore.Slot(int, result=bool)
+    def setSidebarWidth(self, width: int) -> bool:
+        return self._write_config({"sidebarWidth": max(220, min(480, int(width)))})
+
     @QtCore.Slot(result=bool)
     def sidebarCollapsed(self) -> bool:
         """会话列表是否收起（原版 `loadLayout().sidebarCollapsed` 落盘在 layout 里）。"""
