@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def acceptDroppedFiles app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1548:    def acceptDroppedFiles(self, urls: Any) -> List[Dict[str, Any]]:
+app/src/qml_shell.py:1603:    def acceptDroppedFiles(self, urls: Any) -> List[Dict[str, Any]]:

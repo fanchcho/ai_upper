@@ -1,14 +1,14 @@
 $ rg -n --glob *.qml --glob *.py archiveView app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:204:    property bool archiveView: false
-app/src/qml/Main.qml:315:    // 已归档会话同样按搜索词过滤；只有 archiveView 打开时列表才绑定它。
-app/src/qml/Main.qml:338:    readonly property var listedSessions: window.archiveView ? archivedVisibleSessions : visibleSessions
-app/src/qml/Main.qml:754:            visible: window.archiveView
-app/src/qml/Main.qml:801:            y: window.archiveView ? 92 : 56
-app/src/qml/Main.qml:862:            y: window.archiveView ? 104 : 68
-app/src/qml/Main.qml:866:                                          : (window.archiveView
-app/src/qml/Main.qml:879:            visible: window.archivedSessions.length > 0 && !window.archiveView && !window.selectMode
-app/src/qml/Main.qml:2326:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
-app/src/qml/Main.qml:2338:        window.archiveView = true
-app/src/qml/Main.qml:2344:        window.archiveView = false
-app/src/qml/Main.qml:2374:        window.archiveView = false
+app/src/qml/Main.qml:208:    property bool archiveView: false
+app/src/qml/Main.qml:319:    // 已归档会话同样按搜索词过滤；只有 archiveView 打开时列表才绑定它。
+app/src/qml/Main.qml:342:    readonly property var listedSessions: window.archiveView ? archivedVisibleSessions : visibleSessions
+app/src/qml/Main.qml:761:            visible: window.archiveView
+app/src/qml/Main.qml:808:            y: window.archiveView ? 92 : 56
+app/src/qml/Main.qml:869:            y: window.archiveView ? 104 : 68
+app/src/qml/Main.qml:873:                                          : (window.archiveView
+app/src/qml/Main.qml:886:            visible: window.archivedSessions.length > 0 && !window.archiveView && !window.selectMode
+app/src/qml/Main.qml:2369:        var failed = shellBridge.archiveSessions(ids, !window.archiveView)
+app/src/qml/Main.qml:2381:        window.archiveView = true
+app/src/qml/Main.qml:2387:        window.archiveView = false
+app/src/qml/Main.qml:2417:        window.archiveView = false

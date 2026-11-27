@@ -1,5 +1,5 @@
 $ rg -n --glob *.qml --glob *.py GitWidget|gitStatus app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:1703:    def gitStatus(self, root: str) -> Dict[str, Any]:
+app/src/qml_shell.py:1776:    def gitStatus(self, root: str) -> Dict[str, Any]:
 app/src/qml/GitPanel.qml:1:// Git 面板最小子集：状态/暂存/提交/分支/日志（原版 GitWidget.tsx 的常用操作）。
 app/src/qml/GitPanel.qml:40:        status = shellBridge.gitStatus(repoRoot)

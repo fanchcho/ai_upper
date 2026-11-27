@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def startQuickStart app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:887:    def startQuickStart(self, persona_id: str) -> str:
+app/src/qml_shell.py:899:    def startQuickStart(self, persona_id: str) -> str:

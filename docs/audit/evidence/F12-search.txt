@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py inputMethodComposing app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:1665:                    if (inputField.inputMethodComposing) { event.accepted = false; return }
+app/src/qml/Main.qml:1697:                    if (inputField.inputMethodComposing) { event.accepted = false; return }

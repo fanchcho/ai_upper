@@ -1,6 +1,6 @@
 $ rg -n --glob *.qml --glob *.py WindowControlButton app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml/Main.qml:412:    component WindowControlButton: Rectangle {
-app/src/qml/Main.qml:2856:            WindowControlButton {
-app/src/qml/Main.qml:2861:            WindowControlButton {
-app/src/qml/Main.qml:2871:            WindowControlButton {
+app/src/qml/Main.qml:416:    component WindowControlButton: Rectangle {
+app/src/qml/Main.qml:2899:            WindowControlButton {
+app/src/qml/Main.qml:2904:            WindowControlButton {
+app/src/qml/Main.qml:2914:            WindowControlButton {

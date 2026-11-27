@@ -1,3 +1,3 @@
 $ rg -n --glob *.qml --glob *.py def newSession app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:671:    def newSession(self) -> str:
+app/src/qml_shell.py:683:    def newSession(self) -> str:
