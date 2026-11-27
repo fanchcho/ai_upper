@@ -1,0 +1,61 @@
+........................................................................ [  4%]
+.........................................ss............................. [  9%]
+........................................................................ [ 14%]
+........................................................................ [ 19%]
+......................F
+=================================== FAILURES ===================================
+______ test_window_reuses_document_invalidates_edit_and_releases_eviction ______
+
+qapp = <PySide6.QtWidgets.QApplication(0x28b7a1b0) at 0xffff88868a40>
+tmp_path = PosixPath('/tmp/ai-upper-isolated-first-tests/test_window_reuses_document_in0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffff87b09320>
+
+    def test_window_reuses_document_invalidates_edit_and_releases_eviction(qapp, tmp_path, monkeypatch):
+        import test_qml_context_menu as fixture
+        import markdown.prepare as prepare
+        from mvvm.models.chat_models import Message
+        from test_qml_shell import _tick_until
+    
+        def seed(store):
+            for i in range(3):
+                s = store.ensure_session(f's-{i}')
+                s.title = f'Title {i}'
+                s.messages = [Message(role='assistant', content=f'Body {i}\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n```text\n' + 'wide ' * 200 + '\n```')]
+                store.save(s.id)
+        monkeypatch.setattr(fixture, '_seed_sessions', seed)
+        calls = []
+        original = prepare.prepare_document
+        def counted(*args):
+            calls.append(args[0])
+            return original(*args)
+        monkeypatch.setattr(prepare, 'prepare_document', counted)
+>       w, b, store, _, ticker, engine = fixture._build_window(tmp_path, monkeypatch)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+app/tests/test_display_cache.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+app/tests/test_qml_context_menu.py:120: in _build_window
+    bridge.initial()
+app/src/qml_shell.py:1967: in initial
+    self._render()
+app/src/qml_shell.py:1847: in _render
+    self._body.set_markdown(self._markdown())
+                            ^^^^^^^^^^^^^^^^
+app/src/qml_shell.py:1741: in _markdown
+    base = self._markdown_base()
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qml_shell.ShellBridge(0x2940f0e0) at 0xffff92559a40>
+
+    def _markdown_base(self) -> str:
+        session = self._store.load_session(self._active) if self._active else None
+>       return transcript_markdown(session.messages, lang=self.language(), include_activity=True) if session is not None else ""
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: transcript_markdown() got an unexpected keyword argument 'include_activity'
+
+app/src/qml_shell.py:1738: TypeError
+=========================== short test summary info ============================
+FAILED app/tests/test_display_cache.py::test_window_reuses_document_invalidates_edit_and_releases_eviction
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 308 passed, 2 skipped in 19.09s
