@@ -1,15 +1,15 @@
 $ rg -n --glob *.qml --glob *.py sideCollapsed app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:2483:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
-app/src/qml/Main.qml:148:    property bool sideCollapsed: false
-app/src/qml/Main.qml:612:        width: window.sideCollapsed ? (window.sidePeek ? window.sideWidth : 0) : window.sideWidth
-app/src/qml/Main.qml:613:        visible: !window.sideCollapsed || window.sidePeek
-app/src/qml/Main.qml:614:        z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
-app/src/qml/Main.qml:1005:        visible: !window.sideCollapsed
-app/src/qml/Main.qml:1027:        x: window.railWidth + (window.sideCollapsed ? 0 : window.sideWidth)
-app/src/qml/Main.qml:2096:        window.sideCollapsed = !window.sideCollapsed
-app/src/qml/Main.qml:2099:            shellBridge.setSidebarCollapsed(window.sideCollapsed)
-app/src/qml/Main.qml:2105:        if (!window.sideCollapsed || window.settingsOpen)
-app/src/qml/Main.qml:2118:        if (!window.sideCollapsed || window.settingsOpen) {
-app/src/qml/Main.qml:2125:        } else if (!window.sideCollapsed) {
-app/src/qml/Main.qml:2134:        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }
+app/src/qml_shell.py:2556:        window.setProperty("sideCollapsed", self.sidebarCollapsed())
+app/src/qml/Main.qml:159:    property bool sideCollapsed: false
+app/src/qml/Main.qml:624:        width: window.sideCollapsed ? (window.sidePeek ? window.sideWidth : 0) : window.sideWidth
+app/src/qml/Main.qml:625:        visible: !window.sideCollapsed || window.sidePeek
+app/src/qml/Main.qml:626:        z: window.sideCollapsed && window.sidePeek && !window.settingsOpen ? 20 : 0
+app/src/qml/Main.qml:1017:        visible: !window.sideCollapsed
+app/src/qml/Main.qml:1039:        x: window.railWidth + (window.sideCollapsed ? 0 : window.sideWidth)
+app/src/qml/Main.qml:2108:        window.sideCollapsed = !window.sideCollapsed
+app/src/qml/Main.qml:2111:            shellBridge.setSidebarCollapsed(window.sideCollapsed)
+app/src/qml/Main.qml:2117:        if (!window.sideCollapsed || window.settingsOpen)
+app/src/qml/Main.qml:2130:        if (!window.sideCollapsed || window.settingsOpen) {
+app/src/qml/Main.qml:2137:        } else if (!window.sideCollapsed) {
+app/src/qml/Main.qml:2146:        onTriggered: { if (window.sideCollapsed) window.sidePeek = true }

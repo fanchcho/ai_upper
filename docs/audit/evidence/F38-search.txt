@@ -1,6 +1,6 @@
 $ rg -n --glob *.qml --glob *.py chat:insert|insertMessage app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:306:        # 回合中输入的插话：原版 chat:insert；后端没有步内注入，如实排到本轮结束后的下一轮。
-app/src/qml_shell.py:1786:    def insertMessage(self, text: str) -> bool:
-app/src/qml_shell.py:1816:    def insertMessageLegacy(self, text: str) -> bool:
-app/src/qml/Main.qml:1902:                                    if (shellBridge.insertMessage(inputField.text))
+app/src/qml_shell.py:309:        # 回合中输入的插话：原版 chat:insert；后端没有步内注入，如实排到本轮结束后的下一轮。
+app/src/qml_shell.py:1859:    def insertMessage(self, text: str) -> bool:
+app/src/qml_shell.py:1889:    def insertMessageLegacy(self, text: str) -> bool:
+app/src/qml/Main.qml:1914:                                    if (shellBridge.insertMessage(inputField.text))

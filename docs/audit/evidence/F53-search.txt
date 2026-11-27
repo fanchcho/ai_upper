@@ -1,5 +1,5 @@
 $ rg -n --glob *.qml --glob *.py saveIdentity app/src/qml app/src/qml_shell.py app/src/mvvm
 exit=0
-app/src/qml_shell.py:360:            elif operation == "saveIdentity":
-app/src/qml_shell.py:369:                               "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
+app/src/qml_shell.py:363:            elif operation == "saveIdentity":
+app/src/qml_shell.py:372:                               "identities": service.identities() if operation in ("identities", "saveIdentity") else []})
 app/src/qml/PluginSettingsPane.qml:122:                    } else { op = "saveIdentity"; value = {id: identifier.text, text: body.text} }
