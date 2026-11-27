@@ -188,7 +188,9 @@ jobs:
         run: python tools/build.py --doctor --target ${{ matrix.target }}
 
       - name: Full integration build and optional GUI run
-        shell: bash
+        # Git Bash prepends its GNU tar to PATH on Windows. That tar treats
+        # drive letters in native CPython's archive arguments as remote hosts.
+        shell: python
         env:
           PY_UPPER_CI_TARGET: ${{ matrix.target }}
           PY_UPPER_CI_APP_RUN: ${{ matrix.run }}
@@ -197,15 +199,25 @@ jobs:
           # native error dialog that nobody can dismiss.
           PY_UPPER_NO_DIALOG: '1'
         run: |
-          set -o pipefail
-          args=(--target "$PY_UPPER_CI_TARGET")
-          if [[ "$PY_UPPER_CI_APP_RUN" == "true" ]]; then
-            args+=(--run)
-          fi
-          python tools/build.py "${args[@]}" 2>&1 | tee run.log
-          if [[ "$PY_UPPER_CI_APP_RUN" == "true" ]]; then
-            grep -Fq 'GUI OK' run.log || { echo "Packaged GUI did not report readiness" >&2; exit 1; }
-          fi
+          import os
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          run_gui = os.environ["PY_UPPER_CI_APP_RUN"] == "true"
+          command = [sys.executable, "tools/build.py", "--target", os.environ["PY_UPPER_CI_TARGET"]]
+          if run_gui:
+              command.append("--run")
+
+          log_path = Path("run.log")
+          with log_path.open("wb") as log:
+              result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
+          output = log_path.read_text(encoding="utf-8", errors="replace")
+          print(output)
+          if result.returncode:
+              raise SystemExit(result.returncode)
+          if run_gui and not any(line.startswith("GUI OK ") for line in output.splitlines()):
+              raise SystemExit("Packaged GUI did not report readiness")
 
       - name: Upload packaged artifact
         uses: actions/upload-artifact@v4
