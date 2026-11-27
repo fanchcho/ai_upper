@@ -12,4 +12,43 @@
 ........................................................................ [ 58%]
 ........................................................................ [ 63%]
 ........................................................................ [ 68%]
-...........
+........................................................................ [ 73%]
+........................F............................................... [ 78%]
+........................................................................ [ 83%]
+........................................................................ [ 88%]
+........................................................................ [ 93%]
+........................................................................ [ 98%]
+..........................                                               [100%]
+=================================== FAILURES ===================================
+___________________ test_only_the_shim_imports_a_qt_binding ____________________
+
+    def test_only_the_shim_imports_a_qt_binding():
+        """One entry point for Qt: a second direct import breaks the abstraction.
+    
+        Application modules reach Qt through utils.qt_compat so the binding stays
+        swappable and the Qt pruning scanner has a single shape to read. The
+        detection table inside the shim names the bindings as strings, which is why
+        this looks at import statements only.
+        """
+        src = Path(__file__).resolve().parents[1] / "src"
+        offenders: list[str] = []
+        for path in sorted(src.rglob("*.py")):
+            if path.relative_to(src) == Path(*SHIM.split(".")).with_suffix(".py"):
+                continue
+            for node in ast.walk(_parsed(path)):
+                if isinstance(node, ast.Import):
+                    roots = [alias.name.split(".", 1)[0] for alias in node.names]
+                elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                    roots = [node.module.split(".", 1)[0]]
+                else:
+                    continue
+                offenders.extend(f"{path.relative_to(src)}: {root}" for root in roots if root in QT_BINDINGS)
+    
+>       assert not offenders, f"import Qt from {SHIM}, not from a binding: {offenders}"
+E       AssertionError: import Qt from utils.qt_compat, not from a binding: ['mvvm/services/feishu_inbound.py: PySide6', 'mvvm/services/feishu_inbound.py: PySide6', 'mvvm/services/web_pairing.py: PySide6', 'mvvm/services/web_pairing.py: PySide6', 'mvvm/services/web_pairing.py: PySide6']
+E       assert not ['mvvm/services/feishu_inbound.py: PySide6', 'mvvm/services/feishu_inbound.py: PySide6', 'mvvm/services/web_pairing.py: PySide6', 'mvvm/services/web_pairing.py: PySide6', 'mvvm/services/web_pairing.py: PySide6']
+
+app/tests/test_qt_compat.py:140: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_qt_compat.py::test_only_the_shim_imports_a_qt_binding
+1 failed, 1456 passed, 9 skipped in 452.10s (0:07:32)

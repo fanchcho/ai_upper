@@ -1,0 +1,97 @@
+[
+  {
+    "path": "docs/audit/remaining-three/assets/browser-dark.png",
+    "bytes": 30706,
+    "sha256": "8e8b0a502044d5b0a23d6754ed2c83eaa82937a114f1279debd63c9e228cc340"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/browser-light.png",
+    "bytes": 30236,
+    "sha256": "ec0c7ca8698499431acee1cbc21679b77c355a6517bca45cb636662eaf8264c2"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/browser-subscribe-dark.png",
+    "bytes": 31651,
+    "sha256": "5e54690ab3ab183dbc4d4031d8ea6f52a606c5253e2d00d2f932ea0d645a33ad"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/browser-subscribe-light.png",
+    "bytes": 31333,
+    "sha256": "0b58039ed8da1db947716fbed7c67299134ce06f9c6b8031ac58672cb9022295"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/feishu-config.json",
+    "bytes": 3694,
+    "sha256": "e9ac2076e48ed312ca82caea774d62bd08aabddf2ce58925621862a26e4223bd"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/feishu-error-dark.png",
+    "bytes": 56017,
+    "sha256": "0b5a31f060b93376597c54498ff3e0a73efe84127e7ae0846ac2f368ebaccaff"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/feishu-error-light.png",
+    "bytes": 55446,
+    "sha256": "f537cb4e5e5b986e009342a0655711dce3273c8aebe189041d377eb29569d027"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/feishu-pair-dark.png",
+    "bytes": 60726,
+    "sha256": "f7abacb86f3ee2a80907369222f0f8e0b3204fd40993277e4e1b47c1bf50be30"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/feishu-pair-light.png",
+    "bytes": 59864,
+    "sha256": "71282487e281f94b2a1421eda61dc2974a55acb14d194f906d15bbf678f1b98d"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/task-answer-dark.png",
+    "bytes": 74208,
+    "sha256": "4a093b04f523c498f886e184e94db6d08e8873fdd5ca929ee82a9ad498ca87b4"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/task-answer-light.png",
+    "bytes": 73688,
+    "sha256": "30b4ca8fe7e771bfda9d9cea4fc1eef023f7e166682b5978361d01f6f7a702f5"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/task-fallback.json",
+    "bytes": 476367,
+    "sha256": "23e7e24e2b06727ed1d32ad392050094202ee90addfdaf7162359afd23f86c37"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/task-stop-dark.png",
+    "bytes": 93799,
+    "sha256": "81edb0e1f11e2d875c984188bde6b849ccb9d910c862728f54f08ec5d8f80120"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/task-stop-light.png",
+    "bytes": 94247,
+    "sha256": "860e7f828c92ef2937be401c96244e9d8127bce1c19ca099935e723fc7bc9f9a"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/web-entry-dark.png",
+    "bytes": 53129,
+    "sha256": "14ba3b2663a64200b6d06ad906f3fa26c004b0765047530af3a24ce44fcd7c6a"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/web-entry-light.png",
+    "bytes": 52846,
+    "sha256": "69186326e37018a64cc3ec40d9461f3865fb9c132ac1f0530c28c7595d072bfd"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/web-pair.json",
+    "bytes": 3386,
+    "sha256": "de91132c5cdb74d0f10af22dd0ffb7cc5455fa02223ad323469420c373dc6e10"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/web-paired-dark.png",
+    "bytes": 62563,
+    "sha256": "ef5f52685f6da912102f7c378fad5ac2093cd1b9454cc0be30eeac9b73505208"
+  },
+  {
+    "path": "docs/audit/remaining-three/assets/web-paired-light.png",
+    "bytes": 61926,
+    "sha256": "66a33dbd0f071d79f0c1e6f0f155aef25cfe7c66a2abcb50bd836dfc9242df2b"
+  }
+]

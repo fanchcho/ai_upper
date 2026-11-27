@@ -1,0 +1,173 @@
+{
+  "base_at_start": "1e8bf8aa46f6606121d61df168ed90b896de21b9",
+  "external_commits": [
+    "d16d472d76eaff63c29b3d92d935a46089fca718 feat: add git identity, AI commit message and cancellation",
+    "528be7520a48c21076596ba3a24050f00380e3bb feat: add secure browser pairing and Feishu inbound checks",
+    "9a0c65f4aa1154af14a08767486474ba82666724 test: verify git identity and AI message controls with real clicks",
+    "c9775aef31e4b68b5385cf5cf3b409470ce7d061 feat: expose local branch checkout in the git panel"
+  ],
+  "external_uncommitted": [
+    {
+      "path": "docs/audit/evidence/F03-search.txt",
+      "sha256": "ccb9e68186026c7e770458dc992cd90e4a9f071cd479276a01a9cc2481362f2c"
+    },
+    {
+      "path": "docs/audit/evidence/F07-search.txt",
+      "sha256": "69918b4afb1d6b49d5a463c9b2796e7cf6e2e4504d968d19e08fd40ec641cf7f"
+    },
+    {
+      "path": "docs/audit/evidence/F09-search.txt",
+      "sha256": "ae4b364c69c01660d74674d291c27e043ef90f7ed5bdd35d3325637714ea0155"
+    },
+    {
+      "path": "docs/audit/evidence/F13-search.txt",
+      "sha256": "de4d3e63e81f7b99c7671637a8ec3769cd2867fbc5f292cb85dbfc72b6de7e33"
+    },
+    {
+      "path": "docs/audit/evidence/F14-search.txt",
+      "sha256": "a8046e2a0673a946bde06069cb76436f5904dfebd349942d2dd44bd92ed4b225"
+    },
+    {
+      "path": "docs/audit/evidence/F15-search.txt",
+      "sha256": "115e4d4f7a003f209c7cb7d627914771ab8fb1ac8346d6ee9fd4e256d64551b9"
+    },
+    {
+      "path": "docs/audit/evidence/F16-search.txt",
+      "sha256": "660669bda437c58d71d43f89e7f38e832b40cc2cd1a8e6710a2ab7d5b2e741cc"
+    },
+    {
+      "path": "docs/audit/evidence/F17-search.txt",
+      "sha256": "2cc279374d127eb8b5ab120d4705ff53e0937becc2d98f7c0503911500e0649f"
+    },
+    {
+      "path": "docs/audit/evidence/F18-search.txt",
+      "sha256": "0ebb14d3f23f7a79666695f09eaad72c5b16231a21958cca36a07c1843ac61a1"
+    },
+    {
+      "path": "docs/audit/evidence/F19-search.txt",
+      "sha256": "3c093d30a170b33f73348dd06ac6698256d3105cfa8e5070770ad020e4e5b43a"
+    },
+    {
+      "path": "docs/audit/evidence/F20-search.txt",
+      "sha256": "d0330c9889d962d2462fa7c488c19bea281f57deb301985d8140cd9c934bdbf9"
+    },
+    {
+      "path": "docs/audit/evidence/F23-search.txt",
+      "sha256": "c320456e040d7f1340733c16f50ab9d617d9412fa44dddad9d6689f4ef106e6d"
+    },
+    {
+      "path": "docs/audit/evidence/F27b-search.txt",
+      "sha256": "e881c40b1382dc413b90633acd23a0f814a7701151681f073c4586b4661410dd"
+    },
+    {
+      "path": "docs/audit/evidence/F31-search.txt",
+      "sha256": "0da3695d74af426ff8758ab9c94a68e9fe9e94e3e703060cf952fdcf311a9964"
+    },
+    {
+      "path": "docs/audit/evidence/F37-search.txt",
+      "sha256": "b2eae455d22457358be28477c566d687e617e22296410ebc789e92081d726b19"
+    },
+    {
+      "path": "docs/audit/evidence/F38-search.txt",
+      "sha256": "0154f2936c40838c25ac167cec1da501b6587666c13aab04b04e3d30d84a017e"
+    },
+    {
+      "path": "docs/audit/evidence/F39-search.txt",
+      "sha256": "31df90df441edda811c6240dc72b02c826f751966edbf77430cded3d1b506d8a"
+    },
+    {
+      "path": "docs/audit/evidence/F40-search.txt",
+      "sha256": "6e21c50faf3aac6a23979e832bda0efaf5109765aa0d2ffd4249235c26f47d70"
+    },
+    {
+      "path": "docs/audit/evidence/F43-search.txt",
+      "sha256": "8211fa30dddf47874bbbd3cd3f40132d7cf5ace252c454e9b286a5709ce77e81"
+    },
+    {
+      "path": "docs/audit/evidence/F45-search.txt",
+      "sha256": "936ddac05216685181c8f22e28dc5b167cd666f12def3fe4fbd3e31f214064ab"
+    },
+    {
+      "path": "docs/audit/evidence/F46-search.txt",
+      "sha256": "a7509a2d35acf5047cb4690af92d65208b903181ec5f6dadc29e8f8e1814cf25"
+    },
+    {
+      "path": "docs/audit/evidence/F47-search.txt",
+      "sha256": "50422589285946716d90ba91aa2394679cbafa8983aeabf0bddeb5be6098ea67"
+    },
+    {
+      "path": "docs/audit/evidence/F49-search.txt",
+      "sha256": "5e472d61e5209553704119dbcbc1913e3b6a8cca8be8878596e169793d0267ec"
+    },
+    {
+      "path": "docs/audit/evidence/F53-search.txt",
+      "sha256": "74302de20f9f8d2bc5e7c0c5c6944062f21fcd21ba0642981b2923b8f74cada2"
+    },
+    {
+      "path": "docs/audit/evidence/F54-search.txt",
+      "sha256": "0af49f403fb09049146de2ca03af18b329dbf06276c47215182eff8154d95bd8"
+    },
+    {
+      "path": "docs/audit/evidence/F57-search.txt",
+      "sha256": "4df057f82ccd31bab38add578212167699ed04bc73da930d011cd58c2911b6ee"
+    },
+    {
+      "path": "docs/audit/evidence/F60-search.txt",
+      "sha256": "115e4d4f7a003f209c7cb7d627914771ab8fb1ac8346d6ee9fd4e256d64551b9"
+    },
+    {
+      "path": "docs/audit/evidence/F62-search.txt",
+      "sha256": "0fc73a3ece760e3d937afacfbfb991d0ae9b98d83bdaccb749d05a44a57d0499"
+    },
+    {
+      "path": "docs/audit/evidence/F63-search.txt",
+      "sha256": "02449263b87a6b6dd93e489d26e2b5259caf5b9fc562ff857dc3301d0ce5fee4"
+    },
+    {
+      "path": "docs/audit/evidence/F65-search.txt",
+      "sha256": "823ba3bc2d755ee16b1ac0456dc4836bfa1244de3ff9dccb564c71789bc45416"
+    },
+    {
+      "path": "docs/audit/evidence/F66-search.txt",
+      "sha256": "fbc1119100af3156062dc0a583c2d475b26f529e31ffd67b7de92302e73aecf5"
+    },
+    {
+      "path": "docs/audit/evidence/F68-search.txt",
+      "sha256": "912c0e62a34b009345879335e9194d979ff697a8a7a8c711ad10048ddd137c54"
+    },
+    {
+      "path": "docs/audit/evidence/F73-search.txt",
+      "sha256": "30ee7942e2db767b29ca90cdf9fcadd28e56c0ae556ceabad74a2702fb69e2d8"
+    },
+    {
+      "path": "docs/audit/evidence/F74-search.txt",
+      "sha256": "70e18aa22cbc139fe80f8193ffe085d4b59796ec8d752a038bec8ba88edc2f89"
+    },
+    {
+      "path": "docs/audit/evidence/F75-search.txt",
+      "sha256": "32ec55ac71131e4d94704b4122cb55b2e28e19b547dde6f3628fc3ed9033b4b6"
+    },
+    {
+      "path": "docs/audit/evidence/F77-search.txt",
+      "sha256": "582e1e02a809a4a0bbf353cc7e4c3925ef743d83d2329459c425366ea333e3d7"
+    },
+    {
+      "path": "docs/audit/evidence/F85-search.txt",
+      "sha256": "1b69b1ec2e1c1c845e7b65f19a5d4c4e4ff98329491683915aec2125294706d9"
+    },
+    {
+      "path": "docs/audit/feature-parity-gap.json",
+      "sha256": "9be3a5043f29fbd2f2b2b33cd453c99f0e96a51a8b8edc7acc554a04182100d9"
+    },
+    {
+      "path": "docs/audit/feature-parity-gap.md",
+      "sha256": "3ec58f7232ebeab5860f3dd899fa70ad361a52883d2555d39be10e208ae8b474"
+    },
+    {
+      "path": "scripts/parity/final_port/build_audit.py",
+      "sha256": "9b475c3f53f3812205ae30ea63874a8d89125084e46841453d1c14a11133e625"
+    }
+  ],
+  "disposition": "保留、不回退、不暂存；不纳入本轮验收。528be75 包含本执行未完成的 Web 工作树文件，不能以其提交名作为验收。",
+  "external_run_observed": "另一个执行在原工作树启动 out/feature-parity/pytest-reg7.log；本轮不使用其结果。"
+}

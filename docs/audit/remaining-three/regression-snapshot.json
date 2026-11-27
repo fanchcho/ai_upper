@@ -1,0 +1,8 @@
+{
+  "commit": "e85b23d663d0e6900bbd9d2cc9aecb90a912d51a",
+  "cwd": "/home/agent/shared_workspace/ai_upper/.tmp/remaining-three/regression-e85b23d",
+  "untracked_input": "app/pyproject.toml copied byte-for-byte; .venv and Qt runtime symlinked",
+  "pyproject_sha256": "fc979936f0cfba16d08e208aebd81bafb926528d4e59e4b22c97a729e5b7892c",
+  "tests_changed": false,
+  "previous_snapshot": "d0b4445 interrupted after task semantic follow-up; not reported as a completed regression"
+}

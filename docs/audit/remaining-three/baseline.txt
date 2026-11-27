@@ -1,0 +1,14 @@
+$ git log --oneline -8  # 开场基线 1e8bf8a
+1e8bf8a docs: refresh final parity anchors and evidence
+256d868 docs: archive final feature evidence regression and remaining gaps
+bd9b463 fix: align member creation rejection and stopped group handling
+c105390 docs: distinguish outbound push support from unverified channel onboarding
+634db76 test: verify decision provider setup and manual execution gate
+52db4ec fix: preserve member error handoff and verify native folder selection
+00fa741 feat: add task decision provider configuration and channel push results
+41cbfeb feat: complete member folder/task tools and background removal
+
+开场实际 git status --porcelain 输出为空；HEAD 与 origin/develop 均为：
+1e8bf8aa46f6606121d61df168ed90b896de21b9
+
+本文件中日志从保留的基线提交回放；开场四条命令原始输出已在会话工具结果中给出，不将当前远端伪称开场远端。
