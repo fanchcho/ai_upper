@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 import urllib.error
 import zipfile
 
@@ -102,7 +103,14 @@ def test_release_download_failure_is_visible_without_api_fallback():
             "20250723", _target(), "3.13.5", fetch_text=fail_download,
         )
     assert error.value.code == 403
-    assert error.value.url.endswith("/20250723/SHA256SUMS")
+    # `HTTPError.url` only exists when urllib attached a response body: the
+    # attribute comes from the addinfourl base, which Python 3.8 skips for
+    # `fp=None`. `filename` is set by HTTPError itself on every supported
+    # version, so assert on it first; versions that also expose `.url` must
+    # agree with it.
+    assert error.value.filename.endswith("/20250723/SHA256SUMS")
+    if sys.version_info >= (3, 9):
+        assert error.value.url.endswith("/20250723/SHA256SUMS")
 
 
 def test_explicit_release_never_substitutes_a_different_version():

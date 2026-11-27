@@ -4,10 +4,17 @@ import argparse
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
+from py_upper.appdir import APP_DIR_ENV, resolve_app_dir, select_from_argv
+
+# --app has to reach config.py before the module-level APP/APP_CONFIG paths are
+# resolved. Programmatic callers can set PY_UPPER_APP_DIR instead.
+select_from_argv(sys.argv[1:])
+
 from py_upper.config import (
-    BUILD, DIST, TARGETS, app_name, host_description, host_target, pbs_release,
+    APP, BUILD, DIST, TARGETS, app_name, host_description, host_target, pbs_release,
     pbs_sdk_dir, python_version, runtime_provider, target_runtime_dir,
     trim_policy, validate_build_python_version, validate_target, require_local_python,
 )
@@ -49,6 +56,7 @@ def _clean() -> int:
 
 def _doctor(target) -> int:
     print("host:", host_description())
+    print("app:", APP)
     print("target:", target.key, target.triple)
     print("target-python:", python_version())
     print("runtime-provider:", runtime_provider())
@@ -79,6 +87,19 @@ def _doctor(target) -> int:
 
 
 def main(argv=None) -> int:
+    if argv is not None:
+        requested = select_from_argv(argv)
+        if requested is not None and resolve_app_dir(requested) != APP:
+            # config.APP is fixed when py_upper.config is imported. The normal
+            # CLI path selects it before that import; a programmatic caller
+            # that already imported this module is re-run in a child process
+            # so the same --app contract still applies.
+            env = os.environ.copy()
+            env[APP_DIR_ENV] = str(resolve_app_dir(requested))
+            return subprocess.run(
+                [sys.executable, str(Path(__file__).resolve()), *argv],
+                env=env,
+            ).returncode
     validate_build_python_version()
     parser = argparse.ArgumentParser(description="py_upper - standalone Python application builder")
     parser.add_argument("command", nargs="?", choices=["doctor", "build", "run", "verify", "lock", "release", "clean"])
@@ -89,6 +110,9 @@ def main(argv=None) -> int:
     actions.add_argument("--lock", action="store_true")
     actions.add_argument("--release", action="store_true")
     actions.add_argument("--clean", action="store_true")
+    parser.add_argument("--app", metavar="DIR",
+                        help="application directory containing pyproject.toml and src/ "
+                             "(default: <repo>/app; env PY_UPPER_APP_DIR)")
     parser.add_argument("--target", choices=list(TARGETS))
     parser.add_argument("--locked", action="store_true")
     parser.add_argument("--identity")

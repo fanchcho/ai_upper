@@ -2,7 +2,7 @@
 
 本文是 `py_upper` 的完整开发与使用手册：从环境准备、日常开发、打包发布，到 Qt 应用处理、依赖管理和排错。README 讲的是"是什么"，本文讲的是"怎么用、为什么这么设计、出问题怎么查"。
 
-当前稳定线：**0.17.9**。
+当前稳定线：**0.17.35**。
 
 ---
 
@@ -22,9 +22,9 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 
 关键点：
 
-- **宿主 Python 和目标 Python 完全解耦。** 你可以用 3.11 的开发机给 3.10 的目标打包，甚至交叉到别的架构。目标是哪个版本，只在 `app/pyproject.toml` 里写一次。
+- **宿主 Python 和目标 Python 完全解耦。** 你可以用 3.11 的开发机给 3.10 的目标打包，甚至交叉到别的架构。目标是哪个版本，只在应用的 `pyproject.toml` 里写一次。
 - **平台差异只在 Target Contract 里表达。** 代码里所有 `if target.os == ...` 都从 `Target`/`TargetPython` 取值，不再各自判断。
-- **自己的代码 Cython 化，第三方库原样安装。** `app/src/**/*.py` 编译成 `.so/.pyd`（`__init__.py` 保留为包标记），第三方依赖按目标平台的 wheel 解包进 `site-packages`。
+- **自己的代码 Cython 化，第三方库原样安装。** 应用 `src/**/*.py` 编译成 `.so/.pyd`（`__init__.py` 保留为包标记），第三方依赖按目标平台的 wheel 解包进 `site-packages`。
 
 构建流水线（`python tools/build.py`）：
 
@@ -63,7 +63,7 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 最低 **3.8**，推荐 3.10+。选择顺序：
 
 1. `PY_UPPER_PYTHON`（旧变量 `PYSTAND_PYTHON` 仍兼容）
-2. `app/.venv`
+2. 应用目录的 `.venv`（默认示例是 `app/.venv`）
 3. 当前执行 `tools/build.py` 的解释器
 4. `python` / `python3`
 
@@ -103,6 +103,9 @@ pip 的下载缓存放在 `.cache/pip`，重复构建不会重下几百 MB 的 w
 # 0. 克隆后先建本地配置（app/pyproject.toml 不入库）
 cp app/pyproject.toml.example app/pyproject.toml
 
+# 0b. 或者完全使用自己的 app 目录（不修改 tools/）
+python tools/build.py --app ../myapp --doctor
+
 # 1. 写代码：app/src 就是应用源码
 app/src/
 ├── main.py            # 入口（由 [tool.py_upper].entry 指定），只把控制权交给 application
@@ -122,6 +125,8 @@ python tools/build.py --run
 # 4. 只构建
 python tools/build.py
 ```
+
+`app/` 只是示例。自有应用只要是“`pyproject.toml` + `src/`”的目录即可，用 `--app DIR` 或 `PY_UPPER_APP_DIR=DIR` 指定；`--app` 在导入配置前生效，适用于 `build/run/verify/lock/clean/doctor` 全部命令。仓库根目录本身带 `[tool.py_upper]` 的 `pyproject.toml` 时，即使没有 `app/` 也会自动把根目录当应用。应用目录可以有可选的 `resources/` 和开发用 `.venv/`；`build/`、`dist/` 与锁文件仍写在构建工具仓库。
 
 产物：
 
@@ -146,11 +151,11 @@ dist/Upper/                       # Windows / Linux
 
 ```text
 py_upper/
-├── app/
+├── app/                       # 默认示例应用，可整体替换或删除
 │   ├── pyproject.toml.example # 配置模板（入库）
 │   ├── pyproject.toml         # 本地配置（Git ignored，从模板复制）
 │   ├── src/                   # ★ 应用源码（直接是包根）
-│   ├── tests/                 # 应用测试 + 构建链测试
+│   ├── tests/                 # 示例应用测试 + 构建链测试
 │   └── resources/             # 可选：随包资源，没有该目录就不打包
 ├── launcher/                 # C++ 启动器（CMake）
 ├── tools/
@@ -164,16 +169,16 @@ py_upper/
 
 ---
 
-## 5. 配置参考（`app/pyproject.toml`）
+## 5. 配置参考（应用 `pyproject.toml`，默认是 `app/pyproject.toml`）
 
-仓库里入库的是模板 `app/pyproject.toml.example`，实际生效的是 Git 忽略的 `app/pyproject.toml`（`cp app/pyproject.toml.example app/pyproject.toml`）。下面的内容对两者都成立：模板改了就进 Git，本地副本改了只影响你这台机器。文件缺失时 Build Tool 会报错并给出复制命令，不会静默使用模板。
+仓库里入库的是模板 `app/pyproject.toml.example`，默认示例生效的是 Git 忽略的 `app/pyproject.toml`（`cp app/pyproject.toml.example app/pyproject.toml`）。自有应用通过 `--app DIR` / `PY_UPPER_APP_DIR` 指向自己的 `pyproject.toml`，schema 完全相同；此时不要求存在 `.example`。模板改了就进 Git，本地副本改了只影响你这台机器。文件缺失时 Build Tool 会报错并给出复制命令，不会静默使用模板。
 
 模板里的 `[project] dependencies` 是空列表：模板入库、依赖入库就变成"克隆的人继承维护者的 pin"。要装的包写进本地副本即可；CI 构建仓库自带示例应用时自己注入依赖集合（见 §11）。
 
 ```toml
 [project]
 name = "py_upper"
-version = "0.17.9"
+version = "0.17.35"
 requires-python = ">=3.8,<3.14"
 dependencies = ["PySide6==6.11.0", "pyserial==3.5"]
 
@@ -263,7 +268,7 @@ launcher 运行时还会向应用导出 `PY_UPPER_HOME` / `PY_UPPER_RUNTIME` / `
 
 ### 6.1 直接开发，不打包
 
-`app/src` 就是普通 Python 包根，日常开发不需要打包：
+应用目录的 `src/` 就是普通 Python 包根（默认示例是 `app/src`），日常开发不需要打包：
 
 ```bash
 cd app
@@ -600,9 +605,9 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 
 **认证（0.17.34 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
 或用自己的 zip 顶替 `bundle/py_upper.dat`，都会在导入任何模块之前失败
-（`egg authentication failed` / `egg is not authenticated`）。打包后的 launcher
-一律要求认证，v1 归档（只有 `MAGIC`）与手搓普通 zip 都被拒绝；构建期工具仍可用
-`require_auth=False` 读取旧归档做诊断。
+（`egg authentication failed` / `egg is not authenticated`）。认证是强制的：
+launcher 与构建期工具都只接受 MAGIC2，v1 归档（只有 `MAGIC`）与手搓普通 zip
+一律被拒绝。
 
 **性能**：launcher 在初始化 CPython 前读取、验证 TAG 并解密一次，再在进程内把
 同一份 ZIP 字节和 TAG 交给 Python loader。两个阶段不再各自读盘和解密，也不会额外
@@ -614,6 +619,12 @@ TAG 取代了旧格式解密后的全量缓存哈希，`sha3.h` 也改为按 64 
 | --- | --- | --- |
 | 0.17.32（v1，无认证） | 13.1 ms | 308–328 ms |
 | 0.17.34（v2，带认证） | 10.1 ms | 286–294 ms |
+
+Windows x86_64、1.4 MB 产物上，launcher 验签解密后把明文直接交给 Python loader，
+Python 侧 `install()`（不含解释器启动）从 20.4 ms 降到 2.9 ms；这避免了同一次启动
+对 egg 做第二遍 SHAKE-256，实测 bootstrap 阶段约减少 12–15 ms。剩余热启动成本
+主要在 CPython 初始化、loader/`zipfile` 导入和 PySide2 导入；首次启动还要写
+bundle 缓存。
 
 **密钥**：`key_hex` 仍编译进 launcher（否则 loader 无法解密），但不再以可读的
 十六进制字符串存在——生成器写成 `key ^ mask` 与 `mask` 两个字节数组，launcher 在
@@ -631,7 +642,7 @@ backend = "auto"          # auto | memory | extract
 compression = "deflated"  # deflated | stored | lzma
 ```
 
-**进 egg 的东西**：`app/src` 下的 `.py` 和应用自带的其它非原生文件、本次构建
+**进 egg 的东西**：应用 `src` 下的 `.py` 和应用自带的其它非原生文件、本次构建
 编译出的 `.pyd`/`.so`。**不进 egg 的东西**：第三方 wheel、runtime，以及
 `[tool.py_upper.native]` 依赖闭包要检查的 `.dll`/`.so` 等原生输入——它们必须
 留在 `site-packages`，否则 `bundle_native_dependencies` 看不到。
@@ -928,6 +939,7 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 
 | 模块 | 职责 |
 |---|---|
+| `appdir.py` | 应用目录选择：`--app`（导入 config 前解析）、`PY_UPPER_APP_DIR`、根目录自动发现 |
 | `config.py` | 目标契约、配置解析、平台标签、pip 传输参数 |
 | `toolchain.py` | 宿主工具链解析（clang/gcc/MSVC，以及无 VS 宿主上的 Zig 交叉路径） |
 | `pbs.py` | PBS 解析：release 元数据、资产匹配、runtime/SDK 获取与校验 |

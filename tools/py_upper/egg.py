@@ -45,7 +45,7 @@ from .config import (
     APP, BUILD, BUNDLE_DIR, Target, py_upper_config, resolve_target_python,
 )
 from .egg_loader import (
-    BACKENDS, MAGIC, MAGIC2, MANIFEST_NAME, SALT_SIZE, TAG_SIZE, egg_tag,
+    BACKENDS, MAGIC2, MANIFEST_NAME, SALT_SIZE, TAG_SIZE, egg_tag,
     keystream_xor,
 )
 
@@ -255,26 +255,26 @@ def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
     return destination
 
 
-def open_egg_archive(egg_path: Path, key_hex: str, *, require_auth: bool) -> zipfile.ZipFile:
+def open_egg_archive(egg_path: Path, key_hex: str) -> zipfile.ZipFile:
     """Open an egg once for all build-side ZIP reads of this file."""
     from .egg_loader import open_egg
 
     key = bytes.fromhex(str(key_hex).strip())
-    payload, _digest = open_egg(Path(egg_path).read_bytes(), key, require_auth=require_auth)
+    payload, _digest = open_egg(Path(egg_path).read_bytes(), key)
     return zipfile.ZipFile(io.BytesIO(payload))
 
 
-def read_egg_members(egg_path: Path, key_hex: str, require_auth: bool = False) -> tuple:
+def read_egg_members(egg_path: Path, key_hex: str) -> tuple:
     """Decrypt an egg in the build process and return its member names."""
-    with open_egg_archive(egg_path, key_hex, require_auth=require_auth) as archive:
+    with open_egg_archive(egg_path, key_hex) as archive:
         return tuple(sorted(archive.namelist()))
 
 
 def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
-    """The member digests recorded in an egg, or an empty mapping for a v1 egg."""
-    with open_egg_archive(egg_path, key_hex, require_auth=False) as archive:
+    """The member digests recorded in an authenticated egg."""
+    with open_egg_archive(egg_path, key_hex) as archive:
         if MANIFEST_NAME not in archive.namelist():
-            return {}
+            raise ValueError("egg manifest is missing")
         data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
     files = data.get("files") if isinstance(data, dict) else None
     return dict(files) if isinstance(files, dict) else {}
@@ -283,7 +283,7 @@ def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
 def egg_authenticated(egg_path: Path, key_hex: str) -> bool:
     """Whether the file opens as an authenticated ZIP egg."""
     try:
-        read_egg_members(egg_path, key_hex, require_auth=True)
+        read_egg_members(egg_path, key_hex)
     except (OSError, ValueError, zipfile.BadZipFile):
         return False
     return True

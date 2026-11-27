@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import os
 import stat
+import subprocess
 import sys
 from pathlib import Path
 
@@ -76,15 +77,21 @@ def test_every_source_module_defers_its_annotations():
     """
     builtin_generics = {"dict", "frozenset", "list", "set", "tuple", "type"}
     root = Path(__file__).resolve().parents[2]
+    from py_upper.config import APP
+
     offenders: list[str] = []
-    for package in ("app/src", "app/tests", "tools"):
-        for path in sorted((root / package).rglob("*.py")):
+    for package in (APP / "src", Path(__file__).parent, root / "tools"):
+        for path in sorted(package.rglob("*.py")):
             tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
             if _defers_annotations(tree):
                 continue
             lines = sorted({node.lineno for node in _runtime_annotations(tree, builtin_generics)})
             if lines:
-                offenders.append(f"{path.relative_to(root)}: {lines}")
+                try:
+                    label = path.relative_to(root)
+                except ValueError:
+                    label = path
+                offenders.append(f"{label}: {lines}")
     assert not offenders, f"these modules need 'from __future__ import annotations': {offenders}"
 
 
@@ -376,6 +383,109 @@ def test_missing_local_configuration_survives_a_foreign_drive(tmp_path, monkeypa
     with pytest.raises(RuntimeError) as excinfo:
         config.load_app_config()
     assert "pyproject.toml.example" in str(excinfo.value)
+
+
+def _write_probe_app(root: Path, name: str = "Probe") -> Path:
+    app = root / "myapp"
+    (app / "src").mkdir(parents=True)
+    (app / "src" / "main.py").write_text("def main():\n    return 0\n", encoding="utf-8")
+    (app / "pyproject.toml").write_text(
+        f'''[project]
+name = "probe"
+version = "1.2.3"
+dependencies = []
+
+[tool.py_upper]
+entry = "main.py"
+
+[tool.py_upper.app]
+name = "{name}"
+
+[tool.py_upper.runtime]
+python = "3.13.5"
+''',
+        encoding="utf-8",
+    )
+    return app
+
+
+def test_application_directory_can_live_outside_the_framework(tmp_path):
+    """A fork can point at its app without editing any py_upper module."""
+    app = _write_probe_app(tmp_path)
+    code = (
+        "import sys; sys.path.insert(0, 'tools'); "
+        "from py_upper.config import APP, APP_CONFIG, app_name, entry_module; "
+        "print(APP); print(APP_CONFIG); print(app_name()); print(entry_module())"
+    )
+    env = os.environ.copy()
+    env["PY_UPPER_APP_DIR"] = str(app)
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=Path(__file__).parents[2],
+        env=env,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    lines = result.stdout.splitlines()
+    assert lines[0] == str(app.resolve())
+    assert lines[1] == str((app / "pyproject.toml").resolve())
+    assert lines[2:] == ["Probe", "main"]
+
+
+def test_app_directory_option_is_applied_before_config_import(tmp_path):
+    from py_upper import appdir
+
+    app = _write_probe_app(tmp_path)
+    env_name = appdir.APP_DIR_ENV
+    old = os.environ.pop(env_name, None)
+    try:
+        assert appdir.select_from_argv(["--app", str(app)]) == str(app)
+        assert os.environ[env_name] == str(app.resolve())
+        assert appdir.select_from_argv([f"--app={app}"]) == str(app)
+        with pytest.raises(SystemExit):
+            appdir.select_from_argv(["--app"])
+        with pytest.raises(SystemExit):
+            appdir.select_from_argv(["--app", "--doctor"])
+    finally:
+        os.environ.pop(env_name, None)
+        if old is not None:
+            os.environ[env_name] = old
+
+
+def test_root_application_is_discovered_without_an_app_child(tmp_path, monkeypatch):
+    """Copying tools/ into an app repository should not require an app/ folder."""
+    from py_upper import config
+
+    (tmp_path / "pyproject.toml").write_text(
+        "[tool.py_upper]\nentry = \"main.py\"\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    assert config._default_app_dir() == tmp_path
+
+
+def test_build_cli_documents_the_app_directory_option():
+    root = Path(__file__).parents[2]
+    result = subprocess.run(
+        [sys.executable, "tools/build.py", "--help"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    assert "--app DIR" in result.stdout
+    assert "PY_UPPER_APP_DIR" in result.stdout
+
+
+def test_build_cli_selects_an_external_app_before_config_load(tmp_path):
+    app = _write_probe_app(tmp_path)
+    result = subprocess.run(
+        [sys.executable, "tools/build.py", "--app", str(app), "--doctor"],
+        cwd=Path(__file__).parents[2],
+        text=True,
+        capture_output=True,
+    )
+    assert f"app: {app.resolve()}" in result.stdout
 
 
 def test_target_matrix_and_platform_contract(monkeypatch):
@@ -687,8 +797,12 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "kEggKeyMask" in text
     assert "kEggKeyLength" in text
     # A packaged launcher refuses an archive with no authentication tag.
-    assert "pyupper::read_egg(egg, embedded_egg_key(), /*require_auth=*/true)" in text
+    assert "pyupper::read_egg(egg, embedded_egg_key())" in text
     assert 'globals().pop("_py_upper_opened_egg")' in text
+    # Authentication is mandatory: the bootstrap carries no switch that could
+    # turn the tag check off.
+    assert "embedded_egg_requires_auth()" not in text
+    assert "EGG_REQUIRE_AUTH" not in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "PY_UPPER_APP_NAME" in cmake
     assert "PY_UPPER_EMBEDDED_SOURCE" in cmake
@@ -709,6 +823,9 @@ def test_launcher_egg_reader_verifies_the_authentication_tag():
     assert "'W', 'B', 'E', 'G', 'G', '0', '2', '!'" in egg_bundles
     assert "egg authentication failed" in egg_bundles
     assert "egg is not authenticated" in egg_bundles
+    # There is no v1 parser and no switch that skips the tag check.
+    assert "magic_v1" not in egg_bundles
+    assert "require_auth" not in egg_bundles
     # Constant-time compare: the tag check must not leak a matching prefix.
     assert "equal_constant_time" in egg_bundles
     # The tag doubles as the cache key, which is what keeps authentication from

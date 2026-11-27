@@ -4,7 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from .config import LOCK, Target, load_app_config, python_version, runtime_provider, runtime_spec, wheel_dir
+from .config import LOCK, Target, app_config_label, load_app_config, python_version, runtime_provider, runtime_spec, wheel_dir
 from .manifest import manifest_hash, read_manifest
 from .third_party import dependency_specs
 
@@ -86,7 +86,9 @@ def verify_lock(target: Target) -> None:
     if not isinstance(target_data, dict):
         raise RuntimeError(f"Target {target.key} is not present in {LOCK}")
     if target_data.get("requirements", []) != dependency_specs():
-        raise RuntimeError("Lock dependency requirements do not match app/pyproject.toml")
+        raise RuntimeError(
+            f"Lock dependency requirements do not match {app_config_label()}"
+        )
 
     spec = runtime_spec(target)
     manifest = read_manifest(spec.root)

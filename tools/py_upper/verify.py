@@ -241,7 +241,7 @@ def _checks_for_application(
 
     label = f"{prefix or 'encrypted '}egg"
     try:
-        archive = open_egg_archive(*egg_input, require_auth=True)
+        archive = open_egg_archive(*egg_input)
     except (OSError, ValueError, zipfile.BadZipFile) as exc:
         return [(False, f"{label}: {exc}")]
     with archive:

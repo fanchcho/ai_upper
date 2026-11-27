@@ -60,6 +60,28 @@
 - 启动耗时的小幅改善来自 verify 缓存与代码整理；**加密强度与防篡改行为不变**。
 - 只读缓存环境从"无法启动"变为"可启动，缓存落在临时目录"；临时目录每次进程独立，因此这类环境没有热启动缓存复用。
 
+## 0.17.35（应用目录解耦）
+
+### Problem
+- 构建工具把应用目录硬编码成仓库内的 `app/`。fork 后想换一个应用，必须改 `tools/py_upper/config.py` 里的路径，或者把应用塞进示例目录；应用放在仓库外、甚至和仓库不在同一个 Windows 盘符时无法使用。
+
+### Changes
+- 新增 `tools/py_upper/appdir.py`：应用目录统一由 `--app DIR` 或 `PY_UPPER_APP_DIR` 选择，默认仍是 `<repo>/app`；`--app` 在导入 `py_upper.config` 之前解析。
+- 没有 `app/` 子目录时，如果仓库根 `pyproject.toml` 带 `[tool.py_upper]`，自动把仓库根目录当作应用，便于把 `tools/` 直接放进自己的应用仓库。
+- `--doctor` 输出实际选中的 app 路径；锁文件、原生依赖、Qt 剪枝和 Cython 的相对路径错误信息改为读取当前应用的配置路径。
+- 修复应用与 `build/` 不在同一个 Windows 盘符时 Cython 生成 `.c` 的 `os.path.relpath` 抛 `ValueError`：跨盘时退回绝对输出路径。
+- 新增外部应用、根目录自动发现、`--app` 帮助文本和跨盘路径的回归测试；README / DEVELOPMENT_GUIDE 增加自有 app 契约和 fork 用法。
+
+### Verification
+- `python -m pytest app/tests -q`：387 passed, 15 skipped（Python 3.11）。
+- 在仓库外的临时应用上执行 `python tools/build.py --app <tmp> --target windows-x86_64 --no-egg`：6 个阶段全部通过，`PASS native binaries checked=29`，launcher smoke `READY`。应用位于 C:、仓库位于 D:，验证了跨盘路径；同一外部应用不传 `--no-egg` 的默认 encrypted egg 构建也通过。
+- 默认 `app/` 配置的完整构建与 `--verify` 通过；外部应用构建不读取示例源码。
+
+### Impact
+- 默认行为不变：继续使用 `app/` 的现有命令和产物路径完全兼容。
+- 自有应用只需提供 `pyproject.toml`、`src/`，可选 `resources/` 和开发 `.venv/`；构建产物、锁文件和缓存仍归属于构建工具仓库。
+- `--app` 与 `PY_UPPER_APP_DIR` 二选一即可；通过 `tools/build.py` 的 `main([...])` 传 `--app` 时会在子进程中按同一选择重新执行，避免与已导入的配置常量冲突。
+
 ## 0.17.34
 
 ### Problem
@@ -72,22 +94,24 @@
 ### Changes
 - egg 升级为 v2：`MAGIC2 + SALT + TAG + ciphertext`，`TAG = SHAKE-256(key + header + ciphertext)[:32]`，比较使用常数时间。salt 由 payload 派生，重建同样输入仍得到同样字节，release manifest 保持可复现。
 - 归档内新增 `py_upper_manifest.json`（逐成员 SHA-256），打包时用刚读入的字节计算，不做第二遍 I/O。
-- `egg_loader.py`：`open_egg()` 统一解密+验签；`require_auth=True` 拒绝 v1 与普通 zip；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 增加 `require_auth`。
+- `egg_loader.py`：`open_egg()` 统一解密+验签；v1 与普通 zip 一律拒绝，认证没有关闭开关；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 只接受 MAGIC2。
 - `egg_bundles.h`：launcher 在 `Py_Initialize` 之前验签，认证失败/未认证归档直接报错退出；TAG 直接作为 bundle 缓存键。
 - `sha3.h`：absorb/squeeze 从逐字节改为按 64 位 lane 批量处理（memcpy 读入）。
 - `DEFAULT_KEY_HEX` 移出 loader，只留在构建工具里；生成器写入 `key ^ mask` 与 `mask` 两个数组，launcher 运行时重组成十六进制字符串。
 - `--verify` 新增：MAGIC2、认证 TAG、成员清单覆盖与摘要长度、`egg key not stored as plain hex`。
+- launcher 把已验签解密的 egg 明文直接交给 Python loader，避免启动时第二次 SHAKE-256；Windows 1.4 MB 产物上 Python 侧 `install()` 从 20.4 ms 降到 2.9 ms。
 
 ### Verification
 - 实测同一 1.4 MB 产物（macOS arm64，`PY_UPPER_SMOKE=1`，各 5 次）：egg 读取 13.1 ms → 10.1 ms；启动总耗时 308–328 ms → 286–294 ms。认证没有带来净开销，因为 TAG 取代了原本“解密后再对明文做一遍哈希”的遍历。
 - 缓存校验开销落在噪声内：开启 277–294 ms，`PY_UPPER_EGG_CACHE_VERIFY=0` 时 280–306 ms。
 - 端到端：改一个字节 → `egg authentication failed`；换成攻击者自己的 zip → `egg is not authenticated`；篡改 extract 缓存里的 `.py` → 目录被重建，注入内容消失。
 - `strings` 检查编译后的 launcher：明文密钥命中数 0。
-- `python -m pytest app/tests -q`：387 passed, 6 skipped。
+- `python -m pytest app/tests -q`：381 passed, 15 skipped（Python 3.8 与 3.11）。
+- 启动（Windows x86_64，1.4 MB 产物）：Python 侧 `install()` 20.4 ms → 2.9 ms；完整 smoke 热启动约 150–190 ms，受磁盘/杀软影响会有波动。
 
 ### Impact
-- 发布产物需要重新构建才会带认证（旧 v1 归档会被打包后的 launcher 拒绝，报错信息指明要重新构建）。
-- 构建期工具仍可用 `require_auth=False` 读取旧归档做诊断。
+- 发布产物需要重新构建才会带认证（旧 v1 归档会被 launcher 与构建工具拒绝，报错信息指明要重新构建）。
+- 构建期工具也只接受 MAGIC2；v1 与普通 zip 一律拒绝，没有 `require_auth=False` 之类的诊断入口。
 - 启动性能不回退；`PY_UPPER_EGG_CACHE_VERIFY=0` 是留给极端性能敏感场景的开关，默认关闭篡改检测不是默认行为。
 - 边界不变：这是提高逆向成本，不是现代密码学。密钥必须在本地可解密，调试器仍可取回。
 

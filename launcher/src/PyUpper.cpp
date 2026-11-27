@@ -1022,7 +1022,7 @@ int PyUpper::run(const std::vector<std::string>& argv) {
 
         pyupper::EggContents egg_contents;
         if (egg_loader) {
-            egg_contents = pyupper::read_egg(egg, embedded_egg_key(), /*require_auth=*/true);
+            egg_contents = pyupper::read_egg(egg, embedded_egg_key());
             if (!egg_contents.ok) {
                 report_fatal("Could not open " + path_to_utf8(egg) + ": " + egg_contents.error);
                 return 10;

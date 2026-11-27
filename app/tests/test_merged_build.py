@@ -211,6 +211,7 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
         '        return 1;\n'
         '    }\n'
         '    std::cout << "KEY " << egg.cache_key << "\\n";\n'
+        '    std::cout << "PAYLOAD " << egg.payload.size() << "\\n";\n'
         '    for (const auto& file : files) {\n'
         '        std::cout << "FILE " << file.name << " " << file.data.size() << "\\n";\n'
         '    }\n'
@@ -229,8 +230,8 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
     result = subprocess.run([str(binary), str(egg), config.key_hex], check=True, capture_output=True, text=True)
     # The launcher's cache key is the authentication tag, so a rebuilt archive
     # gets a fresh cache directory instead of reusing a stale one.
-    _payload, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
-    assert result.stdout.splitlines()[0] == f"KEY {digest}"
+    plaintext, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
+    assert result.stdout.splitlines()[:2] == [f"KEY {digest}", f"PAYLOAD {len(plaintext)}"]
     assert f"FILE {relative} {len(payload)}" in result.stdout
     assert "pkg/mod.py" not in result.stdout
 

@@ -43,14 +43,14 @@ def test_verify_authenticates_each_artifact_once_without_reusing_prior_results(t
     calls = []
     original = egg_loader.open_egg
 
-    def observe(raw, key, require_auth=False):
-        calls.append(require_auth)
-        return original(raw, key, require_auth=require_auth)
+    def observe(raw, key):
+        calls.append(raw)
+        return original(raw, key)
 
     monkeypatch.setattr(egg_loader, "open_egg", observe)
     assert verify.verify(target) == 0
     output = capsys.readouterr().out
-    assert calls == [True, True]
+    assert len(calls) == 2
     assert "PASS encrypted egg authenticated" in output
     assert "PASS packaged egg authenticated" in output
     assert "PASS egg native dependencies portable" in output
@@ -63,7 +63,7 @@ def test_verify_authenticates_each_artifact_once_without_reusing_prior_results(t
     os.utime(packaged, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
     assert verify.verify(target) == 1
     output = capsys.readouterr().out
-    assert calls == [True, True, True, True]
+    assert len(calls) == 4
     assert "PASS encrypted egg authenticated" in output
     assert "FAIL packaged egg" in output
     assert "egg authentication failed" in output
@@ -139,7 +139,7 @@ def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, membe
     egg = pack_egg(site, tmp_path / "py_upper.dat", [member], config)
     remove_packed_files(site, [member])
 
-    with open_egg_archive(egg, config.key_hex, require_auth=True) as archive:
+    with open_egg_archive(egg, config.key_hex) as archive:
         checks = verify._verify_egg_native_dependencies(archive, TARGETS["windows-x86_64"], tmp_path / "runtime")
 
     assert len(checks) == 1
@@ -163,7 +163,7 @@ def test_egg_windows_runtime_dependency_must_be_bundled(tmp_path, monkeypatch):
     runtime = tmp_path / "runtime"
     target = TARGETS["windows-x86_64"]
 
-    with open_egg_archive(egg, config.key_hex, require_auth=True) as archive:
+    with open_egg_archive(egg, config.key_hex) as archive:
         assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(archive, target, runtime))
         _pe(runtime / "vcruntime140.dll")
         assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(archive, target, runtime))

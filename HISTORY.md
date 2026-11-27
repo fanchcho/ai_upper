@@ -82,6 +82,22 @@ directory: Permission denied` 并在 `Py_Initialize` 前退出。Python 侧的 `
 （此前 287–304 ms）；只读缓存环境下启动由失败变为 `SMOKE PASS`；全量单测
 390 passed / 6 skipped。
 
+## v0.17.35（应用目录解耦）
+
+构建工具此前把应用目录写死为仓库内的 `app/`，fork 后换应用就要改 `tools/py_upper/config.py`，
+应用在仓库外或与仓库不同盘符时也无法构建。现在应用目录由 `--app DIR` 或
+`PY_UPPER_APP_DIR` 选择，默认仍是 `app/`；没有 `app/` 时，根目录带 `[tool.py_upper]`
+的 `pyproject.toml` 会被自动识别。应用只提供 `pyproject.toml`、`src/`（可选
+`resources/`、`.venv/`），`build/`、`dist/`、锁文件仍留在构建工具仓库。
+
+同时修复了应用与 `build/` 跨 Windows 盘符时 Cython `os.path.relpath` 抛 `ValueError`
+的问题：跨盘时使用绝对输出路径。新增外部应用、根目录发现和跨盘路径的回归测试；
+README 与开发指南补充 fork 用法和目录契约。
+
+验证：Python 3.11 全量单测 387 passed / 15 skipped；在 C: 的临时应用、D: 的仓库上执行
+`--app` 构建 `windows-x86_64`，6 个阶段、29 个原生二进制检查和 launcher smoke 全部通过。
+版本同步到 0.17.35。
+
 ## v0.17.34
 
 打包产物的 `bundle/py_upper.dat` 一直是纯 XOR 混淆：没有 MAC，没有成员摘要，

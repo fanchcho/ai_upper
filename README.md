@@ -39,12 +39,12 @@ Application run
 
 核心原则：
 
-- `app/src/` 直接就是应用源码，不再套额外项目包名。
+- 应用目录的 `src/` 直接就是应用源码，不再套额外项目包名；默认示例是 `app/src/`，自有 `app` 可以用 `--app` 指向任意目录。
 - Build Tool Python 与最终 Target Python 完全独立；Build Tool 最低支持 Python 3.8。
 - 应用自己的 Python 模块默认 Cython 化；`__init__.py` 保留为 package marker。
 - 应用模块增量编译：只有内容变化的模块重新 Cython 化并编译，其余复用 `build/cache/` 里的产物；多个模块并行编译（`[tool.py_upper.build]`）。
 - 第三方依赖不 Cython 化，而是根据 Target 的 wheel compatibility tags 安装目标 wheel。
-- `app/src/` 下的 `.dylib/.so/.dll/.pyd` 是正式应用输入，会参加 native dependency closure。
+- 应用目录 `src/` 下的 `.dylib/.so/.dll/.pyd` 是正式应用输入，会参加 native dependency closure。
 - `runtimes/` 是机器本地 Runtime 缓存，不进入 Git。
 - `dist/` 只在一次 rename 中更新：bundle 在 `build/publish/<target>.<pid>/` 组装完成后再原子换入 `dist/`。构建期间 `dist/` 要么是上一版的完整产物，要么是新版的完整产物，不会被原地删改——发布路径上的 runtime 会被编辑器等外部进程执行，原地清理必然与它们的写入互相踩。
 - 最终验证不仅检查文件存在，还会用 bundled Target Python 真正 import 应用和直接声明的第三方依赖。
@@ -58,7 +58,7 @@ Application run
 
 ```text
 py_upper/
-├── app/
+├── app/                        # 默认示例应用，可整体替换
 │   ├── pyproject.toml.example  # 配置模板（入库）
 │   ├── pyproject.toml          # 本地配置（Git ignored，从模板复制而来）
 │   ├── src/
@@ -76,6 +76,39 @@ py_upper/
 └── dist/                     # Git ignored
 ```
 
+## 用自己的 app（fork 后直接使用）
+
+Build Tool 不 import 应用代码，只读取应用目录；`app/` 只是仓库自带的示例，不是框架的一部分。fork 后可以替换 `app/src` 和配置，也可以把应用放在仓库外面，不需要改 `tools/` 或 `launcher/`。
+
+一个应用目录只需要这些内容：
+
+```text
+myapp/
+├── pyproject.toml      # 必填，schema 同 app/pyproject.toml.example
+├── src/                # 必填，src 下直接是包根
+│   └── main.py         # [tool.py_upper].entry 指定的入口
+├── resources/          # 可选，存在就随包复制
+└── .venv/              # 可选，开发用解释器
+```
+
+三种指定方式：
+
+```bash
+# 1. 默认：继续用仓库里的 app/
+cp app/pyproject.toml.example app/pyproject.toml
+python tools/build.py
+
+# 2. 仓库外的应用
+python tools/build.py --app ../myapp
+
+# 3. 环境变量（对 --doctor / build / run / verify / lock / clean 都生效）
+PY_UPPER_APP_DIR=../myapp python tools/build.py --doctor
+```
+
+`--app` 可以和其他命令组合，例如 `python tools/build.py --app ../myapp --run`。如果仓库根目录本身就是应用（根 `pyproject.toml` 带 `[tool.py_upper]`），删掉 `app/` 后也会自动识别根目录，不必额外传参。
+
+`build/`、`dist/` 和 `py_upper.lock.json` 仍属于构建工具所在的仓库；应用目录只提供源码、配置、可选资源和开发 `.venv`。`app/tests` 是示例应用自己的测试，替换示例时一并替换即可。
+
 ## 首次使用
 
 应用配置不入库，克隆后先把模板复制成工作副本：
@@ -84,11 +117,11 @@ py_upper/
 cp app/pyproject.toml.example app/pyproject.toml
 ```
 
-`app/pyproject.toml` 被 `.gitignore` 忽略：应用名、依赖、runtime 版本这些跟着你机器走的东西写在里面，不会进 Git；`app/pyproject.toml.example` 是入库模板，跟着仓库走。忘了复制的话，构建工具会直接报错并把上面这条命令打出来。
+`app/pyproject.toml` 被 `.gitignore` 忽略：应用名、依赖、runtime 版本这些跟着你机器走的东西写在里面，不会进 Git；`app/pyproject.toml.example` 是入库模板，跟着仓库走。忘了复制的话，构建工具会直接报错并把上面这条命令打出来。使用 `--app` 指向自己的应用时，只需要该目录里有 `pyproject.toml`，不要求有 `.example`。
 
 ## App 名称
 
-项目名固定为 `py_upper`。最终 App 名称只在**一处**配置：本地配置 `app/pyproject.toml`（不入库，克隆后由 `app/pyproject.toml.example` 复制而来）的 `[tool.py_upper.app]` 节，当前是 `Upper`：
+项目名固定为 `py_upper`。最终 App 名称只在**一处**配置：当前应用配置（默认示例是本地 `app/pyproject.toml`，不入库，克隆后由 `app/pyproject.toml.example` 复制而来；自有应用则是 `--app` 指向的 `pyproject.toml`）的 `[tool.py_upper.app]` 节，当前是 `Upper`：
 
 ```toml
 [tool.py_upper.app]
@@ -100,7 +133,7 @@ identifier = "com.example.pyupper"   # macOS bundle id，与名字无关
 
 ### 改名怎么操作
 
-1. 改上面那一行 `name = "..."`——`app/pyproject.toml`（工作副本）和 `app/pyproject.toml.example`（入库模板）各有一份，两边都改，否则新克隆的人得到的还是旧名；
+1. 改上面那一行 `name = "..."`——默认示例的 `app/pyproject.toml`（工作副本）和 `app/pyproject.toml.example`（入库模板）各有一份，两边都改，否则新克隆的人得到的还是旧名；自有应用只改自己的 `pyproject.toml`；
 2. 重新构建：`python tools/build.py --clean`。
 
 **旧产物不会自动删除**：构建只写当前名字的产物，`dist/` 里从 `MyApp` 时代的 `MyApp.app`（或 `MyApp/`）会留着，双击旧的那个跑的还是旧包。`--clean` 是唯一会替你清理的开关，它把 `build/` 和 `dist/` 整个删掉；不想全量重建就手工删 `dist/` 下的旧 bundle。
@@ -126,6 +159,7 @@ identifier = "com.example.pyupper"   # macOS bundle id，与名字无关
 
 ```bash
 python tools/build.py
+python tools/build.py --app ../myapp --run
 python tools/build.py --run
 python tools/build.py --verify
 python tools/build.py --target linux-x86_64
@@ -256,7 +290,7 @@ app/src/
 
 ## Qt 裁剪
 
-PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取 `app/src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
+PySide6 的 wheel 会带上整个 Qt，`QtWebEngineCore` 一个就约 450 MB。默认策略是按 **import 裁剪**：读取应用 `src` 里引用的 `PySide6.Qt*` 模块，用目标 runtime 解析出传递闭包，然后删掉没用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken 的 QML 辅助库、Qt 工具二进制和工具翻译。
 
 ```toml
 [tool.py_upper.optimize]
@@ -341,8 +375,15 @@ runtime_keep = []
 
 `[tool.py_upper.egg]` 把应用自己的 Python 模块和本次构建产出的扩展收进一个
 `bundle/py_upper.dat`，不再以散文件留在 `site-packages`。归档格式是
-`MAGIC (8 字节) + XOR(zip, SHAKE-256 key stream)`；launcher 在导入应用入口前
+`MAGIC2 (8 字节) + SALT (16) + TAG (32) + XOR(zip, SHAKE-256(key + SALT))`，
+`TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]`；launcher 在导入应用入口前
 安装内存导入器，所以产物里不会再有 `main.py` / `main.pyd`。
+
+`TAG` 让归档具备完整性校验：重打包、改一个字节、或用自己的 zip 顶替归档，都会在
+导入任何模块之前失败（`egg authentication failed` / `egg is not authenticated`）。
+归档内还带 `py_upper_manifest.json`（逐成员 SHA-256），供 extract 缓存复用前核对。
+当前只接受 MAGIC2 归档：v1（只有 `MAGIC`）与普通 zip 在 launcher 和构建期工具里
+都会被拒绝，没有关闭认证的开关。
 
 加密默认开启：即使项目没有写 `[tool.py_upper.egg]` 段，普通构建也会生成
 `py_upper.dat`。要临时发一个散文件版本，用 `--no-egg`；要长期关闭，在配置里
@@ -356,7 +397,7 @@ backend = "auto"          # auto / memory / extract
 compression = "deflated"  # deflated / stored / lzma
 ```
 
-只有应用自己的代码进 egg：`app/src` 下的 Python 模块、本次构建编译出的
+只有应用自己的代码进 egg：应用 `src` 下的 Python 模块、本次构建编译出的
 `.pyd`/`.so`，以及随应用分发的其它非原生文件。第三方 wheel、runtime 和
 `[tool.py_upper.native]` 依赖闭包需要看到的原生输入仍留在 `site-packages`，
 否则闭合检查看不见它们。
@@ -365,9 +406,11 @@ compression = "deflated"  # deflated / stored / lzma
 
 - `memory`：仅 Windows。扩展模块通过 vendored `_memimporter` 直接从内存映射，
   需要 Zig 工具链；编译产物缓存在 `build/cache/memimporter/<target>/`。
-- `extract`：所有平台。启动时解密到按内容寻址的缓存目录（目录名是解密后
-  归档的 SHA-256）并插入 `sys.path`；首次启动解压一次，之后直接复用，重新
-  构建的 egg 会自然切换到新目录。缓存根默认是
+- `extract`：所有平台。启动时解密到按内容寻址的缓存目录（目录名由认证 TAG
+  派生）并插入 `sys.path`；首次启动解压一次，之后直接复用，重新构建的 egg 会
+  自然切换到新目录。缓存是明文，所以复用前会按归档清单逐个核对 SHA-256，被改
+  过的目录会被删除重建（`PY_UPPER_EGG_CACHE_VERIFY=0` 可关闭这项检查；实测
+  对热启动的影响在测量噪声内，不建议为性能关闭）。缓存根默认是
   `~/Library/Caches/py_upper/eggs`（macOS）、
   `%LOCALAPPDATA%/py_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/py_upper/eggs` 或 `~/.cache/py_upper/eggs`（Linux），可用
@@ -391,11 +434,13 @@ Windows/Linux 下归档位于可执行文件旁的 `bundle/`，macOS 下位于
 `Contents/Resources/bundle/`，文件名固定为 `py_upper.dat`，不再暴露 egg/zip
 字样。stage 下的 `egg.json` 记录本次构建实际使用的 key/backend/compression，
 `--verify` 和冒烟脚本以它为准，不会拿项目默认值去解一个被 CLI 覆盖过的 egg。
-`--verify` 会检查 `bundle/py_upper.dat` 的 MAGIC、成员列表，并确认已打包的应用文件不再以
-散文件出现；`memory` 后端还必须带 `_memimporter.pyd`。
+`--verify` 会检查 `bundle/py_upper.dat` 的 MAGIC2、认证 TAG、成员清单与成员列表，
+并确认已打包的应用文件不再以散文件出现、launcher 二进制里没有明文十六进制密钥；
+`memory` 后端还必须带 `_memimporter.pyd`。
 
-**加密不等于变小**：SHAKE-256 密钥流只提高直接读源码/反编译的成本，key 本身
-编在 launcher 里，不是秘密存储格式；压缩后的 egg 与普通 zip 体积相当。产物
+**加密不等于变小**：SHAKE-256 密钥流只提高直接读源码/反编译的成本；key 必须
+编在 launcher 里才能解密（以 `key ^ mask` 的字节数组形式存放，`strings` 拿不到
+明文十六进制），不是秘密存储格式；压缩后的 egg 与普通 zip 体积相当。产物
 大小仍由 runtime、第三方 wheel 和 Qt 决定，减小体积请用上面的 trim、Qt 裁剪
 和 `strip_native`。
 
@@ -424,7 +469,7 @@ python = "3.13.15"
 开发 Python 可以是 3.8–3.13 的另一个独立解释器。选择顺序：
 
 1. `PY_UPPER_PYTHON` / 兼容旧变量 `PYSTAND_PYTHON`
-2. `app/.venv`
+2. 应用目录的 `.venv`（默认示例是 `app/.venv`）
 3. 当前执行 `tools/build.py` 的 Python
 4. `python` / `python3`
 

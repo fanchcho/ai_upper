@@ -9,7 +9,7 @@ import subprocess
 import zipfile
 from pathlib import Path, PureWindowsPath
 
-from .config import APP, BUILD, LOCK, ROOT, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
+from .config import APP, BUILD, LOCK, ROOT, Target, app_config_label, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
 
 WHEEL_MANIFEST = "manifest.json"
 MANIFEST_FORMAT = 4
@@ -341,14 +341,18 @@ def resolve_wheels(target: Target) -> Path:
             if data.get("format") != MANIFEST_FORMAT or data.get("python") != python_version() or data.get("target") != target.key:
                 raise RuntimeError("Locked wheel manifest does not match configured target")
             if data.get("requirements", []) != dependency_specs():
-                raise RuntimeError("Locked wheel requirements do not match app/pyproject.toml")
+                raise RuntimeError(
+                    f"Locked wheel requirements do not match {app_config_label()}"
+                )
             records = {str(item["file"]): item for item in data.get("wheels", []) if isinstance(item, dict) and item.get("file")}
         elif LOCK.exists():
             lock = json.loads(LOCK.read_text(encoding="utf-8"))
             target_data = lock.get("targets", {}).get(target.key, {}) if isinstance(lock, dict) else {}
             if isinstance(target_data, dict):
                 if target_data.get("requirements", []) != dependency_specs():
-                    raise RuntimeError("Locked wheel requirements do not match app/pyproject.toml")
+                    raise RuntimeError(
+                        f"Locked wheel requirements do not match {app_config_label()}"
+                    )
                 records = {str(item["file"]): item for item in target_data.get("wheels", []) if isinstance(item, dict) and item.get("file")}
         if not records and dependency_specs():
             raise RuntimeError(f"Locked build has no recorded wheels for {target.key}: {LOCK}")

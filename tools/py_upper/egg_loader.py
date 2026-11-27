@@ -13,10 +13,7 @@
 # A packaged startup authenticates and decrypts once in the launcher, then
 # hands the opened archive and its tag to this loader in memory.
 #
-# Layout v1 (MAGIC only, no tag) is still readable when require_auth is false,
-# which is what keeps hand-made archives and the test fixtures working. A
-# packaged launcher passes require_auth=True, so a v1 archive in a shipped
-# bundle is refused instead of being silently trusted.
+# Untagged and legacy archives are not accepted.
 #
 # Backends:
 #   memory  - extension modules are mapped from memory through _memimporter.
@@ -54,7 +51,6 @@ import sys
 import threading
 import zipfile
 
-MAGIC = b'WBEGG01!'
 MAGIC2 = b'WBEGG02!'
 SALT_SIZE = 16
 TAG_SIZE = 32
@@ -92,16 +88,6 @@ def egg_tag(header, ciphertext, key):
     return shake.digest(TAG_SIZE)
 
 
-def decrypt_if_needed(raw, key):
-    if raw[:len(MAGIC2)] == MAGIC2:
-        header, _tag, ciphertext = split_v2(raw)
-        salt = header[len(MAGIC2):]
-        return keystream_xor(ciphertext, key + salt)
-    if raw[:len(MAGIC)] == MAGIC:
-        return keystream_xor(raw[len(MAGIC):], key)
-    return raw
-
-
 def split_v2(raw):
     header_size = len(MAGIC2) + SALT_SIZE
     if len(raw) < header_size + TAG_SIZE:
@@ -112,25 +98,16 @@ def split_v2(raw):
     return header, tag, ciphertext
 
 
-def open_egg(raw, key, require_auth=False):
+def open_egg(raw, key):
     if not raw:
         raise ValueError('egg is empty')
-    if raw[:len(MAGIC2)] == MAGIC2:
-        header, tag, ciphertext = split_v2(raw)
-        expected = egg_tag(header, ciphertext, key)
-        if not hmac.compare_digest(tag, expected):
-            raise ValueError('egg authentication failed: archive was rebuilt or edited')
-        salt = header[len(MAGIC2):]
-        return keystream_xor(ciphertext, key + salt), tag.hex()
-    if require_auth:
+    if raw[:len(MAGIC2)] != MAGIC2:
         raise ValueError('egg is not authenticated: rebuild it with this version of py_upper')
-    if raw[:len(MAGIC)] == MAGIC:
-        payload = keystream_xor(raw[len(MAGIC):], key)
-    else:
-        # A plain zip is accepted, mirroring the launcher, so a hand-made
-        # archive stays usable for debugging.
-        payload = raw
-    return payload, hashlib.sha256(payload).hexdigest()[:32]
+    header, tag, ciphertext = split_v2(raw)
+    expected = egg_tag(header, ciphertext, key)
+    if not hmac.compare_digest(tag, expected):
+        raise ValueError('egg authentication failed: archive was rebuilt or edited')
+    return keystream_xor(ciphertext, key + header[len(MAGIC2):]), tag.hex()
 
 
 def _key_bytes(key_hex):
@@ -274,7 +251,7 @@ def _install_builtin_submodule_finder():
 
 
 class EncryptedEggImporter:
-    def __init__(self, egg_path, key, backend='auto', require_auth=False, *, _opened_egg=None):
+    def __init__(self, egg_path, key, backend='auto', *, _opened_egg=None):
         backend = str(backend or 'auto').strip().lower()
         if backend not in BACKENDS:
             raise ValueError('egg backend must be one of: ' + ', '.join(BACKENDS))
@@ -286,7 +263,7 @@ class EncryptedEggImporter:
                 raw = handle.read()
         try:
             if _opened_egg is None:
-                _opened_egg = open_egg(raw, key, require_auth=require_auth)
+                _opened_egg = open_egg(raw, key)
             payload, self.digest = _opened_egg
             self.archive = zipfile.ZipFile(io.BytesIO(payload))
             self.names = frozenset(self.archive.namelist())
@@ -309,14 +286,14 @@ class EncryptedEggImporter:
         else:
             self.backend = 'memory'
 
-    # Per-member digests recorded at pack time, or None for a legacy egg.
+    # Per-member digests recorded at pack time.
     #
     # A manifest that disagrees with the archive is a build bug, not a
     # tampering signal (the tag already covers the bytes), so it is refused
     # here instead of being used to validate a cache.
     def _read_manifest(self):
         if MANIFEST_NAME not in self.names:
-            return None
+            raise ValueError('egg manifest is missing')
         try:
             data = json.loads(self.archive.read(MANIFEST_NAME).decode('utf-8'))
         except Exception as exc:
@@ -363,7 +340,7 @@ class EncryptedEggImporter:
             return False
         if recorded != self.digest:
             return False
-        if self.manifest is None or not _cache_verify_enabled():
+        if not _cache_verify_enabled():
             return True
         for name, expected in self.manifest.items():
             if name.startswith(BUNDLE_PREFIX):
@@ -540,9 +517,9 @@ def _install(importer):
     return importer
 
 
-def install(egg_path, key_hex=None, backend='auto', require_auth=False):
+def install(egg_path, key_hex=None, backend='auto'):
     key = _key_bytes(key_hex)
-    return _install(EncryptedEggImporter(egg_path, key, backend, require_auth=require_auth))
+    return _install(EncryptedEggImporter(egg_path, key, backend))
 
 
 def install_from_launcher(egg_path, payload, digest, backend):
