@@ -5,14 +5,16 @@ Deva 走 Electron 的 `session.fetch` 以获得系统证书库与系统代理；
 证书认系统 CA（`certifi` + `ssl` 默认），企业网自签证书仍需 `SSL_CERT_FILE` 或用户自带 CA——
 这一点如实写在这里，不假装等价。
 
-代理口径与 Deva 一致：**默认直连，认 `HTTPS_PROXY` / `HTTP_PROXY` / `ALL_PROXY` / `NO_PROXY`
-环境变量，不读系统代理**。Deva 另外有一条「直连失败改走系统代理重试」的兜底，那依赖 Chromium
-得知系统代理；Python 拿不到，故本工程没有这一条，改为在错误信息里明说「设置了代理环境变量吗」。
+环境变量代理优先；未显式配置时，仅连接送达前失败可以试系统代理。
+系统解析由 libproxy（含 PAC/WPAD）或 Qt 平台实现承担；不自行解释 PAC JavaScript。
 """
 from __future__ import annotations
 
 from locale_runtime import tr
 import os
+import re
+import fnmatch
+import ipaddress
 import ssl
 from dataclasses import dataclass
 from typing import Optional
@@ -51,22 +53,45 @@ class ProxyConfig:
 
     def for_url(self, url: str) -> Optional[str]:
         """该地址该走哪个代理（与 Deva `proxyUri` 同口径）；None = 直连。"""
-        host = (urlsplit(url).hostname or "").lower()
-        if host and _matches_no_proxy(host, self.no_proxy):
+        parsed = urlsplit(url)
+        host = (parsed.hostname or "").lower()
+        port = parsed.port or (443 if parsed.scheme == "https" else 80)
+        if host and _matches_no_proxy(host, self.no_proxy, port):
             return None
         if urlsplit(url).scheme == "https":
             return self.https or self.all
         return self.http or self.all
 
 
-def _matches_no_proxy(host: str, no_proxy: Optional[str]) -> bool:
+def _matches_no_proxy(host: str, no_proxy: Optional[str], port: Optional[int] = None) -> bool:
+    """Chromium bypassRules: CIDR, host:port, glob and comma/space delimiters."""
     if not no_proxy:
         return False
-    for raw in no_proxy.split(","):
-        entry = raw.strip().lower().lstrip(".")
+    host = host.lower().strip("[]")
+    for entry in re.split(r"[,\s]+", no_proxy.lower().strip()):
         if not entry:
             continue
-        if entry == "*" or host == entry or host.endswith("." + entry):
+        if entry == "*":
+            return True
+        if entry == "<local>" and "." not in host and ":" not in host:
+            return True
+        if "/" in entry:
+            try:
+                if ipaddress.ip_address(host) in ipaddress.ip_network(entry, strict=False):
+                    return True
+            except ValueError:
+                pass
+            continue
+        match = re.fullmatch(r"(\[[^]]+\]|[^:]+):(\d+)", entry)
+        if match:
+            entry, wanted_port = match.groups()
+            if port != int(wanted_port):
+                continue
+        entry = entry.strip("[]")
+        if entry.startswith("*."):
+            entry = entry[2:]
+        entry = entry.lstrip(".")
+        if fnmatch.fnmatchcase(host, entry) or fnmatch.fnmatchcase(host, "*." + entry):
             return True
     return False
 

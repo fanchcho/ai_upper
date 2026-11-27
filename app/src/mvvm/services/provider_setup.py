@@ -39,7 +39,9 @@ def build_transport(proxy: Optional[str] = None) -> Transport:
     if proxy:
         return HttpxTransport(lambda url: proxy)
     proxy_config = ProxyConfig.from_env()
-    return HttpxTransport(proxy_config.for_url)
+    from mvvm.services.system_proxy import system_proxy
+    explicit = bool(proxy_config.http or proxy_config.https or proxy_config.all) and proxy_config.no_proxy != '*'
+    return HttpxTransport(proxy_config.for_url, system_proxy_resolver=None if explicit else system_proxy)
 
 
 class ModelGateway:

@@ -11,6 +11,9 @@ from __future__ import annotations
 from locale_runtime import tr
 
 import asyncio
+import logging
+from urllib.parse import urlsplit
+import httpx
 from dataclasses import dataclass, field
 from typing import AsyncIterator, Mapping, Optional, Protocol
 
@@ -91,8 +94,12 @@ class Transport(Protocol):
 class HttpxTransport:
     """真实网络传输（httpx）。代理按 URL 逐请求判定。"""
 
-    def __init__(self, proxy_url_resolver=None) -> None:
+    # Successful route choices are shared across model/provider transport instances.
+    _route_by_origin: dict[str, str] = {}
+
+    def __init__(self, proxy_url_resolver=None, *, system_proxy_resolver=None) -> None:
         # resolver(url) -> 代理地址或 None；缺省由调用方直接给固定代理
+        self._system_resolver = system_proxy_resolver
         self._resolver = proxy_url_resolver
         self._clients: dict[Optional[str], object] = {}
 
@@ -111,13 +118,40 @@ class HttpxTransport:
         body: bytes,
         cancel: Optional[CancelToken] = None,
     ) -> HttpResponse:
-        proxy_url = self._resolver(url) if self._resolver else None
-        client = self._client(proxy_url)
-        request = client.build_request("POST", url, headers=dict(headers), content=body)
+        parsed = urlsplit(url)
+        origin = f"{parsed.scheme}://{parsed.hostname}:{parsed.port or (443 if parsed.scheme == 'https' else 80)}"
+        default = self._resolver(url) if self._resolver else None
+        route = self._route_by_origin.get(origin, 'default') if self._system_resolver else 'default'
+
+        async def send(via):
+            if cancel is not None and cancel.cancelled:
+                raise CancelledError(tr('legacy.f2187b0114d3'))
+            proxy = default if via == 'default' else await asyncio.to_thread(self._system_resolver, url)
+            client = self._client(proxy)
+            request = client.build_request("POST", url, headers=dict(headers), content=body)
+            return await client.send(request, stream=True)
+
         try:
-            response = await client.send(request, stream=True)
-        except Exception as exc:  # noqa: BLE001 - 统一转成可读网络错误
-            raise NetworkError(describe_net_error(exc)) from exc
+            response = await send(route)
+        except CancelledError:
+            raise
+        except Exception as first:
+            # Read/write failures may have reached the server: never replay them.
+            if not self._system_resolver or not isinstance(first, (httpx.ConnectError, httpx.ConnectTimeout, httpx.ProxyError)):
+                raise NetworkError(describe_net_error(first)) from first
+            if cancel is not None and cancel.cancelled:
+                raise CancelledError(tr('legacy.f2187b0114d3'))
+            other = 'system' if route == 'default' else 'default'
+            if other == 'system' and not await asyncio.to_thread(self._system_resolver, url):
+                raise NetworkError(describe_net_error(first)) from first
+            try:
+                response = await send(other)
+            except CancelledError:
+                raise
+            except Exception:
+                raise NetworkError(describe_net_error(first)) from first
+            self._route_by_origin[origin] = other
+            logging.getLogger(__name__).warning("[http] %s: %s failed before delivery; using %s", origin, route, other)
         return HttpResponse(
             status=response.status_code,
             headers={k.lower(): v for k, v in response.headers.items()},
