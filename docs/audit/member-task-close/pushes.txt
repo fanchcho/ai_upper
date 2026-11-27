@@ -1,0 +1,12 @@
+To github.com:fanchcho/ai_upper.git
+   61c8e2d..09de966  develop -> develop
+
+To github.com:fanchcho/ai_upper.git
+   355f77c..9e5c29d  develop -> develop
+
+To github.com:fanchcho/ai_upper.git
+   9e5c29d..a7ee565  develop -> develop
+
+09de966499a7e7fb04930d0bc8e8f9c1e9f86cd1 refs/heads/develop
+9e5c29d8c0ce31068ef6d5d091d449e46bbd5d83 refs/heads/develop
+a7ee565df9ab0b28cae0688a15a6fde1f1c49322 refs/heads/develop
