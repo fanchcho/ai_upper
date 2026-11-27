@@ -1,13 +1,19 @@
 {
-  "status": [
-    "安全连接已建立；外部推送未验证"
-  ],
+  "status": "未验证：AbortError: Registration failed - push service not available",
   "users": [
     {
-      "id": "d_4adad6bf37776426",
-      "chatId": "d_4adad6bf37776426",
+      "id": "d_0ea0356800623366",
+      "chatId": "d_0ea0356800623366",
       "name": "浏览器",
-      "pairedAt": 1795805322993
+      "pairedAt": 1795805777832
     }
-  ]
+  ],
+  "reloadResumed": true,
+  "foreground": true,
+  "background": true,
+  "revoked": {
+    "mouseClicked": true,
+    "deviceRemoved": true,
+    "keyDeleted": true
+  }
 }

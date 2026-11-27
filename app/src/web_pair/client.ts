@@ -1,6 +1,7 @@
 import {phoneHello,phoneFinish,b64uDecode} from './remote-crypto'
 const status=document.querySelector('#status')!; const button=document.querySelector('#subscribe') as HTMLButtonElement
-const ticket=JSON.parse(decodeURIComponent(location.hash.slice(1)));history.replaceState(null,'',location.pathname)
+const ticket=JSON.parse(location.hash ? decodeURIComponent(location.hash.slice(1)) : localStorage.getItem('connection')||'null');
+if(!ticket)throw Error('请从桌面重新生成配对票据');localStorage.setItem('connection',JSON.stringify({port:ticket.port}));history.replaceState(null,'',location.pathname)
 const saved=JSON.parse(localStorage.getItem('device:'+ticket.port)||'null');const auth=saved||ticket
 const {hi,priv}=phoneHello(saved?'resume':'pair',auth.id);let channel:any;let publicKey:string
 const ws=new WebSocket('ws://127.0.0.1:'+ticket.port)
@@ -14,4 +15,4 @@ ws.onmessage=event=>{try{const frame=JSON.parse(event.data);if(frame.t==='hi'){c
 ws.onclose=()=>{status.textContent+=' · 连接已关闭';button.disabled=true}
 ws.onerror=()=>status.textContent='连接失败；未验证'
 document.addEventListener('visibilitychange',()=>send({t:'visible',visible:!document.hidden}))
-button.onclick=async()=>{try{const registration=await navigator.serviceWorker.register('/sw.js');await navigator.serviceWorker.ready;const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uDecode(publicKey)!});send({t:'push',subscription:subscription.toJSON()})}catch(e){status.textContent='未验证：'+String(e)}}
+button.onclick=async()=>{try{status.textContent='正在申请浏览器推送订阅…';const registration=await navigator.serviceWorker.register('/sw.js');await navigator.serviceWorker.ready;const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uDecode(publicKey)!});send({t:'push',subscription:subscription.toJSON()})}catch(e){status.textContent='未验证：'+String(e)}}

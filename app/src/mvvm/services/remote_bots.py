@@ -56,7 +56,7 @@ def RemoteBots(shell):
                     self.pairing.pop(identity,None)
                     bot['enabled']=False;self.states[identity]='off'
                     if action=='delete':
-                        for field in ('botToken','appSecret','verificationToken','encryptKey'):
+                        for field in ('botToken','appSecret','verificationToken','encryptKey','vapid',*('dev:'+u['id'] for u in bot.get('users',[]))):
                             self.shell._vault.delete_secret('remote:'+identity+':'+field)
                         rows=[b for b in rows if b['id']!=identity]
                 elif action=='enable':
@@ -72,6 +72,10 @@ def RemoteBots(shell):
                     removed=[u for u in bot.get('users',[]) if u['id']==value]
                     bot['users']=[u for u in bot.get('users',[]) if u['id']!=value]
                     for u in removed:bot.get('bindings',{}).pop(u.get('chatId',''),None)
+                    if bot['platform']=='web':
+                        self.shell._vault.delete_secret('remote:'+identity+':dev:'+value)
+                        worker=self.workers.get(identity)
+                        if worker:worker.revoke(value)
                 else:raise ValueError('未知机器人操作')
                 self.save(rows);return ''
             except Exception as exc:return str(exc)
@@ -82,6 +86,8 @@ def RemoteBots(shell):
             if not bot:
                 bot={'id':'web_'+uuid.uuid4().hex[:12],'name':'本地浏览器','platform':'web','enabled':True,'users':[],'bindings':{},'settings':{},'replyMode':'final','scope':{'mode':'all','personas':[],'sessions':[]}}
                 self.save(self.list()+[bot])
+            elif not bot.get('enabled'):
+                rows=self.list();next(b for b in rows if b['id']==bot['id'])['enabled']=True;self.save(rows)
             if bot['id'] not in self.workers:self.start(bot)
             return self.workers[bot['id']].issue()
 

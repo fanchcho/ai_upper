@@ -1,0 +1,124 @@
+[
+  {
+    "theme": "dark",
+    "device": "d_ec252f939ba0e3bc",
+    "front_suppression": true,
+    "replay_closed": true,
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "dark",
+      "locale": "zh-CN",
+      "remote": {
+        "bots": [
+          {
+            "id": "web_550c49ec7c32",
+            "name": "本地浏览器",
+            "platform": "web",
+            "enabled": true,
+            "users": [
+              {
+                "id": "d_ec252f939ba0e3bc",
+                "chatId": "d_ec252f939ba0e3bc",
+                "name": "浏览器",
+                "pairedAt": 1795805640477,
+                "push": {
+                  "endpoint": "https://push.invalid/unverified",
+                  "keys": {
+                    "p256dh": "BAhzWIeA084ouCRCg4A22pvFfztNAw034IsGHKT8Fqbd8moAzPFZj1wxBEILven4I-BYLqqMYCaz_EMsqgP-SJE",
+                    "auth": "YWFhYWFhYWFhYWFhYWFhYQ"
+                  }
+                }
+              }
+            ],
+            "bindings": {},
+            "settings": {},
+            "replyMode": "final",
+            "scope": {
+              "mode": "all",
+              "personas": [],
+              "sessions": []
+            }
+          }
+        ]
+      }
+    },
+    "subscription_status": "synthetic endpoint, no external send attempted"
+  },
+  {
+    "theme": "light",
+    "device": "d_3ecbdae60b9a8aa9",
+    "front_suppression": true,
+    "replay_closed": true,
+    "config": {
+      "models": {
+        "activeModelId": "p1:claude-sonnet-5-5",
+        "providers": [
+          {
+            "id": "p1",
+            "adapter": "anthropic",
+            "apiHost": "https://api.example.com",
+            "enabled": true,
+            "models": [
+              {
+                "id": "claude-sonnet-5-5",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      "theme": "light",
+      "locale": "zh-CN",
+      "remote": {
+        "bots": [
+          {
+            "id": "web_873dd5830e9a",
+            "name": "本地浏览器",
+            "platform": "web",
+            "enabled": true,
+            "users": [
+              {
+                "id": "d_3ecbdae60b9a8aa9",
+                "chatId": "d_3ecbdae60b9a8aa9",
+                "name": "浏览器",
+                "pairedAt": 1795805646431,
+                "push": {
+                  "endpoint": "https://push.invalid/unverified",
+                  "keys": {
+                    "p256dh": "BBzBij6tE5JlHMJFhdvcNZhipViLiKKHE2dpaF8eI96HiSEIU6ctQhdS7nQo9xrWIDRcJk63yFn7jxROesLEk0s",
+                    "auth": "YWFhYWFhYWFhYWFhYWFhYQ"
+                  }
+                }
+              }
+            ],
+            "bindings": {},
+            "settings": {},
+            "replyMode": "final",
+            "scope": {
+              "mode": "all",
+              "personas": [],
+              "sessions": []
+            }
+          }
+        ]
+      }
+    },
+    "subscription_status": "synthetic endpoint, no external send attempted"
+  }
+]

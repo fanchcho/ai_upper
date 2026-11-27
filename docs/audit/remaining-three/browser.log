@@ -1,21 +1,26 @@
-[215512:1128/024921.738953:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[215512:1128/024921.739067:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[215512:1128/024921.740432:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[215512:1128/024921.740501:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[215512:1128/024921.740518:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[215512:1128/024921.740536:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[215512:1128/024921.740549:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[215512:1128/024921.740978:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[217446:1128/025617.391978:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[217446:1128/025617.607641:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[217446:1128/025617.607703:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[217446:1128/025617.609480:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[217446:1128/025617.609536:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[217446:1128/025617.609555:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[217446:1128/025617.609572:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[217446:1128/025617.609585:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
 
-(electron:215512): GLib-GIO-CRITICAL **: 02:49:21.759: g_settings_schema_source_lookup: assertion 'source != NULL' failed
-[215512:1128/024921.788639:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-(node:215512) electron: Failed to load URL: http://127.0.0.1:41041/index.html#%7B%22port%22%3A%2035089%2C%20%22id%22%3A%20%22GFgnFyQ_FbsQ%22%2C%20%22secret%22%3A%20%22X6WwUUKzlKm73Y2Ch8-mlcQYv51Cg7JqKcck6s56m-o%22%7D with error: ERR_CONNECTION_REFUSED
-(Use `electron --trace-warnings ...` to show where the warning was created)
-Error: ERR_CONNECTION_REFUSED (-102) loading 'http://127.0.0.1:41041/index.html#%7B%22port%22%3A%2035089%2C%20%22id%22%3A%20%22GFgnFyQ_FbsQ%22%2C%20%22secret%22%3A%20%22X6WwUUKzlKm73Y2Ch8-mlcQYv51Cg7JqKcck6s56m-o%22%7D'
-    at rejectAndCleanup (node:electron/js2c/browser_init:2:80969)
-    at WebContents.finishListener (node:electron/js2c/browser_init:2:81131)
-    at WebContents.emit (node:events:518:28) {
-  errno: -102,
-  code: 'ERR_CONNECTION_REFUSED',
-  url: 'http://127.0.0.1:41041/index.html#%7B%22port%22%3A%2035089%2C%20%22id%22%3A%20%22GFgnFyQ_FbsQ%22%2C%20%22secret%22%3A%20%22X6WwUUKzlKm73Y2Ch8-mlcQYv51Cg7JqKcck6s56m-o%22%7D'
+(electron:217446): GLib-GIO-CRITICAL **: 02:56:17.622: g_settings_schema_source_lookup: assertion 'source != NULL' failed
+[217446:1128/025617.642095:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+{
+  status: '未验证：AbortError: Registration failed - push service not available',
+  users: [
+    {
+      id: 'd_0ea0356800623366',
+      chatId: 'd_0ea0356800623366',
+      name: '浏览器',
+      pairedAt: 1795805777832
+    }
+  ],
+  reloadResumed: true,
+  foreground: true,
+  background: true,
+  revoked: { mouseClicked: true, deviceRemoved: true, keyDeleted: true }
 }

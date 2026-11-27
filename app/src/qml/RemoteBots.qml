@@ -20,7 +20,7 @@ Rectangle {
     }
     SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: root.shell.page = "chat" }
     Text { x: 120; y: 26; text: "机器人"; font.pixelSize: 20; color: Theme.fg }
-    Column { x: 20; y: 75; width: parent.width-40; spacing: 10
+    Column { id: setup; x: 20; y: 75; width: parent.width-40; spacing: 10
         Text { text: "Telegram · 从 @BotFather 复制 Token，然后打开配对链接认领机器人"; color: Theme.fgMuted }
         Row { spacing: 8
             SettingsField { id: token; objectName: "botToken"; width: 470; placeholderText: "Bot Token"; echoMode: TextInput.Password }
@@ -39,7 +39,7 @@ Rectangle {
         Text { text: root.error; visible: text.length > 0; color: Theme.danger; wrapMode: Text.Wrap; width: parent.width }
     }
     ListView {
-        id: list; x: 20; y: 260; width: parent.width-40; height: parent.height-y-20
+        id: list; x: 20; y: setup.y+setup.height+20; width: parent.width-40; height: Math.max(0,parent.height-y-20)
         model: root.rows; spacing: 8; clip: true; ScrollBar.vertical: SettingsScrollBar {}
         delegate: Rectangle {
             required property var modelData
@@ -55,7 +55,7 @@ Rectangle {
             }
             Row { x: 12; y: 118; spacing: 8
                 Repeater { model: modelData.users || []
-                    SettingsButton { required property var modelData; text: "移除用户 " + (modelData.name || modelData.id); onClicked: root.act(parent.parent.modelData.id,"remove-user",modelData.id) }
+                    SettingsButton { required property var modelData; objectName: "botUser_"+modelData.id; text: "移除用户 " + (modelData.name || modelData.id); onClicked: root.act(parent.parent.modelData.id,"remove-user",modelData.id) }
                 }
             }
         }

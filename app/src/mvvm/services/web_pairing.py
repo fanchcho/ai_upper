@@ -6,9 +6,9 @@ from pathlib import Path
 from mvvm.services.channel_push import encode,decode
 
 def start(controller,bot):
- from PySide6.QtCore import QObject,QTimer
- from PySide6.QtNetwork import QHostAddress
- from PySide6.QtWebSockets import QWebSocketServer
+ from utils.qt_compat import QtCore,QtNetwork,QtWebSockets
+ QObject,QTimer=QtCore.QObject,QtCore.QTimer
+ QHostAddress,QWebSocketServer=QtNetwork.QHostAddress,QtWebSockets.QWebSocketServer
  from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey,X25519PublicKey
  from cryptography.hazmat.primitives.kdf.hkdf import HKDF
  from cryptography.hazmat.primitives import hashes,serialization
@@ -30,11 +30,15 @@ def start(controller,bot):
    self.ticket={'id':secrets.token_urlsafe(9),'key':os.urandom(32),'expires':time.time()+120,'failures':0}
    data={'port':self.server.serverPort(),'id':self.ticket['id'],'secret':encode(self.ticket['key'])}
    return 'http://127.0.0.1:'+str(self.http.server_port)+'/index.html#'+quote(json.dumps(data))
-  def visible(self,did):return any(c.get('device')==did and c.get('visible',True) for c in self.connections.values())
+  def visible(self,did):return any(c.get('proven') and c.get('device')==did and c.get('visible',True) for c in self.connections.values())
+  def revoke(self,did):
+   for socket,state in list(self.connections.items()):
+    if state.get('device')==did:socket.close()
   def accept(self):
    socket=self.server.nextPendingConnection();state={'send':0,'recv':0,'visible':True};self.connections[socket]=state
    timer=QTimer(socket);timer.setSingleShot(True);timer.timeout.connect(socket.close);timer.start(15000)
    socket.disconnected.connect(lambda:self.connections.pop(socket,None))
+   socket.disconnected.connect(socket.deleteLater)
    def send(value):
     box=state['tx'].encrypt(b'\0'*4+state['send'].to_bytes(8,'big'),json.dumps(value).encode(),None);state['send']+=1
     socket.sendTextMessage(json.dumps({'t':'x','d':encode(box)}))
