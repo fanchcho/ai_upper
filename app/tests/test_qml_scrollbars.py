@@ -146,6 +146,7 @@ def _build_window(tmp_path, monkeypatch):
     bridge.initial()
     window.setProperty("page", "chat")
     window.show()
+    window.requestActivate()
     ticker = _start_ticker(bridge)
     return window, bridge, ticker, engine
 
@@ -161,20 +162,10 @@ def _pixel(image, x: int, y: int) -> tuple[int, int, int]:
 
 
 def _wheel(window, x: float, y: float, delta: int = -120) -> None:
-    from PySide6.QtCore import QPoint, QPointF, Qt
-    from PySide6.QtGui import QGuiApplication, QWheelEvent
+    from PySide6.QtCore import QPoint, QPointF
+    from PySide6.QtTest import QTest
 
-    event = QWheelEvent(
-        QPointF(x, y),
-        QPointF(x, y),
-        QPoint(0, 0),
-        QPoint(0, delta),
-        Qt.NoButton,
-        Qt.NoModifier,
-        Qt.NoScrollPhase,
-        False,
-    )
-    QGuiApplication.sendEvent(window, event)
+    QTest.wheelEvent(window, QPointF(x, y), QPoint(0, delta))
 
 
 def _thumb_center(scrollbar) -> tuple[int, int]:

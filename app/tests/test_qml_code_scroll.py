@@ -13,6 +13,7 @@ def qapp():
 
 def test_code_scroll_is_local_and_vertical_wheel_still_scrolls_body(qapp, tmp_path, monkeypatch):
     from PySide6 import QtCore as C, QtGui as G
+    from PySide6.QtTest import QTest
     window, bridge, store, home, ticker, engine = _build_window(tmp_path, monkeypatch)
     try:
         window.setProperty("page", "chat")
@@ -32,10 +33,9 @@ def test_code_scroll_is_local_and_vertical_wheel_still_scrolls_body(qapp, tmp_pa
             window.grabWindow().save(str(Path(evidence) / "code-start.png"))
         point = first.mapToScene(C.QPointF(40, first.height()/2))
         def wheel(x, y):
-            event = G.QWheelEvent(point, C.QPointF(window.mapToGlobal(point.toPoint())),
-                                 C.QPoint(), C.QPoint(x,y), C.Qt.NoButton,
-                                 C.Qt.NoModifier, C.Qt.NoScrollPhase, False)
-            qapp.sendEvent(window,event)
+            # QTest supplies native timestamps/device and maps global position;
+            # a zero-timestamp QWheelEvent breaks Flickable velocity on macOS.
+            QTest.wheelEvent(window, point, C.QPoint(x, y))
             _pump(qapp,.2)
         before_y = scroller.property("contentY")
         wheel(-120, 0)

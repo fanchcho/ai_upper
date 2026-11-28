@@ -28,7 +28,7 @@ def qapp():
 
 def _icon_paths():
     text = Path(__file__).resolve().parents[1] / "src/qml/IconData.qml"
-    source = text.read_text()
+    source = text.read_text(encoding="utf-8")
     names = {}
     for key in ("cog", "brain", "puzzle", "info"):
         match = re.search(r"readonly property string %s: \"([^\"]*)\"" % key, source)

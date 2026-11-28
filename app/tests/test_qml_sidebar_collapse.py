@@ -87,6 +87,7 @@ def _build(tmp_path, monkeypatch):
     bridge.initial()
     window.setProperty("page", "chat")
     window.show()
+    window.requestActivate()
     ticker = _start_ticker(bridge)
     from qml_shell import _pump
     _pump(qapp_inst(), lambda: False, 0.6)
@@ -111,6 +112,7 @@ def test_ctrl_b_collapses_and_peek_hover_restores_list(qapp, tmp_path, monkeypat
         assert side is not None and conv is not None and chats is not None
         assert side.property("width") == 300
         assert conv.property("x") == 56 + 300
+        assert window.isActive(), "键盘用例必须先激活被测窗口"
 
         QTest.keyClick(window, __import__("PySide6.QtCore", fromlist=["Qt"]).Qt.Key_B,
                        __import__("PySide6.QtCore", fromlist=["Qt"]).Qt.ControlModifier)
@@ -121,8 +123,12 @@ def test_ctrl_b_collapses_and_peek_hover_restores_list(qapp, tmp_path, monkeypat
         assert settings.get_config_sync().get("sidebarCollapsed") is True, "Ctrl+B 必须落盘"
 
         # 悬停「对话」图标：200ms 后浮出，正文宽度不变（覆盖式 peek）。
+        # Establish an actual outside -> inside transition, independently of
+        # the cursor location left by another window/test on the host.
+        QTest.mouseMove(window, QPoint(700, 500))
         QTest.mouseMove(window, QPoint(28, 88))
         _pump(qapp, lambda: False, 0.35)
+        assert chats.property("hovered") is True
         assert window.property("sidePeek") is True
         assert side.property("width") == 300 and side.property("visible") is True
         assert conv.property("x") == 56, "peek 是覆盖层，不该把正文挤走"

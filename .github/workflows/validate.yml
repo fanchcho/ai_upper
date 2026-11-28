@@ -121,6 +121,10 @@ jobs:
             target: macos-arm64
             run: true
     runs-on: ${{ matrix.os }}
+    # Workflow commands and captured logs are UTF-8 on every runner. Windows
+    # console code pages cannot encode the Chinese assertion diagnostics.
+    env:
+      PYTHONIOENCODING: utf-8
     steps:
       - uses: actions/checkout@v4
 

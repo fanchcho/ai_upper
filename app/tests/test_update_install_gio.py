@@ -25,7 +25,7 @@ def test_install_update_uses_gio_handler(qapp, tmp_path, monkeypatch):
         target.write_text("installer\n", encoding="utf-8")
         bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
         assert bridge.installUpdate(str(target)) is True
-        assert len(opened) == 1 and opened[0].toLocalFile() == str(target)
+        assert len(opened) == 1 and Path(opened[0].toLocalFile()) == target
         return
     data = tmp_path / "xdg"; (data / "applications").mkdir(parents=True)
     marker = tmp_path / "opened.txt"

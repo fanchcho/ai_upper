@@ -9,6 +9,7 @@
 // 正文由 Python 渲染进 QTextDocument（markdown 层是唯一真相源），QML 只承载。
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Basic as Basic
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQuick.Window
@@ -123,13 +124,13 @@ ApplicationWindow {
 
     Shortcut {
         sequence: "Ctrl+B"
-        context: Qt.ApplicationShortcut
+        context: Qt.WindowShortcut
         enabled: window.page === "chat"
         onActivated: window.toggleSidebar()
     }
     Shortcut {
         sequence: "Meta+B"
-        context: Qt.ApplicationShortcut
+        context: Qt.WindowShortcut
         enabled: window.page === "chat"
         onActivated: window.toggleSidebar()
     }
@@ -416,7 +417,7 @@ ApplicationWindow {
     // border 2px transparent + background-clip: content-box / track 透明）。
     // 用 QML ScrollBar 附件挂到 Flickable，拖动与滚轮由控件原生处理；
     // hover 只改滑块颜色，形态与 deva 的 :hover 规则一致（--fg-subtle）。
-    component DevaScrollBar: ScrollBar {
+    component DevaScrollBar: Basic.ScrollBar {
         id: devaBar
         width: Theme.scrollbarWidth
         padding: Theme.scrollbarInset
@@ -516,27 +517,27 @@ ApplicationWindow {
         property string iconName
         property bool active: false
         property bool dim: false
+        readonly property bool hovered: railMouse.containsMouse
         signal hoverChanged(bool entered)
         width: 40
         height: 40
         radius: Theme.radius
         color: active ? Theme.bgActive
-                      : railHover.hovered ? Theme.bgHover
+                      : btn.hovered ? Theme.bgHover
                                           : "transparent"
         Icon {
             anchors.centerIn: parent
             name: btn.iconName
             // 原版图标 20px（.cf-navbtn svg{width:20px} → 实测外框 24 内 20 可见）
             size: 20
-            color: btn.active ? Theme.accent : railHover.hovered ? Theme.fg : Theme.fgSubtle
+            color: btn.active ? Theme.accent : btn.hovered ? Theme.fg : Theme.fgSubtle
             opacity: btn.dim ? 0.7 : 1
         }
-        HoverHandler {
-            id: railHover
-            onHoveredChanged: btn.hoverChanged(hovered)
-        }
         MouseArea {
+            id: railMouse
             anchors.fill: parent
+            hoverEnabled: true
+            onContainsMouseChanged: btn.hoverChanged(containsMouse)
             onClicked: btn.clicked()
         }
         // 选中项左侧 3×18 的强调条：原版 ::before{left:-8px;width:3px;height:18px}
@@ -610,6 +611,7 @@ ApplicationWindow {
             y: window.macChrome ? 110 : 70
             spacing: 4
             RailButton {
+                id: railChats
                 objectName: "railChats"
                 iconName: IconData.messageCircle
                 active: true
@@ -2141,6 +2143,8 @@ ApplicationWindow {
         window.sidePeek = false
         if (shellBridge)
             shellBridge.setSidebarCollapsed(window.sideCollapsed)
+        if (window.sideCollapsed && railChats.hovered)
+            window.chatRailHover(true)
     }
 
     // 悬停「对话」图标：收起状态下 200ms 后浮出列表，离开图标/列表 150ms 后收回

@@ -25,8 +25,14 @@ def SingleInstance(home, parent=None):
                     raise RuntimeError('Existing instance activation failed: ' + client.errorString())
                 if client.write(b'activate\n') != len(b'activate\n'):
                     raise RuntimeError('Activation write failed: ' + client.errorString())
-                if client.bytesToWrite() and not client.waitForBytesWritten(2000):
-                    raise RuntimeError('Activation write failed: ' + client.errorString())
+                client.flush()
+                # A named pipe may finish writing before waitForBytesWritten()
+                # starts. Confirm delivery with a reply, not a write notification.
+                # The owner may still be loading QML before its event loop starts.
+                if not client.canReadLine() and not client.waitForReadyRead(10000):
+                    raise RuntimeError('Activation acknowledgement failed: ' + client.errorString())
+                if bytes(client.readLine()) != b'activated\n':
+                    raise RuntimeError('Invalid activation acknowledgement')
                 client.disconnectFromServer()
                 return False
             # The lock proves no live owner remains; remove a socket left by a crash.
@@ -40,6 +46,7 @@ def SingleInstance(home, parent=None):
         def _activate(self):
             while self.server.hasPendingConnections():
                 socket = self.server.nextPendingConnection()
+                socket.disconnected.connect(socket.deleteLater)
                 socket.readyRead.connect(lambda socket=socket: self._receive(socket))
                 if socket.bytesAvailable():
                     self._receive(socket)
@@ -50,15 +57,17 @@ def SingleInstance(home, parent=None):
                 return
             if bytes(socket.readLine()) == b'activate\n':
                 self.pending = True
+                self._show_window()
+                socket.write(b'activated\n')
+                socket.flush()
+            # disconnectFromServer drains queued replies before closing.
             socket.disconnectFromServer()
-            socket.deleteLater()
-            self._show_window()
 
         def _show_window(self):
             if self.window is not None and self.pending:
                 self.pending = False
                 print("SINGLE INSTANCE ACTIVATE", flush=True)
-                if self.window.isMinimized():
+                if self.window.windowState() == QtCore.Qt.WindowMinimized:
                     self.window.showNormal()
                 else:
                     self.window.show()
