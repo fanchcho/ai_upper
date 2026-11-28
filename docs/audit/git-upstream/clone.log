@@ -1,0 +1,4 @@
+$ git clone --depth 1 --branch main https://github.com/sqfcyily/deva.git /tmp/deva-upstream-n5zv9nfb/deva
+Cloning into '/tmp/deva-upstream-n5zv9nfb/deva'...
+
+exit=0

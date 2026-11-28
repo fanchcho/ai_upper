@@ -1,0 +1,30 @@
+{
+  "root": "/tmp/deva-upstream-n5zv9nfb/deva",
+  "version": "0.1.17",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/tmp/deva-upstream-n5zv9nfb/deva",
+        "log",
+        "-1",
+        "--format=%H %cs %s"
+      ],
+      "output": "013c5d7eb4cd0907e02bc8717219a0bef42fb1fc 2026-11-25 feat: 添加 QQ 群和 Telegram 群链接至 README / add QQ group and Telegram group links to README\n",
+      "exit": 0
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/tmp/deva-upstream-n5zv9nfb/deva",
+        "fetch",
+        "origin",
+        "main"
+      ],
+      "output": "From https://github.com/sqfcyily/deva\n * branch            main       -> FETCH_HEAD\n",
+      "exit": 0
+    }
+  ]
+}
