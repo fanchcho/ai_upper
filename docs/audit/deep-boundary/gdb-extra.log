@@ -1,0 +1,4 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libdw1t64 arm64 0.192-4 [237 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 libelf1t64 arm64 0.192-4 [189 kB]
+Fetched 426 kB in 0s (1209 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/environment-closeout/libdw1t64_0.192-4_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

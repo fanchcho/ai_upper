@@ -1,0 +1,7 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libbabeltrace1 arm64 1.5.11-4+b2 [164 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 libboost-regex1.83.0 arm64 1.83.0-4.2 [314 kB]
+Get:3 http://deb.debian.org/debian trixie/main arm64 libdebuginfod1t64 arm64 0.192-4 [31.3 kB]
+Get:4 http://deb.debian.org/debian trixie/main arm64 gdb arm64 16.3-1 [4552 kB]
+Get:5 http://deb.debian.org/debian trixie/main arm64 libsource-highlight4t64 arm64 3.1.9-4.3+b1 [294 kB]
+Fetched 5356 kB in 0s (11.7 MB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/environment-closeout/libbabeltrace1_1.5.11-4+b2_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
