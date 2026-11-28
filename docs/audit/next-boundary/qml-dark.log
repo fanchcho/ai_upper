@@ -1,4 +1,4 @@
-dbus-daemon[305396]: [session uid=0 pid=305396 pidfd=5] Connection :1.0 (uid=0 pid=305399 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.
+dbus-daemon[306302]: [session uid=0 pid=306302 pidfd=5] Connection :1.0 (uid=0 pid=306305 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.
 qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/plugins/platforms" ...
 qt.core.plugin.factoryloader: checking directory path "/usr/lib/aarch64-linux-gnu/qt6/plugins/platforms" ...
 qt.core.plugin.factoryloader: looking at "libqlinuxfb.so"
@@ -417,11 +417,11 @@ qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_worksp
 qt.core.plugin.factoryloader: checking directory path "/usr/lib/aarch64-linux-gnu/qt6/plugins/accessible" ...
 qt.core.plugin.factoryloader: checking directory path "/usr/bin/accessible" ...
 REAL_APP_COMMIT '你好' ['n', 'ni', 'ni h', 'ni ha', 'ni hao', '']
-QML SEND {"sessionId": "qml-mwzta38y244da1", "text": "你好", "attachments": []}
-QML TURN c34d0ad0ce134a53a858cb6f2e94b780
+QML SEND {"sessionId": "qml-mwztjoyq831a78", "text": "你好", "attachments": []}
+QML TURN 31141e8f26c2490cb2a60cf4530fb4e3
 QML STREAM {"text": "本地 fixture 收到你好"}
 QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
-REAL_HTTP_MESSAGE_READBACK True {"committedText": "你好", "qt": "6.8.2", "preedit": ["n", "ni", "ni h", "ni ha", "ni hao", ""], "storedTitle": "你好", "messages": [{"role": "user", "text": "你好"}, {"role": "assistant", "text": "本地 fixture 收到你好"}], "sessionId": "qml-mwzta38y244da1", "path": "/tmp/ai-upper-full-ime-dark-local-1/data/chats/qml-mwzta38y244da1.json"}
+REAL_HTTP_MESSAGE_READBACK True {"committedText": "你好", "qt": "6.8.2", "preedit": ["n", "ni", "ni h", "ni ha", "ni hao", ""], "storedTitle": "你好", "messages": [{"role": "user", "text": "你好"}, {"role": "assistant", "text": "本地 fixture 收到你好"}], "sessionId": "qml-mwztjoyq831a78", "path": "/tmp/ai-upper-full-ime-dark-local-2/data/chats/qml-mwztjoyq831a78.json"}
 file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:69: TypeError: Cannot read property 'saveError' of null
 "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/plugins/imageformats/libqsvg.so" unloaded library 
 "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so" unloaded library 

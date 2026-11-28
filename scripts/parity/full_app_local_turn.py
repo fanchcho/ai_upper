@@ -41,6 +41,7 @@ def ticker(b):
   QTimer.singleShot(1800,readback)
  def readback():
   global result
+  w.grabWindow().save(str(out/f'{theme}-roundtrip.png'))
   from mvvm.services.chat_session_store import ChatSessionStore
   store=ChatSessionStore(Path(os.environ['AI_UPPER_HOME']));session=store.load_session(b._active)
   messages=[{'role':m.role,'text':m.text()} for m in session.messages]
