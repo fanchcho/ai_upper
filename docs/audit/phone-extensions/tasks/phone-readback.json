@@ -1,0 +1,925 @@
+{
+  "boundary": "localhost relay and model fixtures; real sockets/ChatHost/store/browser events; no physical phone or public relay",
+  "results": [
+    {
+      "theme": "dark",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-afa64a2cdce54ff6ae4fd9bfacc74888/home",
+      "session": "sess_mwzq5hi7_qmm574",
+      "messages_reopened": [
+        "PHONE_lan_dark",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_f08153b6551e2b4c",
+        "chatId": "d_f08153b6551e2b4c",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828885766,
+        "lastSeen": 1795828890896,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzq5hi7_qmm574",
+        "device": "d_f08153b6551e2b4c",
+        "body": "我：PHONE_lan_dark助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_57fa7641b1cf1b66"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "dark",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-afa64a2cdce54ff6ae4fd9bfacc74888/home",
+      "session": "sess_mwzq5o7y_djljtg",
+      "messages_reopened": [
+        "PHONE_relay_dark",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_0a438d6c25213bed",
+        "chatId": "d_0a438d6c25213bed",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828894550,
+        "lastSeen": 1795828899687,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzq5o7y_djljtg",
+        "device": "d_0a438d6c25213bed",
+        "body": "我：PHONE_relay_dark助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_f1694c08298ada02"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-6e3f87a5249f49e0a810d4e7620667e2/home",
+      "session": "sess_mwzq5zb8_kv3bck",
+      "messages_reopened": [
+        "PHONE_lan_light",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_6f8ef2426b08f216",
+        "chatId": "d_6f8ef2426b08f216",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828908891,
+        "lastSeen": 1795828914375,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzq5zb8_kv3bck",
+        "device": "d_6f8ef2426b08f216",
+        "body": "我：PHONE_lan_light助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_2f4c597fe5b93257"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-6e3f87a5249f49e0a810d4e7620667e2/home",
+      "session": "sess_mwzq66aa_mnvw4m",
+      "messages_reopened": [
+        "PHONE_relay_light",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_3b18b161310a65df",
+        "chatId": "d_3b18b161310a65df",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828917997,
+        "lastSeen": 1795828923198,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzq66aa_mnvw4m",
+        "device": "d_3b18b161310a65df",
+        "body": "我：PHONE_relay_light助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_604f01b5be6e81dc"
+      },
+      "revoked_disk_and_key": true
+    }
+  ],
+  "model_http_requests": [
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "TASK_REAL_HOST",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "TASK_REAL_HOST",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "TASK_REAL_HOST",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "TASK_REAL_HOST",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relay_envelopes": [
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/f9d6047630527fe8"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/969b9df6fdd3e5b4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "6"
+    }
+  ]
+}

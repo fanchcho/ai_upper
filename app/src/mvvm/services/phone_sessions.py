@@ -51,6 +51,9 @@ def handle(controller, bot_id, state, frame):
     if kind in ('up_begin','up_chunk','up_end','up_cancel'):
         controller.phone_uploads.handle(state['device'],frame,send);return
     rows = session_list(shell, bot)
+    if kind == 'task':
+        from mvvm.services.phone_tasks import task_action
+        task_action(shell,frame,send);return
     if kind == 'action':
         from mvvm.services.phone_cards import action
         sid=action(shell,{r['id'] for r in rows},frame,send)

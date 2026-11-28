@@ -20,7 +20,7 @@ class Model(BaseHTTPRequestHandler):
  def do_POST(self):
   data=json.loads(self.rfile.read(int(self.headers['Content-Length'])));requests.append({'path':self.path,'messages':data['messages']})
   events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'text','text':''}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'text_delta','text':'LOCAL_MODEL_REPLY'}}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'end_turn'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
-  if not any(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else [])):
+  if scenario=='download' and not any(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else [])):
    events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'tool_use','id':'deliver_test','name':'present_files','input':{}}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'input_json_delta','partial_json':json.dumps({'paths':[str((tmp/'delivered.txt').resolve()),str((tmp/'delivered.bin').resolve())]})}}),('content_block_stop',{'type':'content_block_stop','index':0}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'tool_use'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
   if scenario=='cards':
    count=sum(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else []))
@@ -52,6 +52,9 @@ for theme in ('dark','light'):
  click('railBots');api=b.botsService();api.webPairTicket();rows=api.list();bot=rows[0];bot['settings']={'port':0,'relayUrl':'http://127.0.0.1:'+str(relay_port)};api.save(rows);click('phoneEntry')
  for via in ('lan','relay'):
   for name in ('allowed.txt','denied.txt'):(tmp/name).unlink(missing_ok=True)
+  if scenario=='tasks':
+   tasks=b.tasksService();assert not tasks.create('手机任务验收','TASK_REAL_HOST','recurring','0 0 * * *','UTC','general')
+   task_id=tasks.read()[0]['id'];task_snapshots=[]
   env['PHONE_SCENARIO']=scenario
   for name in ('result.json','revoked','repair-url','repaired'):(tmp/name).unlink(missing_ok=True)
   click('phoneLan' if via=='lan' else 'phoneRelay');pane=find_item(w.contentItem(),'phoneQr').parentItem().parentItem().parentItem()
@@ -65,7 +68,12 @@ for theme in ('dark','light'):
    parsed=urlsplit(url);url=urlunsplit((parsed.scheme,'127.0.0.1:'+str(api.workers[bot['id']].lan.port()),parsed.path,parsed.query,parsed.fragment))
   shot(w,out/f'phone-qr-{theme}-{via}.png')
   browser=subprocess.Popen(['xvfb-run','-a',str(Path('.tmp/extensions-complete/browser/node_modules/electron/dist/electron').resolve()),'--no-sandbox','--disable-gpu','scripts/parity/phone_extended_browser.cjs',url,theme,via,str(out/'phone-browser')],env=env,stdout=open(out/f'browser-{theme}-{via}.log','w'),stderr=subprocess.STDOUT)
-  assert _pump(app,lambda:(tmp/'result.json').exists() or browser.poll() is not None,45),(theme,via,'timeout')
+  def completed():
+   if scenario=='tasks':
+    snapshot=json.loads((h/'tasks.json').read_text())
+    if not task_snapshots or task_snapshots[-1]!=snapshot:task_snapshots.append(snapshot)
+   return (tmp/'result.json').exists() or browser.poll() is not None
+  assert _pump(app,completed,65),(theme,via,'timeout')
   assert (tmp/'result.json').exists(),(browser.returncode,(out/f'browser-{theme}-{via}.log').read_text())
   result=json.loads((tmp/'result.json').read_text());sid=result['sid'];did=result['device']
   reopened=ChatSessionStore(h);session=reopened.load_session(sid);assert session
@@ -80,6 +88,12 @@ for theme in ('dark','light'):
    assert (tmp/'allowed.txt').read_text()=='APPROVED_WRITE' and not (tmp/'denied.txt').exists()
    assert session.plans['plan_test']['decision']=='approve',session.plans
    (out/f'cards-{theme}-{via}.json').write_text(json.dumps({'interactions_reopened':interactions,'plans_reopened':session.plans,'messages':[m.model_dump() for m in session.messages]},ensure_ascii=False,indent=2))
+  if scenario=='tasks':
+   task_session=reopened.load_session(task_id)
+   assert any(m.text()=='LOCAL_MODEL_REPLY' for m in task_session.messages)
+   assert not json.loads((h/'tasks.json').read_text())['tasks']
+   assert any(any(r['status']=='paused' for r in snap['tasks']) for snap in task_snapshots)
+   (out/f'tasks-{theme}-{via}.json').write_text(json.dumps({'task_store_reads':task_snapshots,'reopened_messages':[m.model_dump() for m in task_session.messages]},ensure_ascii=False,indent=2))
   users=json.loads((h/'config.json').read_text())['remote']['bots'][0]['users'];assert len(users)==1 and users[0]['via']==via
   assert any(d['id']==did and d['online'] for d in api.phoneState()['devices'])
   shot(w,out/f'phone-device-{theme}-{via}.png')

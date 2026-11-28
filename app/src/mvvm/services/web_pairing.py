@@ -38,7 +38,11 @@ def start(controller,bot):
    from mvvm.services.phone_cards import prompts
    from mvvm.services.phone_sessions import session_list,history
    allowed={r['id'] for r in session_list(controller.shell,row)}
+   from mvvm.services.phone_tasks import task_list
+   tasks=task_list(controller.shell);task_signature=json.dumps(tasks,sort_keys=True)
    for state in list(self.connections.values()):
+    if state.get('phone') and state.get('proven') and task_signature!=state.get('tasks'):
+     state['tasks']=task_signature;state['send_frame']({'t':'tasks','list':tasks})
     sid=state.get('watch')
     if state.get('phone') and state.get('proven') and sid in allowed:
      pending=prompts(controller.shell,sid);signature=json.dumps(pending,sort_keys=True)

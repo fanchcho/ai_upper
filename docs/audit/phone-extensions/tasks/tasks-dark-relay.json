@@ -1,0 +1,176 @@
+{
+  "task_store_reads": [
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "task-0ce972ba7b4f435a",
+          "title": "手机任务验收",
+          "prompt": "TASK_REAL_HOST",
+          "schedule": {
+            "kind": "recurring",
+            "tz": "UTC",
+            "cron": "0 0 * * *"
+          },
+          "auth": {
+            "personaId": "general"
+          },
+          "status": "active",
+          "sessionId": "task-0ce972ba7b4f435a",
+          "originSessionId": "s-1",
+          "createdAt": 1795828892392,
+          "updatedAt": 1795828892392,
+          "nextRunAt": 1795910400000,
+          "consecutiveErrors": 0,
+          "runs": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "task-0ce972ba7b4f435a",
+          "title": "手机任务验收",
+          "prompt": "TASK_REAL_HOST",
+          "schedule": {
+            "kind": "recurring",
+            "tz": "UTC",
+            "cron": "0 0 * * *"
+          },
+          "auth": {
+            "personaId": "general"
+          },
+          "status": "paused",
+          "sessionId": "task-0ce972ba7b4f435a",
+          "originSessionId": "s-1",
+          "createdAt": 1795828892392,
+          "updatedAt": 1795828896235,
+          "nextRunAt": null,
+          "consecutiveErrors": 0,
+          "runs": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "task-0ce972ba7b4f435a",
+          "title": "手机任务验收",
+          "prompt": "TASK_REAL_HOST",
+          "schedule": {
+            "kind": "recurring",
+            "tz": "UTC",
+            "cron": "0 0 * * *"
+          },
+          "auth": {
+            "personaId": "general"
+          },
+          "status": "active",
+          "sessionId": "task-0ce972ba7b4f435a",
+          "originSessionId": "s-1",
+          "createdAt": 1795828892392,
+          "updatedAt": 1795828897142,
+          "nextRunAt": 1795910400000,
+          "consecutiveErrors": 0,
+          "runs": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "task-0ce972ba7b4f435a",
+          "title": "手机任务验收",
+          "prompt": "TASK_REAL_HOST",
+          "schedule": {
+            "kind": "recurring",
+            "tz": "UTC",
+            "cron": "0 0 * * *"
+          },
+          "auth": {
+            "personaId": "general"
+          },
+          "status": "active",
+          "sessionId": "task-0ce972ba7b4f435a",
+          "originSessionId": "s-1",
+          "createdAt": 1795828892392,
+          "updatedAt": 1795828898092,
+          "nextRunAt": 1795910400000,
+          "consecutiveErrors": 0,
+          "runs": [],
+          "lastRunAt": 1795828898089
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "task-0ce972ba7b4f435a",
+          "title": "手机任务验收",
+          "prompt": "TASK_REAL_HOST",
+          "schedule": {
+            "kind": "recurring",
+            "tz": "UTC",
+            "cron": "0 0 * * *"
+          },
+          "auth": {
+            "personaId": "general"
+          },
+          "status": "active",
+          "sessionId": "task-0ce972ba7b4f435a",
+          "originSessionId": "s-1",
+          "createdAt": 1795828892392,
+          "updatedAt": 1795828898092,
+          "nextRunAt": 1795910400000,
+          "consecutiveErrors": 0,
+          "runs": [
+            {
+              "startedAt": 1795828898089,
+              "manual": false,
+              "turnId": "f0d205e24e5c44f3bf52b5e33522ba55",
+              "endedAt": 1795828898116,
+              "status": "done",
+              "error": ""
+            }
+          ],
+          "lastRunAt": 1795828898089,
+          "remoteDelivery": {
+            "status": "unverified",
+            "recipients": 0,
+            "reason": "未配置可用的已配对远程渠道"
+          }
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "tasks": []
+    }
+  ],
+  "reopened_messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "TASK_REAL_HOST",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "LOCAL_MODEL_REPLY",
+          "listing": null
+        }
+      ]
+    }
+  ]
+}
