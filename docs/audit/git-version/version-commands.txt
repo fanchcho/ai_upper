@@ -1,0 +1,26 @@
+$ git -C /home/agent/shared_workspace/deva log -1 --format=%H %ad %s
+25c29354f0fc449f43e6e9eabdd5462ab447cc85 Sat Nov 28 12:55:07 2026 +0800 fix(deva-agent): 合并 MCP 列表并安全对齐桌面配置 / merge MCP catalog and safely sync desktop configuration
+
+exit=0
+$ git -C /home/agent/shared_workspace/deva describe --tags --always
+deva-agent-v0.8.52-6-g25c2935
+
+exit=0
+$ git -C /home/agent/shared_workspace/deva rev-parse v0.1.16 v0.1.17
+718908ea7938c2f223e418519783eb1befdd7f9a
+d045ccafd1d0c6595c829a8e72fa1b20ad58817d
+
+exit=0
+$ git -C /home/agent/shared_workspace/deva rev-list --count v0.1.16..HEAD
+92
+
+exit=0
+$ git -C /home/agent/shared_workspace/deva diff --stat v0.1.16..HEAD -- apps/desktop/src/renderer/src/redesign/GitWidget.tsx
+ apps/desktop/src/renderer/src/redesign/GitWidget.tsx | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+exit=0
+$ read JSON /home/agent/shared_workspace/deva/package.json
+version=<absent>
+$ read JSON /home/agent/shared_workspace/deva/apps/desktop/package.json
+version=0.1.17

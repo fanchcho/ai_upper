@@ -1,0 +1,3 @@
+35:# 值与 Deva 基线 `apps/desktop/package.json` 一致；源码态没有安装 dist-info 时也必须有确定值。
+36:APP_VERSION = "0.1.16"
+41:    return APP_VERSION
