@@ -1,0 +1,11 @@
+{
+  "full_summary": "1486 passed, 9 skipped in 563.10s (0:09:23)",
+  "full_exit": 0,
+  "scope_note": "menu anchoring changed during full run; final focused test and real interaction validated final UI",
+  "application_sha256": {
+    "app/src/qml/GitMenu.qml": "f27ebbe5bb13ac7178201954829a5ee62a526549d9baf6724dad7fe7f39d4e11",
+    "app/src/qml/Main.qml": "e94cf62a8a3b606579881dfb703bea26280bcb1e19ffdcb6eb4f48537c73b601",
+    "app/src/qml/SettingsModal.qml": "98483b297560fb66dc8c16e4ab7d6a67057e93111150137df39e9e548c777d9a",
+    "app/src/mvvm/services/git_service.py": "b6ac11304c8709e92e9b973f3a8c7bb95acb50a3e44f2ed749fdaf1587704c00"
+  }
+}

@@ -916,9 +916,8 @@ Item {
                         }
                         Text {
                             text: modPane.text.keyMissingWarn || ""
-                            // Original warning text in dark mode; light warning has <3:1
-                            // contrast, so use the existing foreground token for readable copy.
-                            color: Theme.dark ? Theme.warning : Theme.fg
+                            // Deva 0.1.17 .provider-warn uses warning in both themes.
+                            color: Theme.warning
                             font.family: Theme.sansFamily
                             font.pixelSize: 12
                         }

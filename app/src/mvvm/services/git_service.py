@@ -54,7 +54,8 @@ def status(root: str) -> dict[str, Any]:
                         "staged": code_txt[0] not in (" ", "?"), "untracked": code_txt == "??"})
     return {"ok": True, "root": root, "isRepo": True, "branch": branch, "upstream": upstream,
             "ahead": ahead, "behind": behind, "remotes": _remotes(root), "entries": entries,
-            "dirty": len(entries) > 0}
+            "dirty": len(entries) > 0,
+            "mergeInProgress": _run(root, ["rev-parse", "-q", "--verify", "MERGE_HEAD"])[0] == 0}
 
 
 def diff(root: str, path: str = "", staged: bool = False, untracked: bool = False) -> dict[str, Any]:

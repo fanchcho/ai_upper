@@ -1665,6 +1665,13 @@ ApplicationWindow {
         // 深色 `0 8px 30px rgba(0,0,0,.5)`、浅色 `0 6px 24px rgba(0,0,0,.12)`
         // （tokens.css:149 / :82）。参数字面量集中在 SoftShadow.qml。
         SoftShadow { id: composerShadow; target: composer }
+        GitMenu {
+            id: gitMenu
+            property point anchorPoint: Qt.point(0, 0)
+            y: Math.max(8, anchorPoint.y - height - 4)
+            x: Math.min(parent.width - width - 8, anchorPoint.x)
+            repoRoot: window.focusRoot
+        }
         GitPanel {
             id: gitPanel
             y: composer.y - height - 8
@@ -1879,13 +1886,14 @@ ApplicationWindow {
                     }
                 }
                 SettingsButton {
+                    id: gitChipControl
                     objectName: "gitChip"
                     visible: window.focusRoot !== ""
                     x: mountChip.x + mountChip.width + 6
                     y: (parent.height - 28) / 2
                     height: 28
-                    text: "Git"
-                    onClicked: { gitPanel.open(); gitPanel.reload() }
+                    text: (gitMenu.status.branch || "Git") + (gitMenu.status.ahead ? " ↑" + gitMenu.status.ahead : "") + (gitMenu.status.behind ? " ↓" + gitMenu.status.behind : "")
+                    onClicked: { gitMenu.anchorPoint = gitChipControl.mapToItem(gitMenu.parent, 0, 0); gitMenu.open() }
                 }
 
                 // 右侧：模型 chip + 强度 chip + 发送/停止

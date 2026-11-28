@@ -1,0 +1,9 @@
+{
+  "redesign/GitWidget.tsx": "b7f3761756c2f345a1d389320b1cb3fe27482b76843f72e505935f9e00eae3af",
+  "redesign/GitIdentityForm.tsx": "baa0d69457ee063ec27bbd1c9fbd668d51f9015f6afa66e978b0e57cc68466f7",
+  "redesign/ContextMenu.tsx": "ad47255387c51883e2e74e8f198d93e28bc9c302e745a0e3f3ca3bedae45e67b",
+  "redesign/redesign.css": "4c40bdaed1454dc5f4fc3e4cfbc56bb0ef7d525b8e1699bc498de915206d8035",
+  "styles/tokens.css": "d847c5defd578f10dd4bc82c4b67f645c652a59e08c3114d99406261acb0da50",
+  "styles/app.css": "ce612be06abcb1028012728512ccb6f4f7b0c336f652f81dca8195416f80fe5a",
+  "features/settings/ModelSettings.tsx": "9da480e4df458d9b2882c2850b6d7e938019dfdc1c9a8eafdf906c083bf6a6ee"
+}
