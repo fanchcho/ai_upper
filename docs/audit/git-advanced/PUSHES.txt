@@ -1,0 +1,22 @@
+每次命令git push origin develop，退出0；紧随git ls-remote origin refs/heads/develop回读：
+To github.com:fanchcho/ai_upper.git
+   dc5f42b..dcae462  develop -> develop
+dcae462802b30fd9ab08cc69ad5378779e73ca47 refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   dcae462..9b57100  develop -> develop
+9b57100134b5691d65ddb96610ffb832632ee6a2 refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   9b57100..62d93ef  develop -> develop
+62d93eff58f516c0790908154733437f88ce6254 refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   62d93ef..4729c55  develop -> develop
+4729c55a17623ba60a9e3c2c3d3f6b7dd5948ffb refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   4729c55..9b14f47  develop -> develop
+9b14f4764089fb8a6381ed887854d3bb323fbaab refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   9b14f47..8b966b6  develop -> develop
+8b966b61da89fdd56ab10b26252e8ea2f9a32685 refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   8b966b6..59cdb28  develop -> develop
+59cdb283586e297e6aa36dd8975d5857c2be5335 refs/heads/develop
