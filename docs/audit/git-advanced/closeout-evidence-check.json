@@ -1,0 +1,146 @@
+{
+  "dark": {
+    "force": {
+      "repo": "/tmp/ai-upper-branches-z_lz8yj_/home/repo",
+      "warning": "分支 unmerged 有 1 个提交未合并到当前分支，强制删除后这些提交将难以找回。",
+      "after_cancel": "unmerged",
+      "after_delete": ""
+    },
+    "remote": {
+      "repo": "/tmp/ai-upper-branches-_sqzjcni/home/repo",
+      "before": "26815b014a355b013390700dc8f1bd80fab5672e\trefs/heads/remote-delete",
+      "after": "",
+      "failure": "fatal: '/tmp/ai-upper-branches-_sqzjcni/home/missing.git' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."
+    },
+    "merge": {
+      "repo": "/tmp/ai-upper-branches-ybpxibpl/home/repo",
+      "files": "解决冲突文件后提交，或中止合并。\na",
+      "status": "",
+      "merge_head": {
+        "exit": 128,
+        "stderr": "fatal: Needed a single revision\n"
+      }
+    },
+    "identity": {
+      "repo": "/tmp/ai-upper-branches-88n35fj3/home/repo",
+      "scope": 1,
+      "name": "Scope User",
+      "email": "scope@example.invalid",
+      "commit": "identity verified"
+    },
+    "ai_worker_exit_verified": true
+  },
+  "light": {
+    "force": {
+      "repo": "/tmp/ai-upper-branches-h2_yrkc5/home/repo",
+      "warning": "分支 unmerged 有 1 个提交未合并到当前分支，强制删除后这些提交将难以找回。",
+      "after_cancel": "unmerged",
+      "after_delete": ""
+    },
+    "remote": {
+      "repo": "/tmp/ai-upper-branches-9_m6j8fu/home/repo",
+      "before": "92e8263e469eb0ee55ffc9c1bee7dec85376ecbd\trefs/heads/remote-delete",
+      "after": "",
+      "failure": "fatal: '/tmp/ai-upper-branches-9_m6j8fu/home/missing.git' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."
+    },
+    "merge": {
+      "repo": "/tmp/ai-upper-branches-983dxtob/home/repo",
+      "files": "解决冲突文件后提交，或中止合并。\na",
+      "status": "",
+      "merge_head": {
+        "exit": 128,
+        "stderr": "fatal: Needed a single revision\n"
+      }
+    },
+    "identity": {
+      "repo": "/tmp/ai-upper-branches-_uer324_/home/repo",
+      "scope": 1,
+      "name": "Scope User",
+      "email": "scope@example.invalid",
+      "commit": "identity verified"
+    },
+    "ai_worker_exit_verified": true
+  },
+  "png_dimensions": {
+    "ai-dark-running.png": [
+      1280,
+      1060
+    ],
+    "identity-light-scope.png": [
+      1280,
+      1060
+    ],
+    "identity-light-missing.png": [
+      1280,
+      1060
+    ],
+    "force-dark-confirm.png": [
+      1280,
+      1060
+    ],
+    "force-light-confirm.png": [
+      1280,
+      1060
+    ],
+    "reach-dark-main.png": [
+      1280,
+      1060
+    ],
+    "ai-light-stopped.png": [
+      1280,
+      1060
+    ],
+    "reach-light-main.png": [
+      1280,
+      1060
+    ],
+    "remote-dark-confirm.png": [
+      1280,
+      1060
+    ],
+    "remote-dark-failure.png": [
+      1280,
+      1060
+    ],
+    "ai-dark-stopped.png": [
+      1280,
+      1060
+    ],
+    "merge-dark-conflict.png": [
+      1280,
+      1060
+    ],
+    "merge-light-conflict.png": [
+      1280,
+      1060
+    ],
+    "remote-light-confirm.png": [
+      1280,
+      1060
+    ],
+    "identity-dark-scope.png": [
+      1280,
+      1060
+    ],
+    "identity-dark-missing.png": [
+      1280,
+      1060
+    ],
+    "reach-dark-branches.png": [
+      1280,
+      1060
+    ],
+    "remote-light-failure.png": [
+      1280,
+      1060
+    ],
+    "reach-light-branches.png": [
+      1280,
+      1060
+    ],
+    "ai-light-running.png": [
+      1280,
+      1060
+    ]
+  }
+}

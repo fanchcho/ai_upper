@@ -1,0 +1,278 @@
+[
+  {
+    "path": "docs/audit/git-advanced/ai-dark-running.png",
+    "bytes": 45066,
+    "sha256": "cb9602b6ab3e989aad01dba5e4a8e178e80500886610a051ab861e05e6284f28",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-dark-stopped.png",
+    "bytes": 44842,
+    "sha256": "3c49502116a732e9216e26ba3c8650258ac97f6ed826fe5a1009d9a7c7cac8a3",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-dark.json",
+    "bytes": 934,
+    "sha256": "4e0498c88526d6411f15d65135e95c3fd2ff347198a4c85c63c59eb10f552cda",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-dark.log",
+    "bytes": 1018,
+    "sha256": "22c83a2dc46cbce9421c73efc0d4a4d6d9cd52f37e34fda8ef4c39b84629896e",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-light-running.png",
+    "bytes": 44900,
+    "sha256": "6d3d8a1b32e4e68fe867a5eca2dd811383519cd08c43e7b9a5b4c0d1ac122345",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-light-stopped.png",
+    "bytes": 44660,
+    "sha256": "b9a72e721d1a65a83f5a59dddc4a85510e76e6a2eb693a3835f00745081eb3a0",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-light.json",
+    "bytes": 934,
+    "sha256": "8bfae7d729a610deed1580526701f9250c4be2271a9e63c624570184b03f5b71",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/ai-light.log",
+    "bytes": 1018,
+    "sha256": "5f3afb074565ce6c91bd9ad9c6d4e22b53c50814ded009d575c2a1a1a94dee89",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-dark-confirm.png",
+    "bytes": 45056,
+    "sha256": "dc0a62d4a70f3a721720c59db181d0424f28a0ffab7e74695f9db5510c1292c7",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-dark.json",
+    "bytes": 229,
+    "sha256": "1d61de85668121405d7b14e9ccc41e2a6f63508ee1cc4f34fcf3bc156a443a24",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-dark.log",
+    "bytes": 345,
+    "sha256": "8cca67c59d0f65dbe0191fa0f360e2e57fb3d882c72bb0e0b73bf4d8fed7ac97",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-light-confirm.png",
+    "bytes": 46015,
+    "sha256": "aa453e9f1f08e3843694c43fe730a926b7fd275433ce0b69d9b5f293759a866c",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-light.json",
+    "bytes": 229,
+    "sha256": "6a5e7929dfc79077eaf2a61244c82500f1d041c7e85b0c0e83d1ce3c4a3fdcca",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/force-light.log",
+    "bytes": 345,
+    "sha256": "bfec0add52861b515d3702fcc368c5ea80f00a15b2cd041e173c6eb847d8321d",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-dark-missing.png",
+    "bytes": 76842,
+    "sha256": "624bae99554cf1be11baa457b5d73f51ca62ea3ac1e5d38030148da7bbafe9bf",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-dark-scope.png",
+    "bytes": 79810,
+    "sha256": "661fa120eabc69d3df754fcde139a0be5d37f1f761c3a4f0cd0cba960db8d6c9",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-dark.json",
+    "bytes": 164,
+    "sha256": "77a0f2fe7b2fbfe219fae2e9d2f0a20cb0d935493a549ef1d746bcfa7c3fbefa",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-dark.log",
+    "bytes": 278,
+    "sha256": "97d080b62bd788f2dc9469e70b4fde2f5c6c8bc97696fda6dcdb5e1331f4541d",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-light-missing.png",
+    "bytes": 76777,
+    "sha256": "b7fde31e819dbb32f548ffd061cd9be84de05d006ebc15bbff7b461601daf6fb",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-light-scope.png",
+    "bytes": 79879,
+    "sha256": "3287d2a96e2eed6aa93361de4812cc33dbdfd567cd060314f26ba58e5e7d0a9a",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-light.json",
+    "bytes": 164,
+    "sha256": "10fa03887c32fc1fbe47eb27d5e797068e717e20973c46308411cffb3f1e40c3",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/identity-light.log",
+    "bytes": 278,
+    "sha256": "b0aa20c1e4bd4fac38594ad5672d858c190f865220156173ec61056ad374d324",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-dark-conflict.png",
+    "bytes": 40957,
+    "sha256": "53270946b59e591b342c869e4455af46579fb2ef5043cc6ca317592149a17e88",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-dark.json",
+    "bytes": 229,
+    "sha256": "799669ab79c52cacd4cd2395b2165bd064e1112e881c65b3c033b22e1b3351c2",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-dark.log",
+    "bytes": 333,
+    "sha256": "c6f4d5d9aeee845771b6e5311e60c855daf565113797b1620afbcbc25e1aca50",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-light-conflict.png",
+    "bytes": 40851,
+    "sha256": "bf540f589325f4f5993bd81e4e0be236201bd4968675c8386c23930ccc40819d",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-light.json",
+    "bytes": 229,
+    "sha256": "7d547eb15b4e7ce46b09977c87339d484ac837a2ad76918326a07ebd6667cbff",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/merge-light.log",
+    "bytes": 333,
+    "sha256": "c95bd16ab438acc4faf0b5ea35e89a8722cf61fcad3d709fc2717593e7fbf104",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/pytest-final.log",
+    "bytes": 1724,
+    "sha256": "6fc825f77ae87679327bfe3bb3e93ab734b60a1b40628491243058437692725c",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/pytest-interrupted-143.log",
+    "bytes": 1063,
+    "sha256": "36ab329de13a13663cb70c17c3a60c2837c9a078ce439e6c63d878580bb21926",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-dark-branches.png",
+    "bytes": 51229,
+    "sha256": "e82b8d8344ead435dde7bdf1bcc790f99876d42d475dfd1cdbf027445423cd8e",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-dark-main.png",
+    "bytes": 46307,
+    "sha256": "4d6d0895011b95f81c6bf93e9a517331214b3e0fd29d3da5d9d87a8f7f490e2c",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-dark.json",
+    "bytes": 238,
+    "sha256": "937e9b5e6c585e5b33f26199205ff60404c7ab4a1f8bc34b3bcb190c739d6f07",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-dark.log",
+    "bytes": 326,
+    "sha256": "59b8ac9672c86c7dacf7ada01fda6cead81332742e59f413bda0d41d0ac60c6f",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-light-branches.png",
+    "bytes": 49596,
+    "sha256": "87594ddf540e9bf2762a74179ac032ce1d86ca5de3b1f2ed0e71c7e96a1c8060",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-light-main.png",
+    "bytes": 44563,
+    "sha256": "5a9f36bbebd2b8c0828af708ed6e87b33349758fbaee1c6951fe2272aaf96126",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-light.json",
+    "bytes": 238,
+    "sha256": "a9141fbceb4e574e89f11db254bb8dc0f3068289f67d6d857253ef20e319df7d",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/reach-light.log",
+    "bytes": 326,
+    "sha256": "61fc9240bb65c99e885f7dff9aa8aeade88afa787f32d473fa3f6ec4ce63a447",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-dark-confirm.png",
+    "bytes": 44006,
+    "sha256": "d56c46bb2f976fc033da9b4e9e9e119b254ed995b5ed7736cd5ee3d17c276210",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-dark-failure.png",
+    "bytes": 59767,
+    "sha256": "76b220b6393699167f46ea7dd0c641e27e74001a13af710a2c1fcfe9a151c01b",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-dark.json",
+    "bytes": 397,
+    "sha256": "f7bbee8d007b68cf860da2950d2b6e688f122672f6b808aae49cab3d02221c3f",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-dark.log",
+    "bytes": 513,
+    "sha256": "0bd58da9ab45a97097ebf73ee0d0b2b77fa9be266dbe64411ce54505bfd03144",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-light-confirm.png",
+    "bytes": 44587,
+    "sha256": "105a88787ec68f08971406e4a23ecacc563c420ce3f2aff8328120d14ed21722",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-light-failure.png",
+    "bytes": 60278,
+    "sha256": "1f95d8db02c3a4a835a34ef401c06ea4981000fda52fe0b68f4a0cf5b0254dbf",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-light.json",
+    "bytes": 397,
+    "sha256": "2a984dbd4c27c9d2292580aa06d7dba5cd8f0289d3cfedf0cd76d53f10098b93",
+    "tracked": true
+  },
+  {
+    "path": "docs/audit/git-advanced/remote-light.log",
+    "bytes": 513,
+    "sha256": "bba3b9602a64ff9f905a24226d0f4a36bd46899f41f0c8598d1f3e4e4f20a2e9",
+    "tracked": true
+  }
+]

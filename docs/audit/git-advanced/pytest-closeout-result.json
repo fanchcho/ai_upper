@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 558.56,
+  "head": "f36a99a922224c243c5cf0e3a17823a4e18d0059",
+  "AI_UPPER_HOME": "/tmp/ai-upper-closeout-51c9ly4b",
+  "command": ".venv/bin/python -m pytest app/tests -q"
+}

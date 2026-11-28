@@ -1,0 +1,8 @@
+f36a99a docs: archive advanced Git interactions and interrupted regression risk
+59cdb28 docs: measure Git menu geometry and retain visual parity gaps
+8b966b6 Cancel Git message generation while the network stream is idle
+9b14f47 Use scoped identity select in Git commit recovery
+4729c55 Expose conflict files and direct abort action after Git merge
+62d93ef Show remote branch deletion failures in confirmation dialog
+f36a99a922224c243c5cf0e3a17823a4e18d0059
+f36a99a922224c243c5cf0e3a17823a4e18d0059	refs/heads/develop
