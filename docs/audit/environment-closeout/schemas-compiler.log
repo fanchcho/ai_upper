@@ -1,0 +1,3 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libglib2.0-dev-bin arm64 2.84.4-3~deb13u5 [56.9 kB]
+Fetched 56.9 kB in 0s (185 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/environment-closeout/libglib2.0-dev-bin_2.84.4-3~deb13u5_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

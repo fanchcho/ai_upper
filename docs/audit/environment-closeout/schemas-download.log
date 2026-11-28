@@ -1,0 +1,5 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libglib2.0-bin arm64 2.84.4-3~deb13u5 [128 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 gsettings-desktop-schemas all 48.0-1 [700 kB]
+Get:3 http://deb.debian.org/debian trixie/main arm64 libgtk-3-common all 3.24.49-3 [4908 kB]
+Fetched 5736 kB in 0s (12.6 MB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/environment-closeout/libglib2.0-bin_2.84.4-3~deb13u5_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

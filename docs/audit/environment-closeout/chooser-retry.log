@@ -1,0 +1,172 @@
+[297715:1128/095047.959599:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[297715:1128/095048.172683:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[297715:1128/095048.172748:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[297715:1128/095048.174149:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[297715:1128/095048.174446:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[297715:1128/095048.174474:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[297715:1128/095048.174489:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[297715:1128/095048.174505:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[297715:1128/095048.203454:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+
+(electron:297715): Gtk-WARNING **: 09:50:48.309: Could not find the icon 'user-home-symbolic-ltr'. The 'hicolor' theme
+was not found either, perhaps you need to install it.
+You can get a copy from:
+	http://icon-theme.freedesktop.org/releases
+XGetWindowProperty[_NET_WM_DESKTOP] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+[297715:1128/095050.852413:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852503:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852639:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852697:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852802:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852853:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.852957:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853005:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853107:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853156:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853257:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853304:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853417:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853468:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853563:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853611:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853717:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853765:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853857:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853904:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.853995:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854041:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854132:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854179:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854271:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854319:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854418:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854466:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854559:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854609:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854702:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854749:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854842:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854889:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.854980:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855027:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855146:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855197:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855289:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855410:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855458:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855503:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855596:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855645:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855747:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855797:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855891:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.855939:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856032:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856079:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856172:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856220:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856312:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856361:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856454:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856502:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856596:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856644:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856736:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856785:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856878:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.856925:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857016:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857065:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857157:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857205:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857296:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857428:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857479:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857525:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857634:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857683:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857786:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857835:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857928:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.857976:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858066:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858114:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858206:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858254:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858350:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858398:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858492:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858541:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858664:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858720:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858823:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858873:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.858967:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859016:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859142:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859193:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859287:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859335:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859429:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859476:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859566:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859615:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859709:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859756:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859849:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859905:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.859998:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860046:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860140:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860189:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860281:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860328:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860419:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860466:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860559:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860606:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860696:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860743:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860838:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860886:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.860979:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861026:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861118:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861165:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861258:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861306:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861417:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861469:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861567:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861617:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861732:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861781:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861872:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.861928:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862022:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862074:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862166:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862214:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862306:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862353:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862445:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862493:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862585:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862632:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862727:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862774:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862867:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.862914:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863007:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863055:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863179:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863231:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863328:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863376:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863468:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863516:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863605:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863652:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863743:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+[297715:1128/095050.863790:ERROR:browser_main_loop.cc(279)] Gtk: gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
