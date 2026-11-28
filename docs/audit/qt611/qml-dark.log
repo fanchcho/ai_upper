@@ -1,0 +1,676 @@
+dbus-daemon[322333]: [session uid=0 pid=322333 pidfd=5] Connection :1.0 (uid=0 pid=322338 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/platforms" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms" ...
+qt.core.plugin.factoryloader: looking at "libqlinuxfb.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqlinuxfb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "linuxfb"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QLinuxFbIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("linuxfb")
+qt.core.plugin.factoryloader: looking at "libqoffscreen.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqoffscreen.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "libqxcb.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: looking at "libqeglfs.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqeglfs.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "eglfs"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QEglFSIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("eglfs")
+qt.core.plugin.factoryloader: looking at "libqvkkhrdisplay.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqvkkhrdisplay.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vkkhrdisplay"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QVkKhrDisplayIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vkkhrdisplay")
+qt.core.plugin.factoryloader: looking at "libqwayland.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqwayland.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland",
+            "wayland-egl",
+            "wayland-brcm"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QWaylandIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland", "wayland-egl", "wayland-brcm")
+qt.core.plugin.factoryloader: looking at "libqminimalegl.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqminimalegl.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimalegl"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QMinimalEglIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimalegl")
+qt.core.plugin.factoryloader: looking at "libqvnc.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqvnc.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vnc"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QVncIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vnc")
+qt.core.plugin.factoryloader: looking at "libqminimal.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqminimal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimal"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QMinimalIntegrationPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimal")
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/platforms" ...
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqxcb.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: looking at "libqgtk3.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platformthemes/libqgtk3.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "gtk3"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QGtk3ThemePlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gtk3")
+qt.core.plugin.factoryloader: looking at "libqxdgdesktopportal.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platformthemes/libqxdgdesktopportal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "xdgdesktopportal",
+            "flatpak",
+            "snap"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QXdgDesktopPortalThemePlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xdgdesktopportal", "flatpak", "snap")
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libibusplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: looking at "libqtvirtualkeyboardplugin.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "qtvirtualkeyboard"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QVirtualKeyboardPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("qtvirtualkeyboard")
+qt.core.plugin.factoryloader: looking at "libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/platforminputcontexts" ...
+qt.core.library: "/tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/styles" ...
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2Plugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2FusionStylePlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Fusion"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2BasicStylePlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Basic"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickLayoutsPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Layouts"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QmlShapesPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Shapes"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuick_WindowPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Window"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickDialogsPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Dialogs"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickTemplates2Plugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Templates"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickControls2BasicStyleImplPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Basic.impl"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickControls2FusionStyleImplPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Fusion.impl"
+    ],
+    "version": 396032
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/imageformats" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats" ...
+qt.core.plugin.factoryloader: looking at "libqtga.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "tga"
+        ],
+        "MimeTypes": [
+            "image/x-tga"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QTgaPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("tga")
+qt.core.plugin.factoryloader: looking at "libqtiff.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "tiff",
+            "tif"
+        ],
+        "MimeTypes": [
+            "image/tiff",
+            "image/tiff"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QTiffPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("tiff", "tif")
+qt.core.plugin.factoryloader: looking at "libqsvg.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "svg",
+            "svgz"
+        ],
+        "MimeTypes": [
+            "image/svg+xml",
+            "image/svg+xml-compressed"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QSvgPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("svg", "svgz")
+qt.core.plugin.factoryloader: looking at "libqico.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "ico",
+            "cur"
+        ],
+        "MimeTypes": [
+            "image/vnd.microsoft.icon",
+            "image/vnd.microsoft.icon"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QICOPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ico", "cur")
+qt.core.plugin.factoryloader: looking at "libqwebp.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "webp"
+        ],
+        "MimeTypes": [
+            "image/webp"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QWebpPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("webp")
+qt.core.plugin.factoryloader: looking at "libqpdf.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "pdf"
+        ],
+        "MimeTypes": [
+            "application/pdf"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QPdfPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("pdf")
+qt.core.plugin.factoryloader: looking at "libqwbmp.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "wbmp"
+        ],
+        "MimeTypes": [
+            "image/vnd.wap.wbmp"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QWbmpPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wbmp")
+qt.core.plugin.factoryloader: looking at "libqicns.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "icns"
+        ],
+        "MimeTypes": [
+            "image/x-icns"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QICNSPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("icns")
+qt.core.plugin.factoryloader: looking at "libqgif.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "gif"
+        ],
+        "MimeTypes": [
+            "image/gif"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QGifPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gif")
+qt.core.plugin.factoryloader: looking at "libqjpeg.so"
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QImageIOHandlerFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "jpg",
+            "jpeg",
+            "jfif"
+        ],
+        "MimeTypes": [
+            "image/jpeg",
+            "image/jpeg",
+            "image/jpeg"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QJpegPlugin",
+    "debug": false,
+    "version": 396032
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("jpg", "jpeg", "jfif")
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/imageformats" ...
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so" loaded library
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/networkaccess" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/networkaccess" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/networkaccess" ...
+TRAY UNAVAILABLE platform=xcb isSystemTrayAvailable=False
+qt.core.plugin.factoryloader: checking directory path "/tmp/ai-upper-qt611-sdk/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/home/agent/shared_workspace/ai_upper/.venv/bin/accessiblebridge" ...
+REAL_APP_COMMIT '你好' ['n', 'ni', 'ni h', 'ni ha', 'ni hao', '']
+QML SEND {"sessionId": "qml-mwzuqkjue37226", "text": "你好", "attachments": []}
+QML TURN c0973d7c1bc54852a5cbb683f112fc5c
+QML STREAM {"text": "本地 fixture 收到你好"}
+QML TURN DONE {"stopReason": "end_turn", "deltas": 1}
+REAL_HTTP_MESSAGE_READBACK True {"committedText": "你好", "qt": "6.11.2", "python": "/home/agent/shared_workspace/ai_upper/.venv/bin/python", "preedit": ["n", "ni", "ni h", "ni ha", "ni hao", ""], "storedTitle": "你好", "messages": [{"role": "user", "text": "你好"}, {"role": "assistant", "text": "本地 fixture 收到你好"}], "sessionId": "qml-mwzuqkjue37226", "path": "/tmp/ai-upper-qt611-dark-7e0JfQ/data/chats/qml-mwzuqkjue37226.json"}
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:69: TypeError: Cannot read property 'saveError' of null
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so" unloaded library 
+qt.core.library: "/tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" unloaded library 
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqxcb.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so" unloaded library 
+dbus-daemon[322333]: [session uid=0 pid=322333 pidfd=5] Monitoring connection :1.0 closed.

@@ -1,0 +1,108 @@
+[
+  {
+    "theme": "dark",
+    "home": "/tmp/ai-upper-qt611-dark-7e0JfQ",
+    "sessionId": "qml-mwzuqkjue37226",
+    "title": "你好",
+    "messages": [
+      {
+        "role": "user",
+        "text": "你好"
+      },
+      {
+        "role": "assistant",
+        "text": "本地 fixture 收到你好"
+      }
+    ],
+    "rawFileSha256": "f02107d1f4e1f3af9ee41f8426e2f257cf331d18580862146291b63ad4f8ac8e",
+    "copiedSessionByteEqual": true,
+    "dbusCallCounts": {
+      "CreateInputContext": 1,
+      "FocusIn": 16,
+      "ProcessKeyEvent": 13,
+      "UpdateFormattedPreedit": 6,
+      "CommitString": 1
+    },
+    "qtLibraryPaths": [
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6XcbQpa.so.6"
+    ]
+  },
+  {
+    "theme": "light",
+    "home": "/tmp/ai-upper-qt611-light-96MbSn",
+    "sessionId": "qml-mwzutfjz9c88bc",
+    "title": "你好",
+    "messages": [
+      {
+        "role": "user",
+        "text": "你好"
+      },
+      {
+        "role": "assistant",
+        "text": "本地 fixture 收到你好"
+      }
+    ],
+    "rawFileSha256": "b16fbfd6cb726caf7beb5d48ef9652450f02ac3ba59e2cfa436e1fbb6644865c",
+    "copiedSessionByteEqual": true,
+    "dbusCallCounts": {
+      "CreateInputContext": 1,
+      "FocusIn": 16,
+      "ProcessKeyEvent": 13,
+      "UpdateFormattedPreedit": 6,
+      "CommitString": 1
+    },
+    "qtLibraryPaths": [
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6",
+      "/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6XcbQpa.so.6"
+    ]
+  }
+]

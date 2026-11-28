@@ -10,7 +10,8 @@ import qml_shell
 from local_model_fixture import start
 fixture=start()
 app=QApplication([]);QFontDatabase.addApplicationFont('.tmp/theme-settings/NotoSansCJKsc-Regular.otf')
-out=Path('docs/audit/next-boundary');theme=os.environ['PROBE_THEME'];events=[];captured=[]
+out=Path(os.environ.get('PARITY_OUTPUT_DIR','docs/audit/next-boundary'));out.mkdir(parents=True,exist_ok=True)
+theme=os.environ['PROBE_THEME'];events=[];captured=[];preedit_capture=[]
 def find(o):
  if o.objectName()=='inputField':return o
  for c in o.childItems():
@@ -27,9 +28,16 @@ def ticker(b):
   b.setTheme(theme);b.newSession();w.setTitle('FULL_APP_IME')
   QTimer.singleShot(700,type_input)
  def type_input():
-  field=find(w.contentItem());field.preeditTextChanged.connect(lambda:events.append(field.property('preeditText')))
+  field=find(w.contentItem())
+  def snapshot():
+   value=field.property('preeditText')
+   if value and w.grabWindow().save(str(out/f'{theme}-preedit.png')):
+    preedit_capture.append(value);print('REAL_PREEDIT_SCREENSHOT',repr(value),flush=True)
+  def preedit_changed():
+   value=field.property('preeditText');events.append(value)
+   if value=='ni hao':QTimer.singleShot(150,snapshot)
+  field.preeditTextChanged.connect(preedit_changed)
   subprocess.Popen(['bash','-c','sleep 1; xdotool search --name FULL_APP_IME windowfocus --sync; xdotool mousemove 700 705 click 1; sleep 1; fcitx5-remote -s pinyin; fcitx5-remote -o; sleep 1; xdotool type --delay 250 nihao; sleep 2; xdotool key space'])
-  QTimer.singleShot(5500,lambda:w.grabWindow().save(str(out/f'{theme}-preedit.png')))
   QTimer.singleShot(8000,commit)
  def commit():
   field=find(w.contentItem());text=field.property('text');print('REAL_APP_COMMIT',repr(text),events,flush=True)
@@ -45,9 +53,11 @@ def ticker(b):
   from mvvm.services.chat_session_store import ChatSessionStore
   store=ChatSessionStore(Path(os.environ['AI_UPPER_HOME']));session=store.load_session(b._active)
   messages=[{'role':m.role,'text':m.text()} for m in session.messages]
-  row={'committedText':captured[0],'qt':qVersion(),'preedit':events,'storedTitle':session.title,'messages':messages,'sessionId':b._active,'path':str(store.session_path(b._active))}
+  row={'committedText':captured[0],'qt':qVersion(),'python':sys.executable,'preedit':events,'preeditScreenshot':preedit_capture,'storedTitle':session.title,'messages':messages,'sessionId':b._active,'path':str(store.session_path(b._active))}
+  (out/f'{theme}-session.json').write_bytes(store.session_path(b._active).read_bytes())
+  (out/f'{theme}-maps.log').write_text(Path('/proc/self/maps').read_text())
   (out/f'{theme}-readback.json').write_text(json.dumps(row,ensure_ascii=False,indent=2))
-  ok=any(m['role']=='user' and '你好' in m['text'] for m in messages) and any(m['role']=='assistant' and '本地 fixture' in m['text'] for m in messages);print('REAL_HTTP_MESSAGE_READBACK',ok,json.dumps(row,ensure_ascii=False),flush=True)
+  ok=bool(preedit_capture) and any(m['role']=='user' and '你好' in m['text'] for m in messages) and any(m['role']=='assistant' and '本地 fixture' in m['text'] for m in messages);print('REAL_HTTP_MESSAGE_READBACK',ok,json.dumps(row,ensure_ascii=False),flush=True)
   result=0 if ok else 1;app.exit(result)
  QTimer.singleShot(700,start);return timer
 qml_shell._start_ticker=ticker

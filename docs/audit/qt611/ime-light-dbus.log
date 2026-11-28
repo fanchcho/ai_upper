@@ -1,0 +1,233 @@
+signal time=1795836717.408349 sender=org.freedesktop.DBus -> destination=:1.0 serial=2 path=/org/freedesktop/DBus; interface=org.freedesktop.DBus; member=NameAcquired
+   string ":1.0"
+signal time=1795836717.408379 sender=org.freedesktop.DBus -> destination=:1.0 serial=4 path=/org/freedesktop/DBus; interface=org.freedesktop.DBus; member=NameLost
+   string ":1.0"
+method call time=1795836724.535159 sender=:1.6 -> destination=:1.1 serial=12 path=/org/freedesktop/portal/inputmethod; interface=org.fcitx.Fcitx.InputMethod1; member=CreateInputContext
+   array [
+      struct {
+         string "program"
+         string "python-real"
+      }
+      struct {
+         string "display"
+         string "x11:"
+      }
+      struct {
+         string "clientControlVirtualkeyboardShow"
+         string "true"
+      }
+      struct {
+         string "clientControlVirtualkeyboardHide"
+         string "false"
+      }
+   ]
+method call time=1795836724.536310 sender=:1.6 -> destination=:1.1 serial=23 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCursorRect
+   int32 447
+   int32 673
+   int32 1
+   int32 16
+method call time=1795836724.536329 sender=:1.6 -> destination=:1.1 serial=24 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836724.536332 sender=:1.6 -> destination=:1.1 serial=25 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetSupportedCapability
+   uint64 2199023255551
+method call time=1795836724.536336 sender=:1.6 -> destination=:1.1 serial=26 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 996440801330
+method call time=1795836724.536341 sender=:1.6 -> destination=:1.1 serial=28 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=IsVirtualKeyboardVisible
+signal time=1795836724.536353 sender=:1.1 -> destination=:1.6 serial=28 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Keyboard - English (US)"
+   string "keyboard-us"
+   string ""
+signal time=1795836725.489750 sender=:1.1 -> destination=:1.6 serial=34 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Pinyin"
+   string "pinyin"
+   string "zh_CN"
+method call time=1795836726.498097 sender=:1.6 -> destination=:1.1 serial=29 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.498190 sender=:1.6 -> destination=:1.1 serial=30 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 110
+   uint32 57
+   uint32 0
+   boolean false
+   uint32 433227047
+method call time=1795836726.560353 sender=:1.6 -> destination=:1.1 serial=31 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.560384 sender=:1.6 -> destination=:1.1 serial=32 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 110
+   uint32 57
+   uint32 0
+   boolean true
+   uint32 433227110
+signal time=1795836726.595054 sender=:1.1 -> destination=:1.6 serial=39 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+      struct {
+         string "n"
+         int32 24
+      }
+   ]
+   int32 0
+method call time=1795836726.595874 sender=:1.6 -> destination=:1.1 serial=33 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 996440801394
+method call time=1795836726.595892 sender=:1.6 -> destination=:1.1 serial=34 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetSurroundingTextPosition
+   uint32 0
+   uint32 0
+method call time=1795836726.623073 sender=:1.6 -> destination=:1.1 serial=35 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.623107 sender=:1.6 -> destination=:1.1 serial=36 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 105
+   uint32 31
+   uint32 0
+   boolean false
+   uint32 433227173
+signal time=1795836726.627799 sender=:1.1 -> destination=:1.6 serial=46 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+      struct {
+         string "ni"
+         int32 24
+      }
+   ]
+   int32 0
+method call time=1795836726.685876 sender=:1.6 -> destination=:1.1 serial=37 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.685902 sender=:1.6 -> destination=:1.1 serial=38 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 105
+   uint32 31
+   uint32 0
+   boolean true
+   uint32 433227236
+method call time=1795836726.748697 sender=:1.6 -> destination=:1.1 serial=39 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.748723 sender=:1.6 -> destination=:1.1 serial=40 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 104
+   uint32 43
+   uint32 0
+   boolean false
+   uint32 433227299
+signal time=1795836726.756641 sender=:1.1 -> destination=:1.6 serial=51 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+      struct {
+         string "ni h"
+         int32 24
+      }
+   ]
+   int32 0
+method call time=1795836726.811431 sender=:1.6 -> destination=:1.1 serial=41 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.811454 sender=:1.6 -> destination=:1.1 serial=42 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 104
+   uint32 43
+   uint32 0
+   boolean true
+   uint32 433227361
+method call time=1795836726.874199 sender=:1.6 -> destination=:1.1 serial=43 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.874222 sender=:1.6 -> destination=:1.1 serial=44 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 97
+   uint32 38
+   uint32 0
+   boolean false
+   uint32 433227424
+signal time=1795836726.878778 sender=:1.1 -> destination=:1.6 serial=56 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+      struct {
+         string "ni ha"
+         int32 24
+      }
+   ]
+   int32 0
+method call time=1795836726.937125 sender=:1.6 -> destination=:1.1 serial=45 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.937157 sender=:1.6 -> destination=:1.1 serial=46 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 97
+   uint32 38
+   uint32 0
+   boolean true
+   uint32 433227487
+method call time=1795836726.999926 sender=:1.6 -> destination=:1.1 serial=47 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836726.999946 sender=:1.6 -> destination=:1.1 serial=48 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 111
+   uint32 32
+   uint32 0
+   boolean false
+   uint32 433227550
+signal time=1795836727.002006 sender=:1.1 -> destination=:1.6 serial=61 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+      struct {
+         string "ni hao"
+         int32 24
+      }
+   ]
+   int32 0
+method call time=1795836727.062799 sender=:1.6 -> destination=:1.1 serial=49 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836727.062815 sender=:1.6 -> destination=:1.1 serial=50 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 111
+   uint32 32
+   uint32 0
+   boolean true
+   uint32 433227613
+method call time=1795836729.129304 sender=:1.6 -> destination=:1.1 serial=51 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836729.129331 sender=:1.6 -> destination=:1.1 serial=52 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 32
+   uint32 65
+   uint32 0
+   boolean false
+   uint32 433229679
+signal time=1795836729.129853 sender=:1.1 -> destination=:1.6 serial=66 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CommitString
+   string "你好"
+signal time=1795836729.129862 sender=:1.1 -> destination=:1.6 serial=67 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=UpdateFormattedPreedit
+   array [
+   ]
+   int32 0
+method call time=1795836729.130511 sender=:1.6 -> destination=:1.1 serial=53 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCursorRect
+   int32 473
+   int32 673
+   int32 1
+   int32 19
+method call time=1795836729.130531 sender=:1.6 -> destination=:1.1 serial=54 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetSurroundingText
+   string "你好"
+   uint32 2
+   uint32 2
+method call time=1795836729.135842 sender=:1.6 -> destination=:1.1 serial=55 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836729.136405 sender=:1.6 -> destination=:1.1 serial=56 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 32
+   uint32 65
+   uint32 0
+   boolean true
+   uint32 433229685
+method call time=1795836731.518449 sender=:1.6 -> destination=:1.1 serial=57 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+method call time=1795836731.518471 sender=:1.6 -> destination=:1.1 serial=58 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ProcessKeyEvent
+   uint32 65293
+   uint32 36
+   uint32 0
+   boolean false
+   uint32 433232067
+method call time=1795836731.527160 sender=:1.6 -> destination=:1.1 serial=59 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=Reset
+method call time=1795836731.527175 sender=:1.6 -> destination=:1.1 serial=60 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusOut
+method call time=1795836731.527178 sender=:1.6 -> destination=:1.1 serial=61 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+signal time=1795836731.527305 sender=:1.1 -> destination=:1.6 serial=75 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=NotifyFocusOut
+signal time=1795836731.527428 sender=:1.1 -> destination=:1.6 serial=77 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Pinyin"
+   string "pinyin"
+   string "zh_CN"
+method call time=1795836731.528612 sender=:1.6 -> destination=:1.1 serial=62 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 2095952429170
+method call time=1795836731.528626 sender=:1.6 -> destination=:1.1 serial=63 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 2061592690802
+signal time=1795836731.529314 sender=:1.1 -> destination=:1.6 serial=79 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Keyboard - English (US)"
+   string "keyboard-us"
+   string ""
+method call time=1795836731.618167 sender=:1.6 -> destination=:1.1 serial=64 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=Reset
+method call time=1795836731.618189 sender=:1.6 -> destination=:1.1 serial=65 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=ShowVirtualKeyboard
+method call time=1795836731.618192 sender=:1.6 -> destination=:1.1 serial=66 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusOut
+method call time=1795836731.618195 sender=:1.6 -> destination=:1.1 serial=67 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=FocusIn
+signal time=1795836731.618416 sender=:1.1 -> destination=:1.6 serial=84 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=NotifyFocusOut
+signal time=1795836731.618425 sender=:1.1 -> destination=:1.6 serial=86 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Keyboard - English (US)"
+   string "keyboard-us"
+   string ""
+method call time=1795836731.623156 sender=:1.6 -> destination=:1.1 serial=68 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 962081063026
+method call time=1795836731.623168 sender=:1.6 -> destination=:1.1 serial=69 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCapability
+   uint64 996440801394
+method call time=1795836731.623172 sender=:1.6 -> destination=:1.1 serial=70 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=SetCursorRect
+   int32 447
+   int32 673
+   int32 1
+   int32 16
+signal time=1795836731.623231 sender=:1.1 -> destination=:1.6 serial=88 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=CurrentIM
+   string "Pinyin"
+   string "pinyin"
+   string "zh_CN"
+method call time=1795836733.311512 sender=:1.6 -> destination=:1.1 serial=71 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=DestroyIC
+signal time=1795836733.311709 sender=:1.1 -> destination=:1.6 serial=92 path=/org/freedesktop/portal/inputcontext/1; interface=org.fcitx.Fcitx.InputContext1; member=NotifyFocusOut
