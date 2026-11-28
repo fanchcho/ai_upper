@@ -177,7 +177,23 @@ jobs:
           ninja --version
 
       - name: Unit tests
-        run: python -m pytest app/tests -q
+        run: python -m pytest app/tests -q --junitxml=unit-results.xml
+
+      - name: Report failing tests
+        if: failure()
+        shell: python
+        run: |
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          report = Path("unit-results.xml")
+          if report.exists():
+              for case in ET.parse(report).iter("testcase"):
+                  for kind in ("failure", "error"):
+                      for failure in case.findall(kind):
+                          message = case.get("name", "test") + ": " + (failure.text or failure.get("message", ""))
+                          message = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                          print("::error::" + message)
+
 
       - name: Local end-to-end build with third-party wheel
         env:
