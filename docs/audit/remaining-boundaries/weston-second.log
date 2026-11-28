@@ -27,3 +27,4 @@ Date: 2026-11-28 CST
                presentation clock: CLOCK_MONOTONIC_RAW, id 4
                presentation clock resolution: 0.000000001 s
 [11:48:05.880] Loading module '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so'
+[11:53:46.335] caught signal 15
