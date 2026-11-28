@@ -107,7 +107,7 @@ jobs:
             # dependency of pydantic here -- the file imports the name directly
             # -- so the requirement is spelled out. 4.13.2 is the last release
             # that supports 3.8 (4.14.0+ requires >=3.9).
-            dependencies: '["PySide6-Essentials==6.6.3.1", "PySide6-Addons==6.6.3.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2"]'
+            dependencies: '["PySide6-Essentials==6.6.3.1", "PySide6-Addons==6.6.3.1", "pydantic==2.10.6", "httpx==0.28.1", "cryptography==46.0.3", "keyring==24.3.1", "typing_extensions==4.13.2", "tzdata==2026.6"]'
             # Keep this compatibility build out of the seven-target release
             # manifest: it duplicates windows-x86_64 and is not a release artifact.
             artifact: py38-compat-windows-x86_64
@@ -258,6 +258,12 @@ jobs:
       - name: Unit tests
         working-directory: app
         shell: bash
+        env:
+          AI_UPPER_HOME: ${{ runner.temp }}/ai-upper-test-home
+          XDG_CACHE_HOME: ${{ runner.temp }}/ai-upper-qt-cache
+          QML_DISABLE_DISK_CACHE: '1'
+          QT_QPA_PLATFORM: offscreen
+          QT_QUICK_BACKEND: software
         run: |
           set -o pipefail
           rc=0

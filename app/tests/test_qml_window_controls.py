@@ -71,7 +71,7 @@ def _pump(app, seconds: float = 0.4) -> None:
     pump(app, lambda: False, seconds)
 
 
-def _build_window(tmp_path, monkeypatch, sessions=None, mac_chrome=None):
+def _build_window(tmp_path, monkeypatch, sessions=None, mac_chrome=False):
     from PySide6.QtCore import QUrl
     from PySide6.QtQml import QQmlApplicationEngine
 

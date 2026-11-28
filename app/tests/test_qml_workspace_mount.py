@@ -29,9 +29,11 @@ def test_mount_picker_mouse_persist_cancel_and_reject(qapp, tmp_path, monkeypatc
         assert not b._mount_session
         dialog.setProperty('currentFolder', QUrl.fromLocalFile(str(tmp_path)))
         dialog.setProperty('selectedFolder', QUrl.fromLocalFile(str(folder)))
-        _click(w, chip); _pump(qapp)
         from PySide6.QtGui import QGuiApplication
-        picker_windows = [win for win in QGuiApplication.allWindows() if win.isVisible() and win != w]
+        # Scope the invariant to the picker opened here, excluding other visible Qt windows.
+        before_windows = {win for win in QGuiApplication.allWindows() if win.isVisible()}
+        _click(w, chip); _pump(qapp)
+        picker_windows = [win for win in QGuiApplication.allWindows() if win.isVisible() and win not in before_windows]
         assert len(picker_windows) == 1
         picker = picker_windows[0]
         if os.environ.get('MOUNT_EVIDENCE'):

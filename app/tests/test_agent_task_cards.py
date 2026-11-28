@@ -1,7 +1,7 @@
 """F81：propose_agent/create_task 名片决定、角色与任务真实落盘。"""
 from __future__ import annotations
 import json, os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import pytest
 
@@ -20,7 +20,7 @@ def test_cards_resolve_to_persona_and_task(qapp, tmp_path, monkeypatch):
     host.create_session({"sessionId": "s-1", "personaId": "general"})
     bridge.openSession("s-1")
     session = store.load_session("s-1")
-    when = (datetime.now() + timedelta(hours=1)).replace(microsecond=0).isoformat()
+    when = (datetime.now(timezone.utc) + timedelta(hours=1)).replace(microsecond=0).isoformat()
     session.messages = [Message(role="assistant", content=[
         ToolUsePart(type="tool_use", id="p1", name="propose_agent", input={"name": "Card Persona", "description": "d", "prompt": "p"}),
         ToolUsePart(type="tool_use", id="t1", name="create_task", input={"title": "Card Task", "prompt": "do it", "schedule": {"kind": "once", "at": when, "tz": "Asia/Shanghai"}}),

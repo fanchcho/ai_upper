@@ -110,6 +110,8 @@ def _build_window(tmp_path, monkeypatch):
     box["bridge"] = bridge
 
     engine = QQmlApplicationEngine()
+    # These pixel fixtures use the non-macOS 56px rail geometry.
+    engine.setInitialProperties({"macChrome": False})
     bridge._engine = engine
     engine.rootContext().setContextProperty("shellBridge", bridge)
     engine.load(QUrl.fromLocalFile(str(qml_main())))

@@ -23,8 +23,9 @@ def SingleInstance(home, parent=None):
                 client.connectToServer(self.name)
                 if not client.waitForConnected(2000):
                     raise RuntimeError('Existing instance activation failed: ' + client.errorString())
-                client.write(b'activate\n')
-                if not client.waitForBytesWritten(2000):
+                if client.write(b'activate\n') != len(b'activate\n'):
+                    raise RuntimeError('Activation write failed: ' + client.errorString())
+                if client.bytesToWrite() and not client.waitForBytesWritten(2000):
                     raise RuntimeError('Activation write failed: ' + client.errorString())
                 client.disconnectFromServer()
                 return False
@@ -39,9 +40,21 @@ def SingleInstance(home, parent=None):
         def _activate(self):
             while self.server.hasPendingConnections():
                 socket = self.server.nextPendingConnection()
-                socket.close()
-                socket.deleteLater()
+                socket.readyRead.connect(lambda socket=socket: self._receive(socket))
+                if socket.bytesAvailable():
+                    self._receive(socket)
+            self._show_window()
+
+        def _receive(self, socket):
+            if not socket.canReadLine():
+                return
+            if bytes(socket.readLine()) == b'activate\n':
                 self.pending = True
+            socket.disconnectFromServer()
+            socket.deleteLater()
+            self._show_window()
+
+        def _show_window(self):
             if self.window is not None and self.pending:
                 self.pending = False
                 print("SINGLE INSTANCE ACTIVATE", flush=True)

@@ -13,7 +13,7 @@ def test_role_memory_roundtrip(tmp_path, monkeypatch):
     result = bridge.roleMemorySave("general", json.dumps({"title": "偏好", "body": "用中文回答", "type": "user"}))
     assert result["ok"] is True
     path = home / "personas" / "memory" / "general.json"
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     assert data["entries"][0]["title"] == "偏好"
     rows = bridge.roleMemories("general")
     assert rows and rows[0]["body"] == "用中文回答"

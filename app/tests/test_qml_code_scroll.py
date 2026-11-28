@@ -34,7 +34,7 @@ def test_code_scroll_is_local_and_vertical_wheel_still_scrolls_body(qapp, tmp_pa
         def wheel(x, y):
             event = G.QWheelEvent(point, C.QPointF(window.mapToGlobal(point.toPoint())),
                                  C.QPoint(), C.QPoint(x,y), C.Qt.NoButton,
-                                 C.Qt.NoModifier, C.Qt.ScrollUpdate, False)
+                                 C.Qt.NoModifier, C.Qt.NoScrollPhase, False)
             qapp.sendEvent(window,event)
             _pump(qapp,.2)
         before_y = scroller.property("contentY")

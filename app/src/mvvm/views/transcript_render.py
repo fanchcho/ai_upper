@@ -105,11 +105,12 @@ def _tool_card(entry: dict[str, Any], image_index: list[int], palette) -> str:
             f'<p><img src="{image_placeholder(index)}" width="{IMAGE_MAX_WIDTH}"/></p>'
             f"<p style='color:{palette.fg_muted};'>［{tr('legacy.be8da62ea113')}］{name}</p>"
         )
+    status = tr("legacy.3e3c8068bb0e") if error else tr("legacy.51991a5d111a")
     return (
         f'<table width="100%" cellspacing="0" cellpadding="8" '
         f'style="background-color:{background}; border:1px solid {palette.border};">'
         f'<tr><td>'
-        f'<p style="color:{color};"><b>{title}</b>（{(tr('legacy.3e3c8068bb0e')) if error else (tr('legacy.51991a5d111a'))}）</p>'
+        f'<p style="color:{color};"><b>{title}</b>（{status}）</p>'
         f'<p style="color:{palette.fg};">{body}</p>'
         f"{''.join(images)}"
         f"</td></tr></table>"

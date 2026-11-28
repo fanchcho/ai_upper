@@ -100,3 +100,13 @@ class DisplayCache:
         for key, (display, _) in list(self.entries.items()):
             if display is self.current:
                 self._remove(key)
+
+    def clear(self):
+        displays = {id(value[0]): value[0] for value in self.entries.values()}
+        if self.current is not None:
+            displays[id(self.current)] = self.current
+        self.entries.clear()
+        self.current = None
+        self.bytes = 0
+        for display in displays.values():
+            display.release()

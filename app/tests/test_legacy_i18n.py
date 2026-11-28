@@ -25,7 +25,7 @@ def test_widget_and_machine_contract(monkeypatch):
         error=http_error(401,'')
         assert error.kind=='auth'
     import ast
-    source=Path('app/src/mvvm/views/settings_pane.py').read_text()
+    source=(Path(__file__).resolve().parents[1] / 'src/mvvm/views/settings_pane.py').read_text(encoding='utf-8')
     assert "TITLE = tr(" in source
     assert "KEY_PLACEHOLDER = tr(" in source
     assert ast.parse(source)

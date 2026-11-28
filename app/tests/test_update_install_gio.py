@@ -15,6 +15,18 @@ def qapp():
 
 def test_install_update_uses_gio_handler(qapp, tmp_path, monkeypatch):
     from test_qml_shell import _bridge, text_stream
+    import sys
+    if not sys.platform.startswith("linux"):
+        # GIO desktop files are Linux-only. Verify native URL dispatch elsewhere.
+        import qml_shell
+        opened = []
+        monkeypatch.setattr(qml_shell.QtGui.QDesktopServices, "openUrl", lambda url: opened.append(url) or True)
+        target = tmp_path / "installer.txt"
+        target.write_text("installer\n", encoding="utf-8")
+        bridge, _store, _host = _bridge(tmp_path, monkeypatch, text_stream("x"))
+        assert bridge.installUpdate(str(target)) is True
+        assert len(opened) == 1 and opened[0].toLocalFile() == str(target)
+        return
     data = tmp_path / "xdg"; (data / "applications").mkdir(parents=True)
     marker = tmp_path / "opened.txt"
     handler = tmp_path / "handler.sh"

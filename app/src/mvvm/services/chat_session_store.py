@@ -58,6 +58,8 @@ def safe_id(session_id: str) -> str:
 
 def write_file_atomic(path: Path, data: str) -> None:
     """先写 `.tmp` 再 rename；rename 失败（跨设备/占位）回退直接覆盖。"""
+    if path.is_dir():
+        raise IsADirectoryError(f"Cannot write session file: {path} is a directory")
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(data, encoding="utf-8")
     try:

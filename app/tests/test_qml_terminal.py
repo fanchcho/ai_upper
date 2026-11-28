@@ -27,7 +27,7 @@ def test_terminal_real_command(qapp, tmp_path):
     assert b.startTerminal() is True
     chunks = []
     b.terminalOutput.connect(chunks.append)
-    assert b.terminalInput("printf TERM_OK\\n") is True
+    assert b.terminalInput("echo TERM_OK") is True
     deadline = time.time() + 5
     while time.time() < deadline and "TERM_OK" not in "".join(chunks):
         qapp.processEvents(); time.sleep(0.05)

@@ -75,3 +75,23 @@ def _legacy_text_language(request, monkeypatch):
                'test_provider_setup.py', 'test_demo.py', 'test_mvvm.py')
     if name in chinese:
         monkeypatch.setenv('AI_UPPER_LANG', 'zh-CN')
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _qt_application_lifetime():
+    """Destroy native Qt state before Python tears down binding callbacks."""
+    yield
+    if "PySide6.QtCore" not in sys.modules:
+        return
+    from PySide6.QtCore import QCoreApplication, QEvent
+    import shiboken6
+
+    app = QCoreApplication.instance()
+    if app is not None:
+        from PySide6.QtGui import QGuiApplication
+        if isinstance(app, QGuiApplication):
+            # The offscreen clipboard owns test-created QMimeData. Its static
+            # destructor runs after Python; release binding callbacks now.
+            app.clipboard().clear()
+        QCoreApplication.sendPostedEvents(None, QEvent.DeferredDelete)
+        shiboken6.delete(app)

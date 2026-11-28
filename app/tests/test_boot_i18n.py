@@ -8,7 +8,7 @@ from locale_runtime import catalogues, selected_locale
 
 
 def loader():
-    path=Path('tools/ai_upper/egg_loader.py')
+    path=Path(__file__).resolve().parents[2] / 'tools/ai_upper/egg_loader.py'
     spec=importlib.util.spec_from_file_location('isolated_egg_loader',path)
     module=importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -18,7 +18,7 @@ def loader():
 def test_boot_catalogue_and_ascii():
     module=loader()
     assert len(module._BOOT_MESSAGES)==8
-    Path('tools/ai_upper/egg_loader.py').read_text().encode('ascii')
+    (Path(__file__).resolve().parents[2] / 'tools/ai_upper/egg_loader.py').read_text(encoding='utf-8').encode('ascii')
     for key, pair in module._BOOT_MESSAGES.items():
         assert pair==[catalogues()[lang][key] for lang in ('en','zh-CN')]
 

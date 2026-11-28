@@ -368,6 +368,11 @@ class ShellBridge(QtCore.QObject):
     # ── 装配 ──────────────────────────────────────────────────────────────
     def bind_window(self, window: Any) -> None:
         self._window = window
+        # Qt owns the bridge and its service timers for exactly the window's
+        # lifetime; Python cycles must not choose a worker thread for disposal.
+        self.setParent(window)
+        if self._engine is not None:
+            self._engine.destroyed.connect(self._dispose_rendering)
         self._sync_theme_singleton()
 
     @QtCore.Slot(str, str, result=str)
@@ -555,7 +560,7 @@ class ShellBridge(QtCore.QObject):
             return True
         # Headless/Linux without xdg-open: use GIO's default application launcher
         # (same GIO stack as xdg-open; no extra dependency).
-        return _gio_launch(target)
+        return sys.platform.startswith("linux") and _gio_launch(target)
 
     @QtCore.Slot(result=str)
     def theme(self) -> str:
@@ -1805,7 +1810,7 @@ class ShellBridge(QtCore.QObject):
 
     @QtCore.Slot(result=bool)
     def startTerminal(self) -> bool:
-        """F79：本地 PTY 等价终端（QProcess + bash），真实 stdin/stdout。"""
+        """F79：本地终端（QProcess + 平台 shell），真实 stdin/stdout。"""
         from utils.qt_compat import QtCore
         if self._terminal is not None:
             return self._terminal.state() != QtCore.QProcess.NotRunning
@@ -1819,7 +1824,11 @@ class ShellBridge(QtCore.QObject):
                 self.terminalOutput.emit(data)
         process.readyReadStandardOutput.connect(read)
         process.finished.connect(lambda code, _status: self.terminalFinished.emit(int(code)) if self._terminal is process else None)
-        process.start("bash", [])
+        if sys.platform == "win32":
+            # System32/bash.exe is a WSL redirector and may have no distro.
+            process.start(os.environ.get("COMSPEC", "cmd.exe"), ["/Q", "/D"])
+        else:
+            process.start("bash", [])
         self._terminal = process
         return bool(process.waitForStarted(1500))
 
@@ -2641,7 +2650,7 @@ class ShellBridge(QtCore.QObject):
             job.cancel()
         source = self._markdown()
         self._display_key = None
-        if isinstance(self._document, QtQuick.QQuickTextDocument):
+        if isinstance(self._document, QtQuick.QQuickTextDocument) and hasattr(self._document, "setTextDocument"):
             key = self._display_cache.key(self._active, source, self._plain,
                                           self._body.style,
                                           (self._body.content_width, self._document.parent().width(),
@@ -2660,11 +2669,21 @@ class ShellBridge(QtCore.QObject):
         self._render_jobs.append((self._render_epoch, source, job))
         job.add_done_callback(lambda _: self._preparedReady.emit())
 
+    def _dispose_rendering(self, *args) -> None:
+        self._close_render_worker()
+        self._display_cache.clear()
+        self._document = None
+        self._window = None
+
     def _close_render_worker(self, *args) -> None:
         self._render_epoch += 1
         if self._render_executor is not None:
-            self._render_executor.shutdown(wait=True, cancel_futures=True)
+            self._render_executor.shutdown(wait=True)
             self._render_executor = None
+        for _, _, job in self._render_jobs:
+            if not job.cancelled() and job.exception() is None:
+                document, _ = job.result()
+                document.deleteLater()
         self._render_jobs.clear()
 
     def _finish_prepared_render(self) -> None:
@@ -2676,14 +2695,17 @@ class ShellBridge(QtCore.QObject):
             if job.cancelled():
                 continue
             try:
-                fragment, images = job.result()
+                prepared, images = job.result()
             except Exception as exc:
                 if epoch == self._render_epoch:
                     print("QML PREPARE FAILED", str(exc), file=sys.stderr)
                     self._render()
                 continue
             if epoch != self._render_epoch:
+                prepared.deleteLater()
                 continue
+            fragment = QtGui.QTextDocumentFragment(prepared)
+            prepared.deleteLater()
             if self._display_key is not None:
                 from markdown.cache import Display
                 old = self._body
@@ -2880,7 +2902,7 @@ def _pump(app: Any, predicate: Any, timeout: float) -> bool:
 
 def _start_ticker(bridge: ShellBridge) -> Any:
     """交互模式下靠定时器推进：没有它，后台线程的事件永远到不了界面。"""
-    timer = QtCore.QTimer()
+    timer = QtCore.QTimer(bridge)
     timer.setInterval(30)
     timer.timeout.connect(bridge.tick)
     timer.start()

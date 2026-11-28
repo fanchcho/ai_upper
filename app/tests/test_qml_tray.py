@@ -43,6 +43,8 @@ def test_close_to_tray_setting_is_read_from_config(tmp_path, monkeypatch):
                               emit_sessions_changed=lambda: None)
     bridge = ShellBridge(host=host, store=ChatSessionStore(tmp_path), plain=True,
                          settings=settings, skills=SkillStore(tmp_path))
+    # Verify explicit preference independently of the Windows default.
+    settings.set_config({"closeToTray": False})
     assert bridge.closeToTray() is False
     settings.set_config({"closeToTray": True})
     assert bridge.closeToTray() is True

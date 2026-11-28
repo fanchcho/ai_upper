@@ -20,7 +20,10 @@ def next_run(schedule, now=None):
     else:
         raise RuntimeError('Python 3.8 仅支持 UTC；IANA 时区调度需要 Python 3.9 或更新版本')
     if schedule['kind'] == 'once':
-        value = datetime.fromisoformat(schedule['at']).replace(tzinfo=zone).timestamp()
+        local = datetime.fromisoformat(schedule['at'])
+        if local.tzinfo is None:
+            local = local.replace(tzinfo=zone)
+        value = local.timestamp()
         if value <= now:
             raise ValueError('执行时间必须在未来')
         return value
@@ -82,11 +85,11 @@ def ScheduledTasks(shell):
         def read(self):
             if not self.path.exists():
                 return []
-            return json.loads(self.path.read_text()).get('tasks', [])
+            return json.loads(self.path.read_text(encoding="utf-8")).get('tasks', [])
     
         def write(self, rows):
             temp = self.path.with_suffix('.json.tmp')
-            temp.write_text(json.dumps({'version':1,'tasks':rows},ensure_ascii=False,indent=2))
+            temp.write_text(json.dumps({'version':1,'tasks':rows},ensure_ascii=False,indent=2), encoding='utf-8')
             temp.replace(self.path)
             self.changed.emit()
     
