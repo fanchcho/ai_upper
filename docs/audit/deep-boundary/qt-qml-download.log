@@ -1,0 +1,8 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtqml-workerscript arm64 6.8.2+dfsg-7 [16.9 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtquick-controls arm64 6.8.2+dfsg-7 [104 kB]
+Get:3 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtquick-dialogs arm64 6.8.2+dfsg-7 [473 kB]
+Get:4 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtquick-layouts arm64 6.8.2+dfsg-7 [77.6 kB]
+Get:5 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtquick-shapes arm64 6.8.2+dfsg-7 [18.7 kB]
+Get:6 http://deb.debian.org/debian trixie/main arm64 qml6-module-qtquick-templates arm64 6.8.2+dfsg-7 [31.7 kB]
+Fetched 722 kB in 0s (1758 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qml6-module-qtqml-workerscript_6.8.2+dfsg-7_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

@@ -1,0 +1,328 @@
+dbus-daemon[300873]: [session uid=0 pid=300873 pidfd=5] Connection :1.0 (uid=0 pid=300876 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/aarch64-linux-gnu/qt6/plugins/platforms" ...
+qt.core.plugin.factoryloader: looking at "libqlinuxfb.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqlinuxfb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "linuxfb"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QLinuxFbIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("linuxfb")
+qt.core.plugin.factoryloader: looking at "libqoffscreen.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqoffscreen.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "libqxcb.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: looking at "libqeglfs.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqeglfs.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "eglfs"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QEglFSIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("eglfs")
+qt.core.plugin.factoryloader: looking at "libqvkkhrdisplay.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqvkkhrdisplay.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vkkhrdisplay"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QVkKhrDisplayIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vkkhrdisplay")
+qt.core.plugin.factoryloader: looking at "libqminimalegl.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqminimalegl.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimalegl"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QMinimalEglIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimalegl")
+qt.core.plugin.factoryloader: looking at "libqminimal.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqminimal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimal"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QMinimalIntegrationPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimal")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforms" ...
+qt.core.library: "/usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqxcb.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/aarch64-linux-gnu/qt6/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: looking at "libibusplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: looking at "libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 0,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 395264
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforminputcontexts" ...
+qt.core.library: "/usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/libqtquickcontrols2plugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2Plugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/libqtquickcontrols2plugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2FusionStylePlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Fusion"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickControls2BasicStylePlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Basic"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Layouts/libqquicklayoutsplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickLayoutsPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Layouts"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Layouts/libqquicklayoutsplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Shapes/libqmlshapesplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QmlShapesPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Shapes"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Shapes/libqmlshapesplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Window/libquickwindowplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuick_WindowPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Window"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Window/libquickwindowplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickDialogsPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Dialogs"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Templates/libqtquicktemplates2plugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlExtensionInterface/1.0",
+    "archlevel": 0,
+    "className": "QtQuickTemplates2Plugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Templates"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Templates/libqtquicktemplates2plugin.so" loaded library
+qt.core.plugin.loader: Found metadata in lib /home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QQmlEngineExtensionInterface",
+    "archlevel": 0,
+    "className": "QtQuickControls2FusionStyleImplPlugin",
+    "debug": false,
+    "uri": [
+        "QtQuick.Controls.Fusion.impl"
+    ],
+    "version": 395264
+}
+
+
+qt.core.library: "/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so" loaded library
+QQmlApplicationEngine failed to load component
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:43:5: Cannot assign to non-existent property "topPadding"
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/ai_upper/scripts/parity/qml_real_ime_probe.py", line 14, in <module>
+    w,b,s,v,t,e=_build_window(Path(os.environ['AI_UPPER_HOME']),MonkeyPatch(),'chat')
+                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agent/shared_workspace/ai_upper/app/tests/test_qml_settings_provider.py", line 131, in _build_window
+    assert len(roots) == 1, "Main.qml 必须能独立加载"
+           ^^^^^^^^^^^^^^^
+AssertionError: Main.qml 必须能独立加载
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Controls/libqtquickcontrols2plugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Layouts/libqquicklayoutsplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Shapes/libqmlshapesplugin.so" unloaded library 
+"/home/agent/shared_workspace/ai_upper/.tmp/deep-boundary/qt-runtime/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Templates/libqtquicktemplates2plugin.so" unloaded library 
+"/usr/lib/aarch64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" unloaded library 
+"/usr/lib/aarch64-linux-gnu/qt6/plugins/platforms/libqxcb.so" unloaded library 
+"/usr/lib/aarch64-linux-gnu/qt6/qml/QtQuick/Window/libquickwindowplugin.so" unloaded library 

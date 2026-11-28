@@ -1,0 +1,30 @@
+{
+  "qt": "6.8.2",
+  "text": "你好",
+  "events": [
+    {
+      "preedit": "n",
+      "commit": ""
+    },
+    {
+      "preedit": "ni",
+      "commit": ""
+    },
+    {
+      "preedit": "ni h",
+      "commit": ""
+    },
+    {
+      "preedit": "ni ha",
+      "commit": ""
+    },
+    {
+      "preedit": "ni hao",
+      "commit": ""
+    },
+    {
+      "preedit": "",
+      "commit": "你好"
+    }
+  ]
+}
