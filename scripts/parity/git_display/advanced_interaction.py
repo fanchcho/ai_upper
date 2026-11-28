@@ -27,7 +27,7 @@ data={"repo":str(repo)}
 def open_branch(name):
  QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,QPoint(100,100));pump();click('gitChip');click('gitMenu_branches');click('gitMenu_branch_'+name)
 if phase=='reach':
- click('gitChip');shot('main');data['legacy_visible']=item('gitPanel').property('visible');assert not data['legacy_visible'];click('gitMenu_branches');shot('branches')
+ click('gitChip');shot('main');data['legacy_visible']=item('gitPanel').property('visible');assert not data['legacy_visible'];data['main_geometry']={'width':item('gitMenu').property('width'),'height':item('gitMenu').property('height'),'padding':item('gitMenu').property('padding')};click('gitMenu_branches');shot('branches');data['branch_geometry']={'width':item('gitMenu').property('width'),'height':item('gitMenu').property('height')}
 elif phase=='force':
  git('checkout','-b','unmerged');git('commit','--allow-empty','-m','unique');git('checkout','main')
  open_branch('unmerged');click('gitMenu_delete');click('gitBranchConfirm');shot('confirm')

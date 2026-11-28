@@ -1,4 +1,13 @@
 {
-  "repo": "/tmp/ai-upper-branches-i9woebhz/home/repo",
-  "legacy_visible": false
+  "repo": "/tmp/ai-upper-branches-mkl6uyir/home/repo",
+  "legacy_visible": false,
+  "main_geometry": {
+    "width": 148.0,
+    "height": 219.0,
+    "padding": 6.0
+  },
+  "branch_geometry": {
+    "width": 300.0,
+    "height": 295.0
+  }
 }
