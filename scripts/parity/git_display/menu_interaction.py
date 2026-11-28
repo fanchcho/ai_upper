@@ -39,7 +39,7 @@ click('gitMenu_branches');snap('branches')
 click('gitMenu_create');typein('gitNewBranchName','new-menu-branch');click('gitBranchConfirm');branch=git('branch','--show-current');snap('created')
 QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,QPoint(100,100));pump();click('gitChip');click('gitMenu_commit');snap('commit')
 geometry={n:{'width':item(n).property('width'),'height':item(n).property('height')} for n in ('gitCommitDialog','gitNewCommitMessage','gitNewGenerate','gitNewSubmit')}
-typein('gitNewCommitMessage','Commit through original-style modal');click('gitNewSubmit');pump();latest=git('log','-1','--format=%h %s');assert 'Commit through original-style modal' in latest
+typein('gitNewCommitMessage','Commit through original-style modal');snap('commit-filled');click('gitNewSubmit');pump();latest=git('log','-1','--format=%h %s');assert 'Commit through original-style modal' in latest
 (out/f'{theme}-interaction.json').write_text(json.dumps({'menu_rect':menu_rect,'geometry':geometry,'home':str(home),'branch':branch,'fetch_head':fetch,'notice':notice,'commit':latest,'status':git('status','--porcelain')},ensure_ascii=False,indent=2))
 QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,QPoint(100,100));pump()
 b._vault.delete_secret('p1');w.setProperty('page','settings-models-provider');pump();snap('warning')

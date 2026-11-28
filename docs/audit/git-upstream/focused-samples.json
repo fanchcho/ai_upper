@@ -1,0 +1,48 @@
+{
+  "dark": {
+    "focus_border": {
+      "xy": [
+        431,
+        550
+      ],
+      "hex": "#7c7cf0"
+    },
+    "primary_background": {
+      "xy": [
+        810,
+        630
+      ],
+      "hex": "#7c7cf0"
+    },
+    "primary_border": {
+      "xy": [
+        810,
+        626
+      ],
+      "hex": "#7c7cf0"
+    }
+  },
+  "light": {
+    "focus_border": {
+      "xy": [
+        431,
+        550
+      ],
+      "hex": "#5b5bd6"
+    },
+    "primary_background": {
+      "xy": [
+        810,
+        630
+      ],
+      "hex": "#5b5bd6"
+    },
+    "primary_border": {
+      "xy": [
+        810,
+        626
+      ],
+      "hex": "#5b5bd6"
+    }
+  }
+}

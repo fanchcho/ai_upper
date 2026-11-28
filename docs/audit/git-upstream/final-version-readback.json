@@ -1,0 +1,89 @@
+[
+  {
+    "command": [
+      "git",
+      "log",
+      "--oneline",
+      "-6"
+    ],
+    "stdout": "8fcbe32 Match Git commit dialog typography and overlay to upstream styles\n9864fab Show real Git branch tracking, scrolling and empty states\n8ee1a55 docs: pin actual upstream main separately from local Deva fork\n2595779 Replace Git form entry with version-referenced menus and commit dialog\n4db9aeb docs: establish Deva desktop version and Git structure differences\n4d37256 Fix Git panel controls and warning color semantics\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "stdout": "?? docs/audit/git-upstream/pytest-final.log\n?? docs/audit/git-upstream/pytest-full.log\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "stdout": "8fcbe32785bd02056a32a784c67edcb097d877d9\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/develop"
+    ],
+    "stdout": "8fcbe32785bd02056a32a784c67edcb097d877d9\trefs/heads/develop\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "merge-base",
+      "--is-ancestor",
+      "2595779",
+      "HEAD"
+    ],
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "/home/agent/shared_workspace/deva",
+      "log",
+      "-1",
+      "--format=%H %cs %s"
+    ],
+    "stdout": "8acfbd4896ff4ea50653adccb42bc08c9495504b 2026-11-28 docs(deva-agent): 补充真机升级回滚核对清单 / add macOS upgrade and rollback verification checklist\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "git",
+      "ls-remote",
+      "https://github.com/sqfcyily/deva.git",
+      "refs/heads/main",
+      "refs/heads/develop"
+    ],
+    "stdout": "013c5d7eb4cd0907e02bc8717219a0bef42fb1fc\trefs/heads/main\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  {
+    "read": "/home/agent/shared_workspace/deva/apps/desktop/package.json",
+    "version": "0.1.17"
+  },
+  {
+    "read": "/tmp/deva-upstream-n5zv9nfb/deva/apps/desktop/package.json",
+    "version": "0.1.17"
+  }
+]

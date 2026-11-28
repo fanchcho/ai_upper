@@ -1,0 +1,32 @@
+{
+  "menu_rect": [
+    539.96875,
+    778.0,
+    148.0,
+    219.0
+  ],
+  "geometry": {
+    "gitCommitDialog": {
+      "width": 460.0,
+      "height": 294.0
+    },
+    "gitNewCommitMessage": {
+      "width": 418.0,
+      "height": 120.0
+    },
+    "gitNewGenerate": {
+      "width": 69.0,
+      "height": 30.0
+    },
+    "gitNewSubmit": {
+      "width": 52.0,
+      "height": 30.0
+    }
+  },
+  "home": "/tmp/ai-upper-git-display-neobxzw8/home",
+  "branch": "new-menu-branch",
+  "fetch_head": "14debe2baa41a9b8076e864aa34aff0e4c35ce92\t\tbranch 'main' of /tmp/ai-upper-git-display-neobxzw8/home/remote\n",
+  "notice": "已获取远端更新",
+  "commit": "a6dcb8e Commit through original-style modal",
+  "status": ""
+}
