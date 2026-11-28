@@ -1,0 +1,22 @@
+runtime 6.11.2 metadata {'IID': 'org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1', 'MetaData': {'Keys': ['fcitx', 'fcitx5']}, 'archlevel': 0, 'className': 'QFcitx5PlatformInputContextPlugin', 'debug': False, 'version': 396032}
+load True error Unknown error
+ffff95030000-ffff957ad000 r-xp 00000000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff957ad000-ffff957bd000 ---p 0077d000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff957bd000-ffff95800000 r--p 0077d000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff95800000-ffff9580c000 rw-p 007c0000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff95810000-ffff958a5000 r-xp 00000000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff958a5000-ffff958bd000 ---p 00095000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff958bd000-ffff958c0000 r--p 0009d000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff958c0000-ffff958c3000 rw-p 000a0000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff98bc0000-ffff98c8f000 r-xp 00000000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff98c8f000-ffff98c9c000 ---p 000cf000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff98c9c000-ffff98ca0000 r--p 000dc000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff98ca0000-ffff98ca2000 rw-p 000e0000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff99060000-ffff9974c000 r-xp 00000000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff9974c000-ffff9975a000 ---p 006ec000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff9975a000-ffff99770000 r--p 006fa000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff99770000-ffff99778000 rw-p 00710000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff99780000-ffff9a18a000 r-xp 00000000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff9a18a000-ffff9a19c000 ---p 00a0a000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff9a19c000-ffff9a1c0000 r--p 00a0c000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff9a1c0000-ffff9a1cd000 rw-p 00a30000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6

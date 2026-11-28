@@ -1,0 +1,44 @@
+-- The CXX compiler identification is GNU 14.2.0
+-- The C compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/gcc
+CMake Warning at cmake/QtBuildHelpers.cmake:13 (message):
+  The officially supported CMake generator for building Qt is Ninja / Ninja
+  Multi-Config.  You are using: 'Unix Makefiles' instead.  Thus, you might
+  encounter issues.  Use at your own risk.
+Call Stack (most recent call first):
+  cmake/QtBuildHelpers.cmake:430 (qt_internal_validate_cmake_generator)
+  cmake/QtBuild.cmake:4 (qt_internal_setup_build_and_global_variables)
+  cmake/QtSetup.cmake:6 (include)
+  cmake/QtBuildRepoHelpers.cmake:28 (include)
+  cmake/QtBuildRepoHelpers.cmake:239 (qt_build_internals_set_up_private_api)
+  cmake/QtBaseHelpers.cmake:220 (qt_build_repo_begin)
+  CMakeLists.txt:36 (qt_internal_qtbase_build_repo)
+
+
+-- CMAKE_BUILD_TYPE was already explicitly set to: 'Release'
+
+-- Configuration summary has been written to /tmp/ai-upper-qt611-sdk/build-make/config.summary
+
+ERROR: The OpenGL functionality tests failed! You might need to modify the OpenGL package search path by setting the OpenGL_DIR CMake variable to the OpenGL library's installation directory.
+
+CMake Error at cmake/QtBuildInformation.cmake:245 (message):
+  Check the configuration messages for an error that has occurred.
+Call Stack (most recent call first):
+  cmake/QtBuildInformation.cmake:64 (qt_configure_print_summary)
+  cmake/QtBuildRepoHelpers.cmake:402 (qt_print_feature_summary)
+  cmake/QtBaseHelpers.cmake:298 (qt_build_repo_end)
+  CMakeLists.txt:36 (qt_internal_qtbase_build_repo)
+
+
+-- Configuring incomplete, errors occurred!

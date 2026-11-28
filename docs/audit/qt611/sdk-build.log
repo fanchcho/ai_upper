@@ -1,0 +1,1862 @@
+[  0%] Generating pc file for target Qt6::Platform
+[  0%] Generating ../../mkspecs/modules/qt_lib_core_private.pri
+[  1%] Generating mkspecs/qmodule.pri
+[  1%] Generating ../../../mkspecs/modules/qt_ext_libpng.pri
+[  1%] Built target Platform
+[  1%] Built target qmodule_pri
+[  1%] Built target Core_lib_pri
+[  1%] Built target BundledLibpng_ext_pri
+[  1%] Generating ../../../mkspecs/modules/qt_ext_libjpeg.pri
+[  1%] Generating ../../../mkspecs/modules/qt_ext_freetype.pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_network_private.pri
+[  1%] Built target BundledLibjpeg_ext_pri
+[  1%] Built target BundledFreetype_ext_pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_sql_private.pri
+[  1%] Built target Network_lib_pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_xml_private.pri
+[  1%] Built target Sql_lib_pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_dbus_private.pri
+[  1%] Built target Xml_lib_pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_gui_private.pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_widgets_private.pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_testlib_private.pri
+[  1%] Built target DBus_lib_pri
+[  1%] Built target Test_lib_pri
+[  1%] Built target Gui_lib_pri
+[  1%] Built target Widgets_lib_pri
+[  1%] Generating ../../mkspecs/modules/qt_lib_printsupport_private.pri
+[  1%] Generating version linker script for target QSQLiteDriverPlugin
+[  1%] Generating version linker script for target QMinimalIntegrationPlugin
+[  1%] Generating version linker script for target QOffscreenIntegrationPlugin
+[  1%] Built target QMinimalIntegrationPlugin_version_script
+[  1%] Built target PrintSupport_lib_pri
+[  1%] Built target QOffscreenIntegrationPlugin_version_script
+[  1%] Built target QSQLiteDriverPlugin_version_script
+[  1%] Generating version linker script for target QLinuxFbIntegrationPlugin
+[  1%] Generating version linker script for target QVncIntegrationPlugin
+[  1%] Built target QLinuxFbIntegrationPlugin_version_script
+[  1%] Generating version linker script for target QXdgDesktopPortalThemePlugin
+[  1%] Generating version linker script for target QICOPlugin
+[  1%] Built target QVncIntegrationPlugin_version_script
+[  1%] Built target QXdgDesktopPortalThemePlugin_version_script
+[  1%] Generating version linker script for target QJpegPlugin
+[  1%] Generating version linker script for target QGifPlugin
+[  1%] Built target QICOPlugin_version_script
+[  1%] Built target QGifPlugin_version_script
+[  1%] Built target QJpegPlugin_version_script
+[  1%] Generating version linker script for target QEvdevMousePlugin
+[  1%] Generating version linker script for target QEvdevTouchScreenPlugin
+[  1%] Generating version linker script for target QEvdevTabletPlugin
+[  1%] Generating version linker script for target QEvdevKeyboardPlugin
+[  1%] Built target QEvdevMousePlugin_version_script
+[  1%] Built target QEvdevTouchScreenPlugin_version_script
+[  1%] Built target QEvdevTabletPlugin_version_script
+[  1%] Built target QEvdevKeyboardPlugin_version_script
+[  1%] Generating version linker script for target QTuioTouchPlugin
+[  1%] Generating version linker script for target QNetworkManagerNetworkInformationPlugin
+[  1%] Built target QTuioTouchPlugin_version_script
+[  1%] Generating version linker script for target QConnManNetworkInformationPlugin
+[  1%] Generating version linker script for target QTlsBackendCertOnlyPlugin
+[  1%] Built target QNetworkManagerNetworkInformationPlugin_version_script
+[  1%] Built target QConnManNetworkInformationPlugin_version_script
+[  1%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_auto_possess.c.o
+[  1%] Building CXX object src/tools/syncqt/CMakeFiles/syncqt.dir/main.cpp.o
+[  1%] Built target QTlsBackendCertOnlyPlugin_version_script
+[  1%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/png.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jcapistd_16.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jccolor_16.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jcdiffct_16.c.o
+[  1%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_chartables.c.o
+[  1%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_chkdint.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jclossls_16.c.o
+[  1%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_compile.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jcmainct_16.c.o
+[  1%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngerror.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jcprepct_16.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jcsample_16.c.o
+[  1%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngget.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdapistd_16.c.o
+[  1%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdcolor_16.c.o
+[  1%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngmem.c.o
+[  1%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngpread.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jddiffct_16.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdlossls_16.c.o
+[  2%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngread.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdmainct_16.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdpostct_16.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jdsample_16.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg16bits.dir/jutils_16.c.o
+[  2%] Linking C static library ../../../lib/libQt6BundledLibjpeg16bits.a
+[  2%] Built target BundledLibjpeg16bits
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcapistd_12.c.o
+[  2%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngrio.c.o
+[  2%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngrtran.c.o
+[  2%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jccolor_12.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcdiffct_12.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jclossls_12.c.o
+[  3%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_compile_cgroup.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcmainct_12.c.o
+[  3%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_compile_class.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcprepct_12.c.o
+[  3%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngrutil.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcsample_12.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdapistd_12.c.o
+[  3%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdcolor_12.c.o
+[  3%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_config.c.o
+[  3%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_context.c.o
+[  3%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_dfa_match.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngset.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jddiffct_12.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdlossls_12.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngtrans.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdmainct_12.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngwio.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdpostct_12.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdsample_12.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngwrite.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jutils_12.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jccoefct_12.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngwtran.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jcdctmgr_12.c.o
+[  4%] Building C object src/3rdparty/libpng/CMakeFiles/BundledLibpng.dir/pngwutil.c.o
+[  4%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdcoefct_12.c.o
+[  4%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_error.c.o
+[  5%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_extuni.c.o
+[  5%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jddctmgr_12.c.o
+[  5%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_find_bracket.c.o
+[  5%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jdmerge_12.c.o
+[  5%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_jit_compile.c.o
+[  5%] Linking C static library ../../../lib/libQt6BundledLibpng.a
+[  5%] Built target BundledLibpng
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jfdctfst_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jfdctint_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jidctflt_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jidctfst_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jidctint_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jidctred_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jquant1_12.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg12bits.dir/jquant2_12.c.o
+[  6%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_maketables.c.o
+[  6%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_match.c.o
+[  6%] Linking C static library ../../../lib/libQt6BundledLibjpeg12bits.a
+[  6%] Built target BundledLibjpeg12bits
+[  6%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/autofit/afadjust.c.o
+[  6%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/autofit/afgsub.c.o
+[  6%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/autofit/autofit.c.o
+[  6%] Linking CXX executable ../../../libexec/syncqt
+[  6%] Built target syncqt
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcapistd.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jccolor.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcdiffct.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jclossls.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcmainct.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcprepct.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcsample.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdapistd.c.o
+[  6%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftbase.c.o
+[  6%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdcolor.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jddiffct.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdlossls.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdmainct.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdpostct.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdsample.c.o
+[  7%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jutils.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftbbox.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jccoefct.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftbdf.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftbitmap.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcdctmgr.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftcid.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdcoefct.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftfstype.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftgasp.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_match_data.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftglyph.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_match_next.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jddctmgr.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_newline.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdmerge.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_ord2utf.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftgxval.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_pattern_info.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftinit.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftmm.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_script_run.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_serialize.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftotval.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_string_utils.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jfdctfst.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftpatent.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_study.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jfdctint.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftpfr.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jidctflt.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jidctfst.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftstroke.c.o
+[  8%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jidctint.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_substitute.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftsynth.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_substring.c.o
+[  8%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/fttype1.c.o
+[  8%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_tables.c.o
+[  9%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_ucd.c.o
+[  9%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftwinfnt.c.o
+[  9%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_valid_utf.c.o
+[  9%] Building C object src/3rdparty/pcre2/CMakeFiles/BundledPcre2.dir/src/pcre2_xclass.c.o
+[  9%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/bdf/bdf.c.o
+[ 10%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/bzip2/ftbzip2.c.o
+[ 10%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/cache/ftcache.c.o
+[ 10%] Linking C static library ../../../lib/libQt6BundledPcre2.a
+[ 10%] Built target BundledPcre2
+[ 10%] Running syncqt.cpp for module: QtJpeg
+[ 10%] Built target JpegPrivate_sync_headers
+[ 10%] Running syncqt.cpp for module: QtFreetype
+[ 10%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jidctred.c.o
+[ 10%] Built target FreetypePrivate_sync_headers
+[ 10%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/cff/cff.c.o
+[ 10%] Running syncqt.cpp for module: QtHarfbuzz
+[ 10%] Running syncqt.cpp for module: QtCore
+[ 11%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jquant1.c.o
+[ 11%] Built target HarfbuzzPrivate_sync_headers
+[ 11%] Running syncqt.cpp for module: QtCore
+[ 11%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jquant2.c.o
+[ 11%] Built target Core_sync_headers
+[ 11%] Generating version linker script for target Core
+[ 11%] Built target Core_version_script
+[ 11%] Running syncqt.cpp for module: QtPng
+[ 11%] Built target PngPrivate_sync_headers
+[ 11%] Built target JpegPrivate
+[ 11%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/hb-dummy.cc.o
+[ 11%] Running syncqt.cpp for module: QtConcurrent
+[ 11%] Built target Concurrent_sync_headers
+[ 12%] Generating version linker script for target Concurrent
+[ 12%] Built target Concurrent_version_script
+[ 12%] Running syncqt.cpp for module: QtSql
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jaricom.c.o
+[ 12%] Generating version linker script for target Sql
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcapimin.c.o
+[ 12%] Built target Sql_version_script
+[ 12%] Built target Sql_sync_headers
+[ 12%] Running syncqt.cpp for module: QtNetwork
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcarith.c.o
+[ 12%] Generating version linker script for target Network
+[ 12%] Built target Network_version_script
+[ 12%] Built target Network_sync_headers
+[ 12%] Running syncqt.cpp for module: QtXml
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jchuff.c.o
+[ 12%] Generating version linker script for target Xml
+[ 12%] Built target Xml_version_script
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/cid/type1cid.c.o
+[ 12%] Built target Xml_sync_headers
+[ 12%] Running syncqt.cpp for module: QtDBus
+[ 12%] Generating version linker script for target DBus
+[ 12%] Built target DBus_version_script
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/gzip/ftgzip.c.o
+[ 12%] Built target DBus_sync_headers
+[ 12%] Running syncqt.cpp for module: QtDeviceDiscoverySupport
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/lzw/ftlzw.c.o
+[ 12%] Built target DeviceDiscoverySupportPrivate_sync_headers
+[ 12%] Generating version linker script for target DeviceDiscoverySupportPrivate
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/pcf/pcf.c.o
+[ 12%] Built target DeviceDiscoverySupportPrivate_version_script
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/pfr/pfr.c.o
+[ 12%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/global/qalloc.cpp.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/psaux/psaux.c.o
+[ 12%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/global/qassert.cpp.o
+[ 12%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/global/qtenvironmentvariables.cpp.o
+[ 12%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-aat-layout.cc.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/pshinter/pshinter.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcicc.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcinit.c.o
+[ 12%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qabstractfileengine.cpp.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jclhuff.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcmarker.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcmaster.c.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/psnames/psnames.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcomapi.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcparam.c.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/raster/raster.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jcphuff.c.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/sdf/sdf.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jctrans.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdapimin.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdarith.c.o
+[ 12%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/sfnt/sfnt.c.o
+[ 12%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdatadst.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdatasrc.c.o
+[ 13%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qdir.cpp.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdhuff.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdicc.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdinput.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdlhuff.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdmarker.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdmaster.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdphuff.c.o
+[ 13%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/smooth/smooth.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jdtrans.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jerror.c.o
+[ 13%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/svg/svg.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jfdctflt.c.o
+[ 13%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/truetype/truetype.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jmemmgr.c.o
+[ 13%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfile.cpp.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jmemnobs.c.o
+[ 13%] Building C object src/3rdparty/libjpeg/CMakeFiles/BundledLibjpeg.dir/jpeg_nbits.c.o
+[ 13%] Linking C static library ../../../lib/libQt6BundledLibjpeg.a
+[ 13%] Built target BundledLibjpeg
+[ 13%] Built target PngPrivate
+[ 13%] Running syncqt.cpp for module: QtGui
+[ 13%] Generating version linker script for target Gui
+[ 13%] Built target Gui_version_script
+[ 13%] Built target Gui_sync_headers
+[ 13%] Running syncqt.cpp for module: QtWidgets
+[ 13%] Generating version linker script for target Widgets
+[ 13%] Built target Widgets_version_script
+[ 13%] Built target Widgets_sync_headers
+[ 13%] Running syncqt.cpp for module: QtFbSupport
+[ 13%] Built target FbSupportPrivate_sync_headers
+[ 13%] Generating version linker script for target FbSupportPrivate
+[ 13%] Built target FbSupportPrivate_version_script
+[ 13%] Running syncqt.cpp for module: QtInputSupport
+[ 13%] Built target InputSupportPrivate_sync_headers
+[ 15%] Generating version linker script for target InputSupportPrivate
+[ 15%] Built target InputSupportPrivate_version_script
+[ 16%] Running syncqt.cpp for module: QtTest
+[ 16%] Generating version linker script for target Test
+[ 16%] Built target Test_version_script
+[ 16%] Built target Test_sync_headers
+[ 16%] Running syncqt.cpp for module: QtPrintSupport
+[ 16%] Generating version linker script for target PrintSupport
+[ 16%] Built target PrintSupport_version_script
+[ 16%] Built target PrintSupport_sync_headers
+[ 16%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfiledevice.cpp.o
+[ 16%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfileinfo.cpp.o
+[ 17%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/type1/type1.c.o
+[ 17%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/type42/type42.c.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfilesystemengine.cpp.o
+[ 17%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/winfonts/winfnt.c.o
+[ 17%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/src/base/ftdebug.c.o
+[ 17%] Building C object src/3rdparty/freetype/CMakeFiles/BundledFreetype.dir/builds/unix/ftsystem.c.o
+[ 17%] Linking C static library ../../../lib/libQt6BundledFreetype.a
+[ 17%] Built target BundledFreetype
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfilesystementry.cpp.o
+[ 17%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-aat-map.cc.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfsfileengine.cpp.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfsfileengine_iterator.cpp.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qiodevice.cpp.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/kernel/qcoreapplication.cpp.o
+[ 17%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-blob.cc.o
+[ 17%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-buffer.cc.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/kernel/qmetatype.cpp.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/kernel/qsystemerror.cpp.o
+[ 17%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-buffer-serialize.cc.o
+[ 17%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qcborcommon.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qcborstreamwriter.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qcborvalue.cpp.o
+[ 18%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-buffer-verify.cc.o
+[ 18%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-depend.cc.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsonarray.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsoncbor.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsondocument.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsonobject.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsonparser.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsonvalue.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qjsonwriter.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/serialization/qtextstream.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qbytearray.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qbytearraylist.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qbytearraymatcher.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qlatin1stringmatcher.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qlocale.cpp.o
+[ 18%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-draw.cc.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qlocale_tools.cpp.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qregularexpression.cpp.o
+[ 18%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-face.cc.o
+[ 18%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qstring.cpp.o
+[ 19%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qstringbuilder.cpp.o
+[ 19%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qstringconverter.cpp.o
+[ 19%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-face-builder.cc.o
+[ 19%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/text/qstringlist.cpp.o
+[ 19%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qcalendar.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-fallback-shape.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-font.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qdatetime.cpp.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qgregoriancalendar.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-map.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qlocaltime.cpp.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qromancalendar.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-number.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-outline.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-paint.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-paint-bounded.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/time/qtimezone.cpp.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/tools/qarraydata.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-paint-extents.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-set.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/tools/qcommandlineoption.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-shape.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/tools/qcommandlineparser.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-shape-plan.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-shaper.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/tools/qhash.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-style.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/tools/qringbuffer.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-cff-common.cc.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-cff1.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfilesystemengine_unix.cpp.o
+[ 20%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-cff2.cc.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfilesystemiterator_unix.cpp.o
+[ 20%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/io/qfsfileengine_unix.cpp.o
+[ 21%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-input.cc.o
+[ 21%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-instancer-iup.cc.o
+[ 22%] Building CXX object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/corelib/kernel/qcore_unix.cpp.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-instancer-solver.cc.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_auto_possess.c.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-plan.cc.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_chartables.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_chkdint.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_compile.c.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-plan-layout.cc.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-serialize.cc.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_compile_cgroup.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_compile_class.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_config.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_context.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_dfa_match.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_error.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_extuni.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_find_bracket.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_jit_compile.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_maketables.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_match.c.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-table-cff.cc.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-table-color.cc.o
+[ 22%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-table-layout.cc.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_match_data.c.o
+[ 22%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_newline.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_ord2utf.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_pattern_info.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_script_run.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_serialize.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_string_utils.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_study.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_substitute.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_substring.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_tables.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_ucd.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_valid_utf.c.o
+[ 23%] Building C object src/tools/bootstrap/CMakeFiles/Bootstrap.dir/__/__/3rdparty/pcre2/src/pcre2_xclass.c.o
+[ 23%] Linking CXX static library libBootstrap.a
+[ 23%] Built target Bootstrap
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/collectjson.cpp.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/generator.cpp.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/main.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-table-other.cc.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/moc.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-table-var.cc.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/parser.cpp.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/preprocessor.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-subset-plan-var.cc.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-unicode.cc.o
+[ 23%] Building CXX object src/tools/moc/CMakeFiles/moc.dir/token.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-cff1-table.cc.o
+[ 23%] Linking CXX executable ../../../libexec/moc
+[ 23%] Built target moc
+[ 23%] Building CXX object src/tools/cmake_automoc_parser/CMakeFiles/cmake_automoc_parser.dir/main.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-cff2-table.cc.o
+[ 23%] Linking CXX executable ../../../libexec/cmake_automoc_parser
+[ 23%] Built target cmake_automoc_parser
+[ 23%] Building CXX object src/tools/tracepointgen/CMakeFiles/tracepointgen.dir/tracepointgen.cpp.o
+[ 23%] Building CXX object src/tools/tracepointgen/CMakeFiles/tracepointgen.dir/parser.cpp.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-color.cc.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-face.cc.o
+[ 23%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-fetch.cc.o
+[ 23%] Linking CXX executable ../../../libexec/tracepointgen
+[ 23%] Built target tracepointgen
+[ 24%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/etw.cpp.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-font.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-layout.cc.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/helpers.cpp.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/ctf.cpp.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-map.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-math.cc.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/lttng.cpp.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-meta.cc.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/panic.cpp.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/provider.cpp.o
+[ 25%] Generating .rcc/qmimeprovider_database.cpp
+[ 25%] Built target Core_autogen_timestamp_deps
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/qtheaders.cpp.o
+[ 25%] Building CXX object src/tools/tracegen/CMakeFiles/tracegen.dir/tracegen.cpp.o
+[ 25%] Automatic MOC for target Core
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-metrics.cc.o
+[ 25%] Linking CXX executable ../../../libexec/tracegen
+[ 25%] Built target tracegen
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-name.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shape.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shape-fallback.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shape-normalize.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-arabic.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-default.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-hangul.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-hebrew.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-indic-table.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-indic.cc.o
+[ 25%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-khmer.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-myanmar.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-syllabic.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-thai.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-use.cc.o
+[ 26%] Built target Core_autogen
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-shaper-vowel-constraints.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-tag.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/hb-ot-var.cc.o
+[ 26%] Building CXX object src/3rdparty/harfbuzz-ng/CMakeFiles/BundledHarfbuzz.dir/src/OT/Var/VARC/VARC.cc.o
+[ 26%] Generating prl file for target Core
+[ 26%] Generating pc file for target Qt6::Core
+[ 26%] Generating kernel/moc_qobject.cpp, kernel/moc_qobject.cpp.json
+[ 26%] Running AUTOMOC file extraction for target Core
+[ 26%] Running moc --collect-json for target Core
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/cmake_pch.hxx.gch
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qsimd.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/compat/removed_api.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qsocketnotifier.cpp.o
+[ 26%] Building C object src/corelib/CMakeFiles/Core.dir/io/forkfd_qt.c.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/Core_autogen/mocs_compilation.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qhash.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/archdetect.cpp.o
+[ 26%] Linking CXX static library ../../../lib/libQt6BundledHarfbuzz.a
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qalloc.cpp.o
+[ 26%] Built target BundledHarfbuzz
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qassert.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qcompare.cpp.o
+[ 26%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qendian.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qfloat16.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qglobal.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qhooks.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qlibraryinfo.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qlogging.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qmalloc.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qnumeric.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qoperatingsystemversion.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qrandom.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qsysinfo.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qtenvironmentvariables.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qtypes.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/q23utility.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsharedmemory.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsystemsemaphore.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qtipccommon.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qabstractfileengine.cpp.o
+[ 27%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qbuffer.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qdataurl.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qdebug.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qdir.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qdirlisting.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qdiriterator.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfile.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfiledevice.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfileinfo.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfileselector.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemengine.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystementry.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfsfileengine.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfsfileengine_iterator.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qiodevice.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qipaddress.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qlockfile.cpp.o
+[ 29%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qloggingcategory.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qloggingregistry.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qnoncontiguousbytedevice.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qresource.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qresource_iterator.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qsavefile.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qstandardpaths.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qstorageinfo.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qtemporaryfile.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qtemporarydir.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qurl.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qurlidna.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qurlquery.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qurlrecode.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qzip.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qabstracteventdispatcher.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qabstractnativeeventfilter.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qassociativeiterable.cpp.o
+[ 30%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qbasictimer.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qchronotimer.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qcoreapplication.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qcoreevent.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qdeadlinetimer.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qelapsedtimer.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qeventloop.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmath.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qiterable.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetaassociation.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetacontainer.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetaobject.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetaobjectbuilder.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetasequence.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmetatype.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qmimedata.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qobject.cpp.o
+[ 31%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qobjectcleanuphandler.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qproperty.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qsequentialiterable.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qsignalmapper.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qsingleshottimer.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qsystemerror.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qtestsupport_core.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qtimer.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qtranslator.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qvariant.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qfactoryinterface.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qfactoryloader.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qpluginloader.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/quuid.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qcborcommon.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qcbordiagnostic.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qcborvalue.cpp.o
+[ 32%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qdatastream.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsonarray.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsoncbor.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsondocument.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsonobject.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsonparser.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsonvalue.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qjsonwriter.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qtextstream.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qxmlutils.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qanystringview.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qbytearray.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qbytearraylist.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qbytearraymatcher.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qcollator.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qlatin1stringmatcher.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qlocale.cpp.o
+[ 33%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qlocale_tools.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstring.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstringbuilder.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstringconverter.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstringlist.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstringtokenizer.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qstringview.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qtextboundaryfinder.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qunicodetools.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qvsnprintf.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qatomicwait.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qrunnable.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qthread.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qthreadpool.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qsemaphore.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qcalendar.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qdatetime.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qgregoriancalendar.cpp.o
+[ 34%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qjuliancalendar.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qlocaltime.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qmilankoviccalendar.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qromancalendar.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qtimezone.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qarraydata.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qbitarray.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qcontiguouscache.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qcryptographichash.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qfreelist.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qfunctionaltools_impl.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qline.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qmargins.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qpoint.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qrect.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qrefcount.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qringbuffer.cpp.o
+[ 35%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qshareddata.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qsharedpointer.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qsize.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qtyperevision.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/quniquehandle_types.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qversionnumber.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/global/qversiontagging.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qxmlstream.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qxmlstreamgrammar.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qabstractanimation.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qanimationgroup.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qparallelanimationgroup.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qpauseanimation.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qpropertyanimation.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qsequentialanimationgroup.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/animation/qvariantanimation.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qiooperation.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qrandomaccessasyncfile.cpp.o
+[ 36%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qrandomaccessasyncfile_threadpool.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemengine_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemiterator_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfsfileengine_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qlockfile_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qcore_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qtimerinfo_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qthread_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qeventdispatcher_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qatomic.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qlatch.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qmutex.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qreadwritelock.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qthreadstorage.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qwaitcondition_unix.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qexception.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qfutureinterface.cpp.o
+[ 37%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qfuturewatcher.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/thread/qresultstore.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qcommandlineoption.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qcommandlineparser.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/bignum.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/bignum-dtoa.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/cached-powers.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/double-to-string.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/fast-dtoa.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/fixed-dtoa.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/string-to-double.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/__/3rdparty/double-conversion/double-conversion/strtod.cc.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qeasingcurve.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/tools/qtimeline.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qlocale_unix.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qcollator_posix.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/text/qregularexpression.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qhijricalendar.cpp.o
+[ 38%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qislamiccivilcalendar.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qjalalicalendar.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qtimezoneprivate.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qtimezoneprivate_tz.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qtimezonelocale.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/time/qdatetimeparser.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemwatcher.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemwatcher_polling.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qfilesystemwatcher_inotify.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qprocess.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qprocess_unix.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qsettings.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qstandardpaths_unix.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/io/qstorageinfo_linux.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qabstractitemmodel.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qitemselectionmodel.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qrangemodel.cpp.o
+[ 39%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qabstractproxymodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qconcatenatetablesproxymodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qidentityproxymodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qsortfilterproxymodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qtransposeproxymodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/itemmodels/qstringlistmodel.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qlibrary.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qelfparser_p.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/plugin/qlibrary_unix.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsharedmemory_posix.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsharedmemory_systemv.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsystemsemaphore_posix.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/ipc/qsystemsemaphore_systemv.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qcborstreamreader.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/serialization/qcborstreamwriter.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimedatabase.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimeglobpattern.cpp.o
+[ 40%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimemagicrule.cpp.o
+[ 41%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimemagicrulematcher.cpp.o
+[ 41%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimeprovider.cpp.o
+[ 41%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimetype.cpp.o
+[ 41%] Building CXX object src/corelib/CMakeFiles/Core.dir/mimetypes/qmimetypeparser.cpp.o
+[ 41%] Building CXX object src/corelib/CMakeFiles/Core.dir/kernel/qpermissions.cpp.o
+[ 41%] Linking CXX shared library ../../lib/libQt6Core.so
+[ 41%] Built target Core
+[ 41%] Built target Concurrent_autogen_timestamp_deps
+[ 41%] Built target Sql_autogen_timestamp_deps
+[ 41%] Built target rcc_autogen_timestamp_deps
+[ 41%] Built target Network_autogen_timestamp_deps
+[ 41%] Built target uic_autogen_timestamp_deps
+[ 41%] Built target Xml_autogen_timestamp_deps
+[ 41%] Built target DBus_autogen_timestamp_deps
+[ 41%] Built target qlalr_autogen_timestamp_deps
+[ 41%] Built target androidtestrunner_autogen_timestamp_deps
+[ 41%] Built target androiddeployqt_autogen_timestamp_deps
+[ 41%] Building CXX object qmake/CMakeFiles/QtLibraryInfo.dir/library/proitems.cpp.o
+[ 41%] Built target qvkgen_autogen_timestamp_deps
+[ 41%] Built target DeviceDiscoverySupportPrivate_autogen_timestamp_deps
+[ 41%] Built target wasmdeployqt_autogen_timestamp_deps
+[ 41%] Built target Test_autogen_timestamp_deps
+[ 41%] Automatic MOC for target rcc
+[ 41%] Automatic MOC for target Concurrent
+[ 41%] Automatic MOC for target Sql
+[ 41%] Built target Concurrent_autogen
+[ 41%] Built target rcc_autogen
+[ 41%] Automatic MOC for target Network
+[ 41%] Automatic MOC for target Xml
+[ 41%] Built target Xml_autogen
+[ 41%] Automatic MOC for target DBus
+[ 41%] Built target Sql_autogen
+[ 41%] Automatic MOC for target uic
+[ 41%] Built target uic_autogen
+[ 41%] Automatic MOC for target qlalr
+[ 41%] Built target qlalr_autogen
+[ 41%] Automatic MOC for target qvkgen
+[ 41%] Built target qvkgen_autogen
+[ 41%] Automatic MOC for target androiddeployqt
+[ 41%] Built target androiddeployqt_autogen
+[ 41%] Automatic MOC for target androidtestrunner
+[ 41%] Built target androidtestrunner_autogen
+[ 43%] Automatic MOC for target wasmdeployqt
+[ 43%] Built target wasmdeployqt_autogen
+[ 43%] Automatic MOC for target DeviceDiscoverySupportPrivate
+[ 43%] Built target DeviceDiscoverySupportPrivate_autogen
+[ 43%] Automatic MOC for target Test
+[ 43%] Built target DBus_autogen
+[ 43%] Building CXX object src/tools/rcc/CMakeFiles/rcc.dir/rcc_autogen/mocs_compilation.cpp.o
+[ 43%] Building CXX object src/tools/rcc/CMakeFiles/rcc.dir/main.cpp.o
+[ 43%] Building CXX object qmake/CMakeFiles/QtLibraryInfo.dir/property.cpp.o
+[ 43%] Built target Test_autogen
+[ 43%] Generating prl file for target Concurrent
+[ 43%] Generating pc file for target Qt6::Concurrent
+[ 43%] Running AUTOMOC file extraction for target Concurrent
+[ 43%] Running moc --collect-json for target Concurrent
+[ 43%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/cmake_pch.hxx.gch
+[ 43%] Building CXX object src/tools/rcc/CMakeFiles/rcc.dir/rcc.cpp.o
+[ 43%] Building CXX object qmake/CMakeFiles/QtLibraryInfo.dir/propertyprinter.cpp.o
+[ 44%] Building CXX object qmake/CMakeFiles/QtLibraryInfo.dir/qmakelibraryinfo.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/Concurrent_autogen/mocs_compilation.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/qtconcurrentfilter.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/qtconcurrentiteratekernel.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/qtconcurrentmap.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/qtconcurrentrun.cpp.o
+[ 44%] Building CXX object src/concurrent/CMakeFiles/Concurrent.dir/qtconcurrentthreadengine.cpp.o
+[ 44%] Built target QtLibraryInfo
+[ 44%] Generating prl file for target Sql
+[ 44%] Generating pc file for target Qt6::Sql
+[ 44%] Running AUTOMOC file extraction for target Sql
+[ 44%] Running moc --collect-json for target Sql
+[ 44%] Building CXX object src/sql/CMakeFiles/Sql.dir/cmake_pch.hxx.gch
+[ 44%] Linking CXX executable ../../../libexec/rcc
+[ 44%] Linking CXX shared library ../../lib/libQt6Concurrent.so
+[ 44%] Built target rcc
+[ 44%] Generating prl file for target Xml
+[ 45%] Generating pc file for target Qt6::Xml
+[ 45%] Built target Concurrent
+[ 45%] Generating prl file for target DBus
+[ 45%] Running AUTOMOC file extraction for target Xml
+[ 45%] Generating pc file for target Qt6::DBus
+[ 45%] Running moc --collect-json for target Xml
+[ 45%] Running AUTOMOC file extraction for target DBus
+[ 45%] Building CXX object src/xml/CMakeFiles/Xml.dir/cmake_pch.hxx.gch
+[ 45%] Running moc --collect-json for target DBus
+AutoMoc: /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/network/ssl/qsslerror.h: note: No relevant classes found. No output generated.
+[ 45%] Building CXX object src/dbus/CMakeFiles/DBus.dir/cmake_pch.hxx.gch
+AutoMoc: /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/network/ssl/qsslsocket.h: note: No relevant classes found. No output generated.
+[ 45%] Built target Network_autogen
+[ 45%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/uic_autogen/mocs_compilation.cpp.o
+[ 45%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/cpp/cppwritedeclaration.cpp.o
+[ 45%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/cpp/cppwriteincludes.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/compat/removed_api.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlcachedresult.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqldatabase.cpp.o
+[ 45%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/cpp/cppwriteinitialization.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqldriver.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqldriverplugin.cpp.o
+[ 45%] Building CXX object src/dbus/CMakeFiles/DBus.dir/DBus_autogen/mocs_compilation.cpp.o
+[ 45%] Building CXX object src/xml/CMakeFiles/Xml.dir/compat/removed_api.cpp.o
+[ 45%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlerror.cpp.o
+[ 46%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbus_symbols.cpp.o
+[ 46%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlfield.cpp.o
+[ 46%] Building CXX object src/xml/CMakeFiles/Xml.dir/dom/qdom.cpp.o
+[ 46%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusabstractadaptor.cpp.o
+[ 46%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlindex.cpp.o
+[ 46%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlquery.cpp.o
+[ 46%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlrecord.cpp.o
+[ 46%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusabstractinterface.cpp.o
+[ 46%] Building CXX object src/sql/CMakeFiles/Sql.dir/kernel/qsqlresult.cpp.o
+[ 46%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusargument.cpp.o
+[ 46%] Building CXX object src/xml/CMakeFiles/Xml.dir/dom/qdomhelpers.cpp.o
+[ 46%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/customwidgetsinfo.cpp.o
+[ 47%] Building CXX object src/sql/CMakeFiles/Sql.dir/models/qsqlquerymodel.cpp.o
+[ 47%] Building CXX object src/xml/CMakeFiles/Xml.dir/Xml_autogen/mocs_compilation.cpp.o
+[ 47%] Linking CXX shared library ../../lib/libQt6Xml.so
+[ 47%] Building CXX object src/sql/CMakeFiles/Sql.dir/models/qsqlrelationaldelegate.cpp.o
+[ 47%] Built target Xml
+[ 47%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusconnection.cpp.o
+[ 47%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/qlalr_autogen/mocs_compilation.cpp.o
+[ 47%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/compress.cpp.o
+[ 47%] Building CXX object src/sql/CMakeFiles/Sql.dir/models/qsqlrelationaltablemodel.cpp.o
+[ 47%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/databaseinfo.cpp.o
+[ 47%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/cppgenerator.cpp.o
+[ 47%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusconnectioninterface.cpp.o
+[ 47%] Building CXX object src/sql/CMakeFiles/Sql.dir/models/qsqltablemodel.cpp.o
+[ 48%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/driver.cpp.o
+[ 48%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusconnectionmanager.cpp.o
+[ 48%] Building CXX object src/sql/CMakeFiles/Sql.dir/Sql_autogen/mocs_compilation.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/dotgraph.cpp.o
+[ 49%] Linking CXX shared library ../../lib/libQt6Sql.so
+[ 49%] Built target Sql
+[ 49%] Building CXX object src/tools/qvkgen/CMakeFiles/qvkgen.dir/qvkgen_autogen/mocs_compilation.cpp.o
+[ 49%] Building CXX object src/tools/qvkgen/CMakeFiles/qvkgen.dir/qvkgen.cpp.o
+[ 49%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbuscontext.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/grammar.cpp.o
+[ 49%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbuserror.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/lalr.cpp.o
+[ 49%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/main.cpp.o
+[ 49%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusextratypes.cpp.o
+[ 49%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusintegrator.cpp.o
+[ 49%] Linking CXX executable ../../../libexec/qvkgen
+[ 49%] Built target qvkgen
+[ 49%] Built target qtpaths_autogen_timestamp_deps
+[ 49%] Building CXX object src/tools/androiddeployqt/CMakeFiles/androiddeployqt.dir/androiddeployqt_autogen/mocs_compilation.cpp.o
+[ 49%] Building CXX object src/tools/androiddeployqt/CMakeFiles/androiddeployqt.dir/main.cpp.o
+[ 49%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/python/pythonwritedeclaration.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/main.cpp.o
+[ 49%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/python/pythonwriteimports.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/parsetable.cpp.o
+[ 49%] Building CXX object src/tools/qlalr/CMakeFiles/qlalr.dir/recognizer.cpp.o
+[ 49%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusinterface.cpp.o
+[ 49%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/shared/language.cpp.o
+[ 49%] Linking CXX executable ../../../libexec/qlalr
+[ 49%] Built target qlalr
+[ 49%] Building CXX object src/tools/androidtestrunner/CMakeFiles/androidtestrunner.dir/androidtestrunner_autogen/mocs_compilation.cpp.o
+[ 50%] Building CXX object src/tools/androidtestrunner/CMakeFiles/androidtestrunner.dir/main.cpp.o
+[ 50%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/shared/writeincludesbase.cpp.o
+[ 50%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusinternalfilters.cpp.o
+[ 50%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusintrospection.cpp.o
+[ 50%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/treewalker.cpp.o
+[ 50%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusmessage.cpp.o
+[ 50%] Linking CXX executable ../../../bin/androiddeployqt
+[ 50%] Built target androiddeployqt
+[ 50%] Building CXX object src/tools/wasmdeployqt/CMakeFiles/wasmdeployqt.dir/wasmdeployqt_autogen/mocs_compilation.cpp.o
+[ 50%] Linking CXX executable ../../../bin/androidtestrunner
+[ 50%] Building CXX object src/tools/wasmdeployqt/CMakeFiles/wasmdeployqt.dir/main.cpp.o
+[ 50%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/ui4.cpp.o
+[ 50%] Built target androidtestrunner
+[ 51%] Generating prl file for target DeviceDiscoverySupportPrivate
+[ 51%] Running AUTOMOC file extraction for target DeviceDiscoverySupportPrivate
+[ 51%] Running moc --collect-json for target DeviceDiscoverySupportPrivate
+[ 51%] Building CXX object src/platformsupport/devicediscovery/CMakeFiles/DeviceDiscoverySupportPrivate.dir/DeviceDiscoverySupportPrivate_autogen/mocs_compilation.cpp.o
+[ 51%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusmetaobject.cpp.o
+[ 51%] Building CXX object src/platformsupport/devicediscovery/CMakeFiles/DeviceDiscoverySupportPrivate.dir/qdevicediscovery_static.cpp.o
+[ 51%] Linking CXX static library ../../../lib/libQt6DeviceDiscoverySupport.a
+[ 51%] Built target DeviceDiscoverySupportPrivate
+[ 51%] Generating prl file for target Test
+[ 51%] Generating pc file for target Qt6::Test
+[ 51%] Running AUTOMOC file extraction for target Test
+[ 51%] Running moc --collect-json for target Test
+[ 51%] Building CXX object src/testlib/CMakeFiles/Test.dir/cmake_pch.hxx.gch
+[ 51%] Building CXX object src/tools/wasmdeployqt/CMakeFiles/wasmdeployqt.dir/wasmbinary.cpp.o
+[ 51%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusmetatype.cpp.o
+[ 51%] Building CXX object src/tools/wasmdeployqt/CMakeFiles/wasmdeployqt.dir/jsontools.cpp.o
+[ 51%] Linking CXX executable ../../../bin/wasmdeployqt
+[ 51%] Built target wasmdeployqt
+[ 51%] Built target QSQLiteDriverPlugin_autogen_timestamp_deps
+[ 51%] Building CXX object qmake/CMakeFiles/qmake.dir/cmake_pch.hxx.gch
+[ 51%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/uic.cpp.o
+[ 51%] Building CXX object src/tools/uic/CMakeFiles/uic.dir/validator.cpp.o
+[ 52%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusmisc.cpp.o
+[ 52%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/mac/pbuilder_pbx.cpp.o
+[ 52%] Building CXX object src/testlib/CMakeFiles/Test.dir/removed_api.cpp.o
+[ 52%] Linking CXX executable ../../../libexec/uic
+[ 52%] Built target uic
+[ 52%] Generating prl file for target Network
+[ 52%] Generating pc file for target Qt6::Network
+[ 52%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbuspendingcall.cpp.o
+[ 52%] Running AUTOMOC file extraction for target Network
+[ 52%] Running moc --collect-json for target Network
+[ 52%] Building CXX object src/network/CMakeFiles/Network.dir/cmake_pch.hxx.gch
+[ 52%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbuspendingreply.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qabstracttestlogger.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusreply.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qasciikey.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusserver.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmark.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusservicewatcher.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmarkevent.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/compat/removed_api.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmarkmeasurement.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmarkmetric.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusunixfiledescriptor.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qauthenticator.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmarkperfevents.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusutil.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qcomparisontesthelper.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qcsvbenchmarklogger.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusvirtualobject.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qhostaddress.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qjunittestlogger.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusxmlgenerator.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qhostinfo.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qplaintestlogger.cpp.o
+[ 53%] Building CXX object src/dbus/CMakeFiles/DBus.dir/qdbusxmlparser.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qsignaldumper.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkdatagram.cpp.o
+[ 53%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkinformation.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qsignalspy.cpp.o
+[ 53%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtaptestlogger.cpp.o
+[ 53%] Linking CXX shared library ../../lib/libQt6DBus.so
+[ 53%] Built target DBus
+[ 53%] Automatic MOC for target qtpaths
+[ 53%] Built target qtpaths_autogen
+[ 53%] Built target Gui_autogen_timestamp_deps
+[ 53%] Automatic MOC for target QSQLiteDriverPlugin
+[ 54%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkinterface.cpp.o
+[ 54%] Built target QSQLiteDriverPlugin_autogen
+[ 54%] Built target qdbuscpp2xml_autogen_timestamp_deps
+[ 54%] Built target qdbusxml2cpp_autogen_timestamp_deps
+[ 54%] Building CXX object src/tools/qtpaths/CMakeFiles/qtpaths.dir/qtpaths_autogen/mocs_compilation.cpp.o
+[ 54%] Building CXX object src/tools/qtpaths/CMakeFiles/qtpaths.dir/qtpaths.cpp.o
+[ 54%] Building CXX object src/testlib/CMakeFiles/Test.dir/qteamcitylogger.cpp.o
+[ 54%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/makefile.cpp.o
+[ 54%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestblacklist.cpp.o
+[ 54%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkproxy.cpp.o
+[ 54%] Linking CXX executable ../../../bin/qtpaths
+[ 54%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestcase.cpp.o
+[ 54%] Built target qtpaths
+[ 54%] Automatic MOC for target Gui
+[ 54%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qabstractsocket.cpp.o
+[ 54%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestdata.cpp.o
+[ 54%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qabstractsocketengine.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestelement.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qnativesocketengine.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestelementattribute.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestjunitstreamer.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qtcpserver.cpp.o
+AutoMoc: /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qopenglcontext.h: note: No relevant classes found. No output generated.
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestlog.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qtcpsocket.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qudpsocket.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestmouse.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/ssl/qpassworddigestor.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestresult.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/ssl/qssl.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/ssl/qsslcertificate.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtesttable.cpp.o
+[ 55%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/makefiledeps.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qxmltestlogger.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/ssl/qsslcertificateextension.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestaccessible.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/ssl/qtlsbackend.cpp.o
+[ 55%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/metamakefile.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qabstractitemmodeltester.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkdiskcache.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhstsstore.cpp.o
+[ 55%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/projectgenerator.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/bitstreams.cpp.o
+[ 55%] Building CXX object src/testlib/CMakeFiles/Test.dir/qbenchmarkvalgrind.cpp.o
+[ 55%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/hpack.cpp.o
+[ 56%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/hpacktable.cpp.o
+[ 56%] Building CXX object src/testlib/CMakeFiles/Test.dir/qtestcrashhandler_unix.cpp.o
+[ 56%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/http2frames.cpp.o
+[ 56%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/unix/unixmake.cpp.o
+[ 56%] Built target Gui_autogen
+[ 58%] Running AUTOMOC file extraction for target QSQLiteDriverPlugin
+[ 58%] Running moc --collect-json for target QSQLiteDriverPlugin
+[ 58%] Building CXX object src/testlib/CMakeFiles/Test.dir/Test_autogen/mocs_compilation.cpp.o
+[ 58%] Building CXX object src/plugins/sqldrivers/sqlite/CMakeFiles/QSQLiteDriverPlugin.dir/QSQLiteDriverPlugin_autogen/mocs_compilation.cpp.o
+[ 58%] Building CXX object src/plugins/sqldrivers/sqlite/CMakeFiles/QSQLiteDriverPlugin.dir/qsql_sqlite.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/http2protocol.cpp.o
+[ 58%] Linking CXX shared library ../../lib/libQt6Test.so
+[ 58%] Built target Test
+[ 58%] Automatic MOC for target qdbuscpp2xml
+[ 58%] Built target qdbuscpp2xml_autogen
+[ 58%] Automatic MOC for target qdbusxml2cpp
+[ 58%] Built target qdbusxml2cpp_autogen
+[ 58%] Generating prl file for target Gui
+[ 58%] Generating pc file for target Qt6::Gui
+[ 58%] Running rcc for resource gui_shaders
+[ 58%] Running rcc for resource qpdf
+[ 58%] Running AUTOMOC file extraction for target Gui
+[ 58%] Running moc --collect-json for target Gui
+[ 58%] Building CXX object src/gui/CMakeFiles/Gui.dir/cmake_pch.hxx.gch
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/http2streams.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/http2/huffman.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qabstractprotocolhandler.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qdecompresshelper.cpp.o
+[ 58%] Building CXX object src/plugins/sqldrivers/sqlite/CMakeFiles/QSQLiteDriverPlugin.dir/qsql_sqlite_vfs.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qformdatabuilder.cpp.o
+[ 58%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/unix/unixmake2.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttp1configuration.cpp.o
+[ 58%] Building CXX object src/plugins/sqldrivers/sqlite/CMakeFiles/QSQLiteDriverPlugin.dir/smain.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttp2configuration.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttp2connection.cpp.o
+[ 58%] Building C object src/plugins/sqldrivers/sqlite/CMakeFiles/QSQLiteDriverPlugin.dir/__/__/__/3rdparty/sqlite/sqlite3.c.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttp2protocolhandler.cpp.o
+[ 58%] Building CXX object src/gui/CMakeFiles/Gui.dir/compat/removed_api.cpp.o
+[ 58%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpmultipart.cpp.o
+[ 58%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qabstractfileiconengine.cpp.o
+[ 59%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qabstractfileiconprovider.cpp.o
+[ 59%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/mingw_make.cpp.o
+[ 59%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpnetworkconnection.cpp.o
+[ 59%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qbitmap.cpp.o
+[ 60%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/msbuild_objectmodel.cpp.o
+[ 60%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qbmphandler.cpp.o
+[ 60%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpnetworkconnectionchannel.cpp.o
+[ 60%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qfonticonengine.cpp.o
+[ 60%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpnetworkheader.cpp.o
+[ 60%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpnetworkreply.cpp.o
+[ 60%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qicon.cpp.o
+[ 60%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpnetworkrequest.cpp.o
+[ 60%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/msvc_nmake.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpprotocolhandler.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qiconengine.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpthreaddelegate.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qiconengineplugin.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qiconloader.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkreplyhttpimpl.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/msvc_objectmodel.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimage.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkrequestfactory.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qrestaccessmanager.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/msvc_vcproj.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/access/qrestreply.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qhttpsocketengine.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qtldurl.cpp.o
+[ 61%] Building C object src/network/CMakeFiles/Network.dir/__/3rdparty/libpsl/src/lookup_string_in_fixed_set.c.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qdnslookup.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimage_conversions.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/msvc_vcxproj.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qhostinfo_unix.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/win32/winmakefile.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qnativesocketengine_unix.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimageiohandler.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkinterface_linux.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimagepixmapcleanuphooks.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qdnslookup_unix.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimagereader.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/generators/xmloutput.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/kernel/qnetworkproxy_generic.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/library/ioutils.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimagereaderwriterhelpers.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qsocks5socketengine.cpp.o
+[ 61%] Building CXX object qmake/CMakeFiles/qmake.dir/library/qmakebuiltins.cpp.o
+[ 61%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimagewriter.cpp.o
+[ 61%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qlocalserver.cpp.o
+[ 62%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qlocalsocket.cpp.o
+[ 62%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpaintengine_pic.cpp.o
+[ 62%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qlocalserver_unix.cpp.o
+[ 62%] Linking CXX shared module ../../../../plugins/sqldrivers/libqsqlite.so
+[ 62%] Built target QSQLiteDriverPlugin
+[ 62%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/qdbuscpp2xml_autogen/mocs_compilation.cpp.o
+[ 62%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/collectjson.cpp.o
+[ 62%] Building CXX object src/network/CMakeFiles/Network.dir/socket/qlocalsocket_unix.cpp.o
+[ 62%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpicture.cpp.o
+[ 62%] Building CXX object qmake/CMakeFiles/qmake.dir/library/qmakeevaluator.cpp.o
+[ 62%] Building CXX object src/network/CMakeFiles/Network.dir/Network_autogen/mocs_compilation.cpp.o
+[ 62%] Building CXX object src/network/CMakeFiles/Network.dir/access/qabstractnetworkcache.cpp.o
+[ 62%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/generator.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpixmap.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhsts.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpixmap_blitter.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhstspolicy.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccessauthenticationmanager.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpixmap_raster.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccessbackend.cpp.o
+[ 63%] Building CXX object qmake/CMakeFiles/qmake.dir/library/qmakeglobals.cpp.o
+[ 63%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/moc.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpixmapcache.cpp.o
+[ 63%] Building CXX object qmake/CMakeFiles/qmake.dir/library/qmakeparser.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccesscache.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccesscachebackend.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qplatformpixmap.cpp.o
+[ 63%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccessfilebackend.cpp.o
+[ 63%] Building CXX object qmake/CMakeFiles/qmake.dir/library/qmakevfs.cpp.o
+[ 63%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qppmhandler.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkaccessmanager.cpp.o
+[ 64%] Building CXX object qmake/CMakeFiles/qmake.dir/main.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qxbmhandler.cpp.o
+[ 64%] Building CXX object qmake/CMakeFiles/qmake.dir/meta.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qxpmhandler.cpp.o
+[ 64%] Building CXX object qmake/CMakeFiles/qmake.dir/option.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qaccessibilityhints.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkcookie.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qclipboard.cpp.o
+[ 64%] Building CXX object qmake/CMakeFiles/qmake.dir/project.cpp.o
+[ 64%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/parser.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qcursor.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkcookiejar.cpp.o
+[ 64%] Linking CXX executable ../bin/qmake
+[ 64%] Built target qmake
+[ 64%] Building CXX object src/tools/qdbusxml2cpp/CMakeFiles/qdbusxml2cpp.dir/qdbusxml2cpp_autogen/mocs_compilation.cpp.o
+[ 64%] Building CXX object src/tools/qdbusxml2cpp/CMakeFiles/qdbusxml2cpp.dir/qdbusxml2cpp.cpp.o
+[ 64%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/preprocessor.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkfile.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qeventpoint.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpheaders.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qevent.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpheaderparser.cpp.o
+[ 64%] Linking CXX executable ../../../bin/qdbusxml2cpp
+[ 64%] Built target qdbusxml2cpp
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qhttpheadershelper.cpp.o
+[ 64%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/__/moc/token.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkreply.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkreplydataimpl.cpp.o
+[ 64%] Building CXX object src/tools/qdbuscpp2xml/CMakeFiles/qdbuscpp2xml.dir/qdbuscpp2xml.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qgenericplugin.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkreplyfileimpl.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qgenericpluginfactory.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkreplyimpl.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qguiapplication.cpp.o
+[ 64%] Building CXX object src/network/CMakeFiles/Network.dir/access/qnetworkrequest.cpp.o
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qguivariant.cpp.o
+[ 64%] Linking CXX executable ../../../bin/qdbuscpp2xml
+[ 64%] Built target qdbuscpp2xml
+[ 64%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qhighdpiscaling.cpp.o
+[ 65%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qinputdevice.cpp.o
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qhighdpiscaling.cpp: In static member function ‘static QDpi QHighDpiScaling::effectiveLogicalDpi(const QPlatformScreen*, qreal, qreal)’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qhighdpiscaling.cpp:363:110: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+  363 | QDpi QHighDpiScaling::effectiveLogicalDpi(const QPlatformScreen *screen, qreal rawFactor, qreal roundedFactor)
+      |                                                                                                              ^
+[ 65%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qinputdevicemanager.cpp.o
+[ 65%] Linking CXX shared library ../../lib/libQt6Network.so
+[ 65%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qinputmethod.cpp.o
+[ 65%] Built target Network
+[ 65%] Built target QNetworkManagerNetworkInformationPlugin_autogen_timestamp_deps
+[ 65%] Built target QConnManNetworkInformationPlugin_autogen_timestamp_deps
+[ 65%] Built target QTlsBackendCertOnlyPlugin_autogen_timestamp_deps
+[ 65%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qinternalmimedata.cpp.o
+[ 65%] Automatic MOC for target QNetworkManagerNetworkInformationPlugin
+[ 65%] Built target QNetworkManagerNetworkInformationPlugin_autogen
+[ 65%] Automatic MOC for target QConnManNetworkInformationPlugin
+[ 65%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qkeymapper.cpp.o
+[ 65%] Built target QConnManNetworkInformationPlugin_autogen
+[ 66%] Automatic MOC for target QTlsBackendCertOnlyPlugin
+[ 66%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qoffscreensurface.cpp.o
+[ 66%] Built target QTlsBackendCertOnlyPlugin_autogen
+[ 67%] Running AUTOMOC file extraction for target QNetworkManagerNetworkInformationPlugin
+[ 67%] Running moc --collect-json for target QNetworkManagerNetworkInformationPlugin
+[ 67%] Building CXX object src/plugins/networkinformation/networkmanager/CMakeFiles/QNetworkManagerNetworkInformationPlugin.dir/QNetworkManagerNetworkInformationPlugin_autogen/mocs_compilation.cpp.o
+[ 67%] Building CXX object src/plugins/networkinformation/networkmanager/CMakeFiles/QNetworkManagerNetworkInformationPlugin.dir/qnetworkmanagernetworkinformationbackend.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qpaintdevicewindow.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qpalette.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qpixelformat.cpp.o
+[ 67%] Building CXX object src/plugins/networkinformation/networkmanager/CMakeFiles/QNetworkManagerNetworkInformationPlugin.dir/qnetworkmanagerservice.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformclipboard.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformcursor.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformdialoghelper.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformgraphicsbuffer.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformgraphicsbufferhelper.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatforminputcontext.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatforminputcontextfactory.cpp.o
+[ 67%] Linking CXX shared module ../../../../plugins/networkinformation/libqnetworkmanager.so
+[ 67%] Built target QNetworkManagerNetworkInformationPlugin
+[ 67%] Running AUTOMOC file extraction for target QConnManNetworkInformationPlugin
+[ 67%] Running moc --collect-json for target QConnManNetworkInformationPlugin
+[ 67%] Building CXX object src/plugins/networkinformation/connman/CMakeFiles/QConnManNetworkInformationPlugin.dir/QConnManNetworkInformationPlugin_autogen/mocs_compilation.cpp.o
+[ 67%] Building CXX object src/plugins/networkinformation/connman/CMakeFiles/QConnManNetworkInformationPlugin.dir/qconnmannetworkinformationbackend.cpp.o
+[ 67%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatforminputcontextplugin.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformintegration.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformintegrationfactory.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformintegrationplugin.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformkeymapper.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformmenu.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformnativeinterface.cpp.o
+[ 68%] Building CXX object src/plugins/networkinformation/connman/CMakeFiles/QConnManNetworkInformationPlugin.dir/qconnmanservice.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformoffscreensurface.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformscreen.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformservices.cpp.o
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qplatformscreen.cpp: In member function ‘virtual QDpi QPlatformScreen::logicalDpi() const’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qplatformscreen.cpp:148:36: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+  148 | QDpi QPlatformScreen::logicalDpi() const
+      |                                    ^~~~~
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformsessionmanager.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformsharedgraphicscache.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformsurface.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformsystemtrayicon.cpp.o
+[ 68%] Linking CXX shared module ../../../../plugins/networkinformation/libqconnman.so
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformtheme.cpp.o
+[ 68%] Built target QConnManNetworkInformationPlugin
+[ 68%] Running AUTOMOC file extraction for target QTlsBackendCertOnlyPlugin
+[ 68%] Running moc --collect-json for target QTlsBackendCertOnlyPlugin
+[ 68%] Building CXX object src/plugins/tls/certonly/CMakeFiles/QTlsBackendCertOnlyPlugin.dir/QTlsBackendCertOnlyPlugin_autogen/mocs_compilation.cpp.o
+[ 68%] Building CXX object src/plugins/tls/certonly/CMakeFiles/QTlsBackendCertOnlyPlugin.dir/__/shared/qx509_base.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformthemefactory.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformthemeplugin.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformwindow.cpp.o
+[ 68%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qpointingdevice.cpp.o
+[ 68%] Building CXX object src/plugins/tls/certonly/CMakeFiles/QTlsBackendCertOnlyPlugin.dir/__/shared/qx509_generic.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qrasterwindow.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qscreen.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qsessionmanager.cpp.o
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qscreen.cpp: In constructor ‘QScreen::QScreen(QPlatformScreen*)’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qscreen.cpp:55:49: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+   55 |     d->logicalDpi = QPlatformScreen::overrideDpi(platformScreen->logicalDpi());
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qstylehints.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qsurface.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qsurfaceformat.cpp.o
+[ 69%] Building CXX object src/plugins/tls/certonly/CMakeFiles/QTlsBackendCertOnlyPlugin.dir/__/shared/qasn1element.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qtestsupport_gui.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qwindow.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qwindowsysteminterface.cpp.o
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qwindowsysteminterface.cpp: In static member function ‘static void QWindowSystemInterface::handleScreenLogicalDotsPerInchChange(QScreen*, qreal, qreal)’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/gui/kernel/qwindowsysteminterface.cpp:825:76: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+  825 |     const QDpi effectiveDpi = QPlatformScreen::overrideDpi(QDpi{dpiX, dpiY});
+      |                                                                            ^
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/math3d/qgenericmatrix.cpp.o
+[ 69%] Building CXX object src/plugins/tls/certonly/CMakeFiles/QTlsBackendCertOnlyPlugin.dir/qtlsbackend_cert.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/math3d/qmatrix4x4.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/math3d/qquaternion.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/math3d/qvectornd.cpp.o
+[ 69%] Linking CXX shared module ../../../../plugins/tls/libqcertonlybackend.so
+[ 69%] Built target QTlsBackendCertOnlyPlugin
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qbackingstore.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qbackingstoredefaultcompositor.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qbackingstorerhisupport.cpp.o
+[ 69%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qbezier.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qblendfunctions.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qblittable.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qbrush.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcolor.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcolorspace.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcolortransform.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcolortrclut.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcompositionfunctions.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcosmeticstroker.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qemulationpaintengine.cpp.o
+[ 70%] Building C object src/gui/CMakeFiles/Gui.dir/painting/qgrayraster.c.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qicc.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qimageeffects.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qimagescale.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qmemrotate.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qoutlinemapper.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpagedpaintdevice.cpp.o
+[ 70%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpagelayout.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpageranges.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpagesize.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpaintdevice.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpaintengine.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpaintengine_blitter.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpaintengine_raster.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpaintengineex.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpainter.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpainterstateguard.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpainterpath.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpathclipper.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpathsimplifier.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpdf.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpdfoutputintent.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpdfwriter.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpen.cpp.o
+[ 72%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpixellayout.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qplatformbackingstore.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qpolygon.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qrasterizer.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qregion.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qstroker.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qtextureglyphcache.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qtransform.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qtriangulatingstroker.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qtriangulator.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/rhi/qrhi.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/rhi/qrhinull.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/rhi/qshader.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/rhi/qshaderdescription.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qabstracttextdocumentlayout.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qcolrpaintgraphrenderer.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qdistancefield.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfont.cpp.o
+[ 73%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontdatabase.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontengine.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontengineglyphcache.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontmetrics.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontsubset.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfontvariableaxis.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qfragmentmap.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qglyphrun.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qinputcontrol.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qplatformfontdatabase.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qrawfont.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qstatictext.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qsyntaxhighlighter.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextcursor.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextdocument.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextdocument_p.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextdocumentfragment.cpp.o
+[ 74%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextdocumentlayout.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextdocumentwriter.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextengine.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextformat.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtexthtmlparser.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextimagehandler.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextlayout.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextlist.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextobject.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextoption.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtexttable.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qabstractlayoutstyleinfo.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qastchandler.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qdesktopservices.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qgridlayoutengine.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qktxhandler.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qlayoutpolicy.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qpkmhandler.cpp.o
+[ 75%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qtexturefiledata.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qtexturefilereader.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qvalidator.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/.qt/rcc/qrc_qpdf.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/.qt/rcc/qrc_gui_shaders.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/itemmodels/qstandarditemmodel.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/animation/qguivariantanimation.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessible.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessiblebridge.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessiblebridgeutils.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessiblecache.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessiblehelper.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessibleobject.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qaccessibleplugin.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/accessible/qplatformaccessibility.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qaction.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qactiongroup.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qdnd.cpp.o
+[ 76%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qdrag.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qplatformdrag.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qshapedpixmapdndwindow.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qsimpledrag.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qkeysequence.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qshortcut.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/kernel/qshortcutmap.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qmovie.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qpnghandler.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/image/qimage_neon.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qdrawhelper_neon.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qimagescale_neon.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qharfbuzzng.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextodfwriter.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextmarkdownimporter.cpp.o
+[ 77%] Building C object src/gui/CMakeFiles/Gui.dir/__/3rdparty/md4c/md4c.c.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qtextmarkdownwriter.cpp.o
+[ 77%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qcssutil.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/qcssparser.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/freetype/qfontengine_ft.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/text/freetype/qfreetypefontdatabase.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qundostack.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/util/qundogroup.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/itemmodels/qfileinfogatherer.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/itemmodels/qfilesystemmodel.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qunixnativeinterface.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qgenericunixeventdispatcher.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qunixeventdispatcher.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qdesktopunixservices.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qgenericunixtheme.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qgnometheme.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusmenuadaptor.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusmenubar.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusmenuconnection.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusmenuregistrarproxy.cpp.o
+[ 78%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusmenutypes.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbusmenu/qdbusplatformmenu.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qdbuslistener.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qdbussettings.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/qgnomeportalinterface.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbustray/qdbustrayicon.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbustray/qdbustraytypes.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbustray/qstatusnotifieritemadaptor.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/platform/unix/dbustray/qxdgnotificationproxy.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/painting/qdrawhelper.cpp.o
+[ 79%] Building CXX object src/gui/CMakeFiles/Gui.dir/Gui_autogen/mocs_compilation.cpp.o
+[ 79%] Linking CXX shared library ../../lib/libQt6Gui.so
+[ 79%] Built target Gui
+[ 79%] Built target Widgets_autogen_timestamp_deps
+[ 79%] Built target InputSupportPrivate_autogen_timestamp_deps
+[ 79%] Built target FbSupportPrivate_autogen_timestamp_deps
+[ 79%] Built target QMinimalIntegrationPlugin_autogen_timestamp_deps
+[ 79%] Built target QICOPlugin_autogen_timestamp_deps
+[ 79%] Built target QOffscreenIntegrationPlugin_autogen_timestamp_deps
+[ 79%] Built target QJpegPlugin_autogen_timestamp_deps
+[ 79%] Built target QXdgDesktopPortalThemePlugin_autogen_timestamp_deps
+[ 79%] Built target QGifPlugin_autogen_timestamp_deps
+[ 79%] Built target QTuioTouchPlugin_autogen_timestamp_deps
+[ 79%] Automatic MOC for target FbSupportPrivate
+[ 79%] Automatic MOC and UIC for target Widgets
+[ 79%] Automatic MOC for target InputSupportPrivate
+[ 79%] Automatic MOC for target QMinimalIntegrationPlugin
+[ 79%] Built target QMinimalIntegrationPlugin_autogen
+[ 79%] Automatic MOC for target QOffscreenIntegrationPlugin
+[ 79%] Built target InputSupportPrivate_autogen
+[ 79%] Built target QOffscreenIntegrationPlugin_autogen
+[ 79%] Automatic MOC for target QXdgDesktopPortalThemePlugin
+[ 79%] Automatic MOC for target QICOPlugin
+[ 79%] Built target FbSupportPrivate_autogen
+[ 79%] Automatic MOC for target QJpegPlugin
+[ 79%] Built target QICOPlugin_autogen
+[ 79%] Automatic MOC for target QGifPlugin
+[ 79%] Built target QJpegPlugin_autogen
+[ 79%] Automatic MOC for target QTuioTouchPlugin
+[ 79%] Built target QGifPlugin_autogen
+[ 79%] Generating prl file for target FbSupportPrivate
+[ 79%] Running AUTOMOC file extraction for target FbSupportPrivate
+[ 79%] Running moc --collect-json for target FbSupportPrivate
+[ 79%] Built target QXdgDesktopPortalThemePlugin_autogen
+[ 80%] Generating prl file for target InputSupportPrivate
+[ 80%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/cmake_pch.hxx.gch
+[ 80%] Running AUTOMOC file extraction for target InputSupportPrivate
+[ 80%] Running moc --collect-json for target InputSupportPrivate
+[ 80%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/cmake_pch.hxx.gch
+[ 80%] Built target QTuioTouchPlugin_autogen
+[ 80%] Running AUTOMOC file extraction for target QMinimalIntegrationPlugin
+[ 80%] Running moc --collect-json for target QMinimalIntegrationPlugin
+[ 80%] Building CXX object src/plugins/platforms/minimal/CMakeFiles/QMinimalIntegrationPlugin.dir/QMinimalIntegrationPlugin_autogen/mocs_compilation.cpp.o
+[ 80%] Building CXX object src/plugins/platforms/minimal/CMakeFiles/QMinimalIntegrationPlugin.dir/main.cpp.o
+[ 80%] Building CXX object src/plugins/platforms/minimal/CMakeFiles/QMinimalIntegrationPlugin.dir/qminimalbackingstore.cpp.o
+[ 80%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/InputSupportPrivate_autogen/mocs_compilation.cpp.o
+[ 80%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/FbSupportPrivate_autogen/mocs_compilation.cpp.o
+[ 80%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevkeyboard/qevdevkeyboardhandler.cpp.o
+[ 80%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/qfbbackingstore.cpp.o
+[ 80%] Building CXX object src/plugins/platforms/minimal/CMakeFiles/QMinimalIntegrationPlugin.dir/qminimalintegration.cpp.o
+[ 80%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/qfbcursor.cpp.o
+[ 80%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevkeyboard/qevdevkeyboardmanager.cpp.o
+[ 80%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/qfbscreen.cpp.o
+[ 80%] Linking CXX shared module ../../../../plugins/platforms/libqminimal.so
+[ 80%] Built target QMinimalIntegrationPlugin
+[ 80%] Running AUTOMOC file extraction for target QOffscreenIntegrationPlugin
+[ 80%] Running moc --collect-json for target QOffscreenIntegrationPlugin
+[ 80%] Building CXX object src/plugins/platforms/offscreen/CMakeFiles/QOffscreenIntegrationPlugin.dir/QOffscreenIntegrationPlugin_autogen/mocs_compilation.cpp.o
+[ 80%] Building CXX object src/plugins/platforms/offscreen/CMakeFiles/QOffscreenIntegrationPlugin.dir/main.cpp.o
+[ 81%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/qfbvthandler.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevmouse/qevdevmousehandler.cpp.o
+[ 81%] Building CXX object src/platformsupport/fbconvenience/CMakeFiles/FbSupportPrivate.dir/qfbwindow.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevmouse/qevdevmousemanager.cpp.o
+[ 81%] Linking CXX static library ../../../lib/libQt6FbSupport.a
+[ 81%] Built target FbSupportPrivate
+[ 81%] Building CXX object src/plugins/platforms/offscreen/CMakeFiles/QOffscreenIntegrationPlugin.dir/qoffscreencommon.cpp.o
+[ 81%] Running AUTOMOC file extraction for target QXdgDesktopPortalThemePlugin
+[ 81%] Running moc --collect-json for target QXdgDesktopPortalThemePlugin
+[ 81%] Building CXX object src/plugins/platformthemes/xdgdesktopportal/CMakeFiles/QXdgDesktopPortalThemePlugin.dir/QXdgDesktopPortalThemePlugin_autogen/mocs_compilation.cpp.o
+[ 81%] Building CXX object src/plugins/platformthemes/xdgdesktopportal/CMakeFiles/QXdgDesktopPortalThemePlugin.dir/main.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevtouch/qevdevtouchhandler.cpp.o
+[ 81%] Building CXX object src/plugins/platformthemes/xdgdesktopportal/CMakeFiles/QXdgDesktopPortalThemePlugin.dir/qxdgdesktopportalfiledialog.cpp.o
+In file included from /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.cpp:4:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h: In member function ‘virtual QDpi QOffscreenScreen::logicalDpi() const’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h:32:38: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+   32 |     QDpi logicalDpi() const override { return QDpi(m_logicalDpi, m_logicalDpi); }
+      |                                      ^
+[ 81%] Building CXX object src/plugins/platforms/offscreen/CMakeFiles/QOffscreenIntegrationPlugin.dir/qoffscreenintegration.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevtouch/qevdevtouchmanager.cpp.o
+In file included from /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreenintegration.cpp:6:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h: In member function ‘virtual QDpi QOffscreenScreen::logicalDpi() const’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h:32:38: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+   32 |     QDpi logicalDpi() const override { return QDpi(m_logicalDpi, m_logicalDpi); }
+      |                                      ^
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevtablet/qevdevtablethandler.cpp.o
+[ 81%] Building CXX object src/plugins/platformthemes/xdgdesktopportal/CMakeFiles/QXdgDesktopPortalThemePlugin.dir/qxdgdesktopportaltheme.cpp.o
+[ 81%] Building CXX object src/plugins/platforms/offscreen/CMakeFiles/QOffscreenIntegrationPlugin.dir/qoffscreenwindow.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/evdevtablet/qevdevtabletmanager.cpp.o
+In file included from /tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreenwindow.cpp:5:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h: In member function ‘virtual QDpi QOffscreenScreen::logicalDpi() const’:
+/tmp/ai-upper-qt611-sdk/qtbase-everywhere-src-6.11.2/src/plugins/platforms/offscreen/qoffscreencommon.h:32:38: note: parameter passing for argument of type ‘std::pair<double, double>’ when C++17 is enabled changed to match C++14 in GCC 10.1
+   32 |     QDpi logicalDpi() const override { return QDpi(m_logicalDpi, m_logicalDpi); }
+      |                                      ^
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/shared/qevdevutil.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/shared/qfdcontainer.cpp.o
+[ 81%] Building CXX object src/platformsupport/input/CMakeFiles/InputSupportPrivate.dir/shared/qoutputmapping.cpp.o
+[ 81%] Linking CXX shared module ../../../../plugins/platforms/libqoffscreen.so
+[ 81%] Built target QOffscreenIntegrationPlugin
+[ 81%] Running AUTOMOC file extraction for target QICOPlugin
+[ 82%] Running moc --collect-json for target QICOPlugin
+[ 82%] Building CXX object src/plugins/imageformats/ico/CMakeFiles/QICOPlugin.dir/QICOPlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/ico/CMakeFiles/QICOPlugin.dir/main.cpp.o
+[ 82%] Linking CXX shared module ../../../../plugins/platformthemes/libqxdgdesktopportal.so
+[ 82%] Built target QXdgDesktopPortalThemePlugin
+[ 82%] Running AUTOMOC file extraction for target QJpegPlugin
+[ 82%] Running moc --collect-json for target QJpegPlugin
+[ 82%] Building CXX object src/plugins/imageformats/jpeg/CMakeFiles/QJpegPlugin.dir/QJpegPlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/jpeg/CMakeFiles/QJpegPlugin.dir/main.cpp.o
+[ 82%] Linking CXX static library ../../../lib/libQt6InputSupport.a
+[ 82%] Built target InputSupportPrivate
+[ 82%] Running AUTOMOC file extraction for target QGifPlugin
+[ 82%] Running moc --collect-json for target QGifPlugin
+[ 82%] Building CXX object src/plugins/imageformats/gif/CMakeFiles/QGifPlugin.dir/QGifPlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/gif/CMakeFiles/QGifPlugin.dir/main.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/ico/CMakeFiles/QICOPlugin.dir/qicohandler.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/jpeg/CMakeFiles/QJpegPlugin.dir/qjpeghandler.cpp.o
+[ 82%] Building CXX object src/plugins/imageformats/gif/CMakeFiles/QGifPlugin.dir/qgifhandler.cpp.o
+[ 82%] Linking CXX shared module ../../../../plugins/imageformats/libqico.so
+[ 82%] Linking CXX shared module ../../../../plugins/imageformats/libqgif.so
+[ 82%] Built target QGifPlugin
+[ 82%] Built target QEvdevMousePlugin_autogen_timestamp_deps
+[ 82%] Built target QEvdevTouchScreenPlugin_autogen_timestamp_deps
+[ 82%] Built target QEvdevKeyboardPlugin_autogen_timestamp_deps
+[ 82%] Built target QICOPlugin
+[ 82%] Running AUTOMOC file extraction for target QTuioTouchPlugin
+[ 82%] Built target QEvdevTabletPlugin_autogen_timestamp_deps
+[ 82%] Built target QLinuxFbIntegrationPlugin_autogen_timestamp_deps
+[ 82%] Built target QVncIntegrationPlugin_autogen_timestamp_deps
+[ 82%] Automatic MOC for target QEvdevMousePlugin
+[ 82%] Running moc --collect-json for target QTuioTouchPlugin
+[ 82%] Linking CXX shared module ../../../../plugins/imageformats/libqjpeg.so
+[ 82%] Built target QEvdevMousePlugin_autogen
+[ 82%] Automatic MOC for target QEvdevTouchScreenPlugin
+[ 82%] Building CXX object src/plugins/generic/tuiotouch/CMakeFiles/QTuioTouchPlugin.dir/QTuioTouchPlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Built target QJpegPlugin
+[ 82%] Automatic MOC for target QEvdevKeyboardPlugin
+[ 82%] Building CXX object src/plugins/generic/tuiotouch/CMakeFiles/QTuioTouchPlugin.dir/main.cpp.o
+[ 82%] Built target QEvdevTouchScreenPlugin_autogen
+[ 82%] Automatic MOC for target QEvdevTabletPlugin
+[ 82%] Built target QEvdevKeyboardPlugin_autogen
+[ 82%] Automatic MOC for target QLinuxFbIntegrationPlugin
+[ 82%] Built target QEvdevTabletPlugin_autogen
+[ 82%] Automatic MOC for target QVncIntegrationPlugin
+[ 82%] Built target QLinuxFbIntegrationPlugin_autogen
+[ 82%] Running AUTOMOC file extraction for target QEvdevMousePlugin
+[ 82%] Running moc --collect-json for target QEvdevMousePlugin
+[ 82%] Building CXX object src/plugins/generic/evdevmouse/CMakeFiles/QEvdevMousePlugin.dir/QEvdevMousePlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Building CXX object src/plugins/generic/evdevmouse/CMakeFiles/QEvdevMousePlugin.dir/main.cpp.o
+[ 82%] Built target QVncIntegrationPlugin_autogen
+[ 82%] Running AUTOMOC file extraction for target QEvdevTouchScreenPlugin
+[ 82%] Running moc --collect-json for target QEvdevTouchScreenPlugin
+[ 82%] Building CXX object src/plugins/generic/evdevtouch/CMakeFiles/QEvdevTouchScreenPlugin.dir/QEvdevTouchScreenPlugin_autogen/mocs_compilation.cpp.o
+[ 82%] Building CXX object src/plugins/generic/evdevtouch/CMakeFiles/QEvdevTouchScreenPlugin.dir/main.cpp.o
+[ 82%] Building CXX object src/plugins/generic/tuiotouch/CMakeFiles/QTuioTouchPlugin.dir/qoscbundle.cpp.o
+[ 82%] Linking CXX shared module ../../../../plugins/generic/libqevdevmouseplugin.so
+[ 82%] Built target QEvdevMousePlugin
+[ 83%] Running AUTOMOC file extraction for target QEvdevKeyboardPlugin
+[ 83%] Running moc --collect-json for target QEvdevKeyboardPlugin
+[ 83%] Building CXX object src/plugins/generic/evdevkeyboard/CMakeFiles/QEvdevKeyboardPlugin.dir/QEvdevKeyboardPlugin_autogen/mocs_compilation.cpp.o
+[ 83%] Building CXX object src/plugins/generic/evdevkeyboard/CMakeFiles/QEvdevKeyboardPlugin.dir/main.cpp.o
+[ 83%] Linking CXX shared module ../../../../plugins/generic/libqevdevtouchplugin.so
+[ 83%] Built target QEvdevTouchScreenPlugin
+[ 83%] Running AUTOMOC file extraction for target QEvdevTabletPlugin
+[ 83%] Running moc --collect-json for target QEvdevTabletPlugin
+[ 83%] Building CXX object src/plugins/generic/evdevtablet/CMakeFiles/QEvdevTabletPlugin.dir/QEvdevTabletPlugin_autogen/mocs_compilation.cpp.o
+[ 83%] Building CXX object src/plugins/generic/evdevtablet/CMakeFiles/QEvdevTabletPlugin.dir/main.cpp.o
+[ 83%] Building CXX object src/plugins/generic/tuiotouch/CMakeFiles/QTuioTouchPlugin.dir/qoscmessage.cpp.o
+[ 83%] Linking CXX shared module ../../../../plugins/generic/libqevdevkeyboardplugin.so
+[ 83%] Built target QEvdevKeyboardPlugin
+[ 84%] Running AUTOMOC file extraction for target QLinuxFbIntegrationPlugin
+[ 84%] Running moc --collect-json for target QLinuxFbIntegrationPlugin
+[ 84%] Building CXX object src/plugins/platforms/linuxfb/CMakeFiles/QLinuxFbIntegrationPlugin.dir/QLinuxFbIntegrationPlugin_autogen/mocs_compilation.cpp.o
+[ 84%] Building CXX object src/plugins/platforms/linuxfb/CMakeFiles/QLinuxFbIntegrationPlugin.dir/main.cpp.o
+[ 86%] Linking CXX shared module ../../../../plugins/generic/libqevdevtabletplugin.so
+[ 86%] Built target QEvdevTabletPlugin
+[ 86%] Running AUTOMOC file extraction for target QVncIntegrationPlugin
+[ 86%] Running moc --collect-json for target QVncIntegrationPlugin
+[ 86%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/QVncIntegrationPlugin_autogen/mocs_compilation.cpp.o
+[ 86%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/main.cpp.o
+[ 86%] Building CXX object src/plugins/generic/tuiotouch/CMakeFiles/QTuioTouchPlugin.dir/qtuiohandler.cpp.o
+[ 86%] Building CXX object src/plugins/platforms/linuxfb/CMakeFiles/QLinuxFbIntegrationPlugin.dir/qlinuxfbintegration.cpp.o
+[ 86%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/qvnc.cpp.o
+[ 86%] Built target Widgets_autogen
+[ 86%] Generating prl file for target Widgets
+[ 86%] Generating pc file for target Qt6::Widgets
+[ 86%] Running rcc for resource qmessagebox
+[ 86%] Running rcc for resource qstyle
+[ 86%] Running rcc for resource qstyle1
+[ 86%] Running rcc for resource qstyle_fusion
+[ 86%] Running AUTOMOC file extraction for target Widgets
+[ 86%] Running moc --collect-json for target Widgets
+[ 86%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/cmake_pch.hxx.gch
+[ 86%] Linking CXX shared module ../../../../plugins/generic/libqtuiotouchplugin.so
+[ 86%] Built target QTuioTouchPlugin
+[ 86%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/compat/removed_api.cpp.o
+[ 86%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/qvncclient.cpp.o
+[ 86%] Building CXX object src/plugins/platforms/linuxfb/CMakeFiles/QLinuxFbIntegrationPlugin.dir/qlinuxfbscreen.cpp.o
+[ 86%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/.qt/rcc/qrc_qstyle.cpp.o
+[ 87%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/qvncintegration.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/.qt/rcc/qrc_qstyle1.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/.qt/rcc/qrc_qstyle_fusion.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/.qt/rcc/qrc_qmessagebox.cpp.o
+[ 87%] Building CXX object src/plugins/platforms/vnc/CMakeFiles/QVncIntegrationPlugin.dir/qvncscreen.cpp.o
+[ 87%] Linking CXX shared module ../../../../plugins/platforms/libqlinuxfb.so
+[ 87%] Built target QLinuxFbIntegrationPlugin
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qfileiconprovider.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/Widgets_autogen/mocs_compilation.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qapplication.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qboxlayout.cpp.o
+[ 87%] Linking CXX shared module ../../../../plugins/platforms/libqvnc.so
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qgesture.cpp.o
+[ 87%] Built target QVncIntegrationPlugin
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qgesturemanager.cpp.o
+[ 87%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qgesturerecognizer.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qgridlayout.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qlayout.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qlayoutengine.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qlayoutitem.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qrhiwidget.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qsizepolicy.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qstackedlayout.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qstandardgestures.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qtestsupport_widgets.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwidget.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwidgetrepaintmanager.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwidgetsvariant.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwidgetwindow.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwindowcontainer.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qcommonstyle.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qdrawutil.cpp.o
+[ 88%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qpixmapstyle.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qproxystyle.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstyle.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstylefactory.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstylehelper.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstyleoption.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstylepainter.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstyleplugin.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qcolormap.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qsystemtrayicon.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qabstractscrollarea.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qfocusframe.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qframe.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qwidgetanimator.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/effects/qgraphicseffect.cpp.o
+[ 89%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/effects/qpixmapfilter.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qaction_widgets.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwidgetaction.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qshortcut_widgets.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qformlayout.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qtooltip.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/kernel/qwhatsthis.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstyleanimation.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstylesheetstyle.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qstylesheetstyle_default.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qwindowsstyle.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/styles/qfusionstyle.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qabstractbutton.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qabstractslider.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qbuttongroup.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qcalendarwidget.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qcheckbox.cpp.o
+[ 90%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qcombobox.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qcommandlinkbutton.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qdatetimeedit.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qdial.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qdockarealayout.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qdockwidget.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qeffects.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qfontcombobox.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qgroupbox.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qkeysequenceedit.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qlabel.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qlcdnumber.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qlineedit.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qlineedit_p.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qwidgetlinecontrol.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmainwindow.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmainwindowlayout.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmdiarea.cpp.o
+[ 91%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmdisubwindow.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmenu.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qmenubar.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qprogressbar.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qpushbutton.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qradiobutton.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qwidgetresizehandler.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qdialogbuttonbox.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qrubberband.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qscrollarea.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qscrollbar.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qsizegrip.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qslider.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qabstractspinbox.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qspinbox.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qsplashscreen.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qsplitter.cpp.o
+[ 92%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qstackedwidget.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qstatusbar.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtabbar.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qplaintextedit.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtextedit.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtextbrowser.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtabwidget.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbar.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbararealayout.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbarlayout.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbarseparator.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbox.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbarextension.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qtoolbutton.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/widgets/qwidgettextcontrol.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qcolordialog.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qdialog.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qerrormessage.cpp.o
+[ 93%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qfiledialog.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qsidebar.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qfontdialog.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qinputdialog.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qmessagebox.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qprogressdialog.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/dialogs/qwizard.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/complexwidgets.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/qaccessiblecolorwell.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/qaccessiblemenu.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/qaccessiblewidget.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/qaccessiblewidgetfactory.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/qaccessiblewidgets.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/rangecontrols.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/simplewidgets.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/accessible/itemviews.cpp.o
+[ 94%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qabstractitemdelegate.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qabstractitemview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qbsptree.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qheaderview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qitemdelegate.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qitemeditorfactory.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qstyleditemdelegate.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qcolumnview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qcolumnviewgrip.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qdatawidgetmapper.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qlistview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qlistwidget.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qtableview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qtablewidget.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qtreeview.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qtreewidget.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/itemviews/qtreewidgetitemiterator.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsanchorlayout.cpp.o
+[ 95%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsanchorlayout_p.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsgridlayout.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsgridlayoutengine.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsitem.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicslayout.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicslayout_p.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicslayoutitem.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicslayoutstyleinfo.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicslinearlayout.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsproxywidget.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsscene.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsscene_bsp.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsscenebsptreeindex.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicssceneevent.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicssceneindex.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsscenelinearindex.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicstransform.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsview.cpp.o
+[ 96%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicswidget.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicswidget_p.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qsimplex_p.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/graphicsview/qgraphicsitemanimation.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qcompleter.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qflickgesture.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qscroller.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qscrollerproperties.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qundoview.cpp.o
+[ 97%] Building CXX object src/widgets/CMakeFiles/Widgets.dir/util/qsystemtrayicon_qpa.cpp.o
+[ 97%] Linking CXX shared library ../../lib/libQt6Widgets.so
+[ 97%] Built target Widgets
+[ 97%] Built target PrintSupport_autogen_timestamp_deps
+[ 97%] Automatic MOC and UIC for target PrintSupport
+[ 97%] Built target PrintSupport_autogen
+[ 97%] Running rcc for resource qprintdialog
+[ 97%] Generating prl file for target PrintSupport
+[ 97%] Generating pc file for target Qt6::PrintSupport
+[ 97%] Running rcc for resource qprintdialog1
+[ 97%] Running AUTOMOC file extraction for target PrintSupport
+[ 97%] Running moc --collect-json for target PrintSupport
+[ 97%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/.qt/rcc/qrc_qprintdialog.cpp.o
+[ 97%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/.qt/rcc/qrc_qprintdialog1.cpp.o
+[ 97%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/cmake_pch.hxx.gch
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qplatformprintersupport.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/PrintSupport_autogen/mocs_compilation.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qpaintengine_alpha.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qplatformprintdevice.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qplatformprintplugin.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprint.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprintdevice.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprintengine.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprintengine_pdf.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprinter.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qprinterinfo.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/kernel/qpaintengine_preview.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/widgets/qprintpreviewwidget.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/dialogs/qabstractprintdialog.cpp.o
+[ 98%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/dialogs/qpagesetupdialog.cpp.o
+[100%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/dialogs/qpagesetupdialog_unix.cpp.o
+[100%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/dialogs/qprintdialog_unix.cpp.o
+[100%] Building CXX object src/printsupport/CMakeFiles/PrintSupport.dir/dialogs/qprintpreviewdialog.cpp.o
+[100%] Linking CXX shared library ../../lib/libQt6PrintSupport.so
+[100%] Built target PrintSupport

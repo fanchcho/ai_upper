@@ -1,0 +1,34 @@
+CMake Warning at cmake/QtBuildHelpers.cmake:13 (message):
+  The officially supported CMake generator for building Qt is Ninja / Ninja
+  Multi-Config.  You are using: 'Unix Makefiles' instead.  Thus, you might
+  encounter issues.  Use at your own risk.
+Call Stack (most recent call first):
+  cmake/QtBuildHelpers.cmake:430 (qt_internal_validate_cmake_generator)
+  cmake/QtBuild.cmake:4 (qt_internal_setup_build_and_global_variables)
+  cmake/QtSetup.cmake:6 (include)
+  cmake/QtBuildRepoHelpers.cmake:28 (include)
+  cmake/QtBuildRepoHelpers.cmake:239 (qt_build_internals_set_up_private_api)
+  cmake/QtBaseHelpers.cmake:220 (qt_build_repo_begin)
+  CMakeLists.txt:36 (qt_internal_qtbase_build_repo)
+
+
+-- CMAKE_BUILD_TYPE was already explicitly set to: 'Release'
+
+-- Configuration summary has been written to /tmp/ai-upper-qt611-sdk/build-make/config.summary
+
+-- 
+
+Qt is now configured for building. Just run 'cmake --build . --parallel'
+
+Once everything is built, you must run 'cmake --install .'
+Qt will be installed into '/tmp/ai-upper-qt611-sdk/install'
+
+To configure and build other Qt modules, you can use the following convenience script:
+        /tmp/ai-upper-qt611-sdk/install/bin/qt-configure-module
+
+If reconfiguration fails for some reason, try removing 'CMakeCache.txt' from the build directory
+Alternatively, you can add the --fresh flag to your CMake flags.
+
+-- Configuring done (8.9s)
+-- Generating done (1.2s)
+-- Build files have been written to: /tmp/ai-upper-qt611-sdk/build-make

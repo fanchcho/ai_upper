@@ -1,0 +1,12 @@
+[
+  {
+    "archive": ".tmp/next-boundary/fcitx.tar.gz",
+    "filesCompared": 180,
+    "mismatches": []
+  },
+  {
+    "archive": "/tmp/ai-upper-qt611-sdk/qtbase.tar.xz",
+    "filesCompared": 22857,
+    "mismatches": []
+  }
+]

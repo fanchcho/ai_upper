@@ -1,0 +1,28 @@
+[  0%] Built target Fcitx5Qt6DBusAddons_autogen_timestamp_deps
+[  4%] Automatic MOC for target Fcitx5Qt6DBusAddons
+[  4%] Built target Fcitx5Qt6DBusAddons_autogen
+[ 16%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtdbustypes.cpp.o
+[ 16%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtwatcher.cpp.o
+[ 16%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/Fcitx5Qt6DBusAddons_autogen/mocs_compilation.cpp.o
+[ 20%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtinputcontextproxy.cpp.o
+[ 25%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtinputcontextproxyimpl.cpp.o
+[ 29%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtinputmethodproxy.cpp.o
+[ 33%] Building CXX object qt6/dbusaddons/CMakeFiles/Fcitx5Qt6DBusAddons.dir/fcitxqtcontrollerproxy.cpp.o
+[ 37%] Built target Fcitx5Qt6DBusAddons
+[ 37%] Built target fcitx5platforminputcontextplugin-qt6_autogen_timestamp_deps
+[ 41%] Automatic MOC for target fcitx5platforminputcontextplugin-qt6
+[ 41%] Built target fcitx5platforminputcontextplugin-qt6_autogen
+[ 50%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitx4watcher.cpp.o
+[ 50%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitx4inputcontextproxyimpl.cpp.o
+[ 58%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitx5platforminputcontextplugin-qt6_autogen/mocs_compilation.cpp.o
+[ 58%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitx4inputcontextproxy.cpp.o
+[ 62%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitx4inputmethodproxy.cpp.o
+[ 66%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/hybridinputcontext.cpp.o
+[ 70%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/qfcitxplatforminputcontext.cpp.o
+[ 75%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitxcandidatewindow.cpp.o
+[ 79%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/fcitxtheme.cpp.o
+[ 83%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/font.cpp.o
+[ 87%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/qtkey.cpp.o
+[ 91%] Building CXX object qt6/platforminputcontext/CMakeFiles/fcitx5platforminputcontextplugin-qt6.dir/main.cpp.o
+[ 95%] Linking CXX shared module libfcitx5platforminputcontextplugin.so
+[100%] Built target fcitx5platforminputcontextplugin-qt6

@@ -1,0 +1,5 @@
+runtime 6.11.2 metadata {'IID': 'org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1', 'MetaData': {'Keys': ['fcitx', 'fcitx5']}, 'archlevel': 0, 'className': 'QFcitx5PlatformInputContextPlugin', 'debug': False, 'version': 396032}
+load False error Cannot load library /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: /lib/aarch64-linux-gnu/libQt6Widgets.so.6: undefined symbol: _ZTI21QMetaTypeModuleHelper, version Qt_6_PRIVATE_API
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError
