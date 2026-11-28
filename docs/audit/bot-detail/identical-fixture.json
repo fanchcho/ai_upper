@@ -1,0 +1,71 @@
+{
+  "config.json": {
+    "models": {
+      "activeModelId": "p1:claude-sonnet-5-5",
+      "providers": [
+        {
+          "id": "p1",
+          "adapter": "anthropic",
+          "apiHost": "https://api.example.com",
+          "enabled": true,
+          "models": [
+            {
+              "id": "claude-sonnet-5-5",
+              "enabled": true
+            }
+          ]
+        }
+      ]
+    },
+    "theme": "light",
+    "locale": "en",
+    "skills": {
+      "enabled": {
+        "beta": false
+      },
+      "roles": {
+        "alpha": [
+          "reviewer",
+          "writer",
+          "tester",
+          "designer",
+          "analyst"
+        ]
+      }
+    },
+    "mcp": {
+      "enabled": {
+        "echo": false,
+        "fail": true,
+        "idle": false
+      }
+    }
+  },
+  "mcp.json": {
+    "mcpServers": {
+      "echo": {
+        "name": "Echo",
+        "transport": "stdio",
+        "command": "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+        "args": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/extensions-calibration/server.py"
+        ],
+        "env": {
+          "TOKEN": {
+            "secretRef": "TOKEN"
+          }
+        }
+      },
+      "fail": {
+        "name": "Failure",
+        "transport": "stdio",
+        "command": "/missing-test-command"
+      },
+      "idle": {
+        "name": "Off",
+        "transport": "http",
+        "url": "http://127.0.0.1:9"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+BUS unix:path=/home/agent/shared_workspace/ai_upper/.tmp/secret-service/runtime/dbus-qTOKv73dSb,guid=0612077f42e945c80b85c9bb6b0a1926
+KEYRING 0 GNOME_KEYRING_CONTROL=/home/agent/shared_workspace/ai_upper/.tmp/secret-service/runtime/keyring
+ 
+BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+REAL_OS_ROUNDTRIP_OK
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+REAL OS BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+EXACT_SCROLL 142.0
+REAL OS: real QTest input -> timer -> bridge -> vault -> GNOME Secret Service; Saved visible
+EXACT_SCROLL 142.0
+REAL OS: reopened detail Configured visible; real OS credential readback
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+REAL OS BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+EXACT_SCROLL 142.0
+REAL OS: real QTest input -> timer -> bridge -> vault -> GNOME Secret Service; Saved visible
+EXACT_SCROLL 142.0
+REAL OS: reopened detail Configured visible; real OS credential readback
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+ELECTRON_COMMAND ['.tmp/wm/usr/bin/xvfb-run', '-a', '.tmp/extensions-complete/browser/node_modules/electron/dist/electron', '--no-sandbox', '--disable-gpu', '--password-store=gnome-libsecret', '--remote-debugging-port=9344', '--user-data-dir=/home/agent/shared_workspace/ai_upper/.tmp/feature-review/electron-profile', '/home/agent/shared_workspace/deva/apps/desktop/out/main/index.js']
+REAL_ELECTRON_SAFE_STORAGE 0 {"id":1,"result":{"result":{"type":"object","value":{"available":true,"saved":{"ok":true,"available":true},"has":true}}}}
+ 
+ROWS ["alphaSkill\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n+3","betaSkill","EchoMCP","FailureMCP","OffMCP"]
+INPUTS [{"type":"text","placeholder":"Search chats"},{"type":"text","placeholder":"e.g. npx, node, python…"},{"type":"text","placeholder":"Key"},{"type":"password","placeholder":"Enter secret value (stored encrypted)"}]
+BOTTOM dark { top: 142, max: 142 }
+SAVED dark true
+ROWS ["alphaSkill\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n+3","betaSkill","EchoMCP","FailureMCP","OffMCP"]
+INPUTS [{"type":"text","placeholder":"Search chats"},{"type":"text","placeholder":"e.g. npx, node, python…"},{"type":"text","placeholder":"Key"},{"type":"password","placeholder":"Configured (leave blank to keep)"}]
+BOTTOM light { top: 142, max: 142 }
+SAVED light true

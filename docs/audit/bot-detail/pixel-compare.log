@@ -1,0 +1,92 @@
+{
+ "themes": {
+  "dark": {
+   "png": "/home/agent/shared_workspace/ai_upper/out/final-port/compare-identical-dark.png",
+   "crop": [
+    280,
+    128,
+    720,
+    567
+   ],
+   "pixel_equal_percent": 94.123,
+   "mean_abs_rgb_sum": 7.416
+  },
+  "light": {
+   "png": "/home/agent/shared_workspace/ai_upper/out/final-port/compare-identical-light.png",
+   "crop": [
+    280,
+    128,
+    720,
+    567
+   ],
+   "pixel_equal_percent": 94.729,
+   "mean_abs_rgb_sum": 9.064
+  }
+ },
+ "label_tops": {
+  "dark": {
+   "Available to": {
+    "deva": 163,
+    "qt": 163.0,
+    "delta": 0.0
+   },
+   "Transport": {
+    "deva": 233.5,
+    "qt": 233.5,
+    "delta": 0.0
+   },
+   "Command": {
+    "deva": 304,
+    "qt": 304.0,
+    "delta": 0.0
+   },
+   "Arguments": {
+    "deva": 374.5,
+    "qt": 374.5,
+    "delta": 0.0
+   },
+   "Environment variables": {
+    "deva": 490.5,
+    "qt": 490.5,
+    "delta": 0.0
+   },
+   "Discovered tools": {
+    "deva": 614.5,
+    "qt": 614.5,
+    "delta": 0.0
+   }
+  },
+  "light": {
+   "Available to": {
+    "deva": 163,
+    "qt": 163.0,
+    "delta": 0.0
+   },
+   "Transport": {
+    "deva": 233.5,
+    "qt": 233.5,
+    "delta": 0.0
+   },
+   "Command": {
+    "deva": 304,
+    "qt": 304.0,
+    "delta": 0.0
+   },
+   "Arguments": {
+    "deva": 374.5,
+    "qt": 374.5,
+    "delta": 0.0
+   },
+   "Environment variables": {
+    "deva": 490.5,
+    "qt": 490.5,
+    "delta": 0.0
+   },
+   "Discovered tools": {
+    "deva": 614.5,
+    "qt": 614.5,
+    "delta": 0.0
+   }
+  }
+ }
+}

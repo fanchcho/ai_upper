@@ -1,0 +1,363 @@
+[
+  {
+    "cls": "provider-detail",
+    "text": "BackEnabledEcho○ OffAvailable toAll personasTransportstdioCommandArguments/home/",
+    "rect": {
+      "x": 469,
+      "y": 58,
+      "width": 502,
+      "height": 598.5,
+      "top": 58,
+      "right": 971,
+      "bottom": 656.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "provider-detail__topbar",
+    "text": "BackEnabled",
+    "rect": {
+      "x": 469,
+      "y": 58,
+      "width": 502,
+      "height": 30,
+      "top": 58,
+      "right": 971,
+      "bottom": 88,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "provider-detail__head",
+    "text": "Echo○ Off",
+    "rect": {
+      "x": 469,
+      "y": 104,
+      "width": 502,
+      "height": 39,
+      "top": 104,
+      "right": 971,
+      "bottom": 143,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 20px",
+      "padding": "0px 0px 16px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Available toAll personas",
+    "rect": {
+      "x": 469,
+      "y": 163,
+      "width": 502,
+      "height": 54.5,
+      "top": 163,
+      "right": 971,
+      "bottom": 217.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Available to",
+    "rect": {
+      "x": 469,
+      "y": 163,
+      "width": 502,
+      "height": 16.5,
+      "top": 163,
+      "right": 971,
+      "bottom": 179.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Transportstdio",
+    "rect": {
+      "x": 469,
+      "y": 233.5,
+      "width": 502,
+      "height": 54.5,
+      "top": 233.5,
+      "right": 971,
+      "bottom": 288,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Transport",
+    "rect": {
+      "x": 469,
+      "y": 233.5,
+      "width": 502,
+      "height": 16.5,
+      "top": 233.5,
+      "right": 971,
+      "bottom": 250,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Command",
+    "rect": {
+      "x": 469,
+      "y": 304,
+      "width": 502,
+      "height": 54.5,
+      "top": 304,
+      "right": 971,
+      "bottom": 358.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Command",
+    "rect": {
+      "x": 469,
+      "y": 304,
+      "width": 502,
+      "height": 16.5,
+      "top": 304,
+      "right": 971,
+      "bottom": 320.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  },
+  {
+    "cls": "ext-input ext-input--mono",
+    "text": "",
+    "rect": {
+      "x": 469,
+      "y": 326.5,
+      "width": 502,
+      "height": 32,
+      "top": 326.5,
+      "right": 971,
+      "bottom": 358.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px",
+      "padding": "0px 12px",
+      "lineHeight": "normal"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Arguments/home/agent/shared_workspace/ai_upper/.tmp/extensions-calibration/serve",
+    "rect": {
+      "x": 469,
+      "y": 374.5,
+      "width": 502,
+      "height": 100,
+      "top": 374.5,
+      "right": 971,
+      "bottom": 474.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Arguments",
+    "rect": {
+      "x": 469,
+      "y": 374.5,
+      "width": 502,
+      "height": 16.5,
+      "top": 374.5,
+      "right": 971,
+      "bottom": 391,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  },
+  {
+    "cls": "ext-area ext-area--mono",
+    "text": "/home/agent/shared_workspace/ai_upper/.tmp/extensions-calibration/server.py",
+    "rect": {
+      "x": 469,
+      "y": 397,
+      "width": 502,
+      "height": 72,
+      "top": 397,
+      "right": 971,
+      "bottom": 469,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px",
+      "padding": "8px 12px",
+      "lineHeight": "18px"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Environment variablesSaved Add row",
+    "rect": {
+      "x": 469,
+      "y": 490.5,
+      "width": 502,
+      "height": 108,
+      "top": 490.5,
+      "right": 971,
+      "bottom": 598.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Environment variables",
+    "rect": {
+      "x": 469,
+      "y": 490.5,
+      "width": 502,
+      "height": 16.5,
+      "top": 490.5,
+      "right": 971,
+      "bottom": 507,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  },
+  {
+    "cls": "ext-input ext-input--mono kv-row__key",
+    "text": "",
+    "rect": {
+      "x": 469,
+      "y": 513,
+      "width": 170.671875,
+      "height": 32,
+      "top": 513,
+      "right": 639.671875,
+      "bottom": 545,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px",
+      "padding": "0px 12px",
+      "lineHeight": "normal"
+    }
+  },
+  {
+    "cls": "ext-input ext-input--mono kv-row__val",
+    "text": "",
+    "rect": {
+      "x": 647.671875,
+      "y": 513,
+      "width": 259.328125,
+      "height": 32,
+      "top": 513,
+      "right": 907,
+      "bottom": 545,
+      "left": 647.671875
+    },
+    "style": {
+      "margin": "0px",
+      "padding": "0px 12px",
+      "lineHeight": "normal"
+    }
+  },
+  {
+    "cls": "ext-field",
+    "text": "Discovered toolsTools this server provides appear here once connected",
+    "rect": {
+      "x": 469,
+      "y": 614.5,
+      "width": 502,
+      "height": 42,
+      "top": 614.5,
+      "right": 971,
+      "bottom": 656.5,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 16px",
+      "padding": "0px",
+      "lineHeight": "19.5px"
+    }
+  },
+  {
+    "cls": "ext-field__label",
+    "text": "Discovered tools",
+    "rect": {
+      "x": 469,
+      "y": 614.5,
+      "width": 502,
+      "height": 16.5,
+      "top": 614.5,
+      "right": 971,
+      "bottom": 631,
+      "left": 469
+    },
+    "style": {
+      "margin": "0px 0px 6px",
+      "padding": "0px",
+      "lineHeight": "16.5px"
+    }
+  }
+]
