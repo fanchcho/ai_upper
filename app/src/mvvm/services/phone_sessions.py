@@ -32,7 +32,10 @@ def history(shell, sid):
         else:
             item['parts'] = [{'k': 'text', 'text': msg.text()}]
         messages.append(item)
-    return {'t': 'history', 'sid': sid, 'messages': messages, 'start': 0,
+    from mvvm.services.deliverables import inspect
+    files = [dict(row, tool=tool, index=i) for tool in (session.delivered or {}) for i,row in enumerate(inspect(session,tool))]
+    for row in files: row.pop('path',None);row.pop('dir',None)
+    return {'files': files, 't': 'history', 'sid': sid, 'messages': messages, 'start': 0,
             'end': len(session.messages), 'total': len(session.messages)}
 
 
@@ -64,10 +67,13 @@ def handle(controller, bot_id, state, frame):
         send({'t': 'sessions', 'list': session_list(shell, bot)})
         return
     sid = frame.get('sid')
-    if kind not in ('send', 'history', 'stop'):
+    if kind not in ('send', 'history', 'stop', 'file'):
         return
     if sid not in {row['id'] for row in rows}:
         send({'t': 'err', 'code': 'gone', 'message': '对话不存在或超出允许范围'});return
+    if kind == 'file':
+        from mvvm.services.phone_files import send_file
+        send_file(shell._store.load_session(sid),frame,send);return
     if kind == 'history':
         state['watch'] = sid
         send(history(shell, sid));return

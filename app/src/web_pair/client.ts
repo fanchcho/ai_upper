@@ -11,19 +11,21 @@ const connection={port:ticket.port,desk:ticket.desk,via:ticket.via};localStorage
 const storageKey='device:'+(ticket.desk||ticket.port);const saved=ticket.secret?null:JSON.parse(localStorage.getItem(storageKey)||'null');const auth=saved||ticket
 const {hi,priv}=phoneHello(saved?'resume':ticket.kind||'pair',auth.id);let channel:any;let publicKey:string;let selected='';const uploads:string[]=[];const uploadWait=new Map<string,(body:any)=>void>()
 const wsUrl=ticket.port?'ws://127.0.0.1:'+ticket.port:(location.protocol==='https:'?'wss://':'ws://')+location.host+(ticket.via==='lan'?'/ws':'/d/'+encodeURIComponent(ticket.desk)+'/ws')
-const ws=new WebSocket(wsUrl)
+const downloads=new Map<string,any>();const ws=new WebSocket(wsUrl)
 function send(body:any){if(channel&&ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(channel.seal(body)))}
 function sessions(rows:any[]){list.replaceChildren();for(const row of rows){const o=document.createElement('option');o.value=row.id;o.textContent=(row.title||row.id)+(row.busy?' · 处理中':'');list.append(o)}if(rows.some(r=>r.id===selected))list.value=selected;else selected=list.value}
 ws.onopen=()=>ws.send(JSON.stringify(hi))
 ws.onmessage=event=>{try{const frame=JSON.parse(event.data);if(frame.t==='hi'){channel=phoneFinish(hi,priv,b64uDecode(auth.key||auth.secret)!,frame);if(!channel)throw Error('设备认证失败');send({t:'hello',v:1,name:navigator.platform+' 浏览器',kind:'browser'});send({t:'visible',visible:!document.hidden});return}
  if(frame.t==='offline')throw Error('电脑不在线')
  const body:any=channel.open(frame);if(!body)throw Error('密文验证失败')
+ if(body.t==='file'){if(!body.ok){status.textContent=body.message}else if(body.text!==undefined){showFile(body,new Blob([body.text],{type:'text/plain'}));}else downloads.set(body.rid,{...body,parts:[]})}
+ if(body.t==='file_chunk'){const file=downloads.get(body.rid);if(!file||body.seq!==file.parts.length)throw Error('文件块顺序错误');file.parts.push(b64uDecode(body.data));if(file.parts.length===file.chunks){showFile(file,new Blob(file.parts,{type:file.mime}));downloads.delete(body.rid)}}
  if(body.t==='upload'){uploadWait.get(body.uid)?.(body);status.textContent=body.state==='done'?'附件已上传，等待发送':body.message||'正在上传'}
  if(body.t==='paired'){localStorage.setItem(storageKey,JSON.stringify({id:body.device||body.id,key:body.key}));status.textContent='设备配对已保存'}
  if(body.t==='ready'){publicKey=body.publicKey;button.disabled=false;status.textContent='安全连接已建立；外部推送未验证'}
  if(body.t==='ok'){sessions(body.sessions);if(selected)send({t:'history',sid:selected})}
  if(body.t==='sessions')sessions(body.list)
- if(body.t==='history'&&body.sid===selected){if(body.messages.at(-1)?.role==='assistant')status.textContent='回复已写回主对话';historyBox.replaceChildren();for(const m of body.messages){const p=document.createElement('p');p.textContent=(m.role==='user'?'我：':'助手：')+(m.text||m.parts?.filter((p:any)=>p.k==='text').map((p:any)=>p.text).join('')||'');historyBox.append(p)}}
+ if(body.t==='history'&&body.sid===selected){if(body.messages.at(-1)?.role==='assistant')status.textContent='回复已写回主对话';historyBox.replaceChildren();for(const m of body.messages){const p=document.createElement('p');p.textContent=(m.role==='user'?'我：':'助手：')+(m.text||m.parts?.filter((p:any)=>p.k==='text').map((p:any)=>p.text).join('')||'');historyBox.append(p)}for(const f of body.files||[]){const b=document.createElement('button');b.className='delivered';b.textContent='查看 / 下载 '+f.name;b.onclick=()=>send({t:'file',sid:selected,tool:f.tool,index:f.index,rid:crypto.randomUUID()});historyBox.append(b)}}
  if(body.t==='created'){if(body.error)status.textContent=body.error;else{selected=body.sid;send({t:'history',sid:selected})}}
  if(body.t==='sent')status.textContent=body.ok?'消息已送入主对话，等待回复':body.message
  if(body.t==='err')status.textContent=body.message
@@ -40,3 +42,5 @@ button.onclick=async()=>{try{status.textContent='正在申请浏览器推送订�
 
 const fileInput=document.querySelector('#attachment') as HTMLInputElement
 fileInput.onchange=async()=>{for(const file of Array.from(fileInput.files||[])){const uid='up_'+Math.random().toString(36).slice(2);try{await new Promise<void>((resolve,reject)=>{uploadWait.set(uid,b=>b.state==='ready'?resolve():reject(Error(b.message)));send({t:'up_begin',uid,name:file.name,size:file.size,mime:file.type})});const data=new Uint8Array(await file.arrayBuffer());for(let i=0;i<data.length;i+=192*1024)send({t:'up_chunk',uid,seq:i/(192*1024),data:b64uEncode(data.slice(i,i+192*1024))});await new Promise<void>((resolve,reject)=>{uploadWait.set(uid,b=>b.state==='done'?resolve():reject(Error(b.message)));send({t:'up_end',uid})});uploads.push(uid)}catch(e){status.textContent=String(e)}finally{uploadWait.delete(uid)}}}
+
+function showFile(file:any,blob:Blob){const box=document.querySelector('#file')!;box.replaceChildren();const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.textContent='保存 '+file.name;a.id='download';box.append(a);const pre=document.createElement('pre');pre.textContent=file.text||('已收到 '+blob.size+' 字节');box.append(pre);status.textContent=file.truncated?'预览已截断':'文件已接收'}

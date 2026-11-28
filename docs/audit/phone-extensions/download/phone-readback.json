@@ -1,0 +1,901 @@
+{
+  "boundary": "localhost relay and model fixtures; real sockets/ChatHost/store/browser events; no physical phone or public relay",
+  "results": [
+    {
+      "theme": "dark",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-e506f837e3334efa9d6c9dbf9fc1260c/home",
+      "session": "sess_mwzpsrp1_aheu5i",
+      "messages_reopened": [
+        "PHONE_lan_dark",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": {
+        "deliver_test": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+        ]
+      },
+      "device_before_revoke": {
+        "id": "d_53fa99ba178e191a",
+        "chatId": "d_53fa99ba178e191a",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828292497,
+        "lastSeen": 1795828295213,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzpsrp1_aheu5i",
+        "device": "d_53fa99ba178e191a",
+        "body": "我：PHONE_lan_dark助手：LOCAL_MODEL_REPLY查看 / 下载 delivered.txt查看 / 下载 delivered.bin",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_a78685d12b73c780"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "dark",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-e506f837e3334efa9d6c9dbf9fc1260c/home",
+      "session": "sess_mwzpswk5_gvqwe3",
+      "messages_reopened": [
+        "PHONE_relay_dark",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": {
+        "deliver_test": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+        ]
+      },
+      "device_before_revoke": {
+        "id": "d_fe1fff4894d8fe04",
+        "chatId": "d_fe1fff4894d8fe04",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828298837,
+        "lastSeen": 1795828301120,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzpswk5_gvqwe3",
+        "device": "d_fe1fff4894d8fe04",
+        "body": "我：PHONE_relay_dark助手：LOCAL_MODEL_REPLY查看 / 下载 delivered.txt查看 / 下载 delivered.bin",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_a40dc10763a8488d"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-711fa3c4906447b7a846e5a32b095482/home",
+      "session": "sess_mwzpt573_vj5u89",
+      "messages_reopened": [
+        "PHONE_lan_light",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": {
+        "deliver_test": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+        ]
+      },
+      "device_before_revoke": {
+        "id": "d_316a86d131a268c5",
+        "chatId": "d_316a86d131a268c5",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828310084,
+        "lastSeen": 1795828312517,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzpt573_vj5u89",
+        "device": "d_316a86d131a268c5",
+        "body": "我：PHONE_lan_light助手：LOCAL_MODEL_REPLY查看 / 下载 delivered.txt查看 / 下载 delivered.bin",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_63ffd29e4925e220"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-711fa3c4906447b7a846e5a32b095482/home",
+      "session": "sess_mwzpt9tj_a3i0cy",
+      "messages_reopened": [
+        "PHONE_relay_light",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": {
+        "deliver_test": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+          "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+        ]
+      },
+      "device_before_revoke": {
+        "id": "d_6413d528efff75a6",
+        "chatId": "d_6413d528efff75a6",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795828316033,
+        "lastSeen": 1795828318406,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzpt9tj_a3i0cy",
+        "device": "d_6413d528efff75a6",
+        "body": "我：PHONE_relay_light助手：LOCAL_MODEL_REPLY查看 / 下载 delivered.txt查看 / 下载 delivered.bin",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_12e0b464bcd48a47"
+      },
+      "revoked_disk_and_key": true
+    }
+  ],
+  "model_http_requests": [
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_dark"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "deliver_test",
+              "name": "present_files",
+              "input": {
+                "paths": [
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "deliver_test",
+              "content": "已交付 2 个文件，交付卡将在本轮回复结束后显示在回复末尾。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_dark"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "deliver_test",
+              "name": "present_files",
+              "input": {
+                "paths": [
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "deliver_test",
+              "content": "已交付 2 个文件，交付卡将在本轮回复结束后显示在回复末尾。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_light"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "deliver_test",
+              "name": "present_files",
+              "input": {
+                "paths": [
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "deliver_test",
+              "content": "已交付 2 个文件，交付卡将在本轮回复结束后显示在回复末尾。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_light"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "deliver_test",
+              "name": "present_files",
+              "input": {
+                "paths": [
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.txt",
+                  "/home/agent/shared_workspace/ai_upper/.tmp/phone-evidence/delivered.bin"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "deliver_test",
+              "content": "已交付 2 个文件，交付卡将在本轮回复结束后显示在回复末尾。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relay_envelopes": [
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/4a0a10a48ca0713f"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/240e83cb29b0698b"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "6"
+    }
+  ]
+}
