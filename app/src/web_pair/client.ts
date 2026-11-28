@@ -9,7 +9,7 @@ else ticket=JSON.parse(localStorage.getItem('connection')||'null')
 if(!ticket)throw Error('请从桌面重新生成配对票据')
 const connection={port:ticket.port,desk:ticket.desk,via:ticket.via};localStorage.setItem('connection',JSON.stringify(connection));history.replaceState(null,'',location.pathname)
 const storageKey='device:'+(ticket.desk||ticket.port);const saved=ticket.secret?null:JSON.parse(localStorage.getItem(storageKey)||'null');const auth=saved||ticket
-const {hi,priv}=phoneHello(saved?'resume':ticket.kind||'pair',auth.id);let channel:any;let publicKey:string;let selected=''
+const {hi,priv}=phoneHello(saved?'resume':ticket.kind||'pair',auth.id);let channel:any;let publicKey:string;let selected='';const uploads:string[]=[];const uploadWait=new Map<string,(body:any)=>void>()
 const wsUrl=ticket.port?'ws://127.0.0.1:'+ticket.port:(location.protocol==='https:'?'wss://':'ws://')+location.host+(ticket.via==='lan'?'/ws':'/d/'+encodeURIComponent(ticket.desk)+'/ws')
 const ws=new WebSocket(wsUrl)
 function send(body:any){if(channel&&ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(channel.seal(body)))}
@@ -18,6 +18,7 @@ ws.onopen=()=>ws.send(JSON.stringify(hi))
 ws.onmessage=event=>{try{const frame=JSON.parse(event.data);if(frame.t==='hi'){channel=phoneFinish(hi,priv,b64uDecode(auth.key||auth.secret)!,frame);if(!channel)throw Error('设备认证失败');send({t:'hello',v:1,name:navigator.platform+' 浏览器',kind:'browser'});send({t:'visible',visible:!document.hidden});return}
  if(frame.t==='offline')throw Error('电脑不在线')
  const body:any=channel.open(frame);if(!body)throw Error('密文验证失败')
+ if(body.t==='upload'){uploadWait.get(body.uid)?.(body);status.textContent=body.state==='done'?'附件已上传，等待发送':body.message||'正在上传'}
  if(body.t==='paired'){localStorage.setItem(storageKey,JSON.stringify({id:body.device||body.id,key:body.key}));status.textContent='设备配对已保存'}
  if(body.t==='ready'){publicKey=body.publicKey;button.disabled=false;status.textContent='安全连接已建立；外部推送未验证'}
  if(body.t==='ok'){sessions(body.sessions);if(selected)send({t:'history',sid:selected})}
@@ -32,7 +33,10 @@ ws.onclose=()=>{status.textContent+=' · 连接已关闭';button.disabled=true}
 ws.onerror=()=>status.textContent='连接失败；未验证'
 list.onchange=()=>{selected=list.value;send({t:'history',sid:selected})}
 document.querySelector('#new')!.addEventListener('click',()=>{const sid='sess_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);send({t:'new',rid:sid,sid})})
-document.querySelector('#send')!.addEventListener('click',()=>{if(selected&&input.value.trim()){send({t:'send',sid:selected,text:input.value,cid:Date.now().toString()});input.value=''}})
+document.querySelector('#send')!.addEventListener('click',()=>{if(selected&&(input.value.trim()||uploads.length)){send({t:'send',sid:selected,text:input.value,files:uploads.splice(0),cid:Date.now().toString()});input.value=''}})
 document.querySelector('#refresh')!.addEventListener('click',()=>{send({t:'refresh'});if(selected)send({t:'history',sid:selected})})
 document.addEventListener('visibilitychange',()=>send({t:'visible',visible:!document.hidden}))
 button.onclick=async()=>{try{status.textContent='正在申请浏览器推送订阅…';const registration=await navigator.serviceWorker.register('/sw.js');await navigator.serviceWorker.ready;const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uDecode(publicKey)!});send({t:'push',subscription:subscription.toJSON()})}catch(e){status.textContent='未验证：'+String(e)}}
+
+const fileInput=document.querySelector('#attachment') as HTMLInputElement
+fileInput.onchange=async()=>{for(const file of Array.from(fileInput.files||[])){const uid='up_'+Math.random().toString(36).slice(2);try{await new Promise<void>((resolve,reject)=>{uploadWait.set(uid,b=>b.state==='ready'?resolve():reject(Error(b.message)));send({t:'up_begin',uid,name:file.name,size:file.size,mime:file.type})});const data=new Uint8Array(await file.arrayBuffer());for(let i=0;i<data.length;i+=192*1024)send({t:'up_chunk',uid,seq:i/(192*1024),data:b64uEncode(data.slice(i,i+192*1024))});await new Promise<void>((resolve,reject)=>{uploadWait.set(uid,b=>b.state==='done'?resolve():reject(Error(b.message)));send({t:'up_end',uid})});uploads.push(uid)}catch(e){status.textContent=String(e)}finally{uploadWait.delete(uid)}}}

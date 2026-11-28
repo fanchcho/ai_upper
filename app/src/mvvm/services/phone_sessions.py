@@ -41,6 +41,11 @@ def handle(controller, bot_id, state, frame):
     bot = next(b for b in controller.list() if b['id'] == bot_id)
     send = state['send_frame']
     kind = frame.get('t')
+    if not hasattr(controller,'phone_uploads'):
+        from mvvm.services.phone_uploads import Uploads
+        controller.phone_uploads=Uploads(shell._host)
+    if kind in ('up_begin','up_chunk','up_end','up_cancel'):
+        controller.phone_uploads.handle(state['device'],frame,send);return
     rows = session_list(shell, bot)
     if kind in ('hello', 'refresh'):
         send({'t': 'sessions', 'list': rows})
@@ -69,14 +74,15 @@ def handle(controller, bot_id, state, frame):
     if kind == 'stop':
         shell._host.abort(shell._host.attach(sid).get('turnId'));return
     text = frame.get('text')
-    if not isinstance(text, str) or not text.strip() or frame.get('files'):
-        send({'t': 'sent', 'cid': frame.get('cid'), 'sid': sid, 'ok': False, 'message': '请输入文字；手机附件尚未接入'});return
+    if not isinstance(text, str) or (not text.strip() and not frame.get('files')):
+        send({'t': 'sent', 'cid': frame.get('cid'), 'sid': sid, 'ok': False, 'message': '请输入文字或上传附件'});return
     if shell._host.is_busy(sid):
         send({'t': 'sent', 'cid': frame.get('cid'), 'sid': sid, 'ok': False, 'message': '当前回合尚未结束'});return
     state['watch'] = sid
     controller.turns[sid] = (bot_id, state['device'])
     try:
-        shell._host.send({'sessionId': sid, 'text': text})
+        paths=controller.phone_uploads.take(state['device'],frame.get('files',[]))
+        shell._host.send({'sessionId': sid, 'text': text, 'attachments':paths})
         send({'t': 'sent', 'cid': frame.get('cid'), 'sid': sid, 'ok': True})
     except Exception as exc:
         controller.turns.pop(sid, None)
