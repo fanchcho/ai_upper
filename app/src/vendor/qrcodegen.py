@@ -978,17 +978,16 @@ class QrSegmentAdvanced:
 			curmode: QrSegment.Mode|None = charmodes[i][prevmode] if (i < len(codepoints)) else None
 			if (i >= len(codepoints)) or (curmode != prevmode):
 				s: str = codepoints[runstart : i]
-				match prevmode:
-					case QrSegment.Mode.BYTE:
-						result.append(QrSegment.make_bytes(s.encode("UTF-8")))
-					case QrSegment.Mode.NUMERIC:
-						result.append(QrSegment.make_numeric(s))
-					case QrSegment.Mode.ALPHANUMERIC:
-						result.append(QrSegment.make_alphanumeric(s))
-					case QrSegment.Mode.KANJI:
-						result.append(QrSegmentAdvanced.make_kanji(s))
-					case _:
-						raise AssertionError()
+				if prevmode == QrSegment.Mode.BYTE:
+					result.append(QrSegment.make_bytes(s.encode("UTF-8")))
+				elif prevmode == QrSegment.Mode.NUMERIC:
+					result.append(QrSegment.make_numeric(s))
+				elif prevmode == QrSegment.Mode.ALPHANUMERIC:
+					result.append(QrSegment.make_alphanumeric(s))
+				elif prevmode == QrSegment.Mode.KANJI:
+					result.append(QrSegmentAdvanced.make_kanji(s))
+				else:
+					raise AssertionError()
 				if i >= len(codepoints):
 					break
 				if curmode is None:

@@ -2,10 +2,10 @@
 # 入库模板 app/pyproject.toml.example 的 dependencies 必须保持为空（克隆者不继承维护者的 pin，
 # 该约束由 app/tests/test_build_tool_compat.py 强制）；这里记录本应用实际需要的最小集合。
 # 安装：pip install -r app/requirements.txt
-# 界面只需要 QtCore/QtGui/QtWidgets/QtQml/QtQuick，全部在 PySide6-Essentials 里；
-# 元包 PySide6 会连带装 PySide6-Addons（含 QtWebEngine 等整套 Chromium，约 240 MiB），
-# 本工程已确定不再使用 WebEngine，所以只声明 Essentials。
+# QML 界面使用 Essentials；飞书连接、浏览器配对及手机 relay 使用 Addons 的 QtWebSockets。
+# 发行构建按实际 import 裁剪 Addons，QtWebEngine 不进入发行包。
 PySide6-Essentials==6.11.2
+PySide6-Addons==6.11.2
 pydantic==2.14.3
 # 模型请求的 HTTP 客户端：http_client.py 直接 import httpx，SSE 解析与
 # 连接复用都建在它的 API 上；漏声明会让打包产物在装配时 ModuleNotFoundError。

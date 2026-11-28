@@ -26,7 +26,7 @@ def linux_release(target, formats=('TGZ', 'DEB'), deb_depends=None):
         if not shutil.which(tool):
             raise RuntimeError('Linux release requires ' + tool)
     name, version = app_name(), project_version()
-    package_name = name.lower()
+    package_name = name.lower().replace("_", "-")
     if not re.fullmatch(r'[a-z0-9][a-z0-9+.-]+', package_name):
         raise ValueError('Linux package name must contain only letters, digits, +, . or -')
     if not re.fullmatch(r'[0-9]+(?:\.[0-9]+)*', version):
