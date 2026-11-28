@@ -1,0 +1,29 @@
+Date: 2026-11-28 CST
+[11:48:05.869] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[11:48:05.869] Command line: .tmp/remaining-boundaries/weston/usr/bin/weston -B headless --renderer=pixman --socket=ai-upper-wayland --idle-time=0 --no-config --shell=kiosk-shell.so
+[11:48:05.869] OS: Linux, 5.10.0-16-arm64, #1 SMP Debian 5.10.127-2 (2022-07-23), aarch64
+[11:48:05.869] Flight recorder: enabled
+[11:48:05.869] Starting with no config file.
+[11:48:05.869] Output repaint window is 7 ms maximum.
+[11:48:05.869] Loading module '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/headless-backend.so'
+[11:48:05.879] Using Pixman renderer
+[11:48:05.880] Registered plugin API 'weston_windowed_output_api_headless_v2' of size 16
+[11:48:05.880] Color manager: no-op
+                 protocol support: no
+[11:48:05.880] Output 'headless' attempts EOTF mode SDR and colorimetry mode default.
+[11:48:05.880] Output 'headless' using color profile: stock sRGB color profile
+[11:48:05.880] Output 'headless' enabled with head(s) headless
+[11:48:05.880] Compositor capabilities:
+               arbitrary surface rotation: yes
+               screen capture uses y-flip: no
+               cursor planes: no
+               arbitrary resolutions: no
+               view mask clipping: yes
+               explicit sync: no
+               color operations: no
+               presentation clock: CLOCK_MONOTONIC_RAW, id 4
+               presentation clock resolution: 0.000000001 s
+[11:48:05.880] Loading module '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so'

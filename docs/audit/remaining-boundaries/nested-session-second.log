@@ -1,0 +1,45 @@
++ export XDG_RUNTIME_DIR=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/xdg
++ XDG_RUNTIME_DIR=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/xdg
++ export LD_LIBRARY_PATH=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston:/home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/icon-dpi/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/extensions-complete/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu
++ LD_LIBRARY_PATH=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston:/home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/icon-dpi/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/extensions-complete/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu
++ export 'WESTON_MODULE_MAP=x11-backend.so=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/x11-backend.so;kiosk-shell.so=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so'
++ WESTON_MODULE_MAP='x11-backend.so=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/x11-backend.so;kiosk-shell.so=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so'
++ wpid=324233
++ sleep 2
++ .tmp/remaining-boundaries/weston/usr/bin/weston -B x11 --renderer=pixman --socket=ai-upper-nested --width=1280 --height=820 --idle-time=0 --no-config --shell=kiosk-shell.so
++ export WAYLAND_DISPLAY=ai-upper-nested QT_QPA_PLATFORM=wayland QT_IM_MODULE=fcitx QT_QUICK_BACKEND=software
++ WAYLAND_DISPLAY=ai-upper-nested
++ QT_QPA_PLATFORM=wayland
++ QT_IM_MODULE=fcitx
++ QT_QUICK_BACKEND=software
++ export XDG_CONFIG_HOME=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/config XDG_DATA_HOME=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/data
++ XDG_CONFIG_HOME=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/config
++ XDG_DATA_HOME=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/data
++ mkdir -p /home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/config/fcitx5
++ cp .tmp/environment-closeout/ime-config/fcitx5/profile /home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/config/fcitx5/profile
++ fcitx5 -d
++ export QT_PLUGIN_PATH=/tmp/ai-upper-qt611-sdk/plugins
++ QT_PLUGIN_PATH=/tmp/ai-upper-qt611-sdk/plugins
++ dbus-monitor --session interface=org.fcitx.Fcitx.InputContext1 interface=org.fcitx.Fcitx.InputMethod1
++ export LD_LIBRARY_PATH=/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston:/home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/icon-dpi/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/extensions-complete/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu
++ LD_LIBRARY_PATH=/home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston:/home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/icon-dpi/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/extensions-complete/runtime/usr/lib/aarch64-linux-gnu:/home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu
++ export PARITY_OUTPUT_DIR=/home/agent/shared_workspace/ai_upper/docs/audit/remaining-boundaries/nested
++ PARITY_OUTPUT_DIR=/home/agent/shared_workspace/ai_upper/docs/audit/remaining-boundaries/nested
++ mkdir -p /home/agent/shared_workspace/ai_upper/docs/audit/remaining-boundaries/nested
++ for theme in dark light
++ AI_UPPER_HOME=/tmp/ai-upper-nested-dark
++ PROBE_THEME=dark
++ PYTHONPATH=/home/agent/shared_workspace/ai_upper/scripts/parity
++ WAYLAND_DEBUG=1
++ .venv/bin/python .tmp/remaining-boundaries/wayland_turn.py
+dbus-daemon[324231]: [session uid=0 pid=324231 pidfd=5] Connection :1.0 (uid=0 pid=324241 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.
++ printf '%s\n' 0
++ for theme in dark light
++ AI_UPPER_HOME=/tmp/ai-upper-nested-light
++ PROBE_THEME=light
++ PYTHONPATH=/home/agent/shared_workspace/ai_upper/scripts/parity
++ WAYLAND_DEBUG=1
++ .venv/bin/python .tmp/remaining-boundaries/wayland_turn.py
++ printf '%s\n' 0
++ fcitx5-remote -e
++ kill 324233

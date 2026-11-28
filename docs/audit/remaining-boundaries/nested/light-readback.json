@@ -1,0 +1,29 @@
+{
+  "committedText": "你好",
+  "qt": "6.11.2",
+  "python": "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+  "preedit": [
+    "n",
+    "ni",
+    "ni h",
+    "ni ha",
+    "ni hao",
+    ""
+  ],
+  "preeditScreenshot": [
+    "ni hao"
+  ],
+  "storedTitle": "你好",
+  "messages": [
+    {
+      "role": "user",
+      "text": "你好"
+    },
+    {
+      "role": "assistant",
+      "text": "本地 fixture 收到你好"
+    }
+  ],
+  "sessionId": "qml-mwzvj7ur99a166",
+  "path": "/tmp/ai-upper-nested-light/data/chats/qml-mwzvj7ur99a166.json"
+}

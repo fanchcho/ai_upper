@@ -1,0 +1,36 @@
+Date: 2026-11-28 CST
+[11:51:35.014] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[11:51:35.014] Command line: .tmp/remaining-boundaries/weston/usr/bin/weston -B x11 --renderer=pixman --socket=ai-upper-nested --width=1280 --height=820 --idle-time=0 --no-config --shell=kiosk-shell.so
+[11:51:35.014] OS: Linux, 5.10.0-16-arm64, #1 SMP Debian 5.10.127-2 (2022-07-23), aarch64
+[11:51:35.014] Flight recorder: enabled
+[11:51:35.015] Starting with no config file.
+[11:51:35.015] Output repaint window is 7 ms maximum.
+[11:51:35.015] Loading module '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/x11-backend.so'
+[11:51:35.017] Using Pixman renderer
+[11:51:35.021] Registered plugin API 'weston_windowed_output_api_x11_v2' of size 16
+[11:51:35.021] Color manager: no-op
+                 protocol support: no
+[11:51:35.021] Output 'screen0' attempts EOTF mode SDR and colorimetry mode default.
+[11:51:35.021] Output 'screen0' using color profile: stock sRGB color profile
+/usr/share/weston/wayland.png: No such file or directory
+[11:51:35.021] Found visual, bits per value: 8, red_mask: 00ff0000, green_mask: 0000ff00, blue_mask: 000000ff
+[11:51:35.021] Visual depth is 24
+[11:51:35.021] Found format for depth 24, bpp: 32
+[11:51:35.021] Will use x8r8g8b8 format for SHM surfaces
+[11:51:35.021] x11 output 1280x820, window id 2097157
+[11:51:35.021] Output 'screen0' enabled with head(s) screen0
+[11:51:35.021] Compositor capabilities:
+               arbitrary surface rotation: yes
+               screen capture uses y-flip: no
+               cursor planes: no
+               arbitrary resolutions: no
+               view mask clipping: yes
+               explicit sync: no
+               color operations: no
+               presentation clock: CLOCK_MONOTONIC_RAW, id 4
+               presentation clock resolution: 0.000000001 s
+[11:51:35.021] Loading module '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so'
+[11:52:16.462] caught signal 15

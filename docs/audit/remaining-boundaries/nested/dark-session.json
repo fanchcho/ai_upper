@@ -1,0 +1,26 @@
+{
+  "id": "qml-mwzviq3c4ed83b",
+  "title": "你好",
+  "createdAt": 1795837902744,
+  "updatedAt": 1795837918589,
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "你好"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "本地 fixture 收到你好"
+        }
+      ]
+    }
+  ]
+}

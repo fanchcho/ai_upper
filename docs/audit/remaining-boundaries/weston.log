@@ -1,0 +1,12 @@
+Date: 2026-11-28 CST
+[11:46:49.675] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[11:46:49.676] Command line: .tmp/remaining-boundaries/weston/usr/bin/weston --backend=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/headless-backend.so --renderer=pixman --socket=ai-upper-wayland --idle-time=0 --no-config --shell=/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/weston/kiosk-shell.so
+[11:46:49.676] OS: Linux, 5.10.0-16-arm64, #1 SMP Debian 5.10.127-2 (2022-07-23), aarch64
+[11:46:49.676] Flight recorder: enabled
+[11:46:49.676] Starting with no config file.
+[11:46:49.676] Output repaint window is 7 ms maximum.
+[11:46:49.676] Error: unknown backend "/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/weston/usr/lib/aarch64-linux-gnu/libweston-14/headless-backend.so"
+[11:46:49.676] fatal: failed to create compositor backend

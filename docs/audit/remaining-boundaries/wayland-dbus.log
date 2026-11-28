@@ -1,0 +1,5 @@
+signal time=1795837766.305261 sender=org.freedesktop.DBus -> destination=:1.0 serial=2 path=/org/freedesktop/DBus; interface=org.freedesktop.DBus; member=NameAcquired
+   string ":1.0"
+signal time=1795837766.305285 sender=org.freedesktop.DBus -> destination=:1.0 serial=4 path=/org/freedesktop/DBus; interface=org.freedesktop.DBus; member=NameLost
+   string ":1.0"
+signal time=1795837780.612670 sender=(null sender) -> destination=(null destination) serial=0 path=/org/freedesktop/DBus/Local; interface=org.freedesktop.DBus.Local; member=Disconnected

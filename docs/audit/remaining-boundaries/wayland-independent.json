@@ -1,0 +1,36 @@
+[
+  {
+    "theme": "dark",
+    "title": "你好",
+    "messages": [
+      {
+        "role": "user",
+        "text": "你好"
+      },
+      {
+        "role": "assistant",
+        "text": "本地 fixture 收到你好"
+      }
+    ],
+    "session": "/tmp/ai-upper-nested-dark/data/chats/qml-mwzviq3c4ed83b.json",
+    "copyByteEqual": true,
+    "waylandClientLoaded": true
+  },
+  {
+    "theme": "light",
+    "title": "你好",
+    "messages": [
+      {
+        "role": "user",
+        "text": "你好"
+      },
+      {
+        "role": "assistant",
+        "text": "本地 fixture 收到你好"
+      }
+    ],
+    "session": "/tmp/ai-upper-nested-light/data/chats/qml-mwzvj7ur99a166.json",
+    "copyByteEqual": true,
+    "waylandClientLoaded": true
+  }
+]

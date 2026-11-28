@@ -1,0 +1,4 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libweston-14-0 arm64 14.0.2-1 [381 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 weston arm64 14.0.2-1 [875 kB]
+Fetched 1256 kB in 1s (2340 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/remaining-boundaries/debs/libweston-14-0_14.0.2-1_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

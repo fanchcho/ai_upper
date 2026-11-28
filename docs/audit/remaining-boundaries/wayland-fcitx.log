@@ -1,0 +1,51 @@
+I2026-11-28 11:49:26.305334 instance.cpp:1394] Override Enabled Addons: {}
+I2026-11-28 11:49:26.305429 instance.cpp:1395] Override Disabled Addons: {}
+I2026-11-28 11:49:26.309478 addonmanager.cpp:205] Loaded addon wayland
+I2026-11-28 11:49:26.315960 addonmanager.cpp:205] Loaded addon xcb
+I2026-11-28 11:49:26.317291 addonmanager.cpp:205] Loaded addon quickphrase
+I2026-11-28 11:49:26.317560 addonmanager.cpp:205] Loaded addon imselector
+I2026-11-28 11:49:26.323178 addonmanager.cpp:205] Loaded addon keyboard
+I2026-11-28 11:49:26.323729 addonmanager.cpp:205] Loaded addon clipboard
+I2026-11-28 11:49:26.324564 addonmanager.cpp:205] Loaded addon waylandim
+I2026-11-28 11:49:26.324774 addonmanager.cpp:205] Loaded addon unicode
+I2026-11-28 11:49:26.325718 addonmanager.cpp:205] Loaded addon pinyinhelper
+I2026-11-28 11:49:26.326787 addonmanager.cpp:205] Loaded addon dbus
+I2026-11-28 11:49:26.327344 addonmanager.cpp:205] Loaded addon dbusfrontend
+I2026-11-28 11:49:26.331898 addonmanager.cpp:205] Loaded addon fcitx4frontend
+I2026-11-28 11:49:26.332856 addonmanager.cpp:205] Loaded addon ibusfrontend
+I2026-11-28 11:49:26.333257 addonmanager.cpp:205] Loaded addon xim
+I2026-11-28 11:49:26.341760 inputmethodmanager.cpp:209] Found 738 input method(s) in addon keyboard
+I2026-11-28 11:49:26.342250 inputmethodmanager.cpp:132] No valid input method group in configuration. Building a default one
+I2026-11-28 11:49:26.342319 instance.cpp:382] Items in Default: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-11-28 11:49:26.342343 instance.cpp:387] Generated groups: [Default]
+I2026-11-28 11:49:26.342759 addonmanager.cpp:205] Loaded addon kimpanel
+I2026-11-28 11:49:26.343061 addonmanager.cpp:205] Loaded addon virtualkeyboard
+I2026-11-28 11:49:26.353418 classicui.cpp:109] Created classicui for wayland display:
+I2026-11-28 11:49:26.353447 addonmanager.cpp:205] Loaded addon classicui
+I2026-11-28 11:49:26.353863 addonmanager.cpp:205] Loaded addon notificationitem
+I2026-11-28 11:49:26.354288 addonmanager.cpp:205] Loaded addon notifications
+I2026-11-28 11:49:26.357859 dbusmodule.cpp:790] Service name change: org.fcitx.Fcitx5  :1.1
+I2026-11-28 11:49:26.357988 kimpanel.cpp:116] Kimpanel new owner: 
+I2026-11-28 11:49:26.358018 virtualkeyboard.cpp:218] VirtualKeyboard new owner: 
+E2026-11-28 11:49:26.358057 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.ServiceUnknown The name org.freedesktop.portal.Desktop was not provided by any .service files
+E2026-11-28 11:49:26.358129 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.ServiceUnknown The name org.freedesktop.portal.Desktop was not provided by any .service files
+E2026-11-28 11:49:26.358199 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.ServiceUnknown The name org.freedesktop.portal.Desktop was not provided by any .service files
+I2026-11-28 11:49:40.619960 addonmanager.cpp:308] Unloading addon notifications
+I2026-11-28 11:49:40.620017 addonmanager.cpp:308] Unloading addon notificationitem
+I2026-11-28 11:49:40.620066 addonmanager.cpp:308] Unloading addon classicui
+I2026-11-28 11:49:40.620586 addonmanager.cpp:308] Unloading addon virtualkeyboard
+I2026-11-28 11:49:40.620627 addonmanager.cpp:308] Unloading addon kimpanel
+I2026-11-28 11:49:40.620654 addonmanager.cpp:308] Unloading addon xim
+I2026-11-28 11:49:40.620677 addonmanager.cpp:308] Unloading addon ibusfrontend
+I2026-11-28 11:49:40.626247 addonmanager.cpp:308] Unloading addon fcitx4frontend
+I2026-11-28 11:49:40.626328 addonmanager.cpp:308] Unloading addon dbusfrontend
+I2026-11-28 11:49:40.626375 addonmanager.cpp:308] Unloading addon dbus
+I2026-11-28 11:49:40.626444 addonmanager.cpp:308] Unloading addon pinyinhelper
+I2026-11-28 11:49:40.626473 addonmanager.cpp:308] Unloading addon unicode
+I2026-11-28 11:49:40.626504 addonmanager.cpp:308] Unloading addon waylandim
+I2026-11-28 11:49:40.626543 addonmanager.cpp:308] Unloading addon clipboard
+I2026-11-28 11:49:40.626581 addonmanager.cpp:308] Unloading addon keyboard
+I2026-11-28 11:49:40.626741 addonmanager.cpp:308] Unloading addon imselector
+I2026-11-28 11:49:40.626778 addonmanager.cpp:308] Unloading addon quickphrase
+I2026-11-28 11:49:40.627047 addonmanager.cpp:308] Unloading addon xcb
+I2026-11-28 11:49:40.627071 addonmanager.cpp:308] Unloading addon wayland

@@ -1,0 +1,1 @@
+dbus-daemon[323983]: [session uid=0 pid=323983 pidfd=5] Connection :1.0 (uid=0 pid=323989 comm="dbus-monitor --session interface=org.fcitx.Fcitx.I") became a monitor.

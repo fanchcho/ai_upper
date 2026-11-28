@@ -1,0 +1,793 @@
+00400000-009cf000 r-xp 00000000 08:02 1446569                            /home/agent/shared_workspace/ai_upper/.venv/bin/python-real
+009df000-009e0000 r--p 005cf000 08:02 1446569                            /home/agent/shared_workspace/ai_upper/.venv/bin/python-real
+009e0000-00a6d000 rw-p 005d0000 08:02 1446569                            /home/agent/shared_workspace/ai_upper/.venv/bin/python-real
+00a6d000-00ae1000 rw-p 00000000 00:00 0 
+3aa2a000-3d7e6000 rw-p 00000000 00:00 0                                  [heap]
+ffff3c000000-ffff3c021000 rw-p 00000000 00:00 0 
+ffff3c021000-ffff40000000 ---p 00000000 00:00 0 
+ffff44000000-ffff44226000 rw-p 00000000 00:00 0 
+ffff44226000-ffff48000000 ---p 00000000 00:00 0 
+ffff48000000-ffff48021000 rw-p 00000000 00:00 0 
+ffff48021000-ffff4c000000 ---p 00000000 00:00 0 
+ffff4c000000-ffff4c021000 rw-p 00000000 00:00 0 
+ffff4c021000-ffff50000000 ---p 00000000 00:00 0 
+ffff50000000-ffff50021000 rw-p 00000000 00:00 0 
+ffff50021000-ffff54000000 ---p 00000000 00:00 0 
+ffff54000000-ffff54021000 rw-p 00000000 00:00 0 
+ffff54021000-ffff58000000 ---p 00000000 00:00 0 
+ffff5a7d0000-ffff5a7e0000 ---p 00000000 00:00 0 
+ffff5a7e0000-ffff5afe0000 rw-p 00000000 00:00 0 
+ffff5c000000-ffff5c021000 rw-p 00000000 00:00 0 
+ffff5c021000-ffff60000000 ---p 00000000 00:00 0 
+ffff6079e000-ffff607ae000 ---p 00000000 00:00 0 
+ffff607ae000-ffff60fae000 rw-p 00000000 00:00 0 
+ffff60fae000-ffff60fbe000 ---p 00000000 00:00 0 
+ffff60fbe000-ffff617be000 rw-p 00000000 00:00 0 
+ffff617be000-ffff617ce000 ---p 00000000 00:00 0 
+ffff617ce000-ffff61fce000 rw-p 00000000 00:00 0 
+ffff61fce000-ffff623cf000 rw-s 00000000 00:01 623405                     /memfd:wayland-shm (deleted)
+ffff623cf000-ffff627d0000 rw-s 00000000 00:01 622270                     /memfd:wayland-shm (deleted)
+ffff627d0000-ffff627e0000 ---p 00000000 00:00 0 
+ffff627e0000-ffff62fe0000 rw-p 00000000 00:00 0 
+ffff62fe0000-ffff62ff0000 ---p 00000000 00:00 0 
+ffff62ff0000-ffff637f0000 rw-p 00000000 00:00 0 
+ffff637f0000-ffff63800000 ---p 00000000 00:00 0 
+ffff63800000-ffff641a7000 rw-p 00000000 00:00 0 
+ffff641a7000-ffff68000000 ---p 00000000 00:00 0 
+ffff68000000-ffff689ba000 rw-p 00000000 00:00 0 
+ffff689ba000-ffff6c000000 ---p 00000000 00:00 0 
+ffff6c500000-ffff6c800000 rw-p 00000000 00:00 0 
+ffff6c800000-ffff6c820000 r-xp 00000000 08:02 660798                     /usr/lib/python3.13/lib-dynload/_ctypes.cpython-313-aarch64-linux-gnu.so
+ffff6c820000-ffff6c82f000 ---p 00020000 08:02 660798                     /usr/lib/python3.13/lib-dynload/_ctypes.cpython-313-aarch64-linux-gnu.so
+ffff6c82f000-ffff6c830000 r--p 0001f000 08:02 660798                     /usr/lib/python3.13/lib-dynload/_ctypes.cpython-313-aarch64-linux-gnu.so
+ffff6c830000-ffff6c833000 rw-p 00020000 08:02 660798                     /usr/lib/python3.13/lib-dynload/_ctypes.cpython-313-aarch64-linux-gnu.so
+ffff6c842000-ffff6cb42000 rw-p 00000000 00:00 0 
+ffff6cb42000-ffff6cb52000 ---p 00000000 00:00 0 
+ffff6cb52000-ffff6d352000 rw-p 00000000 00:00 0 
+ffff6d352000-ffff6d400000 r--p 00000000 08:02 668237                     /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+ffff6d400000-ffff6d80a000 r-xp 00000000 08:02 1450113                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6
+ffff6d80a000-ffff6d81f000 ---p 0040a000 08:02 1450113                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6
+ffff6d81f000-ffff6d830000 r--p 0040f000 08:02 1450113                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6
+ffff6d830000-ffff6d840000 rw-p 00420000 08:02 1450113                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Pdf.so.6
+ffff6d840000-ffff6d845000 rw-p 00000000 00:00 0 
+ffff6d852000-ffff6e800000 r--p 00000000 08:02 1606210                    /home/agent/shared_workspace/ai_upper/.tmp/theme-settings/NotoSansCJKsc-Regular.otf
+ffff6e800000-ffff6e8b0000 ---p 00000000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e8b0000-ffff6e8c0000 rw-p 000b0000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e8c0000-ffff6e920000 ---p 000c0000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e920000-ffff6e930000 rw-p 00120000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e930000-ffff6e980000 ---p 00130000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e980000-ffff6e990000 rw-p 00180000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e990000-ffff6e9b0000 ---p 00190000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6e9b0000-ffff6ec00000 ---p 001b0000 00:01 622239                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ec00000-ffff6ed10000 ---p 00000000 00:01 622238                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ed10000-ffff6ed40000 rw-p 00110000 00:01 622238                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ed40000-ffff6f000000 ---p 00140000 00:01 622238                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f000000-ffff6f110000 ---p 00000000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f110000-ffff6f120000 rw-p 00110000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f120000-ffff6f210000 ---p 00120000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f210000-ffff6f220000 rw-p 00210000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f220000-ffff6f270000 ---p 00220000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f270000-ffff6f280000 rw-p 00270000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f280000-ffff6f2e0000 ---p 00280000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f2e0000-ffff6f2f0000 rw-p 002e0000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f2f0000-ffff6f400000 ---p 002f0000 00:01 622237                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f400000-ffff6f4e0000 ---p 00000000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f4e0000-ffff6f4f0000 rw-p 000e0000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f4f0000-ffff6f500000 ---p 000f0000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f500000-ffff6f510000 rw-p 00100000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f510000-ffff6f560000 ---p 00110000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f560000-ffff6f570000 rw-p 00160000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f570000-ffff6f5b0000 ---p 00170000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f5b0000-ffff6f5e0000 rw-p 001b0000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f5e0000-ffff6f620000 ---p 001e0000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f620000-ffff6f630000 rw-p 00220000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f630000-ffff6f640000 ---p 00230000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f640000-ffff6f650000 rw-p 00240000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f650000-ffff6f800000 ---p 00250000 00:01 622231                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f800000-ffff6f8c0000 ---p 00000000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f8c0000-ffff6f8d0000 rw-p 000c0000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f8d0000-ffff6f900000 ---p 000d0000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f900000-ffff6f910000 rw-p 00100000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6f910000-ffff6fa50000 ---p 00110000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fa50000-ffff6fa60000 rw-p 00250000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fa60000-ffff6fb90000 ---p 00260000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fb90000-ffff6fba0000 rw-p 00390000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fba0000-ffff6fbd0000 ---p 003a0000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fbd0000-ffff6fbe0000 rw-p 003d0000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fbe0000-ffff6fc00000 ---p 003e0000 00:01 622230                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fc00000-ffff6fdf0000 ---p 00000000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fdf0000-ffff6fe00000 rw-p 001f0000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fe00000-ffff6fe30000 ---p 00200000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fe30000-ffff6fe40000 rw-p 00230000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6fe40000-ffff6ff40000 ---p 00240000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ff40000-ffff6ff50000 rw-p 00340000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ff50000-ffff6ff80000 ---p 00350000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ff80000-ffff6ff90000 rw-p 00380000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff6ff90000-ffff70000000 ---p 00390000 00:01 622229                     /memfd:JSGCHeap:QtQml (deleted)
+ffff70000000-ffff70099000 rw-p 00000000 00:00 0 
+ffff70099000-ffff74000000 ---p 00000000 00:00 0 
+ffff74020000-ffff7408e000 r-xp 00000000 08:02 1449904                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so
+ffff7408e000-ffff7409f000 ---p 0006e000 08:02 1449904                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so
+ffff7409f000-ffff740a0000 r--p 0006f000 08:02 1449904                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so
+ffff740a0000-ffff740a1000 rw-p 00070000 08:02 1449904                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqjpeg.so
+ffff740b0000-ffff740b7000 r-xp 00000000 08:02 1449901                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so
+ffff740b7000-ffff740cf000 ---p 00007000 08:02 1449901                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so
+ffff740cf000-ffff740d0000 r--p 0000f000 08:02 1449901                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so
+ffff740d0000-ffff740d1000 rw-p 00010000 08:02 1449901                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqgif.so
+ffff740e0000-ffff740e9000 r-xp 00000000 08:02 1449902                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so
+ffff740e9000-ffff740ff000 ---p 00009000 08:02 1449902                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so
+ffff740ff000-ffff74100000 r--p 0000f000 08:02 1449902                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so
+ffff74100000-ffff74101000 rw-p 00010000 08:02 1449902                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqicns.so
+ffff74110000-ffff74114000 r-xp 00000000 08:02 1449909                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so
+ffff74114000-ffff7412f000 ---p 00004000 08:02 1449909                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so
+ffff7412f000-ffff74130000 r--p 0000f000 08:02 1449909                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so
+ffff74130000-ffff74131000 rw-p 00010000 08:02 1449909                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwbmp.so
+ffff74140000-ffff74146000 r-xp 00000000 08:02 1449905                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so
+ffff74146000-ffff7415f000 ---p 00006000 08:02 1449905                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so
+ffff7415f000-ffff74160000 r--p 0000f000 08:02 1449905                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so
+ffff74160000-ffff74161000 rw-p 00010000 08:02 1449905                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqpdf.so
+ffff74170000-ffff741d1000 r-xp 00000000 08:02 1449910                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so
+ffff741d1000-ffff741ef000 ---p 00061000 08:02 1449910                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so
+ffff741ef000-ffff741f0000 r--p 0006f000 08:02 1449910                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so
+ffff741f0000-ffff741f1000 rw-p 00070000 08:02 1449910                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqwebp.so
+ffff741f1000-ffff741f3000 rw-p 00000000 00:00 0 
+ffff74200000-ffff74208000 r-xp 00000000 08:02 1449903                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so
+ffff74208000-ffff7421f000 ---p 00008000 08:02 1449903                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so
+ffff7421f000-ffff74220000 r--p 0000f000 08:02 1449903                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so
+ffff74220000-ffff74221000 rw-p 00010000 08:02 1449903                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqico.so
+ffff74230000-ffff742ca000 r-xp 00000000 08:02 1449796                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6
+ffff742ca000-ffff742db000 ---p 0009a000 08:02 1449796                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6
+ffff742db000-ffff742e0000 r--p 0009b000 08:02 1449796                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6
+ffff742e0000-ffff742e1000 rw-p 000a0000 08:02 1449796                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Svg.so.6
+ffff742f0000-ffff742f5000 r-xp 00000000 08:02 1449906                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so
+ffff742f5000-ffff7430f000 ---p 00005000 08:02 1449906                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so
+ffff7430f000-ffff74310000 r--p 0000f000 08:02 1449906                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so
+ffff74310000-ffff74311000 rw-p 00010000 08:02 1449906                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqsvg.so
+ffff74320000-ffff74391000 r-xp 00000000 08:02 1449908                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so
+ffff74391000-ffff743ac000 ---p 00071000 08:02 1449908                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so
+ffff743ac000-ffff743b0000 r--p 0007c000 08:02 1449908                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so
+ffff743b0000-ffff743b1000 rw-p 00080000 08:02 1449908                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtiff.so
+ffff743c0000-ffff743c5000 r-xp 00000000 08:02 1449907                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so
+ffff743c5000-ffff743df000 ---p 00005000 08:02 1449907                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so
+ffff743df000-ffff743e0000 r--p 0000f000 08:02 1449907                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so
+ffff743e0000-ffff743e1000 rw-p 00010000 08:02 1449907                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/imageformats/libqtga.so
+ffff743e3000-ffff743f0000 ---p 00000000 00:01 622228                     /memfd:JSGCHeap:QtQml (deleted)
+ffff743f0000-ffff747e0000 ---p 0000d000 00:01 622228                     /memfd:JSGCHeap:QtQml (deleted)
+ffff747e0000-ffff747e3000 ---p 003fd000 00:01 622228                     /memfd:JSGCHeap:QtQml (deleted)
+ffff747e3000-ffff747f0000 ---p 00000000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff747f0000-ffff74890000 ---p 0000d000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74890000-ffff748a0000 rw-p 000ad000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff748a0000-ffff748d0000 ---p 000bd000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff748d0000-ffff748e0000 rw-p 000ed000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff748e0000-ffff74a20000 ---p 000fd000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74a20000-ffff74a30000 rw-p 0023d000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74a30000-ffff74a60000 ---p 0024d000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74a60000-ffff74a70000 rw-p 0027d000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74a70000-ffff74be0000 ---p 0028d000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74be0000-ffff74be3000 ---p 003fd000 00:01 622227                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74be3000-ffff74bf0000 ---p 00000000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74bf0000-ffff74c80000 rw-p 0000d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74c80000-ffff74c90000 ---p 0009d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74c90000-ffff74ca0000 rw-p 000ad000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74ca0000-ffff74cf0000 ---p 000bd000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74cf0000-ffff74d00000 rw-p 0010d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74d00000-ffff74de0000 ---p 0011d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74de0000-ffff74df0000 rw-p 001fd000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74df0000-ffff74e20000 ---p 0020d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74e20000-ffff74e30000 rw-p 0023d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74e30000-ffff74fe0000 ---p 0024d000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74fe0000-ffff74fe3000 ---p 003fd000 00:01 622222                     /memfd:JSGCHeap:QtQml (deleted)
+ffff74fe3000-ffff74fe4000 ---p 00000000 00:00 0 
+ffff74fe4000-ffff751e4000 rw-p 00001000 00:01 622221                     /memfd:JSVMStack:QtQml (deleted)
+ffff751e4000-ffff751e6000 ---p 00000000 00:00 0 
+ffff751e6000-ffff75626000 rw-p 00001000 00:01 622220                     /memfd:JSVMStack:QtQml (deleted)
+ffff75626000-ffff75627000 ---p 00000000 00:00 0 
+ffff75627000-ffff7567b000 r--p 00000000 08:02 668242                     /usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf
+ffff7567b000-ffff75735000 r--p 00000000 08:02 668238                     /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+ffff75735000-ffff75776000 r--s 00000000 08:02 4483123                    /home/agent/.cache/wayland_turn.py/qmlcache/f9795dd91ae4a2df679593e360722da8b4063727.qmlc
+ffff75776000-ffff757a0000 r--s 00000000 08:02 4483108                    /home/agent/.cache/wayland_turn.py/qmlcache/226dbd3c01c10913db1c170c307da4375b0319a5.qmlc
+ffff757a0000-ffff757b5000 r-xp 00000000 08:02 1449768                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6
+ffff757b5000-ffff757ce000 ---p 00015000 08:02 1449768                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6
+ffff757ce000-ffff757d0000 r--p 0001e000 08:02 1449768                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6
+ffff757d0000-ffff757d1000 rw-p 00020000 08:02 1449768                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2BasicStyleImpl.so.6
+ffff757e0000-ffff757e2000 r-xp 00000000 08:02 1584338                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so
+ffff757e2000-ffff757ff000 ---p 00002000 08:02 1584338                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so
+ffff757ff000-ffff75800000 r--p 0000f000 08:02 1584338                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so
+ffff75800000-ffff75801000 rw-p 00010000 08:02 1584338                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/impl/libqtquickcontrols2basicstyleimplplugin.so
+ffff75810000-ffff7583e000 r-xp 00000000 08:02 1449771                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6
+ffff7583e000-ffff7584d000 ---p 0002e000 08:02 1449771                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6
+ffff7584d000-ffff75850000 r--p 0002d000 08:02 1449771                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6
+ffff75850000-ffff75851000 rw-p 00030000 08:02 1449771                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2FusionStyleImpl.so.6
+ffff75860000-ffff75862000 r-xp 00000000 08:02 1585490                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so
+ffff75862000-ffff7587f000 ---p 00002000 08:02 1585490                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so
+ffff7587f000-ffff75880000 r--p 0000f000 08:02 1585490                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so
+ffff75880000-ffff75881000 rw-p 00010000 08:02 1585490                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/impl/libqtquickcontrols2fusionstyleimplplugin.so
+ffff75890000-ffff75893000 r-xp 00000000 08:02 1587063                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
+ffff75893000-ffff758af000 ---p 00003000 08:02 1587063                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
+ffff758af000-ffff758b0000 r--p 0000f000 08:02 1587063                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
+ffff758b0000-ffff758b1000 rw-p 00010000 08:02 1587063                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Templates/libqtquicktemplates2plugin.so
+ffff758c0000-ffff7591d000 r-xp 00000000 08:02 1449774                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6
+ffff7591d000-ffff75929000 ---p 0005d000 08:02 1449774                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6
+ffff75929000-ffff75930000 r--p 00069000 08:02 1449774                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6
+ffff75930000-ffff75933000 rw-p 00070000 08:02 1449774                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Impl.so.6
+ffff75940000-ffff75947000 r-xp 00000000 08:02 1449781                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6
+ffff75947000-ffff7595f000 ---p 00007000 08:02 1449781                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6
+ffff7595f000-ffff75960000 r--p 0000f000 08:02 1449781                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6
+ffff75960000-ffff75961000 rw-p 00010000 08:02 1449781                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2Utils.so.6
+ffff75970000-ffff75c7a000 r-xp 00000000 08:02 1449780                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6
+ffff75c7a000-ffff75c8d000 ---p 0030a000 08:02 1449780                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6
+ffff75c8d000-ffff75cb0000 r--p 0030d000 08:02 1449780                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6
+ffff75cb0000-ffff75cb3000 rw-p 00330000 08:02 1449780                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2QuickImpl.so.6
+ffff75cb3000-ffff75cb9000 rw-p 00000000 00:00 0 
+ffff75cc0000-ffff75cec000 r-xp 00000000 08:02 1449779                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6
+ffff75cec000-ffff75cfd000 ---p 0002c000 08:02 1449779                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6
+ffff75cfd000-ffff75d00000 r--p 0002d000 08:02 1449779                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6
+ffff75d00000-ffff75d01000 rw-p 00030000 08:02 1449779                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickDialogs2.so.6
+ffff75d01000-ffff75d02000 rw-p 00000000 00:00 0 
+ffff75d10000-ffff75d12000 r-xp 00000000 08:02 1586948                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so
+ffff75d12000-ffff75d2f000 ---p 00002000 08:02 1586948                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so
+ffff75d2f000-ffff75d30000 r--p 0000f000 08:02 1586948                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so
+ffff75d30000-ffff75d31000 rw-p 00010000 08:02 1586948                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Dialogs/libqtquickdialogsplugin.so
+ffff75d40000-ffff75d43000 r-xp 00000000 08:02 1587176                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so
+ffff75d43000-ffff75d5f000 ---p 00003000 08:02 1587176                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so
+ffff75d5f000-ffff75d60000 r--p 0000f000 08:02 1587176                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so
+ffff75d60000-ffff75d61000 rw-p 00010000 08:02 1587176                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Window/libquickwindowplugin.so
+ffff75d70000-ffff75dca000 r-xp 00000000 08:02 1449785                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6
+ffff75dca000-ffff75ddc000 ---p 0005a000 08:02 1449785                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6
+ffff75ddc000-ffff75de0000 r--p 0005c000 08:02 1449785                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6
+ffff75de0000-ffff75de2000 rw-p 00060000 08:02 1449785                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickShapes.so.6
+ffff75df0000-ffff75df2000 r-xp 00000000 08:02 1587055                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+ffff75df2000-ffff75e0f000 ---p 00002000 08:02 1587055                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+ffff75e0f000-ffff75e10000 r--p 0000f000 08:02 1587055                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+ffff75e10000-ffff75e11000 rw-p 00010000 08:02 1587055                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Shapes/libqmlshapesplugin.so
+ffff75e20000-ffff75e80000 r-xp 00000000 08:02 1449783                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6
+ffff75e80000-ffff75e8a000 ---p 00060000 08:02 1449783                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6
+ffff75e8a000-ffff75e90000 r--p 0006a000 08:02 1449783                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6
+ffff75e90000-ffff75e92000 rw-p 00070000 08:02 1449783                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickLayouts.so.6
+ffff75ea0000-ffff75ea2000 r-xp 00000000 08:02 1587022                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+ffff75ea2000-ffff75ebf000 ---p 00002000 08:02 1587022                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+ffff75ebf000-ffff75ec0000 r--p 0000f000 08:02 1587022                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+ffff75ec0000-ffff75ec1000 rw-p 00010000 08:02 1587022                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+ffff75ed0000-ffff760ae000 r-xp 00000000 08:02 1449767                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6
+ffff760ae000-ffff760bb000 ---p 001de000 08:02 1449767                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6
+ffff760bb000-ffff760d0000 r--p 001eb000 08:02 1449767                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6
+ffff760d0000-ffff760d1000 rw-p 00200000 08:02 1449767                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Basic.so.6
+ffff760d1000-ffff760d7000 rw-p 00000000 00:00 0 
+ffff760e0000-ffff7626a000 r-xp 00000000 08:02 1449770                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6
+ffff7626a000-ffff7627e000 ---p 0018a000 08:02 1449770                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6
+ffff7627e000-ffff76290000 r--p 0018e000 08:02 1449770                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6
+ffff76290000-ffff76291000 rw-p 001a0000 08:02 1449770                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2Fusion.so.6
+ffff76291000-ffff76294000 rw-p 00000000 00:00 0 
+ffff762a0000-ffff7654c000 r-xp 00000000 08:02 1449787                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6
+ffff7654c000-ffff7655e000 ---p 002ac000 08:02 1449787                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6
+ffff7655e000-ffff76590000 r--p 002ae000 08:02 1449787                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6
+ffff76590000-ffff7659b000 rw-p 002e0000 08:02 1449787                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickTemplates2.so.6
+ffff7659c000-ffff765ac000 ---p 00000000 00:00 0 
+ffff765ac000-ffff76dac000 rw-p 00000000 00:00 0 
+ffff76dac000-ffff76db0000 ---p 00000000 00:01 622209                     /memfd:JSGCHeap:QtQml (deleted)
+ffff76db0000-ffff76f50000 rw-p 00004000 00:01 622209                     /memfd:JSGCHeap:QtQml (deleted)
+ffff76f50000-ffff76f60000 ---p 001a4000 00:01 622209                     /memfd:JSGCHeap:QtQml (deleted)
+ffff76f60000-ffff76f90000 rw-p 001b4000 00:01 622209                     /memfd:JSGCHeap:QtQml (deleted)
+ffff76f90000-ffff771ac000 ---p 001e4000 00:01 622209                     /memfd:JSGCHeap:QtQml (deleted)
+ffff771ac000-ffff771ad000 ---p 00000000 00:00 0 
+ffff771ad000-ffff773ad000 rw-p 00001000 00:01 622208                     /memfd:JSVMStack:QtQml (deleted)
+ffff773ad000-ffff773af000 ---p 00000000 00:00 0 
+ffff773af000-ffff777ef000 rw-p 00001000 00:01 622207                     /memfd:JSVMStack:QtQml (deleted)
+ffff777ef000-ffff77800000 ---p 00000000 00:00 0 
+ffff77800000-ffff78021000 rw-p 00000000 00:00 0 
+ffff78021000-ffff7c000000 ---p 00000000 00:00 0 
+ffff7c000000-ffff7c021000 rw-p 00000000 00:00 0 
+ffff7c021000-ffff80000000 ---p 00000000 00:00 0 
+ffff80000000-ffff80021000 rw-p 00000000 00:00 0 
+ffff80021000-ffff84000000 ---p 00000000 00:00 0 
+ffff84018000-ffff84030000 r--s 00000000 08:02 4483107                    /home/agent/.cache/wayland_turn.py/qmlcache/973ab84cf60aa9b2e73b06a50c990f3daeb95329.qmlc
+ffff84030000-ffff84033000 r-xp 00000000 08:02 1584333                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
+ffff84033000-ffff8404f000 ---p 00003000 08:02 1584333                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
+ffff8404f000-ffff84050000 r--p 0000f000 08:02 1584333                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
+ffff84050000-ffff84051000 rw-p 00010000 08:02 1584333                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Basic/libqtquickcontrols2basicstyleplugin.so
+ffff84060000-ffff84063000 r-xp 00000000 08:02 1585471                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
+ffff84063000-ffff8407f000 ---p 00003000 08:02 1585471                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
+ffff8407f000-ffff84080000 r--p 0000f000 08:02 1585471                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
+ffff84080000-ffff84081000 rw-p 00010000 08:02 1585471                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/Fusion/libqtquickcontrols2fusionstyleplugin.so
+ffff84090000-ffff840a7000 r-xp 00000000 08:02 1449766                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6
+ffff840a7000-ffff840be000 ---p 00017000 08:02 1449766                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6
+ffff840be000-ffff840c0000 r--p 0001e000 08:02 1449766                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6
+ffff840c0000-ffff840c1000 rw-p 00020000 08:02 1449766                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QuickControls2.so.6
+ffff840d0000-ffff840d7000 r-xp 00000000 08:02 1584260                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+ffff840d7000-ffff840ef000 ---p 00007000 08:02 1584260                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+ffff840ef000-ffff840f0000 r--p 0000f000 08:02 1584260                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+ffff840f0000-ffff840f1000 rw-p 00010000 08:02 1584260                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/qml/QtQuick/Controls/libqtquickcontrols2plugin.so
+ffff84100000-ffff84300000 rw-p 00000000 00:00 0 
+ffff84300000-ffff84395000 r-xp 00000000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff84395000-ffff843ad000 ---p 00095000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff843ad000-ffff843b0000 r--p 0009d000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff843b0000-ffff843b3000 rw-p 000a0000 08:02 4235282                    /tmp/ai-upper-qt611-sdk/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+ffff843c0000-ffff843d0000 ---p 00000000 00:00 0 
+ffff843d0000-ffff84bd0000 rw-p 00000000 00:00 0 
+ffff84bd0000-ffff84be0000 ---p 00000000 00:00 0 
+ffff84be0000-ffff853e0000 rw-p 00000000 00:00 0 
+ffff853e0000-ffff853ff000 r-xp 00000000 08:02 1582419                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/wayland-shell-integration/libxdg-shell.so
+ffff853ff000-ffff8540d000 ---p 0001f000 08:02 1582419                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/wayland-shell-integration/libxdg-shell.so
+ffff8540d000-ffff85410000 r--p 0002d000 08:02 1582419                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/wayland-shell-integration/libxdg-shell.so
+ffff85410000-ffff85411000 rw-p 00030000 08:02 1582419                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/wayland-shell-integration/libxdg-shell.so
+ffff85420000-ffff85429000 r-xp 00000000 08:02 551065                     /usr/lib/aarch64-linux-gnu/libffi.so.8.1.4
+ffff85429000-ffff8543f000 ---p 00009000 08:02 551065                     /usr/lib/aarch64-linux-gnu/libffi.so.8.1.4
+ffff8543f000-ffff85440000 r--p 0000f000 08:02 551065                     /usr/lib/aarch64-linux-gnu/libffi.so.8.1.4
+ffff85440000-ffff85441000 rw-p 00010000 08:02 551065                     /usr/lib/aarch64-linux-gnu/libffi.so.8.1.4
+ffff85450000-ffff85455000 r-xp 00000000 08:02 5512708                    /usr/lib/aarch64-linux-gnu/libwayland-cursor.so.0.23.1
+ffff85455000-ffff8546f000 ---p 00005000 08:02 5512708                    /usr/lib/aarch64-linux-gnu/libwayland-cursor.so.0.23.1
+ffff8546f000-ffff85470000 r--p 0000f000 08:02 5512708                    /usr/lib/aarch64-linux-gnu/libwayland-cursor.so.0.23.1
+ffff85470000-ffff85474000 rw-p 00010000 08:02 5512708                    /usr/lib/aarch64-linux-gnu/libwayland-cursor.so.0.23.1
+ffff85480000-ffff8548f000 r-xp 00000000 08:02 5512706                    /usr/lib/aarch64-linux-gnu/libwayland-client.so.0.23.1
+ffff8548f000-ffff8549e000 ---p 0000f000 08:02 5512706                    /usr/lib/aarch64-linux-gnu/libwayland-client.so.0.23.1
+ffff8549e000-ffff854a0000 r--p 0000e000 08:02 5512706                    /usr/lib/aarch64-linux-gnu/libwayland-client.so.0.23.1
+ffff854a0000-ffff854a1000 rw-p 00010000 08:02 5512706                    /usr/lib/aarch64-linux-gnu/libwayland-client.so.0.23.1
+ffff854b0000-ffff855d4000 r-xp 00000000 08:02 1449800                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WaylandClient.so.6
+ffff855d4000-ffff855e1000 ---p 00124000 08:02 1449800                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WaylandClient.so.6
+ffff855e1000-ffff855f0000 r--p 00131000 08:02 1449800                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WaylandClient.so.6
+ffff855f0000-ffff855f2000 rw-p 00140000 08:02 1449800                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6WaylandClient.so.6
+ffff855f2000-ffff855f5000 rw-p 00000000 00:00 0 
+ffff85600000-ffff85602000 r-xp 00000000 08:02 1449927                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqwayland.so
+ffff85602000-ffff8561f000 ---p 00002000 08:02 1449927                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqwayland.so
+ffff8561f000-ffff85620000 r--p 0000f000 08:02 1449927                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqwayland.so
+ffff85620000-ffff85621000 rw-p 00010000 08:02 1449927                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/plugins/platforms/libqwayland.so
+ffff85630000-ffff85640000 ---p 00000000 00:00 0 
+ffff85640000-ffff85e40000 rw-p 00000000 00:00 0 
+ffff85e40000-ffff865cf000 r-xp 00000000 08:02 1449664                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtOpenGL.abi3.so
+ffff865cf000-ffff865de000 ---p 0078f000 08:02 1449664                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtOpenGL.abi3.so
+ffff865de000-ffff865e0000 r--p 0079e000 08:02 1449664                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtOpenGL.abi3.so
+ffff865e0000-ffff8664d000 rw-p 007a0000 08:02 1449664                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtOpenGL.abi3.so
+ffff8664d000-ffff8664e000 rw-p 00000000 00:00 0 
+ffff86650000-ffff86662000 r-xp 00000000 08:02 1449763                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6
+ffff86662000-ffff8667f000 ---p 00012000 08:02 1449763                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6
+ffff8667f000-ffff86680000 r--p 0001f000 08:02 1449763                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6
+ffff86680000-ffff86681000 rw-p 00020000 08:02 1449763                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlWorkerScript.so.6
+ffff86690000-ffff86738000 r-xp 00000000 08:02 1449753                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6
+ffff86738000-ffff8674c000 ---p 000a8000 08:02 1449753                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6
+ffff8674c000-ffff86750000 r--p 000ac000 08:02 1449753                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6
+ffff86750000-ffff86751000 rw-p 000b0000 08:02 1449753                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6OpenGL.so.6
+ffff86751000-ffff86752000 rw-p 00000000 00:00 0 
+ffff86760000-ffff86882000 r-xp 00000000 08:02 1449761                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6
+ffff86882000-ffff86896000 ---p 00122000 08:02 1449761                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6
+ffff86896000-ffff868a0000 r--p 00126000 08:02 1449761                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6
+ffff868a0000-ffff868a4000 rw-p 00130000 08:02 1449761                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlModels.so.6
+ffff868b0000-ffff868d9000 r-xp 00000000 08:02 1449760                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6
+ffff868d9000-ffff868ee000 ---p 00029000 08:02 1449760                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6
+ffff868ee000-ffff868f0000 r--p 0002e000 08:02 1449760                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6
+ffff868f0000-ffff868f1000 rw-p 00030000 08:02 1449760                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6QmlMeta.so.6
+ffff86900000-ffff87089000 r-xp 00000000 08:02 1449765                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6
+ffff87089000-ffff87097000 ---p 00789000 08:02 1449765                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6
+ffff87097000-ffff870e0000 r--p 00797000 08:02 1449765                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6
+ffff870e0000-ffff870f9000 rw-p 007e0000 08:02 1449765                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Quick.so.6
+ffff870f9000-ffff870fc000 rw-p 00000000 00:00 0 
+ffff87100000-ffff871eb000 r-xp 00000000 08:02 1449675                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+ffff871eb000-ffff871fd000 ---p 000eb000 08:02 1449675                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+ffff871fd000-ffff87200000 r--p 000ed000 08:02 1449675                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+ffff87200000-ffff8720f000 rw-p 000f0000 08:02 1449675                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQuick.abi3.so
+ffff8720f000-ffff87211000 rw-p 00000000 00:00 0 
+ffff87220000-ffff87352000 r-xp 00000000 08:02 1449659                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtNetwork.abi3.so
+ffff87352000-ffff8736d000 ---p 00132000 08:02 1449659                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtNetwork.abi3.so
+ffff8736d000-ffff87370000 r--p 0013d000 08:02 1449659                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtNetwork.abi3.so
+ffff87370000-ffff87383000 rw-p 00140000 08:02 1449659                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtNetwork.abi3.so
+ffff87383000-ffff87384000 rw-p 00000000 00:00 0 
+ffff87390000-ffff8758c000 r-xp 00000000 08:02 1449752                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6
+ffff8758c000-ffff87594000 ---p 001fc000 08:02 1449752                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6
+ffff87594000-ffff875a0000 r--p 00204000 08:02 1449752                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6
+ffff875a0000-ffff875a4000 rw-p 00210000 08:02 1449752                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Network.so.6
+ffff875a4000-ffff875a6000 rw-p 00000000 00:00 0 
+ffff875b0000-ffff87be0000 r-xp 00000000 08:02 1449756                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6
+ffff87be0000-ffff87be9000 ---p 00630000 08:02 1449756                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6
+ffff87be9000-ffff87c10000 r--p 00639000 08:02 1449756                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6
+ffff87c10000-ffff87c1a000 rw-p 00660000 08:02 1449756                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Qml.so.6
+ffff87c1a000-ffff87c1d000 rw-p 00000000 00:00 0 
+ffff87c20000-ffff87c34000 r-xp 00000000 08:02 1449719                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6qml.abi3.so.6.11
+ffff87c34000-ffff87c4f000 ---p 00014000 08:02 1449719                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6qml.abi3.so.6.11
+ffff87c4f000-ffff87c50000 r--p 0001f000 08:02 1449719                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6qml.abi3.so.6.11
+ffff87c50000-ffff87c51000 rw-p 00020000 08:02 1449719                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6qml.abi3.so.6.11
+ffff87c60000-ffff87ce9000 r-xp 00000000 08:02 1449673                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ffff87ce9000-ffff87cfe000 ---p 00089000 08:02 1449673                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ffff87cfe000-ffff87d00000 r--p 0008e000 08:02 1449673                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ffff87d00000-ffff87d09000 rw-p 00090000 08:02 1449673                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtQml.abi3.so
+ffff87d10000-ffff87f10000 rw-p 00000000 00:00 0 
+ffff87f10000-ffff87f65000 r-xp 00000000 08:02 1450407                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_cffi_backend.cpython-313-aarch64-linux-gnu.so
+ffff87f65000-ffff87f7f000 ---p 00055000 08:02 1450407                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_cffi_backend.cpython-313-aarch64-linux-gnu.so
+ffff87f7f000-ffff87f80000 r--p 0005f000 08:02 1450407                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_cffi_backend.cpython-313-aarch64-linux-gnu.so
+ffff87f80000-ffff87f84000 rw-p 00060000 08:02 1450407                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/_cffi_backend.cpython-313-aarch64-linux-gnu.so
+ffff87f90000-ffff88090000 rw-p 00000000 00:00 0 
+ffff88090000-ffff8815d000 r--p 00000000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff8815d000-ffff88160000 ---p 000cd000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff88160000-ffff886bc000 r-xp 000d0000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff886bc000-ffff886c0000 ---p 0062c000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff886c0000-ffff888b1000 r--p 00630000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff888b1000-ffff888c7000 ---p 00821000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff888c7000-ffff88960000 r--p 00827000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff88960000-ffff88971000 rw-p 008c0000 08:02 2912309                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/cryptography/hazmat/bindings/_rust.abi3.so
+ffff88971000-ffff88974000 rw-p 00000000 00:00 0 
+ffff88980000-ffff89180000 rw-p 00000000 00:00 0 
+ffff89180000-ffff89189000 r-xp 00000000 08:02 660829                     /usr/lib/python3.13/lib-dynload/_zoneinfo.cpython-313-aarch64-linux-gnu.so
+ffff89189000-ffff8919f000 ---p 00009000 08:02 660829                     /usr/lib/python3.13/lib-dynload/_zoneinfo.cpython-313-aarch64-linux-gnu.so
+ffff8919f000-ffff891a0000 r--p 0000f000 08:02 660829                     /usr/lib/python3.13/lib-dynload/_zoneinfo.cpython-313-aarch64-linux-gnu.so
+ffff891a0000-ffff891a1000 rw-p 00010000 08:02 660829                     /usr/lib/python3.13/lib-dynload/_zoneinfo.cpython-313-aarch64-linux-gnu.so
+ffff891b0000-ffff893b0000 rw-p 00000000 00:00 0 
+ffff893b0000-ffff893ff000 r-xp 00000000 08:02 660803                     /usr/lib/python3.13/lib-dynload/_decimal.cpython-313-aarch64-linux-gnu.so
+ffff893ff000-ffff8940f000 ---p 0004f000 08:02 660803                     /usr/lib/python3.13/lib-dynload/_decimal.cpython-313-aarch64-linux-gnu.so
+ffff8940f000-ffff89410000 r--p 0004f000 08:02 660803                     /usr/lib/python3.13/lib-dynload/_decimal.cpython-313-aarch64-linux-gnu.so
+ffff89410000-ffff89413000 rw-p 00050000 08:02 660803                     /usr/lib/python3.13/lib-dynload/_decimal.cpython-313-aarch64-linux-gnu.so
+ffff89420000-ffff89837000 r-xp 00000000 08:02 2519749                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pydantic_core/_pydantic_core.cpython-313-aarch64-linux-gnu.so
+ffff89837000-ffff89852000 ---p 00417000 08:02 2519749                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pydantic_core/_pydantic_core.cpython-313-aarch64-linux-gnu.so
+ffff89852000-ffff89880000 r--p 00422000 08:02 2519749                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pydantic_core/_pydantic_core.cpython-313-aarch64-linux-gnu.so
+ffff89880000-ffff89886000 rw-p 00450000 08:02 2519749                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/pydantic_core/_pydantic_core.cpython-313-aarch64-linux-gnu.so
+ffff89886000-ffff89887000 rw-p 00000000 00:00 0 
+ffff89890000-ffff89a90000 rw-p 00000000 00:00 0 
+ffff89a90000-ffff89a97000 r-xp 00000000 08:02 531955                     /usr/lib/aarch64-linux-gnu/libuuid.so.1.3.0
+ffff89a97000-ffff89aaf000 ---p 00007000 08:02 531955                     /usr/lib/aarch64-linux-gnu/libuuid.so.1.3.0
+ffff89aaf000-ffff89ab0000 r--p 0000f000 08:02 531955                     /usr/lib/aarch64-linux-gnu/libuuid.so.1.3.0
+ffff89ab0000-ffff89ab1000 rw-p 00010000 08:02 531955                     /usr/lib/aarch64-linux-gnu/libuuid.so.1.3.0
+ffff89ac0000-ffff89ac1000 r-xp 00000000 08:02 660827                     /usr/lib/python3.13/lib-dynload/_uuid.cpython-313-aarch64-linux-gnu.so
+ffff89ac1000-ffff89adf000 ---p 00001000 08:02 660827                     /usr/lib/python3.13/lib-dynload/_uuid.cpython-313-aarch64-linux-gnu.so
+ffff89adf000-ffff89ae0000 r--p 0000f000 08:02 660827                     /usr/lib/python3.13/lib-dynload/_uuid.cpython-313-aarch64-linux-gnu.so
+ffff89ae0000-ffff89ae1000 rw-p 00010000 08:02 660827                     /usr/lib/python3.13/lib-dynload/_uuid.cpython-313-aarch64-linux-gnu.so
+ffff89af0000-ffff89bf0000 rw-p 00000000 00:00 0 
+ffff89bf0000-ffff89bfd000 r-xp 00000000 08:02 660804                     /usr/lib/python3.13/lib-dynload/_hashlib.cpython-313-aarch64-linux-gnu.so
+ffff89bfd000-ffff89c0f000 ---p 0000d000 08:02 660804                     /usr/lib/python3.13/lib-dynload/_hashlib.cpython-313-aarch64-linux-gnu.so
+ffff89c0f000-ffff89c10000 r--p 0000f000 08:02 660804                     /usr/lib/python3.13/lib-dynload/_hashlib.cpython-313-aarch64-linux-gnu.so
+ffff89c10000-ffff89c12000 rw-p 00010000 08:02 660804                     /usr/lib/python3.13/lib-dynload/_hashlib.cpython-313-aarch64-linux-gnu.so
+ffff89c20000-ffff89c23000 r-xp 00000000 08:02 660814                     /usr/lib/python3.13/lib-dynload/_queue.cpython-313-aarch64-linux-gnu.so
+ffff89c23000-ffff89c3f000 ---p 00003000 08:02 660814                     /usr/lib/python3.13/lib-dynload/_queue.cpython-313-aarch64-linux-gnu.so
+ffff89c3f000-ffff89c40000 r--p 0000f000 08:02 660814                     /usr/lib/python3.13/lib-dynload/_queue.cpython-313-aarch64-linux-gnu.so
+ffff89c40000-ffff89c41000 rw-p 00010000 08:02 660814                     /usr/lib/python3.13/lib-dynload/_queue.cpython-313-aarch64-linux-gnu.so
+ffff89c50000-ffff89e50000 rw-p 00000000 00:00 0 
+ffff89e50000-ffff8a3d3000 r-xp 00000000 08:02 531204                     /usr/lib/aarch64-linux-gnu/libcrypto.so.3
+ffff8a3d3000-ffff8a3e5000 ---p 00583000 08:02 531204                     /usr/lib/aarch64-linux-gnu/libcrypto.so.3
+ffff8a3e5000-ffff8a460000 r--p 00585000 08:02 531204                     /usr/lib/aarch64-linux-gnu/libcrypto.so.3
+ffff8a460000-ffff8a463000 rw-p 00600000 08:02 531204                     /usr/lib/aarch64-linux-gnu/libcrypto.so.3
+ffff8a463000-ffff8a466000 rw-p 00000000 00:00 0 
+ffff8a470000-ffff8a57a000 r-xp 00000000 08:02 531740                     /usr/lib/aarch64-linux-gnu/libssl.so.3
+ffff8a57a000-ffff8a586000 ---p 0010a000 08:02 531740                     /usr/lib/aarch64-linux-gnu/libssl.so.3
+ffff8a586000-ffff8a590000 r--p 00116000 08:02 531740                     /usr/lib/aarch64-linux-gnu/libssl.so.3
+ffff8a590000-ffff8a594000 rw-p 00120000 08:02 531740                     /usr/lib/aarch64-linux-gnu/libssl.so.3
+ffff8a59c000-ffff8a89c000 rw-p 00000000 00:00 0 
+ffff8a8a0000-ffff8a8b0000 r-xp 00000000 08:02 660789                     /usr/lib/python3.13/lib-dynload/_asyncio.cpython-313-aarch64-linux-gnu.so
+ffff8a8b0000-ffff8a8bf000 ---p 00010000 08:02 660789                     /usr/lib/python3.13/lib-dynload/_asyncio.cpython-313-aarch64-linux-gnu.so
+ffff8a8bf000-ffff8a8c0000 r--p 0000f000 08:02 660789                     /usr/lib/python3.13/lib-dynload/_asyncio.cpython-313-aarch64-linux-gnu.so
+ffff8a8c0000-ffff8a8c2000 rw-p 00010000 08:02 660789                     /usr/lib/python3.13/lib-dynload/_asyncio.cpython-313-aarch64-linux-gnu.so
+ffff8a8d0000-ffff8a8d1000 r-xp 00000000 08:02 660797                     /usr/lib/python3.13/lib-dynload/_contextvars.cpython-313-aarch64-linux-gnu.so
+ffff8a8d1000-ffff8a8ef000 ---p 00001000 08:02 660797                     /usr/lib/python3.13/lib-dynload/_contextvars.cpython-313-aarch64-linux-gnu.so
+ffff8a8ef000-ffff8a8f0000 r--p 0000f000 08:02 660797                     /usr/lib/python3.13/lib-dynload/_contextvars.cpython-313-aarch64-linux-gnu.so
+ffff8a8f0000-ffff8a8f1000 rw-p 00010000 08:02 660797                     /usr/lib/python3.13/lib-dynload/_contextvars.cpython-313-aarch64-linux-gnu.so
+ffff8a900000-ffff8a92e000 r-xp 00000000 08:02 660816                     /usr/lib/python3.13/lib-dynload/_ssl.cpython-313-aarch64-linux-gnu.so
+ffff8a92e000-ffff8a93f000 ---p 0002e000 08:02 660816                     /usr/lib/python3.13/lib-dynload/_ssl.cpython-313-aarch64-linux-gnu.so
+ffff8a93f000-ffff8a940000 r--p 0002f000 08:02 660816                     /usr/lib/python3.13/lib-dynload/_ssl.cpython-313-aarch64-linux-gnu.so
+ffff8a940000-ffff8a94a000 rw-p 00030000 08:02 660816                     /usr/lib/python3.13/lib-dynload/_ssl.cpython-313-aarch64-linux-gnu.so
+ffff8a950000-ffff8ab50000 rw-p 00000000 00:00 0 
+ffff8ab50000-ffff8af31000 r-xp 00000000 08:02 1449642                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ffff8af31000-ffff8af48000 ---p 003e1000 08:02 1449642                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ffff8af48000-ffff8af50000 r--p 003e8000 08:02 1449642                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ffff8af50000-ffff8af8e000 rw-p 003f0000 08:02 1449642                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtCore.abi3.so
+ffff8af8e000-ffff8af92000 rw-p 00000000 00:00 0 
+ffff8afa0000-ffff8b42e000 r-xp 00000000 08:02 1449651                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ffff8b42e000-ffff8b438000 ---p 0048e000 08:02 1449651                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ffff8b438000-ffff8b440000 r--p 00498000 08:02 1449651                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ffff8b440000-ffff8b48b000 rw-p 004a0000 08:02 1449651                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtGui.abi3.so
+ffff8b48b000-ffff8b48f000 rw-p 00000000 00:00 0 
+ffff8b490000-ffff8b49b000 r-xp 00000000 08:02 531191                     /usr/lib/aarch64-linux-gnu/libcap.so.2.75
+ffff8b49b000-ffff8b4af000 ---p 0000b000 08:02 531191                     /usr/lib/aarch64-linux-gnu/libcap.so.2.75
+ffff8b4af000-ffff8b4b0000 r--p 0000f000 08:02 531191                     /usr/lib/aarch64-linux-gnu/libcap.so.2.75
+ffff8b4b0000-ffff8b4b1000 rw-p 00010000 08:02 531191                     /usr/lib/aarch64-linux-gnu/libcap.so.2.75
+ffff8b4c0000-ffff8b4e0000 r-xp 00000000 08:02 550954                     /usr/lib/aarch64-linux-gnu/libbrotlicommon.so.1.1.0
+ffff8b4e0000-ffff8b4ef000 ---p 00020000 08:02 550954                     /usr/lib/aarch64-linux-gnu/libbrotlicommon.so.1.1.0
+ffff8b4ef000-ffff8b4f0000 r--p 0002f000 08:02 550954                     /usr/lib/aarch64-linux-gnu/libbrotlicommon.so.1.1.0
+ffff8b4f0000-ffff8b4f1000 rw-p 00030000 08:02 550954                     /usr/lib/aarch64-linux-gnu/libbrotlicommon.so.1.1.0
+ffff8b500000-ffff8b60e000 r-xp 00000000 08:02 531886                     /usr/lib/aarch64-linux-gnu/libsystemd.so.0.40.0
+ffff8b60e000-ffff8b613000 ---p 0010e000 08:02 531886                     /usr/lib/aarch64-linux-gnu/libsystemd.so.0.40.0
+ffff8b613000-ffff8b620000 r--p 00113000 08:02 531886                     /usr/lib/aarch64-linux-gnu/libsystemd.so.0.40.0
+ffff8b620000-ffff8b622000 rw-p 00120000 08:02 531886                     /usr/lib/aarch64-linux-gnu/libsystemd.so.0.40.0
+ffff8b630000-ffff8b635000 r-xp 00000000 08:02 550921                     /usr/lib/aarch64-linux-gnu/libXdmcp.so.6.0.0
+ffff8b635000-ffff8b64f000 ---p 00005000 08:02 550921                     /usr/lib/aarch64-linux-gnu/libXdmcp.so.6.0.0
+ffff8b64f000-ffff8b650000 r--p 0000f000 08:02 550921                     /usr/lib/aarch64-linux-gnu/libXdmcp.so.6.0.0
+ffff8b650000-ffff8b651000 rw-p 00010000 08:02 550921                     /usr/lib/aarch64-linux-gnu/libXdmcp.so.6.0.0
+ffff8b660000-ffff8b663000 r-xp 00000000 08:02 550915                     /usr/lib/aarch64-linux-gnu/libXau.so.6.0.0
+ffff8b663000-ffff8b67f000 ---p 00003000 08:02 550915                     /usr/lib/aarch64-linux-gnu/libXau.so.6.0.0
+ffff8b67f000-ffff8b680000 r--p 0000f000 08:02 550915                     /usr/lib/aarch64-linux-gnu/libXau.so.6.0.0
+ffff8b680000-ffff8b681000 rw-p 00010000 08:02 550915                     /usr/lib/aarch64-linux-gnu/libXau.so.6.0.0
+ffff8b690000-ffff8d51c000 r--p 00000000 08:02 1449807                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicudata.so.73
+ffff8d51c000-ffff8d52f000 ---p 01e8c000 08:02 1449807                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicudata.so.73
+ffff8d52f000-ffff8d530000 r--p 01e8f000 08:02 1449807                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicudata.so.73
+ffff8d530000-ffff8d540000 rwxp 00000000 00:00 0 
+ffff8d540000-ffff8d54c000 r-xp 00000000 08:02 550956                     /usr/lib/aarch64-linux-gnu/libbrotlidec.so.1.1.0
+ffff8d54c000-ffff8d55f000 ---p 0000c000 08:02 550956                     /usr/lib/aarch64-linux-gnu/libbrotlidec.so.1.1.0
+ffff8d55f000-ffff8d560000 r--p 0000f000 08:02 550956                     /usr/lib/aarch64-linux-gnu/libbrotlidec.so.1.1.0
+ffff8d560000-ffff8d561000 rw-p 00010000 08:02 550956                     /usr/lib/aarch64-linux-gnu/libbrotlidec.so.1.1.0
+ffff8d570000-ffff8d5a3000 r-xp 00000000 08:02 552758                     /usr/lib/aarch64-linux-gnu/libpng16.so.16.48.0
+ffff8d5a3000-ffff8d5bf000 ---p 00033000 08:02 552758                     /usr/lib/aarch64-linux-gnu/libpng16.so.16.48.0
+ffff8d5bf000-ffff8d5c0000 r--p 0003f000 08:02 552758                     /usr/lib/aarch64-linux-gnu/libpng16.so.16.48.0
+ffff8d5c0000-ffff8d5c1000 rw-p 00040000 08:02 552758                     /usr/lib/aarch64-linux-gnu/libpng16.so.16.48.0
+ffff8d5d0000-ffff8d5f1000 r-xp 00000000 08:02 1596527                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLX.so.0.0.0
+ffff8d5f1000-ffff8d60f000 ---p 00021000 08:02 1596527                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLX.so.0.0.0
+ffff8d60f000-ffff8d610000 r--p 0002f000 08:02 1596527                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLX.so.0.0.0
+ffff8d610000-ffff8d611000 rw-p 00030000 08:02 1596527                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLX.so.0.0.0
+ffff8d611000-ffff8d621000 rw-p 00000000 00:00 0 
+ffff8d630000-ffff8d688000 r-xp 00000000 08:02 4876224                    /home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu/libdbus-1.so.3.38.3
+ffff8d688000-ffff8d69e000 ---p 00058000 08:02 4876224                    /home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu/libdbus-1.so.3.38.3
+ffff8d69e000-ffff8d6a0000 r--p 0005e000 08:02 4876224                    /home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu/libdbus-1.so.3.38.3
+ffff8d6a0000-ffff8d6a1000 rw-p 00060000 08:02 4876224                    /home/agent/shared_workspace/ai_upper/.tmp/secret-service/root/usr/lib/aarch64-linux-gnu/libdbus-1.so.3.38.3
+ffff8d6b0000-ffff8d747000 r-xp 00000000 08:02 531629                     /usr/lib/aarch64-linux-gnu/libpcre2-8.so.0.14.0
+ffff8d747000-ffff8d75f000 ---p 00097000 08:02 531629                     /usr/lib/aarch64-linux-gnu/libpcre2-8.so.0.14.0
+ffff8d75f000-ffff8d760000 r--p 0009f000 08:02 531629                     /usr/lib/aarch64-linux-gnu/libpcre2-8.so.0.14.0
+ffff8d760000-ffff8d761000 rw-p 000a0000 08:02 531629                     /usr/lib/aarch64-linux-gnu/libpcre2-8.so.0.14.0
+ffff8d770000-ffff8d799000 r-xp 00000000 08:02 552828                     /usr/lib/aarch64-linux-gnu/libxcb.so.1.1.0
+ffff8d799000-ffff8d7af000 ---p 00029000 08:02 552828                     /usr/lib/aarch64-linux-gnu/libxcb.so.1.1.0
+ffff8d7af000-ffff8d7b0000 r--p 0002f000 08:02 552828                     /usr/lib/aarch64-linux-gnu/libxcb.so.1.1.0
+ffff8d7b0000-ffff8d7b1000 rw-p 00030000 08:02 552828                     /usr/lib/aarch64-linux-gnu/libxcb.so.1.1.0
+ffff8d7c0000-ffff8d916000 r-xp 00000000 08:02 1596508                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLdispatch.so.0.0.0
+ffff8d916000-ffff8d924000 ---p 00156000 08:02 1596508                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLdispatch.so.0.0.0
+ffff8d924000-ffff8d940000 r--p 00164000 08:02 1596508                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLdispatch.so.0.0.0
+ffff8d940000-ffff8d941000 rw-p 00180000 08:02 1596508                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGLdispatch.so.0.0.0
+ffff8d941000-ffff8d949000 rw-p 00000000 00:00 0 
+ffff8d950000-ffff8d9fa000 r-xp 00000000 08:02 531961                     /usr/lib/aarch64-linux-gnu/libzstd.so.1.5.7
+ffff8d9fa000-ffff8da0f000 ---p 000aa000 08:02 531961                     /usr/lib/aarch64-linux-gnu/libzstd.so.1.5.7
+ffff8da0f000-ffff8da10000 r--p 000af000 08:02 531961                     /usr/lib/aarch64-linux-gnu/libzstd.so.1.5.7
+ffff8da10000-ffff8da11000 rw-p 000b0000 08:02 531961                     /usr/lib/aarch64-linux-gnu/libzstd.so.1.5.7
+ffff8da20000-ffff8dc29000 r-xp 00000000 08:02 1449809                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicuuc.so.73
+ffff8dc29000-ffff8dc3d000 ---p 00209000 08:02 1449809                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicuuc.so.73
+ffff8dc3d000-ffff8dc50000 r--p 0020d000 08:02 1449809                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicuuc.so.73
+ffff8dc50000-ffff8dc51000 rw-p 00220000 08:02 1449809                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicuuc.so.73
+ffff8dc51000-ffff8dc53000 rw-p 00000000 00:00 0 
+ffff8dc60000-ffff8dfa5000 r-xp 00000000 08:02 1449808                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicui18n.so.73
+ffff8dfa5000-ffff8dfbf000 ---p 00345000 08:02 1449808                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicui18n.so.73
+ffff8dfbf000-ffff8dfd0000 r--p 0034f000 08:02 1449808                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicui18n.so.73
+ffff8dfd0000-ffff8dfd2000 rw-p 00360000 08:02 1449808                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libicui18n.so.73
+ffff8dfd2000-ffff8dfd3000 rw-p 00000000 00:00 0 
+ffff8dfe0000-ffff8e09b000 r-xp 00000000 08:02 551136                     /usr/lib/aarch64-linux-gnu/libfreetype.so.6.20.2
+ffff8e09b000-ffff8e0a9000 ---p 000bb000 08:02 551136                     /usr/lib/aarch64-linux-gnu/libfreetype.so.6.20.2
+ffff8e0a9000-ffff8e0b0000 r--p 000c9000 08:02 551136                     /usr/lib/aarch64-linux-gnu/libfreetype.so.6.20.2
+ffff8e0b0000-ffff8e0b1000 rw-p 000d0000 08:02 551136                     /usr/lib/aarch64-linux-gnu/libfreetype.so.6.20.2
+ffff8e0c0000-ffff8e197000 r-xp 00000000 08:02 1596500                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGL.so.1.7.0
+ffff8e197000-ffff8e1a2000 ---p 000d7000 08:02 1596500                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGL.so.1.7.0
+ffff8e1a2000-ffff8e1b0000 r--p 000e2000 08:02 1596500                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGL.so.1.7.0
+ffff8e1b0000-ffff8e1b1000 rw-p 000f0000 08:02 1596500                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libGL.so.1.7.0
+ffff8e1b1000-ffff8e1b2000 rw-p 00000000 00:00 0 
+ffff8e1c0000-ffff8e205000 r-xp 00000000 08:02 552840                     /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0.0.0
+ffff8e205000-ffff8e21e000 ---p 00045000 08:02 552840                     /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0.0.0
+ffff8e21e000-ffff8e220000 r--p 0004e000 08:02 552840                     /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0.0.0
+ffff8e220000-ffff8e221000 rw-p 00050000 08:02 552840                     /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0.0.0
+ffff8e230000-ffff8e2ff000 r-xp 00000000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff8e2ff000-ffff8e30c000 ---p 000cf000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff8e30c000-ffff8e310000 r--p 000dc000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff8e310000-ffff8e312000 rw-p 000e0000 08:02 1449732                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6DBus.so.6
+ffff8e320000-ffff8e482000 r-xp 00000000 08:02 552654                     /usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.8400.4
+ffff8e482000-ffff8e49f000 ---p 00162000 08:02 552654                     /usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.8400.4
+ffff8e49f000-ffff8e4a0000 r--p 0016f000 08:02 552654                     /usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.8400.4
+ffff8e4a0000-ffff8e4a1000 rw-p 00170000 08:02 552654                     /usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.8400.4
+ffff8e4a1000-ffff8e4a2000 rw-p 00000000 00:00 0 
+ffff8e4b0000-ffff8e5f2000 r-xp 00000000 08:02 550849                     /usr/lib/aarch64-linux-gnu/libX11.so.6.4.0
+ffff8e5f2000-ffff8e60f000 ---p 00142000 08:02 550849                     /usr/lib/aarch64-linux-gnu/libX11.so.6.4.0
+ffff8e60f000-ffff8e610000 r--p 0014f000 08:02 550849                     /usr/lib/aarch64-linux-gnu/libX11.so.6.4.0
+ffff8e610000-ffff8e615000 rw-p 00150000 08:02 550849                     /usr/lib/aarch64-linux-gnu/libX11.so.6.4.0
+ffff8e620000-ffff8e66d000 r-xp 00000000 08:02 551079                     /usr/lib/aarch64-linux-gnu/libfontconfig.so.1.12.1
+ffff8e66d000-ffff8e67e000 ---p 0004d000 08:02 551079                     /usr/lib/aarch64-linux-gnu/libfontconfig.so.1.12.1
+ffff8e67e000-ffff8e680000 r--p 0004e000 08:02 551079                     /usr/lib/aarch64-linux-gnu/libfontconfig.so.1.12.1
+ffff8e680000-ffff8e681000 rw-p 00050000 08:02 551079                     /usr/lib/aarch64-linux-gnu/libfontconfig.so.1.12.1
+ffff8e690000-ffff8e6a5000 r-xp 00000000 08:02 1596492                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libEGL.so.1.1.0
+ffff8e6a5000-ffff8e6bf000 ---p 00015000 08:02 1596492                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libEGL.so.1.1.0
+ffff8e6bf000-ffff8e6c0000 r--p 0001f000 08:02 1596492                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libEGL.so.1.1.0
+ffff8e6c0000-ffff8e6c1000 rw-p 00020000 08:02 1596492                    /home/agent/shared_workspace/ai_upper/.tmp/wm/usr/lib/aarch64-linux-gnu/libEGL.so.1.1.0
+ffff8e6d0000-ffff8edbc000 r-xp 00000000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff8edbc000-ffff8edca000 ---p 006ec000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff8edca000-ffff8ede0000 r--p 006fa000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff8ede0000-ffff8ede8000 rw-p 00710000 08:02 1449731                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Core.so.6
+ffff8ede8000-ffff8edec000 rw-p 00000000 00:00 0 
+ffff8edf0000-ffff8f7fa000 r-xp 00000000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff8f7fa000-ffff8f80c000 ---p 00a0a000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff8f80c000-ffff8f830000 r--p 00a0c000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff8f830000-ffff8f83d000 rw-p 00a30000 08:02 1449737                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Gui.so.6
+ffff8f83d000-ffff8f851000 rw-p 00000000 00:00 0 
+ffff8f854000-ffff8f856000 r-xp 00000000 00:01 623498                     /memfd:JITCode:QtQml (deleted)
+ffff8f856000-ffff8f857000 rw-p 00000000 00:01 623497                     /memfd:unknown-usage:QtQml (deleted)
+ffff8f85e000-ffff8f85f000 r-xp 00000000 00:01 624910                     /memfd:JITCode:QtQml (deleted)
+ffff8f85f000-ffff8f860000 r-xp 00000000 00:01 624909                     /memfd:JITCode:QtQml (deleted)
+ffff8f860000-ffff8ffdd000 r-xp 00000000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff8ffdd000-ffff8ffed000 ---p 0077d000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff8ffed000-ffff90030000 r--p 0077d000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff90030000-ffff9003c000 rw-p 007c0000 08:02 1449803                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/Qt/lib/libQt6Widgets.so.6
+ffff9003c000-ffff9003d000 rw-p 00000000 00:00 0 
+ffff9003d000-ffff9003f000 r-xp 00000000 00:01 623496                     /memfd:JITCode:QtQml (deleted)
+ffff9003f000-ffff90040000 rw-p 00000000 00:01 623886                     /memfd:unknown-usage:QtQml (deleted)
+ffff90040000-ffff90084000 r-xp 00000000 08:02 1449718                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6.abi3.so.6.11
+ffff90084000-ffff9009f000 ---p 00044000 08:02 1449718                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6.abi3.so.6.11
+ffff9009f000-ffff900a0000 r--p 0004f000 08:02 1449718                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6.abi3.so.6.11
+ffff900a0000-ffff900a2000 rw-p 00050000 08:02 1449718                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/libpyside6.abi3.so.6.11
+ffff900a2000-ffff900a3000 rw-p 00000000 00:00 0 
+ffff900a3000-ffff900a4000 r-xp 00000000 00:01 622274                     /memfd:JITCode:QtQml (deleted)
+ffff900a4000-ffff900a6000 r-xp 00000000 00:01 622273                     /memfd:JITCode:QtQml (deleted)
+ffff900a6000-ffff900a7000 r-xp 00000000 00:01 624906                     /memfd:JITCode:QtQml (deleted)
+ffff900a7000-ffff900a8000 r-xp 00000000 00:01 623415                     /memfd:JITCode:QtQml (deleted)
+ffff900a8000-ffff900a9000 r-xp 00000000 00:01 623414                     /memfd:JITCode:QtQml (deleted)
+ffff900a9000-ffff900aa000 r-xp 00000000 00:01 623413                     /memfd:JITCode:QtQml (deleted)
+ffff900aa000-ffff900ab000 r-xp 00000000 00:01 623412                     /memfd:JITCode:QtQml (deleted)
+ffff900ab000-ffff900ac000 r-xp 00000000 00:01 623411                     /memfd:JITCode:QtQml (deleted)
+ffff900ac000-ffff900ad000 r-xp 00000000 00:01 623410                     /memfd:JITCode:QtQml (deleted)
+ffff900ad000-ffff900ae000 r-xp 00000000 00:01 623409                     /memfd:JITCode:QtQml (deleted)
+ffff900ae000-ffff900af000 r-xp 00000000 00:01 623408                     /memfd:JITCode:QtQml (deleted)
+ffff900af000-ffff900b0000 r-xp 00000000 00:01 623407                     /memfd:JITCode:QtQml (deleted)
+ffff900b0000-ffff906cb000 r-xp 00000000 08:02 1449708                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ffff906cb000-ffff906dc000 ---p 0061b000 08:02 1449708                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ffff906dc000-ffff906f0000 r--p 0061c000 08:02 1449708                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ffff906f0000-ffff9073a000 rw-p 00630000 08:02 1449708                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/PySide6/QtWidgets.abi3.so
+ffff9073a000-ffff90750000 rw-p 00000000 00:00 0 
+ffff90750000-ffff90751000 r-xp 00000000 00:01 623406                     /memfd:JITCode:QtQml (deleted)
+ffff90751000-ffff90758000 rw-s 00000000 00:01 623404                     /memfd:wayland-cursor (deleted)
+ffff90758000-ffff9075a000 r-xp 00000000 00:01 622268                     /memfd:JITCode:QtQml (deleted)
+ffff9075a000-ffff9085a000 rw-p 00000000 00:00 0 
+ffff9085a000-ffff9085b000 r-xp 00000000 00:01 622271                     /memfd:JITCode:QtQml (deleted)
+ffff9085b000-ffff9085c000 r-xp 00000000 00:01 622267                     /memfd:JITCode:QtQml (deleted)
+ffff9085c000-ffff9085d000 rw-p 00000000 00:01 622266                     /memfd:unknown-usage:QtQml (deleted)
+ffff9085d000-ffff9085e000 rw-p 00000000 00:01 622265                     /memfd:unknown-usage:QtQml (deleted)
+ffff9085e000-ffff9085f000 r-xp 00000000 00:01 622264                     /memfd:JITCode:QtQml (deleted)
+ffff9085f000-ffff90860000 r-xp 00000000 00:01 622263                     /memfd:JITCode:QtQml (deleted)
+ffff90860000-ffff90861000 r-xp 00000000 08:02 531492                     /usr/lib/aarch64-linux-gnu/libdl.so.2
+ffff90861000-ffff9087f000 ---p 00001000 08:02 531492                     /usr/lib/aarch64-linux-gnu/libdl.so.2
+ffff9087f000-ffff90880000 r--p 0000f000 08:02 531492                     /usr/lib/aarch64-linux-gnu/libdl.so.2
+ffff90880000-ffff90881000 rw-p 00010000 08:02 531492                     /usr/lib/aarch64-linux-gnu/libdl.so.2
+ffff90881000-ffff90882000 r-xp 00000000 00:01 622262                     /memfd:JITCode:QtQml (deleted)
+ffff90882000-ffff90883000 rw-p 00000000 00:01 622261                     /memfd:unknown-usage:QtQml (deleted)
+ffff90883000-ffff90884000 r-xp 00000000 00:01 622260                     /memfd:JITCode:QtQml (deleted)
+ffff90884000-ffff90885000 r-xp 00000000 00:01 622259                     /memfd:JITCode:QtQml (deleted)
+ffff90885000-ffff90886000 rw-p 00000000 00:01 622258                     /memfd:unknown-usage:QtQml (deleted)
+ffff90886000-ffff90887000 r-xp 00000000 00:01 622257                     /memfd:JITCode:QtQml (deleted)
+ffff90887000-ffff90888000 r-xp 00000000 00:01 622256                     /memfd:JITCode:QtQml (deleted)
+ffff90888000-ffff90889000 r-xp 00000000 00:01 622255                     /memfd:JITCode:QtQml (deleted)
+ffff90889000-ffff9088a000 rw-p 00000000 00:01 622254                     /memfd:unknown-usage:QtQml (deleted)
+ffff9088a000-ffff9088b000 r-xp 00000000 00:01 622253                     /memfd:JITCode:QtQml (deleted)
+ffff9088b000-ffff9088c000 rw-p 00000000 00:01 622252                     /memfd:unknown-usage:QtQml (deleted)
+ffff9088c000-ffff9088d000 r-xp 00000000 00:01 622251                     /memfd:JITCode:QtQml (deleted)
+ffff9088d000-ffff9088e000 r-xp 00000000 00:01 622250                     /memfd:JITCode:QtQml (deleted)
+ffff9088e000-ffff9088f000 r-xp 00000000 00:01 622249                     /memfd:JITCode:QtQml (deleted)
+ffff9088f000-ffff90890000 r-xp 00000000 00:01 622248                     /memfd:JITCode:QtQml (deleted)
+ffff90890000-ffff90891000 r-xp 00000000 08:02 531647                     /usr/lib/aarch64-linux-gnu/libpthread.so.0
+ffff90891000-ffff908af000 ---p 00001000 08:02 531647                     /usr/lib/aarch64-linux-gnu/libpthread.so.0
+ffff908af000-ffff908b0000 r--p 0000f000 08:02 531647                     /usr/lib/aarch64-linux-gnu/libpthread.so.0
+ffff908b0000-ffff908b1000 rw-p 00010000 08:02 531647                     /usr/lib/aarch64-linux-gnu/libpthread.so.0
+ffff908b1000-ffff908b2000 r-xp 00000000 00:01 622247                     /memfd:JITCode:QtQml (deleted)
+ffff908b2000-ffff908b3000 rw-p 00000000 00:01 622246                     /memfd:unknown-usage:QtQml (deleted)
+ffff908b3000-ffff908b4000 r-xp 00000000 00:01 622245                     /memfd:JITCode:QtQml (deleted)
+ffff908b4000-ffff908b5000 r-xp 00000000 00:01 622244                     /memfd:JITCode:QtQml (deleted)
+ffff908b5000-ffff908b7000 r-xp 00000000 00:01 622243                     /memfd:JITCode:QtQml (deleted)
+ffff908b7000-ffff908b8000 r-xp 00000000 00:01 622242                     /memfd:JITCode:QtQml (deleted)
+ffff908b8000-ffff908b9000 r-xp 00000000 00:01 622241                     /memfd:JITCode:QtQml (deleted)
+ffff908b9000-ffff908ba000 rw-p 00000000 00:01 622240                     /memfd:unknown-usage:QtQml (deleted)
+ffff908ba000-ffff908bb000 r-xp 00000000 00:01 622236                     /memfd:JITCode:QtQml (deleted)
+ffff908bb000-ffff908bc000 r-xp 00000000 00:01 622235                     /memfd:JITCode:QtQml (deleted)
+ffff908bc000-ffff908bd000 r-xp 00000000 00:01 622234                     /memfd:JITCode:QtQml (deleted)
+ffff908bd000-ffff908be000 r-xp 00000000 00:01 622233                     /memfd:JITCode:QtQml (deleted)
+ffff908be000-ffff908bf000 r-xp 00000000 00:01 622232                     /memfd:JITCode:QtQml (deleted)
+ffff908bf000-ffff908c0000 r-xp 00000000 00:01 622226                     /memfd:JITCode:QtQml (deleted)
+ffff908c0000-ffff909c0000 rw-p 00000000 00:00 0 
+ffff909c0000-ffff909df000 r-xp 00000000 08:02 531496                     /usr/lib/aarch64-linux-gnu/libgcc_s.so.1
+ffff909df000-ffff909ef000 ---p 0001f000 08:02 531496                     /usr/lib/aarch64-linux-gnu/libgcc_s.so.1
+ffff909ef000-ffff909f0000 r--p 0001f000 08:02 531496                     /usr/lib/aarch64-linux-gnu/libgcc_s.so.1
+ffff909f0000-ffff909f1000 rw-p 00020000 08:02 531496                     /usr/lib/aarch64-linux-gnu/libgcc_s.so.1
+ffff909f1000-ffff909f2000 r-xp 00000000 00:01 622225                     /memfd:JITCode:QtQml (deleted)
+ffff909f2000-ffff909f3000 r-xp 00000000 00:01 622224                     /memfd:JITCode:QtQml (deleted)
+ffff909f3000-ffff909f7000 r--s 00000000 08:02 4483122                    /home/agent/.cache/wayland_turn.py/qmlcache/34498b2f2dececbc38b4ff65979cb32cdba705ea.qmlc
+ffff909f7000-ffff90a00000 r--s 00000000 08:02 4483120                    /home/agent/.cache/wayland_turn.py/qmlcache/88efc1721665e26e439b61b0192ea137a6decad0.qmlc
+ffff90a00000-ffff90c4c000 r-xp 00000000 08:02 531804                     /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.33
+ffff90c4c000-ffff90c55000 ---p 0024c000 08:02 531804                     /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.33
+ffff90c55000-ffff90c60000 r--p 00255000 08:02 531804                     /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.33
+ffff90c60000-ffff90c63000 rw-p 00260000 08:02 531804                     /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.33
+ffff90c63000-ffff90c67000 rw-p 00000000 00:00 0 
+ffff90c67000-ffff90c68000 rw-p 00000000 00:01 622223                     /memfd:unknown-usage:QtQml (deleted)
+ffff90c68000-ffff90c69000 r-xp 00000000 00:01 622218                     /memfd:JITCode:QtQml (deleted)
+ffff90c69000-ffff90c6c000 r--s 00000000 08:02 4483121                    /home/agent/.cache/wayland_turn.py/qmlcache/5f8958fe2ef654ed3cdd9ce9f82b86aaf957320b.qmlc
+ffff90c6c000-ffff90c70000 r--s 00000000 08:02 4483119                    /home/agent/.cache/wayland_turn.py/qmlcache/8d31521fa0fa9b119dea42dfb2e5c40caafde036.qmlc
+ffff90c70000-ffff90cdb000 r-xp 00000000 08:02 1448434                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/libshiboken6.abi3.so.6.11
+ffff90cdb000-ffff90cef000 ---p 0006b000 08:02 1448434                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/libshiboken6.abi3.so.6.11
+ffff90cef000-ffff90cf0000 r--p 0006f000 08:02 1448434                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/libshiboken6.abi3.so.6.11
+ffff90cf0000-ffff90cf2000 rw-p 00070000 08:02 1448434                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/libshiboken6.abi3.so.6.11
+ffff90cf2000-ffff90cf3000 rw-p 00000000 00:00 0 
+ffff90cf3000-ffff90cf4000 rw-p 00000000 00:01 622217                     /memfd:unknown-usage:QtQml (deleted)
+ffff90cf4000-ffff90cf5000 rw-p 00000000 00:01 622216                     /memfd:unknown-usage:QtQml (deleted)
+ffff90cf5000-ffff90cfa000 r--s 00000000 08:02 4483118                    /home/agent/.cache/wayland_turn.py/qmlcache/e683a735cdcf9b1d39927c893246db0c34f9596a.qmlc
+ffff90cfa000-ffff90d00000 r--s 00000000 08:02 4483117                    /home/agent/.cache/wayland_turn.py/qmlcache/8c318a0c2a81efd2db302d49cdebaf6702a48e9f.qmlc
+ffff90d00000-ffff90d04000 r-xp 00000000 08:02 1448428                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/Shiboken.abi3.so
+ffff90d04000-ffff90d1f000 ---p 00004000 08:02 1448428                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/Shiboken.abi3.so
+ffff90d1f000-ffff90d20000 r--p 0000f000 08:02 1448428                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/Shiboken.abi3.so
+ffff90d20000-ffff90d21000 rw-p 00010000 08:02 1448428                    /home/agent/shared_workspace/ai_upper/.venv/lib/python3.13/site-packages/shiboken6/Shiboken.abi3.so
+ffff90d21000-ffff90d24000 r--s 00000000 08:02 4483116                    /home/agent/.cache/wayland_turn.py/qmlcache/388cf3a46716e0983a582ccae232304eb37a9216.qmlc
+ffff90d24000-ffff90d27000 r--s 00000000 08:02 4483115                    /home/agent/.cache/wayland_turn.py/qmlcache/4fa941477afb352d7605dd133c86e52e8a7091df.qmlc
+ffff90d27000-ffff90d2c000 r--s 00000000 08:02 4483114                    /home/agent/.cache/wayland_turn.py/qmlcache/65eeceb8379f701cd1267cbbd564052fdb19b6af.qmlc
+ffff90d2c000-ffff90d30000 r--s 00000000 08:02 4483113                    /home/agent/.cache/wayland_turn.py/qmlcache/292f7c06c4722778a3185c0a83f4217447ade695.qmlc
+ffff90d30000-ffff90e30000 rw-p 00000000 00:00 0 
+ffff90e30000-ffff90e5c000 r-xp 00000000 08:02 531536                     /usr/lib/aarch64-linux-gnu/liblzma.so.5.8.1
+ffff90e5c000-ffff90e6f000 ---p 0002c000 08:02 531536                     /usr/lib/aarch64-linux-gnu/liblzma.so.5.8.1
+ffff90e6f000-ffff90e70000 r--p 0002f000 08:02 531536                     /usr/lib/aarch64-linux-gnu/liblzma.so.5.8.1
+ffff90e70000-ffff90e71000 rw-p 00030000 08:02 531536                     /usr/lib/aarch64-linux-gnu/liblzma.so.5.8.1
+ffff90e71000-ffff90e72000 rw-p 00000000 00:01 622215                     /memfd:unknown-usage:QtQml (deleted)
+ffff90e72000-ffff90e75000 r--s 00000000 08:02 4483112                    /home/agent/.cache/wayland_turn.py/qmlcache/3f734c3e61e0096f6e7bea75a413afdc13f64586.qmlc
+ffff90e75000-ffff90e7a000 r--s 00000000 08:02 4483111                    /home/agent/.cache/wayland_turn.py/qmlcache/85acefce7ce205cddecb2fb2aaad66d718857dce.qmlc
+ffff90e7a000-ffff90e80000 r--s 00000000 08:02 4483109                    /home/agent/.cache/wayland_turn.py/qmlcache/df64fb309adc2ffaad2b547b8dbb987b1e57ddc1.qmlc
+ffff90e80000-ffff90e88000 r-xp 00000000 08:02 660810                     /usr/lib/python3.13/lib-dynload/_lzma.cpython-313-aarch64-linux-gnu.so
+ffff90e88000-ffff90e9f000 ---p 00008000 08:02 660810                     /usr/lib/python3.13/lib-dynload/_lzma.cpython-313-aarch64-linux-gnu.so
+ffff90e9f000-ffff90ea0000 r--p 0000f000 08:02 660810                     /usr/lib/python3.13/lib-dynload/_lzma.cpython-313-aarch64-linux-gnu.so
+ffff90ea0000-ffff90ea1000 rw-p 00010000 08:02 660810                     /usr/lib/python3.13/lib-dynload/_lzma.cpython-313-aarch64-linux-gnu.so
+ffff90ea1000-ffff90ea2000 rw-p 00000000 00:01 622214                     /memfd:unknown-usage:QtQml (deleted)
+ffff90ea2000-ffff90ea3000 rw-p 00000000 00:01 622213                     /memfd:unknown-usage:QtQml (deleted)
+ffff90ea3000-ffff90ea6000 r--s 00000000 08:02 4483110                    /home/agent/.cache/wayland_turn.py/qmlcache/e9181b7d34ee8f90a3b6b7a960ec4a93832a563d.qmlc
+ffff90ea6000-ffff90eae000 r--s 00000000 08:02 4483106                    /home/agent/.cache/wayland_turn.py/qmlcache/08ed24b58059dd2ce5ae8f8a5f749b9ae79e686f.qmlc
+ffff90eae000-ffff90eb0000 r--s 00000000 08:02 4483105                    /home/agent/.cache/wayland_turn.py/qmlcache/2ddee9a7e893a208d4d33a029c18b6054a3ca023.qmlc
+ffff90eb0000-ffff90ec0000 r-xp 00000000 08:02 530988                     /usr/lib/aarch64-linux-gnu/libbz2.so.1.0.4
+ffff90ec0000-ffff90ecf000 ---p 00010000 08:02 530988                     /usr/lib/aarch64-linux-gnu/libbz2.so.1.0.4
+ffff90ecf000-ffff90ed0000 r--p 0000f000 08:02 530988                     /usr/lib/aarch64-linux-gnu/libbz2.so.1.0.4
+ffff90ed0000-ffff90ed1000 rw-p 00010000 08:02 530988                     /usr/lib/aarch64-linux-gnu/libbz2.so.1.0.4
+ffff90ed1000-ffff90ed4000 r--s 00000000 08:02 4483103                    /home/agent/.cache/wayland_turn.py/qmlcache/2bf52383a4b4972921805373a4b1859a26b18e5e.qmlc
+ffff90ed4000-ffff90ed7000 r--s 00000000 08:02 4483102                    /home/agent/.cache/wayland_turn.py/qmlcache/c0f34b95a2a8bfab94151b12ff7ebfc7f707c7a9.qmlc
+ffff90ed7000-ffff90ee0000 r--s 00000000 08:02 4483101                    /home/agent/.cache/wayland_turn.py/qmlcache/09487694dc52fb4bf0297b9aaf3f880e593f83f6.qmlc
+ffff90ee0000-ffff90ee5000 r-xp 00000000 08:02 660790                     /usr/lib/python3.13/lib-dynload/_bz2.cpython-313-aarch64-linux-gnu.so
+ffff90ee5000-ffff90eff000 ---p 00005000 08:02 660790                     /usr/lib/python3.13/lib-dynload/_bz2.cpython-313-aarch64-linux-gnu.so
+ffff90eff000-ffff90f00000 r--p 0000f000 08:02 660790                     /usr/lib/python3.13/lib-dynload/_bz2.cpython-313-aarch64-linux-gnu.so
+ffff90f00000-ffff90f01000 rw-p 00010000 08:02 660790                     /usr/lib/python3.13/lib-dynload/_bz2.cpython-313-aarch64-linux-gnu.so
+ffff90f01000-ffff90f03000 r--s 00000000 08:02 4483104                    /home/agent/.cache/wayland_turn.py/qmlcache/d4d64d6551ee05de50be23b45a2c62c9e361881d.qmlc
+ffff90f03000-ffff90f0a000 r--s 00000000 08:02 4483100                    /home/agent/.cache/wayland_turn.py/qmlcache/85c877f25a052edabab3a83115d19b38a984dfba.qmlc
+ffff90f0a000-ffff90f0c000 r--s 00000000 08:02 4483099                    /home/agent/.cache/wayland_turn.py/qmlcache/c2fa016ff6eff37a5ee07ac74aa42d2452d9bbf7.qmlc
+ffff90f0c000-ffff90f0e000 r--s 00000000 08:02 4483098                    /home/agent/.cache/wayland_turn.py/qmlcache/cc807e35d8db917ddf9985a4a7f1432fa24a4c8b.qmlc
+ffff90f0e000-ffff90f11000 r--s 00000000 08:02 4483097                    /home/agent/.cache/wayland_turn.py/qmlcache/0b889ee10f2e0cebe7cf100317544ec128d3c8a0.qmlc
+ffff90f11000-ffff91011000 rw-p 00000000 00:00 0 
+ffff91011000-ffff91012000 rw-p 00000000 00:01 622212                     /memfd:unknown-usage:QtQml (deleted)
+ffff91012000-ffff9101d000 r--s 00000000 08:02 4483096                    /home/agent/.cache/wayland_turn.py/qmlcache/123b6f3a4d771ef594acc76d0a6652277e91e5ef.qmlc
+ffff9101d000-ffff91020000 r--s 00000000 08:02 4483093                    /home/agent/.cache/wayland_turn.py/qmlcache/74cabb0ed18d8d9081379b20e7dacf30eb8f7cc6.qmlc
+ffff91020000-ffff91029000 r-xp 00000000 08:02 550945                     /usr/lib/aarch64-linux-gnu/libatomic.so.1.2.0
+ffff91029000-ffff9103f000 ---p 00009000 08:02 550945                     /usr/lib/aarch64-linux-gnu/libatomic.so.1.2.0
+ffff9103f000-ffff91040000 r--p 0000f000 08:02 550945                     /usr/lib/aarch64-linux-gnu/libatomic.so.1.2.0
+ffff91040000-ffff91041000 rw-p 00010000 08:02 550945                     /usr/lib/aarch64-linux-gnu/libatomic.so.1.2.0
+ffff91041000-ffff91042000 rw-p 00000000 00:00 0 
+ffff91042000-ffff91043000 rw-p 00000000 00:01 622211                     /memfd:unknown-usage:QtQml (deleted)
+ffff91043000-ffff91044000 r--s 00000000 08:02 4483095                    /home/agent/.cache/wayland_turn.py/qmlcache/7c26975a93bee6385038f035bbe3ac4f7d633b46.qmlc
+ffff91044000-ffff913a6000 rw-p 00000000 00:00 0 
+ffff913a6000-ffff91400000 r--p 00000000 08:02 532994                     /usr/lib/locale/C.utf8/LC_CTYPE
+ffff91400000-ffff9159c000 r-xp 00000000 08:02 531002                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffff9159c000-ffff915ad000 ---p 0019c000 08:02 531002                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffff915ad000-ffff915b0000 r--p 0019d000 08:02 531002                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffff915b0000-ffff915b2000 rw-p 001a0000 08:02 531002                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffff915b2000-ffff915bf000 rw-p 00000000 00:00 0 
+ffff915bf000-ffff915c0000 r--s 00000000 08:02 4483094                    /home/agent/.cache/wayland_turn.py/qmlcache/e3b833557b9b8cf34c09451801a1481a64531881.qmlc
+ffff915c0000-ffff915e8000 r-xp 00000000 08:02 551053                     /usr/lib/aarch64-linux-gnu/libexpat.so.1.13.0
+ffff915e8000-ffff915fe000 ---p 00028000 08:02 551053                     /usr/lib/aarch64-linux-gnu/libexpat.so.1.13.0
+ffff915fe000-ffff91600000 r--p 0002e000 08:02 551053                     /usr/lib/aarch64-linux-gnu/libexpat.so.1.13.0
+ffff91600000-ffff91601000 rw-p 00030000 08:02 551053                     /usr/lib/aarch64-linux-gnu/libexpat.so.1.13.0
+ffff91601000-ffff91603000 r--s 00000000 08:02 4483092                    /home/agent/.cache/wayland_turn.py/qmlcache/4f90ad277c120d7aff6f0c254a15d32c9576edb7.qmlc
+ffff91603000-ffff91605000 r--s 00000000 08:02 4483091                    /home/agent/.cache/wayland_turn.py/qmlcache/18c3c1da8d9d211cd41bdc4f4ac003073391fdc4.qmlc
+ffff91605000-ffff91606000 r--s 00000000 08:02 4483090                    /home/agent/.cache/wayland_turn.py/qmlcache/04eeea8a96061270a0a3e10000bf58968f79b140.qmlc
+ffff91606000-ffff9160a000 r--s 00000000 08:02 4483089                    /home/agent/.cache/wayland_turn.py/qmlcache/4bdb7bc4a6d27c0b9538fa969373cf3dc419180a.qmlc
+ffff9160a000-ffff91610000 r--s 00000000 08:02 5378804                    /var/cache/fontconfig/d589a48862398ed80a3d6066f4f56f4c-le64.cache-9
+ffff91610000-ffff9162c000 r-xp 00000000 08:02 531959                     /usr/lib/aarch64-linux-gnu/libz.so.1.3.1
+ffff9162c000-ffff9163f000 ---p 0001c000 08:02 531959                     /usr/lib/aarch64-linux-gnu/libz.so.1.3.1
+ffff9163f000-ffff91640000 r--p 0001f000 08:02 531959                     /usr/lib/aarch64-linux-gnu/libz.so.1.3.1
+ffff91640000-ffff91641000 rw-p 00020000 08:02 531959                     /usr/lib/aarch64-linux-gnu/libz.so.1.3.1
+ffff91641000-ffff91644000 r--s 00000000 08:02 4483087                    /home/agent/.cache/wayland_turn.py/qmlcache/4b681f5f89d50f686e2d38db357a950bc71bfa99.qmlc
+ffff91644000-ffff91645000 rw-p 00000000 00:01 622210                     /memfd:unknown-usage:QtQml (deleted)
+ffff91645000-ffff91646000 r--p 00000000 08:02 533022                     /usr/lib/locale/C.utf8/LC_NUMERIC
+ffff91646000-ffff91647000 r--p 00000000 08:02 533025                     /usr/lib/locale/C.utf8/LC_TIME
+ffff91647000-ffff91648000 r--p 00000000 08:02 532993                     /usr/lib/locale/C.utf8/LC_COLLATE
+ffff91648000-ffff91649000 r--p 00000000 08:02 533020                     /usr/lib/locale/C.utf8/LC_MONETARY
+ffff91649000-ffff9164a000 r--p 00000000 08:02 533019                     /usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES
+ffff9164a000-ffff9164b000 r--p 00000000 08:02 533023                     /usr/lib/locale/C.utf8/LC_PAPER
+ffff9164b000-ffff9164c000 r--p 00000000 08:02 533021                     /usr/lib/locale/C.utf8/LC_NAME
+ffff9164c000-ffff91650000 rw-p 00000000 00:00 0 
+ffff91650000-ffff916de000 r-xp 00000000 08:02 531547                     /usr/lib/aarch64-linux-gnu/libm.so.6
+ffff916de000-ffff916ef000 ---p 0008e000 08:02 531547                     /usr/lib/aarch64-linux-gnu/libm.so.6
+ffff916ef000-ffff916f0000 r--p 0008f000 08:02 531547                     /usr/lib/aarch64-linux-gnu/libm.so.6
+ffff916f0000-ffff916f1000 rw-p 00090000 08:02 531547                     /usr/lib/aarch64-linux-gnu/libm.so.6
+ffff916f1000-ffff916f2000 r--p 00000000 08:02 532992                     /usr/lib/locale/C.utf8/LC_ADDRESS
+ffff916f2000-ffff916f3000 r--p 00000000 08:02 533024                     /usr/lib/locale/C.utf8/LC_TELEPHONE
+ffff916f3000-ffff9171b000 r-xp 00000000 08:02 530647                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffff9171b000-ffff9171c000 r--p 00000000 08:02 533017                     /usr/lib/locale/C.utf8/LC_MEASUREMENT
+ffff9171c000-ffff9171d000 r--p 00000000 08:02 533016                     /usr/lib/locale/C.utf8/LC_IDENTIFICATION
+ffff9171d000-ffff91725000 rw-p 00000000 00:00 0 
+ffff91725000-ffff9172c000 r--s 00000000 08:02 530549                     /usr/lib/aarch64-linux-gnu/gconv/gconv-modules.cache
+ffff9172c000-ffff9172e000 rw-p 00000000 00:00 0 
+ffff9172e000-ffff91730000 r--p 00000000 00:00 0                          [vvar]
+ffff91730000-ffff91731000 r-xp 00000000 00:00 0                          [vdso]
+ffff91731000-ffff91733000 r--p 0002e000 08:02 530647                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffff91733000-ffff91734000 rw-p 00030000 08:02 530647                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffff91734000-ffff91735000 rw-p 00000000 00:00 0 
+ffffe74aa000-ffffe74cc000 rw-p 00000000 00:00 0                          [stack]
