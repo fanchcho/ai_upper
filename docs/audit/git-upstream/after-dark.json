@@ -1,0 +1,48 @@
+{
+  "repo": "/tmp/ai-upper-branches-czvk8ycw/home/repo",
+  "rows": [
+    {
+      "name": "behind",
+      "current": false,
+      "remote": null,
+      "upstream": "origin/main",
+      "ahead": 0,
+      "behind": 1
+    },
+    {
+      "name": "feature/a",
+      "current": false,
+      "remote": null,
+      "upstream": null,
+      "ahead": null,
+      "behind": null
+    },
+    {
+      "name": "feature/b",
+      "current": false,
+      "remote": null,
+      "upstream": null,
+      "ahead": null,
+      "behind": null
+    },
+    {
+      "name": "main",
+      "current": true,
+      "remote": null,
+      "upstream": "origin/main",
+      "ahead": 1,
+      "behind": 0
+    },
+    {
+      "name": "origin/main",
+      "current": false,
+      "remote": "origin",
+      "upstream": null
+    }
+  ],
+  "checkout_readback": "feature/a",
+  "menu_height": 1044.0,
+  "content_height": 1656.0,
+  "scroll_y": 623.6099157428899,
+  "empty_ui": "暂无分支"
+}

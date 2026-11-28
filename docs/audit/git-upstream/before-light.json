@@ -1,0 +1,35 @@
+{
+  "repo": "/tmp/ai-upper-branches-0gyocvug/home/repo",
+  "rows": [
+    {
+      "name": "behind",
+      "current": false,
+      "remote": null,
+      "upstream": "origin/main"
+    },
+    {
+      "name": "feature/a",
+      "current": false,
+      "remote": null,
+      "upstream": null
+    },
+    {
+      "name": "feature/b",
+      "current": false,
+      "remote": null,
+      "upstream": null
+    },
+    {
+      "name": "main",
+      "current": true,
+      "remote": null,
+      "upstream": "origin/main"
+    },
+    {
+      "name": "origin/main",
+      "current": false,
+      "remote": "origin",
+      "upstream": null
+    }
+  ]
+}

@@ -121,7 +121,13 @@ def branches(root: str) -> dict[str, Any]:
             continue
         ref, head, upstream, symref = (line.split("\x00") + ["", "", "", ""])[:4]
         if ref.startswith("refs/heads/"):
-            rows.append({"name": ref[11:], "current": head == "*", "remote": None, "upstream": upstream or None})
+            ahead = behind = None
+            if upstream:
+                count_code, counts, _ = _run(root, ["rev-list", "--left-right", "--count", ref + "..." + upstream])
+                if count_code == 0:
+                    ahead, behind = map(int, counts.split())
+            rows.append({"name": ref[11:], "current": head == "*", "remote": None,
+                         "upstream": upstream or None, "ahead": ahead, "behind": behind})
         elif ref.startswith("refs/remotes/") and not symref:
             name = ref[13:]
             remote = next((r for r in remotes if name.startswith(r + "/")), name.split("/")[0])

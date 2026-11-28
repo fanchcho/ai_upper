@@ -52,8 +52,12 @@ Popup {
   for(var group=0;group<2;group++) {
    var subset=branches.filter(function(b){return !!b.remote === !!group && (view !== "merge" || !b.current) && (!filter || b.name.toLowerCase().indexOf(filter.toLowerCase())>=0)})
    if(subset.length)list.push({label:group?"远程分支":"本地分支",section:true})
-   subset.forEach(function(b){list.push({label:(b.current?"✓  ":"    ")+b.name,action:"branch",branch:b})})
+   subset.forEach(function(b){
+    var tracking = b.upstream ? "  → " + b.upstream + (b.ahead !== null && b.ahead !== undefined ? "  ↑" + b.ahead + " ↓" + b.behind : "  状态未知") : ""
+    list.push({label:(b.current?"✓  ":"")+b.name+tracking,action:"branch",branch:b})
+   })
   }
+  if(!list.some(function(r){return r.branch}))list.push({label:branches.length?"无匹配分支":"暂无分支",section:true,empty:true})
   return list
  }
  function act(row) {
@@ -66,8 +70,11 @@ Popup {
   else if(a==="checkout") {result(selected.remote?shellBridge.gitCheckoutRemote(repoRoot,selected.name):shellBridge.gitCheckout(repoRoot,selected.name),"已切换分支")}
   else prompt(a)
  }
- contentItem: ScrollView {
-  clip:true
+ contentItem: Flickable {
+  objectName: "gitBranchScroll"
+  clip:true; contentWidth:width;contentHeight:menuColumn.implicitHeight
+  boundsBehavior:Flickable.StopAtBounds
+  ScrollBar.vertical: ScrollBar {}
   Column {
    id:menuColumn; width:root.availableWidth; spacing:0
    SettingsField { objectName:"gitBranchFilter"; width:parent.width; visible:root.view!=="main" && root.branches.length>8; placeholderText:"筛选分支"; onTextChanged:root.filter=text }
@@ -77,13 +84,15 @@ Popup {
      required property var modelData
      width:menuColumn.width; height:modelData.sep?9:modelData.section?26:33
      Rectangle { visible:!!modelData.sep; x:6;y:4;width:parent.width-12;height:1;color:Theme.border }
-     Text { visible:!!modelData.section; x:9;y:6;text:modelData.label||"";color:Theme.fgSubtle;font.pixelSize:11 }
+     Text { objectName:modelData.empty?"gitBranchEmpty":"gitBranchSection"; visible:!!modelData.section; x:9;y:6;text:modelData.label||"";color:Theme.fgSubtle;font.pixelSize:11 }
      Button {
       objectName:"gitMenu_"+(modelData.action||"section")+(modelData.branch?"_"+modelData.branch.name:"")
       anchors.fill:parent; visible:!modelData.sep&&!modelData.section;enabled:!modelData.disabled;opacity:enabled?1:.4
-      contentItem:Text { text:modelData.label||"";color:modelData.danger?Theme.danger:Theme.fg;font.family:Theme.sansFamily;font.pixelSize:13;leftPadding:31;verticalAlignment:Text.AlignVCenter;elide:Text.ElideRight }
+      contentItem:Text { text:modelData.label||"";color:modelData.danger?Theme.danger:Theme.fg;font.family:Theme.sansFamily;font.pixelSize:13;leftPadding:modelData.branch?9:31;verticalAlignment:Text.AlignVCenter;elide:Text.ElideRight }
       Icon { x:9;anchors.verticalCenter:parent.verticalCenter;size:14;name:root.glyph(modelData.action);color:modelData.danger?Theme.danger:Theme.fg;visible:name.length>0 }
-      background:Rectangle {radius:Theme.radius;color:parent.hovered?Theme.bgHover:"transparent"}
+      ToolTip.visible:hovered
+      ToolTip.text:modelData.label||""
+      background:Rectangle {radius:Theme.radius;color:parent.hovered?(modelData.danger?Qt.rgba(Theme.danger.r,Theme.danger.g,Theme.danger.b,0.14):Theme.bgHover):"transparent"}
       onClicked:root.act(modelData)
      }
     }
