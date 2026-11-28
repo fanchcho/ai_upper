@@ -6,6 +6,6 @@
   "writers": [],
   "realPath": "/home/agent/shared_workspace/pc/ai_upper",
   "ai_upper": "/home/agent/shared_workspace/pc/ai_upper",
-  "py_upper": "/home/agent/shared_workspace/pc/ai_upper",
+  "legacyEntry": "/home/agent/shared_workspace/pc/ai_upper",
   "fsckExit": 0
 }

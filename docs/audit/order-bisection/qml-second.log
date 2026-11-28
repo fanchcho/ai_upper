@@ -1,0 +1,28 @@
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+...................s.................................................... [ 44%]
+..........................................................ssss.......... [ 59%]
+.F...................................................................... [ 74%]
+........................................................................ [ 88%]
+......................................................                   [100%]
+=================================== FAILURES ===================================
+________________________ test_stdio_cancel_reaps_child _________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-7/test_stdio_cancel_reaps_child0')
+
+    def test_stdio_cancel_reaps_child(tmp_path):
+        script=tmp_path/'stuck.py';script.write_text('import time\ntime.sleep(20)\n')
+        stop=threading.Event()
+        connection=McpConnection({'command':sys.executable,'args':[str(script)]},cancelled=stop.is_set)
+        timer=threading.Timer(.1,stop.set);timer.start()
+        try:
+>           with pytest.raises(OSError,match='cancelled'): connection.initialize()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'cancelled'
+E             Actual message: 'MCP 取消或超时；执行结果可能未知'
+
+app/tests/test_plugin_runtime.py:91: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_plugin_runtime.py::test_stdio_cancel_reaps_child - Asse...
+1 failed, 480 passed, 5 skipped in 185.27s (0:03:05)

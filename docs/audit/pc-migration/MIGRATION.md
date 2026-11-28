@@ -1,6 +1,6 @@
 # 工程迁至 pc/ai_upper
 
-实体目录 /home/agent/shared_workspace/pc/ai_upper。旧 ai_upper 与 py_upper 均软链到该实体；保留前者是因为宿主workspaceRoot仍指旧路径，删除会使会话cwd失效。迁前py_upper实际上不存在，不能照旧回执写成存在；本次已重建。
+实体目录 /home/agent/shared_workspace/pc/ai_upper。旧 ai_upper 与 /home/agent/shared_workspace/py_upper 均软链到该实体；保留前者是因为宿主workspaceRoot仍指旧路径，删除会使会话cwd失效。迁前/home/agent/shared_workspace/py_upper实际上不存在，不能照旧回执写成存在；本次已重建。
 
 迁前HEAD e8fdc2cad57b073e46e5d16f99d6645fdbce8173，status为空，无未提交或未推送的本地提交（HTTPS回读同SHA）；因此不需要归档未提交改动。/proc文件描述符检查未发现工作树文件写入者。实体与父目录设备号同为2050，按用户要求cd /后同一条命令执行mv及两个ln -sfn，无复制删除。迁后HEAD/status保持一致、4669个跟踪文件、.git 80604192字节与迁前完全一致；du约9.4G。fsck --full退出0，仅已有dangling对象；count-objects garbage=0。
 

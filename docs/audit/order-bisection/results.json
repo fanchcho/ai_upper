@@ -1,0 +1,26 @@
+[
+  {
+    "label": "bot-first",
+    "count": 26,
+    "exit": 0,
+    "seconds": 1.32
+  },
+  {
+    "label": "bot-second",
+    "count": 27,
+    "exit": 1,
+    "seconds": 2.35
+  },
+  {
+    "label": "qml-first",
+    "count": 485,
+    "exit": 1,
+    "seconds": 43.16
+  },
+  {
+    "label": "qml-second",
+    "count": 486,
+    "exit": 1,
+    "seconds": 185.91
+  }
+]

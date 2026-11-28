@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/agent/shared_workspace/pc/ai_upper/scripts/parity/order_prefix_bisect.py", line 10, in <module>
+    i=nodes.index(target);prefix=nodes[:i];m=len(prefix)//2
+ValueError: 'app/tests/test_bot_roundtrip.py::test_telegram_roundtrip_local' is not in list

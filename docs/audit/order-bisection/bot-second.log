@@ -1,0 +1,57 @@
+......................F....                                              [100%]
+=================================== FAILURES ===================================
+___________________ test_repository_keeps_no_stale_old_name ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-4/test_repository_keeps_no_stale0')
+
+    def test_repository_keeps_no_stale_old_name(tmp_path):
+        """改名的验收线：仓库里只允许「显式兼容旧名」这几处提到旧拼写。"""
+        root = Path(__file__).parents[2]
+        allowed = {
+            "README.md",
+            "tools/ai_upper/config.py",
+            "tools/ai_upper/egg_loader.py",
+            "tools/ai_upper/lock.py",
+            "tools/ai_upper/third_party.py",
+            "app/src/utils/app_home.py",
+            "app/src/utils/paths.py",
+            "launcher/src/AiUpper.cpp",
+            "app/tests/test_app_home.py",
+        }
+        offenders: list[str] = []
+        # Git's index includes newly staged files while excluding historical scratch
+        # trees and installed dependencies. Scan working-tree contents of those paths.
+        tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=root)
+        for name in tracked.decode("utf-8").split("\0"):
+            path = root / name
+            if not path.is_file() or path.suffix not in {".py", ".cpp", ".h", ".md", ".toml", ".yml", ".json", ".js", ".sh"}:
+                continue
+            relative = path.relative_to(root).as_posix()
+            if relative.startswith((".tmp/", "out/", ".git/", ".cache/", "build/", "dist/", "runtimes/")):
+                continue
+            if relative in allowed:
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError):
+                continue
+            # 工作区根目录由宿主固定，不随改名移动；它的绝对路径出现在历史证据里
+            # 是记录而不是命名，替换掉再查。
+            #
+            # 这个路径是**常量**：CI 的检出根是另一条路径（`/home/agent/work/...`），
+            # 只剔除 `str(root)` 时，文档里写死的宿主路径会留下来，被当成残留旧名——
+            # 本机跑绿、CI 十二条 job 全红正是这么来的。
+            for host_fixed in (str(root), HOST_FIXED_WORKSPACE):
+                text = text.replace(host_fixed, "<repo>")
+            for old in ("py_upper", "PY_UPPER", "PyUpper", "pyupper"):
+                if old in text:
+                    offenders.append(f"{relative}: {old}")
+                    break
+>       assert not offenders, offenders
+E       AssertionError: ['docs/audit/pc-migration/MIGRATION.md: py_upper', 'docs/audit/pc-migration/after.json: py_upper']
+E       assert not ['docs/audit/pc-migration/MIGRATION.md: py_upper', 'docs/audit/pc-migration/after.json: py_upper']
+
+app/tests/test_app_home.py:266: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/test_app_home.py::test_repository_keeps_no_stale_old_name - ...
+1 failed, 26 passed in 1.89s
