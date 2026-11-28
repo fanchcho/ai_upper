@@ -42,6 +42,7 @@ Rectangle {
             SettingsButton { objectName:"feishuConnect"; text:"连接飞书"; onClicked:root.error=root.api.linkFeishu(feishuId.text,feishuSecret.text,feishuDomain.currentText) }
         }
         SettingsButton { visible: root.link.length > 0; text: "打开 Telegram 认领链接"; onClicked: shellBridge.openExternal(root.link) }
+        SettingsButton { objectName:"phoneEntry"; text:"手机联动：扫码 / 设备"; onClicked:root.shell.page="phone" }
         SettingsButton { objectName:"webPairTicket"; text:"生成浏览器配对票据"; onClicked:root.webLink=root.api.webPairTicket() }
         SettingsButton { objectName:"openWebPair"; visible:root.webLink.length>0; text:"打开浏览器完成安全配对"; onClicked:shellBridge.openExternal(root.webLink) }
         Text { text: root.error; visible: text.length > 0; color: Theme.danger; wrapMode: Text.Wrap; width: parent.width }

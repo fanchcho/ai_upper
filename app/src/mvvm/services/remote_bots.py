@@ -58,7 +58,7 @@ def RemoteBots(shell):
                     self.pairing.pop(identity,None)
                     bot['enabled']=False;self.states[identity]='off'
                     if action=='delete':
-                        for field in ('botToken','appSecret','verificationToken','encryptKey','vapid',*('dev:'+u['id'] for u in bot.get('users',[]))):
+                        for field in ('botToken','appSecret','verificationToken','encryptKey','vapid','deskKey',*('dev:'+u['id'] for u in bot.get('users',[]))):
                             self.shell._vault.delete_secret('remote:'+identity+':'+field)
                         rows=[b for b in rows if b['id']!=identity]
                 elif action=='enable':
@@ -118,6 +118,41 @@ def RemoteBots(shell):
             if bot['id'] not in self.workers:self.start(bot)
             return self.workers[bot['id']].issue()
 
+        @Slot(str,str,result='QVariantMap')
+        def phoneTicket(self,via,kind):
+            try:
+                bot=next((b for b in self.list() if b['platform']=='web'),None)
+                if not bot:
+                    self.webPairTicket();bot=next(b for b in self.list() if b['platform']=='web')
+                rows=self.list();bot=next(b for b in rows if b['id']==bot['id'])
+                bot['settings'].setdefault('deskId',secrets.token_hex(8));bot['settings']['lastVia']=via
+                bot['name']='手机联动';bot['enabled']=True;self.save(rows)
+                if bot['id'] not in self.workers:self.start(bot)
+                return self.workers[bot['id']].phone_issue('lan' if via=='lan' else 'relay','link' if kind=='link' else 'pair')
+            except Exception as exc:return {'error':str(exc)}
+
+        @Slot(result='QVariantMap')
+        def phoneState(self):
+            bot=next((b for b in self.list() if b['platform']=='web'),None)
+            if not bot:return {'added':False,'devices':[],'links':{'lan':'off','relay':'off'}}
+            server=self.workers.get(bot['id'])
+            return {'added':True,'id':bot['id'],'enabled':bot['enabled'],'devices':server.devices() if server else bot['users'],
+                    'links':server.links if server else {'lan':'off','relay':'off'}}
+
+        @Slot()
+        def cancelPhoneQr(self):
+            for bot in self.list():
+                server=self.workers.get(bot['id'])
+                if bot['platform']=='web' and server:
+                    server.tickets={k:t for k,t in server.tickets.items() if t.get('sticky')}
+                    if server.ticket and not server.ticket.get('sticky'):server.ticket=None
+                    server.release_qr()
+
+        @Slot(str)
+        def copyLink(self,url):
+            from utils.qt_compat import QtGui
+            QtGui.QGuiApplication.clipboard().setText(url)
+
         @Slot(str,result=str)
         def feishuPairCode(self,identity):
             if not any(b['id']==identity and b['platform']=='feishu' for b in self.list()):return '机器人不存在'
@@ -168,6 +203,11 @@ def RemoteBots(shell):
             if bot.get('platform')=='web':
                 from mvvm.services.web_pairing import start
                 self.workers[identity]=start(self,bot)
+                if bot.get('settings',{}).get('deskId'):
+                    for via in {u.get('via','relay') for u in bot.get('users',[])}:
+                        try:self.workers[identity].phone_issue(via)
+                        except Exception as exc:self.states[identity]='error: '+str(exc)
+                    self.workers[identity].ticket=None;self.workers[identity].tickets.clear()
                 self.states[identity]='本地配对服务已启动；外部推送未验证'
                 return ''
             if bot.get('platform')!='telegram':return '此平台的连接适配器尚未移植'
@@ -309,9 +349,19 @@ def RemoteBots(shell):
 
         def turn_event(self,payload):
             sid=payload.get('sessionId');event=payload.get('event',{});kind=event.get('type')
+            if kind in ('done','error') and sid not in self.turns:
+                for bot in self.list():
+                    server=self.workers.get(bot['id'])
+                    if bot['platform']=='web' and server:server.publish(sid)
             if sid not in self.turns or kind not in ('text_delta','done','error'):return
             identity,chat=self.turns[sid];bot=next((b for b in self.list() if b['id']==identity),None)
             if not bot or not bot.get('enabled'):return
+            if bot.get('platform')=='web':
+                if kind in ('done','error'):
+                    server=self.workers.get(identity)
+                    if server:server.publish(sid)
+                    self.turns.pop(sid,None)
+                return
             if bot.get('platform')!='telegram':return
             state=self.streams.setdefault(sid,{'text':'','message_id':None,'busy':False,'sent':'','lock':threading.Lock()})
             if kind=='text_delta':

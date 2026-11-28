@@ -3066,6 +3066,7 @@ ApplicationWindow {
 
     ScheduledTasks { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "tasks" }
 
+    PhonePane { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 101; shell: window; visible: window.page === "phone" }
     RemoteBots { anchors.fill: parent; anchors.leftMargin: window.railWidth; z: 100; shell: window; visible: window.page === "bots" }
 
 }
