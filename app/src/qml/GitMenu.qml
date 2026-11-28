@@ -24,6 +24,7 @@ Popup {
  property string promptAction: ""
  property string filter: ""
  property int unmergedCount: 0
+ property var conflictFiles: []
  width: view === "main" ? 148 : 300; padding: 6
  height: Math.min(menuColumn.implicitHeight + 12, parent.height - 16)
  background: Item {
@@ -144,6 +145,17 @@ Popup {
  }
  Connections {target:shellBridge;function onCommitMessageGenerated(id,result){if(id!==root.requestId)return;root.generating=false;if(result.ok)commitText.text=result.text;else root.notice=(result.reason||"")+": "+(result.message||"")}}
  Popup {
+  id:conflictToast;objectName:"gitConflictToast";parent:Overlay.overlay
+  width:Math.min(360,parent.width-32);x:parent.width-width-16;y:40;padding:14;height:conflictColumn.implicitHeight+28
+  closePolicy:Popup.NoAutoClose
+  background:Rectangle {color:Theme.bgElevated;border.color:Theme.warning;radius:Theme.radiusLg}
+  ColumnLayout {id:conflictColumn;width:parent.width;spacing:8
+   Text {text:"合并产生冲突";color:Theme.fg;font.bold:true}
+   Text {objectName:"gitConflictFiles";text:"解决冲突文件后提交，或中止合并。\n"+root.conflictFiles.join("\n");Layout.fillWidth:true;wrapMode:Text.Wrap;color:Theme.fgMuted}
+   SettingsButton {objectName:"gitConflictAbort";text:"中止合并";onClicked:if(root.result(shellBridge.gitMergeAbort(root.repoRoot),"已中止合并"))conflictToast.close()}
+  }
+ }
+ Popup {
   id:promptDialog;objectName:"gitBranchPrompt";parent:Overlay.overlay;modal:true;width:420;padding:20;height:promptColumn.implicitHeight+40;x:(parent.width-width)/2;y:(parent.height-height)/2
   background:Rectangle{color:Theme.bgElevated;border.color:Theme.border;radius:Theme.radiusLg}
   ColumnLayout {
@@ -154,7 +166,7 @@ Popup {
    Text {objectName:"gitPromptError";Layout.fillWidth:true;visible:root.notice.length>0;text:root.notice;color:Theme.danger;wrapMode:Text.Wrap}
    RowLayout {
     SettingsButton{objectName:"gitBranchCancel";text:"取消";ghost:true;onClicked:promptDialog.close()}
-    SettingsButton{objectName:"gitBranchConfirm";text:root.promptAction==="forceDelete"?"强制删除":root.promptAction==="delete"?"删除":"确认";primary:root.promptAction!=="delete"&&root.promptAction!=="forceDelete";destructive:root.promptAction==="delete"||root.promptAction==="forceDelete";onClicked:{var r;var a=root.promptAction;if(a==="abort")r=shellBridge.gitMergeAbort(root.repoRoot);else if(a==="create")r=shellBridge.gitCreateBranch(root.repoRoot,nameField.text);else if(a==="rename")r=shellBridge.gitRenameBranch(root.repoRoot,root.selected.name,nameField.text);else if(a==="merge")r=shellBridge.gitMerge(root.repoRoot,root.selected.name);else r=root.selected.remote?shellBridge.gitDeleteRemoteBranch(root.repoRoot,root.selected.remote,root.selected.name.slice(root.selected.remote.length+1)):shellBridge.gitDeleteBranch(root.repoRoot,root.selected.name,a==="forceDelete");if(!r.ok&&r.reason==="unmerged"&&a==="delete"){root.unmergedCount=r.count;root.promptAction="forceDelete";return}if(root.result(r,"操作完成")){promptDialog.close();root.view="branches"}}}
+    SettingsButton{objectName:"gitBranchConfirm";text:root.promptAction==="forceDelete"?"强制删除":root.promptAction==="delete"?"删除":"确认";primary:root.promptAction!=="delete"&&root.promptAction!=="forceDelete";destructive:root.promptAction==="delete"||root.promptAction==="forceDelete";onClicked:{var r;var a=root.promptAction;if(a==="abort")r=shellBridge.gitMergeAbort(root.repoRoot);else if(a==="create")r=shellBridge.gitCreateBranch(root.repoRoot,nameField.text);else if(a==="rename")r=shellBridge.gitRenameBranch(root.repoRoot,root.selected.name,nameField.text);else if(a==="merge")r=shellBridge.gitMerge(root.repoRoot,root.selected.name);else r=root.selected.remote?shellBridge.gitDeleteRemoteBranch(root.repoRoot,root.selected.remote,root.selected.name.slice(root.selected.remote.length+1)):shellBridge.gitDeleteBranch(root.repoRoot,root.selected.name,a==="forceDelete");if(!r.ok&&r.reason==="conflict"&&a==="merge"){root.conflictFiles=r.conflicts||[];promptDialog.close();conflictToast.open();root.reload();return}if(!r.ok&&r.reason==="unmerged"&&a==="delete"){root.unmergedCount=r.count;root.promptAction="forceDelete";return}if(root.result(r,"操作完成")){promptDialog.close();root.view="branches"}}}
    }
   }
  }

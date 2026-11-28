@@ -33,6 +33,10 @@ elif phase=='force':
  open_branch('unmerged');click('gitMenu_delete');click('gitBranchConfirm');shot('confirm')
  data['warning']=item('gitDeleteWarning').property('text');assert '1 个提交' in data['warning'];click('gitBranchCancel');data['after_cancel']=git('branch','--list','unmerged');assert data['after_cancel']
  open_branch('unmerged');click('gitMenu_delete');click('gitBranchConfirm');click('gitBranchConfirm');data['after_delete']=git('branch','--list','unmerged');assert not data['after_delete']
+elif phase=='merge':
+ git('checkout','-b','conflict');(repo/'a').write_text('branch');git('commit','-am','branch change');git('checkout','main');(repo/'a').write_text('main');git('commit','-am','main change')
+ click('gitChip');click('gitMenu_branches');click('gitMenu_merge');click('gitMenu_branch_conflict');click('gitBranchConfirm');shot('conflict');data['files']=item('gitConflictFiles').property('text');assert '\na' in data['files']
+ click('gitConflictAbort');data['status']=git('status','--porcelain');r=subprocess.run(['git','-C',str(repo),'rev-parse','--verify','MERGE_HEAD'],capture_output=True,text=True);data['merge_head']={'exit':r.returncode,'stderr':r.stderr};assert data['status']=='' and r.returncode!=0
 elif phase=='remote':
  git('branch','remote-delete');git('push','origin','remote-delete');data['before']=git('ls-remote','--heads','origin','remote-delete')
  open_branch('origin/remote-delete');click('gitMenu_delete');shot('confirm');click('gitBranchConfirm');data['after']=git('ls-remote','--heads','origin','remote-delete');assert data['before'] and not data['after']

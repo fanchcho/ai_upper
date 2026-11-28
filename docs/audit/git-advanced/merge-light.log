@@ -1,0 +1,2 @@
+{"repo": "/tmp/ai-upper-branches-983dxtob/home/repo", "files": "解决冲突文件后提交，或中止合并。\na", "status": "", "merge_head": {"exit": 128, "stderr": "fatal: Needed a single revision\n"}}
+file:///home/agent/shared_workspace/pc/ai_upper/app/src/qml/Main.qml:69: TypeError: Cannot read property 'saveError' of null

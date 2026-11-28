@@ -176,7 +176,9 @@ def delete_remote_branch(root: str, remote: str, branch: str) -> dict[str, Any]:
 
 def merge(root: str, ref: str) -> dict[str, Any]:
     code, out, err = _run(root, ["merge", "--no-edit", str(ref)], timeout=120)
-    return {"ok": code == 0, "error": (out + "\n" + err).strip(), "reason": "conflict" if code else ""}
+    _, conflicts, _ = _run(root, ["diff", "--name-only", "--diff-filter=U", "-z"])
+    files = [p for p in conflicts.split("\x00") if p]
+    return {"ok": code == 0, "error": (out + "\n" + err).strip(), "reason": "conflict" if files else "error" if code else "", "conflicts": files}
 
 
 def merge_abort(root: str) -> dict[str, Any]:
