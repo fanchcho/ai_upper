@@ -2,7 +2,7 @@
   {
     "theme": "dark",
     "web": {
-      "id": "web_c8b6b10b2d27",
+      "id": "web_91d5309a8cf7",
       "name": "本地浏览器",
       "platform": "web",
       "enabled": true,
@@ -13,8 +13,8 @@
       "scope": {
         "mode": "personas",
         "personas": [
-          "detail-a-ee107d73",
-          "detail-b-bedcdb6c"
+          "detail-a-c23aceea",
+          "detail-b-983b5ee3"
         ],
         "sessions": [
           "s-1",
@@ -27,7 +27,7 @@
   {
     "theme": "light",
     "web": {
-      "id": "web_d2f553b3dd16",
+      "id": "web_eaebf94695bd",
       "name": "本地浏览器",
       "platform": "web",
       "enabled": true,
@@ -38,8 +38,8 @@
       "scope": {
         "mode": "personas",
         "personas": [
-          "detail-a-52adc8fa",
-          "detail-b-93f38525"
+          "detail-a-91f07d11",
+          "detail-b-37868db2"
         ],
         "sessions": [
           "s-1",

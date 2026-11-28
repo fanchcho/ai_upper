@@ -35,7 +35,7 @@ Rectangle {
   ListView {
    width:parent.width; height:200; clip:true; model:root.choices
    ScrollBar.vertical:SettingsScrollBar {}
-   delegate:CheckBox { required property var modelData; objectName:"scopeChoice_"+modelData.id; text:modelData.title; checked:root.picked.indexOf(modelData.id)>=0
+   delegate:CheckBox { palette.windowText: Theme.fg; required property var modelData; objectName:"scopeChoice_"+modelData.id; text:modelData.title; checked:root.picked.indexOf(modelData.id)>=0
     onClicked: { var next=root.picked.slice();var at=next.indexOf(modelData.id);if(at>=0)next.splice(at,1);else next.push(modelData.id);root.picked=next }
    }
   }
