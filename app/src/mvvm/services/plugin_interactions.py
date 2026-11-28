@@ -49,6 +49,7 @@ class Interactions:
             row = json.loads(path.read_text())
             allowed = (('approved', 'denied', 'cancelled') if row['kind'] == 'approval'
                        else ('approve', 'keep', 'ignore', 'cancelled') if row['kind'] == 'plan'
+                       else ('skipped', 'cancelled') if row['kind'] == 'mount'
                        else ('answered', 'dismissed', 'cancelled'))
             if row['session'] != session or row['outcome'] != 'pending' or outcome not in allowed or time.time() >= row['expires']:
                 return False

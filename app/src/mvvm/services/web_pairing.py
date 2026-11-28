@@ -35,6 +35,15 @@ def start(controller,bot):
    if self.ticket and self.ticket['expires']<=now:self.ticket=None
    row=next((b for b in controller.list() if b['id']==bot['id']),None)
    if not row:return
+   from mvvm.services.phone_cards import prompts
+   from mvvm.services.phone_sessions import session_list,history
+   allowed={r['id'] for r in session_list(controller.shell,row)}
+   for state in list(self.connections.values()):
+    sid=state.get('watch')
+    if state.get('phone') and state.get('proven') and sid in allowed:
+     pending=prompts(controller.shell,sid);signature=json.dumps(pending,sort_keys=True)
+     if signature!=state.get('prompts'):
+      state['prompts']=signature;state['send_frame'](history(controller.shell,sid))
    changed=False
    for via in ('lan','relay'):
     if max(self.holds[via].values())>now or any(u.get('via','relay')==via for u in row['users']):continue

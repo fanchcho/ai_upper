@@ -22,6 +22,12 @@ class Model(BaseHTTPRequestHandler):
   events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'text','text':''}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'text_delta','text':'LOCAL_MODEL_REPLY'}}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'end_turn'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
   if not any(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else [])):
    events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'tool_use','id':'deliver_test','name':'present_files','input':{}}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'input_json_delta','partial_json':json.dumps({'paths':[str((tmp/'delivered.txt').resolve()),str((tmp/'delivered.bin').resolve())]})}}),('content_block_stop',{'type':'content_block_stop','index':0}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'tool_use'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
+  if scenario=='cards':
+   count=sum(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else []))
+   tools=[('mount_test','mount_workspace',{'question':'这个本地测试是否指定工作区？'}),('plan_test','exit_plan',{'plan':'本地计划：写入允许文件，拒绝第二次写入。'}),('allow_test','write_file',{'path':str((tmp/'allowed.txt').resolve()),'content':'APPROVED_WRITE'}),('deny_test','write_file',{'path':str((tmp/'denied.txt').resolve()),'content':'MUST_NOT_WRITE'})]
+   if count<len(tools):
+    tid,name,args=tools[count]
+    events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'tool_use','id':tid,'name':name,'input':{}}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'input_json_delta','partial_json':json.dumps(args)}}),('content_block_stop',{'type':'content_block_stop','index':0}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'tool_use'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
   raw=''.join('event: '+name+'\ndata: '+json.dumps(body)+'\n\n' for name,body in events).encode();self.send_response(200);self.send_header('Content-Type','text/event-stream');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def log_message(self,*a):pass
 model=ThreadingHTTPServer(('127.0.0.1',0),Model);threading.Thread(target=model.serve_forever,daemon=True).start()
@@ -36,12 +42,17 @@ for _ in range(100):
 for theme in ('dark','light'):
  w,b,s,t,e,h=build(Path('/tmp/ai-upper-phone-'+uuid.uuid4().hex),theme,None)
  b._host.guard.trust_root(tmp.resolve())
+ if scenario=='cards':
+  from mvvm.services.plugin_settings import PluginSettings
+  PluginSettings(b._settings,b._vault).write(approvalEnabled=True)
  models=b._settings.get('models');models['providers'][0]['apiHost']='http://127.0.0.1:'+str(model.server_port);b._settings.set_config({'models':models})
  def click(name):
   item=find_item(w.contentItem(),name);assert item,name
   QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,item.mapToScene(QPointF(item.width()/2,item.height()/2)).toPoint());_pump(app,lambda:False,.25)
  click('railBots');api=b.botsService();api.webPairTicket();rows=api.list();bot=rows[0];bot['settings']={'port':0,'relayUrl':'http://127.0.0.1:'+str(relay_port)};api.save(rows);click('phoneEntry')
  for via in ('lan','relay'):
+  for name in ('allowed.txt','denied.txt'):(tmp/name).unlink(missing_ok=True)
+  env['PHONE_SCENARIO']=scenario
   for name in ('result.json','revoked','repair-url','repaired'):(tmp/name).unlink(missing_ok=True)
   click('phoneLan' if via=='lan' else 'phoneRelay');pane=find_item(w.contentItem(),'phoneQr').parentItem().parentItem().parentItem()
   ticket=pane.property('ticket');assert ticket.get('url'),ticket
@@ -59,9 +70,16 @@ for theme in ('dark','light'):
   result=json.loads((tmp/'result.json').read_text());sid=result['sid'];did=result['device']
   reopened=ChatSessionStore(h);session=reopened.load_session(sid);assert session
   messages=[m.text() for m in session.messages];assert any('PHONE_'+via+'_'+theme in m for m in messages) and 'LOCAL_MODEL_REPLY' in messages,messages
-  assert session.delivered and session.delivered['deliver_test']
-  assert (tmp/'downloaded.txt').read_text()=='DELIVERED_TEXT'
-  assert (tmp/'downloaded.bin').read_bytes()==(tmp/'delivered.bin').read_bytes()
+  if scenario=='download':
+   assert session.delivered and session.delivered['deliver_test']
+   assert (tmp/'downloaded.txt').read_text()=='DELIVERED_TEXT'
+   assert (tmp/'downloaded.bin').read_bytes()==(tmp/'delivered.bin').read_bytes()
+  if scenario=='cards':
+   interactions=[json.loads(p.read_text()) for p in (h/'data'/'interactions').rglob('*.json') if json.loads(p.read_text()).get('session')==sid]
+   assert {r['outcome'] for r in interactions}=={'approve','approved','denied','skipped'},interactions
+   assert (tmp/'allowed.txt').read_text()=='APPROVED_WRITE' and not (tmp/'denied.txt').exists()
+   assert session.plans['plan_test']['decision']=='approve',session.plans
+   (out/f'cards-{theme}-{via}.json').write_text(json.dumps({'interactions_reopened':interactions,'plans_reopened':session.plans,'messages':[m.model_dump() for m in session.messages]},ensure_ascii=False,indent=2))
   users=json.loads((h/'config.json').read_text())['remote']['bots'][0]['users'];assert len(users)==1 and users[0]['via']==via
   assert any(d['id']==did and d['online'] for d in api.phoneState()['devices'])
   shot(w,out/f'phone-device-{theme}-{via}.png')

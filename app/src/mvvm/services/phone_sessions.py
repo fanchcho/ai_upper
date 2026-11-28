@@ -35,7 +35,8 @@ def history(shell, sid):
     from mvvm.services.deliverables import inspect
     files = [dict(row, tool=tool, index=i) for tool in (session.delivered or {}) for i,row in enumerate(inspect(session,tool))]
     for row in files: row.pop('path',None);row.pop('dir',None)
-    return {'files': files, 't': 'history', 'sid': sid, 'messages': messages, 'start': 0,
+    from mvvm.services.phone_cards import prompts
+    return {'prompts': prompts(shell,sid), 'files': files, 't': 'history', 'sid': sid, 'messages': messages, 'start': 0,
             'end': len(session.messages), 'total': len(session.messages)}
 
 
@@ -50,6 +51,11 @@ def handle(controller, bot_id, state, frame):
     if kind in ('up_begin','up_chunk','up_end','up_cancel'):
         controller.phone_uploads.handle(state['device'],frame,send);return
     rows = session_list(shell, bot)
+    if kind == 'action':
+        from mvvm.services.phone_cards import action
+        sid=action(shell,{r['id'] for r in rows},frame,send)
+        if sid:send(history(shell,sid))
+        return
     if kind in ('hello', 'refresh'):
         send({'t': 'sessions', 'list': rows})
         return
@@ -88,6 +94,8 @@ def handle(controller, bot_id, state, frame):
     controller.turns[sid] = (bot_id, state['device'])
     try:
         paths=controller.phone_uploads.take(state['device'],frame.get('files',[]))
+        from mvvm.services.phone_cards import enable
+        enable(shell,sid)
         shell._host.send({'sessionId': sid, 'text': text, 'attachments':paths})
         send({'t': 'sent', 'cid': frame.get('cid'), 'sid': sid, 'ok': True})
     except Exception as exc:
