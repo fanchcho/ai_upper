@@ -18,5 +18,13 @@ app.whenReady().then(async()=>{
  fs.writeFileSync('.tmp/phone-evidence/result.json',JSON.stringify({sid,device:state.device.id,body:state.body,reload:true}));
  // Keep the socket alive for the desktop's real revoke click.
  await waitJS('document.querySelector("#status").textContent.includes("连接已关闭")');
- fs.writeFileSync('.tmp/phone-evidence/revoked','true');app.quit();
+ fs.writeFileSync('.tmp/phone-evidence/revoked','true');
+ for(let i=0;i<150&&!fs.existsSync('.tmp/phone-evidence/repair-url');i++)await delay(100);
+ await win.loadURL(fs.readFileSync('.tmp/phone-evidence/repair-url','utf8'));
+ await waitJS('document.querySelector("#sessions").options.length>0');
+ await waitJS('JSON.parse(localStorage.getItem("device:"+JSON.parse(localStorage.getItem("connection")).desk)).id!=='+JSON.stringify(state.device.id));
+ const repaired=await win.webContents.executeJavaScript('JSON.parse(localStorage.getItem("device:"+JSON.parse(localStorage.getItem("connection")).desk)).id');
+ if(repaired===state.device.id)throw Error('revoked credential reused');
+ fs.writeFileSync('.tmp/phone-evidence/repaired',repaired);
+ await waitJS('document.querySelector("#status").textContent.includes("连接已关闭")');app.quit();
 }).catch(e=>{console.error(e);app.exit(1)});

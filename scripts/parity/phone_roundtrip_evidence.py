@@ -1,7 +1,7 @@
 """QML clicks -> browser input -> real encrypted WS -> ChatHost -> loopback model -> disk.
 Relay and model are explicitly local fixtures, not public/mobile verification.
 """
-import json,os,sys,threading,uuid,subprocess,time
+import atexit,json,os,sys,threading,uuid,subprocess,time
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from urllib.parse import urlsplit,urlunsplit
@@ -25,6 +25,7 @@ model=ThreadingHTTPServer(('127.0.0.1',0),Model);threading.Thread(target=model.s
 env=os.environ.copy();env['PATH']=str(Path('.tmp/wm/usr/bin').resolve())+':'+str(Path('.tmp/icon-dpi/runtime/usr/bin').resolve())+':'+env['PATH'];env['LD_LIBRARY_PATH']=':'.join(str(Path(p).resolve()) for p in ['.tmp/extensions-complete/runtime/usr/lib/aarch64-linux-gnu','.tmp/icon-dpi/runtime/usr/lib/aarch64-linux-gnu','.tmp/wm/usr/lib/aarch64-linux-gnu']);env['NODE_PATH']='/home/agent/shared_workspace/deva/node_modules';env['TMPDIR']=str(tmp.resolve())
 portfile=tmp/'relay-port';portfile.unlink(missing_ok=True)
 relay=subprocess.Popen(['node','scripts/parity/phone_relay_fixture.cjs'],env=env,stdout=open(tmp/'relay.stdout','w'),stderr=subprocess.STDOUT)
+atexit.register(lambda: relay.terminate() if relay.poll() is None else None)
 for _ in range(100):
  if portfile.exists():break
  time.sleep(.05)
@@ -37,7 +38,7 @@ for theme in ('dark','light'):
   QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,item.mapToScene(QPointF(item.width()/2,item.height()/2)).toPoint());_pump(app,lambda:False,.25)
  click('railBots');api=b.botsService();api.webPairTicket();rows=api.list();bot=rows[0];bot['settings']={'port':0,'relayUrl':'http://127.0.0.1:'+str(relay_port)};api.save(rows);click('phoneEntry')
  for via in ('lan','relay'):
-  for name in ('result.json','revoked'):(tmp/name).unlink(missing_ok=True)
+  for name in ('result.json','revoked','repair-url','repaired'):(tmp/name).unlink(missing_ok=True)
   click('phoneLan' if via=='lan' else 'phoneRelay');pane=find_item(w.contentItem(),'phoneQr').parentItem().parentItem().parentItem()
   ticket=pane.property('ticket');assert ticket.get('url'),ticket
   server=api.workers[bot['id']];cancel_id=server.ticket['id'];click('phoneCancel');assert cancel_id not in server.tickets
@@ -57,10 +58,20 @@ for theme in ('dark','light'):
   users=json.loads((h/'config.json').read_text())['remote']['bots'][0]['users'];assert len(users)==1 and users[0]['via']==via
   assert any(d['id']==did and d['online'] for d in api.phoneState()['devices'])
   shot(w,out/f'phone-device-{theme}-{via}.png')
-  click('phoneRevoke_'+did);assert _pump(app,lambda:browser.poll() is not None,15)
-  assert browser.returncode==0,(out/f'browser-{theme}-{via}.log').read_text()
+  click('phoneRevoke_'+did);assert _pump(app,lambda:(tmp/'revoked').exists(),15)
   assert not json.loads((h/'config.json').read_text())['remote']['bots'][0]['users']
   assert SecretsVault(h).get_secret('remote:'+bot['id']+':dev:'+did) is None
+  click('phoneLan' if via=='lan' else 'phoneRelay');repair_url=pane.property('ticket')['url']
+  if via=='lan':
+   parsed=urlsplit(repair_url);repair_url=urlunsplit((parsed.scheme,'127.0.0.1:'+str(server.lan.port()),parsed.path,parsed.query,parsed.fragment))
+  (tmp/'repair-url').write_text(repair_url)
+  assert _pump(app,lambda:(tmp/'repaired').exists() or browser.poll() is not None,20)
+  assert (tmp/'repaired').exists(),(out/f'browser-{theme}-{via}.log').read_text()
+  repaired=(tmp/'repaired').read_text();assert repaired!=did
+  click('phoneRevoke_'+repaired);assert _pump(app,lambda:browser.poll() is not None,15)
+  assert browser.returncode==0,(out/f'browser-{theme}-{via}.log').read_text()
+  assert not json.loads((h/'config.json').read_text())['remote']['bots'][0]['users']
+  result['fresh_qr_after_revoke']=repaired
   results.append({'theme':theme,'via':via,'home':str(h),'session':sid,'messages_reopened':messages,'device_before_revoke':users[0],'browser':result,'revoked_disk_and_key':True})
  api.close();t.stop();w.close();e.deleteLater();_pump(app,lambda:False,.2)
 model.shutdown();model.server_close();relay.terminate();relay.wait(5)

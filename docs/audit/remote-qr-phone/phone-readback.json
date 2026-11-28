@@ -4,104 +4,108 @@
     {
       "theme": "dark",
       "via": "lan",
-      "home": "/tmp/ai-upper-phone-acbcc745f2204b698c31517b1904e32b/home",
-      "session": "sess_mwzonpbz_lk0w7x",
+      "home": "/tmp/ai-upper-phone-a0f24f3977524a68850ca19f0efb2f89/home",
+      "session": "sess_mwzoyobo_g51pkx",
       "messages_reopened": [
         "PHONE_lan_dark",
         "LOCAL_MODEL_REPLY"
       ],
       "device_before_revoke": {
-        "id": "d_129e5e69beb9d9c5",
-        "chatId": "d_129e5e69beb9d9c5",
+        "id": "d_070575a2d8ce40ac",
+        "chatId": "d_070575a2d8ce40ac",
         "name": "Linux x86_64 浏览器",
-        "pairedAt": 1795826376688,
-        "lastSeen": 1795826378450,
+        "pairedAt": 1795826888595,
+        "lastSeen": 1795826890360,
         "via": "lan",
         "kind": "browser"
       },
       "browser": {
-        "sid": "sess_mwzonpbz_lk0w7x",
-        "device": "d_129e5e69beb9d9c5",
+        "sid": "sess_mwzoyobo_g51pkx",
+        "device": "d_070575a2d8ce40ac",
         "body": "我：PHONE_lan_dark助手：LOCAL_MODEL_REPLY",
-        "reload": true
+        "reload": true,
+        "fresh_qr_after_revoke": "d_a9082d3bc53c881b"
       },
       "revoked_disk_and_key": true
     },
     {
       "theme": "dark",
       "via": "relay",
-      "home": "/tmp/ai-upper-phone-acbcc745f2204b698c31517b1904e32b/home",
-      "session": "sess_mwzonsnd_9qy63b",
+      "home": "/tmp/ai-upper-phone-a0f24f3977524a68850ca19f0efb2f89/home",
+      "session": "sess_mwzoysde_hogc0r",
       "messages_reopened": [
         "PHONE_relay_dark",
         "LOCAL_MODEL_REPLY"
       ],
       "device_before_revoke": {
-        "id": "d_f22f7cd43973d8f2",
-        "chatId": "d_f22f7cd43973d8f2",
+        "id": "d_743fecc8d9832dfb",
+        "chatId": "d_743fecc8d9832dfb",
         "name": "Linux x86_64 浏览器",
-        "pairedAt": 1795826381004,
-        "lastSeen": 1795826382448,
+        "pairedAt": 1795826893906,
+        "lastSeen": 1795826895313,
         "via": "relay",
         "kind": "browser"
       },
       "browser": {
-        "sid": "sess_mwzonsnd_9qy63b",
-        "device": "d_f22f7cd43973d8f2",
+        "sid": "sess_mwzoysde_hogc0r",
+        "device": "d_743fecc8d9832dfb",
         "body": "我：PHONE_relay_dark助手：LOCAL_MODEL_REPLY",
-        "reload": true
+        "reload": true,
+        "fresh_qr_after_revoke": "d_7eb4155301ba0f46"
       },
       "revoked_disk_and_key": true
     },
     {
       "theme": "light",
       "via": "lan",
-      "home": "/tmp/ai-upper-phone-1ddb2fad76f74b7eb02de866d40ca722/home",
-      "session": "sess_mwzoo08q_qwa31z",
+      "home": "/tmp/ai-upper-phone-9306be601b55408cafba6b569da60922/home",
+      "session": "sess_mwzoz0q1_frspef",
       "messages_reopened": [
         "PHONE_lan_light",
         "LOCAL_MODEL_REPLY"
       ],
       "device_before_revoke": {
-        "id": "d_8b03c8829b8906e0",
-        "chatId": "d_8b03c8829b8906e0",
+        "id": "d_7fffe03317a98e59",
+        "chatId": "d_7fffe03317a98e59",
         "name": "Linux x86_64 浏览器",
-        "pairedAt": 1795826390805,
-        "lastSeen": 1795826392480,
+        "pairedAt": 1795826904688,
+        "lastSeen": 1795826906324,
         "via": "lan",
         "kind": "browser"
       },
       "browser": {
-        "sid": "sess_mwzoo08q_qwa31z",
-        "device": "d_8b03c8829b8906e0",
+        "sid": "sess_mwzoz0q1_frspef",
+        "device": "d_7fffe03317a98e59",
         "body": "我：PHONE_lan_light助手：LOCAL_MODEL_REPLY",
-        "reload": true
+        "reload": true,
+        "fresh_qr_after_revoke": "d_28f3ecb116c8a2c9"
       },
       "revoked_disk_and_key": true
     },
     {
       "theme": "light",
       "via": "relay",
-      "home": "/tmp/ai-upper-phone-1ddb2fad76f74b7eb02de866d40ca722/home",
-      "session": "sess_mwzoo3fx_ogdixg",
+      "home": "/tmp/ai-upper-phone-9306be601b55408cafba6b569da60922/home",
+      "session": "sess_mwzoz4o3_e32kl3",
       "messages_reopened": [
         "PHONE_relay_light",
         "LOCAL_MODEL_REPLY"
       ],
       "device_before_revoke": {
-        "id": "d_25165e9fbe66f970",
-        "chatId": "d_25165e9fbe66f970",
+        "id": "d_a42765206178954f",
+        "chatId": "d_a42765206178954f",
         "name": "Linux x86_64 浏览器",
-        "pairedAt": 1795826395010,
-        "lastSeen": 1795826396435,
+        "pairedAt": 1795826909861,
+        "lastSeen": 1795826911245,
         "via": "relay",
         "kind": "browser"
       },
       "browser": {
-        "sid": "sess_mwzoo3fx_ogdixg",
-        "device": "d_25165e9fbe66f970",
+        "sid": "sess_mwzoz4o3_e32kl3",
+        "device": "d_a42765206178954f",
         "body": "我：PHONE_relay_light助手：LOCAL_MODEL_REPLY",
-        "reload": true
+        "reload": true,
+        "fresh_qr_after_revoke": "d_5e45e2d5f5be9d20"
       },
       "revoked_disk_and_key": true
     }
@@ -179,7 +183,7 @@
   "relay_envelopes": [
     {
       "t": "desk-authenticated",
-      "path": "/desk/e7b3ae0edd618d4c"
+      "path": "/desk/1a39b9b172259701"
     },
     {
       "t": "msg",
@@ -345,120 +349,70 @@
       "t": "close",
       "direction": "outbound",
       "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "3"
     },
     {
       "t": "desk-authenticated",
-      "path": "/desk/32a283a46dc683ab"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "outbound",
-      "c": "3"
-    },
-    {
-      "t": "msg",
-      "direction": "inbound",
-      "c": "3"
+      "path": "/desk/ea42aaadef0db2b3"
     },
     {
       "t": "msg",
       "direction": "inbound",
       "c": "4"
-    },
-    {
-      "t": "close",
-      "direction": "outbound",
-      "c": "3"
     },
     {
       "t": "msg",
@@ -492,7 +446,17 @@
     },
     {
       "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
       "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
       "c": "4"
     },
     {
@@ -509,11 +473,161 @@
       "t": "msg",
       "direction": "outbound",
       "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
     },
     {
       "t": "close",
       "direction": "outbound",
       "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "6"
     }
   ]
 }

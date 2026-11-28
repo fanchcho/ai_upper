@@ -1,4 +1,5 @@
 import {phoneHello,phoneFinish,b64uDecode,b64uEncode,parseTicket} from './remote-crypto'
+window.addEventListener('hashchange',()=>{if(location.hash)location.reload()})
 const status=document.querySelector('#status')!; const button=document.querySelector('#subscribe') as HTMLButtonElement
 const list=document.querySelector('#sessions') as HTMLSelectElement;const historyBox=document.querySelector('#history')!;const input=document.querySelector('#message') as HTMLTextAreaElement
 let ticket:any;const hash=decodeURIComponent(location.hash.slice(1))
@@ -7,7 +8,7 @@ else if(hash){const q=new URLSearchParams(location.hash.slice(1));const p=parseT
 else ticket=JSON.parse(localStorage.getItem('connection')||'null')
 if(!ticket)throw Error('请从桌面重新生成配对票据')
 const connection={port:ticket.port,desk:ticket.desk,via:ticket.via};localStorage.setItem('connection',JSON.stringify(connection));history.replaceState(null,'',location.pathname)
-const storageKey='device:'+(ticket.desk||ticket.port);const saved=JSON.parse(localStorage.getItem(storageKey)||'null');const auth=saved||ticket
+const storageKey='device:'+(ticket.desk||ticket.port);const saved=ticket.secret?null:JSON.parse(localStorage.getItem(storageKey)||'null');const auth=saved||ticket
 const {hi,priv}=phoneHello(saved?'resume':ticket.kind||'pair',auth.id);let channel:any;let publicKey:string;let selected=''
 const wsUrl=ticket.port?'ws://127.0.0.1:'+ticket.port:(location.protocol==='https:'?'wss://':'ws://')+location.host+(ticket.via==='lan'?'/ws':'/d/'+encodeURIComponent(ticket.desk)+'/ws')
 const ws=new WebSocket(wsUrl)
