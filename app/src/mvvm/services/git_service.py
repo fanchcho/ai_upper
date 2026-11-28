@@ -320,7 +320,19 @@ def generate_commit_message(settings: Any, vault: Any, root: str, model_ref: str
         return "".join(chunks).strip().strip('"').strip("`").splitlines()[0][:200] if "".join(chunks).strip() else ""
 
     try:
-        text = asyncio.run(collect())
+        async def cancellable() -> str:
+            task = asyncio.create_task(collect())
+            try:
+                while not task.done():
+                    if cancel_event is not None and cancel_event.is_set():
+                        raise RuntimeError("已取消")
+                    await asyncio.wait({task}, timeout=0.05)
+                return await task
+            finally:
+                if not task.done():
+                    task.cancel()
+                    await asyncio.gather(task, return_exceptions=True)
+        text = asyncio.run(cancellable())
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "reason": "unverified", "message": f"{type(exc).__name__}: {exc}"}
     if not text:

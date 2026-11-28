@@ -47,6 +47,23 @@ elif phase=='identity':
   pump()
  typein('gitNewCommitMessage','identity verified');click('gitNewSubmit');assert item('gitNewIdentityName').property('visible');shot('missing')
  typein('gitNewIdentityName','Scope User');typein('gitNewIdentityEmail','scope@example.invalid');click('gitIdentityScope');QTest.keyClick(w,Qt.Key_Down);QTest.keyClick(w,Qt.Key_Return);pump();data['scope']=item('gitIdentityScope').property('currentIndex');assert data['scope']==1;shot('scope');click('gitIdentitySave');data['name']=git('config','--global','--get','user.name');data['email']=git('config','--global','--get','user.email');assert data['name']=='Scope User';assert not item('gitNewIdentityName').property('visible');click('gitNewSubmit');data['commit']=git('log','-1','--format=%s');assert data['commit']=='identity verified'
+elif phase=='ai':
+ import threading,time
+ from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+ requests=[];release=threading.Event()
+ class Handler(BaseHTTPRequestHandler):
+  def do_POST(self):
+   requests.append({'path':self.path,'body':self.rfile.read(int(self.headers['Content-Length'])).decode()});release.wait(5);self.send_response(503);self.end_headers()
+  def log_message(self,*args):pass
+ server=ThreadingHTTPServer(('127.0.0.1',0),Handler);threading.Thread(target=server.serve_forever,daemon=True).start()
+ from test_qml_shell import MODELS
+ import copy
+ models=copy.deepcopy(MODELS);models['providers'][0]['apiHost']='http://127.0.0.1:'+str(server.server_port);b._settings.set_config({'models':models})
+ (repo/'a').write_text('AI real diff');click('gitChip');click('gitMenu_commit');click('gitNewGenerate')
+ for _ in range(30):
+  pump()
+  if requests:break
+ assert requests;data['requests']=requests;data['before_stop']=item('gitNewGenerate').property('text');assert data['before_stop']=='停止生成';shot('running');click('gitNewGenerate');data['after_stop']=item('gitNewGenerate').property('text');assert data['after_stop']=='AI 生成';pump();data['pending']=len(b._commit_cancels);assert data['pending']==0;data['workers_after_stop']=[th.name for th in threading.enumerate() if '_generate_commit_worker' in th.name];assert data['workers_after_stop']==[];shot('stopped');release.set();server.shutdown();data['boundary']='本地HTTP阻塞端点；未返回模型文本，不算真实模型成功'
 elif phase=='remote':
  git('branch','remote-delete');git('push','origin','remote-delete');data['before']=git('ls-remote','--heads','origin','remote-delete')
  open_branch('origin/remote-delete');click('gitMenu_delete');shot('confirm');click('gitBranchConfirm');data['after']=git('ls-remote','--heads','origin','remote-delete');assert data['before'] and not data['after']
