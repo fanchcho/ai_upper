@@ -1,0 +1,10 @@
+-- Could NOT find XCB_XCB (missing: XCB_XCB_LIBRARY XCB_XCB_INCLUDE_DIR) (found version "")
+CMake Error at /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
+  Could NOT find XCB (missing: XCB_LIBRARIES XCB)
+Call Stack (most recent call first):
+  /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
+  /home/agent/shared_workspace/ai_upper/.tmp/next-boundary/sdk/usr/share/ECM/find-modules/FindXCB.cmake:154 (find_package_handle_standard_args)
+  CMakeLists.txt:48 (find_package)
+
+
+-- Configuring incomplete, errors occurred!

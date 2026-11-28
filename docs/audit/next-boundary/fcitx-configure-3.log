@@ -1,0 +1,13 @@
+-- Found XCB_XCB: /usr/lib/aarch64-linux-gnu/libxcb.so.1 (found version "")
+-- Found XCB: /usr/lib/aarch64-linux-gnu/libxcb.so.1  found components: XCB
+-- Could NOT find XKBCommon_XKBCommon (missing: XKBCommon_XKBCommon_LIBRARY) (found version "1.7.0")
+CMake Error at /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
+  Could NOT find XKBCommon (missing: XKBCommon_LIBRARIES XKBCommon) (found
+  suitable version "1.7.0", minimum required is "0.5.0")
+Call Stack (most recent call first):
+  /usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
+  cmake/FindXKBCommon.cmake:30 (find_package_handle_standard_args)
+  CMakeLists.txt:50 (find_package)
+
+
+-- Configuring incomplete, errors occurred!

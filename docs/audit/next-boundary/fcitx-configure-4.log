@@ -1,0 +1,20 @@
+-- Found XKBCommon_XKBCommon: /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0 (found version "1.7.0")
+-- Found XKBCommon: /usr/lib/aarch64-linux-gnu/libxkbcommon.so.0 (found suitable version "1.7.0", minimum required is "0.5.0") found components: XKBCommon
+CMake Error at CMakeLists.txt:52 (find_package):
+  By not providing "FindFcitx5Utils.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "Fcitx5Utils", but CMake did not find one.
+
+  Could not find a package configuration file provided by "Fcitx5Utils"
+  (requested version 5.0.16) with any of the following names:
+
+    Fcitx5UtilsConfig.cmake
+    fcitx5utils-config.cmake
+
+  Add the installation prefix of "Fcitx5Utils" to CMAKE_PREFIX_PATH or set
+  "Fcitx5Utils_DIR" to a directory containing one of the above files.  If
+  "Fcitx5Utils" provides a separate development package or SDK, be sure it
+  has been installed.
+
+
+-- Configuring incomplete, errors occurred!

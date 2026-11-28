@@ -1,0 +1,23 @@
+CMake Error at /home/agent/shared_workspace/ai_upper/.tmp/next-boundary/sdk/usr/lib/aarch64-linux-gnu/cmake/Fcitx5Utils/Fcitx5UtilsTargets.cmake:93 (message):
+  The imported target "Fcitx5::Utils" references the file
+
+     "/home/agent/shared_workspace/ai_upper/.tmp/next-boundary/sdk/usr/lib/aarch64-linux-gnu/libFcitx5Utils.so.5.1.12"
+
+  but this file does not exist.  Possible reasons include:
+
+  * The file was deleted, renamed, or moved to another location.
+
+  * An install or uninstall procedure did not complete successfully.
+
+  * The installation package was faulty and contained
+
+     "/home/agent/shared_workspace/ai_upper/.tmp/next-boundary/sdk/usr/lib/aarch64-linux-gnu/cmake/Fcitx5Utils/Fcitx5UtilsTargets.cmake"
+
+  but not all the files it references.
+
+Call Stack (most recent call first):
+  /home/agent/shared_workspace/ai_upper/.tmp/next-boundary/sdk/usr/lib/aarch64-linux-gnu/cmake/Fcitx5Utils/Fcitx5UtilsConfig.cmake:37 (include)
+  CMakeLists.txt:52 (find_package)
+
+
+-- Configuring incomplete, errors occurred!

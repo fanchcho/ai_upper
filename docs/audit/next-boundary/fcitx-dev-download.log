@@ -1,0 +1,3 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libfcitx5utils-dev arm64 5.1.12-2 [75.3 kB]
+Fetched 75.3 kB in 0s (159 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/next-boundary/libfcitx5utils-dev_5.1.12-2_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

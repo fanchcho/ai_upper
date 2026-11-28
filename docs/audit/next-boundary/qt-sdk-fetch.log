@@ -1,0 +1,41 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0 48.2M    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+HTTP/1.1 302 Found
+Date: Sat, 28 Nov 2026 02:52:23 GMT
+Server: Apache
+Access-Control-Allow-Origin: *
+X-Content-Type-Options: nosniff
+Strict-Transport-Security: max-age=63072000; includeSubdomains;
+X-Prefix: 158.101.0.0/18
+X-AS: 31898
+X-MirrorBrain-Mirror: mirror.constant.com
+X-MirrorBrain-Realm: country
+Link: <https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz.meta4>; rel=describedby; type="application/metalink4+xml"
+Link: <https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz.torrent>; rel=describedby; type="application/x-bittorrent"
+Link: <https://qt.mirror.constant.com/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz>; rel=duplicate; pri=1; geo=us
+Link: <https://mirrors.20i.com/pub/qt.io/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz>; rel=duplicate; pri=2; geo=gb
+Link: <https://ftp.fau.de/qtproject/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz>; rel=duplicate; pri=3; geo=de
+Link: <https://mirror.accum.se/mirror/qt.io/qtproject/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz>; rel=duplicate; pri=4; geo=se
+Link: <https://qtproject.mirror.liquidtelecom.com/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz>; rel=duplicate; pri=5; geo=ke
+Digest: MD5=yztxji5Ym2G9eBtFlmBKWw==
+Digest: SHA=79RAxguzi+qvKdH8CKXMqU7bIyk=
+Digest: SHA-256=Wy4A7Mr1pNjBQTT/oOqN/Qo1rh/8f42H+kMFoe0jzyI=
+Location: https://qt.mirror.constant.com/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz
+Content-Type: text/html; charset=iso-8859-1
+
+HTTP/2 200 
+server: nginx
+date: Sat, 28 Nov 2026 02:52:23 GMT
+content-type: application/octet-stream
+content-length: 50582668
+last-modified: Tue, 18 Aug 2026 04:31:27 GMT
+etag: "6a83e01f-303d48c"
+expires: Sun, 29 Nov 2026 02:52:23 GMT
+cache-control: max-age=86400
+x-frame-options: DENY
+x-content-type-options: nosniff
+x-vid: 9130436
+accept-ranges: bytes
+
