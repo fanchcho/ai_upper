@@ -1,0 +1,13 @@
+[296305:1128/094608.058397:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[296305:1128/094608.769386:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[296305:1128/094608.769448:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+
+(electron:296305): GLib-GIO-CRITICAL **: 09:46:08.770: g_settings_schema_source_lookup: assertion 'source != NULL' failed
+
+DevTools listening on ws://127.0.0.1:9344/devtools/browser/ed083d70-edcc-4298-8fee-3500d3f6c4dd
+
+(electron:296305): GLib-GIO-CRITICAL **: 09:46:08.989: g_settings_schema_source_lookup: assertion 'source != NULL' failed
+
+(electron:296305): GLib-GIO-CRITICAL **: 09:46:08.997: g_settings_schema_source_lookup: assertion 'source != NULL' failed
+[window] 首显兜底触发：did-finish-load
+[296305:1128/094720.699956:FATAL:electron_browser_main_parts.cc(502)] Failed to shutdown.

@@ -1,0 +1,5 @@
+{
+  "action": "app.quit before Xvfb termination",
+  "electron_exit": 0,
+  "fatal_shutdown": false
+}

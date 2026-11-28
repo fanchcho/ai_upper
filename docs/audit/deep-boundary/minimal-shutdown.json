@@ -1,0 +1,5 @@
+{
+  "action": "SIGTERM Xvfb only after real window ready",
+  "electron_exit": -5,
+  "fatal_shutdown": true
+}
