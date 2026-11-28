@@ -1,0 +1,171 @@
+{
+  "registry": {
+    "mcpServers": {
+      "echo": {
+        "name": "Echo",
+        "transport": "stdio",
+        "command": "/home/agent/shared_workspace/ai_upper/.venv/bin/python",
+        "args": [
+          "/home/agent/shared_workspace/ai_upper/.tmp/extensions-calibration/server.py"
+        ]
+      },
+      "fail": {
+        "name": "Failure",
+        "transport": "stdio",
+        "command": "/missing-test-command"
+      },
+      "idle": {
+        "name": "Off",
+        "transport": "http",
+        "url": "http://127.0.0.1:9"
+      }
+    }
+  },
+  "config": {
+    "models": {
+      "activeModelId": "p1:claude-sonnet-5-5",
+      "providers": [
+        {
+          "id": "p1",
+          "adapter": "anthropic",
+          "apiHost": "https://api.example.com",
+          "enabled": true,
+          "models": [
+            {
+              "id": "claude-sonnet-5-5",
+              "enabled": true
+            }
+          ]
+        }
+      ]
+    },
+    "theme": "dark",
+    "locale": "en",
+    "skills": {
+      "enabled": {
+        "beta": false
+      },
+      "roles": {
+        "alpha": [
+          "reviewer",
+          "writer",
+          "tester",
+          "designer",
+          "analyst"
+        ]
+      }
+    },
+    "mcp": {
+      "enabled": {
+        "echo": true,
+        "fail": true,
+        "idle": false
+      }
+    }
+  },
+  "rows": [
+    {
+      "kind": "skill",
+      "id": "create-skill",
+      "name": "create-skill",
+      "enabled": true,
+      "builtin": true,
+      "roles": null,
+      "badge": "Skill",
+      "note": "Built-in",
+      "roleAvatars": {}
+    },
+    {
+      "kind": "skill",
+      "id": "create-agent",
+      "name": "create-agent",
+      "enabled": true,
+      "builtin": true,
+      "roles": null,
+      "badge": "Skill",
+      "note": "Built-in",
+      "roleAvatars": {}
+    },
+    {
+      "kind": "skill",
+      "id": "create-mcp",
+      "name": "create-mcp",
+      "enabled": true,
+      "builtin": true,
+      "roles": null,
+      "badge": "Skill",
+      "note": "Built-in",
+      "roleAvatars": {}
+    },
+    {
+      "kind": "skill",
+      "id": "alpha",
+      "name": "alpha",
+      "enabled": true,
+      "builtin": false,
+      "roles": [
+        "reviewer",
+        "writer",
+        "tester",
+        "designer",
+        "analyst"
+      ],
+      "badge": "Skill",
+      "note": "",
+      "roleAvatars": {
+        "reviewer": "",
+        "writer": "",
+        "tester": "",
+        "designer": "",
+        "analyst": ""
+      }
+    },
+    {
+      "kind": "skill",
+      "id": "beta",
+      "name": "beta",
+      "enabled": false,
+      "builtin": false,
+      "roles": null,
+      "badge": "Skill",
+      "note": "",
+      "roleAvatars": {}
+    },
+    {
+      "id": "echo",
+      "kind": "mcp",
+      "name": "Echo",
+      "enabled": true,
+      "builtin": false,
+      "roles": null,
+      "warning": false,
+      "badge": "MCP",
+      "note": "Connected",
+      "roleAvatars": {}
+    },
+    {
+      "id": "fail",
+      "kind": "mcp",
+      "name": "Failure",
+      "enabled": true,
+      "builtin": false,
+      "roles": null,
+      "warning": true,
+      "badge": "MCP",
+      "note": "Connection failed",
+      "roleAvatars": {}
+    },
+    {
+      "id": "idle",
+      "kind": "mcp",
+      "name": "Off",
+      "enabled": false,
+      "builtin": false,
+      "roles": null,
+      "warning": false,
+      "badge": "MCP",
+      "note": "",
+      "roleAvatars": {}
+    }
+  ]
+}

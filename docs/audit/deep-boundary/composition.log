@@ -1,0 +1,90 @@
+qml: MODE css-source-over source-over
+qml: MODE css-default source-over
+qml: MODE qcolor-source-over source-over
+qml: MODE qcolor-default source-over
+qml: MODE css-source-over source-over
+qml: MODE css-default source-over
+qml: MODE qcolor-source-over source-over
+qml: MODE qcolor-default source-over
+[
+  {
+    "theme": "dark",
+    "style": "qcolor",
+    "mode": "default",
+    "rgb": [
+      55,
+      55,
+      77
+    ]
+  },
+  {
+    "theme": "dark",
+    "style": "qcolor",
+    "mode": "source-over",
+    "rgb": [
+      55,
+      55,
+      77
+    ]
+  },
+  {
+    "theme": "dark",
+    "style": "css",
+    "mode": "default",
+    "rgb": [
+      55,
+      55,
+      78
+    ]
+  },
+  {
+    "theme": "dark",
+    "style": "css",
+    "mode": "source-over",
+    "rgb": [
+      55,
+      55,
+      78
+    ]
+  },
+  {
+    "theme": "light",
+    "style": "qcolor",
+    "mode": "default",
+    "rgb": [
+      238,
+      238,
+      250
+    ]
+  },
+  {
+    "theme": "light",
+    "style": "qcolor",
+    "mode": "source-over",
+    "rgb": [
+      238,
+      238,
+      250
+    ]
+  },
+  {
+    "theme": "light",
+    "style": "css",
+    "mode": "default",
+    "rgb": [
+      238,
+      238,
+      251
+    ]
+  },
+  {
+    "theme": "light",
+    "style": "css",
+    "mode": "source-over",
+    "rgb": [
+      238,
+      238,
+      251
+    ]
+  }
+]

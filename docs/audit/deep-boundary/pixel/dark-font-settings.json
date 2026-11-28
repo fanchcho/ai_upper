@@ -1,0 +1,50 @@
+[
+  {
+    "hint": 0,
+    "reported": 0,
+    "phase": 0,
+    "sceneY": 411.0
+  },
+  {
+    "hint": 0,
+    "reported": 0,
+    "phase": 0.5,
+    "sceneY": 411.5
+  },
+  {
+    "hint": 1,
+    "reported": 1,
+    "phase": 0,
+    "sceneY": 411.0
+  },
+  {
+    "hint": 1,
+    "reported": 1,
+    "phase": 0.5,
+    "sceneY": 411.5
+  },
+  {
+    "hint": 2,
+    "reported": 2,
+    "phase": 0,
+    "sceneY": 411.0
+  },
+  {
+    "hint": 2,
+    "reported": 2,
+    "phase": 0.5,
+    "sceneY": 411.5
+  },
+  {
+    "hint": 3,
+    "reported": 3,
+    "phase": 0,
+    "sceneY": 411.0
+  },
+  {
+    "hint": 3,
+    "reported": 3,
+    "phase": 0.5,
+    "sceneY": 411.5
+  }
+]

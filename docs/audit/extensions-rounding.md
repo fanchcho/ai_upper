@@ -146,3 +146,36 @@ F85/F56/F41 等本轮功能变更没有触碰正文/阴影 token；`git diff` �
 执行 `AI_UPPER_HOME=/tmp/ai-upper-environment-phase .venv/bin/python scripts/parity/closeout/phase-session.py`，随后 `python scripts/parity/closeout/measure_phases.py`。新日志与暗亮原始图归档 `docs/audit/environment-closeout/phase.log`、`phase-measure.log`、`phase/`。
 
 两主题相位0文字原版415/444/477/509/542/575，Qt416/445/477/510/543/575；相位0.5两端416/445/478/510/543/576；相位1原版416/445/478/510/543/576，Qt417/446/478/511/544/576。亮色阴影(700,700)相位0/.5分别137与138，相位1均137；暗色相位1蓝通道11与12，相位0/.5一致。再次支持相位相关栅格化/合成差异，未归零；没有发现可证的token错误，不改生产token、不加坐标补偿。
+
+## 2026-11-28 深入归因：hinting、描边/圆角与合成入口
+
+本轮只在探针中改变变量，生产 Theme.qml / SoftShadow.qml / ExtensionDetail.qml 均未改，未添加坐标补偿、未修改 token。新的 Qt 暗亮截图与几何位于 `docs/audit/deep-boundary/pixel/`；对照用 `docs/audit/environment-closeout/phase/deva-*.png` 的上轮原版基准，明确**不是本轮重新运行 Electron 的同场截图**。
+
+### 正文真实 TextEdit：四种 hinting × 两相位
+
+`scripts/parity/deep_pixel_probe.py` 使用真实 Main.qml / ExtensionDetail.qml，在独立 fixture 改 QFont.hintingPreference，读取生效值与 sceneY。Default 与 Vertical 两主题均逐像素一致；NoHinting 相位0与默认分别有暗2866/亮2864像素不同，FullHinting 有3439/3444像素不同（ROI 486,411,900,600）。FullHinting 的行起点变为416/444/476/509/542/574，仍不能同时匹配原版415/444/477/509/542/575。默认相位0.5的本轮行起点416/445/478/510/543/576，与已有原版同相位起点一致，但字形内部仍有差异。
+
+因此 hinting 确实能改变字形/墨迹边缘；没有证据支持将 Full/NoHinting 当成生产修复。字体轮廓、字体后端与 hinting 并未被证明等价，不能写成已归零。数值见 pixel/measurements.json 与 pixel-measure.log，原始图完整保留。
+
+### 阴影：排除采样点的圆角与描边假设
+
+对真实320px高菜单阴影，分别取相位0/.5、radius12/0、border.width1/0。两主题全部8组合在(700,700)仍分别为暗(11,11,12)、亮(138,138,138)。关闭菜单阴影后变为暗(13,13,15)、亮(142,142,142)，确认实验确实操作到了目标阴影。这个采样点的残差不是圆角半径或描边导致；不能把该结论外推到整个圆角边缘。原版既有相位0亮色为(137,137,137)，残差未归零。
+
+### 合成模式与颜色入口
+
+`scripts/parity/deep_composite_probe.py` 在软件 Canvas 中检查默认 globalCompositeOperation，实际为 source-over；显式指定 source-over 与默认结果完全一致，排除该探针的模式差异。
+
+但是**相同 RGBA 值的 QColor 与 CSS rgba 字符串入口不等价**：
+
+| 主题/alpha | QColor 输入 | CSS rgba 字符串输入 | 既有 Chromium 中心采样 |
+|---|---|---|---|
+| dark .16 | 55,55,77 | 55,55,78 | 55,55,78 |
+| light .10 | 238,238,250 | 238,238,251 | 238,238,251 |
+
+这将前文笼统的合成量化结论细化为**颜色解析/alpha精度到合成入口的差异**；不是token数值不一致，也不是source-over选错。只对这里的矩形中心采样成立，不是全页修复依据。
+
+继续复制真实 SoftShadow 实现到 .tmp，仅把 shadowColor 的 QColor 改为由相同通道构造的 CSS rgba 字符串（scripts/parity/deep_shadow_color_probe.py），暗亮全部图像均 **0 changedPixels**（pixel/shadow-color-difference.json）。所以矩形填充发现不能直接外推为阴影修复，没有将这项实验改动写入生产。
+
+结论：**正文与阴影未归零；未发现本轮可证的生产样式错误**。新增排除项是该采样点的圆角/描边、Canvas默认合成模式；进一步定位了颜色入口的量化差异。阴影 blur 核/量化、字体后端的更深差异仍未完成。
+
+复现：`AI_UPPER_HOME=/tmp/ai-upper-deep-pixel-<unique> XDG_DATA_HOME=$PWD/.tmp/deep-boundary/pixel-data QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu .venv/bin/python scripts/parity/deep_pixel_probe.py dark`（light 独立home）；相同Qt环境运行 deep_composite_probe.py / deep_shadow_color_probe.py；系统 `python3 scripts/parity/deep_pixel_measure.py` 计算图像数值。截图 *-reference-left.png 左侧是已保留原版基准，右侧为本轮 Qt，非完整同场像素验收。

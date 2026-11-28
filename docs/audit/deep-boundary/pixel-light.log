@@ -1,0 +1,6 @@
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+MCP detail wheel -0.0 -> 185.0 height 673.5 view 489.0
+MENU_CAP_AND_KEYBOARD_OK
+SHADOWS [('SoftShadow_QMLTYPE_14', 12.0, 24.0), ('SoftShadow_QMLTYPE_14', 12.0, 24.0)]
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
