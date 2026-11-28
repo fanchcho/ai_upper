@@ -1,0 +1,1 @@
+PASS: 3 QR matrices identical to upstream; PNG generation succeeds after Python 3.8 base-class fix

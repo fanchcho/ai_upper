@@ -24,7 +24,7 @@
 from __future__ import annotations
 import array, base64, collections, itertools, re, sys
 from collections.abc import Sequence
-from typing import cast
+from typing import cast, List
 
 
 # ---- QR Code symbol class ----
@@ -1153,7 +1153,7 @@ _init_kanji_table()
 
 # ---- Private helper class ----
 
-class _BitBuffer(list[int]):
+class _BitBuffer(List[int]):
 	"""An appendable sequence of bits (0s and 1s). Mainly used by QrSegment."""
 	
 	def append_bits(self, val: int, n: int) -> None:
