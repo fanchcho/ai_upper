@@ -1,0 +1,22 @@
+[
+  [
+    "electron-DEPS",
+    "https://raw.githubusercontent.com/electron/electron/v33.4.11/DEPS",
+    false
+  ],
+  [
+    "chromium-DEPS",
+    "https://chromium.googlesource.com/chromium/src/+/refs/tags/130.0.6723.191/DEPS?format=TEXT",
+    true
+  ],
+  [
+    "box_painter_base.cc",
+    "https://chromium.googlesource.com/chromium/src/+/refs/tags/130.0.6723.191/third_party/blink/renderer/core/paint/box_painter_base.cc?format=TEXT",
+    true
+  ],
+  [
+    "SkBlurMask.cpp",
+    "https://skia.googlesource.com/skia/+/d41eba845cdb7ade07e68f20676675c25e2734fc/src/core/SkBlurMask.cpp?format=TEXT",
+    true
+  ]
+]

@@ -191,3 +191,13 @@ scripts/parity/blur_backend_probe.py 对复制场景中的真实生产SoftShadow
 Skia当前源码使用sigma驱动的Blur接口，但本轮未取得Electron33所捆绑Skia的精确revision及完整CSS box-shadow调用链，所以不能用Skia main源码证明历史Chromium截图每个灰阶的根因。未宣称找到同版本算法的一一对应关系。
 
 结论：正文和阴影仍未归零。字体renderType开关在当前software环境无效果；Qt blur半径量化已被源码与真实图像实验证实，但尚未证明是全部跨引擎残差的唯一来源。没有发现可证的生产样式错，未改SoftShadow/Theme token，未加坐标补偿。
+
+## 2026-11-28 同版本 Electron/Chromium/Skia 链路取证
+
+原版只读pnpm-lock.yaml:111、1905、5204锁定electron33.4.11；实际实验二进制.tmp/extensions-complete/browser/node_modules/electron/dist/version亦为33.4.11。Electron v33.4.11 DEPS:4-5锁Chromium130.0.6723.191；该Chromium DEPS:307锁Skia d41eba845cdb7ade07e68f20676675c25e2734fc。Electron没有Qt版本；Qt6.11.2属于移植版，不能混称Electron捆绑Qt。
+
+官方同版本源码原文及URL归档docs/audit/next-boundary/sources/：box_painter_base.cc:291-303把CSS shadow.Offset/Blur/Color传DrawLooperBuilder后画圆角矩形；draw_looper_builder.cc:78-80调用BlurRadiusToStdDev；skia_utils.h:139-145明确sigma=radius*0.5；cc/paint/draw_looper.cc:28-30把sigma传给SkMaskFilter::MakeBlur。相同Skia revision的SkBlurMask.cpp已取到；其ConvertRadiusToSigma的0.57735*r+0.5不是这里Blink调用的转换，不能拿该公式解释CSS阴影。
+
+与前轮实测Qt6.11.2 Canvas qt_image_boxblur(...qRound(blur/2),true)相比，blur24/24.2/24.8/25在Blink参数分别12/12.1/12.4/12.5，而Qt box radius为12/12/12/13；30系列为15/15.1/15.4/15.5 vs15/15/15/16。机器数据blur-parameters.json。前轮真实Qt图像在+.2/.8不变、+1跳变与此一致。
+
+新结论：版本链与CSS调用链已闭环；两端模糊参数处理不等价，不能再笼统称只是相同算法的最后一位取整。但这还没有同版本Skia/Qt逐像素kernel输出对照，无法证明全部1灰阶尾部误差由这一点单独造成，也不能由阴影链推导字体轮廓残差。正文/阴影仍未归零，未发现可证的token或样式错，不改生产。
