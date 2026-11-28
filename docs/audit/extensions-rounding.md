@@ -179,3 +179,15 @@ F85/F56/F41 等本轮功能变更没有触碰正文/阴影 token；`git diff` �
 结论：**正文与阴影未归零；未发现本轮可证的生产样式错误**。新增排除项是该采样点的圆角/描边、Canvas默认合成模式；进一步定位了颜色入口的量化差异。阴影 blur 核/量化、字体后端的更深差异仍未完成。
 
 复现：`AI_UPPER_HOME=/tmp/ai-upper-deep-pixel-<unique> XDG_DATA_HOME=$PWD/.tmp/deep-boundary/pixel-data QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu .venv/bin/python scripts/parity/deep_pixel_probe.py dark`（light 独立home）；相同Qt环境运行 deep_composite_probe.py / deep_shadow_color_probe.py；系统 `python3 scripts/parity/deep_pixel_measure.py` 计算图像数值。截图 *-reference-left.png 左侧是已保留原版基准，右侧为本轮 Qt，非完整同场像素验收。
+
+## 2026-11-28 完整输入法轮：字体 raster 与 blur 后端
+
+没有重做已验收页面对照。新增脚本 scripts/parity/font_backend_probe.py 在真实Main.qml的正文TextEdit上切换renderType=0/1，通过QQmlProperty写入（避免Python枚举转换错误），两主题实际截图差异均0像素；结果docs/audit/raster-backend/font-results.json。这只说明当前software backend下该开关不能消除差异，不宣称两种硬件字体后端全都等价，也不把hinting整体排除为所有像素的因素。
+
+当前venv qVersion实测6.11.2；官方同版本源码 https://github.com/qt/qtdeclarative/blob/v6.11.2/src/quick/items/context2d/qquickcontext2dcommandbuffer.cpp 的paintShapeAndShadow明确将shadow画入ARGB32_Premultiplied，调用qt_image_boxblur(shadowImage,qMax(1,qRound(blur/2)),true)，之后SourceIn着色再drawImage。原文件只读下载于.tmp/blur-backend/qt-current.cpp，不改第三方代码。
+
+scripts/parity/blur_backend_probe.py 对复制场景中的真实生产SoftShadow分别使用原始blur与+0.2/+0.8/+1。dark30→30.2/30.8与light24→24.2/24.8均0像素差；到31/25分别改变6763/12122像素。与qRound(blur/2)的阶跃一致，docs/audit/raster-backend/blur-differences.json及blur-profile.json保留逐行尾部采样。这将阴影差异进一步定位到软件Canvas的离散box-blur路径。
+
+Skia当前源码使用sigma驱动的Blur接口，但本轮未取得Electron33所捆绑Skia的精确revision及完整CSS box-shadow调用链，所以不能用Skia main源码证明历史Chromium截图每个灰阶的根因。未宣称找到同版本算法的一一对应关系。
+
+结论：正文和阴影仍未归零。字体renderType开关在当前software环境无效果；Qt blur半径量化已被源码与真实图像实验证实，但尚未证明是全部跨引擎残差的唯一来源。没有发现可证的生产样式错，未改SoftShadow/Theme token，未加坐标补偿。

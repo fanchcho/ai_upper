@@ -1,0 +1,42 @@
+[
+  {
+    "theme": "dark",
+    "blurDelta": 0,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "dark",
+    "blurDelta": 0.2,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "dark",
+    "blurDelta": 0.8,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "dark",
+    "blurDelta": 1,
+    "pixelsDifferent": 6763
+  },
+  {
+    "theme": "light",
+    "blurDelta": 0,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "light",
+    "blurDelta": 0.2,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "light",
+    "blurDelta": 0.8,
+    "pixelsDifferent": 0
+  },
+  {
+    "theme": "light",
+    "blurDelta": 1,
+    "pixelsDifferent": 12122
+  }
+]
