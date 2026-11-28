@@ -154,7 +154,12 @@ def create_branch(root: str, name: str, checkout_it: bool = True) -> dict[str, A
 
 def delete_branch(root: str, name: str, force: bool = False) -> dict[str, Any]:
     code, _, err = _run(root, ["branch", "-D" if force else "-d", str(name)])
-    return {"ok": code == 0, "error": err.strip(), "reason": "unmerged" if "not fully merged" in err else "error"}
+    result = {"ok": code == 0, "error": err.strip(), "reason": "unmerged" if "not fully merged" in err else "error"}
+    if result["reason"] == "unmerged":
+        count_code, count, _ = _run(root, ["rev-list", "--count", "HEAD.." + str(name)])
+        if count_code == 0:
+            result["count"] = int(count.strip())
+    return result
 
 
 def rename_branch(root: str, old: str, new: str) -> dict[str, Any]:

@@ -1,0 +1,6 @@
+{
+  "repo": "/tmp/ai-upper-branches-h2_yrkc5/home/repo",
+  "warning": "分支 unmerged 有 1 个提交未合并到当前分支，强制删除后这些提交将难以找回。",
+  "after_cancel": "unmerged",
+  "after_delete": ""
+}

@@ -23,6 +23,7 @@ Popup {
  property bool identityNeeded: false
  property string promptAction: ""
  property string filter: ""
+ property int unmergedCount: 0
  width: view === "main" ? 148 : 300; padding: 6
  height: Math.min(menuColumn.implicitHeight + 12, parent.height - 16)
  background: Item {
@@ -147,12 +148,12 @@ Popup {
   background:Rectangle{color:Theme.bgElevated;border.color:Theme.border;radius:Theme.radiusLg}
   ColumnLayout {
    id:promptColumn;width:parent.width;spacing:12
-   Text {text:root.promptAction==="abort"?"中止合并？":root.promptAction==="create"?"新建分支":root.promptAction==="rename"?"重命名分支":root.promptAction==="merge"?"合并分支 "+root.selected.name:"删除分支 "+root.selected.name+"？";color:Theme.fg;font.pixelSize:16}
+   Text {text:root.promptAction==="forceDelete"?"分支尚未合并":root.promptAction==="abort"?"中止合并？":root.promptAction==="create"?"新建分支":root.promptAction==="rename"?"重命名分支":root.promptAction==="merge"?"合并分支 "+root.selected.name:"删除分支 "+root.selected.name+"？";color:Theme.fg;font.pixelSize:16}
    SettingsField{id:nameField;objectName:"gitNewBranchName";Layout.fillWidth:true;visible:root.promptAction==="create"||root.promptAction==="rename";placeholderText:"分支名称"}
-   Text {visible:root.promptAction==="delete";text:root.selected.remote?"将从远程仓库删除该分支，会影响所有协作者。":"只删除本地分支，不影响远程。";color:Theme.fgMuted;Layout.fillWidth:true;wrapMode:Text.Wrap}
+   Text {objectName:"gitDeleteWarning";visible:root.promptAction==="delete"||root.promptAction==="forceDelete";text:root.promptAction==="forceDelete"?"分支 "+root.selected.name+" 有 "+root.unmergedCount+" 个提交未合并到当前分支，强制删除后这些提交将难以找回。":root.selected.remote?"将从远程仓库删除该分支，会影响所有协作者。":"只删除本地分支，不影响远程。";color:Theme.fgMuted;Layout.fillWidth:true;wrapMode:Text.Wrap}
    RowLayout {
-    SettingsButton{text:"取消";ghost:true;onClicked:promptDialog.close()}
-    SettingsButton{objectName:"gitBranchConfirm";text:root.promptAction==="delete"?"删除":"确认";primary:root.promptAction!=="delete";destructive:root.promptAction==="delete";onClicked:{var r;var a=root.promptAction;if(a==="abort")r=shellBridge.gitMergeAbort(root.repoRoot);else if(a==="create")r=shellBridge.gitCreateBranch(root.repoRoot,nameField.text);else if(a==="rename")r=shellBridge.gitRenameBranch(root.repoRoot,root.selected.name,nameField.text);else if(a==="merge")r=shellBridge.gitMerge(root.repoRoot,root.selected.name);else r=root.selected.remote?shellBridge.gitDeleteRemoteBranch(root.repoRoot,root.selected.remote,root.selected.name.slice(root.selected.remote.length+1)):shellBridge.gitDeleteBranch(root.repoRoot,root.selected.name,false);if(root.result(r,"操作完成")){promptDialog.close();root.view="branches"}}}
+    SettingsButton{objectName:"gitBranchCancel";text:"取消";ghost:true;onClicked:promptDialog.close()}
+    SettingsButton{objectName:"gitBranchConfirm";text:root.promptAction==="forceDelete"?"强制删除":root.promptAction==="delete"?"删除":"确认";primary:root.promptAction!=="delete"&&root.promptAction!=="forceDelete";destructive:root.promptAction==="delete"||root.promptAction==="forceDelete";onClicked:{var r;var a=root.promptAction;if(a==="abort")r=shellBridge.gitMergeAbort(root.repoRoot);else if(a==="create")r=shellBridge.gitCreateBranch(root.repoRoot,nameField.text);else if(a==="rename")r=shellBridge.gitRenameBranch(root.repoRoot,root.selected.name,nameField.text);else if(a==="merge")r=shellBridge.gitMerge(root.repoRoot,root.selected.name);else r=root.selected.remote?shellBridge.gitDeleteRemoteBranch(root.repoRoot,root.selected.remote,root.selected.name.slice(root.selected.remote.length+1)):shellBridge.gitDeleteBranch(root.repoRoot,root.selected.name,a==="forceDelete");if(!r.ok&&r.reason==="unmerged"&&a==="delete"){root.unmergedCount=r.count;root.promptAction="forceDelete";return}if(root.result(r,"操作完成")){promptDialog.close();root.view="branches"}}}
    }
   }
  }
