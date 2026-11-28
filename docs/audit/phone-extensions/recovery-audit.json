@@ -1,0 +1,1601 @@
+{
+  "checked_head": "6c62ff9891c2b8dd0b5036fbf2608677a1331c68",
+  "files": [
+    {
+      "path": "docs/audit/phone-extensions/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "004a1dc140eb980f32639fa0925644af9608bfea19d3164be1cad898726e8cc5"
+    },
+    {
+      "path": "docs/audit/phone-extensions/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "cbcb461d7ab220b1bfcde5f50f5231bce9549b86a893e88782a33ceaa42d954c"
+    },
+    {
+      "path": "docs/audit/phone-extensions/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "032df45b6e62d15f9ca26d3f3060760d0dc4433c2b3bf99e428abd5342af9c3b"
+    },
+    {
+      "path": "docs/audit/phone-extensions/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "66696f1886ab52d10147505b977a898b07343b3187389fb4005df736723f05b4"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "c43caf20ac39ad651ae2bab8f24f6f1f8ba6b55eb9a4d036c729a9a871bd4917"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "a8699294e74e71f91f2e95450e241691a080cbfe467ba461b0abad59ae162b7b"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "7d1fabb7fd44efff70134fe55fdefc25f186234a57d3f45584045417ef537a70"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "bb3700325405c1158e51d58c79970ed69ff9d44944c3e45f23b25138813c14f9"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/cards-dark-lan.json",
+      "bytes": 4936,
+      "sha256": "630eb902391778671d00cbb30574ebbd2a2773dff128a80f45880569053cbc13"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/cards-dark-relay.json",
+      "bytes": 4937,
+      "sha256": "4b5499716f83cd9485e821fb756f87792e1396bf3702a92a4bfe5c4c786e7e4a"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/cards-light-lan.json",
+      "bytes": 4937,
+      "sha256": "5dae53e21a36e62070b673e16f6a3d62973c5b093334b3975de63086a1ce7190"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/cards-light-relay.json",
+      "bytes": 4938,
+      "sha256": "ec6f06e99edf4271eee31e7a3099afcf339d97deebe114bc18d207d0489432d5"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approve-dark-lan.png",
+      "bytes": 37593,
+      "sha256": "854dfbadcc863ec2e9ce62bda81f72505320e51a7b9718e7f368385931c2679e",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approve-dark-relay.png",
+      "bytes": 38393,
+      "sha256": "ff86a680671b9222deddf3b4e5fb5fac72cead4befa0529ab7c38dd061b4bf9f",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approve-light-lan.png",
+      "bytes": 39133,
+      "sha256": "dab766e649751081cf27dbc66b46adc8c8e7fbb1926372640f3fb2333fb5839f",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approve-light-relay.png",
+      "bytes": 39044,
+      "sha256": "fcaf3014136997e71e4ad6b30d55b37e017a512400a4b1cfe75eb3503edc1b77",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approved-dark-lan.png",
+      "bytes": 44709,
+      "sha256": "4d06b4e400c9b7750bf16cb57625a3e2729e7e978992df6fb6507ab3b39cc652",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approved-dark-relay.png",
+      "bytes": 45487,
+      "sha256": "e1d0bb97579fae1ae9093d0c0a5a8bffdec91052af89005827416bc8319c3677",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approved-light-lan.png",
+      "bytes": 45936,
+      "sha256": "236d66b0bbbfdf6a3efa145b96f551880678997f529ea869bb4c39fef61553fb",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-approved-light-relay.png",
+      "bytes": 45851,
+      "sha256": "490871d4967f7d08af8f01459b712968acd0a1aad71a49e6fba156409cbac7d8",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-dark-lan.png",
+      "bytes": 36289,
+      "sha256": "d98a387496a818a79bdee9cea02b596f7755364d4206ebfeef1151480247ec45",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-dark-relay.png",
+      "bytes": 36956,
+      "sha256": "cd185fbeebb3bad99c8f4c9ffc10bfcce4da0a1c7bfe4293252f7fb281192d84",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-denied-dark-lan.png",
+      "bytes": 44522,
+      "sha256": "0175628bb9bee4f5d64ee594283e08b83916083fc5e4fd0e132d08c10e0b5d4f",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-denied-dark-relay.png",
+      "bytes": 45291,
+      "sha256": "3a15b7042ccfc001d487d84e3eb4fd390b8ae9cfdc7532cacaeaaf9d9a209830",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-denied-light-lan.png",
+      "bytes": 45789,
+      "sha256": "88c0a28d22579c2d3685b35c6f6307cdfa0ed2d6c41e338501410bbacee307ad",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-denied-light-relay.png",
+      "bytes": 45704,
+      "sha256": "0cd1dadfebb7b86e8fadce06f502a6afdff61a4cce8f016b2df2176e52c070eb",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-light-lan.png",
+      "bytes": 36931,
+      "sha256": "dd582b7ccae723b321f208fa8a6a20afb77aa6c5f2c4d4eadef2021951a80e66",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-light-relay.png",
+      "bytes": 37577,
+      "sha256": "b82fba7b632f40ad7f3942ab0c5879c4006738e5aabcfb705646eb98a91a95b5",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-skipped-dark-lan.png",
+      "bytes": 37353,
+      "sha256": "23fc3a3433cb499820450b8924639401461d4813717c0e1ccf2af0a94c4f9bc5",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-skipped-dark-relay.png",
+      "bytes": 38209,
+      "sha256": "b0aa9ee5c36515417889b34daf31c7f31d9d7f0627e95069d6e13adf7aeadb3e",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-skipped-light-lan.png",
+      "bytes": 38847,
+      "sha256": "54c87d2733196c56ac314f04237889e674a40cc42e2a756b66a96462ae6a3b3b",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-browser-skipped-light-relay.png",
+      "bytes": 38781,
+      "sha256": "859c399374515eeb011ded0afb4c6a6fcd3ac5729f9fb97e8e8efae1cc577cce",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-device-dark-lan.png",
+      "bytes": 54482,
+      "sha256": "e49b4902fb0f0fd247f187a5e07dcc5b4250e2172f584568c3f03f33e72ad6b7",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-device-dark-relay.png",
+      "bytes": 54612,
+      "sha256": "e731f031dce04bcf9eec9d9b81c4199bf66af7a96b720da2dd6942806cf02a58",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-device-light-lan.png",
+      "bytes": 54071,
+      "sha256": "c73782539175f8e9262900c362c2b6b40eff571a27b47cd6486cce2b08022b6e",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-device-light-relay.png",
+      "bytes": 54370,
+      "sha256": "84bac38721a4a040da0c22ba6f429332f11633f9956d059676fe735fe219b48c",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-qr-dark-lan.png",
+      "bytes": 51185,
+      "sha256": "574fe1668ebc7035218ce404513fb8480d47930439fce5a2fe41451074c4d2b3",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-qr-dark-relay.png",
+      "bytes": 51199,
+      "sha256": "a43f7e0c89209f2b0abe73eec951636d9f4f06999ce20b86d630806c8f153c4f",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-qr-light-lan.png",
+      "bytes": 51027,
+      "sha256": "0fff1c26d3f230710531f194f2f056a011d2c916cd336dd60d49f900eabd9e28",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-qr-light-relay.png",
+      "bytes": 51047,
+      "sha256": "b8aafb3d7de87b7cb26c1a42a3796dfcbd6cbe5d502822340e0edc1723fe82ce",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/phone-readback.json",
+      "bytes": 47452,
+      "sha256": "02ecf525c8e6800f8be5ca7fe2e66c27f450158b170a5dd28acb93439e1508d5"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards/run.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "6404e752b8bc8b392f8c213d49017259f8bc28fe5db5f1ba6d96266f9e1f066a"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "2fdcfb8a6a2a4d6ae645fef66b16f23df73d6c467abb31d7e220a41436f0f8da"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "355dc6637a6a5d53f24eab53cb8c77304e81260fecae8336207c7b6919d0ec12"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "694ec1ca70e4f1eabeafe34b5077b5916501396523a813ed744e7837617f385b"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/cards-dark-lan.json",
+      "bytes": 1622,
+      "sha256": "1d580de48e2b5e8b90cf19cfeba3922f3f3e4b7eb10421f0a62f844f6844aa55"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/cards-dark-relay.json",
+      "bytes": 1624,
+      "sha256": "29e6f30ccae118a9378b94bd09d428b3ebb619a9fadf79e2c923058fb5b439fc"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/cards-light-lan.json",
+      "bytes": 1623,
+      "sha256": "7e94926a4ccaad7ed31649730c5bfc00933505b1a8d06754cfb088d458d8a3f6"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/cards-light-relay.json",
+      "bytes": 1626,
+      "sha256": "2d76e06771d9c265cf9cfbffb8a6101ab5beff0a5dc4fe7ff5cd6b5533d3d53e"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-dark-lan.png",
+      "bytes": 40143,
+      "sha256": "c572896726d4c216a1b81478acdfea869fc847fb68aea636457426c442cd72b5",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-dark-relay.png",
+      "bytes": 40951,
+      "sha256": "e8a4f3dcb61e1bcc9594557600b57156b2f29916746baa76781e947f5e486981",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-ignore-dark-lan.png",
+      "bytes": 45775,
+      "sha256": "c83f67d31f04125eb390b5aebf785c86222b578e5fff11ebf6456f765c15ee55",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-ignore-dark-relay.png",
+      "bytes": 45963,
+      "sha256": "298d40b03101923c37920fdbd73f1a62ff41be51966a6121126ec8cc6ec2e5ff",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-ignore-light-lan.png",
+      "bytes": 46919,
+      "sha256": "316197ef16bdb94e087c477ab3b26b5cca8570220b8a47a9a02411586c615165",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-ignore-light-relay.png",
+      "bytes": 47325,
+      "sha256": "b8cc19728109f57fd30dc24c9c254433e65ddd4b36812ff8b9e96a52f742d974",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-light-lan.png",
+      "bytes": 41043,
+      "sha256": "15de8e21868013373e2e36a06be81e1bc07babfadf33727ef499895e0f89009c",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-browser-light-relay.png",
+      "bytes": 41815,
+      "sha256": "5ff864186c7a459f645ec8f625f28a066439af399eabc88f005155f593b3b580",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-device-dark-lan.png",
+      "bytes": 54463,
+      "sha256": "acc659b1c0afbad16c020ea7b5e8f2e6f11b1c6831a33d273e2e61e21678aabc",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-device-dark-relay.png",
+      "bytes": 54875,
+      "sha256": "14c13c8974d1c1d59510de8a4113e3c3518d50bf07659a47f678b18d85913aba",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-device-light-lan.png",
+      "bytes": 54141,
+      "sha256": "abd0e4de891e5ceea579c241e274881a39b5b05aea3e045a0336ee9c5cc75f82",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-device-light-relay.png",
+      "bytes": 54640,
+      "sha256": "5df3ce16010471c782e199f60b2b51ac2327d3d87e5ba6a7e11342d48dba3681",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-qr-dark-lan.png",
+      "bytes": 51167,
+      "sha256": "f368b2b291f3cff0c6535ba1f09e6fd234375ac6f91328dc97c1317516c74630",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-qr-dark-relay.png",
+      "bytes": 51190,
+      "sha256": "2b8ebf124513b61d849ae79977c97986ec430cf0f71856dbc0c1850d55874260",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-qr-light-lan.png",
+      "bytes": 50991,
+      "sha256": "6471054368197a7cf8456c6a3db444df5912842100037b58faf7471b69ed5efb",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-qr-light-relay.png",
+      "bytes": 50964,
+      "sha256": "879968c17d9ef9b7ffe6dfe36b220a39ee28ea9a75965e23a2949e0ccc7e03ac",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/phone-readback.json",
+      "bytes": 17110,
+      "sha256": "89c74386f47b4933df1e694592bcbcebd5e61a18017ec4b44824856f4ad1593b"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-ignore/run.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "7b9558b6958492acfb8c6bac89a2d2bc4627ba932a948687170b98959ada54b9"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "b05b894a3c9a7652145eb46bde58580af48e2dbfa3a86ee7f62ece068b9f0ce4"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "b52e1533200cac02cc8e2ef019b29aac89dc89b53dc45ccf3f31043b8c86d642"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "1a297a5ee034f7385ae585451269153983ccff9f1ff740eb16d5eecf67c7c8f1"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/cards-dark-lan.json",
+      "bytes": 1598,
+      "sha256": "afe9fcfdc9cdb435c7803b7afb0e99ceabe476e42c6c1b7b71374835c4f464ca"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/cards-dark-relay.json",
+      "bytes": 1600,
+      "sha256": "9c63575edc72563f7c8db200dd47af2449ab52cb794c78e932a8641640fb38f8"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/cards-light-lan.json",
+      "bytes": 1600,
+      "sha256": "663f19d903b733185c62f4af22231dc31c36f55567e5abe6e0ada563d9a0adea"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/cards-light-relay.json",
+      "bytes": 1602,
+      "sha256": "2022e01f952be50d7cadea4be473497796bdf8ec9929dc37a5e1236b5727b4b2"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-dark-lan.png",
+      "bytes": 40143,
+      "sha256": "c572896726d4c216a1b81478acdfea869fc847fb68aea636457426c442cd72b5",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-dark-relay.png",
+      "bytes": 40951,
+      "sha256": "e8a4f3dcb61e1bcc9594557600b57156b2f29916746baa76781e947f5e486981",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-keep-dark-lan.png",
+      "bytes": 45915,
+      "sha256": "a0a988bc885f9defc693a2185b0bdf7d3ac1959fe9ddff26307fd39cc6083cdc",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-keep-dark-relay.png",
+      "bytes": 45829,
+      "sha256": "aa5de88f473d674a9a2bcbf69add052c0f7d3c2361118a35387a9ef286d47cb7",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-keep-light-lan.png",
+      "bytes": 46711,
+      "sha256": "3c16b74f4fde51cf0dcf1f9e63b8434aa941dc371c690c767ebea36a20f1bb0c",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-keep-light-relay.png",
+      "bytes": 46941,
+      "sha256": "35108d7c568bc677b4f6539cdf3b3db400ebe5f31f676becffbf489be69a968b",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-light-lan.png",
+      "bytes": 41043,
+      "sha256": "15de8e21868013373e2e36a06be81e1bc07babfadf33727ef499895e0f89009c",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-browser-light-relay.png",
+      "bytes": 41815,
+      "sha256": "5ff864186c7a459f645ec8f625f28a066439af399eabc88f005155f593b3b580",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-device-dark-lan.png",
+      "bytes": 54598,
+      "sha256": "aeb63cc2f6c5a0331cd895f4916a19b579c3462f0515c5103d8d1f141e9c5b11",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-device-dark-relay.png",
+      "bytes": 54753,
+      "sha256": "2ddc368643ebbae3df321827c8c5f8d9f2b08a48570926d0c4176af3b0d1edd5",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-device-light-lan.png",
+      "bytes": 54116,
+      "sha256": "bcb26bf5604080231b4df8e07f56884aceaec919a52ac299be405963d5461d65",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-device-light-relay.png",
+      "bytes": 54479,
+      "sha256": "979c0e3b91d4ab54ef9a7c4522092d8ac012da8350176bf137ead07a79e04356",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-qr-dark-lan.png",
+      "bytes": 51169,
+      "sha256": "eb40a0e1b0eb3fc7ecafd70677c15d0c8ca90ae1025f9004173e8483072a6c2e",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-qr-dark-relay.png",
+      "bytes": 51186,
+      "sha256": "e5ffbf63b274a43907ba1450ef47dbcd5b4888a6aaeddddd9cd1f7ae695df760",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-qr-light-lan.png",
+      "bytes": 50926,
+      "sha256": "e5f233109f0742329fa31cfcdb8b94b46cfa9a015ad78c2781bd9165260549ad",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-qr-light-relay.png",
+      "bytes": 51040,
+      "sha256": "20c3037de24fe9c6b0c20b221694d1161ac254231035f5e928a651a0bbb32311",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/phone-readback.json",
+      "bytes": 17030,
+      "sha256": "cddb0a516cc1eee47987c77c1ba9529e73a23531cbbe4fd541f0b7afe967991f"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards-keep/run.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/cards.md",
+      "bytes": 2644,
+      "sha256": "eede61784d3163db83814679f4c2715c0a00ef3acd26c5e9b473ef47e6cfbee1"
+    },
+    {
+      "path": "docs/audit/phone-extensions/delivery.json",
+      "bytes": 4472,
+      "sha256": "0890f1993b60c4e7eb36be82e333a6c51e924a8a5e564d302c345525c7c63617"
+    },
+    {
+      "path": "docs/audit/phone-extensions/delivery.md",
+      "bytes": 5032,
+      "sha256": "657f7f3c4c6d6b868e8688c71165552ff3fe704f1bdbb2e07045fb0bac56607e"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "10d8d638296fb3b9b70188cd5c622d8e428387a87c42c5da18f64c5c12251657"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "52fb85a0d277669e05d3e3c1ac479fbd70903e5931f836410a3af37d005cbe3f"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "17c9bb5c874d477230a962f709cdcc5d1557b390f7a2ae8a6d0fef2584d9c7a1"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "35b192c8be92748bdf6bd7c203c71ba0ed1dce135fc6e55f138f902b740f86f6"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-browser-dark-lan.png",
+      "bytes": 46076,
+      "sha256": "a3c3a17d68f0b428ff5cd127d0e9b7473a2a71db46832afdc00ae594bbc6116f",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-browser-dark-relay.png",
+      "bytes": 46802,
+      "sha256": "5e3b2f95e10560723c279c6dc1c71f72d3b49ad0f1b220d12f179674a0c32645",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-browser-light-lan.png",
+      "bytes": 46952,
+      "sha256": "451403339dc3567de00d8bf9b2c1fa834bbcfdcee59ccefec30f78a279871e07",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-browser-light-relay.png",
+      "bytes": 47687,
+      "sha256": "f3092ce8baf54a53291b46d54db09da7fca1b6dc9e62d425f43ed32da8370f2f",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-device-dark-lan.png",
+      "bytes": 54596,
+      "sha256": "8db92264976dda9a327a71c688ae05d9baa16f8f4f9852d179d7bea5aff635a3",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-device-dark-relay.png",
+      "bytes": 54671,
+      "sha256": "ccca0a63595014a98178e07d36cba3c55ca7fd1480e992881044ef19ef1f5841",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-device-light-lan.png",
+      "bytes": 54205,
+      "sha256": "356df55ce85e7d07e0225df50bacd643805f91317d2822b85f21d30d156565e4",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-device-light-relay.png",
+      "bytes": 54587,
+      "sha256": "ab9596a0b8baf5b1d3c52197d816f9059c1c7eb7dc1403d952a011e9d4294a4f",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-qr-dark-lan.png",
+      "bytes": 51139,
+      "sha256": "fb6e44d391d4873b44570d21b521a3021353eb235107fb7af66234a100e54ede",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-qr-dark-relay.png",
+      "bytes": 51240,
+      "sha256": "1d2471cc1134d15808ef726b4e85f62f3a8ace521b113b8bed413fbea8ef7983",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-qr-light-lan.png",
+      "bytes": 51000,
+      "sha256": "543c87a647004f0ff5cc70ad31c25d6ac7d17ce4e200ac6f7d0141569876d21c",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-qr-light-relay.png",
+      "bytes": 51012,
+      "sha256": "f4bcd8acbef1fef4975fea39d9a9512957ce8a8641a59c6dfe7364abe4108148",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/phone-readback.json",
+      "bytes": 18708,
+      "sha256": "64b2189f23281cc3652f32b0bf147bd669e35f09cb21f6e3a87233ef0072877d"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download/run.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/download.md",
+      "bytes": 1818,
+      "sha256": "42ddbdc671bbc9500bb7a9d85a46a1cd5bad54ba60580192f85fce70471a4418"
+    },
+    {
+      "path": "docs/audit/phone-extensions/file-chooser-failure.log",
+      "bytes": 2643,
+      "sha256": "1de5c256eacc05b9009a9ffaf7d3bf99478e24dbf496b58c1f8075d9b63488a0"
+    },
+    {
+      "path": "docs/audit/phone-extensions/full.log",
+      "bytes": 1724,
+      "sha256": "bca720c7f0ad6a17b69fbfb0b2ad6983d5ed3599c9c8d80838d7b5372cff2df6"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/browser-dark-lan.log",
+      "bytes": 2072,
+      "sha256": "02b771c025bdde21ea40f0c0490f87cad7bc26cbc76c2c2de0d4e94f5bb779de"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/browser-dark-relay.log",
+      "bytes": 2072,
+      "sha256": "ecc0802301cbfa1c0df2f58aca7452ef4b2acb937ad622a5cdcf6b5d920d4e30"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/browser-light-lan.log",
+      "bytes": 2072,
+      "sha256": "bb85782cb8da12740c85a7536d3a560b020ce930868690da0c8d58cd0d75dce0"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/browser-light-relay.log",
+      "bytes": 2072,
+      "sha256": "0cd84a53eb2d80fd44f6b6c8b2a20e4d5d96675f160e07af66a89e10aabecf85"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/install-dark-lan.json",
+      "bytes": 1372,
+      "sha256": "91743d098c9ee1c3a0dbf6cdbd3bfd7b262a526d36baa24d4dc3a83567c9f693"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/install-dark-relay.json",
+      "bytes": 1397,
+      "sha256": "2033389b983a7659bc36d48f366d8c7e9decfd78a84d4ed461222249c0789af0"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/install-light-lan.json",
+      "bytes": 1373,
+      "sha256": "40571df343dc2a30f71333f8a5810175681fc0c3d798f9f00ad5385d562e1e9e"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/install-light-relay.json",
+      "bytes": 1398,
+      "sha256": "f360b903743ef08de06859253dd2ff1287cfd3722c299a98d5686b46bb8b11af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-dark-lan.png",
+      "bytes": 67513,
+      "sha256": "2d6107c6a19bab6e5a5becf3dcfd1d360cef1f8ef263f8b14c76ce9da954257e",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-dark-relay.png",
+      "bytes": 68249,
+      "sha256": "0aaccc80d494b53e5316806431c9ef6f10c129658236e0ae640a052e1b56f532",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-install-dark-lan.png",
+      "bytes": 61940,
+      "sha256": "d8fe184a103d33041b03f786e7a37d6fc05d2e85e337b2400bf5cb7d1ddaf776",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-install-dark-relay.png",
+      "bytes": 62640,
+      "sha256": "6f6c2421d1e8dde8c39ffe72a847e81fece36f9db7125b2c11aa13bf438f0b71",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-install-light-lan.png",
+      "bytes": 62485,
+      "sha256": "3beb42a8efeb27d082c4dc9d0b8832f1367bcd160bebb83d5661b2bcecb36653",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-install-light-relay.png",
+      "bytes": 63113,
+      "sha256": "bcca0b9b58b267fe773aa77a187f760c1ae7b2a0f1105596be4b991ef1c833ac",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-light-lan.png",
+      "bytes": 68027,
+      "sha256": "555252d9a0c4bdba76a34a8422f1ea1c9aac901c6a19235a63ffb3fec204e8f0",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-browser-light-relay.png",
+      "bytes": 68934,
+      "sha256": "f6d7fbcaadbaf5f9b20589b21eeb9e2e7474c2a1ad028e48ff7147062271fe81",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-device-dark-lan.png",
+      "bytes": 54174,
+      "sha256": "8bc6e137756e52efe4d9bdcc0e8b2ec0a9b19c1ab7d7fa41d7907c0e88d4c2e7",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-device-dark-relay.png",
+      "bytes": 54628,
+      "sha256": "f62f450e74dd044bd8b0838eb80a49d6bb6757984421dd87c215182e6ca454b3",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-device-light-lan.png",
+      "bytes": 53887,
+      "sha256": "34e1cc4269dca49559d769c62c309e18de17c1b6bc7625089764784de311f29c",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-device-light-relay.png",
+      "bytes": 54092,
+      "sha256": "7d681eeea2db3d1c5452eb8b1ed5eeb5e6d3754977234bbabd9934068441440d",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-qr-dark-lan.png",
+      "bytes": 51181,
+      "sha256": "880cdf330f9b9d3f1b52b43f75fa565b30857baf0831366ebeb0f76db2597bb5",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-qr-dark-relay.png",
+      "bytes": 51204,
+      "sha256": "1c7bd42dec0e2fc5b9b89a36e886bdbd483661048a757cf949b596fa7cdbb996",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-qr-light-lan.png",
+      "bytes": 50920,
+      "sha256": "f5474f125792339b543da7ac40144a16befe145288b8c93fa2bb1e9b6f5f4a40",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-qr-light-relay.png",
+      "bytes": 50980,
+      "sha256": "21a6b09df732b3f0adc9c6e1e65376469260d734ded6f85c7e2c4f8e7d6b4448",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/phone-readback.json",
+      "bytes": 19919,
+      "sha256": "eeb1d873e8351a67cdfdd74faaddd397e62ac4b4be0cd8c8076f05ae294c60c1"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install/run.log",
+      "bytes": 1317,
+      "sha256": "137499f097c05f132583dbc633ac9a60c645898ccbe2cbde9f020f68a19ccb11"
+    },
+    {
+      "path": "docs/audit/phone-extensions/install.md",
+      "bytes": 2214,
+      "sha256": "31a0dc281d375841874f51afea0da8f4cd134b7dad1fdbe76ba176d58c67fca6"
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-browser-dark-lan.png",
+      "bytes": 41563,
+      "sha256": "92dda8893d426aef4b85f5a8447bc9cd3c34f0534d77f317f7a329f0215d9b59",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-browser-dark-relay.png",
+      "bytes": 42862,
+      "sha256": "86de1ad6f6e69abe2e0fae8bd5e06652846429169d743de14844e719dfaab06c",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-browser-light-lan.png",
+      "bytes": 42150,
+      "sha256": "12ed3d8b8840328cab0b21b763cc291da6471a90f47a46f4b83a77d561ba90c9",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-browser-light-relay.png",
+      "bytes": 43316,
+      "sha256": "453d9c0bf253af893ecfb22e4466ccfd4a4490aaeff5b0f7382f0b88c6e8b872",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-device-dark-lan.png",
+      "bytes": 54440,
+      "sha256": "a88ec3699946d45837ceaf2ae8839a2a2db106a359e7a5d46964da8c7eda19a9",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-device-dark-relay.png",
+      "bytes": 54795,
+      "sha256": "100cb0ded2dce2878a885c5774fd368e978916a5c5fcc1eee4d70b70516a4e60",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-device-light-lan.png",
+      "bytes": 54115,
+      "sha256": "b2e89ad1aa2828ba9f055aad418b3f481e0babecd4ddecb94c279a92a8093201",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-device-light-relay.png",
+      "bytes": 54522,
+      "sha256": "83c3ebbda42456cea699845effd86ea472eb3e0c303dac7665a4195a6f4d3a5f",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-qr-dark-lan.png",
+      "bytes": 51157,
+      "sha256": "0e98917936651699d56d41721ba4409dac851b168d3393672eb449846d9ffc5f",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-qr-dark-relay.png",
+      "bytes": 51170,
+      "sha256": "ff9cc371fa2835a135243d48c355928f6a29c946e197043bb672defc605fc270",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-qr-light-lan.png",
+      "bytes": 51045,
+      "sha256": "2ee5eb4a6e41a8daef29b2d7a305ffb195c375db02fa59418a0353ed29fe1b87",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-qr-light-relay.png",
+      "bytes": 50953,
+      "sha256": "d8ca5f51cf97db346e0130b4564ccc77580de7a40a43b8cc12609f638880d503",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/phone-readback.json",
+      "bytes": 13582,
+      "sha256": "40218d46feb037b7d56a4aeeef9254008b9bee4f38b66b67cbbd2cfbc62acb9a"
+    },
+    {
+      "path": "docs/audit/phone-extensions/pushes.md",
+      "bytes": 1304,
+      "sha256": "0285229b6c362232c8cc684a7672c824f6fde7cef8432472d84ce9ac67ee9aa2"
+    },
+    {
+      "path": "docs/audit/phone-extensions/recovery-tests.log",
+      "bytes": 98,
+      "sha256": "b09e31acdd0d6e7ef17c7808f4f06c36a60d3b2f2289cd9d114f4471fdcaee51"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/browser-dark-lan.log",
+      "bytes": 1704,
+      "sha256": "baa21933f8d49c6053a510ab3fa9547c1df8242ca41fc4e73e63980f1cc96826"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/browser-dark-relay.log",
+      "bytes": 1704,
+      "sha256": "24a38b2a8a7d2ff9c9792855811dcb4b58f6aa71195b57d1a08c416a69ee4a14"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/browser-light-lan.log",
+      "bytes": 1704,
+      "sha256": "4528ababd925c534b10de77643e02b738e938d069d85cfe8ded3155a225c6281"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/browser-light-relay.log",
+      "bytes": 1704,
+      "sha256": "43099e8fb03612ae64e1e6999759bc0284ae77a82d9af2a6eb73b9338a6551ad"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-dark-lan.png",
+      "bytes": 37763,
+      "sha256": "661d004dd1ba3ec11aa656f4625106fab4f20afd3ab3abe752996a58c108cb84",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-dark-relay.png",
+      "bytes": 38623,
+      "sha256": "173dcadaa0d598e1f13fcc9fa1f02d75c69fe254ee129cd5f19f9cf02893b810",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-light-lan.png",
+      "bytes": 38609,
+      "sha256": "4bb78c2e672461eeed9b486d7e216b41cb27fa002a8708eed818d16ac5d751ec",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-light-relay.png",
+      "bytes": 39439,
+      "sha256": "410b75786ca16bc3f4385f39e7f3b5bd76b45466c4d668969374bf1e7c1ba212",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-tasks-dark-lan.png",
+      "bytes": 53702,
+      "sha256": "855b52d05508f629c3ebf549b5cf17ac1bbcdf7c8c224268c123d87f20579d61",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-tasks-dark-relay.png",
+      "bytes": 54435,
+      "sha256": "45fdc20315b00e1b66e9ec70811331d5c03e443d005d8099a675cd5d55e74542",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-tasks-light-lan.png",
+      "bytes": 54464,
+      "sha256": "9424e0eb53328c7f594030dfe326db229ed10db3e0a61e2be58f2b3d3079319e",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-browser-tasks-light-relay.png",
+      "bytes": 55240,
+      "sha256": "cda00e5b4b0483325550fd8248b0aa52a5ed52b9beab116eaaec951b5c6a160e",
+      "size": [
+        900,
+        793
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-device-dark-lan.png",
+      "bytes": 54570,
+      "sha256": "bc46448df9b6d1a99decf0785b72ecbfde613e7f8a49766963e1030d09f773bf",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-device-dark-relay.png",
+      "bytes": 55007,
+      "sha256": "e362d8d5bb9641fe78531322db16645f57cd9d92afb8cdc7d6db573f81335fa6",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-device-light-lan.png",
+      "bytes": 54252,
+      "sha256": "950654790323f842d950bbe612db5e59ae5f1c79b6d9055e11f03809a3ddefd1",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-device-light-relay.png",
+      "bytes": 54634,
+      "sha256": "5555e19d432e351de8dbd8d2fd637ed890a2fb4beda5c320267aa49d74df5a88",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-qr-dark-lan.png",
+      "bytes": 51210,
+      "sha256": "2674166e68fe0fa5b05a9c5a5900837077a12eadcaafe0d8a80665bb3deb115f",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-qr-dark-relay.png",
+      "bytes": 51225,
+      "sha256": "bc1da47c3d45531f8a1c3c956985ee835afd2480c122765bed1580f42805388b",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-qr-light-lan.png",
+      "bytes": 50982,
+      "sha256": "eb2e447ac103475d8326fd6079b1b63a84c7796743676b0de2f2b3798d23ecbf",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-qr-light-relay.png",
+      "bytes": 50961,
+      "sha256": "5940f028b90cd4e34f6545f9d40d3d9b6128be82f960ce01d83553e2047c00a4",
+      "size": [
+        1280,
+        820
+      ]
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/phone-readback.json",
+      "bytes": 16662,
+      "sha256": "873d3e3df8af10b74a5d8d9a5298f4af4e89f91086e0ceb96371577e2650f928"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/run.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/tasks-dark-lan.json",
+      "bytes": 4347,
+      "sha256": "1204257e0a9a16ac89d24d814463f074b1b84e135e35c3f7410bc63029ebf6e3"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/tasks-dark-relay.json",
+      "bytes": 4347,
+      "sha256": "69e6c556a6eb7f5847efa001796cdc3b7d0bb9f34b9d5bca737e12b5a169493a"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/tasks-light-lan.json",
+      "bytes": 4347,
+      "sha256": "688b67cd1a5767a4fd240f5e82128fe85bf5e7814902c74a1f859d72691640b3"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks/tasks-light-relay.json",
+      "bytes": 4347,
+      "sha256": "f00ab2d5745a73c44056615e01728df89396eb1d7d3fe1343b61bc8d905c72ca"
+    },
+    {
+      "path": "docs/audit/phone-extensions/tasks.md",
+      "bytes": 1898,
+      "sha256": "c237e20da2378f6b2e5c46a18a0b56f8f077524897d14e72f171e1d107aba822"
+    },
+    {
+      "path": "docs/audit/phone-extensions/upload-ui.log",
+      "bytes": 949,
+      "sha256": "e9f5c404580d44ef396bc8bd306a75453af185b941e23da7451dbfc18aca87af"
+    },
+    {
+      "path": "docs/audit/phone-extensions/upload.md",
+      "bytes": 2050,
+      "sha256": "bc4ddfbbd9d5e6f61a9a0c779e7be5704447e1033045c9a87b3262b21b796358"
+    }
+  ],
+  "runs": [
+    {
+      "feature": "upload",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzpnvso_oobs6q"
+    },
+    {
+      "feature": "upload",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzpo03x_kit6xp"
+    },
+    {
+      "feature": "upload",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzpo8j6_noln9e"
+    },
+    {
+      "feature": "upload",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzpocnr_81vw2r"
+    },
+    {
+      "feature": "download",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzpsrp1_aheu5i"
+    },
+    {
+      "feature": "download",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzpswk5_gvqwe3"
+    },
+    {
+      "feature": "download",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzpt573_vj5u89"
+    },
+    {
+      "feature": "download",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzpt9tj_a3i0cy"
+    },
+    {
+      "feature": "cards",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzq17r7_fc3lkg"
+    },
+    {
+      "feature": "cards",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzq1f3a_qd3w28"
+    },
+    {
+      "feature": "cards",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzq1qb9_3hw7gw"
+    },
+    {
+      "feature": "cards",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzq1xn4_yirkne"
+    },
+    {
+      "feature": "tasks",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzq5hi7_qmm574"
+    },
+    {
+      "feature": "tasks",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzq5o7y_djljtg"
+    },
+    {
+      "feature": "tasks",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzq5zb8_kv3bck"
+    },
+    {
+      "feature": "tasks",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzq66aa_mnvw4m"
+    },
+    {
+      "feature": "install",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzqbs4o_9ditbd"
+    },
+    {
+      "feature": "install",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzqbxbd_i0sl58"
+    },
+    {
+      "feature": "install",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzqc6ei_ylf769"
+    },
+    {
+      "feature": "install",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzqcbgp_gxiu0u"
+    },
+    {
+      "feature": "cards-keep",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzqtfcp_9a2845"
+    },
+    {
+      "feature": "cards-keep",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzqtkcp_7lps8i"
+    },
+    {
+      "feature": "cards-keep",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzqttab_vd5hx1"
+    },
+    {
+      "feature": "cards-keep",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzqtxsr_ay3sdt"
+    },
+    {
+      "feature": "cards-ignore",
+      "theme": "dark",
+      "via": "lan",
+      "session": "sess_mwzquayr_vz8o0d"
+    },
+    {
+      "feature": "cards-ignore",
+      "theme": "dark",
+      "via": "relay",
+      "session": "sess_mwzqufvx_5m36rb"
+    },
+    {
+      "feature": "cards-ignore",
+      "theme": "light",
+      "via": "lan",
+      "session": "sess_mwzquovd_begh6l"
+    },
+    {
+      "feature": "cards-ignore",
+      "theme": "light",
+      "via": "relay",
+      "session": "sess_mwzqutd3_9a7kxe"
+    }
+  ],
+  "download_byte_comparison": {
+    "txt": {
+      "bytes": 14,
+      "source_sha256": "53ec84f8b892ec00491a34002d489022de127ea1da49d8a684547ffaed19ef02",
+      "download_sha256": "53ec84f8b892ec00491a34002d489022de127ea1da49d8a684547ffaed19ef02",
+      "identical": true
+    },
+    "bin": {
+      "bytes": 256000,
+      "source_sha256": "b57b64b198d5d59ce5a22a9b9f25e72a7d081476d432051aa923f3dbebb90934",
+      "download_sha256": "b57b64b198d5d59ce5a22a9b9f25e72a7d081476d432051aa923f3dbebb90934",
+      "identical": true
+    }
+  },
+  "app_tree": "e802c08f881f91b8835a48a941ecc7a7c44b5f6f",
+  "baseline_app_tree": "e802c08f881f91b8835a48a941ecc7a7c44b5f6f",
+  "full_log_last_line": "1486 passed, 9 skipped in 556.32s (0:09:16)"
+}

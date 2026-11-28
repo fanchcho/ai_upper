@@ -8,7 +8,7 @@ app.whenReady().then(async()=>{
  await win.webContents.executeJavaScript(`(async()=>{const f=new FontFace('EvidenceCJK','url(data:font/otf;base64,${fs.readFileSync('.tmp/theme-settings/NotoSansCJKsc-Regular.otf').toString('base64')})');await f.load();document.fonts.add(f);document.body.style.fontFamily='EvidenceCJK,sans-serif'})()`);
  await click('#new');await waitJS('document.querySelector("#sessions").value.startsWith("sess_")');
  await click('#message');await win.webContents.insertText('PHONE_'+via+'_'+theme);await click('#send');
- if(process.env.PHONE_SCENARIO==='cards'){for(const d of ['skipped','approve','approved','denied']){await waitJS('!!document.querySelector('+JSON.stringify('[data-decision="'+d+'"]')+')');fs.writeFileSync(out+'-'+d+'-'+theme+'-'+via+'.png',(await win.webContents.capturePage()).toPNG());await click('[data-decision="'+d+'"]')}}
+ if(process.env.PHONE_SCENARIO==='cards'){for(const d of (process.env.PLAN_DECISION&&process.env.PLAN_DECISION!=='approve'?[process.env.PLAN_DECISION]:['skipped','approve','approved','denied'])){await waitJS('!!document.querySelector('+JSON.stringify('[data-decision="'+d+'"]')+')');fs.writeFileSync(out+'-'+d+'-'+theme+'-'+via+'.png',(await win.webContents.capturePage()).toPNG());await click('[data-decision="'+d+'"]')}}
  await waitJS('document.querySelector("#history").textContent.includes("LOCAL_MODEL_REPLY")');
  if(process.env.PHONE_SCENARIO==='download'){win.webContents.session.on('will-download',(event,item)=>{item.setSavePath(process.cwd()+'/.tmp/phone-evidence/downloaded.'+(item.getFilename().endsWith('.bin')?'bin':'txt'))});
  await click('.delivered');await waitJS('document.querySelector("#file").textContent.includes("DELIVERED_TEXT")');await click('#download');

@@ -12,4 +12,6 @@ AI_UPPER_HOME=/tmp/ai-upper-cards-run QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND
 ```
 LAN/relay × 暗亮四组键鼠点击：mount_workspace → 暂不挂载；exit_plan → 批准；write_file → 允许，真实写出 APPROVED_WRITE；第二次 write_file → 拒绝，文件不存在，工具结果为审批未通过。调用均由本机 HTTP 模型 fixture 发出，真实 ChatHost/工具执行。`cards/cards-{theme}-{via}.json` 为重开文件读取的四种交互决定、plans 边车及完整工具结果。`cards/phone-browser-{skipped,approve,approved,denied}-{theme}-{via}.png` 为点击前真实卡片；最终回复截图无待决卡。`cards/run.log` 原始运行结果。
 
-新增安全测试验证会话越界与重放拒绝：2 passed（含既有 scope 测试）。本机 fixture，不是外部模型/真机/公网成功。keep/ignore 与问答使用既有服务校验；本轮真实键鼠覆盖批准、挂载跳过、执行允许/拒绝。
+新增安全测试验证会话越界与重放拒绝：2 passed（含既有 scope 测试）。本机 fixture，不是外部模型/真机/公网成功。先前真实键鼠覆盖批准、挂载跳过、执行允许/拒绝。恢复核验补齐 keep/ignore，两者分别在 cards-keep 与 cards-ignore 目录保留 LAN/relay × 暗亮的真实鼠标选择、plans 与交互存储读回、宿主工具结果及截图。问答不是本轮新增交互验收项。
+
+远端复核：该项提交 `b3885d0470fd1ce8207acd4aee6297ca98a72559` 已包含在 `origin/develop` 的 `6c62ff9891c2b8dd0b5036fbf2608677a1331c68` 祖先链中，未重写。

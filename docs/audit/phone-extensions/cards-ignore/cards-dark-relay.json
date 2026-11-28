@@ -1,0 +1,73 @@
+{
+  "interactions_reopened": [
+    {
+      "id": "sess_mwzqufvx_5m36rb:plan_test",
+      "session": "sess_mwzqufvx_5m36rb",
+      "operation": "plan_test",
+      "kind": "plan",
+      "question": "本地计划：写入允许文件，拒绝第二次写入。",
+      "choices": [
+        "approve",
+        "keep",
+        "ignore"
+      ],
+      "fingerprint": "e78d0f73bcb0c981c9d1e0402b363d99ef7fd749b0167715cb4e99cf42e1ac4d",
+      "outcome": "ignore",
+      "expires": 1795830351.534326,
+      "answer": ""
+    }
+  ],
+  "plans_reopened": {
+    "plan_test": {
+      "decision": "ignore"
+    }
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "PHONE_relay_dark",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "plan_test",
+          "name": "exit_plan",
+          "input": {
+            "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "toolUseId": "plan_test",
+          "content": "用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。",
+          "isError": null,
+          "images": null,
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "LOCAL_MODEL_REPLY",
+          "listing": null
+        }
+      ]
+    }
+  ]
+}

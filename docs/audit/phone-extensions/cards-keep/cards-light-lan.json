@@ -1,0 +1,73 @@
+{
+  "interactions_reopened": [
+    {
+      "id": "sess_mwzqttab_vd5hx1:plan_test",
+      "session": "sess_mwzqttab_vd5hx1",
+      "operation": "plan_test",
+      "kind": "plan",
+      "question": "本地计划：写入允许文件，拒绝第二次写入。",
+      "choices": [
+        "approve",
+        "keep",
+        "ignore"
+      ],
+      "fingerprint": "e78d0f73bcb0c981c9d1e0402b363d99ef7fd749b0167715cb4e99cf42e1ac4d",
+      "outcome": "keep",
+      "expires": 1795830322.2607703,
+      "answer": ""
+    }
+  ],
+  "plans_reopened": {
+    "plan_test": {
+      "decision": "keep"
+    }
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "PHONE_lan_light",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "plan_test",
+          "name": "exit_plan",
+          "input": {
+            "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "toolUseId": "plan_test",
+          "content": "用户暂不批准，对计划的回复如下：\n\n请调整计划后重新提交。",
+          "isError": null,
+          "images": null,
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "LOCAL_MODEL_REPLY",
+          "listing": null
+        }
+      ]
+    }
+  ]
+}

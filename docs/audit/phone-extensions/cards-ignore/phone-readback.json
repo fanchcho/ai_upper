@@ -1,0 +1,869 @@
+{
+  "boundary": "localhost relay and model fixtures; real sockets/ChatHost/store/browser events; no physical phone or public relay",
+  "results": [
+    {
+      "theme": "dark",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-5f57b6a28e7244f68aaca6391aedfe06/home",
+      "session": "sess_mwzquayr_vz8o0d",
+      "messages_reopened": [
+        "PHONE_lan_dark",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_dd4afe8f49d347ad",
+        "chatId": "d_dd4afe8f49d347ad",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795830043709,
+        "lastSeen": 1795830046504,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzquayr_vz8o0d",
+        "device": "d_dd4afe8f49d347ad",
+        "body": "我：PHONE_lan_dark助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_641926eaa00525f6"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "dark",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-5f57b6a28e7244f68aaca6391aedfe06/home",
+      "session": "sess_mwzqufvx_5m36rb",
+      "messages_reopened": [
+        "PHONE_relay_dark",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_450c5acaa89f89d8",
+        "chatId": "d_450c5acaa89f89d8",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795830050162,
+        "lastSeen": 1795830052294,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzqufvx_5m36rb",
+        "device": "d_450c5acaa89f89d8",
+        "body": "我：PHONE_relay_dark助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_d981639b1b931d36"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "lan",
+      "home": "/tmp/ai-upper-phone-3b6cf5aee62a45939092a479286da0ae/home",
+      "session": "sess_mwzquovd_begh6l",
+      "messages_reopened": [
+        "PHONE_lan_light",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_c32e8a8929b922c3",
+        "chatId": "d_c32e8a8929b922c3",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795830061793,
+        "lastSeen": 1795830064026,
+        "via": "lan",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzquovd_begh6l",
+        "device": "d_c32e8a8929b922c3",
+        "body": "我：PHONE_lan_light助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_5a77c6dc1bc4dd2e"
+      },
+      "revoked_disk_and_key": true
+    },
+    {
+      "theme": "light",
+      "via": "relay",
+      "home": "/tmp/ai-upper-phone-3b6cf5aee62a45939092a479286da0ae/home",
+      "session": "sess_mwzqutd3_9a7kxe",
+      "messages_reopened": [
+        "PHONE_relay_light",
+        "",
+        "",
+        "LOCAL_MODEL_REPLY"
+      ],
+      "delivered_reopened": null,
+      "device_before_revoke": {
+        "id": "d_7564ee45642e04c6",
+        "chatId": "d_7564ee45642e04c6",
+        "name": "Linux x86_64 浏览器",
+        "pairedAt": 1795830067640,
+        "lastSeen": 1795830069740,
+        "via": "relay",
+        "kind": "browser"
+      },
+      "browser": {
+        "sid": "sess_mwzqutd3_9a7kxe",
+        "device": "d_7564ee45642e04c6",
+        "body": "我：PHONE_relay_light助手：LOCAL_MODEL_REPLY",
+        "reload": true,
+        "fresh_qr_after_revoke": "d_08fac8936c66e727"
+      },
+      "revoked_disk_and_key": true
+    }
+  ],
+  "model_http_requests": [
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_dark"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "plan_test",
+              "name": "exit_plan",
+              "input": {
+                "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "plan_test",
+              "content": "用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_dark",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_dark"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "plan_test",
+              "name": "exit_plan",
+              "input": {
+                "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "plan_test",
+              "content": "用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_lan_light"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "plan_test",
+              "name": "exit_plan",
+              "input": {
+                "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "plan_test",
+              "content": "用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_light",
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/v1/messages",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "PHONE_relay_light"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "plan_test",
+              "name": "exit_plan",
+              "input": {
+                "plan": "本地计划：写入允许文件，拒绝第二次写入。"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "plan_test",
+              "content": "用户忽略了这份计划：不要执行，也不要重新提交，用一句话确认后结束本轮。",
+              "is_error": false,
+              "cache_control": {
+                "type": "ephemeral"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relay_envelopes": [
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/9600528f3fda3780"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "1"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "2"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "3"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "3"
+    },
+    {
+      "t": "desk-authenticated",
+      "path": "/desk/8ec3c1ac3cd66c9d"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "4"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "5"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "inbound",
+      "c": "6"
+    },
+    {
+      "t": "msg",
+      "direction": "outbound",
+      "c": "6"
+    },
+    {
+      "t": "close",
+      "direction": "outbound",
+      "c": "6"
+    }
+  ]
+}

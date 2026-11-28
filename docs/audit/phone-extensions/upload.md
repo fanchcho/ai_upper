@@ -14,3 +14,5 @@ AI_UPPER_HOME=/tmp/ai-upper-upload-run QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEN
 `phone-readback.json` 四组 LAN/relay × 暗/亮记录包含独立 /tmp home、实际模型 HTTP 请求、重开 ChatSessionStore 读出的附件正文和回复、设备记录。`phone-browser-{dark,light}-{lan,relay}.png` 为真实渲染。测试真实键鼠发送，文件用 CDP 的 DOM.setFileInputFiles 选取真实磁盘文件。原生 GTK 文件选择器在本宿主报 `No GSettings schemas are installed on the system`，日志 `file-chooser-failure.log`，core 保留在 `.tmp/phone-extensions/file-chooser.core`；不将 CDP 选文件说成原生选择器成功。
 
 验证边界：LAN 是真实本机监听；relay 与模型是 127.0.0.1 fixture，ChatHost、加密协议、HTTP、磁盘与浏览器均真实执行。没有公网 relay、真实手机或外部模型成功态。已通过附件属于其他设备拒绝、乱序删除未完成文件的新增测试。既有断言未改。
+
+远端复核：该项提交 `564d226da261c9496599931b4d780fef7ad93ab6` 已包含在 `origin/develop` 的 `6c62ff9891c2b8dd0b5036fbf2608677a1331c68` 祖先链中，未重写。

@@ -14,7 +14,8 @@ from PySide6.QtGui import QGuiApplication,QFontDatabase
 from PySide6.QtCore import Qt,QPointF
 from PySide6.QtTest import QTest
 scenario=sys.argv[1] if len(sys.argv)>1 else 'download'
-out=Path('docs/audit/phone-extensions')/scenario;out.mkdir(parents=True,exist_ok=True);tmp=Path('.tmp/phone-evidence');tmp.mkdir(parents=True,exist_ok=True)
+plan_decision=os.environ.get('PLAN_DECISION','approve')
+out=Path('docs/audit/phone-extensions')/(scenario if plan_decision=='approve' else scenario+'-'+plan_decision);out.mkdir(parents=True,exist_ok=True);tmp=Path('.tmp/phone-evidence');tmp.mkdir(parents=True,exist_ok=True)
 requests=[]
 class Model(BaseHTTPRequestHandler):
  def do_POST(self):
@@ -25,6 +26,7 @@ class Model(BaseHTTPRequestHandler):
   if scenario=='cards':
    count=sum(p.get('type')=='tool_result' for m in data['messages'] for p in (m.get('content') if isinstance(m.get('content'),list) else []))
    tools=[('mount_test','mount_workspace',{'question':'这个本地测试是否指定工作区？'}),('plan_test','exit_plan',{'plan':'本地计划：写入允许文件，拒绝第二次写入。'}),('allow_test','write_file',{'path':str((tmp/'allowed.txt').resolve()),'content':'APPROVED_WRITE'}),('deny_test','write_file',{'path':str((tmp/'denied.txt').resolve()),'content':'MUST_NOT_WRITE'})]
+   if plan_decision!='approve':tools=tools[1:2]
    if count<len(tools):
     tid,name,args=tools[count]
     events=[('message_start',{'type':'message_start','message':{'usage':{'input_tokens':7}}}),('content_block_start',{'type':'content_block_start','index':0,'content_block':{'type':'tool_use','id':tid,'name':name,'input':{}}}),('content_block_delta',{'type':'content_block_delta','index':0,'delta':{'type':'input_json_delta','partial_json':json.dumps(args)}}),('content_block_stop',{'type':'content_block_stop','index':0}),('message_delta',{'type':'message_delta','delta':{'stop_reason':'tool_use'},'usage':{'output_tokens':2}}),('message_stop',{'type':'message_stop'})]
@@ -84,9 +86,10 @@ for theme in ('dark','light'):
    assert (tmp/'downloaded.bin').read_bytes()==(tmp/'delivered.bin').read_bytes()
   if scenario=='cards':
    interactions=[json.loads(p.read_text()) for p in (h/'data'/'interactions').rglob('*.json') if json.loads(p.read_text()).get('session')==sid]
-   assert {r['outcome'] for r in interactions}=={'approve','approved','denied','skipped'},interactions
-   assert (tmp/'allowed.txt').read_text()=='APPROVED_WRITE' and not (tmp/'denied.txt').exists()
-   assert session.plans['plan_test']['decision']=='approve',session.plans
+   assert {r['outcome'] for r in interactions}==({'approve','approved','denied','skipped'} if plan_decision=='approve' else {plan_decision}),interactions
+   if plan_decision=='approve':assert (tmp/'allowed.txt').read_text()=='APPROVED_WRITE' and not (tmp/'denied.txt').exists()
+   else:assert not (tmp/'allowed.txt').exists() and not (tmp/'denied.txt').exists()
+   assert session.plans['plan_test']['decision']==plan_decision,session.plans
    (out/f'cards-{theme}-{via}.json').write_text(json.dumps({'interactions_reopened':interactions,'plans_reopened':session.plans,'messages':[m.model_dump() for m in session.messages]},ensure_ascii=False,indent=2))
   if scenario=='tasks':
    task_session=reopened.load_session(task_id)

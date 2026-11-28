@@ -11,3 +11,5 @@ AI_UPPER_HOME=/tmp/ai-upper-tasks-run QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND
 四组 LAN/relay × 暗亮：真实浏览器鼠标打开任务详情 → 暂停 → 恢复 → 立即运行 → 查看任务对话 → 删除。ChatHost 真实调用本机模型 HTTP fixture，任务对话有 TASK_REAL_HOST 和 LOCAL_MODEL_REPLY；重新打开 ChatSessionStore 读回任务回合，同时读取 tasks.json 验证 paused/active/runs 和最终删除。`tasks/tasks-{theme}-{via}.json` 保存状态变化与读盘结果，`tasks/phone-browser-tasks-{theme}-{via}.png` 详情截图，`tasks/run.log` 原始结果。新增完成任务恢复拒绝与非法动作测试，结合卡片/范围测试为 3 passed。
 
 只证明本机端点与真实宿主闭环，不是公网、真机或外部模型/推送成功。运行期间删除仍遵循宿主现有拒绝规则，不中断正在执行的任务。
+
+远端复核：该项提交 `cd28ad9139eb76038ba3f94cd19800352fa5a2af` 已包含在 `origin/develop` 的 `6c62ff9891c2b8dd0b5036fbf2608677a1331c68` 祖先链中，未重写。

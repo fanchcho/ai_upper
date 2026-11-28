@@ -11,3 +11,5 @@ AI_UPPER_HOME=/tmp/ai-upper-download-run QT_QPA_PLATFORM=offscreen QT_QUICK_BACK
 四组浏览器键鼠（LAN/relay × 暗亮）发消息 → 真实 ChatHost 请求本机模型 fixture → 返回 present_files 工具调用 → 真实工具登记交付边车 → 手机点击下载文本与 256000 字节文件（跨块）→ 浏览器 download 实际写盘，逐字节比较源文件 → 重开 ChatSessionStore 读出 delivered 边车。结果 `download/phone-readback.json`，截图 `download/phone-browser-{dark,light}-{lan,relay}.png`，原始日志 `download/run.log`。单测覆盖未登记工具、布尔序号、文件移除拒绝：2 passed（含既有 scope 测试）。
 
 边界：本机 LAN 与 relay/model fixture，非公网/真机；Office 路径复用现有解析器，本轮端到端样本为 txt 和 bin。无外部送达成功声明。
+
+远端复核：该项提交 `b5d2c3029cd27e74a7aa30813125dcc5f344c1db` 已包含在 `origin/develop` 的 `6c62ff9891c2b8dd0b5036fbf2608677a1331c68` 祖先链中，未重写。
