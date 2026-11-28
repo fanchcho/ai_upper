@@ -10,7 +10,7 @@ from test_qml_shell import text_stream
 from qml_shell import _pump
 from PySide6.QtGui import QImage
 os.environ['GIT_AUTHOR_DATE']='2026-01-01T00:00:00Z'; os.environ['GIT_COMMITTER_DATE']='2026-01-01T00:00:00Z'
-phase='menu';theme=sys.argv[1]; out=ROOT/'docs/audit/git-version'; out.mkdir(exist_ok=True)
+phase='menu';theme=sys.argv[1]; out=ROOT/(sys.argv[2] if len(sys.argv)>2 else 'docs/audit/git-version'); out.mkdir(parents=True,exist_ok=True)
 app=QApplication([])
 QFontDatabase.addApplicationFont(str(ROOT/'.tmp/theme-settings/NotoSansCJKsc-Regular.otf'))
 tmp=Path(tempfile.mkdtemp(prefix='ai-upper-git-display-',dir='/tmp'))
@@ -38,8 +38,9 @@ click('gitMenu_fetch');fetch=(repo/'.git/FETCH_HEAD').read_text();notice=item('g
 click('gitMenu_branches');snap('branches')
 click('gitMenu_create');typein('gitNewBranchName','new-menu-branch');click('gitBranchConfirm');branch=git('branch','--show-current');snap('created')
 QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,QPoint(100,100));pump();click('gitChip');click('gitMenu_commit');snap('commit')
+geometry={n:{'width':item(n).property('width'),'height':item(n).property('height')} for n in ('gitCommitDialog','gitNewCommitMessage','gitNewGenerate','gitNewSubmit')}
 typein('gitNewCommitMessage','Commit through original-style modal');click('gitNewSubmit');pump();latest=git('log','-1','--format=%h %s');assert 'Commit through original-style modal' in latest
-(out/f'{theme}-interaction.json').write_text(json.dumps({'menu_rect':menu_rect,'home':str(home),'branch':branch,'fetch_head':fetch,'notice':notice,'commit':latest,'status':git('status','--porcelain')},ensure_ascii=False,indent=2))
+(out/f'{theme}-interaction.json').write_text(json.dumps({'menu_rect':menu_rect,'geometry':geometry,'home':str(home),'branch':branch,'fetch_head':fetch,'notice':notice,'commit':latest,'status':git('status','--porcelain')},ensure_ascii=False,indent=2))
 QTest.mouseClick(w,Qt.LeftButton,Qt.NoModifier,QPoint(100,100));pump()
 b._vault.delete_secret('p1');w.setProperty('page','settings-models-provider');pump();snap('warning')
 t.stop();w.close();e.deleteLater();pump()

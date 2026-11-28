@@ -1,0 +1,378 @@
+{
+  "before": {
+    "dark": {
+      "size": [
+        1280,
+        1060
+      ],
+      "backdrop": {
+        "xy": [
+          900,
+          200
+        ],
+        "hex": "#4a4a4b"
+      },
+      "dialog_surface": {
+        "xy": [
+          420,
+          500
+        ],
+        "hex": "#2a2a2e"
+      },
+      "dialog_border": {
+        "xy": [
+          410,
+          500
+        ],
+        "hex": "#2f2f33"
+      },
+      "input_surface": {
+        "xy": [
+          600,
+          550
+        ],
+        "hex": "#2a2a2e"
+      },
+      "input_border": {
+        "xy": [
+          430,
+          550
+        ],
+        "hex": "#3d3d42"
+      },
+      "placeholder": {
+        "xy": [
+          451,
+          502
+        ],
+        "hex": "#a1a1aa"
+      },
+      "heading": {
+        "xy": [
+          433,
+          422
+        ],
+        "hex": "#e4e4e7"
+      },
+      "menu_surface": {
+        "xy": [
+          543,
+          808
+        ],
+        "hex": "#2a2a2e"
+      },
+      "menu_separator": {
+        "xy": [
+          560,
+          920
+        ],
+        "hex": "#2f2f33"
+      },
+      "warning_surface": {
+        "xy": [
+          550,
+          422
+        ],
+        "hex": "#363227"
+      },
+      "warning_border": {
+        "xy": [
+          550,
+          416
+        ],
+        "hex": "#816b29"
+      },
+      "warning_text": {
+        "xy": [
+          524,
+          428
+        ],
+        "hex": "#fcc419"
+      },
+      "heading_contrast": 11.266,
+      "placeholder_contrast": 5.577,
+      "warning_contrast": 7.945
+    },
+    "light": {
+      "size": [
+        1280,
+        1060
+      ],
+      "backdrop": {
+        "xy": [
+          900,
+          200
+        ],
+        "hex": "#bbbbbb"
+      },
+      "dialog_surface": {
+        "xy": [
+          420,
+          500
+        ],
+        "hex": "#ffffff"
+      },
+      "dialog_border": {
+        "xy": [
+          410,
+          500
+        ],
+        "hex": "#e6e6ea"
+      },
+      "input_surface": {
+        "xy": [
+          600,
+          550
+        ],
+        "hex": "#ffffff"
+      },
+      "input_border": {
+        "xy": [
+          430,
+          550
+        ],
+        "hex": "#d5d5db"
+      },
+      "placeholder": {
+        "xy": [
+          451,
+          502
+        ],
+        "hex": "#5c5c66"
+      },
+      "heading": {
+        "xy": [
+          433,
+          422
+        ],
+        "hex": "#1f1f24"
+      },
+      "menu_surface": {
+        "xy": [
+          543,
+          808
+        ],
+        "hex": "#ffffff"
+      },
+      "menu_separator": {
+        "xy": [
+          560,
+          920
+        ],
+        "hex": "#e6e6ea"
+      },
+      "warning_surface": {
+        "xy": [
+          550,
+          422
+        ],
+        "hex": "#f5efe6"
+      },
+      "warning_border": {
+        "xy": [
+          550,
+          416
+        ],
+        "hex": "#e1c091"
+      },
+      "warning_text": {
+        "xy": [
+          524,
+          428
+        ],
+        "hex": "#d9860b"
+      },
+      "heading_contrast": 16.41,
+      "placeholder_contrast": 6.608,
+      "warning_contrast": 2.494
+    }
+  },
+  "final": {
+    "dark": {
+      "size": [
+        1280,
+        1060
+      ],
+      "backdrop": {
+        "xy": [
+          900,
+          200
+        ],
+        "hex": "#111113"
+      },
+      "dialog_surface": {
+        "xy": [
+          420,
+          500
+        ],
+        "hex": "#2a2a2e"
+      },
+      "dialog_border": {
+        "xy": [
+          410,
+          500
+        ],
+        "hex": "#2f2f33"
+      },
+      "input_surface": {
+        "xy": [
+          600,
+          550
+        ],
+        "hex": "#2a2a2e"
+      },
+      "input_border": {
+        "xy": [
+          431,
+          550
+        ],
+        "hex": "#3d3d42"
+      },
+      "placeholder": {
+        "xy": [
+          445,
+          486
+        ],
+        "hex": "#a1a1aa"
+      },
+      "heading": {
+        "xy": [
+          437,
+          409
+        ],
+        "hex": "#e4e4e7"
+      },
+      "menu_surface": {
+        "xy": [
+          543,
+          808
+        ],
+        "hex": "#2a2a2e"
+      },
+      "menu_separator": {
+        "xy": [
+          560,
+          920
+        ],
+        "hex": "#2f2f33"
+      },
+      "warning_surface": {
+        "xy": [
+          550,
+          422
+        ],
+        "hex": "#363227"
+      },
+      "warning_border": {
+        "xy": [
+          550,
+          416
+        ],
+        "hex": "#816b29"
+      },
+      "warning_text": {
+        "xy": [
+          524,
+          428
+        ],
+        "hex": "#fcc419"
+      },
+      "heading_contrast": 11.266,
+      "placeholder_contrast": 5.577,
+      "warning_contrast": 7.945
+    },
+    "light": {
+      "size": [
+        1280,
+        1060
+      ],
+      "backdrop": {
+        "xy": [
+          900,
+          200
+        ],
+        "hex": "#949494"
+      },
+      "dialog_surface": {
+        "xy": [
+          420,
+          500
+        ],
+        "hex": "#ffffff"
+      },
+      "dialog_border": {
+        "xy": [
+          410,
+          500
+        ],
+        "hex": "#e6e6ea"
+      },
+      "input_surface": {
+        "xy": [
+          600,
+          550
+        ],
+        "hex": "#ffffff"
+      },
+      "input_border": {
+        "xy": [
+          431,
+          550
+        ],
+        "hex": "#d5d5db"
+      },
+      "placeholder": {
+        "xy": [
+          445,
+          486
+        ],
+        "hex": "#5c5c66"
+      },
+      "heading": {
+        "xy": [
+          437,
+          409
+        ],
+        "hex": "#1f1f24"
+      },
+      "menu_surface": {
+        "xy": [
+          543,
+          808
+        ],
+        "hex": "#ffffff"
+      },
+      "menu_separator": {
+        "xy": [
+          560,
+          920
+        ],
+        "hex": "#e6e6ea"
+      },
+      "warning_surface": {
+        "xy": [
+          550,
+          422
+        ],
+        "hex": "#f5efe6"
+      },
+      "warning_border": {
+        "xy": [
+          550,
+          416
+        ],
+        "hex": "#e1c091"
+      },
+      "warning_text": {
+        "xy": [
+          524,
+          428
+        ],
+        "hex": "#d9860b"
+      },
+      "heading_contrast": 16.41,
+      "placeholder_contrast": 6.608,
+      "warning_contrast": 2.494
+    }
+  }
+}

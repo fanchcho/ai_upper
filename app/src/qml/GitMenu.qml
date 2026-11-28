@@ -5,6 +5,12 @@ import QtQuick.Layouts
 import "."
 Popup {
  id: root
+ component GitActionButton: SettingsButton {
+  implicitHeight:30
+  implicitWidth:contentItem.implicitWidth+26
+  leftPadding:12;rightPadding:12;topPadding:0;bottomPadding:0
+  font.weight:Font.Medium
+ }
  objectName: "gitMenu"
  property string repoRoot: ""
  property var status: ({})
@@ -19,7 +25,10 @@ Popup {
  property string filter: ""
  width: view === "main" ? 148 : 300; padding: 6
  height: Math.min(menuColumn.implicitHeight + 12, parent.height - 16)
- background: Rectangle { color: Theme.bgElevated; border.color: Theme.border; radius: Theme.radiusLg }
+ background: Item {
+  SoftShadow { target: menuSurface }
+  Rectangle { id:menuSurface; anchors.fill:parent; color:Theme.bgElevated; border.color:Theme.border; radius:Theme.radiusLg }
+ }
  onRepoRootChanged: if (repoRoot) reload()
  onOpened: { view = "main"; filter = ""; reload() }
  function reload() { status = shellBridge.gitStatus(repoRoot); branches = shellBridge.gitBranches(repoRoot).branches || [] }
@@ -102,14 +111,18 @@ Popup {
  }
  Popup {
   id:commitDialog;objectName:"gitCommitDialog";parent:Overlay.overlay
-  x:(parent.width-width)/2;y:(parent.height-height)/2;width:460;padding:20;height:commitColumn.implicitHeight+40;modal:true
+  x:(parent.width-width)/2;y:(parent.height-height)/2;width:460;padding:21;height:commitColumn.implicitHeight+42;modal:true
+  Overlay.modal:Rectangle { color:Qt.rgba(0,0,0,0.42) }
   onClosed:if(root.generating){shellBridge.cancelCommitMessage(root.requestId);root.generating=false}
-  background:Rectangle {color:Theme.bgElevated;border.color:Theme.border;radius:Theme.radiusLg}
+  background:Item {
+   SoftShadow { target: commitSurface }
+   Rectangle { id:commitSurface;anchors.fill:parent;color:Theme.bgElevated;border.color:Theme.border;radius:Theme.radiusLg }
+  }
   ColumnLayout {
    id:commitColumn;width:parent.width;spacing:12
-   Text {text:"提交更改";font.pixelSize:18;font.bold:true;color:Theme.fg}
-   Text {text:(root.status.entries||[]).length?"将暂存并提交 "+root.status.entries.length+" 项更改":"没有可提交的更改";color:Theme.fgMuted}
-   TextArea {id:commitText;objectName:"gitNewCommitMessage";Layout.fillWidth:true;Layout.preferredHeight:110;readOnly:root.generating;placeholderText:"填写提交信息…";placeholderTextColor:Theme.fgMuted;color:Theme.fg;wrapMode:TextEdit.Wrap;padding:12;background:Rectangle{color:Theme.bgElevated;border.color:Theme.borderStrong;radius:Theme.radiusSm}}
+   Text {objectName:"gitCommitTitle";text:"提交更改";font.family:Theme.sansFamily;font.pixelSize:15;font.weight:Font.DemiBold;color:Theme.fg}
+   Text {Layout.topMargin:4;Layout.bottomMargin:10;text:(root.status.entries||[]).length?"将暂存并提交 "+root.status.entries.length+" 项更改":"没有可提交的更改";font.pixelSize:12;color:Theme.fgMuted}
+   TextArea {id:commitText;objectName:"gitNewCommitMessage";Layout.fillWidth:true;Layout.preferredHeight:120;readOnly:root.generating;placeholderText:"填写提交信息…";placeholderTextColor:Theme.fgMuted;color:Theme.fg;font.family:Theme.sansFamily;font.pixelSize:13;wrapMode:TextEdit.Wrap;leftPadding:12;rightPadding:12;topPadding:0;bottomPadding:0;background:Rectangle{color:Theme.bgElevated;border.color:commitText.activeFocus?Theme.accent:Theme.borderStrong;radius:Theme.radiusSm}}
    ColumnLayout {
     visible:root.identityNeeded;Layout.fillWidth:true
     Text {text:"配置 Git 提交身份";color:Theme.fg}
@@ -120,11 +133,11 @@ Popup {
    }
    Text {Layout.fillWidth:true;text:root.notice;color:Theme.fgMuted;wrapMode:Text.Wrap;visible:text.length>0}
    RowLayout {
-    Layout.fillWidth:true
-    SettingsButton {objectName:"gitNewGenerate";text:root.generating?"停止生成":"AI 生成";ghost:true;onClicked:{if(root.generating){shellBridge.cancelCommitMessage(root.requestId);root.generating=false}else{root.requestId="git-menu-"+Date.now();root.generating=shellBridge.generateCommitMessage(root.repoRoot,root.requestId)}}}
+    Layout.fillWidth:true;Layout.topMargin:12;spacing:8
+    GitActionButton {objectName:"gitNewGenerate";text:root.generating?"停止生成":"AI 生成";ghost:true;onClicked:{if(root.generating){shellBridge.cancelCommitMessage(root.requestId);root.generating=false}else{root.requestId="git-menu-"+Date.now();root.generating=shellBridge.generateCommitMessage(root.repoRoot,root.requestId)}}}
     Item {Layout.fillWidth:true}
-    SettingsButton {text:"取消";ghost:true;onClicked:commitDialog.close()}
-    SettingsButton {objectName:"gitNewSubmit";text:"提交";primary:true;enabled:!root.generating&&commitText.text.trim().length>0&&(root.status.entries||[]).length>0;onClicked:root.submit()}
+    GitActionButton {text:"取消";ghost:true;onClicked:commitDialog.close()}
+    GitActionButton {objectName:"gitNewSubmit";text:"提交";primary:true;enabled:!root.generating&&commitText.text.trim().length>0&&(root.status.entries||[]).length>0;onClicked:root.submit()}
    }
   }
  }

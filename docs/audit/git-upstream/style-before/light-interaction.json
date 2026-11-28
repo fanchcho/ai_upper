@@ -1,0 +1,14 @@
+{
+  "menu_rect": [
+    539.96875,
+    778.0,
+    148.0,
+    219.0
+  ],
+  "home": "/tmp/ai-upper-git-display-5xfup8ea/home",
+  "branch": "new-menu-branch",
+  "fetch_head": "14debe2baa41a9b8076e864aa34aff0e4c35ce92\t\tbranch 'main' of /tmp/ai-upper-git-display-5xfup8ea/home/remote\n",
+  "notice": "已获取远端更新",
+  "commit": "a6dcb8e Commit through original-style modal",
+  "status": ""
+}
