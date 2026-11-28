@@ -88,6 +88,61 @@ def test_services_belong_to_the_application_that_registered_them():
     assert second.get_service("demo") is None
 
 
+def test_disposing_one_view_preserves_the_shared_viewmodel():
+    from types import SimpleNamespace
+    from mvvm.core import BaseViewModel, ObservableProperty
+    from mvvm.views import ViewBase
+
+    vm = BaseViewModel()
+    vm._register_property("value", ObservableProperty(0))
+    first, second = ViewBase(vm), ViewBase(vm)
+    first_widget, second_widget = SimpleNamespace(value=0), SimpleNamespace(value=0)
+    first.bind_property("value", first_widget)
+    second.bind_property("value", second_widget)
+    events = []
+    vm.subscribe_property_changed(lambda event: events.append(event.new_value))
+
+    first.dispose()
+    assert vm.set_property_value("value", 7)
+    assert first_widget.value == 0
+    assert second_widget.value == 7
+    assert events == [7]
+
+
+def test_container_disposes_shared_viewmodel_once_after_all_views():
+    from mvvm.core import BaseViewModel
+    from mvvm.mvvm_application import MVVMApplication
+    from mvvm.views import ViewBase
+
+    events = []
+
+    class VM(BaseViewModel):
+        def dispose(self):
+            events.append("vm.dispose")
+            super().dispose()
+
+    class View(ViewBase):
+        def __init__(self, vm, name):
+            super().__init__(vm)
+            self.name = name
+
+        def close(self):
+            events.append(self.name + ".close")
+
+        def dispose(self):
+            events.append(self.name + ".dispose")
+            super().dispose()
+
+    app = MVVMApplication()
+    vm = VM()
+    app.register_viewmodel("shared", vm)
+    for name in ("first", "second"):
+        app.register_view(name, View(vm, name))
+    app.stop()
+    app.stop()
+    assert events == ["first.close", "first.dispose", "second.close", "second.dispose", "vm.dispose"]
+
+
 def test_a_binding_can_target_a_setter_method():
     """``bind_property(..., 'setText')`` has to call setText.
 

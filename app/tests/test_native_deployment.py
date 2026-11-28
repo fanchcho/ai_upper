@@ -133,6 +133,14 @@ def test_linux_cross_build_never_reads_host_loader_cache(monkeypatch):
     assert deps.linux_host_libraries(TARGETS["linux-x86_64"]) == {}
 
 
+def test_linux_xcb_session_libraries_are_host_dependencies(closure_workspace, monkeypatch):
+    root = closure_workspace
+    _elf(root / "site-packages" / "libQt6XcbQpa.so.6")
+    monkeypatch.setattr(bundle, "dependency_names", lambda path, env: ["libICE.so.6", "libSM.so.6"])
+    result = bundle.bundle_native_dependencies(root, TARGETS["linux-x86_64"])
+    assert result == []
+
+
 def test_linux_closure_bundles_host_dependencies_transitively(closure_workspace, monkeypatch):
     root = closure_workspace
     owner = _elf(root / "site-packages" / "module.so")

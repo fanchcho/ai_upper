@@ -2,7 +2,7 @@
 
 本文是 `py_upper` 的完整开发与使用手册：从环境准备、日常开发、打包发布，到 Qt 应用处理、依赖管理和排错。README 讲的是"是什么"，本文讲的是"怎么用、为什么这么设计、出问题怎么查"。
 
-当前稳定线：**0.17.35**。
+当前稳定线：**0.17.37**。各层职责与生命周期约定见 [框架总览](ARCHITECTURE.md)。
 
 ---
 
@@ -109,7 +109,7 @@ python tools/build.py --app ../myapp --doctor
 # 1. 写代码：app/src 就是应用源码
 app/src/
 ├── main.py            # 入口（由 [tool.py_upper].entry 指定），只把控制权交给 application
-├── application.py     # ★ 装配处：MVVM 的对象图在这里接起来（见 §9.5）
+├── application.py     # ★ 装配处：MVVM 的对象图在这里接起来（见 §9.6）
 ├── mvvm/              # MVVM 骨架：core / models / view_models / views / services
 ├── utils/             # 运行时胶水：paths（launcher 契约）、qt_compat（Qt 名字唯一入口）
 └── ...
@@ -178,7 +178,7 @@ py_upper/
 ```toml
 [project]
 name = "py_upper"
-version = "0.17.35"
+version = "0.17.37"
 requires-python = ">=3.8,<3.14"
 dependencies = ["PySide6==6.11.0", "pyserial==3.5"]
 
@@ -279,7 +279,7 @@ PYTHONPATH=src python src/main.py
 
 注意：直接运行 `main()` 会尝试打开 Qt 窗口；CI/无显示环境加 `PY_UPPER_HEADLESS=1`。
 
-还没装 Qt 时也能看到装配跑通：`import application` 不加载任何 binding（见 §9.5），
+还没装 Qt 时也能导入装配入口：`import application` 不加载任何 binding（见 §9.6），
 `PYTHONPATH=src python -c "from application import run_application; run_application()"` 只打印问候语，不碰 Qt。
 
 ### 6.2 测试
@@ -426,7 +426,7 @@ class Window(QtWidgets.QMainWindow):
 2. 拼错的子模块（`QtWidget`）在 import 那一行就报 `ImportError`，不会拖到用的时候；
 3. `Signal` / `Slot` 由这里转出：PySide 侧是 `Signal`/`Slot`，PyQt 侧是 `pyqtSignal`/`pyqtSlot`，应用代码只写一种拼法；
 4. 整个 `app/src` 里只有 `utils/qt_compat.py` 允许出现 binding 名，`app/tests/test_qt_compat.py` 用 ast 不变式锁住这条；换 binding 只改 `app/pyproject.toml` 的依赖，应用代码与 Qt 剪枝都跟着走；
-5. 应用自己的模块也别在模块级 import Qt：`mvvm/views/*.py` 和 `mvvm/mvvm_bootstrap.py` 把 Qt 名字放在真正建窗口的那个函数里（见 §9.5）。模块级 import 会让「import 应用入口」变成「必须装 Qt」——pytest、pyflakes、Cython 编译全被拖进来，而它们本来不需要 binding。
+5. 应用自己的模块也别在模块级 import Qt：`mvvm/views/*.py` 和 `mvvm/mvvm_bootstrap.py` 把 Qt 名字放在真正建窗口的那个函数里（见 §9.6）。模块级 import 会让「import 应用入口」变成「必须装 Qt」——pytest、pyflakes、Cython 编译全被拖进来，而它们本来不需要 binding。
 6. 事件循环也从这里进：Qt6 的入口叫 `exec`，Qt5 只有 `exec_`，应用代码写死任一个就等于绑死一个 Qt 大版本（PySide2 包会开完窗口再崩在 `AttributeError: ... has no attribute 'exec'`）。唯一入口是 `utils.qt_compat.exec_loop(app)`，`app/src` 里再出现 `.exec(`/`.exec_(` 会被 `app/tests/test_qt_compat.py` 的 ast 不变式拦下。
 
 ### 9.2 窗口与 headless
@@ -595,7 +595,7 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 `examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`，以及
 `qwebgl` 平台插件（它会牵连 QtQuick/QtQml；`qoffscreen` 保留给 headless 冒烟）。
 
-### 9.6 加密 egg（默认开启）
+### 9.5 加密 egg（默认开启）
 
 `[tool.py_upper.egg]` 把应用自己的 Python 模块与本次构建产出的扩展收进一个
 `bundle/py_upper.dat`，不再以散文件留在 `site-packages`。格式是
@@ -714,7 +714,7 @@ loader，先 `install()` 再导入入口。
 §9.3/§9.4。memory 后端下模块的 `__file__` 是 `bundle/py_upper.dat` 内的虚拟路径，依赖
 真实文件路径的代码需要自己处理；extract 后端则指向临时目录。
 
-### 9.5 MVVM 应用骨架
+### 9.6 MVVM 应用骨架
 
 `app/src/mvvm/` 是一个能跑的最小 MVVM 骨架，依赖方向单向：View → ViewModel → Model/Service，反向靠属性的变更通知回来。
 
@@ -733,7 +733,7 @@ app/src/
 
 规则：
 
-1. 四层互相不 import 具体实现，`application.py` 是唯一同时 import models / view_models / views / services 的文件；换实现只改这一个文件；
+1. `application.py` 负责创建与连接对象；View 可以引用 ViewModel 类型，ViewModel 可以引用 Model/Service 类型，下层不反向 import View。替换依赖时在装配处传入新实现；
 2. `models/`、`view_models/`、`services/` 不 import Qt——它们只持有数据和命令，界面能不能显示与它们无关；
 3. Qt 名字在真正建窗口的地方才 import（`MainWindow.__init__`、`create_application()`），所以 `import application` 不加载任何 binding；
 4. 「服务」是注入进去的能力，不是全局单例：`GreetingService` 由装配处注册进容器，再传给 ViewModel；
@@ -749,10 +749,12 @@ application.get_viewmodel("main")
 application.register_view("main", MainWindow(...))
 application.get_view("main")
 application.start()   # 置位运行标记 + 依次 show 所有已注册 View
-application.stop()    # close 所有 View → dispose 所有 ViewModel → 清空注册表
+application.stop()    # 逐个 close/dispose View → dispose ViewModel → 清空两类注册表
 ```
 
-`MVVMQtApplication`（`mvvm/mvvm_bootstrap.py`）只固定顺序：`setup()` 建容器 → `initialize_viewmodels()` → `initialize_views()` → `start()`，`run()` 再进 Qt 事件循环。`run()` 进循环走 `utils.qt_compat.exec_loop()`，因为 Qt6 把入口叫 `exec`、Qt5 只有 `exec_`（见 §9.1）。子类只写 `initialize_viewmodels()` 和 `initialize_views()` 这两个钩子。
+`MVVMQtApplication`（`mvvm/mvvm_bootstrap.py`）固定顺序：`setup()` 建容器 → `initialize_viewmodels()` → `initialize_views()` → `start()`。运行中的 `prepare()` 复用当前对象图。`run()` 通过 `utils.qt_compat.exec_loop()` 进入事件循环；`run(headless=True)` 只调用一次 `processEvents()`。两条路径均在 `finally` 中停止容器，装配或事件处理抛异常也清理已注册对象。Qt6 的循环入口叫 `exec`、Qt5 只有 `exec_`，适配由 shim 负责（见 §9.1）。子类只写两个初始化钩子；headless 的平台环境变量必须在创建 QApplication 前设置，示例 `run_gui()` 已负责此步骤。
+
+资源归属：View 只解除自己创建的属性绑定、命令信号和额外订阅，不能销毁共享 ViewModel；容器在所有 View 清理之后释放已注册的 ViewModel。手工创建、未注册到容器的 ViewModel 由创建方调用 `dispose()`。直接调用 `prepare()` 的嵌入者负责最终 `quit()`；通常使用自带清理的 `run()`。
 
 绑定 API（`mvvm/views/base_view.py`，View 继承 `ViewBase`）：
 
@@ -775,7 +777,8 @@ MainWindow._on_viewmodel_property_changed ─────→ AboutWindow.show()
 AboutWindow 的「关闭」按钮 ─CommandBinding→ MainViewModel.hide_about_command → about_visible = False → AboutWindow.close()
 ```
 
-`about_visible` 是唯一真相源：主窗口和「关于」窗口都不自己存可见状态，谁都不需要知道对方存在。主窗口拿到的「关于」窗口是构造参数（`MainWindow(viewmodel, about_window)`），不是自己 new 的。
+按钮链路通过 `about_visible` 驱动窗口：ViewModel 不认识具体窗口。主窗口拿到的「关于」视图是构造参数（`MainWindow(viewmodel, about_window)`），不是自己创建它；主窗口的额外属性订阅会在 `dispose()` 中解除。
+原生关闭或拒绝对话框通过 `finished` 信号绑定同一个 `hide_about` 命令，避免窗口已经关闭但 `about_visible` 仍为 True，导致按钮无法再次打开。信号语义见 [Qt QDialog 文档](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QDialog.html#PySide6.QtWidgets.QDialog.finished)。
 「关于」视图照常注册，但首次显示才创建 Qt 控件并读取最新的 ViewModel 内容。同步命令
 不加载异步运行时；`AsyncRelayCommand.execute()` 首次调度时才导入 `asyncio`。
 
@@ -884,7 +887,7 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 
 - **macOS**：对嵌套 dylib/so 与应用本体签名，`--notary-profile` 时提交公证并 staple。
 - **Windows**：需要 `signtool` 与 `PY_UPPER_SIGN_CERT`。
-- **Linux**：交给发行版打包/签名体系。
+- **Linux**：CPack 生成 TGZ/DEB，可用 `--linux-format RPM` 选择 RPM；依赖、目标输出和验证边界见 [发布与异步说明](RELEASE_AND_ASYNC.md)。
 
 签名顺序由工具保证：嵌套代码由内向外，launcher 最后（否则 bundle 封签会失效）。
 

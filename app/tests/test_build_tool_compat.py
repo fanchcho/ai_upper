@@ -671,6 +671,78 @@ def test_cython_supported_versions():
     assert not _supported_cython("3.0.12")
 
 
+def test_supported_host_cython_ignores_stale_cache(monkeypatch, tmp_path):
+    from py_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    probes = []
+
+    def version(host, env):
+        probes.append(env.copy())
+        return "3.0.12" if str(cache) in env.get("PYTHONPATH", "") else "3.2.4"
+
+    monkeypatch.setattr(python_build, "_cython_version", version)
+    cache_probes = []
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache_probes.append(host) or cache)
+    env = python_build._cython_env(Path("python"))
+
+    assert env["PYTHONPATH"] == "existing-path"
+    assert len(probes) == 1
+    assert not cache_probes
+
+
+def test_supported_cached_cython_is_added_once(monkeypatch, tmp_path):
+    from py_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache)
+    monkeypatch.setattr(
+        python_build, "_cython_version",
+        lambda host, env: "3.2.4" if str(cache) in env["PYTHONPATH"] else None,
+    )
+    env = python_build._cython_env(Path("python"))
+
+    assert env["PYTHONPATH"].split(os.pathsep) == [str(cache), "existing-path"]
+
+
+@pytest.mark.parametrize("existing_cache", [False, True])
+@pytest.mark.parametrize("installed_version", ["3.2.4", "3.0.12"])
+def test_cython_bootstrap_replaces_cache_and_checks_result(
+    monkeypatch, tmp_path, existing_cache, installed_version,
+):
+    from py_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    if existing_cache:
+        cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache)
+    commands = []
+    probes = []
+
+    def version(host, env):
+        probes.append(env.copy())
+        return installed_version if commands else "3.0.12"
+
+    monkeypatch.setattr(python_build, "_cython_version", version)
+    monkeypatch.setattr(python_build, "_run", lambda cmd: commands.append(cmd))
+    monkeypatch.setattr(python_build, "pip_transfer_args", lambda: [])
+    if installed_version == "3.0.12":
+        with pytest.raises(RuntimeError, match="Unable to bootstrap"):
+            python_build._cython_env(Path("python"))
+    else:
+        env = python_build._cython_env(Path("python"))
+        assert env["PYTHONPATH"].split(os.pathsep) == [str(cache), "existing-path"]
+
+    assert len(commands) == 1
+    assert "--upgrade" in commands[0]
+    assert len(probes) == (3 if existing_cache else 2)
+
+
 def test_package_copy_does_not_replay_source_metadata(tmp_path, monkeypatch):
     from py_upper import fs
 

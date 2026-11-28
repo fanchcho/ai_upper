@@ -2,7 +2,7 @@
 
 `py_upper` 是一个面向 Windows、macOS、Linux 的独立 Python 应用运行时与打包工程。
 
-当前稳定开发线：**0.17.36**。
+当前稳定开发线：**0.17.37**。
 
 ## 构建模型
 
@@ -40,17 +40,21 @@ Application run
 核心原则：
 
 - 应用目录的 `src/` 直接就是应用源码，不再套额外项目包名；默认示例是 `app/src/`，自有 `app` 可以用 `--app` 指向任意目录。
-- Build Tool Python 与最终 Target Python 完全独立；Build Tool 最低支持 Python 3.8。
+- Build Tool Python 与最终 Target Python 完全独立；Build Tool 最低支持 Python 3.8。解压 PBS runtime 时，构建解释器必须包含 `tarfile.data_filter` 安全更新；缺少此能力会明确报错，避免退回不安全的解包方式。
 - 应用自己的 Python 模块默认 Cython 化；`__init__.py` 保留为 package marker。
 - 应用模块增量编译：只有内容变化的模块重新 Cython 化并编译，其余复用 `build/cache/` 里的产物；多个模块并行编译（`[tool.py_upper.build]`）。
 - 第三方依赖不 Cython 化，而是根据 Target 的 wheel compatibility tags 安装目标 wheel。
 - 应用目录 `src/` 下的 `.dylib/.so/.dll/.pyd` 是正式应用输入，会参加 native dependency closure。
 - `runtimes/` 是机器本地 Runtime 缓存，不进入 Git。
-- `dist/` 只在一次 rename 中更新：bundle 在 `build/publish/<target>.<pid>/` 组装完成后再原子换入 `dist/`。构建期间 `dist/` 要么是上一版的完整产物，要么是新版的完整产物，不会被原地删改——发布路径上的 runtime 会被编辑器等外部进程执行，原地清理必然与它们的写入互相踩。
+- bundle 在 `build/publish/<target>.<pid>/` 组装完成后再通过 rename 发布到 `dist/`，不会在发布路径上原地删改。替换已有版本时，先将旧包移入组装目录暂存，新包发布成功后才清理旧包；新包 rename 报错时恢复旧包。两次 rename 之间发布路径会短暂不存在，这不是无间隙的原子交换，也不保证进程被强制终止时自动恢复。发布路径上的 runtime 可能被编辑器等外部进程执行，因此清理始终在移出发布路径后进行。
 - 最终验证不仅检查文件存在，还会用 bundled Target Python 真正 import 应用和直接声明的第三方依赖。
+- Linux 本机构建在 runtime 裁剪完成后，用目标解释器预编译标准库为 checked-hash 字节码，减少每次启动时的源码编译。源码仍保留，launcher 仍禁止运行时写缓存；这会增加少量包体积和构建耗时。跨架构构建不执行目标解释器，保持原流程。
 
 ## 文档
 
+- Linux 安装包、异步生命周期与桌面验证：[docs/RELEASE_AND_ASYNC.md](docs/RELEASE_AND_ASYNC.md)
+
+- 框架总览（分层边界、生命周期、验证与后续工作）：[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - 开发使用指南（环境、配置、打包、依赖、Qt、排错）：[docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
 - 变更记录：[CHANGELOG.md](CHANGELOG.md) / [HISTORY.md](HISTORY.md)
 
@@ -107,7 +111,7 @@ PY_UPPER_APP_DIR=../myapp python tools/build.py --doctor
 
 `--app` 可以和其他命令组合，例如 `python tools/build.py --app ../myapp --run`。如果仓库根目录本身就是应用（根 `pyproject.toml` 带 `[tool.py_upper]`），删掉 `app/` 后也会自动识别根目录，不必额外传参。
 
-`build/`、`dist/` 和 `py_upper.lock.json` 仍属于构建工具所在的仓库；应用目录只提供源码、配置、可选资源和开发 `.venv`。`app/tests` 是示例应用自己的测试，替换示例时一并替换即可。
+`build/`、`dist/` 和 `py_upper.lock.json` 仍属于构建工具所在的仓库；应用目录只提供源码、配置、可选资源和开发 `.venv`。`app/tests` 同时包含示例应用和构建链测试；替换示例时更新应用测试，保留 runtime、wheel、launcher、打包与部署回归用例，见框架总览中的验证矩阵。
 
 ## 首次使用
 

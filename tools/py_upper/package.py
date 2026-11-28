@@ -12,12 +12,12 @@ import subprocess
 from pathlib import Path
 
 from .config import (
-    APP, BUILD, DIST, LAUNCHER, Target, app_identifier, app_name, entry_source,
-    project_version, publish_dir, resolve_target_python, staging_dir, target_runtime_dir,
+    APP, BUILD, DIST, LAUNCHER, Target, app_identifier, app_name, entry_source, host_target,
+    project_version, publish_dir, resolve_target_python, runtime_executable, staging_dir, target_runtime_dir,
 )
 from .egg import EGG_DIR, EGG_NAME, egg_loader_source
 from .fs import (
-    copy_file_contents, copy_optional_tree, copy_tree_contents, make_executable,
+    _housekeeping, copy_file_contents, copy_optional_tree, copy_tree_contents, make_executable,
     retire_tree, sha256,
 )
 from .native.bundle import bundle_native_dependencies, prune_excluded_native_files
@@ -317,11 +317,42 @@ def _publish(assembly: Path, source: Path, destination: Path) -> Path:
     on the entry that writer recreated. Assembling elsewhere and renaming at the
     end keeps the published path either absent or complete.
     """
-    retire_tree(destination, trash=BUILD / "retired")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    os.replace(source, destination)
+    previous = assembly / f".previous-{destination.name}"
+    had_previous = destination.exists()
+    if had_previous:
+        if not destination.is_dir() or destination.is_symlink():
+            raise RuntimeError(f"Not a directory tree: {destination}")
+        _housekeeping(lambda: os.replace(destination, previous), path=destination)
+    try:
+        os.replace(source, destination)
+    except OSError:
+        if had_previous:
+            _housekeeping(lambda: os.replace(previous, destination), path=previous)
+        raise
+    # Delete the previous bundle only after the new one has been published.
     retire_tree(assembly, trash=BUILD / "retired")
     return destination
+
+
+def _precompile_linux_stdlib(bundle: Path, target: Target) -> None:
+    """Build target bytecode before publication; the launcher stays read-only.
+
+    Only native Linux targets can run their interpreter here. Checked hashes
+    keep caches valid after relocation and detect edited sources; -d removes
+    the private assembly path from tracebacks.
+    """
+    if target.os != "linux" or target != host_target():
+        return
+    executable = runtime_executable(target)
+    for stdlib in sorted((bundle / "runtime" / "lib").glob("python*")):
+        if not stdlib.is_dir():
+            continue
+        subprocess.run([
+            str(executable), "-I", "-m", "compileall", "-q", "-f",
+            "--invalidation-mode", "checked-hash", "-d",
+            stdlib.relative_to(bundle).as_posix(), str(stdlib),
+        ], check=True)
 
 
 def package(target: Target, launcher: Path, trim=None) -> Path:
@@ -355,6 +386,7 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
         # Resources are optional: a project without app/resources simply ships none.
         copy_optional_tree(APP / "resources", out / "resources")
         bundle_native_dependencies(out, target)
+        _precompile_linux_stdlib(out, target)
         return _publish(assembly, out, DIST / name)
 
     app = assembly / f"{name}.app"

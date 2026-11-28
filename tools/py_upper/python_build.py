@@ -173,24 +173,23 @@ def _supported_cython(version: str | None) -> bool:
 def _cython_env(host_python: Path) -> dict[str, str]:
     base = dict(os.environ)
     installed = _cython_version(host_python, base)
+    # A usable host installation needs no cache lookup or extra interpreter
+    # probes, and must not be shadowed by an outdated cached installation.
+    if _supported_cython(installed):
+        return base
     cache = _cython_cache_dir(host_python)
     env = dict(base)
-    if cache.exists():
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
-    cached = _cython_version(host_python, env)
-    if not _supported_cython(installed) and not _supported_cython(cached):
+    env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    cached = _cython_version(host_python, env) if cache.exists() else None
+    if not _supported_cython(cached):
         cache.mkdir(parents=True, exist_ok=True)
         _run([
             str(host_python), "-m", "pip", "install", "--disable-pip-version-check", "--no-input",
-            "--target", str(cache),
+            "--upgrade", "--target", str(cache),
         ] + pip_transfer_args() + [CYTHON_REQUIREMENT])
-        env = dict(base)
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
         cached = _cython_version(host_python, env)
         if not _supported_cython(cached):
             raise RuntimeError(f"Unable to bootstrap {CYTHON_REQUIREMENT} for {host_python}; cache={cache}")
-    elif not _supported_cython(installed):
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     return env
 
 

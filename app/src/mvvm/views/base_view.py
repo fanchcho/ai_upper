@@ -14,11 +14,20 @@ class MVVMBinding:
         self.property_name = property_name
         self._ui_elements: List[Any] = []
         self._value_converters: List[Callable[[Any], Any]] = []
+        self._unsubscribe = None
         
         # 订阅ViewModel属性变化
         property_obj = viewmodel.get_property(property_name)
         if property_obj:
-            property_obj.subscribe(self._on_viewmodel_property_changed)
+            self._unsubscribe = property_obj.subscribe(self._on_viewmodel_property_changed)
+
+    def dispose(self) -> None:
+        """解除订阅并释放控件引用。"""
+        if self._unsubscribe:
+            self._unsubscribe()
+            self._unsubscribe = None
+        self._ui_elements.clear()
+        self._value_converters.clear()
     
     def add_ui_element(
         self,
@@ -87,6 +96,7 @@ class CommandBinding:
         self.command_name = command_name
         self.command = getattr(viewmodel, f"{command_name}_command", None)
         self._ui_elements: List[Any] = []
+        self._connections: List[Any] = []
     
     def add_ui_element(self, ui_element: Any, event_name: str = 'clicked') -> None:
         """添加UI元素到绑定"""
@@ -99,7 +109,9 @@ class CommandBinding:
         if self.command:
             try:
                 event_obj = getattr(ui_element, event_name)
-                event_obj.connect(lambda param=None: self.command.execute(param))
+                callback = lambda param=None: self.command.execute(param)
+                event_obj.connect(callback)
+                self._connections.append((event_obj, callback))
             except Exception as e:
                 print(f"Error binding command: {e}")
     
@@ -107,6 +119,17 @@ class CommandBinding:
         """执行命令"""
         if self.command:
             self.command.execute(parameter)
+
+    def dispose(self) -> None:
+        """断开信号，避免关闭后的控件继续触发命令。"""
+        for signal, callback in self._connections:
+            try:
+                signal.disconnect(callback)
+            except (RuntimeError, TypeError):
+                # Qt 控件可能已经在关闭时销毁或自动断开连接。
+                pass
+        self._connections.clear()
+        self._ui_elements.clear()
 
 
 class ViewBase:
@@ -152,8 +175,10 @@ class ViewBase:
         pass
     
     def dispose(self) -> None:
-        """清理资源"""
+        """解除本视图的绑定；共享 ViewModel 由应用容器统一释放。"""
+        for binding in self._bindings:
+            binding.dispose()
+        for binding in self._command_bindings:
+            binding.dispose()
         self._bindings.clear()
         self._command_bindings.clear()
-        if self.viewmodel:
-            self.viewmodel.dispose()

@@ -36,7 +36,9 @@ class MainWindow(ViewBase):
         # label: 属性 → setter 方法；button: 命令 → clicked 信号
         self.bind_property("message", label, "setText")
         self.bind_command("show_about", button)
-        self.viewmodel.subscribe_property_changed(self._on_viewmodel_property_changed)
+        self._unsubscribe_viewmodel = self.viewmodel.subscribe_property_changed(
+            self._on_viewmodel_property_changed
+        )
 
     def _on_viewmodel_property_changed(self, event: PropertyChangedEvent) -> None:
         """about_visible 变化时开关「关于」窗口；ViewModel 不认识窗口"""
@@ -57,3 +59,9 @@ class MainWindow(ViewBase):
 
     def close(self) -> None:
         self._window.close()
+
+    def dispose(self) -> None:
+        if self._unsubscribe_viewmodel is not None:
+            self._unsubscribe_viewmodel()
+            self._unsubscribe_viewmodel = None
+        super().dispose()

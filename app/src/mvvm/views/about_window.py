@@ -30,6 +30,7 @@ class AboutWindow(ViewBase):
         self.bind_property("about_title", dialog, "setWindowTitle")
         self.bind_property("about_body", browser, "setPlainText")
         self.bind_command("hide_about", close_button)
+        self.bind_command("hide_about", dialog, "finished")
         return dialog
 
     def show(self) -> None:

@@ -1,3 +1,30 @@
+## 0.17.37
+
+### Problem
+- Linux 安装归档未接入正式 CLI；共享 ViewModel 清理、原生关闭 About、异步退出缺少一致的资源归属。
+- Linux 启动重复编译标准库，构建缓存、发布回滚和 runtime 解包存在可靠性问题。
+
+### Root cause
+- 发布归档在工具外手工生成；View 与容器重复释放共享状态，交互与 headless 退出路径分离。
+- 缺少受管异步任务与服务关闭协议；宿主 Cython 与缓存优先级、安全解包和发布顺序未统一。
+
+### Changes
+- CLI 增加 CPack TGZ/DEB/RPM 发布和独立目标清单，支持显式 Debian Depends；全部成功后替换发布目录。
+- 统一视图订阅释放与 Qt 生命周期，修复 About 原生关闭重开；增加可选 qasync 入口、受管任务取消和服务逆序关闭。
+- Linux 本机构建预编译 checked-hash 标准库字节码；修复 Cython 缓存优先级、重试等待、安全解包、发布失败恢复和 Linux E2E runtime 依赖。
+- 增加框架说明、桌面验证探针和对应回归测试，E2E 排除项目内临时目录。
+
+### Verification
+- Linux ARM64 全量含 E2E：473 passed，2 Windows 专属 skipped；发布最终参数调整后相关回归 99 passed，2 skipped。
+- 三格式正式 CLI 发布成功；DEB 解压后 4,780 项文件一致且 GUI offscreen 启动通过，RPM 元数据查询通过。
+- Python 3.13.5 / Qt / qasync 真实事件循环验证任务取消、服务关闭与容器清理顺序。
+- 当前记录为本地验证；本提交的远端 CI 结果以 GitHub Actions 对应 SHA 为准。
+
+### Impact
+- 默认同步示例不强制新增 qasync 依赖；异步应用需自行声明依赖并注册任务和服务关闭。
+- DEB 自动扫描可能受 sysroot/PBS 引用影响，显式 Depends 必须针对目标负载核对；干净发行版安装升级卸载尚未实测。
+- 桌面探针不代替真实显示延迟，Wayland、Windows/macOS 桌面实机验证仍待完成；临时文件和安装包不入库。
+
 ## 未发布
 
 - 优化打包应用的正常启动：故障报告、脚本旁路启动和异步命令按需加载；egg 导入器不再加载未用到的抽象基类，示例的「关于」对话框在首次打开时创建。

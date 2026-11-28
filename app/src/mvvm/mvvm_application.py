@@ -94,6 +94,7 @@ class MVVMApplication:
     def _cleanup(self) -> None:
         for view in self.views.values():
             view.close()
+            view.dispose()
         for viewmodel in self.viewmodels.values():
             viewmodel.dispose()
         self.views.clear()

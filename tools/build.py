@@ -115,6 +115,9 @@ def main(argv=None) -> int:
                              "(default: <repo>/app; env PY_UPPER_APP_DIR)")
     parser.add_argument("--target", choices=list(TARGETS))
     parser.add_argument("--locked", action="store_true")
+    parser.add_argument("--linux-format", action="append", choices=["TGZ", "DEB", "RPM"],
+                        help="Linux release format; repeatable; default TGZ and DEB")
+    parser.add_argument("--linux-deb-depends", help="explicit Debian Depends for cross/sysroot packaging; otherwise use dpkg-shlibdeps")
     parser.add_argument("--identity")
     parser.add_argument("--notary-profile")
     parser.add_argument("--trim-preset", choices=tuple(PRESETS), metavar="NAME",
@@ -205,8 +208,12 @@ def main(argv=None) -> int:
         if action == "run":
             return _run_app(out, target)
         if action == "release":
-            release(target, args.identity, args.notary_profile)
-            print("Release manifest:", write_release_manifest(target))
+            if target.os == "linux":
+                from py_upper.linux_release import linux_release
+                print("Linux release:", linux_release(target, args.linux_format or ("TGZ", "DEB"), args.linux_deb_depends))
+            else:
+                release(target, args.identity, args.notary_profile)
+                print("Release manifest:", write_release_manifest(target))
         else:
             print("READY:", out)
         return 0

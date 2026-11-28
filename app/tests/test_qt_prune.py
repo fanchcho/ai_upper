@@ -465,6 +465,9 @@ def test_runtime_closure_probe_inherits_the_host_environment(tmp_path, monkeypat
     """
     from py_upper import qt_prune
 
+    monkeypatch.setenv("PYTHONPATH", "host-python-path")
+    monkeypatch.setenv("PYTHONDONTWRITEBYTECODE", "0")
+    monkeypatch.setenv("SystemRoot", "host-system-root")
     site = tmp_path / "site-packages"
     site.mkdir()
     recorded: dict[str, object] = {}
@@ -484,7 +487,11 @@ def test_runtime_closure_probe_inherits_the_host_environment(tmp_path, monkeypat
     env = recorded["env"]
     assert env["PYTHONPATH"] == str(site)
     assert env["PYTHONDONTWRITEBYTECODE"] == "1"
-    dropped = {name: value for name, value in os.environ.items() if env.get(name) != value}
+    overrides = {"PYTHONPATH", "PYTHONDONTWRITEBYTECODE"}
+    dropped = {
+        name: value for name, value in os.environ.items()
+        if name not in overrides and env.get(name) != value
+    }
     assert not dropped, f"the probe dropped host variables: {sorted(dropped)}"
 
 

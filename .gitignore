@@ -6,6 +6,7 @@ __pycache__/
 app/pyproject.toml
 .venv/
 .cache/
+.tmp/
 runtimes/
 build/
 dist/
