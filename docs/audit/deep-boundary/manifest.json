@@ -1,0 +1,921 @@
+{
+  "base": "6da7b81",
+  "application_tree": "e802c08f881f91b8835a48a941ecc7a7c44b5f6f",
+  "files": [
+    {
+      "path": "docs/audit/deep-boundary/chooser-dark.log",
+      "bytes": 2357,
+      "sha256": "a43cb5cd3ddef1750ec20dfc02879958e9f5d09662ca0f207737ae2bd0a6a125"
+    },
+    {
+      "path": "docs/audit/deep-boundary/chooser-dark.png",
+      "bytes": 21561,
+      "sha256": "57a057d59338678a2b357af1a5880da383516b1328a446b9d5e76c5d6ef09576"
+    },
+    {
+      "path": "docs/audit/deep-boundary/chooser-light.log",
+      "bytes": 2069,
+      "sha256": "32b15646aaaf22fced0298c9aad020770be9c6415bc9a68a997d467252d8af73"
+    },
+    {
+      "path": "docs/audit/deep-boundary/chooser-light.png",
+      "bytes": 22115,
+      "sha256": "d30051e0ff943f188c9a53d9151c6a876ce65f718c947920ad3c2603ce11453f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/chooser.log",
+      "bytes": 2069,
+      "sha256": "8317665a5dbe6a2a385cbe261b34eae09ea930cd4711fd7db505c181711b9465"
+    },
+    {
+      "path": "docs/audit/deep-boundary/chooser.md",
+      "bytes": 2467,
+      "sha256": "463074107ad40e643361cac2140a4039bbce0a55d81653296dcf01e8f73e2cdf"
+    },
+    {
+      "path": "docs/audit/deep-boundary/composition.log",
+      "bytes": 1315,
+      "sha256": "23590b212947119c6f54a17ebc12a179070ed48b303689b6fe9f15668fc758c7"
+    },
+    {
+      "path": "docs/audit/deep-boundary/core-gdb.log",
+      "bytes": 96667,
+      "sha256": "88e8b9341cb2374c932ae6cd29f27e18c44134d236a65e89b4077078bc1ec5e0"
+    },
+    {
+      "path": "docs/audit/deep-boundary/core-instructions.log",
+      "bytes": 3882,
+      "sha256": "cadd07a98eb5091ae188e0af4ce34b23afb7f29a967b37f2f2b6b67ff6b5e151"
+    },
+    {
+      "path": "docs/audit/deep-boundary/core-matching-electron.log",
+      "bytes": 1079,
+      "sha256": "871f03d2fb24991b9e34a1d51605e1df4d65ad735330c66405ab2ef8a9caa0c1"
+    },
+    {
+      "path": "docs/audit/deep-boundary/core-trap-string.log",
+      "bytes": 3813,
+      "sha256": "127b3c9a252c4d770d3483f4bbc5c2b21938cc83a3c53e22c4fb9a172f3f5a2e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/electron-core.md",
+      "bytes": 3405,
+      "sha256": "446f2ca24120d1728988dc4446bca8a657ecde40e06cf630004aa97e84ae946b"
+    },
+    {
+      "path": "docs/audit/deep-boundary/fcitx-daemon.log",
+      "bytes": 4508,
+      "sha256": "a6c20435e369cb23d29d06f1f6f42c6c7ba1a68fcbcb9c81db41b0e73d0b38fc"
+    },
+    {
+      "path": "docs/audit/deep-boundary/fcitx-dark.log",
+      "bytes": 4508,
+      "sha256": "a7274d414120ae9b1ffa596c92031fb63c01bc4223ccb928fd6fa214604cc585"
+    },
+    {
+      "path": "docs/audit/deep-boundary/fcitx-light.log",
+      "bytes": 4508,
+      "sha256": "25de47657d3d82fb4208c4cd10a3fca591a2f2fd1054b16fb0eab1ccc3ef5ee7"
+    },
+    {
+      "path": "docs/audit/deep-boundary/final.md",
+      "bytes": 4362,
+      "sha256": "855bc82364306a40174facde3c3f41f42d4100c833dffa4c78973ceebd604821"
+    },
+    {
+      "path": "docs/audit/deep-boundary/full-confirm.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "docs/audit/deep-boundary/full-confirm.log",
+      "bytes": 1724,
+      "sha256": "df75bd07d7f050b810656448c2476a2d975778b3e68d3d24dd510331ffa82a16"
+    },
+    {
+      "path": "docs/audit/deep-boundary/full.log",
+      "bytes": 1724,
+      "sha256": "dc35b8862ff8d86c0ebd167801f1c874650e2a8c8cfd7b1bc23bb4b863b0af8d"
+    },
+    {
+      "path": "docs/audit/deep-boundary/gdb-download.log",
+      "bytes": 744,
+      "sha256": "6b2eeb06955fbbc14b0005ba930904c91bc9d62db21b3610b6737cbb16ab1f05"
+    },
+    {
+      "path": "docs/audit/deep-boundary/gdb-extra.log",
+      "bytes": 432,
+      "sha256": "6d5e2cc68dbd9eb5ed9c1ef04295819ecf289683781d8ec8e406db4f9c30ff74"
+    },
+    {
+      "path": "docs/audit/deep-boundary/graceful-electron.log",
+      "bytes": 1725,
+      "sha256": "95d09d7058053c29fee7cbd18ca13d644fa151919c5b05a5d5eabb714b3b44a0"
+    },
+    {
+      "path": "docs/audit/deep-boundary/graceful-shutdown.json",
+      "bytes": 99,
+      "sha256": "c3639bb70f8641e20c22f6d69c41e561a03d2b357e5d93d938bfeb818c49e79f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/graceful-shutdown.log",
+      "bytes": 92,
+      "sha256": "88d4bc40bff5bd385590c6ab0308f30d3bed60c1c4623afb09fdb54cff98ac92"
+    },
+    {
+      "path": "docs/audit/deep-boundary/graceful-xvfb.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-async.log",
+      "bytes": 9820,
+      "sha256": "7075ae3b1fa45da96cc9bdd642c0ac0c8f7c16e009b22658c07d1da0486d7c3f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-dark-commit.png",
+      "bytes": 2266,
+      "sha256": "a90c6bb77925dd7b62f35b10ed3a51eb2eea436a6889ae999d8c253e6e03b4ae"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-dark-dbus.log",
+      "bytes": 12409,
+      "sha256": "ed5dd3251e97323fc0bacd2c851d316c67e84859339c193e0e1edcea9742afc6"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-dark-preedit.png",
+      "bytes": 1986,
+      "sha256": "309b6056f548efa89e67150db1c56ce095ae852a51f9dafb508c397fae7c36f2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-dark-readback.json",
+      "bytes": 399,
+      "sha256": "41d279ab5401ffea705422a41573123f1862b5b2de3111acc6142104c9474b8e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-dark.log",
+      "bytes": 10025,
+      "sha256": "af843cecefa86e9d0ca055758a11717cb640a52a4ea866f486aa18e6d6845a57"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-light-commit.png",
+      "bytes": 2303,
+      "sha256": "21ad5a686dcc45283c8e18b0a8216c9b5bd2c45322c3c4ae6c11f5c17a3d50c2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-light-dbus.log",
+      "bytes": 12409,
+      "sha256": "7cd953354bf98b4d457004aa52a8aea23d78ee750f166bf4212b11049098211f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-light-preedit.png",
+      "bytes": 1988,
+      "sha256": "f1d44d52dc31ede63c075e6eba0222cb656f2252f13964c67c05bbeadd585521"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-light-readback.json",
+      "bytes": 399,
+      "sha256": "41d279ab5401ffea705422a41573123f1862b5b2de3111acc6142104c9474b8e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-light.log",
+      "bytes": 10025,
+      "sha256": "091ae4154eef28fe244ad1f720e0f2082fe29719d088ec702ace643103ec0094"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime-preedit.png",
+      "bytes": 921,
+      "sha256": "1264092bfdaf5164e17048a360768865b0a3a8dde6379274158a468aacebc850"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime.log",
+      "bytes": 9652,
+      "sha256": "33cd4f939cf37c1679f525b2f9b03501adcfc5a40b4c952cd634c104747da736"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime.md",
+      "bytes": 3168,
+      "sha256": "64713d911cbac2ea85150cbcdd637cad83c95b15be4e77a5411c9afc6521202d"
+    },
+    {
+      "path": "docs/audit/deep-boundary/ime.png",
+      "bytes": 446,
+      "sha256": "efac2ad8eaf966430dfdb5675e0fcea844e192e9a3793e35adfb5b1a05ee4d77"
+    },
+    {
+      "path": "docs/audit/deep-boundary/minimal-electron.log",
+      "bytes": 1815,
+      "sha256": "9e429735de74e35448b7e3c788e5fc260134c07d5c4035e5b38b980f686115e2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/minimal-shutdown.json",
+      "bytes": 108,
+      "sha256": "aa036ac2a5a1a1910c3cbab8e22e95e6fbedf13c5aabe51df430b98c32d48817"
+    },
+    {
+      "path": "docs/audit/deep-boundary/minimal-shutdown.log",
+      "bytes": 101,
+      "sha256": "c242a750b590dabcbb7c0e9bb8b58a8d58a40051f554c88d92ec5b4c661d0d66"
+    },
+    {
+      "path": "docs/audit/deep-boundary/minimal-xvfb.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/composition.json",
+      "bytes": 1014,
+      "sha256": "a31b3a70a55000bc298cb4b4d46d166337c516a41f1b9806c631fded22506e9d"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-all-roles-geometry.json",
+      "bytes": 11830,
+      "sha256": "ffe71e34e2ef5e5fadad93d12799d64fd72636ed78fc0655f75402f439988bf5"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-all-roles-popup-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-all-roles-popup.png",
+      "bytes": 64188,
+      "sha256": "332925c6b845d2be0b10f54d76c6ff98133b56423b1611e9dd6593972d313356"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-all-roles.png",
+      "bytes": 56983,
+      "sha256": "82b70893865b3eca69fc9a194021141d362522b97b8c57a317869975f0fd5dc2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-composition.png",
+      "bytes": 500,
+      "sha256": "b78cd0c48bf26182476597b62eef519701623b30179889ef1945d44d3222287d"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-fixture.json",
+      "bytes": 3432,
+      "sha256": "a1ebfccc88b6b3fd4c62331ec14b93dff5a90b71e07ee060eb08174ab8000a2b"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-font-settings.json",
+      "bytes": 642,
+      "sha256": "66e74be514679804de35d99d3d07e737cbf801b980ae6790a476058c44fa0837"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-0-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-0-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-0-phase-0.5.png",
+      "bytes": 60057,
+      "sha256": "63b1b61cb09c2e0b21671fe0bd6952ca1e6b6456fc6c20791021db08379bf443"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-0-phase-0.png",
+      "bytes": 60057,
+      "sha256": "0b150150fb25a971ae3a268651da8a8a74f03a8bcf94a02c09ea0e4c919b4b50"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-1-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-1-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-1-phase-0.5.png",
+      "bytes": 62630,
+      "sha256": "53b0873858f5afcf2fba7d8b734619adaf5f05d6aceb16c84924d01cb4b44e32"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-1-phase-0.png",
+      "bytes": 62629,
+      "sha256": "c3f74d5158ece15b34a19c176b2f15c181de1417d5124457a75f7e95a3d8f77e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-2-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-2-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-2-phase-0.5.png",
+      "bytes": 60057,
+      "sha256": "63b1b61cb09c2e0b21671fe0bd6952ca1e6b6456fc6c20791021db08379bf443"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-2-phase-0.png",
+      "bytes": 60057,
+      "sha256": "0b150150fb25a971ae3a268651da8a8a74f03a8bcf94a02c09ea0e4c919b4b50"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-3-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-3-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-3-phase-0.5.png",
+      "bytes": 56979,
+      "sha256": "94eced4834e171ee91df6e6ac013fa2ef5e3ebb5cb46e298a6fba894c525e7fe"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-hint-3-phase-0.png",
+      "bytes": 56973,
+      "sha256": "3fd323873a109ec73264ba1ad5304f1e68b08522829371aac1af53bbf9977f7c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-list-geometry.json",
+      "bytes": 10716,
+      "sha256": "187a4808431aa564aa34b9d0b13190b59f7938ac8182247a1709c89e4fc6d35c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-list.png",
+      "bytes": 63008,
+      "sha256": "7cb07d93fe4da34d35a7f0275948b09ba6deafcc2bc9e5271cba151000e22616"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-mcp-bottom-geometry.json",
+      "bytes": 13674,
+      "sha256": "a1fcdca9aec3fbd43a6f2dc2cdd10ac0dfe07623bca71f99f1d5056d15728ad2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-mcp-bottom.png",
+      "bytes": 65376,
+      "sha256": "ee435bc844531ab30174fa7c60a2f48a9833cbc1455e1f73e4d004f05bc0b823"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-mcp-detail-geometry.json",
+      "bytes": 13678,
+      "sha256": "8ceded8647bede81001c9e4970086196e5421057a3611859cef1017fcb849e83"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-mcp-detail.png",
+      "bytes": 61570,
+      "sha256": "47bb51531a83a612d75e3489e168e4eff3d322b0912a6a1aa8d3ad557a362de8"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-menu-keyboard-end-geometry.json",
+      "bytes": 13499,
+      "sha256": "6b1541165b5d8cccd7c04d1bfe0ec7a047d1b29497f28d8d9e64ab807c560c43"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-menu-keyboard-end.png",
+      "bytes": 62719,
+      "sha256": "82d18a7e62cebafdd4d1cb6224e3a05303244d51fea5638fd5f550cbc4fc05bf"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-roles-popup-geometry.json",
+      "bytes": 13775,
+      "sha256": "92fdf20ba144e9747f42290a150c30f9bab992969afa203c403d61671ae6bf32"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-roles-popup.png",
+      "bytes": 68105,
+      "sha256": "b9fa6a45ef1aa30020c335fabf8598e85de3551b1e07aaa18060c7d97655e5fe"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-baseline-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-baseline.png",
+      "bytes": 63963,
+      "sha256": "4ebba254a8934bd1bfb600b8208f943f82398769a338f1343a10d5327a3b2446"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-color-css.png",
+      "bytes": 4373,
+      "sha256": "4cdec1c900e68eb1cdf95943ac89a3d98378756e5594302354428cb9159f1112"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-color-production.png",
+      "bytes": 4373,
+      "sha256": "4cdec1c900e68eb1cdf95943ac89a3d98378756e5594302354428cb9159f1112"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-hidden-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-hidden.png",
+      "bytes": 61475,
+      "sha256": "7bf2c1cc58d887281614eae7c58457909f9a9a417955bf506bb672b132594f99"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-0-border-0.png",
+      "bytes": 63706,
+      "sha256": "2c5bc96b8ddf62d88c7a822d39a81a47fa5f68ee35c7a3ad3506f8eb300f1270"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-0-border-1.0.png",
+      "bytes": 63963,
+      "sha256": "4ebba254a8934bd1bfb600b8208f943f82398769a338f1343a10d5327a3b2446"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-12.0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-12.0-border-0.png",
+      "bytes": 63980,
+      "sha256": "e8f2298d02d2bf082d552a01732138bc2cd5ae73d0b8eb4d580bcfb27ed06090"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-12.0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0-radius-12.0-border-1.0.png",
+      "bytes": 64188,
+      "sha256": "332925c6b845d2be0b10f54d76c6ff98133b56423b1611e9dd6593972d313356"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-0-border-0.png",
+      "bytes": 63728,
+      "sha256": "b8c188ea39e2b4c808e092e8818a74b992d1f18b10fef6f55d566942d81f4d83"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-0-border-1.0.png",
+      "bytes": 63986,
+      "sha256": "7f3e181329cbf4c02928d453afc02673fcb0a4f1de2b87cde8c13dac0dc3d0e3"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-12.0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-12.0-border-0.png",
+      "bytes": 64006,
+      "sha256": "132a9788eb51ce7b2514d96bb31a84d04b4fb205c725659161f6fad412186d2b"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-12.0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-phase-0.5-radius-12.0-border-1.0.png",
+      "bytes": 64217,
+      "sha256": "9fa2965ec4cb6fca5183c71e302b8211fa420e8bbd0be4925fe2157914a30b6f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-reference-left.png",
+      "bytes": 4467,
+      "sha256": "ca7928ad2d7f09f615ce86b97f5964851eaa2e4b10b728786a6d4c1f81e60100"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-shadow-settings.json",
+      "bytes": 95,
+      "sha256": "4cc98c4f2770b9be8d00936f4d11fddd6cf09d3cfac9decdac0299fc5b6e1119"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-skill-detail-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-skill-detail.png",
+      "bytes": 60057,
+      "sha256": "0b150150fb25a971ae3a268651da8a8a74f03a8bcf94a02c09ea0e4c919b4b50"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-state-check-geometry.json",
+      "bytes": 10716,
+      "sha256": "187a4808431aa564aa34b9d0b13190b59f7938ac8182247a1709c89e4fc6d35c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-state-check.png",
+      "bytes": 63008,
+      "sha256": "7cb07d93fe4da34d35a7f0275948b09ba6deafcc2bc9e5271cba151000e22616"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/dark-text-reference-left.png",
+      "bytes": 21009,
+      "sha256": "c25dec31666ce01f31bede80fa08eca274729b493876a4db3d686e91342bc396"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/hint-measurements.json",
+      "bytes": 6538,
+      "sha256": "1b0b9eda010295b457779cda905a7cdf1844b6b104c2da1939d757190534c59f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-all-roles-geometry.json",
+      "bytes": 11830,
+      "sha256": "ffe71e34e2ef5e5fadad93d12799d64fd72636ed78fc0655f75402f439988bf5"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-all-roles-popup-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-all-roles-popup.png",
+      "bytes": 62396,
+      "sha256": "ecffd00087a7dac4aef8807d429fcb24b86dcda882d1e9a9d3f94eee437d6461"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-all-roles.png",
+      "bytes": 56172,
+      "sha256": "895fd982b75ff6cefb823af831e3552cd8e2714e1df263a4533a0284137f50c9"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-composition.png",
+      "bytes": 496,
+      "sha256": "c137a3c248ecc14b68b02bf8fcc65f4f5750b38806cfaa7ed7e26225382f7471"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-fixture.json",
+      "bytes": 3433,
+      "sha256": "d00f62c0d49a72a3c049007fce9c08ed2ce4805ac579cc6e4c188060ce7196a5"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-font-settings.json",
+      "bytes": 642,
+      "sha256": "66e74be514679804de35d99d3d07e737cbf801b980ae6790a476058c44fa0837"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-0-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-0-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-0-phase-0.5.png",
+      "bytes": 59103,
+      "sha256": "224c152292d8936a5d25a06e2cee29b422838267163d02d9dc20a561d0633b04"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-0-phase-0.png",
+      "bytes": 59103,
+      "sha256": "98c2938f8988d4d34a13a12e4863feb43f59065582e1941641b856e49f56ae0f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-1-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-1-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-1-phase-0.5.png",
+      "bytes": 62332,
+      "sha256": "0b264e9ccda7baf9218b0b38d653948aef8164a4debb2da23159657f6004396a"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-1-phase-0.png",
+      "bytes": 62330,
+      "sha256": "a8d95cbc2ff4022b96f8764454bbd6e9da875d7f0633a5df34f282d2eb206184"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-2-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-2-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-2-phase-0.5.png",
+      "bytes": 59103,
+      "sha256": "224c152292d8936a5d25a06e2cee29b422838267163d02d9dc20a561d0633b04"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-2-phase-0.png",
+      "bytes": 59103,
+      "sha256": "98c2938f8988d4d34a13a12e4863feb43f59065582e1941641b856e49f56ae0f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-3-phase-0-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-3-phase-0.5-geometry.json",
+      "bytes": 12102,
+      "sha256": "4740fbd9605fab4d57256f9e085fbed99e7796de1ba197221e7735ead3ca112e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-3-phase-0.5.png",
+      "bytes": 56021,
+      "sha256": "ae56c7952f957b1ee40410ba9ae928f50e0739ce27cd49a5280819d9c0f939b2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-hint-3-phase-0.png",
+      "bytes": 56021,
+      "sha256": "0a51b4049b1f80009fdff6b7cfb2cbdc7dc47e49d7eb4d767b45e62a38848a1c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-list-geometry.json",
+      "bytes": 10716,
+      "sha256": "187a4808431aa564aa34b9d0b13190b59f7938ac8182247a1709c89e4fc6d35c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-list.png",
+      "bytes": 62137,
+      "sha256": "25cc7bced241807f110f3b967816d3305ba353ac2303fd975215560b466abaea"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-mcp-bottom-geometry.json",
+      "bytes": 13674,
+      "sha256": "a1fcdca9aec3fbd43a6f2dc2cdd10ac0dfe07623bca71f99f1d5056d15728ad2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-mcp-bottom.png",
+      "bytes": 65346,
+      "sha256": "cdc7b761f8258d35a43bf78499279992a331077fbed557e2df37c95226fe80b4"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-mcp-detail-geometry.json",
+      "bytes": 13678,
+      "sha256": "8ceded8647bede81001c9e4970086196e5421057a3611859cef1017fcb849e83"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-mcp-detail.png",
+      "bytes": 61251,
+      "sha256": "4258a8380a1a38fe7272058d0ccef41cc7897a2ebbfed91eb11e730d8dc9d437"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-menu-keyboard-end-geometry.json",
+      "bytes": 13499,
+      "sha256": "6b1541165b5d8cccd7c04d1bfe0ec7a047d1b29497f28d8d9e64ab807c560c43"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-menu-keyboard-end.png",
+      "bytes": 60863,
+      "sha256": "8e3e894b042c05e738ca57253d0e664818fe8089ad1bab1716cc4e9f9d380e9e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-roles-popup-geometry.json",
+      "bytes": 13775,
+      "sha256": "92fdf20ba144e9747f42290a150c30f9bab992969afa203c403d61671ae6bf32"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-roles-popup.png",
+      "bytes": 66182,
+      "sha256": "28c8169e37de5dba9c8f6ec0e1ac1524035a33036e90ceb8d6326e984cfc6e91"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-baseline-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-baseline.png",
+      "bytes": 62390,
+      "sha256": "c644b40aff9456df72f8e6bb50b1333770631566bf7a463e11ba8798e141d8ab"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-color-css.png",
+      "bytes": 4040,
+      "sha256": "7de4257353c2b3163928942755aa83b46324280a9dec67afa21f335af217dc5f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-color-production.png",
+      "bytes": 4040,
+      "sha256": "7de4257353c2b3163928942755aa83b46324280a9dec67afa21f335af217dc5f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-hidden-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-hidden.png",
+      "bytes": 60648,
+      "sha256": "ceebdc2b736ecbb05f7514f8749a961a4182c783a5334e9f8994996db11577e1"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-0-border-0.png",
+      "bytes": 62062,
+      "sha256": "f9f58ce69df8fed4075b7d0812645266a9bc1fbec1fc29f7383a4f1104334654"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-0-border-1.0.png",
+      "bytes": 62390,
+      "sha256": "c644b40aff9456df72f8e6bb50b1333770631566bf7a463e11ba8798e141d8ab"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-12.0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-12.0-border-0.png",
+      "bytes": 62176,
+      "sha256": "75c385ad60fb4c6e3e7f31287e908197794848a2eec9df6a16540d8f67350050"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-12.0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b66f16906479c09112afd2d22058c4aec846afd597a69dcbc857c6a14a073141"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0-radius-12.0-border-1.0.png",
+      "bytes": 62396,
+      "sha256": "ecffd00087a7dac4aef8807d429fcb24b86dcda882d1e9a9d3f94eee437d6461"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-0-border-0.png",
+      "bytes": 62057,
+      "sha256": "68f5bb80969747a17815595422c14d91706f08eb88009ed81af3b507a0b8b725"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-0-border-1.0.png",
+      "bytes": 62389,
+      "sha256": "728a0f729463676e4e518ebc7858399f5b63c37b5e958d8b56ece71a2e45ec3a"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-12.0-border-0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-12.0-border-0.png",
+      "bytes": 62173,
+      "sha256": "8d50a4da610b717fe021ad112e925ae7d75ede4a28443451895ba912db33e852"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-12.0-border-1.0-geometry.json",
+      "bytes": 13503,
+      "sha256": "b38c9ac39f162277f28d236e0e49e355997c0d3847ef9e7d39e5d11802201f48"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-phase-0.5-radius-12.0-border-1.0.png",
+      "bytes": 62395,
+      "sha256": "a27e1d03a84258d77e6b990f281d32dd4ddcc733c720e907ce6246cfc926e459"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-reference-left.png",
+      "bytes": 4321,
+      "sha256": "2c3a0a37ae56a8cfc30ec185cc00a69cffcb352820b16c4be76d799fa9b33be8"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-shadow-settings.json",
+      "bytes": 95,
+      "sha256": "6012bc3b2c416004784077dfb02346f15d2c41bd9ede7e346bb461b84190c2a1"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-skill-detail-geometry.json",
+      "bytes": 12102,
+      "sha256": "c3cf6d356362b37d1eae59c79ab773d8e1e08ce445f123f826f50d3138170738"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-skill-detail.png",
+      "bytes": 59103,
+      "sha256": "98c2938f8988d4d34a13a12e4863feb43f59065582e1941641b856e49f56ae0f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-state-check-geometry.json",
+      "bytes": 10716,
+      "sha256": "187a4808431aa564aa34b9d0b13190b59f7938ac8182247a1709c89e4fc6d35c"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-state-check.png",
+      "bytes": 62137,
+      "sha256": "25cc7bced241807f110f3b967816d3305ba353ac2303fd975215560b466abaea"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/light-text-reference-left.png",
+      "bytes": 20787,
+      "sha256": "4423dd7c87f7b0a2fb90303a9902788c123e3fbd1910fc3d064e38c9ef514430"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/measurements.json",
+      "bytes": 75957,
+      "sha256": "fefa0bd765eeb904e81bb84c01b6266925425128886eba3a34c4f919cac9b8ea"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/shadow-color-difference.json",
+      "bytes": 145,
+      "sha256": "34e2cc54c4320a4f53a5cc5bf0dba74db4a241203a1b0636a27e80463644b00f"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel/shadow-color.json",
+      "bytes": 15452,
+      "sha256": "1913fcba4440c04d02832908210fcd2887b6f02f8cbc0f4b90b3bb18b36716fb"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel-dark.log",
+      "bytes": 657,
+      "sha256": "32d0643bb7a3033e1ee8b0852e903c09e866411176aed3fa7b6831b2614ab494"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel-light.log",
+      "bytes": 657,
+      "sha256": "6c7f7e7781c8af2cec6bdd811866ac1e745fd2cb76a2a9555bc37e9422b40b24"
+    },
+    {
+      "path": "docs/audit/deep-boundary/pixel-measure.log",
+      "bytes": 4096,
+      "sha256": "2b4160f0665bc8dc70e6a004fbfb4474c29c02adc02fb6ae5e305b5c31858a7e"
+    },
+    {
+      "path": "docs/audit/deep-boundary/push-receipts.txt",
+      "bytes": 904,
+      "sha256": "8ef824b9564871b149da8623ce393855e00c6096c7ad3249e28877de835bf031"
+    },
+    {
+      "path": "docs/audit/deep-boundary/qml-ime-dark.log",
+      "bytes": 14319,
+      "sha256": "22895434922ec85271bb3433620a59d948ccc17500a2b4a16f4a73415a9231d5"
+    },
+    {
+      "path": "docs/audit/deep-boundary/qml-ime-light.log",
+      "bytes": 14319,
+      "sha256": "494df88ff29f1bc9a6f35f53f95e5f44fe29eb3d1cc86e78354beb01f14c3da7"
+    },
+    {
+      "path": "docs/audit/deep-boundary/qt-folder-download.log",
+      "bytes": 401,
+      "sha256": "042e3bea8aa7c5e68b109b78a893c763b3ccca4949f089ca4cd22b28f7b057e2"
+    },
+    {
+      "path": "docs/audit/deep-boundary/qt-libs-download.log",
+      "bytes": 662,
+      "sha256": "30b62d0176feb121234d30631c436620a4fd36cb78d8048157b864425e8037ab"
+    },
+    {
+      "path": "docs/audit/deep-boundary/qt-qml-download.log",
+      "bytes": 941,
+      "sha256": "3329fce9f44b4b16bf6d91a86c805a9f9f9ec7230cd94c73ee6875f29ee31d7d"
+    },
+    {
+      "path": "docs/audit/deep-boundary/shadow-color.log",
+      "bytes": 3875,
+      "sha256": "5fac8964a12d0a21b1fc3851fa46dcc1110f1fd2e2247c8f20de20dccfcce144"
+    }
+  ]
+}
