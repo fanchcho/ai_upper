@@ -80,7 +80,7 @@ def start(controller,bot):
    now=time.time();self.tickets={k:t for k,t in self.tickets.items() if t['expires']>now}
    if kind=='pair':
     for old in self.tickets.values():
-     if not old.get('sticky'):old['expires']=min(old['expires'],now+15)
+     if old.get('kind','pair')=='pair' and not old.get('sticky'):old['expires']=min(old['expires'],now+15)
    self.ticket={'id':secrets.token_urlsafe(9),'key':os.urandom(32),'expires':now+(600 if kind=='link' else 120),'failures':0,'kind':'pair','sticky':kind=='link'}
    self.tickets[self.ticket['id']]=self.ticket
    if kind=='pair':
@@ -90,6 +90,11 @@ def start(controller,bot):
    url=base.rstrip('/')+'/#'+urlencode({'d':desk,'p':self.ticket['id']+'.'+encode(self.ticket['key']),'n':__import__('socket').gethostname()[:40],'via':via})
    controller.changed.emit()
    return {'url':url,'qr':qr_image(url),'expiresAt':int(self.ticket['expires']*1000),'via':via}
+  def install_ticket(self,via):
+   ticket={'id':secrets.token_urlsafe(9),'key':os.urandom(32),'expires':time.time()+3600,'failures':0,'kind':'install'}
+   self.tickets[ticket['id']]=ticket
+   self.holds[via]['link']=max(self.holds[via]['link'],ticket['expires']+30)
+   return ticket['id']+'.'+encode(ticket['key'])
   def devices(self):
    row=next(b for b in controller.list() if b['id']==bot['id'])
    return [dict(u,online=any(s.get('proven') and s.get('device')==u['id'] for s in self.connections.values())) for u in row['users']]
@@ -135,7 +140,7 @@ def start(controller,bot):
      if frame.get('t')=='hi':
       if 'tx' in state or frame.get('v')!=1:raise ValueError('invalid handshake')
       kind=frame.get('k');identity=frame.get('id');ticket=self.tickets.get(identity) or self.ticket
-      if kind in ('pair','link'):
+      if kind in ('pair','link','install'):
        if not ticket or ticket.get('kind','pair')!=kind or ticket['id']!=identity or time.time()>ticket['expires']:raise ValueError('配对票据已过期或已使用')
        secret=ticket['key'];state['ticket']=ticket
       elif kind=='resume':
@@ -184,6 +189,8 @@ def start(controller,bot):
      if state.get('phone'):
       from mvvm.services.phone_sessions import handle
       handle(controller,bot['id'],state,body)
+     if body.get('t')=='install' and state.get('phone') and isinstance(body.get('rid'),str):
+      send({'t':'install','rid':body['rid'],'ticket':self.install_ticket(via)})
      if body.get('t')=='visible':state['visible']=body.get('visible') is True
      if body.get('t')=='push':
       sub=body.get('subscription')
@@ -198,6 +205,7 @@ def start(controller,bot):
       if state['ticket']['failures']>=3:
        self.tickets.pop(state['ticket']['id'],None)
        if self.ticket is state['ticket']:self.ticket=None
+     if not state.get('proven'):socket.sendTextMessage(json.dumps({'t':'err','code':'auth','message':str(exc) or type(exc).__name__}))
      controller.status.emit('未验证：'+(str(exc) or type(exc).__name__),'');socket.close()
    socket.textMessageReceived.connect(receive)
  return Server()

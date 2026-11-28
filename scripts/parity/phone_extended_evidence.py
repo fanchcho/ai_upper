@@ -56,7 +56,7 @@ for theme in ('dark','light'):
    tasks=b.tasksService();assert not tasks.create('手机任务验收','TASK_REAL_HOST','recurring','0 0 * * *','UTC','general')
    task_id=tasks.read()[0]['id'];task_snapshots=[]
   env['PHONE_SCENARIO']=scenario
-  for name in ('result.json','revoked','repair-url','repaired'):(tmp/name).unlink(missing_ok=True)
+  for name in ('install-url','install-result.json','result.json','revoked','repair-url','repaired'):(tmp/name).unlink(missing_ok=True)
   click('phoneLan' if via=='lan' else 'phoneRelay');pane=find_item(w.contentItem(),'phoneQr').parentItem().parentItem().parentItem()
   ticket=pane.property('ticket');assert ticket.get('url'),ticket
   server=api.workers[bot['id']];cancel_id=server.ticket['id'];click('phoneCancel');assert cancel_id not in server.tickets
@@ -94,8 +94,14 @@ for theme in ('dark','light'):
    assert not json.loads((h/'tasks.json').read_text())['tasks']
    assert any(any(r['status']=='paused' for r in snap['tasks']) for snap in task_snapshots)
    (out/f'tasks-{theme}-{via}.json').write_text(json.dumps({'task_store_reads':task_snapshots,'reopened_messages':[m.model_dump() for m in task_session.messages]},ensure_ascii=False,indent=2))
-  users=json.loads((h/'config.json').read_text())['remote']['bots'][0]['users'];assert len(users)==1 and users[0]['via']==via
+  users=json.loads((h/'config.json').read_text())['remote']['bots'][0]['users'];assert len(users)==(2 if scenario=='install' else 1) and users[0]['via']==via
   assert any(d['id']==did and d['online'] for d in api.phoneState()['devices'])
+  if scenario=='install':
+   installed=json.loads((tmp/'install-result.json').read_text());assert installed['installed']!=did
+   assert any('INSTALL_WRITE' in m.text() for m in ChatSessionStore(h).load_session(sid).messages)
+   assert all(t['kind']!='install' for t in server.tickets.values())
+   (out/f'install-{theme}-{via}.json').write_text(json.dumps({'browser':installed,'devices_reopened':users,'messages_reopened':[m.model_dump() for m in ChatSessionStore(h).load_session(sid).messages]},ensure_ascii=False,indent=2))
+   click('phoneRevoke_'+installed['installed'])
   shot(w,out/f'phone-device-{theme}-{via}.png')
   click('phoneRevoke_'+did);assert _pump(app,lambda:(tmp/'revoked').exists(),15)
   assert not json.loads((h/'config.json').read_text())['remote']['bots'][0]['users']

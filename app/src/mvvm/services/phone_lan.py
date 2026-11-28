@@ -25,7 +25,7 @@ def start(parent, websocket_server, port):
                     websocket_server.handleConnection(socket);return
                 socket.readAll()
                 socket.disconnected.connect(socket.deleteLater)
-                assets={b'/':('index.html','text/html'),b'/index.html':('index.html','text/html'),b'/client.js':('client.js','text/javascript'),b'/sw.js':('sw.js','text/javascript')}
+                assets={b'/manifest.webmanifest':('manifest.webmanifest','application/manifest+json'),b'/':('index.html','text/html'),b'/index.html':('index.html','text/html'),b'/client.js':('client.js','text/javascript'),b'/sw.js':('sw.js','text/javascript')}
                 asset=assets.get(path);code=b'200 OK' if asset else b'404 Not Found'
                 body=(directory/asset[0]).read_bytes() if asset else b'Not found'
                 mime=asset[1] if asset else 'text/plain'

@@ -144,7 +144,7 @@ def RemoteBots(shell):
             for bot in self.list():
                 server=self.workers.get(bot['id'])
                 if bot['platform']=='web' and server:
-                    server.tickets={k:t for k,t in server.tickets.items() if t.get('sticky')}
+                    server.tickets={k:t for k,t in server.tickets.items() if t.get('sticky') or t.get('kind')=='install'}
                     if server.ticket and not server.ticket.get('sticky'):server.ticket=None
                     server.release_qr()
 

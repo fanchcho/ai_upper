@@ -1,0 +1,69 @@
+{
+  "browser": {
+    "installed": "d_640c10821d98cf8f",
+    "rejection": "Error: 配对票据已过期或已使用",
+    "isolatedStorage": true
+  },
+  "devices_reopened": [
+    {
+      "id": "d_3dc2467df1a2c229",
+      "chatId": "d_3dc2467df1a2c229",
+      "name": "Linux x86_64 浏览器",
+      "pairedAt": 1795829198060,
+      "lastSeen": 1795829200798,
+      "via": "lan",
+      "kind": "browser"
+    },
+    {
+      "id": "d_640c10821d98cf8f",
+      "chatId": "d_640c10821d98cf8f",
+      "name": "Linux x86_64 浏览器",
+      "pairedAt": 1795829199934,
+      "lastSeen": 1795829200262,
+      "via": "lan",
+      "kind": "browser"
+    }
+  ],
+  "messages_reopened": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "PHONE_lan_light",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "LOCAL_MODEL_REPLY",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "INSTALL_WRITE",
+          "listing": null
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "LOCAL_MODEL_REPLY",
+          "listing": null
+        }
+      ]
+    }
+  ]
+}
