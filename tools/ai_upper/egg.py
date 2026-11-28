@@ -4,7 +4,14 @@ The application's own Python modules and compiled extensions are packed into a
 single ``bundle/ai_upper.dat`` instead of shipping as loose files in
 ``site-packages``:
 
-    MAGIC (8 bytes) + XOR(zip bytes, SHAKE-256 key stream)
+    MAGIC2 (8) + SALT (16) + TAG (32) + XOR(zip bytes, SHAKE-256(key + SALT))
+
+``TAG`` is ``SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]``, so the archive
+is authenticated: a rebuilt or edited egg no longer loads. Authenticating the
+ciphertext costs one extra hash pass at ~1.4 ms/MB next to the XOR pass the
+format already needs at ~6.7 ms/MB, which keeps startup inside measurement
+noise. The zip also carries ``ai_upper_manifest.json`` with a SHA-256 per
+member, which is what makes a reused plaintext extract cache verifiable.
 
 The launcher carries ``egg_loader.py`` and installs it before importing the
 application entry. On Windows, extension modules are mapped straight from
@@ -15,9 +22,12 @@ loader decrypts into a private temporary directory and puts that on
 the pack format and the import order do not depend on the platform.
 
 This is obfuscation, not modern cryptography: it raises the cost of reading the
-shipped application code, and it is not a secret storage format. It also barely
-changes the bundle size -- the bulk is the runtime and third-party wheels; use
-``[tool.ai_upper.trim]`` and Qt pruning for size.
+shipped application code, and it is not a secret storage format. The key is
+assembled at run time from a masked pair in the launcher so it does not sit in
+the binary as a readable hexadecimal string, which stops a casual ``strings``
+grep and nothing more. It also barely changes the bundle size -- the bulk is
+the runtime and third-party wheels; use ``[tool.ai_upper.trim]`` and Qt pruning
+for size.
 """
 from __future__ import annotations
 from ai_upper.localization import tr
@@ -35,7 +45,16 @@ from pathlib import Path
 from .config import (
     APP, BUILD, BUNDLE_DIR, Target, ai_upper_config, resolve_target_python,
 )
-from .egg_loader import BACKENDS, DEFAULT_KEY_HEX, MAGIC, keystream_xor
+from .egg_loader import (
+    BACKENDS, MAGIC2, MANIFEST_NAME, SALT_SIZE, TAG_SIZE, egg_tag,
+    keystream_xor,
+)
+
+# The default SHAKE-256 key stream key. It lives here, in the build tool, and
+# never in egg_loader.py: the loader is embedded verbatim into the launcher, so a
+# constant there would put the key into the shipped binary as a readable string.
+# The generator masks it before writing it out (see masked_key_arrays).
+DEFAULT_KEY_HEX = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
 from .native.inspect import inspect as inspect_native
 
 EGG_DIR = "bundle"
@@ -176,8 +195,17 @@ def _compression(name: str):
     }[name]
 
 
+def _manifest_bytes(files: dict) -> bytes:
+    """The per-member digest record stored in the archive.
+
+    Sorted and indented so two builds over the same inputs produce identical
+    bytes; the archive as a whole stays reproducible.
+    """
+    return (json.dumps({"format": 2, "files": files}, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
 def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
-    """Write the encrypted zip containing exactly ``files``.
+    """Write the authenticated encrypted zip containing exactly ``files``.
 
     Entries are sorted and carry a fixed timestamp, so two builds over the same
     inputs produce byte-identical eggs and a release manifest stays stable.
@@ -185,41 +213,81 @@ def pack_egg(site: Path, destination: Path, files, config: EggConfig) -> Path:
     Merged extension bundles are stored uncompressed: the launcher reads them
     from the decrypted archive before ``Py_Initialize`` without linking zlib or
     lzma, so their entry method is part of the format contract.
+
+    Each member's SHA-256 is computed from the bytes that were just read for the
+    archive, so the manifest costs no second pass over the inputs.
     """
     names = sorted({str(name).replace("\\", "/") for name in files})
     method, level = _compression(config.compression)
+    digests = {}
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", compression=method, compresslevel=level) as archive:
         for name in names:
             source = site / Path(name)
             if not source.is_file():
                 raise RuntimeError(tr('legacy.66baac4d0116') + str(source))
+            data = source.read_bytes()
+            digests[name] = hashlib.sha256(data).hexdigest()
             stored = name.startswith(BUNDLE_DIR + "/")
             entry_method = zipfile.ZIP_STORED if stored else method
             entry_level = None if stored else level
             info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
             info.compress_type = entry_method
             info.external_attr = 0o644 << 16
-            with source.open("rb") as handle:
-                archive.writestr(
-                    info, handle.read(),
-                    compress_type=entry_method, compresslevel=entry_level,
-                )
-    payload = MAGIC + keystream_xor(buffer.getvalue(), config.key)
+            archive.writestr(
+                info, data,
+                compress_type=entry_method, compresslevel=entry_level,
+            )
+        manifest = zipfile.ZipInfo(MANIFEST_NAME, date_time=(1980, 1, 1, 0, 0, 0))
+        manifest.compress_type = zipfile.ZIP_DEFLATED
+        manifest.external_attr = 0o644 << 16
+        archive.writestr(manifest, _manifest_bytes(digests), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    zip_bytes = buffer.getvalue()
+    # The salt makes the key stream differ per build, so two eggs of the same
+    # tree are not byte-identical ciphertexts and a known-plaintext XOR of them
+    # yields nothing. It is derived from the payload instead of os.urandom so a
+    # rebuild of the same inputs still reproduces the same archive.
+    salt = hashlib.shake_256(zip_bytes + config.key).digest(SALT_SIZE)
+    header = MAGIC2 + salt
+    ciphertext = keystream_xor(zip_bytes, config.key + salt)
+    tag = egg_tag(header, ciphertext, config.key)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_bytes(payload)
+    destination.write_bytes(header + tag + ciphertext)
     return destination
+
+
+def open_egg_archive(egg_path: Path, key_hex: str) -> zipfile.ZipFile:
+    """Open an egg once for all build-side ZIP reads of this file."""
+    from .egg_loader import open_egg
+
+    key = bytes.fromhex(str(key_hex).strip())
+    payload, _digest = open_egg(Path(egg_path).read_bytes(), key)
+    return zipfile.ZipFile(io.BytesIO(payload))
 
 
 def read_egg_members(egg_path: Path, key_hex: str) -> tuple:
     """Decrypt an egg in the build process and return its member names."""
-    key = bytes.fromhex(str(key_hex).strip())
-    raw = Path(egg_path).read_bytes()
-    payload = raw[len(MAGIC):] if raw[:len(MAGIC)] == MAGIC else raw
-    if raw[:len(MAGIC)] == MAGIC:
-        payload = keystream_xor(payload, key)
-    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-        return tuple(sorted(archive.namelist()))
+    with open_egg_archive(egg_path, key_hex) as archive:
+        return tuple(sorted(archive.namelist(), key=lambda name: (name == MANIFEST_NAME, name)))
+
+
+def read_egg_manifest(egg_path: Path, key_hex: str) -> dict:
+    """The member digests recorded in an authenticated egg."""
+    with open_egg_archive(egg_path, key_hex) as archive:
+        if MANIFEST_NAME not in archive.namelist():
+            raise ValueError("egg manifest is missing")
+        data = json.loads(archive.read(MANIFEST_NAME).decode("utf-8"))
+    files = data.get("files") if isinstance(data, dict) else None
+    return dict(files) if isinstance(files, dict) else {}
+
+
+def egg_authenticated(egg_path: Path, key_hex: str) -> bool:
+    """Whether the file opens as an authenticated ZIP egg."""
+    try:
+        read_egg_members(egg_path, key_hex)
+    except (OSError, ValueError, zipfile.BadZipFile):
+        return False
+    return True
 
 
 def _native_input(path: Path) -> bool:

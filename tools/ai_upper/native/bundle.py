@@ -7,7 +7,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from ..config import BUILD, app_name, native_exclude_patterns, optimize_config
+from ..config import BUILD, app_config_label, app_name, native_exclude_patterns, optimize_config
 from ..fs import copy_file_contents, sha256
 from .deps import (
     Dependency, DependencyResolver, _mac_install_name, _system_dependency,

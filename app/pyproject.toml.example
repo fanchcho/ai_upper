@@ -1,9 +1,13 @@
 # ai_upper application configuration.
 #
-# This file is the tracked template. Copy it to app/pyproject.toml and edit the
-# copy: the local file is Git-ignored, so your application name, dependencies
-# and runtime choices stay on your machine while this template keeps tracking
-# the repository.
+# This file is the tracked template for the bundled example application. Copy
+# it to app/pyproject.toml and edit the copy: the local file is Git-ignored, so
+# your application name, dependencies and runtime choices stay on your machine
+# while this template keeps tracking the repository.
+#
+# Your own application can live anywhere with this same file at its root; run
+# `python tools/build.py --app /path/to/app` or set AI_UPPER_APP_DIR. The
+# build tool reads this configuration and src/ without importing app code.
 
 [build-system]
 requires = [
@@ -16,7 +20,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ai_upper"
-version = "0.17.33"
+version = "0.17.37"
 description = "ai_upper standalone Python application"
 requires-python = ">=3.8,<3.14"
 # Runtime dependencies of your application, as requirement strings, e.g.
@@ -117,10 +121,18 @@ exclude = [
 # shipped code; it is obfuscation, not strong cryptography, and it barely
 # changes the bundle size. Use [tool.ai_upper.trim] and Qt pruning for size.
 # Encryption is the default; pass --no-egg for a loose-file build.
+#
+# The archive is authenticated: MAGIC2 + salt + SHAKE-256 tag + ciphertext,
+# plus a per-member digest manifest. A launcher or build tool refuses an archive
+# whose tag does not match, so replacing bundle/ai_upper.dat with a rebuilt
+# zip fails before any module is imported. The tag also keys the extract
+# cache, so authentication costs no extra pass over the payload.
 enabled = true
 # SHAKE-256 key stream key: at least 16 bytes of hexadecimal. It is compiled
-# into the launcher, so it is obfuscation material, not a secret. Changing it
-# requires rebuilding everything that reads the archive.
+# into the launcher, so it is obfuscation material, not a secret. It is
+# stored XORed with a derived mask rather than as a readable hexadecimal
+# string, which stops `strings` from finding it; a debugger still can.
+# Changing it requires rebuilding everything that reads the archive.
 key_hex = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
 # auto: map extensions from memory on Windows when _memimporter is available,
 #       otherwise decrypt into a private temporary directory.
@@ -134,13 +146,12 @@ compression = "deflated"
 include = ["*"]
 exclude = []
 # none: one extension per module (historical layout).
-# directory: link every leaf module of a top-level package into one extension
-#            and register them with the launcher before Py_Initialize. Package
-#            markers stay as .py files. Bundles are packed as stored entries in
-#            bundle/ai_upper.dat and extracted to a cache by the launcher, so no
-#            loose copy ships in site-packages. On macOS this cuts a cold start
-#            with a thousand extensions from minutes to seconds.
-merge = "directory"
+# directory: one bundle per top-level package, for smaller incremental rebuilds.
+# all: one native bundle for all selected leaf modules, for fewer startup loads.
+# Both merged modes keep __init__.py package markers and register modules in
+# the launcher before Py_Initialize. With an egg, bundles are stored in the
+# archive and extracted into a cache, not shipped loose in site-packages.
+merge = "all"
 
 [tool.ai_upper.build]
 # 同时编译的模块数；0（默认）= 每 CPU 一个任务。

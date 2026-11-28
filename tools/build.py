@@ -8,8 +8,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+from ai_upper.appdir import APP_DIR_ENV, resolve_app_dir, select_from_argv
+
+# --app has to reach config.py before the module-level APP/APP_CONFIG paths are
+# resolved. Programmatic callers can set AI_UPPER_APP_DIR instead.
+select_from_argv(sys.argv[1:])
+
 from ai_upper.config import (
-    BUILD, DIST, TARGETS, app_name, host_description, host_target, pbs_release,
+    APP, BUILD, DIST, TARGETS, app_name, host_description, host_target, pbs_release,
     pbs_sdk_dir, python_version, runtime_provider, target_runtime_dir,
     trim_policy, validate_build_python_version, validate_target, require_local_python,
 )
@@ -55,6 +61,7 @@ def _doctor(target) -> int:
     print(tr('legacy.bca299ecf9c5'), python_version())
     print(tr('legacy.35d5d317b79a'), runtime_provider())
     print(tr('legacy.36ef05bdfea0'), pbs_release() or "auto")
+    print("app:", APP)
     try:
         print(tr('legacy.ea97c9af6812'), require_local_python())
     except Exception as exc:
@@ -117,6 +124,19 @@ def main(argv=None) -> int:
     from ai_upper.localization import configure_cli
     configure_cli(argv)
     _line_buffered()
+    if argv is not None:
+        requested = select_from_argv(argv)
+        if requested is not None and resolve_app_dir(requested) != APP:
+            # config.APP is fixed when ai_upper.config is imported. The normal
+            # CLI path selects it before that import; a programmatic caller
+            # that already imported this module is re-run in a child process
+            # so the same --app contract still applies.
+            env = os.environ.copy()
+            env[APP_DIR_ENV] = str(resolve_app_dir(requested))
+            return subprocess.run(
+                [sys.executable, str(Path(__file__).resolve()), *argv],
+                env=env,
+            ).returncode
     validate_build_python_version()
     parser = argparse.ArgumentParser(description=tr('legacy.9e8a12d793eb'))
     parser.add_argument("command", nargs="?", choices=["doctor", "build", "run", "verify", "lock", "release", "clean"])
@@ -127,8 +147,14 @@ def main(argv=None) -> int:
     actions.add_argument("--lock", action="store_true")
     actions.add_argument("--release", action="store_true")
     actions.add_argument("--clean", action="store_true")
+    parser.add_argument("--app", metavar="DIR",
+                        help="application directory containing pyproject.toml and src/ "
+                             "(default: <repo>/app; env AI_UPPER_APP_DIR)")
     parser.add_argument("--target", choices=list(TARGETS))
     parser.add_argument("--locked", action="store_true")
+    parser.add_argument("--linux-format", action="append", choices=["TGZ", "DEB", "RPM"],
+                        help="Linux release format; repeatable; default TGZ and DEB")
+    parser.add_argument("--linux-deb-depends", help="explicit Debian Depends for cross/sysroot packaging; otherwise use dpkg-shlibdeps")
     parser.add_argument("--identity")
     parser.add_argument("--notary-profile")
     parser.add_argument("--trim-preset", choices=tuple(PRESETS), metavar="NAME",
@@ -220,8 +246,12 @@ def main(argv=None) -> int:
         if action == "run":
             return _run_app(out, target)
         if action == "release":
-            release(target, args.identity, args.notary_profile)
-            print(tr('legacy.7b9b2ee07a29'), write_release_manifest(target))
+            if target.os == "linux":
+                from ai_upper.linux_release import linux_release
+                print("Linux release:", linux_release(target, args.linux_format or ("TGZ", "DEB"), args.linux_deb_depends))
+            else:
+                release(target, args.identity, args.notary_profile)
+                print(tr('legacy.7b9b2ee07a29'), write_release_manifest(target))
         else:
             print(tr('legacy.2db9a748ad8a'), out)
         return 0

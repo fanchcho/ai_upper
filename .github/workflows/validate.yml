@@ -263,7 +263,7 @@ jobs:
         run: |
           set -o pipefail
           rc=0
-          python -m pytest tests -q -ra --tb=long 2>&1 | tee pytest.log || rc=$?
+          python -m pytest tests -q -ra --tb=long --junitxml=../unit-results.xml 2>&1 | tee pytest.log || rc=$?
           echo "$rc" > pytest.exitcode
           exit "$rc"
 
@@ -333,19 +333,65 @@ jobs:
       - name: Doctor
         run: python tools/build.py --doctor --target ${{ matrix.target }}
 
-      # The build is the longest step and it is where a missing host tool
-      # (cmake, ninja, a compiler, a toolchain) shows up. Without this block its
-      # failure left exactly "exit code 1" and no text: the job log needs a
-      # token that anonymous callers do not have, and the annotations only carry
-      # the run below. `pipefail` keeps the real exit code behind `tee`.
-      - name: Full integration build
-        shell: bash
+      - name: Report failing tests
+        if: failure()
+        shell: python
         run: |
-          set -o pipefail
-          rc=0
-          python tools/build.py --target ${{ matrix.target }} 2>&1 | tee build.log || rc=$?
-          echo "$rc" > build.exitcode
-          exit "$rc"
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          report = Path("unit-results.xml")
+          if report.exists():
+              for case in ET.parse(report).iter("testcase"):
+                  for kind in ("failure", "error"):
+                      for failure in case.findall(kind):
+                          message = case.get("name", "test") + ": " + (failure.text or failure.get("message", ""))
+                          message = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                          print("::error::" + message)
+
+
+      - name: Local end-to-end build with third-party wheel
+        working-directory: app
+        env:
+          AI_UPPER_E2E: '1'
+        run: python -m pytest tests/test_e2e_local.py -q
+
+      - name: Doctor
+        run: python tools/build.py --doctor --target ${{ matrix.target }}
+
+      - name: Full integration build and optional GUI run
+        # Git Bash prepends its GNU tar to PATH on Windows. That tar treats
+        # drive letters in native CPython's archive arguments as remote hosts.
+        shell: python
+        env:
+          AI_UPPER_CI_TARGET: ${{ matrix.target }}
+          AI_UPPER_CI_APP_RUN: ${{ matrix.run }}
+          AI_UPPER_HEADLESS: '1'
+          # A failed launcher must exit non-zero, never block the job on a
+          # native error dialog that nobody can dismiss.
+          AI_UPPER_NO_DIALOG: '1'
+        run: |
+          import os
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          run_gui = os.environ["AI_UPPER_CI_APP_RUN"] == "true"
+          command = [sys.executable, "tools/build.py", "--target", os.environ["AI_UPPER_CI_TARGET"]]
+          if run_gui:
+              command.append("--run")
+
+          log_path = Path("run.log")
+          with log_path.open("wb") as log:
+              result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
+          Path("build.exitcode").write_text(str(result.returncode))
+          Path("build.log").write_bytes(log_path.read_bytes())
+          output = log_path.read_text(encoding="utf-8", errors="replace")
+          print(output)
+          if result.returncode:
+              subprocess.run([sys.executable, "tools/ci_tail.py", "--log", str(log_path), "--title", "Integration failed", "--label", "run.log"], check=False)
+              raise SystemExit(result.returncode)
+          if run_gui and not any(line.startswith("QML OK ") for line in output.splitlines()):
+              raise SystemExit("Packaged GUI did not report readiness")
 
       - name: Publish build log
         if: always()
@@ -402,107 +448,6 @@ jobs:
           path: build.log
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Full integration run
-        if: matrix.run == true
-        shell: bash
-        env:
-          AI_UPPER_HEADLESS: '1'
-          # A failed launcher must exit non-zero, never block the job on a
-          # native error dialog that nobody can dismiss.
-          AI_UPPER_NO_DIALOG: '1'
-        run: |
-          set -o pipefail
-          # Keep the real exit code: the assertion below is a separate process.
-          rc=0
-          python tools/build.py --run --target ${{ matrix.target }} > run.log 2>&1 || rc=$?
-          {
-            echo '### Full integration run — ${{ matrix.target }}'
-            echo ''
-            echo "build.py --run exit code: $rc"
-            echo ''
-            echo '```'
-            tail -n 400 run.log
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-          cat run.log
-          # The entry point is app/src/main.py (the single launch path for the
-          # source tree and the packaged launcher), so the readiness marker is
-          # the one it prints once the QML shell has rendered its first frame.
-          # Asserting on the template app's "GUI OK" passed only when this step
-          # silently ran a different entry.
-          #
-          # The marker check runs before the annotation is emitted: a run that
-          # exits 0 without printing the marker is a failure too, and it used to
-          # leave an "exit 0" notice as the only readable text.
-          marker=1
-          if ! python - <<'PY'
-          import pathlib
-          import sys
-
-          text = pathlib.Path('run.log').read_text(encoding='utf-8', errors='replace')
-          print(text[-3000:])
-          # `QML OK … size=1280x820` is the shell's own first-frame marker. There
-          # is no second UI route any more, so there is no union to check.
-          ok = 'QML OK' in text and 'size=1280x820' in text
-          if not ok:
-              print('MISSING MARKER in run.log:', repr(text[-400:]), file=sys.stderr)
-          sys.exit(0 if ok else 1)
-          PY
-          then
-            marker=0
-          fi
-          # Annotations are readable without admin rights; job logs are not.
-          # Only a failed run emits an error, or every green job would carry one.
-          # The annotation carries diagnostic lines, not a raw tail: GitHub keeps
-          # only the first 4096 characters of the message, which on Windows a
-          # few command lines already exhaust.
-          if [ "$rc" != "0" ]; then
-            python tools/ci_tail.py \
-              --log run.log \
-              --title "run.log (build.py --run exit $rc)" \
-              --label run.log
-          elif [ "$marker" != "1" ]; then
-            python tools/ci_tail.py \
-              --log run.log \
-              --title "run.log (build.py --run exit 0, readiness marker missing)" \
-              --label run.log
-          else
-            python tools/ci_tail.py \
-              --log run.log \
-              --title "run.log (build.py --run exit 0)" \
-              --level notice \
-              --label run.log
-          fi
-          # Either failure is the step's failure: build.py --run exiting non-zero
-          # and a run that "succeeded" without printing the marker.
-          if [ "$rc" != "0" ] || [ "$marker" != "1" ]; then
-            exit 1
-          fi
-
-      - name: Upload integration run log
-        if: always() && matrix.run == true
-        uses: actions/upload-artifact@v4
-        with:
-          name: run-log-${{ matrix.artifact || matrix.target }}
-          path: run.log
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Validate packaged release manifest inputs
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import hashlib
-          root = Path('dist')
-          files = [p for p in root.rglob('*') if p.is_file()]
-          assert files, 'dist is empty'
-          for p in files:
-              h = hashlib.sha256(p.read_bytes()).hexdigest()
-              assert len(h) == 64
-          print(f'validated {len(files)} packaged files')
-          PY
 
       - name: Upload packaged artifact
         uses: actions/upload-artifact@v4

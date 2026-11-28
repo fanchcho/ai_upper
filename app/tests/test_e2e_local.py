@@ -52,7 +52,30 @@ def _host_libpython() -> Path:
     for candidate in candidates:
         if candidate.is_file():
             return candidate
+    # Relocated standalone interpreters may retain their build-time LIBDIR
+    # (for example /install/lib). The running installation is authoritative.
+    for name in (sysconfig.get_config_var("LDLIBRARY"), sysconfig.get_config_var("INSTSONAME")):
+        if name and "/" not in str(name):
+            candidate = Path(sys.base_prefix) / "lib" / str(name)
+            candidates.append(candidate)
+            if candidate.is_file():
+                return candidate
     raise RuntimeError("Host libpython not found; tried: " + ", ".join(str(path) for path in candidates))
+
+
+def test_host_libpython_uses_relocated_base_prefix(tmp_path, monkeypatch):
+    library = tmp_path / "lib" / "libpython3.13.so.1.0"
+    library.parent.mkdir()
+    library.write_bytes(b"fixture")
+    values = {
+        "LIBDIR": str(tmp_path / "old-install" / "lib"),
+        "LDLIBRARY": "libpython3.13.so",
+        "INSTSONAME": library.name,
+    }
+    monkeypatch.setattr(sysconfig, "get_config_var", values.get)
+    monkeypatch.setattr(sys, "base_prefix", str(tmp_path))
+
+    assert _host_libpython() == library
 
 
 def _complete_linux_runtime(runtime: Path, target) -> None:
@@ -65,8 +88,14 @@ def _complete_linux_runtime(runtime: Path, target) -> None:
     """
     lib = runtime / "lib"
     dependencies: dict[str, Path] = {}
+    # Standalone Python carries Tcl/Tk and other libraries beside libpython.
+    # The copied extensions' relative RPATH no longer reaches that host tree.
+    env = dict(os.environ)
+    env["LD_LIBRARY_PATH"] = str(Path(sys.base_prefix) / "lib") + (
+        os.pathsep + env["LD_LIBRARY_PATH"] if env.get("LD_LIBRARY_PATH") else ""
+    )
     for binary in native_files(runtime, target):
-        result = subprocess.run(["ldd", str(binary)], capture_output=True, text=True, check=True)
+        result = subprocess.run(["ldd", str(binary)], env=env, capture_output=True, text=True, check=True)
         for line in result.stdout.splitlines():
             if "=>" not in line:
                 continue
@@ -266,7 +295,7 @@ def _prepare_repo() -> Path:
     shutil.copytree(
         source_repo,
         repo,
-        ignore=shutil.ignore_patterns(".git", ".cache", "build", "dist", "runtimes", "__pycache__", ".pytest_cache"),
+        ignore=shutil.ignore_patterns(".git", ".cache", ".tmp", "build", "dist", "runtimes", "__pycache__", ".pytest_cache"),
         symlinks=True,
     )
     version = _make_local_runtime(repo)

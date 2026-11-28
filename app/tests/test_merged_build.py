@@ -1,12 +1,4 @@
-"""Directory-level native merging: grouping, symbol rewriting and layout checks.
-
-macOS charges a code-signing registration for every Mach-O image a process
-maps. A thousand one-module extensions therefore cost minutes on a cold start;
-one bundle per top-level package costs three image loads. These tests pin the
-parts that make that legal: package markers stay source, every Cython entry
-point gets a unique name, and the launcher registers the table before the
-interpreter exists.
-"""
+"""Native bundle grouping, symbol rewriting and layout checks."""
 from __future__ import annotations
 
 import hashlib
@@ -19,7 +11,7 @@ import pytest
 
 from ai_upper import python_build, verify
 from ai_upper.config import TARGETS
-from ai_upper.egg import EggConfig, pack_egg, read_egg_members
+from ai_upper.egg import EggConfig, pack_egg
 from ai_upper.toolchain import Toolchain
 
 
@@ -41,7 +33,11 @@ def _cython_c(directory: Path, name: str, basename: str) -> Path:
     return path
 
 
-def test_merged_groups_leave_package_markers_out(tmp_path, monkeypatch):
+@pytest.mark.parametrize(("mode", "expected"), [
+    ("directory", {"_root": ["main"], "pkg": ["pkg.a", "pkg.sub.b"], "utils": ["utils.paths"]}),
+    ("all", {"_all": ["main", "pkg.a", "pkg.sub.b", "utils.paths"]}),
+])
+def test_merged_groups_leave_package_markers_out(tmp_path, monkeypatch, mode, expected):
     app_root = tmp_path / "app"
     monkeypatch.setattr(python_build, "APP", app_root)
     sources = [
@@ -54,12 +50,11 @@ def test_merged_groups_leave_package_markers_out(tmp_path, monkeypatch):
         _source(app_root, "utils/paths.py"),
     ]
 
-    groups = python_build.merged_groups(sources)
+    groups = python_build.merged_groups(sources, mode)
 
-    assert sorted(groups) == ["_root", "pkg", "utils"]
-    assert [python_build.module_name(path) for path in groups["_root"]] == ["main"]
-    assert [python_build.module_name(path) for path in groups["pkg"]] == ["pkg.a", "pkg.sub.b"]
-    assert [python_build.module_name(path) for path in groups["utils"]] == ["utils.paths"]
+    assert {group: [python_build.module_name(path) for path in paths]
+            for group, paths in groups.items()} == expected
+    assert python_build.merged_groups([source for source in sources if source.name == "__init__.py"], mode) == {}
 
 
 def test_entry_point_rewrite_is_unique_and_rejects_ambiguous_units(tmp_path, monkeypatch):
@@ -84,24 +79,27 @@ def test_registration_table_names_every_module(tmp_path, monkeypatch):
     app_root = tmp_path / "app"
     monkeypatch.setattr(python_build, "APP", app_root)
     monkeypatch.setattr(python_build, "BUILD", tmp_path / "build")
-    first = _source(app_root, "pkg/a.py")
-    second = _source(app_root, "pkg/b.py")
+    first = _source(app_root, "pkg/shared.py")
+    second = _source(app_root, "utils/shared.py")
     generated = {
-        first: _cython_c(tmp_path / "gen", "a.c", "a"),
-        second: _cython_c(tmp_path / "gen", "b.c", "b"),
+        first: _cython_c(tmp_path / "gen", "pkg/shared.c", "shared"),
+        second: _cython_c(tmp_path / "gen", "utils/shared.c", "shared"),
     }
 
-    inputs, register = python_build.prepare_merged_group(TARGETS["linux-x86_64"], "pkg", [first, second], generated)
+    inputs, register = python_build.prepare_merged_group(TARGETS["linux-x86_64"], "_all", [first, second], generated)
 
     assert len(inputs) == 2
     text = register.read_text(encoding="utf-8")
-    assert "(char*)\"pkg.a\"" in text
-    assert "(char*)\"pkg.b\"" in text
+    names = ["pkg.shared", "utils.shared"]
+    symbols = [python_build.merged_init_symbol(name) for name in names]
+    assert len(set(symbols)) == 2
+    for name, symbol, path in zip(names, symbols, inputs):
+        assert f'(char*)"{name}", {symbol}' in text
+        rewritten = path.read_text(encoding="utf-8")
+        assert symbol + "(" in rewritten
+        assert "PyInit_shared(" not in rewritten
     assert "PyImport_ExtendInittab" in text
     assert "ai_upper_register_modules" in text
-    for path in inputs:
-        assert "PyInit_a(" not in path.read_text(encoding="utf-8")
-        assert "PyInit_b(" not in path.read_text(encoding="utf-8")
 
 
 def test_windows_merged_setup_exports_the_registration_entry_point(tmp_path):
@@ -159,7 +157,8 @@ def test_merged_compile_links_every_translation_unit_once(tmp_path, monkeypatch)
     assert outputs[0].parent.name == python_build.BUNDLE_DIR
 
 
-def test_merge_mode_cythonizes_only_leaves(tmp_path, monkeypatch):
+@pytest.mark.parametrize(("mode", "group"), [("directory", "pkg"), ("all", "_all")])
+def test_merge_mode_cythonizes_only_leaves(tmp_path, monkeypatch, mode, group):
     app_root = tmp_path / "app"
     marker = _source(app_root, "pkg/__init__.py")
     leaf = _source(app_root, "pkg/a.py")
@@ -175,19 +174,19 @@ def test_merge_mode_cythonizes_only_leaves(tmp_path, monkeypatch):
         return []
 
     monkeypatch.setattr(python_build, "APP", app_root)
-    monkeypatch.setattr(python_build, "cython_merge_mode", lambda: "directory")
+    monkeypatch.setattr(python_build, "cython_merge_mode", lambda: mode)
     monkeypatch.setattr(python_build, "require_local_python", lambda: Path("/fake/python3"))
     monkeypatch.setattr(python_build, "cythonize_to_c", fake_cython)
     monkeypatch.setattr(python_build, "build_merged_extensions", fake_merged)
 
     assert python_build.build_target_extensions(TARGETS["linux-x86_64"], [marker, leaf]) == []
     assert seen["sources"] == [leaf]
-    assert seen["groups"] == {leaf.parent.name: [leaf]}
+    assert seen["groups"] == {group: [leaf]}
 
 
 @pytest.mark.skipif(shutil.which("c++") is None, reason="no C++ compiler")
 def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
-    from ai_upper.egg_loader import decrypt_if_needed
+    from ai_upper.egg_loader import open_egg
 
     config = EggConfig()
     relative = "ai_upper_bundles/ai_upper_pkg.so"
@@ -205,12 +204,14 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
         '#include <iostream>\n'
         'int main(int argc, char** argv) {\n'
         '    std::vector<aiupper::EggBundleFile> files;\n'
-        '    std::string key, error;\n'
-        '    if (!aiupper::read_egg_bundles(argv[1], argv[2], "ai_upper_bundles/", files, key, error)) {\n'
+        '    auto egg = aiupper::read_egg(argv[1], argv[2]);\n'
+        '    std::string error = egg.error;\n'
+        '    if (!egg.ok || !aiupper::read_bundles_from_payload(egg.payload, "ai_upper_bundles/", files, error)) {\n'
         '        std::cout << "ERROR " << error << "\\n";\n'
         '        return 1;\n'
         '    }\n'
-        '    std::cout << "KEY " << key << "\\n";\n'
+        '    std::cout << "KEY " << egg.cache_key << "\\n";\n'
+        '    std::cout << "PAYLOAD " << egg.payload.size() << "\\n";\n'
         '    for (const auto& file : files) {\n'
         '        std::cout << "FILE " << file.name << " " << file.data.size() << "\\n";\n'
         '    }\n'
@@ -227,51 +228,50 @@ def test_native_egg_reader_matches_the_python_egg_format(tmp_path):
     )
 
     result = subprocess.run([str(binary), str(egg), config.key_hex], check=True, capture_output=True, text=True)
-    plaintext = decrypt_if_needed(egg.read_bytes(), bytes.fromhex(config.key_hex))
-    expected_key = hashlib.shake_256(plaintext).hexdigest(16)
-    assert f"KEY {expected_key}" in result.stdout
+    # The launcher's cache key is the authentication tag, so a rebuilt archive
+    # gets a fresh cache directory instead of reusing a stale one.
+    plaintext, digest = open_egg(egg.read_bytes(), bytes.fromhex(config.key_hex))
+    assert result.stdout.splitlines()[:2] == [f"KEY {digest}", f"PAYLOAD {len(plaintext)}"]
     assert f"FILE {relative} {len(payload)}" in result.stdout
     assert "pkg/mod.py" not in result.stdout
 
     bad = subprocess.run([str(binary), str(egg), "00" * 16], capture_output=True, text=True)
     assert bad.returncode == 1
-    assert "not a zip archive" in bad.stdout
+    assert "authentication failed" in bad.stdout
 
 
-def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkeypatch):
+@pytest.mark.parametrize(("mode", "group"), [("directory", "pkg"), ("all", "_all")])
+def test_merged_layout_keeps_markers_and_reads_bundles_from_egg(tmp_path, monkeypatch, mode, group):
     app_root = tmp_path / "app"
     marker = _source(app_root, "pkg/__init__.py")
     leaf = _source(app_root, "pkg/a.py")
     site = tmp_path / "site-packages"
     (site / "pkg").mkdir(parents=True)
     (site / "pkg" / "__init__.py").write_text("x = 1\n", encoding="utf-8")
-    relative = "ai_upper_bundles/ai_upper_pkg.cp313-darwin.so"
+    relative = f"ai_upper_bundles/ai_upper_{group}.cp313-darwin.so"
     bundle = site / relative
     bundle.parent.mkdir(parents=True)
     bundle.write_bytes(b"bundle")
 
     monkeypatch.setattr(python_build, "APP", app_root)
     monkeypatch.setattr(verify, "APP", app_root)
-    monkeypatch.setattr(verify, "cython_merge_mode", lambda: "directory")
+    monkeypatch.setattr(verify, "cython_merge_mode", lambda: mode)
     monkeypatch.setattr(verify, "runtime_spec", lambda target: SimpleNamespace(major_minor="3.13", abi_tag="cp313"))
     monkeypatch.setattr(verify, "target_extension_suffix", lambda target, major, abi: ".cp313-darwin.so")
     monkeypatch.setattr(verify, "verify_arch", lambda path, target: None)
 
     # A build without an egg still has a loose bundle, and verification accepts it.
-    checks = verify._application_source_checks(site, [marker, leaf], TARGETS["macos-arm64"], None, "")
+    target = TARGETS["macos-arm64"]
+    checks = verify._checks_for_application(site, [marker, leaf], target)
     assert all(ok for ok, _ in checks), checks
 
     config = EggConfig()
     egg = pack_egg(site, tmp_path / "bundle" / "ai_upper.dat", ["pkg/__init__.py", relative], config)
-    egg_members = set(read_egg_members(egg, config.key_hex))
-    assert relative in egg_members
-
     (site / "pkg" / "__init__.py").unlink()
     bundle.unlink()
     bundle.parent.rmdir()
-    checks = verify._application_source_checks(
-        site, [marker, leaf], TARGETS["macos-arm64"], egg_members, "",
-        egg_path=egg, egg_key=config.key_hex,
+    checks = verify._checks_for_application(
+        site, [marker, leaf], target, egg_input=(egg, config.key_hex),
     )
     assert all(ok for ok, _ in checks), checks
     assert any("merged bundle stored" in label for ok, label in checks if ok)
@@ -282,4 +282,7 @@ def test_launcher_registers_bundles_before_interpreter_initialization():
     text = launcher.read_text(encoding="utf-8")
     assert "ai_upper_bundles" in text
     assert "ai_upper_register_modules" in text
-    assert text.index("load_module_bundles(site, egg, runtime)") < text.index("PyStatus status = init(&config)")
+    native = text.index("load_module_bundles(site, egg_contents, runtime)")
+    init = text.index("PyStatus status = init(&config)")
+    handoff = text.index("publish_egg_payload(loaded.handle")
+    assert native < init < handoff < text.index("run_simple(source.c_str())")

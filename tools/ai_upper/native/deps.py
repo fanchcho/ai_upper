@@ -360,7 +360,7 @@ LINUX_HOST_LIBRARIES = frozenset({
     "libc.so.6", "libm.so.6", "libdl.so.2", "libpthread.so.0", "librt.so.1",
     "libutil.so.1", "libresolv.so.2", "libgcc_s.so.1", "libstdc++.so.6",
     # Display server and graphics driver stack.
-    "libx11.so.6", "libx11-xcb.so.1",
+    "libx11.so.6", "libx11-xcb.so.1", "libice.so.6", "libsm.so.6",
     "libxcb.so.1", "libxcb-cursor.so.0", "libxcb-icccm.so.4", "libxcb-image.so.0",
     "libxcb-keysyms.so.1", "libxcb-randr.so.0", "libxcb-render.so.0",
     "libxcb-render-util.so.0", "libxcb-shape.so.0", "libxcb-shm.so.0",

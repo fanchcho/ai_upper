@@ -11,6 +11,43 @@ from pathlib import Path
 import pytest
 
 
+@pytest.mark.parametrize("mode", ["embedded", "crash", "sidecar"])
+def test_bootstrap_only_imports_failure_and_sidecar_helpers_when_needed(tmp_path, mode):
+    launcher = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
+    body = launcher.read_text(encoding="utf-8").split('R"PYUPPER(', 1)[1].split(')PYUPPER"', 1)[0]
+    report = tmp_path / "crash.log"
+    script = tmp_path / "entry.py"
+    script.write_text("print('sidecar reached')", encoding="utf-8")
+    code = {
+        "embedded": "import sys\nassert not {'traceback', 'linecache', 'runpy'} & sys.modules.keys()\n",
+        "crash": "raise RuntimeError('entry failed')\n",
+        "sidecar": None,
+    }[mode]
+    variables = {
+        "ENTRY_FILE": str(tmp_path / "compiled-launcher"),
+        "ENTRY_SCRIPT": str(script),
+        "ENTRY_SOURCE": code,
+        "CRASH_REPORT": str(report),
+        "EGG_LOADER_SOURCE": None,
+        "LAUNCHER_ENV": {},
+    }
+    prelude = "".join(f"{name} = {value!r}\n" for name, value in variables.items())
+    result = subprocess.run(
+        [sys.executable, "-IS", "-"], input=prelude + body, text=True,
+        capture_output=True, timeout=10,
+    )
+    if mode == "crash":
+        assert result.returncode != 0
+        text = report.read_text(encoding="utf-8")
+        assert "raise RuntimeError('entry failed')" in text
+        assert "RuntimeError: entry failed" in result.stderr
+    else:
+        assert result.returncode == 0, result.stderr
+        assert not report.exists()
+        if mode == "sidecar":
+            assert "sidecar reached" in result.stdout
+
+
 @pytest.fixture(scope="module")
 def launcher_probe(tmp_path_factory):
     root = tmp_path_factory.mktemp("launcher-paths") / "安装 目录"
@@ -92,3 +129,23 @@ def test_launcher_cache_paths_preserve_unicode(launcher_probe, tmp_path, overrid
         text=True, encoding="utf-8", check=True, timeout=10,
     )
     assert Path(result.stdout.splitlines()[1]) == expected
+
+
+def test_launcher_falls_back_when_the_cache_root_is_not_writable(tmp_path):
+    """An unwritable cache must not stop the application from starting.
+
+    The per-user cache directory can exist and still be unwritable: a read-only
+    home, a roaming profile, a container without a writable $HOME. The launcher
+    used to report "Could not create the bundle cache staging directory" and
+    exit before Py_Initialize, which turns a cache problem into an application
+    that will not run at all.
+    """
+    source = Path(__file__).parents[2] / "launcher" / "src" / "AiUpper.cpp"
+    text = source.read_text(encoding="utf-8")
+    assert "cache_root_usable" in text
+    assert "usable_cache_root" in text
+    # The probe writes and removes a file, so a directory that merely exists is
+    # not mistaken for a usable one.
+    assert ".probe-" in text
+    # Both the bundle cache publish path and the plaintext cache go through it.
+    assert "const fs::path base = usable_cache_root();" in text

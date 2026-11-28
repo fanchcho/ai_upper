@@ -42,6 +42,8 @@ class MVVMQtApplication:
     def __init__(self, argv: list[str] | None = None) -> None:
         self.qt_app = create_application(argv)
         self.mvvm_app: Optional[MVVMApplication] = None
+        self.async_lifecycle = None
+        self._async_stop = None
 
     def setup(self, model: Optional[ApplicationModel] = None) -> MVVMApplication:
         """创建 MVVM 容器；root model 由参数提供，缺省时建一个空的"""
@@ -55,22 +57,75 @@ class MVVMQtApplication:
         """创建并注册 View（由子类实现）"""
 
     def prepare(self) -> MVVMApplication:
-        """装配并启动：建容器、造 ViewModel/View、start()（start 会显示 View）"""
+        """装配并启动；已运行的容器直接复用，避免重复创建窗口与订阅。"""
         application = self.mvvm_app or self.setup()
+        if application.is_running:
+            return application
         self.initialize_viewmodels()
         self.initialize_views()
         application.start()
         return application
 
-    def run(self) -> int:
-        """prepare() 之后进入 Qt 事件循环"""
+    def run(self, *, headless: bool = False) -> int:
+        """统一装配、事件处理与清理；headless 只处理一轮事件。"""
         from utils.qt_compat import exec_loop
 
-        self.prepare()
-        return exec_loop(self.qt_app)
+        try:
+            self.prepare()
+            if headless:
+                self.qt_app.processEvents()
+                return 0
+            return exec_loop(self.qt_app)
+        finally:
+            if self.mvvm_app is not None:
+                self.mvvm_app.stop()
+
+    def run_async(self, *, headless: bool = False) -> int:
+        """Opt-in qasync loop; add qasync to the application's dependencies."""
+        import asyncio
+        # qasync belongs to the opt-in async integration, not the QML shell.
+        from importlib import import_module
+        QEventLoop = import_module("qasync").QEventLoop
+        from mvvm.async_lifecycle import AsyncLifecycle
+
+        self.async_lifecycle = AsyncLifecycle()
+        stop = asyncio.Event()
+        self._async_stop = stop
+        previous_quit = self.qt_app.quitOnLastWindowClosed()
+        self.qt_app.setQuitOnLastWindowClosed(False)
+        self.qt_app.lastWindowClosed.connect(stop.set)
+        loop = QEventLoop(self.qt_app)
+
+        async def main():
+            try:
+                self.prepare()
+                if headless:
+                    await asyncio.sleep(0)
+                else:
+                    await stop.wait()
+            finally:
+                try:
+                    await self.async_lifecycle.aclose()
+                finally:
+                    if self.mvvm_app is not None:
+                        self.mvvm_app.stop()
+            return 0
+
+        try:
+            asyncio.set_event_loop(loop)
+            with loop:
+                return loop.run_until_complete(main())
+        finally:
+            self.qt_app.lastWindowClosed.disconnect(stop.set)
+            self.qt_app.setQuitOnLastWindowClosed(previous_quit)
+            self._async_stop = None
+            asyncio.set_event_loop(None)
 
     def quit(self) -> None:
         """停止应用：停容器、退事件循环"""
+        if self._async_stop is not None:
+            self._async_stop.set()
+            return
         if self.mvvm_app is not None:
             self.mvvm_app.stop()
         self.qt_app.quit()

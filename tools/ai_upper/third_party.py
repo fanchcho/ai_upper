@@ -10,7 +10,7 @@ import subprocess
 import zipfile
 from pathlib import Path, PureWindowsPath
 
-from .config import APP, BUILD, LEGACY_LOCK, LOCK, ROOT, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
+from .config import APP, BUILD, LEGACY_LOCK, LOCK, ROOT, app_config_label, Target, dependency_config, host_target, load_app_config, optimize_config, pip_cache_dir, pip_transfer_args, python_version, require_local_python, runtime_executable, wheel_dir
 from .fs import make_executable
 
 WHEEL_MANIFEST = "manifest.json"

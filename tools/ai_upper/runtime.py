@@ -24,6 +24,8 @@ RUNTIME_MARKER = ".ai_upper-runtime.json"
 
 
 def safe_extract(tar_path: Path, dest: Path) -> None:
+    if not hasattr(tarfile, "data_filter"):
+        raise RuntimeError("Safe runtime extraction requires a Python security update with tarfile.data_filter")
     dest.mkdir(parents=True, exist_ok=True)
     root = dest.resolve()
     with tarfile.open(tar_path, "r:gz") as tf:
@@ -31,7 +33,7 @@ def safe_extract(tar_path: Path, dest: Path) -> None:
             target = (dest / member.name).resolve()
             if os.path.commonpath([str(root), str(target)]) != str(root):
                 raise RuntimeError(tr('legacy.e1a96e9e350b' ,p1=member.name))
-        tf.extractall(dest)
+        tf.extractall(dest, filter="data")
 
 
 def ensure_pbs_runtime(target: Target) -> Path:

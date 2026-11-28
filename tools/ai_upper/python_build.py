@@ -110,20 +110,22 @@ def selected_sources() -> list[Path]:
     return result
 
 
-def merged_groups(sources: list[Path]) -> dict[str, list[Path]]:
-    """Leaf modules grouped by the top-level directory they live under.
+def merged_groups(sources: list[Path], mode: str) -> dict[str, list[Path]]:
+    """The same native bundle layout for building and static verification.
 
     Package markers are deliberately absent: a built-in module is not a
     package, so ``__init__.py`` has to stay a real file for ``from . import`` to
-    work. Root modules (``main.py``, ``application.py``) have no directory and
-    share one group.
+    work. In directory mode, root modules share their own group.
     """
     groups: dict[str, list[Path]] = {}
     for source in sources:
         if source.name == "__init__.py":
             continue
         name = module_name(source)
-        group = name.split(".", 1)[0] if "." in name else "_root"
+        if mode == "all":
+            group = "_all"
+        else:
+            group = name.split(".", 1)[0] if "." in name else "_root"
         groups.setdefault(group, []).append(source)
     return {group: sorted(paths, key=module_name) for group, paths in sorted(groups.items())}
 
@@ -172,24 +174,23 @@ def _supported_cython(version: str | None) -> bool:
 def _cython_env(host_python: Path) -> dict[str, str]:
     base = dict(os.environ)
     installed = _cython_version(host_python, base)
+    # A usable host installation needs no cache lookup or extra interpreter
+    # probes, and must not be shadowed by an outdated cached installation.
+    if _supported_cython(installed):
+        return base
     cache = _cython_cache_dir(host_python)
     env = dict(base)
-    if cache.exists():
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
-    cached = _cython_version(host_python, env)
-    if not _supported_cython(installed) and not _supported_cython(cached):
+    env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    cached = _cython_version(host_python, env) if cache.exists() else None
+    if not _supported_cython(cached):
         cache.mkdir(parents=True, exist_ok=True)
         _run([
             str(host_python), "-m", "pip", "install", "--disable-pip-version-check", "--no-input",
-            "--target", str(cache),
+            "--upgrade", "--target", str(cache),
         ] + pip_transfer_args() + [CYTHON_REQUIREMENT])
-        env = dict(base)
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
         cached = _cython_version(host_python, env)
         if not _supported_cython(cached):
             raise RuntimeError(tr('legacy.bb3cb1499963' ,p1=CYTHON_REQUIREMENT, p3=host_python, p5=cache))
-    elif not _supported_cython(installed):
-        env["PYTHONPATH"] = str(cache) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     return env
 
 
@@ -346,8 +347,15 @@ def cythonize_to_c(sources: list[Path], host_python: Path) -> dict[Path, Path]:
     print(tr('legacy.45324af0c4af' ,p1=len(pending), p3=len(sources)))
     tasks: list[tuple[list[str], Path | None, dict[str, str] | None]] = []
     for source, destination, _ in pending:
-        output_rel = os.path.relpath(destination, source.parent)
-        tasks.append(([str(host_python), "-m", "cython", "--force", "-3", "-o", output_rel, source.name], source.parent, env))
+        try:
+            # A relative output path keeps Cython diagnostics short, but an
+            # application can live on a different Windows drive from build/.
+            # ntpath.relpath raises across drives, so fall back to the absolute
+            # destination instead of failing the build.
+            output = os.path.relpath(destination, source.parent)
+        except ValueError:
+            output = str(destination)
+        tasks.append(([str(host_python), "-m", "cython", "--force", "-3", "-o", output, source.name], source.parent, env))
     _run_parallel(tasks)
     for source, destination, key in pending:
         if not destination.exists():
@@ -769,7 +777,8 @@ def build_target_extensions(target: Target, sources: list[Path]) -> list[Path]:
     if not sources:
         return []
     host_python = require_local_python()
-    merge = cython_merge_mode() == "directory"
+    mode = cython_merge_mode()
+    merge = mode != "none"
     # Package markers cannot become built-in modules: a built-in has no
     # __path__ and ``from . import`` would fail with "'pkg' is not a package".
     # They keep shipping as source files while only the leaves are linked.
@@ -778,7 +787,7 @@ def build_target_extensions(target: Target, sources: list[Path]) -> list[Path]:
         return []
     generated = cythonize_to_c(compiled_sources, host_python)
     if merge:
-        return build_merged_extensions(target, merged_groups(compiled_sources), generated, host_python)
+        return build_merged_extensions(target, merged_groups(compiled_sources, mode), generated, host_python)
     if target.os != "windows":
         return compile_unix_extensions(target, generated)
     return compile_windows_extensions(target, generated, compiled_sources, host_python)
@@ -1006,6 +1015,31 @@ def copy_native_outputs(outputs: list[Path], site: Path, target: Target) -> None
         copy_file_contents(artifact, site / artifact.relative_to(root))
 
 
+def strip_packed_extensions(site: Path, files, target: Target) -> None:
+    """Strip the extensions this build produced before they are packed.
+
+    Only files that are about to go into the egg are touched, and only when
+    ``strip_native`` is on. On macOS the strip invalidates the ad-hoc signature
+    that Cython's link step produced, so the image is re-signed in place; dyld
+    refuses to load a Mach-O whose signature no longer matches.
+    """
+    from .config import optimize_config
+
+    if not bool(optimize_config().get("strip_native", False)):
+        return
+    from .native.bundle import _strip_native, ad_hoc_sign
+
+    for name in files:
+        if Path(str(name)).suffix.lower() not in {".so", ".pyd", ".dylib"}:
+            continue
+        path = site / Path(str(name))
+        if not path.is_file():
+            continue
+        _strip_native(path, target)
+        if target.os == "macos":
+            ad_hoc_sign(path)
+
+
 def build_python_package(target: Target, trim=None, egg=None) -> Path:
     stage = staging_dir(target)
     if stage.exists():
@@ -1021,7 +1055,7 @@ def build_python_package(target: Target, trim=None, egg=None) -> Path:
     sources = selected_sources()
     outputs = build_target_extensions(target, sources)
     copy_native_outputs(outputs, site, target)
-    merge = cython_merge_mode() == "directory"
+    merge = cython_merge_mode() != "none"
     # The merged layout only replaces leaf modules; package markers stay as
     # source files because CPython cannot make a built-in module a package.
     remove_compiled_source_py(site, [source for source in sources if source.name != "__init__.py"] if merge else sources)
@@ -1045,6 +1079,13 @@ def build_python_package(target: Target, trim=None, egg=None) -> Path:
             for artifact in outputs
         }
         files = application_files(site, compiled)
+        # Strip before packing, not after. bundle_native_dependencies runs in a
+        # later step and only sees files that are still loose; anything already
+        # sealed inside the egg never reached _strip_native, so strip_native had
+        # no effect on the application's own extensions. Doing it here also keeps
+        # the archive's authentication tag correct, because the bytes are final
+        # before the tag is computed.
+        strip_packed_extensions(site, files, target)
         pack_egg(site, stage / EGG_DIR / EGG_NAME, files, egg)
         remove_packed_files(site, files)
         write_egg_meta(stage, egg)

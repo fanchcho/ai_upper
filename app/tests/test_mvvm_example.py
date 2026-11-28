@@ -7,6 +7,9 @@ smoke step and in the CI integration run.
 from __future__ import annotations
 
 import os
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -35,6 +38,9 @@ class FakeSignal:
 
     def connect(self, handler) -> None:
         self.handlers.append(handler)
+
+    def disconnect(self, handler) -> None:
+        self.handlers.remove(handler)
 
     def emit(self, *args) -> None:
         for handler in list(self.handlers):
@@ -83,7 +89,14 @@ class FakeMainWindow(FakeWindow):
 class FakeDialog(FakeWindow):
     def __init__(self) -> None:
         super().__init__()
+        self.finished = FakeSignal()
         CREATED["dialogs"].append(self)
+
+    def close(self) -> None:
+        was_visible = self.visible
+        super().close()
+        if was_visible:
+            self.finished.emit(0)
 
 
 class FakeLabel:
@@ -301,27 +314,37 @@ def test_the_about_button_opens_and_closes_the_window(fake_qt):
 
     viewmodel = application.mvvm_app.get_viewmodel("main")
     window = fake_qt["windows"][0]
-    dialog = fake_qt["dialogs"][0]
 
     # start() 显示了主窗口，但没点按钮就不该弹出「关于」窗口
     assert window.visible is True
     assert window.raised is True
     assert window.activated is True
-    assert dialog.visible is False
+    assert not fake_qt["dialogs"]
+    assert not fake_qt["browsers"]
 
     # 绑定生效：窗口标题/文案来自 ViewModel，ViewModel 又来自 model 与 service
     assert window.title == viewmodel.title != ""
     assert fake_qt["labels"][0].text == "来自 ai_upper 的问候"
-    assert dialog.title == ABOUT_BUTTON
-    assert fake_qt["browsers"][0].plain_text == viewmodel.about_body
+    viewmodel.about_body_property.set_value("Updated before first open")
 
     button(ABOUT_BUTTON).click()
+    dialog = fake_qt["dialogs"][0]
+    assert dialog.title == ABOUT_BUTTON
+    assert fake_qt["browsers"][0].plain_text == viewmodel.about_body
     assert viewmodel.about_visible is True
     assert dialog.visible is True
+    assert dialog.title == ABOUT_BUTTON
+    browser = fake_qt["browsers"][0]
+    assert browser.plain_text == "Updated before first open"
+    viewmodel.about_body_property.set_value("Updated while open")
+    assert browser.plain_text == "Updated while open"
 
     button(CLOSE_BUTTON).click()
     assert viewmodel.about_visible is False
     assert dialog.visible is False
+    button(ABOUT_BUTTON).click()
+    assert fake_qt["dialogs"] == [dialog]
+    assert dialog.visible is True
 
 
 def test_run_gui_headless_uses_the_same_assembly(fake_qt, monkeypatch, capsys):
@@ -334,7 +357,49 @@ def test_run_gui_headless_uses_the_same_assembly(fake_qt, monkeypatch, capsys):
     assert "GUI OK offscreen" in capsys.readouterr().out
     # stop() 把窗口关掉、容器清空，冒烟路径不会留下半开的窗口
     assert fake_qt["windows"][0].visible is False
-    assert fake_qt["dialogs"][0].visible is False
+    assert not fake_qt["dialogs"]
+
+
+def test_native_dialog_close_updates_state_and_allows_reopening(fake_qt):
+    from application import AiUpperApplication
+
+    application = AiUpperApplication()
+    container = application.prepare()
+    vm = container.get_viewmodel("main")
+    button(ABOUT_BUTTON).click()
+    dialog = fake_qt["dialogs"][0]
+    dialog.close()  # Window close / reject does not go through the Close button.
+    assert not vm.about_visible
+    button(ABOUT_BUTTON).click()
+    assert dialog.visible and vm.about_visible
+    assert fake_qt["dialogs"] == [dialog]
+    application.quit()
+
+
+def test_application_import_defers_asyncio_until_an_async_command_runs():
+    result = subprocess.run(
+        [sys.executable, "-IS", "-c", """
+import sys
+sys.path.insert(0, sys.argv[1])
+import application
+assert 'asyncio' not in sys.modules
+from mvvm.core.command import AsyncRelayCommand
+seen = []
+async def operation(value):
+    seen.append(value)
+import asyncio
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+try:
+    AsyncRelayCommand(operation).execute(42)
+    assert seen == [42]
+finally:
+    loop.close()
+    asyncio.set_event_loop(None)
+""", str(Path(__file__).parents[1] / "src")],
+        capture_output=True, text=True, timeout=10,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
 
 
 def test_run_gui_enters_the_loop_the_binding_ships(fake_qt5, monkeypatch):
@@ -369,3 +434,79 @@ def test_the_qt5_high_dpi_attribute_is_set_before_the_window(fake_qt5):
     AiUpperApplication()
 
     assert fake_qt5["qt_attributes"] == [FakeQtFlags.AA_EnableHighDpiScaling]
+
+
+def test_prepare_reuses_the_running_object_graph(fake_qt):
+    from application import AiUpperApplication
+
+    application = AiUpperApplication()
+    container = application.prepare()
+    vm = container.get_viewmodel("main")
+    vm.message_property.set_value("Keep this state")
+    assert application.prepare() is container
+    assert container.get_viewmodel("main") is vm
+    assert len(fake_qt["windows"]) == 1
+    assert fake_qt["labels"][0].text == "Keep this state"
+    application.quit()
+
+
+def test_main_window_dispose_detaches_its_custom_subscription(fake_qt):
+    from application import AiUpperApplication
+
+    application = AiUpperApplication()
+    container = application.prepare()
+    vm = container.get_viewmodel("main")
+    main = container.get_view("main")
+    main.close()
+    main.dispose()
+    main.dispose()
+    vm.show_about_command.execute()
+    assert not fake_qt["dialogs"], "a disposed main view must not open another view"
+    assert vm.get_property("about_visible") is vm.about_visible_property
+    application.quit()
+
+
+@pytest.mark.parametrize("headless", [False, True])
+def test_run_cleans_up_the_container_on_normal_exit(fake_qt, headless):
+    from application import AiUpperApplication
+
+    application = AiUpperApplication()
+    result = application.run(headless=True) if headless else application.run()
+    assert result == 0
+    container = application.mvvm_app
+    assert not container.is_running and not container.model.is_running
+    assert not container.views and not container.viewmodels
+    assert not fake_qt["windows"][0].visible
+    assert application.qt_app.processed == int(headless)
+    assert application.qt_app.loops == int(not headless)
+
+
+@pytest.mark.parametrize("headless", [False, True])
+@pytest.mark.parametrize("stage", ["initialize_views", "start", "events"])
+def test_run_cleans_up_after_partial_start_or_event_failure(fake_qt, monkeypatch, headless, stage):
+    from application import AiUpperApplication
+
+    application = AiUpperApplication()
+    container = application.setup()
+    if stage == "events":
+        owner = application.qt_app
+        method = "processEvents" if headless else "_enter_loop"
+    elif stage == "start":
+        owner, method = container, "start"
+    else:
+        owner, method = application, stage
+    original = getattr(owner, method)
+
+    def fail():
+        original()
+        raise RuntimeError("injected lifecycle failure")
+
+    monkeypatch.setattr(owner, method, fail)
+    with pytest.raises(RuntimeError, match="injected lifecycle failure"):
+        if headless:
+            application.run(headless=True)
+        else:
+            application.run()
+    assert not container.is_running and not container.model.is_running
+    assert not container.views and not container.viewmodels
+    assert not fake_qt["windows"][0].visible

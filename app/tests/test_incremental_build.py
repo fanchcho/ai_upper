@@ -73,6 +73,22 @@ def test_changed_source_regenerates_only_that_module(tmp_path, monkeypatch):
     assert outputs[stable].is_file() and outputs[edited].is_file()
 
 
+def test_cython_output_path_survives_a_foreign_windows_drive(tmp_path, monkeypatch):
+    """The app and build/ may live on different Windows drives."""
+    app_root = tmp_path / "app"
+    source = _app_source(app_root)
+    commands = _stub_cython(monkeypatch, app_root, tmp_path / "build")
+
+    def cross_drive(*_args, **_kwargs):
+        raise ValueError("path is on mount 'D:', start on mount 'C:'")
+
+    monkeypatch.setattr(python_build.os.path, "relpath", cross_drive)
+    python_build.cythonize_to_c([source], Path("/fake/python3"))
+
+    output = Path(commands[0][commands[0].index("-o") + 1])
+    assert output.is_absolute()
+
+
 def test_a_new_cython_version_invalidates_the_cache(tmp_path, monkeypatch):
     app_root = tmp_path / "app"
     source = _app_source(app_root)

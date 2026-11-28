@@ -2,7 +2,6 @@
 from __future__ import annotations
 from ai_upper.localization import tr
 
-import io
 import json
 import os
 import subprocess
@@ -17,9 +16,9 @@ from .config import (
     staging_dir, target_extension_suffix, target_runtime_dir,
 )
 from .egg import (
-    EGG_DIR, EGG_NAME, egg_config, egg_loader_source, read_egg_members, read_egg_meta,
+    EGG_DIR, EGG_NAME, egg_config, egg_loader_source, open_egg_archive, read_egg_meta,
 )
-from .egg_loader import MAGIC, _safe_member, keystream_xor
+from .egg_loader import MANIFEST_NAME, _safe_member
 from .manifest import read_manifest, validate_manifest
 from .native.deps import _system_dependency, dependency_names
 from .native.inspect import (
@@ -33,9 +32,7 @@ from .runtime import runtime_pip_payloads
 from .third_party import WHEEL_MANIFEST, dependency_specs, wheel_dir
 
 
-def _expected_extension(site: Path, source: Path, target: Target) -> Path:
-    spec = runtime_spec(target)
-    suffix = target_extension_suffix(target, spec.major_minor, spec.abi_tag)
+def _expected_extension(site: Path, source: Path, suffix: str) -> Path:
     rel = source.relative_to(APP / "src").with_suffix("")
     return site.joinpath(*rel.parts[:-1], rel.name + suffix)
 
@@ -56,32 +53,41 @@ def _stage_egg_config(stage) -> "EggConfig":
     return egg_config(enabled=(stage / EGG_DIR / EGG_NAME).is_file())
 
 
-def _egg_payload(egg_path: Path, key_hex: str) -> bytes:
-    """The decrypted zip bytes of an egg, MAGIC-aware like the runtime loader."""
-    raw = Path(egg_path).read_bytes()
-    if raw[:len(MAGIC)] != MAGIC:
-        return raw
-    return keystream_xor(raw[len(MAGIC):], bytes.fromhex(str(key_hex).strip()))
+def _egg_manifest_checks(archive: zipfile.ZipFile, members: set[str]) -> list[tuple[bool, str]]:
+    """The archive records a digest per member, so a cache can be validated.
 
-
-def _egg_member(egg_path: Path, key_hex: str, name: str) -> tuple[int, bytes]:
-    with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
-        info = archive.getinfo(name)
-        return info.compress_type, archive.read(name)
+    Without it the plaintext extract cache has no way to tell an untouched
+    directory from an edited one; the authentication tag covers the archive but
+    not the files a previous run unpacked from it.
+    """
+    try:
+        data = json.loads(archive.read(MANIFEST_NAME)) if MANIFEST_NAME in members else {}
+        files = data.get("files") if isinstance(data, dict) else None
+        manifest = files if isinstance(files, dict) else {}
+    except Exception as exc:
+        return [(False, f"egg manifest: {exc}")]
+    if not manifest:
+        return [(False, "egg manifest records per-member digests")]
+    covered = {name for name in members if not name.endswith("/") and name != MANIFEST_NAME}
+    missing = sorted(covered - set(manifest))
+    checks = [(not missing, "egg manifest covers every member" + (f": missing {missing[0]}" if missing else ""))]
+    malformed = sorted(name for name, digest in manifest.items() if len(str(digest)) != 64)
+    checks.append((not malformed, "egg manifest digests are SHA-256"))
+    return checks
 
 
 def _verify_egg_bundle(
-    egg_path: Path,
-    key_hex: str,
+    archive: zipfile.ZipFile,
     member: str,
     target: Target,
 ) -> list[tuple[bool, str]]:
     """Check the stored method and architecture of a bundle inside an egg."""
     try:
-        method, data = _egg_member(egg_path, key_hex, member)
+        info = archive.getinfo(member)
+        data = archive.read(info)
     except Exception as exc:
         return [(False, f"{tr('finish.756c506bd035')}{exc}")]
-    checks = [(method == zipfile.ZIP_STORED, f"{tr('finish.eed5590d26b3')}{member}")]
+    checks = [(info.compress_type == zipfile.ZIP_STORED, f"{tr('finish.eed5590d26b3')}{member}")]
     with tempfile.TemporaryDirectory(prefix="ai_upper-verify-") as tmp:
         probe = Path(tmp) / Path(member).name
         probe.write_bytes(data)
@@ -93,7 +99,7 @@ def _verify_egg_bundle(
     return checks
 
 
-def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target,
+def _verify_egg_native_dependencies(archive: zipfile.ZipFile, target: Target,
                                     runtime: Path) -> list[tuple[bool, str]]:
     """Packed extensions load from a cache, outside the bundle's native tree.
 
@@ -118,14 +124,14 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
                            if dep.lower() in libraries and dep.lower() not in preloaded)
     with tempfile.TemporaryDirectory(prefix="ai_upper-egg-check-") as tmp:
         root = Path(tmp)
-        with zipfile.ZipFile(io.BytesIO(_egg_payload(egg_path, key_hex))) as archive:
-            for member in archive.infolist():
-                if member.is_dir():
-                    continue
-                destination = root / _safe_member(member.filename)
-                destination.resolve().relative_to(root.resolve())
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                destination.write_bytes(archive.read(member))
+        resolved_root = root.resolve()
+        for member in archive.infolist():
+            if member.is_dir():
+                continue
+            destination = root / _safe_member(member.filename)
+            destination.resolve().relative_to(resolved_root)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(archive.read(member))
         for binary in native_files(root, target):
             verify_arch(binary, target)
             for name in dependency_names(binary):
@@ -140,28 +146,35 @@ def _verify_egg_native_dependencies(egg_path: Path, key_hex: str, target: Target
     return checks
 
 
-def _application_source_checks(
+def _application_payload_checks(
     site: Path,
     sources,
     target: Target,
-    egg_members,
     prefix: str,
-    egg_path: Path | None = None,
-    egg_key: str | None = None,
+    *,
+    archive: zipfile.ZipFile | None = None,
 ) -> list[tuple[bool, str]]:
-    """Checks for the application's own files in either native layout.
+    """Check archive metadata and the application's own files.
 
     The per-module layout has one extension per source. The merged layout has
-    one bundle per top-level group. Bundles ship as stored entries inside the
-    egg; the launcher extracts them before ``Py_Initialize`` and registers them,
-    so site-packages carries no loose copy.
+    bundles selected by the same grouping logic as the build. Bundles inside an
+    egg ship as stored entries; the launcher extracts and registers them before
+    ``Py_Initialize``, so site-packages carries no loose copy in that case.
     """
     spec = runtime_spec(target)
     suffix = target_extension_suffix(target, spec.major_minor, spec.abi_tag)
     checks: list[tuple[bool, str]] = []
-    if cython_merge_mode() != "directory":
+    mode = cython_merge_mode()
+    egg_members = None
+    if archive is not None:
+        label = f"{prefix or 'encrypted '}egg"
+        egg_members = set(archive.namelist())
+        checks.extend([(True, f"{label} authenticated"),
+                       (bool(egg_members), f"{label} members={len(egg_members)}")])
+        checks.extend(_egg_manifest_checks(archive, egg_members))
+    if mode == "none":
         for source in sources:
-            expected = _expected_extension(site, source, target)
+            expected = _expected_extension(site, source, suffix)
             name = module_name(source)
             if egg_members is None:
                 checks.append((expected.is_file(), f"{prefix}{tr('finish.extension')}{name}"))
@@ -178,8 +191,7 @@ def _application_source_checks(
             checks.append((not (site / source.relative_to(APP / "src")).exists(), f"{prefix}{tr('finish.89673a15fa13')}{name}"))
         return checks
 
-    leaves = [source for source in sources if source.name != "__init__.py"]
-    for group, grouped in merged_groups(leaves).items():
+    for group, grouped in merged_groups(sources, mode).items():
         relative = merged_bundle_relative(group, suffix)
         bundle = site / relative
         if egg_members is None:
@@ -194,14 +206,14 @@ def _application_source_checks(
             present = relative in egg_members
             checks.append((present, f"{prefix}{tr('finish.27fe35231f0f')}{group}"))
             checks.append((not bundle.is_file(), f"{prefix}{tr('finish.aaefed52979d')}{group}"))
-            if present and egg_path is not None and egg_key is not None:
-                checks.extend(_verify_egg_bundle(egg_path, egg_key, relative, target))
+            if present and archive is not None:
+                checks.extend(_verify_egg_bundle(archive, relative, target))
         checks.append((bool(grouped), f"{prefix}{tr('finish.ab8e262a571e')}{group}={len(grouped)}"))
 
     for source in sources:
         name = module_name(source)
         relative = source.relative_to(APP / "src")
-        expected = _expected_extension(site, source, target)
+        expected = _expected_extension(site, source, suffix)
         if source.name == "__init__.py":
             if egg_members is None:
                 checks.append(((site / relative).is_file(), f"{prefix}{tr('finish.dbb3305214d8')}{name}"))
@@ -212,6 +224,30 @@ def _application_source_checks(
         else:
             checks.append((not (site / relative).exists(), f"{prefix}{tr('finish.89673a15fa13')}{name}"))
             checks.append((not expected.is_file(), f"{prefix}{tr('finish.f55fb70c59ae')}{name}"))
+    return checks
+
+
+def _checks_for_application(
+    site: Path,
+    sources: list[Path],
+    target: Target,
+    *,
+    prefix: str = "",
+    egg_input: tuple[Path, str] | None = None,
+    runtime: Path | None = None,
+) -> list[tuple[bool, str]]:
+    if egg_input is None:
+        return _application_payload_checks(site, sources, target, prefix)
+
+    label = f"{prefix or 'encrypted '}egg"
+    try:
+        archive = open_egg_archive(*egg_input)
+    except (OSError, ValueError, zipfile.BadZipFile) as exc:
+        return [(False, f"{label}: {exc}")]
+    with archive:
+        checks = _application_payload_checks(site, sources, target, prefix, archive=archive)
+        if runtime is not None:
+            checks.extend(_verify_egg_native_dependencies(archive, target, runtime))
     return checks
 
 
@@ -234,26 +270,18 @@ def _checks_for_stage(target: Target) -> list[tuple[bool, str]]:
     checks.append((entry_module() in selected_modules, f"{tr('finish.94f48ce275cf')}{entry_module()}"))
 
     egg = _stage_egg_config(stage)
-    egg_members = None
+    egg_input = None
     if egg.enabled:
         egg_path = stage / EGG_DIR / EGG_NAME
-        checks.append((egg_path.is_file(), f"{tr('finish.8c41ffd40536')}{EGG_NAME}"))
-        if egg_path.is_file():
-            try:
-                checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, tr('finish.586a0dde0363')))
-                egg_members = set(read_egg_members(egg_path, egg.key_hex))
-                checks.append((bool(egg_members), f"{tr('finish.4d9bf18c6aef')}{len(egg_members)}"))
-            except Exception as exc:
-                checks.append((False, f"{tr('finish.1805ede89806')}{exc}"))
+        exists = egg_path.is_file()
+        checks.append((exists, f"{tr('finish.8c41ffd40536')}{EGG_NAME}"))
+        if exists:
+            egg_input = (egg_path, egg.key_hex)
         if target.os == "windows" and egg.backend == "memory":
             checks.append(((site / "_memimporter.pyd").is_file(),
                            tr('finish.22e436ea8985')))
 
-    checks.extend(_application_source_checks(
-        site, sources, target, egg_members, "",
-        egg_path=stage / EGG_DIR / EGG_NAME,
-        egg_key=egg.key_hex,
-    ))
+    checks.extend(_checks_for_application(site, sources, target, egg_input=egg_input))
 
     leftovers = [path for path in site.rglob("*") if path.is_file() and path.suffix.lower() in {".c", ".cpp", ".pyc", ".pyo"}]
     checks.append((not leftovers, tr('finish.536daa89f7ef')))
@@ -323,14 +351,15 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     # copy of the entry.
     sidecars = sorted(path.relative_to(root).as_posix() for path in entry_dir.glob("*.int"))
     checks.append((not sidecars, tr('finish.abd5da15a2c7') + (f": {', '.join(sidecars)}" if sidecars else "")))
-    if executable.is_file():
+    binary = executable.read_bytes() if executable.is_file() else None
+    if binary is not None:
         # The entry is the one thing the launcher cannot get from anywhere else,
         # and the packaging step compiles it in: reading the bytes back out
         # proves the binary that was built carries the entry the configuration
         # names, which a file-based check silently stopped doing the moment the
         # two sides could disagree.
         embedded = entry_source().encode("utf-8")
-        checks.append((embedded in executable.read_bytes(), f"{tr('finish.1a36d35f7eb6')}{entry_module()}"))
+        checks.append((embedded in binary, f"{tr('finish.1a36d35f7eb6')}{entry_module()}"))
 
     # The package is the contract: an egg that is present must be readable with
     # the key of the build that produced it. Stage verification is what proves
@@ -338,22 +367,13 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
     # unconditionally, so an absent archive here means a loose build.
     egg_path = entry_dir / EGG_DIR / EGG_NAME
     egg = read_egg_meta(staging_dir(target)) or egg_config()
-    egg_members = None
-    if egg_path.is_file():
-        try:
-            checks.append((egg_path.read_bytes()[:len(MAGIC)] == MAGIC, tr('finish.651c2b9b6f74')))
-            egg_members = set(read_egg_members(egg_path, egg.key_hex))
-            checks.append((bool(egg_members), f"{tr('finish.6a068a8ced05')}{len(egg_members)}"))
-        except Exception as exc:
-            checks.append((False, f"{tr('finish.9b109bf87d47')}{exc}"))
-        if executable.is_file():
-            # The archive is useless without the loader, and the loader is only
-            # reachable when it was compiled into this launcher.
-            loader = egg_loader_source().encode("utf-8")
-            checks.append((loader in executable.read_bytes(), tr('finish.25b3b55fb48f')))
+    egg_input = (egg_path, egg.key_hex) if egg_path.is_file() else None
+    if egg_input is not None and binary is not None:
+        # The archive is useless unless the launcher carries its loader.
+        loader = egg_loader_source().encode("utf-8")
+        checks.append((loader in binary, tr('finish.25b3b55fb48f')))
+        checks.append((egg.key_hex.encode("ascii") not in binary, "egg key not stored as plain hex"))
     runtime_root = resources / "runtime" if target.os == "macos" else root / "runtime"
-    if egg_members is not None:
-        checks.extend(_verify_egg_native_dependencies(egg_path, egg.key_hex, target, runtime_root))
     if bool(optimize_config().get("remove_runtime_pip", True)):
         checks.append((not runtime_pip_payloads(runtime_root), tr('finish.b39d925643b5')))
     if target.os == "windows" and runtime_spec(target).provider == "pbs":
@@ -371,10 +391,8 @@ def _checks_for_package(target: Target) -> list[tuple[bool, str]]:
         if target.os == "windows":
             checks.append(_launcher_subsystem_check(executable))
 
-    checks.extend(_application_source_checks(
-        site, selected_sources(), target, egg_members, tr('finish.packaged'),
-        egg_path=egg_path,
-        egg_key=egg.key_hex,
+    checks.extend(_checks_for_application(
+        site, selected_sources(), target, prefix=tr('finish.packaged'), egg_input=egg_input, runtime=runtime_root,
     ))
 
     # Only binaries the target OS can actually load are part of the native ABI
@@ -446,7 +464,7 @@ def smoke_modules(target: Target, include_entry: bool = True) -> list[str]:
 
 
 def write_smoke_script(target: Target, destination: Path) -> Path:
-    merged = cython_merge_mode() == "directory"
+    merged = cython_merge_mode() != "none"
     modules = smoke_modules(target, include_entry=not merged)
     destination.parent.mkdir(parents=True, exist_ok=True)
     # The target interpreter is started with the stage on PYTHONPATH, not

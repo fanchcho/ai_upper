@@ -1,3 +1,129 @@
+## v0.17.37
+
+接入 Linux TGZ/DEB/RPM 正式发布，整合 MVVM 共享状态和可选异步生命周期；
+补齐 Linux 启动字节码、构建与发布可靠性回归，以及桌面验证入口。
+本地全量 473 passed、2 skipped；跨平台 CI 以提交 SHA 对应运行记录为准。
+
+## 未发布
+
+Cocoa 首窗前的工作只保留实际启动需要的部分：错误报告和手工 launcher 的脚本入口按需
+导入，egg finder/loader 直接实现所需方法，异步命令首次调度才导入 `asyncio`，
+示例「关于」窗口按需创建。没有改变归档完整性检查、窗口平台插件或交互方式。
+macOS arm64 实际窗口交错 A/B：应用缓存冷启动中位数 848 → 779 ms（每组 8 次），
+热启动 596 → 522 ms（每组 16 次）。
+
+静态校验复用每份归档打开后得到的 ZIP，staging 和成品各验签一次，不在进程内缓存
+跨轮次的校验结果。扩展 ABI 后缀改为每组校验只计算一次。macOS arm64 同一成品交错
+A/B（每组 24 次）：`--verify` 中位数 210.2 → 150.1 ms；归档打开 6 → 2 次，
+项目配置解析 117 → 21 次。CI 集成矩阵把 GUI 构建和运行合成一次 `--run`，
+删除不比较任何期望值的预哈希步骤；聚合发布清单仍记录每个文件的真实散列。
+
+增加 `merge = "all"`：编译和静态校验复用同一份分组逻辑，把示例的 17 个叶子模块
+合成一个原生 bundle（原来是三个），入口注册与归档校验不变。macOS arm64 交错
+A/B 实测 Cocoa 主窗口的冷缓存启动中位数从 1,229 ms 降至 779 ms（每组 8 次），
+热缓存从 529 ms 降至 520 ms（每组 16 次）。模板默认选 `all`；如果更在意局部
+修改后的构建速度，保留 `directory` 可减少每次需要重建的模块。
+
+归档开包固定在 launcher 层：先读取并认证解密，再注册合并扩展，把同一份内存中的 ZIP
+与 TAG 交给 Python loader。独立 loader 与构建期诊断仍有文件读取路径，打包启动不再走
+第二遍；格式、归档认证与已有缓存目录名不变。
+
+两层解压缓存分别执行自己的回退。过去 Python 侧把目录已存在误当可写，导致 launcher
+回退成功后应用仍打不开。现在用真实的 staging 创建操作判定权限或只读挂载错误，
+无需在命中热缓存时写探测文件。
+
+macOS arm64 对完全相同的 egg 做交错 A/B：真实 Cocoa 主窗口热启动中位数
+603 → 593 ms（每组 16 次）；新建应用缓存时约 1.38 → 1.39 s（每组 8 次），
+没有显著改善。分段计时显示冷缓存的主要耗时集中在首次 `dlopen` 合并扩展，
+而不是读取归档或写出缓存。macOS ACL 和 Linux arm64 只读挂载均通过打包启动，
+Windows x86_64 通过交叉构建及静态校验，尚未实机启动验证。
+
+## v0.17.36
+
+`strip_native` 对应用自己的扩展一直是空操作。原因在打包顺序：应用扩展在 `[2/6]` 就被
+`pack_egg()` 封进 `bundle/ai_upper.dat`，而 strip 发生在 `[4/6]` 的
+`bundle_native_dependencies`，那一步只遍历仍散落在 `site-packages` 的原生镜像。开启
+`strip_native` 后 `dist/Upper.app` 从 75 MB 降到 68 MB，但 egg 里那 977 KB 的 bundle
+一个字节都没动。
+
+修复是把 strip 提到入包之前：新增 `strip_packed_extensions()`，对即将进归档的
+`.so/.pyd/.dylib` 先 strip，macOS 随即重新 ad-hoc 签名（strip 会让 Cython 链接时的签名
+失效，dyld 会拒绝加载）。放在 pack 之前还有第二个好处：认证 tag 在字节定稿之后才计算，
+不会出现"签完名又改字节"。收益是 egg 981 KB → 832 KB（−15.2%），整体 75 MB → 68 MB
+（−9.3%）。启动做交错 A/B 各 12 次确认无影响（未 strip 301–326 ms，strip 300–314 ms）。
+
+同时修掉一个缓存职责串位：`_prune_cache()` 的前缀过滤把 `merged-*` 也算进来了，可那是
+launcher 在 `Py_Initialize` 之前写入、正在使用的目录。单版本时看不出来，多版本共存时
+会删掉活着的缓存，下次启动被迫重新解压。现在 loader 只清理 `egg-*`，`merged-*` 由
+launcher 的 `prune_bundle_cache()` 自己管。
+
+全量单测 393 passed / 6 skipped；`--verify` 169 项 PASS，含 3 个 bundle 的 arm64 校验；
+`codesign -v --deep --strict` 通过。
+
+## v0.17.35
+
+egg 缓存目录名取自认证 TAG，所以每次发布都是一个新目录，而 loader 和 launcher
+都只在"缺失时创建"，没有任何淘汰路径。两次构建之后本机缓存里就躺着两套
+`egg-*` + `merged-*`，占约 2 MB，并随发布次数线性增长。`--verify` 另有重复劳动：
+它按 merged bundle 逐个调用解密，3 个 bundle 就把整个归档解密 3 遍。
+
+修复是给两边都加上淘汰：loader 发布新条目后只保留当前与上一版，launcher 的
+`merged-<tag>` 保留当前加最新一个旧条目，删除都尽力而为、不影响启动；留上一版是
+为了回滚仍能热启动。verify 侧给解密结果加了按（路径、mtime、size、key）判定的进程
+内缓存，manifest 也走同一份明文。`egg_bundles.h` 顺带把读取与解析拆开。
+
+同时评估并**放弃**了一个看似划算的优化：把 launcher 已解密的明文交给 Python 侧复用。
+实测只省约 3 ms（~1%），代价是磁盘上多一份解密后的 zip，与"加密是为了提高阅读成本"
+直接冲突，因此回滚。另外测出 Qt 的字体别名告警（98–108 ms）只在 offscreen 插件下
+出现，cocoa 下没有，不是真实用户成本；cocoa 的 `QApplication()` 本身占 144–167 ms，
+是启动的最大头，属 Qt 固有开销。
+
+顺带修掉一个会把缓存问题放大成"应用打不开"的缺陷：缓存目录存在但不可写时（只读 home、
+漫游配置、无写权限容器），launcher 会直接报 `Could not create the bundle cache staging
+directory: Permission denied` 并在 `Py_Initialize` 前退出。Python 侧的 `_cache_root()`
+本来就会回退到临时目录，C++ 侧没有这个规则。现在两边一致：先探测可写性，不可写就用系统
+临时目录下的按进程目录。
+
+连续 4 次发布实测缓存条目稳定在 2 个；`--verify` 169 项全 PASS；启动 267–273 ms
+（此前 287–304 ms）；只读缓存环境下启动由失败变为 `SMOKE PASS`；全量单测
+390 passed / 6 skipped。
+
+## v0.17.35（应用目录解耦）
+
+构建工具此前把应用目录写死为仓库内的 `app/`，fork 后换应用就要改 `tools/ai_upper/config.py`，
+应用在仓库外或与仓库不同盘符时也无法构建。现在应用目录由 `--app DIR` 或
+`AI_UPPER_APP_DIR` 选择，默认仍是 `app/`；没有 `app/` 时，根目录带 `[tool.ai_upper]`
+的 `pyproject.toml` 会被自动识别。应用只提供 `pyproject.toml`、`src/`（可选
+`resources/`、`.venv/`），`build/`、`dist/`、锁文件仍留在构建工具仓库。
+
+同时修复了应用与 `build/` 跨 Windows 盘符时 Cython `os.path.relpath` 抛 `ValueError`
+的问题：跨盘时使用绝对输出路径。新增外部应用、根目录发现和跨盘路径的回归测试；
+README 与开发指南补充 fork 用法和目录契约。
+
+验证：Python 3.11 全量单测 387 passed / 15 skipped；在 C: 的临时应用、D: 的仓库上执行
+`--app` 构建 `windows-x86_64`，6 个阶段、29 个原生二进制检查和 launcher smoke 全部通过。
+版本同步到 0.17.35。
+
+## v0.17.34
+
+打包产物的 `bundle/ai_upper.dat` 一直是纯 XOR 混淆：没有 MAC，没有成员摘要，
+loader 甚至把不带 MAGIC 的普通 zip 当合法归档。于是用自己的 zip 顶替它、改一个字节、
+或改掉 extract 缓存里的明文 `.py`，应用都照常加载。密钥同时以明文十六进制存在于
+`egg_loader.py` 的 `DEFAULT_KEY_HEX` 和生成的翻译单元里，而 loader 源码会被整体嵌入
+launcher，所以只改生成端也挡不住泄漏。加固的硬约束是**不能降低启动速度**。
+
+格式升级为 `MAGIC2 + SALT + TAG + ciphertext`，`TAG` 覆盖 header 与密文，比较用常数
+时间；归档内新增逐成员 SHA-256 清单。打包后的 launcher 在 `Py_Initialize` 之前验签，
+认证失败或未认证直接退出；extract 缓存复用前按清单核对，被改过就删除重建。
+
+性能靠两点守住：TAG 直接充当缓存键，取代了原本"解密后再对整个明文哈希一遍"的遍历，
+所以认证净开销为零；`sha3.h` 的 absorb/squeeze 从逐字节改为按 64 位 lane 批量处理。
+同一 1.4 MB 产物实测，egg 读取 13.1 ms → 10.2 ms，启动总耗时 308–328 ms → 277–312 ms。
+密钥改为 `key ^ mask` 两个字节数组编入、运行时重组，`strings` 命中数为 0。
+
+本机全量单测 387 passed / 6 skipped，真实 `macos-arm64` 构建的 `--verify` 与两段冒烟
+通过。
+
 ## v0.17.33
 
 `metadata-full` 路径把旧 PBS release 的同一个 `.tar.zst` full build 同时当作 runtime 和 SDK，
@@ -10,6 +136,7 @@ python.org embeddable ZIP，因此没有暴露该问题；回归测试又用了 
 `.tar.zst` 资产并断言运行时不走 `download`。同时 `test_launcher_deployment.py` 在没有 MSVC
 `cl.exe` 时改为 skip，不再产生 3 个 error。版本同步到 0.17.33。
 本地全量单测 367 passed / 15 skipped / 0 errors；Windows 3.8.10 全量构建、打包与启动验证通过。
+
 
 ## v0.17.32
 

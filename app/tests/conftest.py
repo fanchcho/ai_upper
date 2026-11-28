@@ -8,7 +8,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
-sys.path.insert(0, str(ROOT / "app" / "src"))
+from ai_upper.config import APP  # noqa: E402 - tools/ must be importable first
+
+sys.path.insert(0, str(APP / "src"))
 
 QT_BINDINGS = ("PySide6", "PyQt6", "PySide2", "PyQt5")
 

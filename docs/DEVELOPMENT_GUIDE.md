@@ -2,7 +2,7 @@
 
 本文是 `ai_upper` 的完整开发与使用手册：从环境准备、日常开发、打包发布，到 Qt 应用处理、依赖管理和排错。README 讲的是"是什么"，本文讲的是"怎么用、为什么这么设计、出问题怎么查"。
 
-当前稳定线：**0.17.9**。
+当前稳定线：**0.17.37**。各层职责与生命周期约定见 [框架总览](ARCHITECTURE.md)。
 
 ---
 
@@ -22,9 +22,9 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 
 关键点：
 
-- **宿主 Python 和目标 Python 完全解耦。** 你可以用 3.11 的开发机给 3.10 的目标打包，甚至交叉到别的架构。目标是哪个版本，只在 `app/pyproject.toml` 里写一次。
+- **宿主 Python 和目标 Python 完全解耦。** 你可以用 3.11 的开发机给 3.10 的目标打包，甚至交叉到别的架构。目标是哪个版本，只在应用的 `pyproject.toml` 里写一次。
 - **平台差异只在 Target Contract 里表达。** 代码里所有 `if target.os == ...` 都从 `Target`/`TargetPython` 取值，不再各自判断。
-- **自己的代码 Cython 化，第三方库原样安装。** `app/src/**/*.py` 编译成 `.so/.pyd`（`__init__.py` 保留为包标记），第三方依赖按目标平台的 wheel 解包进 `site-packages`。
+- **自己的代码 Cython 化，第三方库原样安装。** 应用 `src/**/*.py` 编译成 `.so/.pyd`（`__init__.py` 保留为包标记），第三方依赖按目标平台的 wheel 解包进 `site-packages`。
 
 构建流水线（`python tools/build.py`）：
 
@@ -63,7 +63,7 @@ Target Contract（目标契约：OS / 架构 / Python 版本 / ABI / wheel 标�
 最低 **3.8**，推荐 3.10+。选择顺序：
 
 1. `AI_UPPER_PYTHON`（旧变量 `PYSTAND_PYTHON` 仍兼容）
-2. `app/.venv`
+2. 应用目录的 `.venv`（默认示例是 `app/.venv`）
 3. 当前执行 `tools/build.py` 的解释器
 4. `python` / `python3`
 
@@ -103,10 +103,13 @@ pip 的下载缓存放在 `.cache/pip`，重复构建不会重下几百 MB 的 w
 # 0. 克隆后先建本地配置（app/pyproject.toml 不入库）
 cp app/pyproject.toml.example app/pyproject.toml
 
+# 0b. 或者完全使用自己的 app 目录（不修改 tools/）
+python tools/build.py --app ../myapp --doctor
+
 # 1. 写代码：app/src 就是应用源码
 app/src/
 ├── main.py            # 入口（由 [tool.ai_upper].entry 指定），只把控制权交给 application
-├── application.py     # ★ 装配处：MVVM 的对象图在这里接起来（见 §9.5）
+├── application.py     # ★ 装配处：MVVM 的对象图在这里接起来（见 §9.6）
 ├── mvvm/              # MVVM 骨架：core / models / view_models / views / services
 ├── utils/             # 运行时胶水：paths（launcher 契约）、qt_compat（Qt 名字唯一入口）
 └── ...
@@ -122,6 +125,8 @@ python tools/build.py --run
 # 4. 只构建
 python tools/build.py
 ```
+
+`app/` 只是示例。自有应用只要是“`pyproject.toml` + `src/`”的目录即可，用 `--app DIR` 或 `AI_UPPER_APP_DIR=DIR` 指定；`--app` 在导入配置前生效，适用于 `build/run/verify/lock/clean/doctor` 全部命令。仓库根目录本身带 `[tool.ai_upper]` 的 `pyproject.toml` 时，即使没有 `app/` 也会自动把根目录当应用。应用目录可以有可选的 `resources/` 和开发用 `.venv/`；`build/`、`dist/` 与锁文件仍写在构建工具仓库。
 
 产物：
 
@@ -146,11 +151,11 @@ dist/ai_upper/                   # Windows / Linux
 
 ```text
 ai_upper/
-├── app/
+├── app/                       # 默认示例应用，可整体替换或删除
 │   ├── pyproject.toml.example # 配置模板（入库）
 │   ├── pyproject.toml         # 本地配置（Git ignored，从模板复制）
 │   ├── src/                   # ★ 应用源码（直接是包根）
-│   ├── tests/                 # 应用测试 + 构建链测试
+│   ├── tests/                 # 示例应用测试 + 构建链测试
 │   └── resources/             # 可选：随包资源，没有该目录就不打包
 ├── launcher/                 # C++ 启动器（CMake）
 ├── tools/
@@ -164,16 +169,16 @@ ai_upper/
 
 ---
 
-## 5. 配置参考（`app/pyproject.toml`）
+## 5. 配置参考（应用 `pyproject.toml`，默认是 `app/pyproject.toml`）
 
-仓库里入库的是模板 `app/pyproject.toml.example`，实际生效的是 Git 忽略的 `app/pyproject.toml`（`cp app/pyproject.toml.example app/pyproject.toml`）。下面的内容对两者都成立：模板改了就进 Git，本地副本改了只影响你这台机器。文件缺失时 Build Tool 会报错并给出复制命令，不会静默使用模板。
+仓库里入库的是模板 `app/pyproject.toml.example`，默认示例生效的是 Git 忽略的 `app/pyproject.toml`（`cp app/pyproject.toml.example app/pyproject.toml`）。自有应用通过 `--app DIR` / `AI_UPPER_APP_DIR` 指向自己的 `pyproject.toml`，schema 完全相同；此时不要求存在 `.example`。模板改了就进 Git，本地副本改了只影响你这台机器。文件缺失时 Build Tool 会报错并给出复制命令，不会静默使用模板。
 
 模板里的 `[project] dependencies` 是空列表：模板入库、依赖入库就变成"克隆的人继承维护者的 pin"。要装的包写进本地副本即可；CI 构建仓库自带示例应用时自己注入依赖集合（见 §11）。
 
 ```toml
 [project]
 name = "ai_upper"
-version = "0.17.9"
+version = "0.17.37"
 requires-python = ">=3.8,<3.14"
 dependencies = ["PySide6-Essentials==6.11.0", "pyserial==3.5"]
 
@@ -211,7 +216,7 @@ exclude = [                       # 丢弃无法在包内满足依赖的可选�
 [tool.ai_upper.cython]
 include = ["*"]                   # 相对 app/src 的模块名 glob
 exclude = []
-merge = "directory"               # none = 一模块一扩展；directory = 按顶层目录合并
+merge = "all"                     # all = 单 bundle；directory = 按顶层目录；none = 每模块一个扩展
 
 [tool.ai_upper.build]
 jobs = 0                          # 并行编译任务数；0 = 每 CPU 一个
@@ -263,7 +268,7 @@ launcher 运行时还会向应用导出 `AI_UPPER_HOME` / `AI_UPPER_RUNTIME` / `
 
 ### 6.1 直接开发，不打包
 
-`app/src` 就是普通 Python 包根，日常开发不需要打包：
+应用目录的 `src/` 就是普通 Python 包根（默认示例是 `app/src`），日常开发不需要打包：
 
 ```bash
 cd app
@@ -274,7 +279,7 @@ PYTHONPATH=src python src/main.py
 
 注意：直接运行 `main()` 会尝试打开 Qt 窗口；CI/无显示环境加 `AI_UPPER_HEADLESS=1`。
 
-还没装 Qt 时也能看到装配跑通：`import application` 不加载任何 binding（见 §9.5），
+还没装 Qt 时也能导入装配入口：`import application` 不加载任何 binding（见 §9.6），
 `PYTHONPATH=src python -c "from application import run_application; run_application()"` 只打印问候语，不碰 Qt。
 
 ### 6.2 测试
@@ -320,7 +325,7 @@ AI_UPPER_E2E=1 python -m pytest app/tests -q  # 额外跑真实端到端（较�
 
 所以只有真正变化的模块会重新 Cython 化并编译，其余直接从缓存复制。两层是链式的：改一个 `.py` 只会让它的 `.c` 和它自己的扩展失效，删掉或改名的模块不会留下会被打包的旧产物（staging 只处理当前源码）。
 
-`merge = "directory"` 时，缓存分成两层：第一步仍按模块缓存生成的 `.c`；第二步按顶层目录把该组所有 `.c` 加上生成的 `register.c` 链接成一个 bundle，缓存 key（`ai_upper-merged-native-1`）包含每个翻译单元的内容、链接命令和 MSVC 环境。改一个模块只会让它所在的 bundle 失效，其他组继续复用。
+合并模式仍按模块缓存生成的 `.c`，然后把组内的 `.c` 与生成的 `register.c` 一起构建为一个 bundle。缓存 key（`ai_upper-merged-native-1`）包含翻译单元内容、链接命令和 MSVC 环境。`directory` 只重建改动所在的组；`all` 则需重建这个唯一的 bundle，但没改过的模块不必重新生成 `.c`。频繁迭代的大型项目可按需保留 `directory`。
 
 Cython 与编译器调用都在线程池里并发执行，并行度由 `[tool.ai_upper.build].jobs` 控制（默认 `0` = 每 CPU 一个任务）。
 
@@ -421,7 +426,7 @@ class Window(QtWidgets.QMainWindow):
 2. 拼错的子模块（`QtWidget`）在 import 那一行就报 `ImportError`，不会拖到用的时候；
 3. `Signal` / `Slot` 由这里转出：PySide 侧是 `Signal`/`Slot`，PyQt 侧是 `pyqtSignal`/`pyqtSlot`，应用代码只写一种拼法；
 4. 整个 `app/src` 里只有 `utils/qt_compat.py` 允许出现 binding 名，`app/tests/test_qt_compat.py` 用 ast 不变式锁住这条；换 binding 只改 `app/pyproject.toml` 的依赖，应用代码与 Qt 剪枝都跟着走；
-5. 应用自己的模块也别在模块级 import Qt：`mvvm/views/*.py` 和 `mvvm/mvvm_bootstrap.py` 把 Qt 名字放在真正建窗口的那个函数里（见 §9.5）。模块级 import 会让「import 应用入口」变成「必须装 Qt」——pytest、pyflakes、Cython 编译全被拖进来，而它们本来不需要 binding。
+5. 应用自己的模块也别在模块级 import Qt：`mvvm/views/*.py` 和 `mvvm/mvvm_bootstrap.py` 把 Qt 名字放在真正建窗口的那个函数里（见 §9.6）。模块级 import 会让「import 应用入口」变成「必须装 Qt」——pytest、pyflakes、Cython 编译全被拖进来，而它们本来不需要 binding。
 6. 事件循环也从这里进：Qt6 的入口叫 `exec`，Qt5 只有 `exec_`，应用代码写死任一个就等于绑死一个 Qt 大版本（PySide2 包会开完窗口再崩在 `AttributeError: ... has no attribute 'exec'`）。唯一入口是 `utils.qt_compat.exec_loop(app)`，`app/src` 里再出现 `.exec(`/`.exec_(` 会被 `app/tests/test_qt_compat.py` 的 ast 不变式拦下。
 
 ### 9.2 窗口与 headless
@@ -452,7 +457,21 @@ qt = "imports"
 3. 删除未用到的 wrapper 模块、Qt 库、插件类别、QML 树、shiboken QML 辅助库、Qt 工具二进制、工具翻译；
 4. 插件按**依赖的 Qt 模块**判定：需要额外 Qt 模块的插件（如虚拟键盘输入法插件拉 QtQml/QtQuick、`libqpdf` 拉 QtPdf）会被删除；**平台插件类别永不裁剪**（删了应用起不来）；SVG 图标插件走例外保留。
 
-实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/ai_upper.app` 100 MB、其中 PySide6 58 MB；再开 `strip_native = true` 原生库还能更小。
+实测（PySide6 6.11.0，macOS arm64）：staging 的 `site-packages` **1.2 GB → 109 MB**（PySide6 本体 1.2 GB → 105 MB），打包后 `dist/Upper.app` 100 MB、其中 PySide6 58 MB。
+
+`strip_native = true` 的实测收益（同一产物，macOS arm64）：
+
+| | `dist/Upper.app` | `bundle/ai_upper.dat` |
+| --- | --- | --- |
+| `strip_native = false`（默认） | 75 MB | 981 KB |
+| `strip_native = true` | **68 MB（−9.3%）** | **832 KB（−15.2%）** |
+
+启动耗时不受影响（交错 A/B 各 12 次：未 strip 301–326 ms，strip 300–314 ms，落在噪声内）。
+`strip_native` 同时覆盖 runtime 的 `libpython`、第三方扩展，以及**本次构建产出的应用扩展**——
+最后一项需要 `strip_packed_extensions()` 在 `pack_egg()` 之前执行：`bundle_native_dependencies`
+在更晚的步骤才跑，只能看到仍散落在 `site-packages` 的文件，已经封进 egg 的扩展它永远看不到。
+在 egg 之前 strip 也让认证 tag 计算在字节定稿之后，不会出现"签名后改字节"的问题。
+macOS 上 strip 会使 Cython 链接时产生的 ad-hoc 签名失效，因此随即重新 ad-hoc 签名。
 
 限制：动态加载（`importlib`、QML 内 import）静态看不到，这类应用请显式写模块列表；交叉目标无法执行目标解释器，会保留完整 Qt。
 
@@ -576,12 +595,41 @@ Qt 自动裁剪本身也覆盖了这些固定负载：`PySide*/` 与 `PyQt*/` �
 `examples`、`include`，未使用 `QtWebEngineCore` 时的 `resources`（两者只有 Addons 才带，本应用不再声明它），以及
 `qwebgl` 平台插件（它会牵连 QtQuick/QtQml；`qoffscreen` 保留给 headless 冒烟）。
 
-### 9.6 加密 egg（默认开启）
+### 9.5 加密 egg（默认开启）
 
 `[tool.ai_upper.egg]` 把应用自己的 Python 模块与本次构建产出的扩展收进一个
 `bundle/ai_upper.dat`，不再以散文件留在 `site-packages`。格式是
-`MAGIC (8 字节) + XOR(zip, SHAKE-256 key stream)`，launcher 在导入入口前安装
-loader。
+`MAGIC2 (8 字节) + SALT (16) + TAG (32) + XOR(zip, SHAKE-256(key + SALT))`，
+`TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32]`。launcher 在导入入口前
+安装 loader。
+
+**认证（0.17.34 起）**：`TAG` 让归档具备完整性校验。重打包、改一个字节、
+或用自己的 zip 顶替 `bundle/ai_upper.dat`，都会在导入任何模块之前失败
+（`egg authentication failed` / `egg is not authenticated`）。认证是强制的：
+launcher 与构建期工具都只接受 MAGIC2，v1 归档（只有 `MAGIC`）与手搓普通 zip
+一律被拒绝。
+
+**性能**：launcher 在初始化 CPython 前读取、验证 TAG 并解密一次，再在进程内把
+同一份 ZIP 字节和 TAG 交给 Python loader。两个阶段不再各自读盘和解密，也不会额外
+写一份明文 ZIP；已有 extract 缓存键不变。构建期单独调用 loader 仍自行打开归档。
+TAG 取代了旧格式解密后的全量缓存哈希，`sha3.h` 也改为按 64 位 lane 处理。
+历史实测同一 1.4 MB 产物（macOS arm64，`AI_UPPER_SMOKE=1`）：
+
+| 版本 | egg 读取 | 启动总耗时 |
+| --- | --- | --- |
+| 0.17.32（v1，无认证） | 13.1 ms | 308–328 ms |
+| 0.17.34（v2，带认证） | 10.1 ms | 286–294 ms |
+
+Windows x86_64、1.4 MB 产物上，launcher 验签解密后把明文直接交给 Python loader，
+Python 侧 `install()`（不含解释器启动）从 20.4 ms 降到 2.9 ms；这避免了同一次启动
+对 egg 做第二遍 SHAKE-256，实测 bootstrap 阶段约减少 12–15 ms。剩余热启动成本
+主要在 CPython 初始化、loader/`zipfile` 导入和 PySide2 导入；首次启动还要写
+bundle 缓存。
+
+**密钥**：`key_hex` 仍编译进 launcher（否则 loader 无法解密），但不再以可读的
+十六进制字符串存在——生成器写成 `key ^ mask` 与 `mask` 两个字节数组，launcher 在
+运行时重组成字符串。这让 `strings launcher | grep` 找不到密钥；挡不住调试器，
+这是本地解密器的固有边界。
 
 加密默认开启：配置里没有 `[tool.ai_upper.egg]` 段时也按 `enabled = true`
 处理；`--no-egg` 只对本次构建关闭，配置里写 `enabled = false` 才会长期关闭。
@@ -594,7 +642,7 @@ backend = "auto"          # auto | memory | extract
 compression = "deflated"  # deflated | stored | lzma
 ```
 
-**进 egg 的东西**：`app/src` 下的 `.py` 和应用自带的其它非原生文件、本次构建
+**进 egg 的东西**：应用 `src` 下的 `.py` 和应用自带的其它非原生文件、本次构建
 编译出的 `.pyd`/`.so`。**不进 egg 的东西**：第三方 wheel、runtime，以及
 `[tool.ai_upper.native]` 依赖闭包要检查的 `.dll`/`.so` 等原生输入——它们必须
 留在 `site-packages`，否则 `bundle_native_dependencies` 看不到。
@@ -604,32 +652,44 @@ compression = "deflated"  # deflated | stored | lzma
 - `memory`：仅 Windows。扩展用 vendored `_memimporter` 从内存映射，需要 PATH
   里能找到 Zig，`build/cache/memimporter/<target>/_memimporter.pyd` 会缓存。
 - `extract`：所有平台。启动时解密到按内容寻址的缓存目录并插入 `sys.path`。
-  目录名是解密后归档的 SHA-256：首次启动解压一次并写入 `.complete` 标记，
-  后续启动直接复用；egg 内容变化时目录名随之变化，不存在的缓存会重新解压。
+  目录名是认证 TAG：首次启动解压一次并写入 `.complete` 标记，后续启动直接复用；
+  egg 内容变化时目录名随之变化，不存在的缓存会重新解压。
+  缓存是**明文**，所以复用前会按归档内的成员清单逐个核对 SHA-256——被改过的
+  缓存目录会被删除重建，而不是带着改动继续运行（`AI_UPPER_EGG_CACHE_VERIFY=0`
+  可关闭这项检查，换取一点启动时间）。实测开启校验与关闭校验的启动耗时落在
+  测量噪声内（277–294 ms vs 280–306 ms），默认保持开启。
   缓存根默认是 `~/Library/Caches/ai_upper/eggs`（macOS）、
   `%LOCALAPPDATA%/ai_upper/cache/eggs`（Windows）、
   `$XDG_CACHE_HOME/ai_upper/eggs` 或 `~/.cache/ai_upper/eggs`（Linux），
-  `AI_UPPER_EGG_CACHE` 可覆盖；目录不可写时回退到 `ai_upper_egg_*` 临时目录。
+  `AI_UPPER_EGG_CACHE` 可覆盖；目录无法创建，或现有目录因权限、只读文件系统无法
+  创建解压 staging 时，Python loader 改用系统的 `ai_upper_egg_*` 临时目录。
+  归档读取、解压及其他写入错误不会按权限问题隐藏。
+  缓存目录名就是认证 TAG，因此每次发布都会产生新目录；loader 发布新条目后会删掉
+  更早的条目，只保留当前和上一版（`CACHE_KEEP = 2`），上一版留着是为了回滚时仍能
+  热启动。launcher 的 `merged-<tag>` 缓存同理（保留当前 + 最新一个旧条目）。删除是
+  尽力而为：另一个实例可能正在用旧条目，残留目录只占磁盘，不影响启动。
   Linux 没有稳定的内存 dlopen 接口；macOS 的 hardened runtime 还要求缓存
   目录里的 `.so` 通过签名校验，否则需要
   `com.apple.security.cs.disable-library-validation`。
 - `auto`：Windows 且 `_memimporter` 能导入时用 memory，否则 extract。Windows
   上编译失败只打印 warning；显式 `memory` 则报错。
 
-**合并扩展（`merge = "directory"`）**：每个顶层目录下的叶子模块链接成一个
-bundle，文件名是 `ai_upper_<group><扩展后缀>`，统一放在
+**合并扩展**：模板使用 `merge = "all"`，把选中的应用叶子模块链接为一个
+`ai_upper__all<扩展后缀>`，启动时只加载一个应用原生 bundle。
+`merge = "directory"` 仍按顶层目录分组，根目录模块单独成组；已有配置不会自动迁移。
+两种模式的 bundle 都放在
 `site-packages/ai_upper_bundles/`，再以 **`ZIP_STORED`** 写进 `ai_upper.dat`
 （launcher 在 `Py_Initialize` 之前读归档，没有 zlib/lzma 可用，所以这些 entry
 不能压缩）。`__init__.py` 不参与合并，仍以 `.py` 包标记进入 egg。launcher
 启动时从 egg 取出 bundle 到内容寻址缓存
-（`<cache>/eggs/merged-<shake256(payload)[:16]>/`），`dlopen` 后调用
+（`<cache>/eggs/merged-<TAG 前 16 字节的十六进制>/`），`dlopen` 后调用
 `ai_upper_register_modules()`，由它用 `PyImport_ExtendInittab` 在解释器初始化
 前注册所有模块名。Python 层的 egg loader 会跳过 `ai_upper_bundles/`，不会重复
 解压。`--verify` 会检查 bundle 在 egg 内、`site-packages` 没有散落副本、entry
 是 `ZIP_STORED`、架构与 target 一致。
 
 launcher 内嵌 loader 源码、key 与 backend，并在运行入口前调用
-`install(EGG_PATH, key_hex, backend)`；`AI_UPPER_EGG` 指向包内的
+`install_from_launcher()` 交接已认证的归档；`AI_UPPER_EGG` 指向包内的
 `bundle/ai_upper.dat`
 （Windows/Linux 在可执行文件旁，macOS 在 `Contents/Resources/`）。stage 下的
 `egg.json` 记录本次构建实际使用的 key/backend/compression；`--verify` 和冒烟
@@ -643,16 +703,18 @@ python tools/build.py --no-egg
 python tools/build.py --egg --egg-key <HEX> --egg-backend extract --egg-compression lzma
 ```
 
-验证点：`--verify` 检查 `bundle/ai_upper.dat` 存在、MAGIC 正确、成员可解，并确认已打包的
-应用文件不再以散文件出现；`backend = memory` 的 stage 还必须带
-`_memimporter.pyd`。冒烟脚本内嵌同一份 loader，先 `install()` 再导入入口。
+验证点：`--verify` 检查 `bundle/ai_upper.dat` 存在、MAGIC2 正确、**认证 TAG 通过**、
+成员可解、成员清单覆盖每个成员且摘要为 SHA-256，并确认已打包的应用文件不再以散文件
+出现；它还断言 launcher 二进制里不含明文十六进制密钥（`egg key not stored as plain
+hex`）。`backend = memory` 的 stage 还必须带 `_memimporter.pyd`。冒烟脚本内嵌同一份
+loader，先 `install()` 再导入入口。
 
 边界：这是混淆而不是现代密码学——key 编在 launcher 里，有决心的逆向者仍能
 取回；它也不会显著缩小产物，runtime/第三方 wheel/Qt 才是体积大头，裁剪仍用
 §9.3/§9.4。memory 后端下模块的 `__file__` 是 `bundle/ai_upper.dat` 内的虚拟路径，依赖
 真实文件路径的代码需要自己处理；extract 后端则指向临时目录。
 
-### 9.5 MVVM 应用骨架
+### 9.6 MVVM 应用骨架
 
 `app/src/mvvm/` 是一个能跑的最小 MVVM 骨架，依赖方向单向：View → ViewModel → Model/Service，反向靠属性的变更通知回来。
 
@@ -671,7 +733,7 @@ app/src/
 
 规则：
 
-1. 四层互相不 import 具体实现，`application.py` 是唯一同时 import models / view_models / views / services 的文件；换实现只改这一个文件；
+1. `application.py` 负责创建与连接对象；View 可以引用 ViewModel 类型，ViewModel 可以引用 Model/Service 类型，下层不反向 import View。替换依赖时在装配处传入新实现；
 2. `models/`、`view_models/`、`services/` 不 import Qt——它们只持有数据和命令，界面能不能显示与它们无关；
 3. Qt 名字在真正建窗口的地方才 import（`MainWindow.__init__`、`create_application()`），所以 `import application` 不加载任何 binding；
 4. 「服务」是注入进去的能力，不是全局单例：`GreetingService` 由装配处注册进容器，再传给 ViewModel；
@@ -687,10 +749,12 @@ application.get_viewmodel("main")
 application.register_view("main", MainWindow(...))
 application.get_view("main")
 application.start()   # 置位运行标记 + 依次 show 所有已注册 View
-application.stop()    # close 所有 View → dispose 所有 ViewModel → 清空注册表
+application.stop()    # 逐个 close/dispose View → dispose ViewModel → 清空两类注册表
 ```
 
-`MVVMQtApplication`（`mvvm/mvvm_bootstrap.py`）只固定顺序：`setup()` 建容器 → `initialize_viewmodels()` → `initialize_views()` → `start()`，`run()` 再进 Qt 事件循环。`run()` 进循环走 `utils.qt_compat.exec_loop()`，因为 Qt6 把入口叫 `exec`、Qt5 只有 `exec_`（见 §9.1）。子类只写 `initialize_viewmodels()` 和 `initialize_views()` 这两个钩子。
+`MVVMQtApplication`（`mvvm/mvvm_bootstrap.py`）固定顺序：`setup()` 建容器 → `initialize_viewmodels()` → `initialize_views()` → `start()`。运行中的 `prepare()` 复用当前对象图。`run()` 通过 `utils.qt_compat.exec_loop()` 进入事件循环；`run(headless=True)` 只调用一次 `processEvents()`。两条路径均在 `finally` 中停止容器，装配或事件处理抛异常也清理已注册对象。Qt6 的循环入口叫 `exec`、Qt5 只有 `exec_`，适配由 shim 负责（见 §9.1）。子类只写两个初始化钩子；headless 的平台环境变量必须在创建 QApplication 前设置，示例 `run_gui()` 已负责此步骤。
+
+资源归属：View 只解除自己创建的属性绑定、命令信号和额外订阅，不能销毁共享 ViewModel；容器在所有 View 清理之后释放已注册的 ViewModel。手工创建、未注册到容器的 ViewModel 由创建方调用 `dispose()`。直接调用 `prepare()` 的嵌入者负责最终 `quit()`；通常使用自带清理的 `run()`。
 
 绑定 API（`mvvm/views/base_view.py`，View 继承 `ViewBase`）：
 
@@ -713,7 +777,10 @@ MainWindow._on_viewmodel_property_changed ─────→ AboutWindow.show()
 AboutWindow 的「关闭」按钮 ─CommandBinding→ MainViewModel.hide_about_command → about_visible = False → AboutWindow.close()
 ```
 
-`about_visible` 是唯一真相源：主窗口和「关于」窗口都不自己存可见状态，谁都不需要知道对方存在。主窗口拿到的「关于」窗口是构造参数（`MainWindow(viewmodel, about_window)`），不是自己 new 的。
+按钮链路通过 `about_visible` 驱动窗口：ViewModel 不认识具体窗口。主窗口拿到的「关于」视图是构造参数（`MainWindow(viewmodel, about_window)`），不是自己创建它；主窗口的额外属性订阅会在 `dispose()` 中解除。
+原生关闭或拒绝对话框通过 `finished` 信号绑定同一个 `hide_about` 命令，避免窗口已经关闭但 `about_visible` 仍为 True，导致按钮无法再次打开。信号语义见 [Qt QDialog 文档](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QDialog.html#PySide6.QtWidgets.QDialog.finished)。
+「关于」视图照常注册，但首次显示才创建 Qt 控件并读取最新的 ViewModel 内容。同步命令
+不加载异步运行时；`AsyncRelayCommand.execute()` 首次调度时才导入 `asyncio`。
 
 ---
 
@@ -766,7 +833,7 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 
 - 致命错误（入口缺失、runtime 加载失败、解释器初始化失败、应用抛未捕获异常）先写 stderr，再按需弹**原生对话框**：Windows `MessageBoxW`、macOS `CFUserNotification`、Linux `zenity`（退回 `xmessage`）。macOS 的对话框有 120 s 超时，无人值守不会挂死。
 - 已经能看到 stderr 时不弹窗：设置了 `AI_UPPER_NO_DIALOG`，或 stdout/stderr 是 tty。**CI 与 smoke 必须设 `AI_UPPER_NO_DIALOG=1`**。
-- 应用抛未捕获异常时，bootstrap 先把 traceback 写进 `TMPDIR/ai_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件。
+- 应用抛未捕获异常时，bootstrap 按需导入 traceback 并将错误写进 `TMPDIR/ai_upper-<pid>.log`；`Py_FinalizeEx` 之后 launcher 检查该文件并把它作为致命错误上报，然后删除。双击启动（没有终端）也能看到 traceback，且不会在包里留下垃圾文件；正常的内嵌入口也不会导入仅文件入口使用的 `runpy`。
 - 退出码：1 无 argv / 未捕获异常，3 入口缺失，4 libpython 加载失败，5 符号缺失，6 配置失败，7 初始化失败，8 `PyRun_SimpleString` 缺失，9 launcher 内部异常。
 
 ### 10.4 平台差异
@@ -785,7 +852,7 @@ UTF-8，避免 Linux 的默认 C locale 把中文安装路径按 ASCII 编码；
 
 两道门：
 
-1. **静态校验**（`--verify`）：文件存在、架构匹配、扩展 ABI 后缀、依赖清单、包布局。可重复执行（幂等）。
+1. **静态校验**（`--verify`）：文件存在、架构匹配、扩展 ABI 后缀、依赖清单、包布局。staging 和成品分别验签解密一次，各项归档检查复用这一份 ZIP；再次运行会重新读取并检查文件。
 2. **真 import smoke**（`--run` 之前自动执行）：
    - 用 bundled Python 导入入口模块 + 所有直接声明的第三方依赖；
    - 用打包好的 launcher 再导入一次（`AI_UPPER_SMOKE=1`）；
@@ -797,7 +864,7 @@ CI（`.github/workflows/validate.yml`）在**每个原生平台**都跑：
 
 ```
 单元测试 → 本地端到端构建（第三方 wheel、应用自带 native 库、lock/--locked）
-→ doctor → 完整 PBS 构建 → 集成运行（headless，断言 GUI OK）
+→ doctor → 一次完整 PBS 构建（支持 GUI 的目标用 --run 在构建后直接运行，断言 GUI OK）
 ```
 
 原生集成 job 从模板生成 `app/pyproject.toml` 时会把仓库自身示例应用的依赖集合填进 `[project] dependencies`（模板里是空列表），否则集成运行没有 PySide6 可用；纯测试与聚合 job 只需要文件存在，直接复制模板。E2E 夹具同样自己重写这一段依赖。
@@ -820,7 +887,7 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 
 - **macOS**：对嵌套 dylib/so 与应用本体签名，`--notary-profile` 时提交公证并 staple。
 - **Windows**：需要 `signtool` 与 `AI_UPPER_SIGN_CERT`。
-- **Linux**：交给发行版打包/签名体系。
+- **Linux**：CPack 生成 TGZ/DEB，可用 `--linux-format RPM` 选择 RPM；依赖、目标输出和验证边界见 [发布与异步说明](RELEASE_AND_ASYNC.md)。
 
 签名顺序由工具保证：嵌套代码由内向外，launcher 最后（否则 bundle 封签会失效）。
 
@@ -875,6 +942,7 @@ python tools/build.py --release --identity "Developer ID Application: ..." --not
 
 | 模块 | 职责 |
 |---|---|
+| `appdir.py` | 应用目录选择：`--app`（导入 config 前解析）、`AI_UPPER_APP_DIR`、根目录自动发现 |
 | `config.py` | 目标契约、配置解析、平台标签、pip 传输参数 |
 | `toolchain.py` | 宿主工具链解析（clang/gcc/MSVC，以及无 VS 宿主上的 Zig 交叉路径） |
 | `pbs.py` | PBS 解析：release 元数据、资产匹配、runtime/SDK 获取与校验 |

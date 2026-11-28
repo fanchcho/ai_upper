@@ -2,6 +2,7 @@ from __future__ import annotations
 from ai_upper.localization import tr
 
 import json
+import math
 import os
 import time
 import urllib.error
@@ -35,7 +36,9 @@ def _retry_delay(error: urllib.error.HTTPError, attempt: int) -> float:
     retry_after = error.headers.get("Retry-After") if error.headers else None
     if retry_after:
         try:
-            return min(float(retry_after), MAX_BACKOFF)
+            delay = float(retry_after)
+            if math.isfinite(delay) and delay >= 0:
+                return min(delay, MAX_BACKOFF)
         except (TypeError, ValueError):
             pass
     return min(2.0**attempt, MAX_BACKOFF)

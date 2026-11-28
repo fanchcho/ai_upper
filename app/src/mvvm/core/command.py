@@ -5,7 +5,6 @@ Command system for MVVM
 from locale_runtime import tr
 
 from typing import Callable, Any, Optional, Coroutine
-import asyncio
 
 
 class RelayCommand:
@@ -54,7 +53,7 @@ class RelayCommand:
     
     def notify_can_execute_changed(self) -> None:
         """通知命令执行状态已变化"""
-        for listener in self._can_execute_changed_listeners:
+        for listener in tuple(self._can_execute_changed_listeners):
             try:
                 listener()
             except Exception as e:
@@ -67,13 +66,16 @@ class AsyncRelayCommand:
     def __init__(
         self,
         execute: Callable[..., Coroutine],
-        can_execute: Optional[Callable[..., bool]] = None
+        can_execute: Optional[Callable[..., bool]] = None,
+        task_owner=None,
     ):
         """
         Args:
             execute: 异步执行方法
             can_execute: 判断是否可以执行的方法
         """
+        self._task_owner = task_owner
+        self._pending_task = None
         self._execute = execute
         self._can_execute = can_execute or (lambda *args, **kwargs: True)
         self._is_executing = False
@@ -114,14 +116,17 @@ class AsyncRelayCommand:
     
     def execute(self, parameter: Any = None) -> None:
         """同步执行异步命令（需要在事件循环中运行）"""
-        if not self.can_execute(parameter):
+        if not self.can_execute(parameter) or (self._pending_task is not None and not self._pending_task.done()):
             return
-        
+        import asyncio
+
         try:
             loop = asyncio.get_event_loop()
             if loop.is_running():
                 # 如果事件循环正在运行，需要使用 create_task
-                asyncio.ensure_future(self.execute_async(parameter))
+                self._pending_task = (self._task_owner.create_task(self.execute_async(parameter))
+                                      if self._task_owner is not None else
+                                      loop.create_task(self.execute_async(parameter)))
             else:
                 # 否则直接运行
                 loop.run_until_complete(self.execute_async(parameter))
@@ -135,7 +140,7 @@ class AsyncRelayCommand:
     
     def notify_can_execute_changed(self) -> None:
         """通知命令状态已变化"""
-        for listener in self._can_execute_changed_listeners:
+        for listener in tuple(self._can_execute_changed_listeners):
             try:
                 listener()
             except Exception as e:

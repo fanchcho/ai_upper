@@ -1,11 +1,19 @@
 #pragma once
 
-// Minimal SHAKE-256 keystream, matching `hashlib.shake_256(key).digest(n)`.
+// Minimal SHAKE-256 keystream and authentication, matching
+// `hashlib.shake_256(...)`.
 //
-// The egg format is MAGIC + XOR(zip bytes, SHAKE-256(key) stream), so the
-// launcher needs the same stream before CPython exists. This is a compact
-// Keccak-f[1600] implementation; it assumes a little-endian host, which every
-// target this launcher ships for is.
+// The egg format is
+//   MAGIC2 + SALT + TAG + XOR(zip bytes, SHAKE-256(key + SALT) stream)
+// with TAG = SHAKE-256(key + MAGIC2 + SALT + ciphertext)[:32], so the launcher
+// needs both the stream and a plain digest before CPython exists. This is a
+// compact Keccak-f[1600] implementation.
+//
+// Absorb and squeeze work a 64-bit lane at a time through memcpy rather than
+// byte by byte: the byte loop was ~150 MB/s, which made the authentication pass
+// over a 1.4 MB egg cost more than everything else the launcher does before
+// Py_Initialize. Lane-wise access is ~8x faster and keeps the authenticated
+// format inside the cost the unauthenticated one already paid.
 
 #include <cstddef>
 #include <cstdint>
@@ -15,6 +23,16 @@ namespace aiupper {
 
 inline std::uint64_t rotl64(std::uint64_t value, int bits) {
     return (value << bits) | (value >> (64 - bits));
+}
+
+inline std::uint64_t load_le64(const std::uint8_t* data) {
+    std::uint64_t value = 0;
+    std::memcpy(&value, data, sizeof(value));
+    return value;
+}
+
+inline void store_le64(std::uint8_t* data, std::uint64_t value) {
+    std::memcpy(data, &value, sizeof(value));
 }
 
 inline void keccak_f1600(std::uint64_t state[25]) {
@@ -70,8 +88,31 @@ public:
     Shake256() { std::memset(state_, 0, sizeof(state_)); }
 
     void absorb(const std::uint8_t* data, std::size_t length) {
-        for (std::size_t i = 0; i < length; ++i) {
-            state_[position_ / 8] ^= static_cast<std::uint64_t>(data[i]) << (8 * (position_ % 8));
+        // Fill the current partial lane first, so the bulk of the input moves
+        // eight bytes per iteration.
+        while (length > 0 && (position_ % 8) != 0) {
+            state_[position_ / 8] ^= static_cast<std::uint64_t>(*data) << (8 * (position_ % 8));
+            ++data;
+            --length;
+            if (++position_ == kRate) {
+                keccak_f1600(state_);
+                position_ = 0;
+            }
+        }
+        while (length >= 8) {
+            state_[position_ / 8] ^= load_le64(data);
+            data += 8;
+            length -= 8;
+            position_ += 8;
+            if (position_ == kRate) {
+                keccak_f1600(state_);
+                position_ = 0;
+            }
+        }
+        while (length > 0) {
+            state_[position_ / 8] ^= static_cast<std::uint64_t>(*data) << (8 * (position_ % 8));
+            ++data;
+            --length;
             if (++position_ == kRate) {
                 keccak_f1600(state_);
                 position_ = 0;
@@ -88,14 +129,42 @@ public:
 
     // XORs the squeezed stream into `output`, which is what decryption wants.
     void squeeze_xor(std::uint8_t* output, std::size_t length) {
-        for (std::size_t i = 0; i < length; ++i) {
+        while (length > 0 && (position_ % 8) != 0) {
             if (position_ == kRate) {
                 keccak_f1600(state_);
                 position_ = 0;
             }
-            output[i] ^= static_cast<std::uint8_t>((state_[position_ / 8] >> (8 * (position_ % 8))) & 0xff);
+            output[0] ^= static_cast<std::uint8_t>((state_[position_ / 8] >> (8 * (position_ % 8))) & 0xff);
+            ++output;
+            --length;
             ++position_;
         }
+        while (length >= 8) {
+            if (position_ == kRate) {
+                keccak_f1600(state_);
+                position_ = 0;
+            }
+            store_le64(output, load_le64(output) ^ state_[position_ / 8]);
+            output += 8;
+            length -= 8;
+            position_ += 8;
+        }
+        while (length > 0) {
+            if (position_ == kRate) {
+                keccak_f1600(state_);
+                position_ = 0;
+            }
+            output[0] ^= static_cast<std::uint8_t>((state_[position_ / 8] >> (8 * (position_ % 8))) & 0xff);
+            ++output;
+            --length;
+            ++position_;
+        }
+    }
+
+    // Writes `length` bytes of the squeezed stream, for a plain digest.
+    void squeeze(std::uint8_t* output, std::size_t length) {
+        std::memset(output, 0, length);
+        squeeze_xor(output, length);
     }
 
 private:
@@ -110,6 +179,16 @@ inline void shake256_xor(std::uint8_t* data, std::size_t length,
     shake.absorb(key, key_length);
     shake.finalize();
     shake.squeeze_xor(data, length);
+}
+
+inline void shake256_digest(const std::uint8_t* first, std::size_t first_length,
+                            const std::uint8_t* second, std::size_t second_length,
+                            std::uint8_t* output, std::size_t output_length) {
+    Shake256 shake;
+    shake.absorb(first, first_length);
+    shake.absorb(second, second_length);
+    shake.finalize();
+    shake.squeeze(output, output_length);
 }
 
 }  // namespace aiupper

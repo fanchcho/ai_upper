@@ -6,6 +6,69 @@ import os
 import pytest
 
 
+def test_verify_authenticates_each_artifact_once_without_reusing_prior_results(tmp_path, monkeypatch, capsys):
+    from ai_upper import egg_loader, verify
+    from ai_upper.config import TARGETS, runtime_spec, target_extension_suffix
+    from ai_upper.egg import EGG_DIR, EGG_NAME, EggConfig, egg_loader_source, pack_egg
+    from test_native_deployment import _elf
+
+    target = TARGETS["linux-arm64"]
+    stage = tmp_path / "stage"
+    package = tmp_path / "package"
+    site = tmp_path / "payload"
+    (stage / "site-packages").mkdir(parents=True)
+    spec = runtime_spec(target)
+    suffix = target_extension_suffix(target, spec.major_minor, spec.abi_tag)
+    _elf(site / ("main" + suffix), machine=183)
+    config = EggConfig()
+    staged = pack_egg(site, stage / EGG_DIR / EGG_NAME, ["main" + suffix], config)
+    packaged = package / EGG_DIR / EGG_NAME
+    packaged.parent.mkdir(parents=True)
+    packaged.write_bytes(staged.read_bytes())
+    launcher = _elf(package / "VerifyApp", machine=183, file_type=2)
+    launcher.write_bytes(launcher.read_bytes() + verify.entry_source().encode() + egg_loader_source().encode())
+    monkeypatch.setattr(verify, "app_name", lambda: "VerifyApp")
+    monkeypatch.setattr(verify, "entry_module", lambda: "main")
+    monkeypatch.setattr(verify, "cython_merge_mode", lambda: "none")
+    monkeypatch.setattr(verify, "read_manifest", lambda root: {"format": 4})
+    monkeypatch.setattr(verify, "validate_manifest", lambda manifest, target, spec: None)
+    monkeypatch.setattr(verify, "dependency_specs", lambda: [])
+    monkeypatch.setattr(verify, "dependency_names", lambda path: [])
+    monkeypatch.setattr(verify, "staging_dir", lambda target: stage)
+    monkeypatch.setattr(verify, "_stage_egg_config", lambda stage: config)
+    monkeypatch.setattr(verify, "egg_config", lambda: config)
+    monkeypatch.setattr(verify, "_package_root", lambda target: package)
+    monkeypatch.setattr(verify, "selected_sources", lambda: [verify.APP / "src" / "main.py"])
+
+    calls = []
+    original = egg_loader.open_egg
+
+    def observe(raw, key):
+        calls.append(raw)
+        return original(raw, key)
+
+    monkeypatch.setattr(egg_loader, "open_egg", observe)
+    assert verify.verify(target) == 0
+    output = capsys.readouterr().out
+    assert len(calls) == 2
+    assert "PASS encrypted egg authenticated" in output
+    assert "PASS packaged egg authenticated" in output
+    assert "PASS egg native dependencies portable" in output
+    assert output.count("PASS egg manifest covers every member") == 2
+
+    stamp = packaged.stat()
+    data = bytearray(packaged.read_bytes())
+    data[-1] ^= 1
+    packaged.write_bytes(data)
+    os.utime(packaged, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    assert verify.verify(target) == 1
+    output = capsys.readouterr().out
+    assert len(calls) == 4
+    assert "PASS encrypted egg authenticated" in output
+    assert "FAIL packaged egg" in output
+    assert "egg authentication failed" in output
+
+
 def test_smoke_modules_include_entry_and_direct_dependencies(tmp_path, monkeypatch):
     import ai_upper.verify as smoke
 
@@ -65,7 +128,7 @@ def test_windows_pbs_stage_smoke_uses_sdk_interpreter(tmp_path, monkeypatch):
 def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, member):
     from ai_upper import verify
     from ai_upper.config import TARGETS
-    from ai_upper.egg import EggConfig, pack_egg, remove_packed_files
+    from ai_upper.egg import EggConfig, open_egg_archive, pack_egg, remove_packed_files
     from ai_upper.native import deps
     from test_native_deployment import _pe
 
@@ -76,7 +139,8 @@ def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, membe
     egg = pack_egg(site, tmp_path / "ai_upper.dat", [member], config)
     remove_packed_files(site, [member])
 
-    checks = verify._verify_egg_native_dependencies(egg, config.key_hex, TARGETS["windows-x86_64"], tmp_path / "runtime")
+    with open_egg_archive(egg, config.key_hex) as archive:
+        checks = verify._verify_egg_native_dependencies(archive, TARGETS["windows-x86_64"], tmp_path / "runtime")
 
     assert len(checks) == 1
     assert checks[0][0] is False
@@ -87,7 +151,7 @@ def test_egg_cannot_hide_custom_native_dependencies(tmp_path, monkeypatch, membe
 def test_egg_windows_runtime_dependency_must_be_bundled(tmp_path, monkeypatch):
     from ai_upper import verify
     from ai_upper.config import TARGETS
-    from ai_upper.egg import EggConfig, pack_egg
+    from ai_upper.egg import EggConfig, open_egg_archive, pack_egg
     from ai_upper.native import deps
     from test_native_deployment import _pe
 
@@ -99,11 +163,12 @@ def test_egg_windows_runtime_dependency_must_be_bundled(tmp_path, monkeypatch):
     runtime = tmp_path / "runtime"
     target = TARGETS["windows-x86_64"]
 
-    assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(egg, config.key_hex, target, runtime))
-    _pe(runtime / "vcruntime140.dll")
-    assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(egg, config.key_hex, target, runtime))
-    _pe(runtime / "python313.dll", ["vcruntime140.dll"])
-    assert all(ok for ok, _ in verify._verify_egg_native_dependencies(egg, config.key_hex, target, runtime))
+    with open_egg_archive(egg, config.key_hex) as archive:
+        assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(archive, target, runtime))
+        _pe(runtime / "vcruntime140.dll")
+        assert not all(ok for ok, _ in verify._verify_egg_native_dependencies(archive, target, runtime))
+        _pe(runtime / "python313.dll", ["vcruntime140.dll"])
+        assert all(ok for ok, _ in verify._verify_egg_native_dependencies(archive, target, runtime))
 
 
 def test_build_output_stays_in_print_order_under_redirection(tmp_path):

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from .config import (
-    LEGACY_LOCK, LEGACY_RUNTIME_MARKER, LEGACY_SDK_MARKER, LOCK, Target, load_app_config,
+    LEGACY_LOCK, LEGACY_RUNTIME_MARKER, LEGACY_SDK_MARKER, LOCK, app_config_label, Target, load_app_config,
     python_version, runtime_provider, runtime_spec, wheel_dir,
 )
 from .fs import marker_file

@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import os
 import stat
+import subprocess
 import sys
 from pathlib import Path
 
@@ -76,15 +77,21 @@ def test_every_source_module_defers_its_annotations():
     """
     builtin_generics = {"dict", "frozenset", "list", "set", "tuple", "type"}
     root = Path(__file__).resolve().parents[2]
+    from ai_upper.config import APP
+
     offenders: list[str] = []
-    for package in ("app/src", "app/tests", "tools"):
-        for path in sorted((root / package).rglob("*.py")):
+    for package in (APP / "src", Path(__file__).parent, root / "tools"):
+        for path in sorted(package.rglob("*.py")):
             tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
             if _defers_annotations(tree):
                 continue
             lines = sorted({node.lineno for node in _runtime_annotations(tree, builtin_generics)})
             if lines:
-                offenders.append(f"{path.relative_to(root)}: {lines}")
+                try:
+                    label = path.relative_to(root)
+                except ValueError:
+                    label = path
+                offenders.append(f"{label}: {lines}")
     assert not offenders, f"these modules need 'from __future__ import annotations': {offenders}"
 
 
@@ -467,6 +474,109 @@ def test_missing_local_configuration_survives_a_foreign_drive(tmp_path, monkeypa
     assert "pyproject.toml.example" in str(excinfo.value)
 
 
+def _write_probe_app(root: Path, name: str = "Probe") -> Path:
+    app = root / "myapp"
+    (app / "src").mkdir(parents=True)
+    (app / "src" / "main.py").write_text("def main():\n    return 0\n", encoding="utf-8")
+    (app / "pyproject.toml").write_text(
+        f'''[project]
+name = "probe"
+version = "1.2.3"
+dependencies = []
+
+[tool.ai_upper]
+entry = "main.py"
+
+[tool.ai_upper.app]
+name = "{name}"
+
+[tool.ai_upper.runtime]
+python = "3.13.5"
+''',
+        encoding="utf-8",
+    )
+    return app
+
+
+def test_application_directory_can_live_outside_the_framework(tmp_path):
+    """A fork can point at its app without editing any ai_upper module."""
+    app = _write_probe_app(tmp_path)
+    code = (
+        "import sys; sys.path.insert(0, 'tools'); "
+        "from ai_upper.config import APP, APP_CONFIG, app_name, entry_module; "
+        "print(APP); print(APP_CONFIG); print(app_name()); print(entry_module())"
+    )
+    env = os.environ.copy()
+    env["AI_UPPER_APP_DIR"] = str(app)
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=Path(__file__).parents[2],
+        env=env,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    lines = result.stdout.splitlines()
+    assert lines[0] == str(app.resolve())
+    assert lines[1] == str((app / "pyproject.toml").resolve())
+    assert lines[2:] == ["Probe", "main"]
+
+
+def test_app_directory_option_is_applied_before_config_import(tmp_path):
+    from ai_upper import appdir
+
+    app = _write_probe_app(tmp_path)
+    env_name = appdir.APP_DIR_ENV
+    old = os.environ.pop(env_name, None)
+    try:
+        assert appdir.select_from_argv(["--app", str(app)]) == str(app)
+        assert os.environ[env_name] == str(app.resolve())
+        assert appdir.select_from_argv([f"--app={app}"]) == str(app)
+        with pytest.raises(SystemExit):
+            appdir.select_from_argv(["--app"])
+        with pytest.raises(SystemExit):
+            appdir.select_from_argv(["--app", "--doctor"])
+    finally:
+        os.environ.pop(env_name, None)
+        if old is not None:
+            os.environ[env_name] = old
+
+
+def test_root_application_is_discovered_without_an_app_child(tmp_path, monkeypatch):
+    """Copying tools/ into an app repository should not require an app/ folder."""
+    from ai_upper import config
+
+    (tmp_path / "pyproject.toml").write_text(
+        "[tool.ai_upper]\nentry = \"main.py\"\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    assert config._default_app_dir() == tmp_path
+
+
+def test_build_cli_documents_the_app_directory_option():
+    root = Path(__file__).parents[2]
+    result = subprocess.run(
+        [sys.executable, "tools/build.py", "--help"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    assert "--app DIR" in result.stdout
+    assert "AI_UPPER_APP_DIR" in result.stdout
+
+
+def test_build_cli_selects_an_external_app_before_config_load(tmp_path):
+    app = _write_probe_app(tmp_path)
+    result = subprocess.run(
+        [sys.executable, "tools/build.py", "--app", str(app), "--doctor"],
+        cwd=Path(__file__).parents[2],
+        text=True,
+        capture_output=True,
+    )
+    assert f"app: {app.resolve()}" in result.stdout
+
+
 def test_target_matrix_and_platform_contract(monkeypatch):
     from ai_upper import config
     from ai_upper.config import TARGETS
@@ -650,6 +760,78 @@ def test_cython_supported_versions():
     assert not _supported_cython("3.0.12")
 
 
+def test_supported_host_cython_ignores_stale_cache(monkeypatch, tmp_path):
+    from ai_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    probes = []
+
+    def version(host, env):
+        probes.append(env.copy())
+        return "3.0.12" if str(cache) in env.get("PYTHONPATH", "") else "3.2.4"
+
+    monkeypatch.setattr(python_build, "_cython_version", version)
+    cache_probes = []
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache_probes.append(host) or cache)
+    env = python_build._cython_env(Path("python"))
+
+    assert env["PYTHONPATH"] == "existing-path"
+    assert len(probes) == 1
+    assert not cache_probes
+
+
+def test_supported_cached_cython_is_added_once(monkeypatch, tmp_path):
+    from ai_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache)
+    monkeypatch.setattr(
+        python_build, "_cython_version",
+        lambda host, env: "3.2.4" if str(cache) in env["PYTHONPATH"] else None,
+    )
+    env = python_build._cython_env(Path("python"))
+
+    assert env["PYTHONPATH"].split(os.pathsep) == [str(cache), "existing-path"]
+
+
+@pytest.mark.parametrize("existing_cache", [False, True])
+@pytest.mark.parametrize("installed_version", ["3.2.4", "3.0.12"])
+def test_cython_bootstrap_replaces_cache_and_checks_result(
+    monkeypatch, tmp_path, existing_cache, installed_version,
+):
+    from ai_upper import python_build
+
+    cache = tmp_path / "cython-cache"
+    if existing_cache:
+        cache.mkdir()
+    monkeypatch.setenv("PYTHONPATH", "existing-path")
+    monkeypatch.setattr(python_build, "_cython_cache_dir", lambda host: cache)
+    commands = []
+    probes = []
+
+    def version(host, env):
+        probes.append(env.copy())
+        return installed_version if commands else "3.0.12"
+
+    monkeypatch.setattr(python_build, "_cython_version", version)
+    monkeypatch.setattr(python_build, "_run", lambda cmd: commands.append(cmd))
+    monkeypatch.setattr(python_build, "pip_transfer_args", lambda: [])
+    if installed_version == "3.0.12":
+        with pytest.raises(RuntimeError, match="Unable to bootstrap"):
+            python_build._cython_env(Path("python"))
+    else:
+        env = python_build._cython_env(Path("python"))
+        assert env["PYTHONPATH"].split(os.pathsep) == [str(cache), "existing-path"]
+
+    assert len(commands) == 1
+    assert "--upgrade" in commands[0]
+    assert len(probes) == (3 if existing_cache else 2)
+
+
 def test_package_copy_does_not_replay_source_metadata(tmp_path, monkeypatch):
     from ai_upper import fs
 
@@ -770,10 +952,67 @@ def test_launcher_uses_global_python_symbols_and_smoke_switch():
     assert "AI_UPPER_HAS_EMBEDDED_SOURCE" in text
     assert "ai_upper_embedded::kEntry" in text
     assert "ai_upper_embedded::kSmoke" in text
+    # The egg key is rebuilt at run time from a masked pair, so the shipped
+    # binary has no readable hexadecimal key for `strings` to find.
+    assert "kEggKeyMasked" in text
+    assert "kEggKeyMask" in text
+    assert "kEggKeyLength" in text
+    # A packaged launcher refuses an archive with no authentication tag.
+    assert "aiupper::read_egg(egg, embedded_egg_key())" in text
+    assert 'globals().pop("_ai_upper_opened_egg")' in text
+    # Authentication is mandatory: the bootstrap carries no switch that could
+    # turn the tag check off.
+    assert "embedded_egg_requires_auth()" not in text
+    assert "EGG_REQUIRE_AUTH" not in text
     cmake = (launcher.parents[1] / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "AI_UPPER_APP_NAME" in cmake
     assert "AI_UPPER_EMBEDDED_SOURCE" in cmake
     assert "AI_UPPER_HAS_EMBEDDED_SOURCE" in cmake
+
+
+def test_launcher_egg_reader_verifies_the_authentication_tag():
+    """The C++ reader and the Python loader must agree on the v2 format.
+
+    If the launcher trusted an untagged archive, replacing bundle/ai_upper.dat
+    with any zip of the attacker's own would run their code; the tag is what
+    makes that fail before a single module is imported.
+    """
+    headers = Path(__file__).parents[2] / "launcher" / "src"
+    egg_bundles = (headers / "egg_bundles.h").read_text(encoding="utf-8")
+    # The magic is spelled byte by byte so the reader never depends on the
+    # host's string encoding for a binary header.
+    assert "'W', 'B', 'E', 'G', 'G', '0', '2', '!'" in egg_bundles
+    assert "egg authentication failed" in egg_bundles
+    assert "egg is not authenticated" in egg_bundles
+    # There is no v1 parser and no switch that skips the tag check.
+    assert "magic_v1" not in egg_bundles
+    assert "require_auth" not in egg_bundles
+    # Constant-time compare: the tag check must not leak a matching prefix.
+    assert "equal_constant_time" in egg_bundles
+    # The tag doubles as the cache key, which is what keeps authentication from
+    # costing an extra pass over the payload.
+    assert "cache_key = detail::hex(tag, kTagSize)" in egg_bundles
+    sha3 = (headers / "sha3.h").read_text(encoding="utf-8")
+    # Lane-wise absorb/squeeze instead of the byte loop: the byte version ran at
+    # ~150 MB/s and made the authenticated format measurably slower than the
+    # unauthenticated one.
+    assert "load_le64" in sha3
+    assert "store_le64" in sha3
+
+
+def test_masked_key_arrays_round_trip_and_hide_the_plain_key():
+    from ai_upper.package import masked_key_arrays
+
+    key_hex = "047636cf3ddbaae2346f597256416e858ee0b7c8b7448221e5babfbb4f74c20d"
+    masked, mask = masked_key_arrays(key_hex)
+    key = bytes.fromhex(key_hex)
+    assert bytes(left ^ right for left, right in zip(masked, mask)) == key
+    # Neither array may contain the key, or the masking is decorative.
+    assert bytes(masked) != key
+    assert bytes(mask) != key
+    assert key_hex.encode("ascii") not in bytes(masked) + bytes(mask)
+    # Derived from the key, so a rebuild reproduces the same binary.
+    assert masked_key_arrays(key_hex) == (masked, mask)
 
 
 def test_launcher_compiles_against_python38_snprintf_alias():

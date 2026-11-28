@@ -9,10 +9,37 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from .appdir import selected_app_dir
 from .compat import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-APP = ROOT / "app"
+
+
+def _default_app_dir() -> Path:
+    """Find the application when no explicit directory was selected.
+
+    The repository keeps its example application under ``app/``. A fork that
+    uses the build tool in a normal application repository has no such child
+    directory; in that case a root ``pyproject.toml`` carrying a
+    ``[tool.ai_upper]`` table is the application.
+    """
+    bundled = ROOT / "app"
+    if (bundled / "pyproject.toml").is_file() or (bundled / "pyproject.toml.example").is_file():
+        return bundled
+    root_config = ROOT / "pyproject.toml"
+    if root_config.is_file():
+        try:
+            with root_config.open("rb") as f:
+                data = tomllib.load(f)
+        except (OSError, ValueError):
+            data = {}
+        tool = data.get("tool")
+        if isinstance(tool, dict) and isinstance(tool.get("ai_upper"), dict):
+            return ROOT
+    return bundled
+
+
+APP = selected_app_dir(_default_app_dir())
 CACHE = ROOT / ".cache"
 BUILD = ROOT / "build"
 DIST = ROOT / "dist"
@@ -29,9 +56,9 @@ LEGACY_LOCK = ROOT / "py_upper.lock.json"
 LEGACY_RUNTIME_MARKER = ".py_upper-runtime.json"
 LEGACY_SDK_MARKER = ".py_upper-sdk.json"
 MIN_BUILD_PYTHON = (3, 8)
-# The tracked template and the Git-ignored working copy of the application
-# configuration. Everything reads the working copy; the template is what a
-# fresh clone starts from.
+# The application configuration. The bundled example keeps a tracked template
+# and a Git-ignored working copy; an application supplied with --app or
+# AI_UPPER_APP_DIR normally has only pyproject.toml.
 APP_CONFIG = APP / "pyproject.toml"
 APP_CONFIG_EXAMPLE = APP / "pyproject.toml.example"
 
@@ -203,12 +230,24 @@ def _readable_path(path: Path) -> str:
         return str(path)
 
 
+def app_config_label() -> str:
+    """The active application configuration path for diagnostics."""
+    return _readable_path(APP_CONFIG)
+
+
 def load_app_config() -> dict:
     if not APP_CONFIG.is_file():
         target = _readable_path(APP_CONFIG)
+        if APP_CONFIG_EXAMPLE.is_file():
+            example = _readable_path(APP_CONFIG_EXAMPLE)
+            raise RuntimeError(
+                f"{target} is missing.\n"
+                "Create your local configuration from the tracked template:\n"
+                f"    cp {example} {target}"
+            )
         example = _readable_path(APP_CONFIG_EXAMPLE)
         raise RuntimeError(
-            tr('legacy.8f84890cf58c' ,p0=target, p2=example, p4=target)
+            tr('legacy.8f84890cf58c' ,p0=target, p2=example, p4=target) + "\n--app (AI_UPPER_APP_DIR): pyproject.toml + src/."
         )
     with APP_CONFIG.open("rb") as f:
         return tomllib.load(f)
@@ -389,7 +428,7 @@ def cython_config() -> dict:
     return value if isinstance(value, dict) else {}
 
 
-MERGE_MODES = ("none", "directory")
+MERGE_MODES = ("none", "directory", "all")
 
 # Merged extension bundles live under this directory. The build packs them into
 # the egg as stored entries and the launcher extracts and registers them before
@@ -400,14 +439,9 @@ BUNDLE_DIR = "ai_upper_bundles"
 def cython_merge_mode() -> str:
     """How application modules are packaged as native extensions.
 
-    ``none`` keeps one extension per module, which is the historical layout and
-    the right default for projects that do not care about startup cost.
-    ``directory`` links every leaf module of a top-level package (and the root
-    modules together) into one extension. macOS charges a kernel code-signing
-    check for every Mach-O image a process maps, so a bundle of a thousand
-    extensions costs minutes on a cold start while three bundles cost seconds;
-    the registration half of that layout lives in the launcher and in
-    ``python_build.build_merged_extensions``.
+    ``none`` keeps one extension per module. ``directory`` links leaf modules by
+    top-level package so localized changes only rebuild that bundle.
+    ``all`` links all leaves into one image to minimize native loads at startup.
     """
     value = cython_config().get("merge", "none")
     if isinstance(value, bool):
@@ -417,6 +451,8 @@ def cython_merge_mode() -> str:
         return "none"
     if text in ("directory", "dir", "package", "on", "true", "yes", "1"):
         return "directory"
+    if text == "all":
+        return text
     raise RuntimeError(
         tr('legacy.be1ae9054874') + ", ".join(MERGE_MODES)
     )

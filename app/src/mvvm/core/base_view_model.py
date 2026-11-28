@@ -16,6 +16,7 @@ class BaseViewModel:
     
     def __init__(self):
         self._properties: Dict[str, ObservableProperty] = {}
+        self._property_unsubscribers: Dict[str, Callable[[], None]] = {}
         self._property_changed_listeners: list = []
         self._initialize_properties()
     
@@ -28,10 +29,13 @@ class BaseViewModel:
     
     def _register_property(self, name: str, property_obj: ObservableProperty) -> None:
         """注册一个属性并设置其名称"""
+        unsubscribe = self._property_unsubscribers.pop(name, None)
+        if unsubscribe:
+            unsubscribe()
         property_obj.set_property_name(name)
         self._properties[name] = property_obj
         # 订阅属性变化事件
-        property_obj.subscribe(self._on_property_changed)
+        self._property_unsubscribers[name] = property_obj.subscribe(self._on_property_changed)
     
     def get_property(self, name: str) -> Optional[ObservableProperty]:
         """获取指定名称的属性"""
@@ -55,7 +59,7 @@ class BaseViewModel:
         将在任何属性值改变时被调用
         """
         # 通知所有监听器
-        for listener in self._property_changed_listeners:
+        for listener in tuple(self._property_changed_listeners):
             try:
                 listener(event)
             except Exception as e:
@@ -81,6 +85,9 @@ class BaseViewModel:
     
     def dispose(self) -> None:
         """清理资源"""
+        for unsubscribe in self._property_unsubscribers.values():
+            unsubscribe()
+        self._property_unsubscribers.clear()
         self._properties.clear()
         self._property_changed_listeners.clear()
     

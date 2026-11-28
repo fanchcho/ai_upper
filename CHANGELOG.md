@@ -1,3 +1,147 @@
+## 0.17.37
+
+### Problem
+- Linux 安装归档未接入正式 CLI；共享 ViewModel 清理、原生关闭 About、异步退出缺少一致的资源归属。
+- Linux 启动重复编译标准库，构建缓存、发布回滚和 runtime 解包存在可靠性问题。
+
+### Root cause
+- 发布归档在工具外手工生成；View 与容器重复释放共享状态，交互与 headless 退出路径分离。
+- 缺少受管异步任务与服务关闭协议；宿主 Cython 与缓存优先级、安全解包和发布顺序未统一。
+
+### Changes
+- CLI 增加 CPack TGZ/DEB/RPM 发布和独立目标清单，支持显式 Debian Depends；全部成功后替换发布目录。
+- 统一视图订阅释放与 Qt 生命周期，修复 About 原生关闭重开；增加可选 qasync 入口、受管任务取消和服务逆序关闭。
+- Linux 本机构建预编译 checked-hash 标准库字节码；修复 Cython 缓存优先级、重试等待、安全解包、发布失败恢复和 Linux E2E runtime 依赖。
+- 增加框架说明、桌面验证探针和对应回归测试，E2E 排除项目内临时目录。
+
+### Verification
+- Linux ARM64 全量含 E2E：473 passed，2 Windows 专属 skipped；发布最终参数调整后相关回归 99 passed，2 skipped。
+- 三格式正式 CLI 发布成功；DEB 解压后 4,780 项文件一致且 GUI offscreen 启动通过，RPM 元数据查询通过。
+- Python 3.13.5 / Qt / qasync 真实事件循环验证任务取消、服务关闭与容器清理顺序。
+- 当前记录为本地验证；本提交的远端 CI 结果以 GitHub Actions 对应 SHA 为准。
+
+### Impact
+- 默认同步示例不强制新增 qasync 依赖；异步应用需自行声明依赖并注册任务和服务关闭。
+- DEB 自动扫描可能受 sysroot/PBS 引用影响，显式 Depends 必须针对目标负载核对；干净发行版安装升级卸载尚未实测。
+- 桌面探针不代替真实显示延迟，Wayland、Windows/macOS 桌面实机验证仍待完成；临时文件和安装包不入库。
+
+## 未发布
+
+- 优化打包应用的正常启动：故障报告、脚本旁路启动和异步命令按需加载；egg 导入器不再加载未用到的抽象基类，示例的「关于」对话框在首次打开时创建。
+- 静态校验对 staging 和成品的 egg 各读取并验签解密一次，复用同一份 ZIP 做成员、架构与依赖检查；GUI 集成 CI 不再重复完整打包。
+- 新增 `[tool.ai_upper.cython].merge = "all"`，将应用扩展合为一个原生 bundle，减少冷启动时的加载次数；示例配置启用此模式，已有 `directory` 和 `none` 配置行为不变。
+- 打包应用启动时只读取并认证解密 egg 一次，launcher 与 Python loader 在进程内复用结果。不改变归档格式、现有缓存键或完整性检查。
+- 修复 extract 缓存目录已存在但因权限或只读挂载无法创建 staging 时启动失败的问题；此时改用系统临时目录，其他写入和解压错误仍报错。
+
+## 0.17.36
+
+### Problem
+- `strip_native = true` 对**应用自己的扩展完全无效**。`bundle_native_dependencies` 在 `[4/6]` 才运行，而应用扩展在 `[2/6]` 就被打进 `bundle/ai_upper.dat` 了——已经封进归档的文件它永远看不到。开启后 `dist/Upper.app` 只从 75 MB 降到 68 MB，而 egg 里那 977 KB 的 bundle 一个字节都没变。
+- egg 缓存的淘汰职责串了：`_prune_cache()` 把 `merged-*` 也纳入清理范围，但 `merged-*` 是 launcher 在 `Py_Initialize` 之前写入并正在使用的目录。多版本共存时会删掉活着的缓存，下次启动被迫重新解压。
+
+### Root cause
+- 打包顺序：`pack_egg()` → `remove_packed_files()` → 后续步骤做 strip/签名。strip 的实现（`_strip_native`）只遍历仍在 `site-packages` 的原生镜像。
+- `_prune_cache()` 的前缀过滤写成了 `(CACHE_PREFIX, 'merged-')`，把 launcher 的命名空间也算进自己的淘汰范围。
+
+### Changes
+- `python_build.py`：新增 `strip_packed_extensions()`，在 `pack_egg()` 之前对即将入包的 `.so/.pyd/.dylib` 执行 strip；macOS 随即 `ad_hoc_sign()`（strip 会让 Cython 链接时的 ad-hoc 签名失效，dyld 会拒绝加载）。
+- `egg_loader.py`：`_prune_cache()` 只清理 `egg-*`，`merged-*` 交给 launcher 自己的 `prune_bundle_cache()`。
+- 文档补上 `strip_native` 的真实收益表与启动 A/B 结果。
+
+### Verification
+- `strip_native = true`：`dist/Upper.app` 75 MB → **68 MB（−9.3%）**；`bundle/ai_upper.dat` 981 KB → **832 KB（−15.2%）**。
+- 启动不受影响：交错 A/B 各 12 次，未 strip 301–326 ms，strip 300–314 ms。
+- 签名：`codesign -v --deep --strict` 通过；`--verify` 169 项 PASS，含 3 个 bundle 的 arm64 架构校验。
+- 缓存命名空间：新增回归测试确认 loader 不再删 `merged-*`。
+- `python -m pytest app/tests -q`：393 passed, 6 skipped。
+
+### Impact
+- 想让产物更小，把 `strip_native` 打开即可（默认仍是 `false`，保持保守）。
+- 已发布产物需要重新构建才能拿到这两项收益。
+- 加密与防篡改行为不变；strip 在 tag 计算之前完成，归档仍然可认证。
+
+## 0.17.35
+
+### Problem
+- egg 缓存按认证 TAG 命名，因此**每次发布都会留下一个新目录**，且从不清理。实测两次构建后 `~/Library/Caches/ai_upper/eggs` 里已有两套 `egg-*` + `merged-*`（约 2 MB），随发布次数线性增长。`--verify` 还会为每个 merged bundle 重复解密整个归档（3 个 bundle = 3 次，每次约 3.6 ms）。
+
+### Root cause
+- 缓存目录名来自内容哈希/TAG，设计上就是"新版本 = 新目录"，但没有任何淘汰路径：loader 的 `_extract()` 与 launcher 的 `publish_bundle_cache()` 都只在缺失时创建，从不删除旧条目。`verify._egg_payload()` 每次调用都重新读文件并解密，而 `_verify_egg_bundle()` 按 bundle 逐个调用它。
+
+### Changes
+- `egg_loader.py`：新增 `_prune_cache()`，发布新条目后只保留当前与上一版（`CACHE_KEEP = 2`）。上一版留着，回滚到前一版本仍能热启动。删除尽力而为，失败不影响启动。
+- `AiUpper.cpp`：新增 `prune_bundle_cache()`，`merged-<tag>` 缓存保留当前 + 最新一个旧条目，在三条发布成功路径上调用。
+- `egg_bundles.h`：把"读取+解密"拆成 `read_egg()`，与 `read_bundles_from_payload()` 分开；`read_egg_bundles()` 保留为一次性包装。**没有**把明文交给 Python 侧复用——实测只省约 3 ms（~1%），却要在磁盘上留一份解密后的 zip，与加密的目的相悖。
+- `verify.py`：`_egg_payload()` 增加进程内缓存，按（路径、mtime、size、key）判定；manifest 读取改走同一份已解密归档。
+- `AiUpper.cpp`：新增 `cache_root_usable()` / `usable_cache_root()`。缓存目录**存在但不可写**时（只读 home、漫游配置、无写权限的容器）此前会直接报 `Could not create the bundle cache staging directory: Permission denied` 并在 `Py_Initialize` 前退出，现在改为回退到系统临时目录下的按进程目录。Python 侧 `_cache_root()` 本来就有这个回退，C++ 侧缺失。
+
+### Verification
+- 连续 4 次发布实测：缓存条目数 1 → 2 → 2 → 2，不再线性增长。
+- `--verify`：169 项 PASS，无 FAIL。
+- 启动（macOS arm64，cocoa，warm，8 次）：267–273 ms，此前 287–304 ms。
+- `python -m pytest app/tests -q`：389 passed, 6 skipped。
+
+### Impact
+- 磁盘占用不再随发布次数增长；升级后旧缓存会在首次启动时被清到 2 个。
+- 回滚到上一版本仍命中缓存，不会因清理而变慢。
+- 启动耗时的小幅改善来自 verify 缓存与代码整理；**加密强度与防篡改行为不变**。
+- 只读缓存环境从"无法启动"变为"可启动，缓存落在临时目录"；临时目录每次进程独立，因此这类环境没有热启动缓存复用。
+
+## 0.17.35（应用目录解耦）
+
+### Problem
+- 构建工具把应用目录硬编码成仓库内的 `app/`。fork 后想换一个应用，必须改 `tools/ai_upper/config.py` 里的路径，或者把应用塞进示例目录；应用放在仓库外、甚至和仓库不在同一个 Windows 盘符时无法使用。
+
+### Changes
+- 新增 `tools/ai_upper/appdir.py`：应用目录统一由 `--app DIR` 或 `AI_UPPER_APP_DIR` 选择，默认仍是 `<repo>/app`；`--app` 在导入 `ai_upper.config` 之前解析。
+- 没有 `app/` 子目录时，如果仓库根 `pyproject.toml` 带 `[tool.ai_upper]`，自动把仓库根目录当作应用，便于把 `tools/` 直接放进自己的应用仓库。
+- `--doctor` 输出实际选中的 app 路径；锁文件、原生依赖、Qt 剪枝和 Cython 的相对路径错误信息改为读取当前应用的配置路径。
+- 修复应用与 `build/` 不在同一个 Windows 盘符时 Cython 生成 `.c` 的 `os.path.relpath` 抛 `ValueError`：跨盘时退回绝对输出路径。
+- 新增外部应用、根目录自动发现、`--app` 帮助文本和跨盘路径的回归测试；README / DEVELOPMENT_GUIDE 增加自有 app 契约和 fork 用法。
+
+### Verification
+- `python -m pytest app/tests -q`：387 passed, 15 skipped（Python 3.11）。
+- 在仓库外的临时应用上执行 `python tools/build.py --app <tmp> --target windows-x86_64 --no-egg`：6 个阶段全部通过，`PASS native binaries checked=29`，launcher smoke `READY`。应用位于 C:、仓库位于 D:，验证了跨盘路径；同一外部应用不传 `--no-egg` 的默认 encrypted egg 构建也通过。
+- 默认 `app/` 配置的完整构建与 `--verify` 通过；外部应用构建不读取示例源码。
+
+### Impact
+- 默认行为不变：继续使用 `app/` 的现有命令和产物路径完全兼容。
+- 自有应用只需提供 `pyproject.toml`、`src/`，可选 `resources/` 和开发 `.venv/`；构建产物、锁文件和缓存仍归属于构建工具仓库。
+- `--app` 与 `AI_UPPER_APP_DIR` 二选一即可；通过 `tools/build.py` 的 `main([...])` 传 `--app` 时会在子进程中按同一选择重新执行，避免与已导入的配置常量冲突。
+
+## 0.17.34
+
+### Problem
+- `bundle/ai_upper.dat` 只做了 XOR 混淆，没有任何完整性校验：用自己的 zip 顶替它、改一个字节、或换掉 extract 缓存里的明文文件，应用都会照常加载。密钥还以明文十六进制字符串编进 launcher，`strings` 一秒就能拿到。用户明确要求加固，但**不能降低打包后的启动速度**。
+
+### Root cause
+- v1 格式是 `MAGIC + XOR(zip, SHAKE-256(key))`，没有 MAC，也没有成员摘要；loader 甚至把不带 MAGIC 的普通 zip 当作合法归档接受。缓存目录名来自明文哈希，`.complete` 标记一旦存在就直接复用，从不核对内容。
+- 密钥同时存在于 `egg_loader.py` 的 `DEFAULT_KEY_HEX` 与生成的翻译单元里，而 loader 源码会被整体嵌入 launcher，所以即使把生成端改成掩码也仍会泄漏。
+
+### Changes
+- egg 升级为 v2：`MAGIC2 + SALT + TAG + ciphertext`，`TAG = SHAKE-256(key + header + ciphertext)[:32]`，比较使用常数时间。salt 由 payload 派生，重建同样输入仍得到同样字节，release manifest 保持可复现。
+- 归档内新增 `ai_upper_manifest.json`（逐成员 SHA-256），打包时用刚读入的字节计算，不做第二遍 I/O。
+- `egg_loader.py`：`open_egg()` 统一解密+验签；v1 与普通 zip 一律拒绝，认证没有关闭开关；extract 缓存复用前按清单校验成员摘要，不匹配则删除重建。`install()`/`EncryptedEggImporter` 只接受 MAGIC2。
+- `egg_bundles.h`：launcher 在 `Py_Initialize` 之前验签，认证失败/未认证归档直接报错退出；TAG 直接作为 bundle 缓存键。
+- `sha3.h`：absorb/squeeze 从逐字节改为按 64 位 lane 批量处理（memcpy 读入）。
+- `DEFAULT_KEY_HEX` 移出 loader，只留在构建工具里；生成器写入 `key ^ mask` 与 `mask` 两个数组，launcher 运行时重组成十六进制字符串。
+- `--verify` 新增：MAGIC2、认证 TAG、成员清单覆盖与摘要长度、`egg key not stored as plain hex`。
+- launcher 把已验签解密的 egg 明文直接交给 Python loader，避免启动时第二次 SHAKE-256；Windows 1.4 MB 产物上 Python 侧 `install()` 从 20.4 ms 降到 2.9 ms。
+
+### Verification
+- 实测同一 1.4 MB 产物（macOS arm64，`AI_UPPER_SMOKE=1`，各 5 次）：egg 读取 13.1 ms → 10.1 ms；启动总耗时 308–328 ms → 286–294 ms。认证没有带来净开销，因为 TAG 取代了原本“解密后再对明文做一遍哈希”的遍历。
+- 缓存校验开销落在噪声内：开启 277–294 ms，`AI_UPPER_EGG_CACHE_VERIFY=0` 时 280–306 ms。
+- 端到端：改一个字节 → `egg authentication failed`；换成攻击者自己的 zip → `egg is not authenticated`；篡改 extract 缓存里的 `.py` → 目录被重建，注入内容消失。
+- `strings` 检查编译后的 launcher：明文密钥命中数 0。
+- `python -m pytest app/tests -q`：381 passed, 15 skipped（Python 3.8 与 3.11）。
+- 启动（Windows x86_64，1.4 MB 产物）：Python 侧 `install()` 20.4 ms → 2.9 ms；完整 smoke 热启动约 150–190 ms，受磁盘/杀软影响会有波动。
+
+### Impact
+- 发布产物需要重新构建才会带认证（旧 v1 归档会被 launcher 与构建工具拒绝，报错信息指明要重新构建）。
+- 构建期工具也只接受 MAGIC2；v1 与普通 zip 一律拒绝，没有 `require_auth=False` 之类的诊断入口。
+- 启动性能不回退；`AI_UPPER_EGG_CACHE_VERIFY=0` 是留给极端性能敏感场景的开关，默认关闭篡改检测不是默认行为。
+- 边界不变：这是提高逆向成本，不是现代密码学。密钥必须在本地可解密，调试器仍可取回。
+
 ## 0.17.33
 
 ### Problem
@@ -20,6 +164,7 @@
 
 ### Impact
 - Old PBS releases now work as both runtime and SDK on POSIX as well as Windows. Current releases keep the install-only runtime path unchanged.
+
 
 ## 0.17.32
 

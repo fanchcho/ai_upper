@@ -64,16 +64,10 @@ def run_gui() -> int:
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
     application = AiUpperApplication()
+    result = application.run(headless=headless)
     if headless:
-        # Same assembly as the interactive run, minus the blocking event loop:
-        # start() shows the registered views, processEvents() runs the window's
-        # pending work once, stop() tears the container down again.
-        application.prepare()
-        application.qt_app.processEvents()
-        application.mvvm_app.stop()
         print("GUI OK", application.qt_app.platformName())
-        return 0
-    return application.run()
+    return result
 
 
 def main() -> int:

@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import errno
 import importlib
 import importlib.machinery
 import io
+import os
+import subprocess
 import sys
+import tempfile
 import types
 import zipfile
 from pathlib import Path
@@ -11,14 +15,15 @@ from pathlib import Path
 import pytest
 
 from ai_upper import egg as egg_module
+from ai_upper import egg_loader
 from ai_upper.egg import (
-    EGG_DIR, EGG_META_NAME, EGG_NAME, EggConfig, application_files, egg_config,
-    egg_loader_source, pack_egg, read_egg_members, read_egg_meta,
-    remove_packed_files, write_egg_meta,
+    DEFAULT_KEY_HEX, EGG_DIR, EGG_META_NAME, EGG_NAME, EggConfig, application_files,
+    egg_authenticated, egg_config, egg_loader_source, pack_egg, read_egg_members,
+    read_egg_manifest, read_egg_meta, remove_packed_files, write_egg_meta,
 )
 from ai_upper.egg_loader import (
-    DEFAULT_KEY_HEX, MAGIC, BuiltinSubmoduleFinder, EncryptedEggImporter,
-    decrypt_if_needed, install, keystream_xor,
+    MAGIC2, MANIFEST_NAME, BuiltinSubmoduleFinder, EncryptedEggImporter,
+    egg_tag, install, keystream_xor, open_egg,
 )
 
 KEY = DEFAULT_KEY_HEX
@@ -76,13 +81,51 @@ def test_keystream_is_its_own_inverse_and_handles_empty_input():
     assert keystream_xor(b"", key) == b""
 
 
-def test_pack_egg_writes_magic_and_encrypted_zip(tmp_path):
+def test_pack_egg_writes_authenticated_v2_archive(tmp_path):
     egg = make_egg(tmp_path, {"pkg/__init__.py": "", "pkg/mod.py": "VALUE = 42\n"})
     raw = egg.read_bytes()
-    assert raw[:len(MAGIC)] == MAGIC
+    assert raw[:len(MAGIC2)] == MAGIC2
     # The payload is obfuscated, so the plaintext member name is not visible.
     assert b"pkg/mod.py" not in raw
-    assert read_egg_members(egg, KEY) == ("pkg/__init__.py", "pkg/mod.py")
+    assert read_egg_members(egg, KEY) == ("pkg/__init__.py", "pkg/mod.py", MANIFEST_NAME)
+    assert egg_authenticated(egg, KEY)
+
+
+def test_pack_egg_records_a_digest_per_member(tmp_path):
+    egg = make_egg(tmp_path, {"pkg/__init__.py": "", "pkg/mod.py": "VALUE = 42\n"})
+    manifest = read_egg_manifest(egg, KEY)
+    assert set(manifest) == {"pkg/__init__.py", "pkg/mod.py"}
+    import hashlib
+    assert manifest["pkg/mod.py"] == hashlib.sha256(b"VALUE = 42\n").hexdigest()
+
+
+def test_pack_egg_tag_detects_an_edited_archive(tmp_path):
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n" * 50})
+    raw = bytearray(egg.read_bytes())
+    raw[-40] ^= 0x01
+    egg.write_bytes(bytes(raw))
+    with pytest.raises(ValueError, match="authentication failed"):
+        read_egg_members(egg, KEY)
+    assert not egg_authenticated(egg, KEY)
+
+
+def test_pack_egg_tag_detects_a_swapped_archive(tmp_path):
+    """An attacker who rebuilds the zip with their own code cannot re-tag it."""
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    plain = tmp_path / "attacker.zip"
+    with zipfile.ZipFile(plain, "w") as archive:
+        archive.writestr("mod.py", "PWNED = 1\n")
+    egg.write_bytes(plain.read_bytes())
+    with pytest.raises(ValueError, match="not authenticated"):
+        read_egg_members(egg, KEY)
+    assert not egg_authenticated(egg, KEY)
+
+
+def test_pack_egg_salt_differs_between_keys(tmp_path):
+    """The key stream depends on the salt, so equal plaintext is not equal ciphertext."""
+    first = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"}, "a.egg", key=KEY)
+    second = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"}, "b.egg", key="11" * 32)
+    assert first.read_bytes() != second.read_bytes()
 
 
 def test_pack_egg_is_deterministic(tmp_path):
@@ -90,15 +133,19 @@ def test_pack_egg_is_deterministic(tmp_path):
     first = make_egg(tmp_path, files, "first.egg")
     second = make_egg(tmp_path, files, "second.egg")
     assert first.read_bytes() == second.read_bytes()
-    with zipfile.ZipFile(io.BytesIO(decrypt_if_needed(first.read_bytes(), bytes.fromhex(KEY)))) as archive:
-        assert archive.namelist() == ["pkg/__init__.py", "pkg/mod.py"]
+    with zipfile.ZipFile(io.BytesIO(open_egg(first.read_bytes(), bytes.fromhex(KEY))[0])) as archive:
+        # The manifest is the last entry: it is written after every member's
+        # digest is known.
+        assert archive.namelist() == ["pkg/__init__.py", "pkg/mod.py", MANIFEST_NAME]
         assert all(info.date_time == (1980, 1, 1, 0, 0, 0) for info in archive.infolist())
 
 
 @pytest.mark.parametrize("compression", ["stored", "deflated", "lzma"])
 def test_pack_egg_supports_each_compression(tmp_path, compression):
     egg = make_egg(tmp_path, {"mod.py": "VALUE = 7\n"}, name=compression + ".egg", compression=compression)
-    assert read_egg_members(egg, KEY) == ("mod.py",)
+    # read_egg_members sorts, and 'p' sorts before... nothing here: the manifest
+    # name sorts after 'mod.py' because 'p' > 'm'.
+    assert read_egg_members(egg, KEY) == ("mod.py", MANIFEST_NAME)
 
 
 def test_pack_egg_stores_launcher_bundles_uncompressed(tmp_path):
@@ -110,7 +157,7 @@ def test_pack_egg_stores_launcher_bundles_uncompressed(tmp_path):
         },
         compression="deflated",
     )
-    with zipfile.ZipFile(io.BytesIO(decrypt_if_needed(egg.read_bytes(), bytes.fromhex(KEY)))) as archive:
+    with zipfile.ZipFile(io.BytesIO(open_egg(egg.read_bytes(), bytes.fromhex(KEY))[0])) as archive:
         bundle = archive.getinfo("ai_upper_bundles/ai_upper_pkg.so")
         source = archive.getinfo("pkg/mod.py")
         assert bundle.compress_type == zipfile.ZIP_STORED
@@ -118,17 +165,23 @@ def test_pack_egg_stores_launcher_bundles_uncompressed(tmp_path):
         assert source.compress_type == zipfile.ZIP_DEFLATED
 
 
-def test_read_egg_members_accepts_a_plain_zip(tmp_path):
+def test_read_egg_members_refuses_a_plain_zip(tmp_path):
     path = tmp_path / "plain.zip"
     with zipfile.ZipFile(path, "w") as archive:
         archive.writestr("mod.py", "VALUE = 1\n")
-    assert read_egg_members(path, KEY) == ("mod.py",)
+    with pytest.raises(ValueError, match="not authenticated"):
+        read_egg_members(path, KEY)
+    with pytest.raises(ValueError, match="not authenticated"):
+        EncryptedEggImporter(path, bytes.fromhex(KEY), "extract")
 
 
 def test_read_egg_members_rejects_a_wrong_key(tmp_path):
+    """A wrong key fails the authentication tag, before any zip parsing."""
     egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
-    with pytest.raises(zipfile.BadZipFile):
+    with pytest.raises(ValueError, match="authentication failed"):
         read_egg_members(egg, "00" * 16)
+    with pytest.raises(ValueError, match="authentication failed"):
+        EncryptedEggImporter(egg, bytes.fromhex("00" * 16), "extract")
 
 
 def test_importer_rejects_empty_and_garbage_archives(tmp_path):
@@ -172,6 +225,21 @@ def test_extract_backend_imports_a_source_module(tmp_path):
     try:
         module = importlib.import_module(name)
         assert module.VALUE == "loaded"
+        assert importer.extract_root in sys.path
+    finally:
+        sys.modules.pop(name, None)
+        if importer.extract_root in sys.path:
+            sys.path.remove(importer.extract_root)
+
+
+def test_extract_backend_accepts_the_launcher_payload_without_the_file(tmp_path):
+    name = "egg_extract_payload_" + tmp_path.name
+    egg = make_egg(tmp_path, {name + ".py": "VALUE = 'payload'\n"})
+    payload, digest = open_egg(egg.read_bytes(), bytes.fromhex(KEY))
+    importer = egg_loader.install_from_launcher(tmp_path / "already-consumed.egg", payload, digest, "extract")
+    try:
+        module = importlib.import_module(name)
+        assert module.VALUE == "payload"
         assert importer.extract_root in sys.path
     finally:
         sys.modules.pop(name, None)
@@ -224,6 +292,65 @@ def test_extract_cache_reuses_a_complete_directory(tmp_path, monkeypatch):
     assert second.extract_root == first.extract_root
 
 
+@pytest.mark.parametrize("backend", ["extract", "memory"])
+def test_launcher_handoff_uses_the_open_archive_and_existing_cache_key(tmp_path, monkeypatch, backend):
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    key = bytes.fromhex(KEY)
+    payload, digest = open_egg(egg.read_bytes(), key)
+    if backend == "memory":
+        fake_memimporter(monkeypatch)
+    else:
+        existing_root = EncryptedEggImporter(egg, key, backend).extract_root
+    egg.unlink()
+    monkeypatch.setattr(sys, "path", sys.path[:])
+    monkeypatch.setattr(sys, "meta_path", sys.meta_path[:])
+
+    importer = egg_loader.install_from_launcher(egg, payload, digest, backend)
+
+    assert importer.backend == backend
+    assert importer.digest == digest
+    assert importer.read_data("mod.py") == b"VALUE = 1\n"
+    if backend == "extract":
+        assert importer.extract_root == existing_root
+
+
+@pytest.mark.parametrize("error", [errno.EACCES, errno.EROFS, errno.EIO])
+def test_extract_handles_unwritable_cache_without_hiding_io_errors(tmp_path, monkeypatch, error):
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    mkdtemp = tempfile.mkdtemp
+
+    def make_directory(*args, **kwargs):
+        if kwargs.get("dir") == str(cache):
+            raise OSError(error, os.strerror(error))
+        return mkdtemp(*args, **kwargs)
+
+    monkeypatch.setattr(tempfile, "mkdtemp", make_directory)
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path))
+    if error == errno.EIO:
+        with pytest.raises(OSError) as failure:
+            EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+        assert failure.value.errno == errno.EIO
+    else:
+        importer = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+        root = Path(importer.extract_root)
+        assert root.parent == tmp_path
+        assert (root / "mod.py").read_text(encoding="utf-8") == "VALUE = 1\n"
+    assert not list(cache.iterdir())
+
+
+def test_embedded_egg_loader_import_does_not_load_importlib_resources():
+    result = subprocess.run(
+        [sys.executable, "-IS", "-c",
+         "import sys; exec(compile(sys.stdin.read(), '<egg loader>', 'exec')); "
+         "assert 'importlib.abc' not in sys.modules; "
+         "assert 'importlib.resources' not in sys.modules"],
+        input=egg_loader_source(), capture_output=True, text=True, timeout=10,
+    )
+    assert result.returncode == 0, result.stderr
+
+
 def test_extract_cache_rebuilds_an_incomplete_directory(tmp_path):
     egg = make_egg(tmp_path, {"pkg/__init__.py": "", "pkg/mod.py": "VALUE = 1\n"})
     first = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
@@ -239,12 +366,24 @@ def test_extract_cache_rebuilds_an_incomplete_directory(tmp_path):
 
 
 def test_extract_rejects_unsafe_members_without_leaving_staging_dirs(tmp_path):
-    egg = tmp_path / "unsafe.zip"
-    with zipfile.ZipFile(egg, "w") as archive:
-        archive.writestr("../escape.py", "VALUE = 1\n")
+    import hashlib
+    import json
+
+    payload = b"VALUE = 1\n"
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("../escape.py", payload)
+        archive.writestr(MANIFEST_NAME, json.dumps(
+            {"files": {"../escape.py": hashlib.sha256(payload).hexdigest()}}))
+    key = bytes.fromhex(KEY)
+    salt = bytes(16)
+    header = MAGIC2 + salt
+    ciphertext = keystream_xor(buffer.getvalue(), key + salt)
+    egg = tmp_path / "unsafe.egg"
+    egg.write_bytes(header + egg_tag(header, ciphertext, key) + ciphertext)
 
     with pytest.raises(ValueError, match="unsafe egg member"):
-        EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+        EncryptedEggImporter(egg, key, "extract")
 
     cache = tmp_path / "egg-cache"
     assert not list(cache.glob(".egg-*"))
@@ -335,6 +474,19 @@ def test_memory_backend_falls_back_to_the_package_init_symbol(tmp_path, monkeypa
     module = importer.create_module(types.SimpleNamespace(name="pkg", origin="pkg"))
     assert module.__memimported__ is True
     assert [call[2] for call in calls] == ["PyInit_pkg", "PyInit___init__"]
+
+
+def test_memory_backend_accepts_the_launcher_payload_without_the_file(tmp_path, monkeypatch):
+    """The launcher already authenticated the egg; do not decrypt it twice."""
+    calls = []
+    fake_memimporter(monkeypatch, calls)
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    payload, digest = open_egg(egg.read_bytes(), bytes.fromhex(KEY))
+    missing = tmp_path / "already-consumed.egg"
+    monkeypatch.setattr(sys, "meta_path", sys.meta_path[:])
+    importer = egg_loader.install_from_launcher(missing, payload, digest, "memory")
+    assert importer.read_data("mod.py") == b"VALUE = 1\n"
+    assert importer.find_spec("mod") is not None
 
 
 def test_memory_backend_requires_the_helper(tmp_path, monkeypatch):
@@ -466,7 +618,7 @@ def test_write_embedded_source_carries_the_loader_only_when_enabled(tmp_path):
     disabled = write_embedded_source(tmp_path / "off", TARGETS["windows-x86_64"])
     text = disabled.read_text(encoding="utf-8")
     assert "const char* const kEggLoader = nullptr;" in text
-    assert 'kEggKey = ""' in text
+    assert "const unsigned int kEggKeyLength = 0u;" in text
     assert 'kEggBackend = "auto"' in text
 
     config = EggConfig(enabled=True, key_hex=KEY, backend="extract")
@@ -474,9 +626,14 @@ def test_write_embedded_source_carries_the_loader_only_when_enabled(tmp_path):
     text = enabled.read_text(encoding="utf-8")
     assert "kEggLoader = R\"aiupper(" in text
     assert "extern const char* const kEggLoader;" in text
-    assert '"' + KEY + '"' in text
     assert '"extract"' in text
-    assert "MAGIC = b'WBEGG01!'" in text
+    assert "MAGIC2 = b'WBEGG02!'" in text
+    # The key must not be a readable hexadecimal literal in the shipped binary;
+    # the generator stores it masked and the launcher reassembles it at run time.
+    assert KEY not in text
+    assert "const unsigned char kEggKeyMasked[]" in text
+    assert "const unsigned char kEggKeyMask[]" in text
+    assert "kEggKeyLength = 32u" in text
 
 
 def test_pack_egg_targets_the_stage_name_used_by_packaging(tmp_path):
@@ -494,5 +651,222 @@ def test_stage_egg_config_honours_a_no_egg_build(tmp_path, monkeypatch):
         enabled=True if enabled is None else bool(enabled)))
     assert verify_module._stage_egg_config(tmp_path).enabled is False
     (tmp_path / EGG_DIR).mkdir()
-    (tmp_path / EGG_DIR / EGG_NAME).write_bytes(MAGIC)
+    (tmp_path / EGG_DIR / EGG_NAME).write_bytes(MAGIC2)
     assert verify_module._stage_egg_config(tmp_path).enabled is True
+
+
+def test_tampered_extract_cache_is_rebuilt_instead_of_run(tmp_path):
+    """The extract cache is plaintext, so reuse has to be checked, not assumed."""
+    name = "egg_cache_tamper_" + tmp_path.name
+    egg = make_egg(tmp_path, {name + ".py": "VALUE = 'clean'\n"})
+    first = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    cached = Path(first.extract_root) / (name + ".py")
+    cached.write_text("VALUE = 'pwned'\n", encoding="utf-8")
+
+    second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    assert second.extract_root == first.extract_root
+    assert (Path(second.extract_root) / (name + ".py")).read_text(encoding="utf-8") == "VALUE = 'clean'\n"
+
+
+def test_cache_verification_can_be_disabled_for_speed(tmp_path, monkeypatch):
+    name = "egg_cache_skip_" + tmp_path.name
+    egg = make_egg(tmp_path, {name + ".py": "VALUE = 'clean'\n"})
+    first = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    (Path(first.extract_root) / (name + ".py")).write_text("VALUE = 'pwned'\n", encoding="utf-8")
+
+    monkeypatch.setenv("AI_UPPER_EGG_CACHE_VERIFY", "0")
+    second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    # With the check off the edited file is reused as-is; this documents the
+    # trade-off rather than pretending the switch is free.
+    assert (Path(second.extract_root) / (name + ".py")).read_text(encoding="utf-8") == "VALUE = 'pwned'\n"
+
+
+def test_unauthenticated_archives_are_refused_everywhere(tmp_path):
+    """A v1 archive and a hand-made zip are rejected, build tools included."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("mod.py", "VALUE = 1\n")
+    plain = buffer.getvalue()
+
+    legacy = tmp_path / "legacy.dat"
+    legacy.write_bytes(b'WBEGG01!' + keystream_xor(plain, bytes.fromhex(KEY)))
+    with pytest.raises(ValueError, match="not authenticated"):
+        read_egg_members(legacy, KEY)
+    with pytest.raises(ValueError, match="not authenticated"):
+        EncryptedEggImporter(legacy, bytes.fromhex(KEY), "extract")
+
+    plain_zip = tmp_path / "plain.zip"
+    plain_zip.write_bytes(plain)
+    with pytest.raises(ValueError, match="not authenticated"):
+        read_egg_members(plain_zip, KEY)
+    with pytest.raises(ValueError, match="not authenticated"):
+        EncryptedEggImporter(plain_zip, bytes.fromhex(KEY), "extract")
+
+
+def test_manifest_and_tag_reject_a_member_added_after_packing(tmp_path):
+    """Editing the plaintext zip cannot work: the tag covers the ciphertext."""
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    payload, _digest = open_egg(egg.read_bytes(), bytes.fromhex(KEY))
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(io.BytesIO(payload)) as original:
+        with zipfile.ZipFile(buffer, "w") as rebuilt:
+            for name in original.namelist():
+                rebuilt.writestr(name, original.read(name))
+            rebuilt.writestr("extra.py", "PWNED = 1\n")
+    salt = bytes(16)
+    header = MAGIC2 + salt
+    ciphertext = keystream_xor(buffer.getvalue(), bytes.fromhex(KEY) + salt)
+    egg.write_bytes(header + bytes(32) + ciphertext)
+    with pytest.raises(ValueError, match="authentication failed"):
+        EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+
+
+def test_manifest_naming_a_missing_member_is_refused(tmp_path):
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    payload, _digest = open_egg(egg.read_bytes(), bytes.fromhex(KEY))
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(io.BytesIO(payload)) as original:
+        with zipfile.ZipFile(buffer, "w") as rebuilt:
+            for name in original.namelist():
+                data = original.read(name)
+                if name == MANIFEST_NAME:
+                    data = b'{"files": {"ghost.py": "' + b"0" * 64 + b'"}}'
+                rebuilt.writestr(name, data)
+    salt = bytes(16)
+    key = bytes.fromhex(KEY)
+    header = MAGIC2 + salt
+    ciphertext = keystream_xor(buffer.getvalue(), key + salt)
+    tag = egg_tag(header, ciphertext, key)
+    egg.write_bytes(header + tag + ciphertext)
+    with pytest.raises(ValueError, match="missing member"):
+        EncryptedEggImporter(egg, key, "extract")
+
+
+def test_old_cache_entries_are_pruned_but_the_previous_build_is_kept(tmp_path):
+    """A new tag per release must not leave one cache directory per version."""
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    stale = []
+    for index in range(4):
+        entry = cache / ("egg-" + ("%064x" % index))
+        entry.mkdir()
+        (entry / ".complete").write_text("old\n", encoding="utf-8")
+        os.utime(entry, (1000 + index, 1000 + index))
+        stale.append(entry)
+
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    importer = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    current = Path(importer.extract_root)
+    assert current.is_dir()
+
+    survivors = {path.name for path in cache.iterdir() if path.is_dir()}
+    assert current.name in survivors
+    # One older entry stays so a rollback to the previous build is still warm.
+    assert len(survivors) == 2
+    assert stale[-1].name in survivors
+
+
+def test_cache_pruning_never_fails_a_start(tmp_path, monkeypatch):
+    """Pruning is best effort: an unreadable cache root must not break startup."""
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    first = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    monkeypatch.setattr(egg_module, "_prune_cache", None) if hasattr(egg_module, "_prune_cache") else None
+    # A directory that disappears mid-listing is the realistic race; the loader
+    # must still publish and return.
+    second = EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+    assert second.extract_root == first.extract_root
+
+
+def test_loader_pruning_leaves_the_launchers_bundle_cache_alone(tmp_path):
+    """Each side owns its own cache prefix.
+
+    `merged-*` is written and used by the launcher before Py_Initialize. When
+    the loader pruned it too, a multi-version cache lost the directory the
+    launcher was using, and the next start had to extract the bundles again.
+    """
+    cache = tmp_path / "egg-cache"
+    cache.mkdir()
+    for name in ("merged-current", "merged-old", "merged-older"):
+        (cache / name).mkdir()
+        (cache / name / ".complete").write_text("x\n", encoding="utf-8")
+
+    egg = make_egg(tmp_path, {"mod.py": "VALUE = 1\n"})
+    EncryptedEggImporter(egg, bytes.fromhex(KEY), "extract")
+
+    survivors = {path.name for path in cache.iterdir() if path.is_dir()}
+    # The loader published its own entry and pruned only egg-* entries.
+    assert {name for name in survivors if name.startswith("merged-")} == {
+        "merged-current", "merged-old", "merged-older"}
+    assert any(name.startswith("egg-") for name in survivors)
+
+
+def test_packed_extensions_are_stripped_before_the_egg_is_sealed(tmp_path, monkeypatch):
+    """strip_native has to run before packing, not after.
+
+    bundle_native_dependencies runs in a later build step and only sees files
+    that are still loose in site-packages. An extension sealed inside the egg
+    never reached it, so strip_native silently had no effect on the
+    application's own bundles.
+    """
+    from ai_upper import python_build
+
+    calls = []
+    monkeypatch.setattr(python_build, "optimize_config", lambda: {"strip_native": True},
+                        raising=False)
+    import ai_upper.config as config_module
+    monkeypatch.setattr(config_module, "optimize_config", lambda: {"strip_native": True})
+
+    import ai_upper.native.bundle as bundle_module
+    monkeypatch.setattr(bundle_module, "_strip_native", lambda path, target: calls.append(("strip", path.name)))
+    monkeypatch.setattr(bundle_module, "ad_hoc_sign", lambda path: calls.append(("sign", path.name)))
+
+    site = tmp_path / "site"
+    (site / "pkg").mkdir(parents=True)
+    (site / "pkg" / "mod.py").write_text("VALUE = 1\n", encoding="utf-8")
+    (site / "ai_upper_bundles").mkdir()
+    (site / "ai_upper_bundles" / "bundle.so").write_bytes(b"\x7fELF")
+
+    from ai_upper.config import TARGETS
+    python_build.strip_packed_extensions(
+        site, ["pkg/mod.py", "ai_upper_bundles/bundle.so"], TARGETS["macos-arm64"])
+
+    assert ("strip", "bundle.so") in calls
+    # macOS: stripping invalidates the ad-hoc signature, so it is re-signed.
+    assert ("sign", "bundle.so") in calls
+    # A source file is not a native image and must not be touched.
+    assert all(name != "mod.py" for _, name in calls)
+
+
+def test_strip_is_a_no_op_when_disabled(tmp_path, monkeypatch):
+    from ai_upper import python_build
+    import ai_upper.config as config_module
+
+    monkeypatch.setattr(config_module, "optimize_config", lambda: {"strip_native": False})
+    calls = []
+    import ai_upper.native.bundle as bundle_module
+    monkeypatch.setattr(bundle_module, "_strip_native", lambda path, target: calls.append(path))
+
+    site = tmp_path / "site"
+    (site / "ai_upper_bundles").mkdir(parents=True)
+    (site / "ai_upper_bundles" / "bundle.so").write_bytes(b"\x7fELF")
+    from ai_upper.config import TARGETS
+    python_build.strip_packed_extensions(site, ["ai_upper_bundles/bundle.so"], TARGETS["macos-arm64"])
+    assert calls == []
+
+
+def test_egg_without_a_manifest_is_refused(tmp_path):
+    """Every accepted archive must carry the per-member digest manifest."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("mod.py", "VALUE = 1\n")
+    key = bytes.fromhex(KEY)
+    salt = bytes(16)
+    header = MAGIC2 + salt
+    ciphertext = keystream_xor(buffer.getvalue(), key + salt)
+    egg = tmp_path / "no-manifest.egg"
+    egg.write_bytes(header + egg_tag(header, ciphertext, key) + ciphertext)
+
+    with pytest.raises(ValueError, match="manifest is missing"):
+        EncryptedEggImporter(egg, key, "extract")
+    with pytest.raises(ValueError, match="manifest is missing"):
+        read_egg_manifest(egg, KEY)

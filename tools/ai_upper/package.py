@@ -2,6 +2,7 @@
 from __future__ import annotations
 from ai_upper.localization import tr
 
+import hashlib
 import json
 import os
 import platform
@@ -12,12 +13,12 @@ import subprocess
 from pathlib import Path
 
 from .config import (
-    APP, BUILD, DIST, LAUNCHER, Target, app_identifier, app_name, entry_source,
-    project_version, publish_dir, resolve_target_python, staging_dir, target_runtime_dir,
+    APP, BUILD, DIST, LAUNCHER, Target, app_identifier, app_name, entry_source, host_target,
+    project_version, publish_dir, resolve_target_python, runtime_executable, staging_dir, target_runtime_dir,
 )
 from .egg import EGG_DIR, EGG_NAME, egg_loader_source
 from .fs import (
-    copy_file_contents, copy_optional_tree, copy_tree_contents, make_executable,
+    _housekeeping, copy_file_contents, copy_optional_tree, copy_tree_contents, make_executable,
     retire_tree, sha256,
 )
 from .native.bundle import bundle_native_dependencies, prune_excluded_native_files
@@ -157,6 +158,28 @@ def _embedded_literal(source: str, what: str) -> str:
     return f'R"{RAW_STRING_DELIMITER}({source}){RAW_STRING_DELIMITER}"'
 
 
+def masked_key_arrays(key_hex: str) -> tuple:
+    """Split an egg key into a masked byte array and its mask.
+
+    The key has to be in the binary for the loader to decrypt anything, so it
+    cannot be hidden. What it must not be is *readable*: a plain hexadecimal
+    string is found by ``strings launcher | grep``, which turns "the code is
+    encrypted" into a two-second exercise for anyone who tries. Storing
+    ``key ^ mask`` and the mask as numeric arrays removes that shortcut.
+
+    The mask is derived from the key itself, so a rebuild of the same key
+    produces the same binary and release manifests stay reproducible.
+    """
+    key = bytes.fromhex(str(key_hex).strip())
+    mask = hashlib.shake_256(key + b"ai_upper-key-mask").digest(len(key))
+    masked = bytes(left ^ right for left, right in zip(key, mask))
+    return masked, mask
+
+
+def _byte_array(values: bytes) -> str:
+    return "{" + ", ".join(f"0x{value:02x}" for value in values) + "}"
+
+
 def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
     """Write the translation unit that carries the entry programs.
 
@@ -169,18 +192,29 @@ def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
 
     When the encrypted egg is enabled, the loader and the key are compiled in
     the same way. The key is obfuscation material, not a secret: it has to be
-    present in the binary for the loader to decrypt anything at all.
+    present in the binary for the loader to decrypt anything at all. It is
+    therefore stored masked (see masked_key_arrays) so the shipped binary does
+    not contain the key as a readable hexadecimal string.
     """
     entry = _embedded_literal(entry_source(), tr('finish.d2a62be17e2a'))
     smoke = _embedded_literal(smoke_source(target), tr('finish.f6042ff55d14'))
     if egg is not None and egg.enabled:
         loader = _embedded_literal(egg_loader_source(), tr('finish.1b0be85b692b'))
         loader_definition = f"const char* const kEggLoader = {loader};\n"
-        key_definition = f"const char* const kEggKey = {_rc_literal(egg.key_hex)};\n"
+        masked, mask = masked_key_arrays(egg.key_hex)
+        key_definition = (
+            f"const unsigned char kEggKeyMasked[] = {_byte_array(masked)};\n"
+            f"const unsigned char kEggKeyMask[] = {_byte_array(mask)};\n"
+            f"const unsigned int kEggKeyLength = {len(masked)}u;\n"
+        )
         backend_definition = f"const char* const kEggBackend = {_rc_literal(egg.backend)};\n"
     else:
         loader_definition = "const char* const kEggLoader = nullptr;\n"
-        key_definition = 'const char* const kEggKey = "";\n'
+        key_definition = (
+            "const unsigned char kEggKeyMasked[] = {0};\n"
+            "const unsigned char kEggKeyMask[] = {0};\n"
+            "const unsigned int kEggKeyLength = 0u;\n"
+        )
         backend_definition = 'const char* const kEggBackend = "auto";\n'
     path = directory / EMBEDDED_SOURCE_FILE
     path.write_text(
@@ -194,7 +228,9 @@ def write_embedded_source(directory: Path, target: Target, egg=None) -> Path:
         f"const char* const kSmoke = {smoke};\n"
         "extern const char* const kEggLoader;\n"
         + loader_definition +
-        "extern const char* const kEggKey;\n"
+        "extern const unsigned char kEggKeyMasked[];\n"
+        "extern const unsigned char kEggKeyMask[];\n"
+        "extern const unsigned int kEggKeyLength;\n"
         + key_definition +
         "extern const char* const kEggBackend;\n"
         + backend_definition +
@@ -282,9 +318,20 @@ def _publish(assembly: Path, source: Path, destination: Path) -> Path:
     on the entry that writer recreated. Assembling elsewhere and renaming at the
     end keeps the published path either absent or complete.
     """
-    retire_tree(destination, trash=BUILD / "retired")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    os.replace(source, destination)
+    previous = assembly / f".previous-{destination.name}"
+    had_previous = destination.exists()
+    if had_previous:
+        if not destination.is_dir() or destination.is_symlink():
+            raise RuntimeError(f"Not a directory tree: {destination}")
+        _housekeeping(lambda: os.replace(destination, previous), path=destination)
+    try:
+        os.replace(source, destination)
+    except OSError:
+        if had_previous:
+            _housekeeping(lambda: os.replace(previous, destination), path=previous)
+        raise
+    # Delete the previous bundle only after the new one has been published.
     retire_tree(assembly, trash=BUILD / "retired")
     return destination
 
@@ -308,6 +355,26 @@ def _copy_supporting_trees(bundle_root: Path) -> None:
     # after the package is finished.
     copy_optional_tree(APP / "assets", bundle_root / "assets")
     copy_optional_tree(APP / "src" / "qml", bundle_root / "assets" / "qml")
+
+
+def _precompile_linux_stdlib(bundle: Path, target: Target) -> None:
+    """Build target bytecode before publication; the launcher stays read-only.
+
+    Only native Linux targets can run their interpreter here. Checked hashes
+    keep caches valid after relocation and detect edited sources; -d removes
+    the private assembly path from tracebacks.
+    """
+    if target.os != "linux" or target != host_target():
+        return
+    executable = runtime_executable(target)
+    for stdlib in sorted((bundle / "runtime" / "lib").glob("python*")):
+        if not stdlib.is_dir():
+            continue
+        subprocess.run([
+            str(executable), "-I", "-m", "compileall", "-q", "-f",
+            "--invalidation-mode", "checked-hash", "-d",
+            stdlib.relative_to(bundle).as_posix(), str(stdlib),
+        ], check=True)
 
 
 def package(target: Target, launcher: Path, trim=None) -> Path:
@@ -341,6 +408,7 @@ def package(target: Target, launcher: Path, trim=None) -> Path:
         # Resources are optional: a project without app/resources simply ships none.
         _copy_supporting_trees(out)
         bundle_native_dependencies(out, target)
+        _precompile_linux_stdlib(out, target)
         return _publish(assembly, out, DIST / name)
 
     app = assembly / f"{name}.app"

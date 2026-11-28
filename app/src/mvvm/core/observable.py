@@ -54,7 +54,7 @@ class ObservableProperty(Generic[T]):
             old_value=old_value,
             new_value=new_value
         )
-        for listener in self._listeners:
+        for listener in tuple(self._listeners):
             try:
                 listener(event)
             except Exception as e:

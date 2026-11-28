@@ -240,7 +240,10 @@ def expected_arch(target) -> str:
 # ucrtbase.dll). The guard is the right answer for that too, but the reader of
 # the error has to be told which door leads out of it, or the tempting move is
 # to weaken the guard instead.
-
+_ARCH_MISMATCH_REMEDY = (
+    " A foreign payload that no bundled image loads can be dropped with"
+    " [tool.ai_upper.native].exclude in the application pyproject.toml."
+)
 
 
 def compatible_with(arch: str, target_arch: str) -> bool:

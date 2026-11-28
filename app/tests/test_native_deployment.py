@@ -133,6 +133,14 @@ def test_linux_cross_build_never_reads_host_loader_cache(monkeypatch):
     assert deps.linux_host_libraries(TARGETS["linux-x86_64"]) == {}
 
 
+def test_linux_xcb_session_libraries_are_host_dependencies(closure_workspace, monkeypatch):
+    root = closure_workspace
+    _elf(root / "site-packages" / "libQt6XcbQpa.so.6")
+    monkeypatch.setattr(bundle, "dependency_names", lambda path, env: ["libICE.so.6", "libSM.so.6"])
+    result = bundle.bundle_native_dependencies(root, TARGETS["linux-x86_64"])
+    assert result == []
+
+
 def test_linux_closure_bundles_host_dependencies_transitively(closure_workspace, monkeypatch):
     root = closure_workspace
     owner = _elf(root / "site-packages" / "module.so")
@@ -535,7 +543,10 @@ def test_egg_leaves_native_inputs_visible_to_the_closure(closure_workspace, monk
     config = egg.EggConfig()
     archive = egg.pack_egg(site, root / "bundle" / egg.EGG_NAME, files, config)
     egg.remove_packed_files(site, files)
-    assert egg.read_egg_members(archive, config.key_hex) == tuple(files)
+    # The archive carries a manifest of per-member digests in addition to the
+    # application files themselves.
+    from ai_upper.egg_loader import MANIFEST_NAME
+    assert set(egg.read_egg_members(archive, config.key_hex)) == set(files) | {MANIFEST_NAME}
     assert (site / native.relative_to(source)).is_file()
     assert not compiled.exists()
     monkeypatch.setattr(bundle, "dependency_names", lambda path, env: ["libmissing.so.1"])
