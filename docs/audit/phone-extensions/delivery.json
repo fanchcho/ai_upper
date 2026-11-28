@@ -1,0 +1,161 @@
+{
+  "baseline": "1ad23b2febb53e981ff9092e2af00117d06998fd",
+  "boundary": "localhost LAN + localhost relay/model fixtures; real ChatHost, encrypted sockets, browser input and reopened stores; no physical phone/public relay",
+  "features": [
+    {
+      "feature": "upload",
+      "commit": "564d226da261c9496599931b4d780fef7ad93ab6",
+      "remote_after_push": "564d226da261c9496599931b4d780fef7ad93ab6",
+      "report": "docs/audit/phone-extensions/upload.md",
+      "evidence": "docs/audit/phone-extensions/phone-readback.json",
+      "runs": [
+        {
+          "theme": "dark",
+          "via": "lan",
+          "session": "sess_mwzpnvso_oobs6q"
+        },
+        {
+          "theme": "dark",
+          "via": "relay",
+          "session": "sess_mwzpo03x_kit6xp"
+        },
+        {
+          "theme": "light",
+          "via": "lan",
+          "session": "sess_mwzpo8j6_noln9e"
+        },
+        {
+          "theme": "light",
+          "via": "relay",
+          "session": "sess_mwzpocnr_81vw2r"
+        }
+      ]
+    },
+    {
+      "feature": "download",
+      "commit": "b5d2c3029cd27e74a7aa30813125dcc5f344c1db",
+      "remote_after_push": "b5d2c3029cd27e74a7aa30813125dcc5f344c1db",
+      "report": "docs/audit/phone-extensions/download.md",
+      "evidence": "docs/audit/phone-extensions/download/phone-readback.json",
+      "runs": [
+        {
+          "theme": "dark",
+          "via": "lan",
+          "session": "sess_mwzpsrp1_aheu5i"
+        },
+        {
+          "theme": "dark",
+          "via": "relay",
+          "session": "sess_mwzpswk5_gvqwe3"
+        },
+        {
+          "theme": "light",
+          "via": "lan",
+          "session": "sess_mwzpt573_vj5u89"
+        },
+        {
+          "theme": "light",
+          "via": "relay",
+          "session": "sess_mwzpt9tj_a3i0cy"
+        }
+      ]
+    },
+    {
+      "feature": "cards",
+      "commit": "b3885d0470fd1ce8207acd4aee6297ca98a72559",
+      "remote_after_push": "b3885d0470fd1ce8207acd4aee6297ca98a72559",
+      "report": "docs/audit/phone-extensions/cards.md",
+      "evidence": "docs/audit/phone-extensions/cards/phone-readback.json",
+      "runs": [
+        {
+          "theme": "dark",
+          "via": "lan",
+          "session": "sess_mwzq17r7_fc3lkg"
+        },
+        {
+          "theme": "dark",
+          "via": "relay",
+          "session": "sess_mwzq1f3a_qd3w28"
+        },
+        {
+          "theme": "light",
+          "via": "lan",
+          "session": "sess_mwzq1qb9_3hw7gw"
+        },
+        {
+          "theme": "light",
+          "via": "relay",
+          "session": "sess_mwzq1xn4_yirkne"
+        }
+      ]
+    },
+    {
+      "feature": "tasks",
+      "commit": "cd28ad9139eb76038ba3f94cd19800352fa5a2af",
+      "remote_after_push": "cd28ad9139eb76038ba3f94cd19800352fa5a2af",
+      "report": "docs/audit/phone-extensions/tasks.md",
+      "evidence": "docs/audit/phone-extensions/tasks/phone-readback.json",
+      "runs": [
+        {
+          "theme": "dark",
+          "via": "lan",
+          "session": "sess_mwzq5hi7_qmm574"
+        },
+        {
+          "theme": "dark",
+          "via": "relay",
+          "session": "sess_mwzq5o7y_djljtg"
+        },
+        {
+          "theme": "light",
+          "via": "lan",
+          "session": "sess_mwzq5zb8_kv3bck"
+        },
+        {
+          "theme": "light",
+          "via": "relay",
+          "session": "sess_mwzq66aa_mnvw4m"
+        }
+      ]
+    },
+    {
+      "feature": "install",
+      "commit": "b53779c3ac184531b773597c773d3037d44100b7",
+      "remote_after_push": "b53779c3ac184531b773597c773d3037d44100b7",
+      "report": "docs/audit/phone-extensions/install.md",
+      "evidence": "docs/audit/phone-extensions/install/phone-readback.json",
+      "runs": [
+        {
+          "theme": "dark",
+          "via": "lan",
+          "session": "sess_mwzqbs4o_9ditbd"
+        },
+        {
+          "theme": "dark",
+          "via": "relay",
+          "session": "sess_mwzqbxbd_i0sl58"
+        },
+        {
+          "theme": "light",
+          "via": "lan",
+          "session": "sess_mwzqc6ei_ylf769"
+        },
+        {
+          "theme": "light",
+          "via": "relay",
+          "session": "sess_mwzqcbgp_gxiu0u"
+        }
+      ]
+    }
+  ],
+  "regression": {
+    "passed": 1486,
+    "skipped": 9,
+    "failed": 0,
+    "exit_code": 0,
+    "seconds": 556.32,
+    "log": "docs/audit/phone-extensions/full.log",
+    "no_existing_test_changes": true
+  },
+  "external_concurrent_commits": []
+}
