@@ -1,0 +1,2 @@
+{"repo": "/tmp/ai-upper-branches-_sqzjcni/home/repo", "before": "26815b014a355b013390700dc8f1bd80fab5672e\trefs/heads/remote-delete", "after": "", "failure": "fatal: '/tmp/ai-upper-branches-_sqzjcni/home/missing.git' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."}
+file:///home/agent/shared_workspace/pc/ai_upper/app/src/qml/Main.qml:69: TypeError: Cannot read property 'saveError' of null

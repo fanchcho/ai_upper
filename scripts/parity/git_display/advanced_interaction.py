@@ -37,5 +37,5 @@ elif phase=='remote':
  git('branch','remote-delete');git('push','origin','remote-delete');data['before']=git('ls-remote','--heads','origin','remote-delete')
  open_branch('origin/remote-delete');click('gitMenu_delete');shot('confirm');click('gitBranchConfirm');data['after']=git('ls-remote','--heads','origin','remote-delete');assert data['before'] and not data['after']
  git('branch','remote-fail');git('push','origin','remote-fail');git('remote','set-url','origin',str(home/'missing.git'))
- open_branch('origin/remote-fail');click('gitMenu_delete');click('gitBranchConfirm');data['failure']=item('gitMenu').property('notice');assert data['failure'];shot('failure')
+ open_branch('origin/remote-fail');click('gitMenu_delete');click('gitBranchConfirm');data['failure']=item('gitMenu').property('notice');assert data['failure'];assert item('gitPromptError').property('visible');shot('failure')
 (out/f'{phase}-{theme}.json').write_text(json.dumps(data,ensure_ascii=False,indent=2));print(json.dumps(data,ensure_ascii=False));t.stop();w.close();e.deleteLater();pump()

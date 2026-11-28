@@ -1,0 +1,6 @@
+{
+  "repo": "/tmp/ai-upper-branches-9_m6j8fu/home/repo",
+  "before": "92e8263e469eb0ee55ffc9c1bee7dec85376ecbd\trefs/heads/remote-delete",
+  "after": "",
+  "failure": "fatal: '/tmp/ai-upper-branches-9_m6j8fu/home/missing.git' does not appear to be a git repository\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists."
+}
