@@ -1,0 +1,22 @@
+[
+  {
+    "theme": "dark",
+    "dbus": {
+      "CreateInputContext": 1,
+      "FocusIn": 15,
+      "ProcessKeyEvent": 14,
+      "CommitString": 1
+    },
+    "storedTitle": "你好"
+  },
+  {
+    "theme": "light",
+    "dbus": {
+      "CreateInputContext": 1,
+      "FocusIn": 16,
+      "ProcessKeyEvent": 13,
+      "CommitString": 1
+    },
+    "storedTitle": "你好"
+  }
+]

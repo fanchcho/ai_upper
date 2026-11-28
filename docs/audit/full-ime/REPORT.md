@@ -19,3 +19,29 @@ scripts/parity/full_app_ime_run.sh <唯一后缀>，先确保已有隔离依赖�
 默认Qt+系统fcitx的历史ABI错误仍保留../environment-closeout/ime-abi.log。这里通过的是用户指定的“系统Qt6.8.2+匹配插件”组合，不宣称默认Qt插件ABI已修复。无macOS或物理设备结论升级。
 
 退出时Main.qml saveError空对象警告仍保留；不影响本次输入和存储断言，但未伪称日志完全无警告。
+
+## 归档补充
+
+实际/tmp会话文件另复制为dark-session.json与light-session.json，均title=你好、messages=[]，与重开存储结果一致。qml-ime-dark-*是最早旧探针未建会话的失败中间证据，不能用于成功验收；成功证据文件名为dark/light-preedit.png、dark/light-commit.png及dark/light-readback.json。最早旧探针断言失败后未退出，已终止其本执行进程，失败日志仍保留。
+
+默认环境全量以final-tests.log/exit为准；full.log是修复过程中提前启动的探索轮，期间代码继续修改，不能作为最终版本验收。
+
+旧失败探针退出时仍持有被后续轮次复用的日志描述符，导致暗色日志末尾追加空洞/终止信息；已将污染副本保留.tmp/full-ime/late-writer-*，正式三份日志恢复为bdf9d26中已经提交且具有成功事件的原始快照。没有删改成功轮输出，退出后已确认无探针残留进程。
+
+## 最终回归
+
+AI_UPPER_HOME=/tmp/ai-upper-full-ime-final-tests PYTHONFAULTHANDLER=1 QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software LD_LIBRARY_PATH=$PWD/.tmp/wm/usr/lib/aarch64-linux-gnu .venv/bin/python -m pytest app/tests -q
+
+final-tests.log：1486 passed, 9 skipped in 558.50s (0:09:18)，0 failed；final-tests.exit=0。默认Qt6.11.2环境，无预载、无既有断言修改，无新段错误。两处历史段错误仍未归因，不宣称修复。探索轮full.log不作为最终验收。
+
+专题推送原文：
+```
+To github.com:fanchcho/ai_upper.git
+   8b432c0..bdf9d26  develop -> develop
+bdf9d26e9adc8e68ce1345354aaf30800abf7c03 refs/heads/develop
+To github.com:fanchcho/ai_upper.git
+   bdf9d26..302e069  develop -> develop
+302e0698c86d9a52c113afdac7599c433188df29 refs/heads/develop
+```
+
+未完成：默认Qt6.11.2匹配fcitx插件未提供（系统Qt6.8.2路径已验证）；无模型配置下消息回合未验证；正文/阴影未归零；历史Python段错误未归因。真手机/第二物理设备/公网relay移动网络/外部推送/iOS Android系统安装/F06 macOS均保持未验证。没有重做已验收功能。
