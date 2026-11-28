@@ -2,6 +2,7 @@ import shutil
 import subprocess
 import pytest
 from py_upper import linux_release as release
+from py_upper import package
 from py_upper.config import TARGETS
 
 
@@ -22,6 +23,7 @@ def test_release_replaces_only_target_artifacts(tmp_path, monkeypatch):
     unrelated = dist / 'other.tar.gz'
     unrelated.write_text('preserve')
     monkeypatch.setattr(release, 'BUILD', tmp_path / 'build')
+    monkeypatch.setattr(package, 'BUILD', tmp_path / 'build')
     monkeypatch.setattr(release, 'DIST', dist)
     monkeypatch.setattr(release, 'app_name', lambda: 'Upper')
     monkeypatch.setattr(shutil, 'which', lambda name: '/bin/' + name)

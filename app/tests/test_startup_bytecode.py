@@ -1,5 +1,6 @@
 import importlib.util
 import marshal
+from pathlib import Path
 import subprocess
 import sys
 
@@ -22,7 +23,7 @@ def test_linux_precompile_is_relocatable_and_rejects_stale_source(tmp_path, monk
         header = stream.read(16)
         code = marshal.load(stream)
     assert int.from_bytes(header[4:8], 'little') == 3  # checked hash
-    assert code.co_filename == 'runtime/lib/python3.13/startup_fixture.py'
+    assert Path(code.co_filename).as_posix() == 'runtime/lib/python3.13/startup_fixture.py'
     moved = tmp_path / 'installed'
     bundle.rename(moved)
     installed = moved / 'runtime/lib/python3.13'

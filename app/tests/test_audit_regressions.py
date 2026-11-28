@@ -2,6 +2,7 @@
 import gc
 import io
 import math
+import os
 import tarfile
 from types import SimpleNamespace
 import weakref
@@ -151,7 +152,8 @@ def test_runtime_archive_preserves_safe_links_and_executable(tmp_path):
     dest = tmp_path / 'extracted'
     safe_extract(archive, dest)
     assert (dest / 'python/bin/python').read_bytes() == b'bin'
-    assert (dest / 'python/bin/python3').stat().st_mode & 0o100
+    if os.name == 'posix':
+        assert (dest / 'python/bin/python3').stat().st_mode & 0o100
 
 
 def test_runtime_archive_requires_safe_filter_support(tmp_path, monkeypatch):
