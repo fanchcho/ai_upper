@@ -1,0 +1,5 @@
+fcitx5-frontend-qt6	5.1.9-1+b1
+libqt6core6t64:arm64	6.8.2+dfsg-9+deb13u2
+libqt6gui6:arm64	6.8.2+dfsg-9+deb13u2
+libqt6gui6t64	
+libqt6waylandclient6:arm64	6.8.2-4
