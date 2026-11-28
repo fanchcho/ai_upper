@@ -1,0 +1,166 @@
+[
+  {
+    "file": ".venv/bin/pyside6-qsb",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-android-deploy",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/cythonize",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-balsamui",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/py.test",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-lrelease",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-svgtoqml",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/cython",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmlimportscanner",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/cygdb",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-assistant",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-rcc",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qml",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/activate.fish",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmlls",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pytest",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/keyring",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-genpyi",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmlcachegen",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmlformat",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/activate",
+    "occurrences": 2
+  },
+  {
+    "file": ".venv/bin/cffi-gen-src",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-lupdate",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-balsam",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pip3",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pygmentize",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmllint",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-uic",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/idna",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-metaobjectdump",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/httpx",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qtpy2cpp",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pip3.13",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-project",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-designer",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-linguist",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/activate.csh",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/wheel",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-qmltyperegistrar",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pip",
+    "occurrences": 1
+  },
+  {
+    "file": ".venv/bin/pyside6-deploy",
+    "occurrences": 1
+  }
+]

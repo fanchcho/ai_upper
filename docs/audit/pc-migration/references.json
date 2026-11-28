@@ -1,0 +1,2022 @@
+[
+  {
+    "file": "app/tests/test_app_home.py",
+    "occurrences": 1,
+    "classification": "legacy-compatibility-fixture"
+  },
+  {
+    "file": "audit-tools/gen_migration_plan.py",
+    "occurrences": 1,
+    "classification": "active-generator"
+  },
+  {
+    "file": "docs/BUILD-PROGRESS.md",
+    "occurrences": 23,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/MIGRATION-PLAN.md",
+    "occurrences": 1,
+    "classification": "current-location"
+  },
+  {
+    "file": "docs/STAGE5-CLOSEOUT-REPORT.md",
+    "occurrences": 29,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/STAGE6-CLOSEOUT-REPORT.md",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/compare-identical.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/dark-secret-real-os-saved-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/deva-fields-dark.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/deva-fields-light.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/identical-fixture.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/ime-abi.log",
+    "occurrences": 26,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/light-secret-real-os-saved-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/pixel-attempt.log",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/pixel-compare.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/bot-detail/ui.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/chooser-dark.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/chooser-light.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/chooser.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/core-gdb.log",
+    "occurrences": 96,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/core-instructions.log",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/core-trap-string.log",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/gdb-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/gdb-extra.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel-dark.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel-light.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/dark-fixture.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/dark-mcp-bottom-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/dark-mcp-detail-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/light-fixture.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/light-mcp-bottom-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/pixel/light-mcp-detail-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/qml-ime-dark.log",
+    "occurrences": 27,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/qml-ime-light.log",
+    "occurrences": 27,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/qt-folder-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/qt-libs-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/deep-boundary/qt-qml-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/core-identity.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/glib-runtime.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/ime-abi.log",
+    "occurrences": 26,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/phase.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/schemas-compiler.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/environment-closeout/schemas-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/evidence/layout-before.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/evidence/menu-edges.log",
+    "occurrences": 8,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/evidence/parity-overwrite.diff",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/extensions-calibration.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/extensions-exact.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/extensions-finish-worklog.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/extensions-runtime-parity.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/feature-parity-gap.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/final-four/external-residual.diff",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/final-four/member-tools.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/final-four/report.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/final-port-report.md",
+    "occurrences": 15,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/full-ime/first-no-model.log",
+    "occurrences": 41,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/full-ime/qml-dark.log",
+    "occurrences": 36,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/full-ime/qml-light.log",
+    "occurrences": 36,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/full-ime/svg-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/icon-dpi.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/member-task-close/result.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/multi-selection-performance.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/ecm-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/fcitx-configure-2.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/fcitx-configure-5.log",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/fcitx-dev-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/fcitx-utils-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/qml-core-gdb.log",
+    "occurrences": 381,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/qml-dark.log",
+    "occurrences": 36,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/qml-light.log",
+    "occurrences": 36,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/next-boundary/xcb-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/parity-close/bots.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/parity-close/full.log",
+    "occurrences": 41,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/parity-close/nonmac.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards-ignore/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards-keep/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/cards-dark-lan.json",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/cards-dark-relay.json",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/cards-light-lan.json",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/cards-light-relay.json",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/phone-readback.json",
+    "occurrences": 12,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/cards/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/download/phone-readback.json",
+    "occurrences": 16,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/download/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/file-chooser-failure.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/install/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/tasks/run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/phone-extensions/upload-ui.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/dark-maps.log",
+    "occurrences": 323,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/dark-readback.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/first-light-timing/light-maps.log",
+    "occurrences": 323,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/first-light-timing/light-readback.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/first-light-timing/qml-light.log",
+    "occurrences": 91,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/independent-readback.json",
+    "occurrences": 52,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/light-maps.log",
+    "occurrences": 323,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/light-readback.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/new-plugin-ldd.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/new-plugin-loader.log",
+    "occurrences": 16,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/plugin-loader.log",
+    "occurrences": 12,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/qml-dark.log",
+    "occurrences": 92,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/qt611/qml-light.log",
+    "occurrences": 91,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/dark-fixture.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/dark-mcp-bottom-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/dark-mcp-detail-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/dark.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/light-fixture.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/light-mcp-bottom-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/light-mcp-detail-geometry.json",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/raster-backend/light.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/core-gdb.log",
+    "occurrences": 28,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested-session-second.log",
+    "occurrences": 43,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/dark-maps.log",
+    "occurrences": 287,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/dark-readback.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/dark.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/light-maps.log",
+    "occurrences": 287,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/light-readback.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/nested/light.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/phase-missing-pillow.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/receiver-instructions.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/receiver.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/wayland-light.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/weston-download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/weston-nested.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/weston-second.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-boundaries/weston.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-impl/isolated-final.log",
+    "occurrences": 33,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-impl/result.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-three/external-working-tree.patch",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-three/final.md",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remaining-three/regression-snapshot.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remote-qr-phone/compat-before.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remote-qr-phone/feishu-ui.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remote-qr-phone/full-regression.log",
+    "occurrences": 31,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/remote-qr-phone/phone-ui.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/cache/display-probe-1.log",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/followup/pytest-dispose.log",
+    "occurrences": 9,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/idle-prefetch/prefetch-1.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/idle-prefetch/prefetch-2.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/push-validation/final-1.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/push-validation/final-2.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "docs/audit/session-switch/push-validation/final-3.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/TEST-REPORT.md",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ab-closeout/b-image-metrics.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/audit-model-path/REPORT-CHAT-FILES.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chat-files/REPORT.md",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chat-files/probe-qml-deliverables.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chat-files/probe-qml-slots.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chat-files/qml-run.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chat-files/web-deliverables-probe.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-settings-custom-model.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-settings-identities.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-settings-mcp.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/after-settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/before-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/before-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/before-settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/interaction-debug.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-after-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-after-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-after-settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-before-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-before-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/pair-before-settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-first.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-interaction-shot.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-second.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-settings-custom-model.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-settings-identities.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-settings-mcp.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/chrome-upgrade/port/runtime-shot-settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/build-ci-deps.log",
+    "occurrences": 17,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/build-fixed-deps.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/build-run-local.log",
+    "occurrences": 30,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/build-run-local2.log",
+    "occurrences": 33,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/build-run-local3.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/mutate_all.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-closeout-report.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-dependency-closure-final.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-1-annotated.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-1-real38.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-2-levelmap.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-2-real38.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-3-real38.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-3-streamevent.log",
+    "occurrences": 8,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-4-real38.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-4-removesuffix.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-5-pydantic-field.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38-mutation-5-real38.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38fix-build.log",
+    "occurrences": 30,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38fix-build2.log",
+    "occurrences": 103,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38fix-build3.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/closeout/py38fix-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/run-step14-fixed-deps.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/run-step14-stale-deps.log",
+    "occurrences": 13,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/run-step14.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/step14-stale-launch.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-7476558/packaged-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-7476558/packaging-build-attempt1-ninja-missing.log",
+    "occurrences": 35,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-7476558/packaging-build.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-7476558/py38-runtime-smoke.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-round3/packaged-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/ci-fix/verify-round3/packaging-build.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/SEARCH-LOG.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/probe_click_split.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/probe_click_visible.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/probe_fidelity_geometry.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/probe_margin.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/conversation-picker-lag/probe_shot_long.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/e2e-live/logs/abort.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/e2e-live/logs/model.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/e2e-live/logs/reload.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/e2e-live/logs/tools.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-close/REPORT.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-closeout/REPORT.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-closeout/ci/poll_run.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-closeout/logs/00-inventory.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-closeout/run_deva.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-parity/scale-compare.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/final-parity/summary.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/after-app.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/after-chat.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/after-settings-general.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/before-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/before-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/controlled-after-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/controlled-after-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/controlled-before-chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/controlled-before-settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download3.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download4.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download5.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download6.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/download7.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/final-wm-actions.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/ldd.log",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/ldd2.log",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/ldd3.log",
+    "occurrences": 12,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/verified-wm-actions.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/frameless/xcb-tests.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/REPORT.md",
+    "occurrences": 15,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/cli-en-2.txt",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/cli-en-5.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/cli-results.json",
+    "occurrences": 16,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/cli-zh-CN-2.txt",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/cli-zh-CN-5.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/en-dark-shots-final.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/en-dark-shots.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/en-shots-final.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/en-shots.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/zh-CN-dark-shots-final.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/zh-CN-shots-final.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/zh-dark-shots.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/close/zh-shots.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-0.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-1.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-2.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-3.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-4.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-5.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-en-6.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-evidence.txt",
+    "occurrences": 28,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-results.json",
+    "occurrences": 28,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-0.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-1.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-2.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-3.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-4.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-5.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/cli-zh-CN-6.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/en-dark-widgets.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/en-widgets.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/live-settings-first.txt",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/pytest-first.txt",
+    "occurrences": 13,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/screenshots.md",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/screenshots.sha256",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/zh-CN-dark-widgets.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/final/zh-CN-widgets.txt",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/initial-git.txt",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/screenshots.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/i18n/verify.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/REPORT.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/logs/pytest-full-final.log",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/logs/pytest-segv-head-full.log",
+    "occurrences": 30,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c4_delete_dialog.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c5_ctx_confirm.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_band_diff.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_d1_region_attr.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_d2_edges.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_d3_attribution.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_d3_white_bbox.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_delta_histogram.py",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_ghead_font.py",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_model_picker.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/latest-parity/probes/c6_panel_subgeom.py",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/packaging/build-qml-default.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/packaging/build8.log",
+    "occurrences": 34,
+    "classification": "historical"
+  },
+  {
+    "file": "out/packaging/launch8.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/PARITY-CLOSEOUT.md",
+    "occurrences": 12,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/REPORT.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/REPORT2.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/body/body-report.json",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/dist-run.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/logs/regress-1.log",
+    "occurrences": 4,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/logs/regress-2.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/logs/regress-3.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/packaged/REPORT.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/packaged/mutate-style.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/packaged/mutate.log",
+    "occurrences": 6,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/packaged/mutation-build.log",
+    "occurrences": 30,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/packaged/run.log",
+    "occurrences": 37,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/run.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qml-shell/run2.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/REPORT.md",
+    "occurrences": 5,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/build-after.log",
+    "occurrences": 28,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/build-after2.log",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/build-final.log",
+    "occurrences": 31,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/build-final2.log",
+    "occurrences": 31,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/build-final3.log",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/du-before-repro.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/essentials-launch-py313.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/essentials-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/final-packaged-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/final-packaged-launch2.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/grep-residue-before.txt",
+    "occurrences": 14,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-remove/logs/pytest-workingtree-first.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-verify/logs/09-packaged-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-verify/logs/13-build-head.log",
+    "occurrences": 32,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-verify/logs/23-packaged-launch.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-verify/logs/38-du-before-after.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/qwebengine-verify/shots/settings-extensions.err",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/rename-ai-upper/post-rename-state.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/rename-ai-upper/qml-run-new-path.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/rename-ai-upper/symlink-and-checks.txt",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-chunking/REPORT.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-chunking/probe_chunk_matrix.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-chunking/probe_fidelity_chunked.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/REPORT.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_ab_alternating.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_ab_merge.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_attach_decisive.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_attach_layout.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_attach_lines.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_attach_target.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_attach_undo.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_cell_borders.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_chunk_sweep.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_highlight_phase2.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_indep_render.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_reorder_highlight.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_table_before_after.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_table_fast.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_table_matrix.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_table_scale.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt2/probe_tint_switch.py",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt3/REPORT.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt3/mutation_check.sh",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt3/rest_paths.log",
+    "occurrences": 18,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt3/shot.log",
+    "occurrences": 3,
+    "classification": "historical"
+  },
+  {
+    "file": "out/render-opt4/REPORT.md",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/e4/chat.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/e4/runtime.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/e4/search-none.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/e5/runtime.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/after.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/before.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/test-after.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/test-combination-rerun.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/test-scroll-baseline.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/long-mid/test-scroll.log",
+    "occurrences": 7,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/about-after.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/delete-confirm.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/general-after.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-about-final.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-about.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-extensions-final.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-extensions.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-general-final.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-general.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/residual-20261123/modal/settings-models.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-chat.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-delete-confirm.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-long-bottom.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-long-mid.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-search-none.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-settings-about.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-settings-extensions.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-settings-general.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/current-settings-models.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/failure.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/pytest-full.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/pytest-isolated.log",
+    "occurrences": 39,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/runtime-chat.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/runtime-long-mid.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/runtime-search-none.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/retest-20261123/logs/runtime.log",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/theme-settings/README-reproduce.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/theme-settings/targeted.log",
+    "occurrences": 2,
+    "classification": "historical"
+  },
+  {
+    "file": "out/workspace-mount/REPORT.md",
+    "occurrences": 1,
+    "classification": "historical"
+  },
+  {
+    "file": "out/workspace-mount/dialog-tree.log",
+    "occurrences": 1,
+    "classification": "historical"
+  }
+]

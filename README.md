@@ -498,3 +498,5 @@ CI 在每个原生平台上都跑同一套真实链路：单元测试 → 本地
 ## Git
 
 Git 历史完整保留，包括之前的 `v0.16.x` 版本；v0.17.0 是一次结构性重构，不改写旧 tag。`runtimes/`、`build/`、`dist/` 和 Python cache 均由 `.gitignore` 忽略。
+
+工程实体目录现为 `/home/agent/shared_workspace/pc/ai_upper`。旧 ai_upper 与 py_upper 入口保留软链；历史审计路径按当时事实保留，详见 docs/audit/pc-migration/MIGRATION.md。
