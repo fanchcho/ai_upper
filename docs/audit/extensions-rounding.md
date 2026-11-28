@@ -140,3 +140,9 @@ out/extensions-rounding/measurements.json：各位移下墨迹上下界、check 
 ## 2026-11-28 收口复核（不改生产）
 
 F85/F56/F41 等本轮功能变更没有触碰正文/阴影 token；`git diff` 对照 `ExtensionDetail.qml`、`Theme.qml`、`SoftShadow.qml` 仍无生产样式改动。复跑 `scripts/parity/closeout/phase-session.py` 与 `measure_phases.py` 的原始结果继续为：相位 0/1 六段文字部分差 1px，0.5 相位六段重合；亮色阴影 (700,700) 137 vs 138，暗色相位相关 1 灰阶。结论维持「引擎栅格化/合成，未归零」；没有加坐标补偿、没有改 token。完整原始日志 `out/final-port/phase-rerun.log`、`out/final-port/phase-measurements.json`。
+
+## 2026-11-28 环境收尾实际复跑（41e8894 应用代码）
+
+执行 `AI_UPPER_HOME=/tmp/ai-upper-environment-phase .venv/bin/python scripts/parity/closeout/phase-session.py`，随后 `python scripts/parity/closeout/measure_phases.py`。新日志与暗亮原始图归档 `docs/audit/environment-closeout/phase.log`、`phase-measure.log`、`phase/`。
+
+两主题相位0文字原版415/444/477/509/542/575，Qt416/445/477/510/543/575；相位0.5两端416/445/478/510/543/576；相位1原版416/445/478/510/543/576，Qt417/446/478/511/544/576。亮色阴影(700,700)相位0/.5分别137与138，相位1均137；暗色相位1蓝通道11与12，相位0/.5一致。再次支持相位相关栅格化/合成差异，未归零；没有发现可证的token错误，不改生产token、不加坐标补偿。

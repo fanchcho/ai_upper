@@ -1,0 +1,120 @@
+BUS unix:path=/home/agent/shared_workspace/ai_upper/.tmp/secret-service/runtime/dbus-7mNUaOpGrZ,guid=c5a19bc9c69e24403aa4430d6b0a3243
+KEYRING 0 GNOME_KEYRING_CONTROL=/home/agent/shared_workspace/ai_upper/.tmp/secret-service/runtime/keyring
+ 
+BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+REAL_OS_ROUNDTRIP_OK
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+REAL OS BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+EXACT_SCROLL 142.0
+REAL OS: real QTest input -> timer -> bridge -> vault -> GNOME Secret Service; Saved visible
+EXACT_SCROLL 142.0
+REAL OS: reopened detail Configured visible; real OS credential readback
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+REAL OS BACKEND keyring.backends.SecretService.Keyring (priority: 5)
+EXACT_SCROLL 142.0
+REAL OS: real QTest input -> timer -> bridge -> vault -> GNOME Secret Service; Saved visible
+EXACT_SCROLL 142.0
+REAL OS: reopened detail Configured visible; real OS credential readback
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+ELECTRON_COMMAND ['.tmp/wm/usr/bin/xvfb-run', '-a', '.tmp/extensions-complete/browser/node_modules/electron/dist/electron', '--no-sandbox', '--disable-gpu', '--password-store=gnome-libsecret', '--remote-debugging-port=9344', '--user-data-dir=/home/agent/shared_workspace/ai_upper/.tmp/feature-review/electron-profile', '/home/agent/shared_workspace/deva/apps/desktop/out/main/index.js']
+REAL_ELECTRON_SAFE_STORAGE 0 {"id":1,"result":{"result":{"type":"object","value":{"available":true,"saved":{"ok":true,"available":true},"has":true}}}}
+ 
+ROWS ["alphaSkill\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n+3","betaSkill","EchoMCP","FailureMCP","OffMCP"]
+INPUTS [{"type":"text","placeholder":"Search chats"},{"type":"text","placeholder":"e.g. npx, node, python…"},{"type":"text","placeholder":"Key"},{"type":"password","placeholder":"Enter secret value (stored encrypted)"}]
+BOTTOM dark { top: 142, max: 142 }
+SAVED dark true
+ROWS ["alphaSkill\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n+3","betaSkill","EchoMCP","FailureMCP","OffMCP"]
+INPUTS [{"type":"text","placeholder":"Search chats"},{"type":"text","placeholder":"e.g. npx, node, python…"},{"type":"text","placeholder":"Key"},{"type":"password","placeholder":"Configured (leave blank to keep)"}]
+BOTTOM light { top: 142, max: 142 }
+SAVED light true
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"cf-avstack\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":48,\"height\":20,\"top\":333.5,\"right\":526,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0.5px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(1px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":""}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select is-open\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"rgba(124, 124, 240, 0.157) 0px 0px 0px 2.95032px\",\"radius\":\"6px\"},{\"cls\":\"cf-avstack\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":48,\"height\":20,\"top\":333.5,\"right\":526,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"select-menu is-scroll\",\"rect\":{\"x\":469,\"y\":365.5,\"width\":510,\"height\":320,\"top\":365.5,\"right\":979,\"bottom\":685.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"rgba(0, 0, 0, 0.5) 0px 8px 30px 0px\",\"radius\":\"12px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":372.5,\"width\":494,\"height\":48.75,\"top\":372.5,\"right\":970,\"bottom\":421.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":484,\"y\":383.875,\"width\":26,\"height\":26,\"top\":383.875,\"right\":510,\"bottom\":409.875,\"left\":484},\"bg\":\"rgba(124, 124, 240, 0.2)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"select-menu__opt is-on is-active\",\"rect\":{\"x\":476,\"y\":460.75,\"width\":494,\"height\":38,\"top\":460.75,\"right\":970,\"bottom\":498.75,\"left\":476},\"bg\":\"rgba(255, 255, 255, 0.06)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt is-on\",\"rect\":{\"x\":476,\"y\":498.75,\"width\":494,\"height\":38,\"top\":498.75,\"right\":970,\"bottom\":536.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":536.75,\"width\":494,\"height\":48.75,\"top\":536.75,\"right\":970,\"bottom\":585.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt is-on\",\"rect\":{\"x\":476,\"y\":585.5,\"width\":494,\"height\":38,\"top\":585.5,\"right\":970,\"bottom\":623.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt is-on\",\"rect\":{\"x\":476,\"y\":623.5,\"width\":494,\"height\":38,\"top\":623.5,\"right\":970,\"bottom\":661.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt is-on\",\"rect\":{\"x\":476,\"y\":661.5,\"width\":494,\"height\":38,\"top\":661.5,\"right\":970,\"bottom\":699.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":699.5,\"width\":494,\"height\":48.75,\"top\":699.5,\"right\":970,\"bottom\":748.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"rgba(124, 124, 240, 0.16) 0px 0px 0px 3px\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(124, 124, 240, 0.2)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select is-open\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"rgba(124, 124, 240, 0.16) 0px 0px 0px 3px\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(124, 124, 240, 0.2)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"select-menu is-scroll\",\"rect\":{\"x\":469,\"y\":365.5,\"width\":510,\"height\":320,\"top\":365.5,\"right\":979,\"bottom\":685.5,\"left\":469},\"bg\":\"rgb(42, 42, 46)\",\"shadow\":\"rgba(0, 0, 0, 0.5) 0px 8px 30px 0px\",\"radius\":\"12px\"},{\"cls\":\"select-menu__opt has-sub is-on is-active\",\"rect\":{\"x\":476,\"y\":372.5,\"width\":494,\"height\":48.75,\"top\":372.5,\"right\":970,\"bottom\":421.25,\"left\":476},\"bg\":\"rgba(255, 255, 255, 0.06)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":484,\"y\":383.875,\"width\":26,\"height\":26,\"top\":383.875,\"right\":510,\"bottom\":409.875,\"left\":484},\"bg\":\"rgba(124, 124, 240, 0.2)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":460.75,\"width\":494,\"height\":38,\"top\":460.75,\"right\":970,\"bottom\":498.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":498.75,\"width\":494,\"height\":38,\"top\":498.75,\"right\":970,\"bottom\":536.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":536.75,\"width\":494,\"height\":48.75,\"top\":536.75,\"right\":970,\"bottom\":585.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":585.5,\"width\":494,\"height\":38,\"top\":585.5,\"right\":970,\"bottom\":623.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":623.5,\"width\":494,\"height\":38,\"top\":623.5,\"right\":970,\"bottom\":661.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":661.5,\"width\":494,\"height\":38,\"top\":661.5,\"right\":970,\"bottom\":699.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":699.5,\"width\":494,\"height\":48.75,\"top\":699.5,\"right\":970,\"bottom\":748.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0.5px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(1px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0.5px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(1px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":""}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select is-open\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"rgba(91, 91, 214, 0.1) 0px 0px 0px 2.95032px\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"select-menu is-scroll\",\"rect\":{\"x\":469,\"y\":365.5,\"width\":510,\"height\":320,\"top\":365.5,\"right\":979,\"bottom\":685.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"rgba(0, 0, 0, 0.12) 0px 6px 24px 0px\",\"radius\":\"12px\"},{\"cls\":\"select-menu__opt has-sub is-on is-active\",\"rect\":{\"x\":476,\"y\":372.5,\"width\":494,\"height\":48.75,\"top\":372.5,\"right\":970,\"bottom\":421.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0.043)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":484,\"y\":383.875,\"width\":26,\"height\":26,\"top\":383.875,\"right\":510,\"bottom\":409.875,\"left\":484},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":460.75,\"width\":494,\"height\":38,\"top\":460.75,\"right\":970,\"bottom\":498.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":498.75,\"width\":494,\"height\":38,\"top\":498.75,\"right\":970,\"bottom\":536.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":536.75,\"width\":494,\"height\":48.75,\"top\":536.75,\"right\":970,\"bottom\":585.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":585.5,\"width\":494,\"height\":38,\"top\":585.5,\"right\":970,\"bottom\":623.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":623.5,\"width\":494,\"height\":38,\"top\":623.5,\"right\":970,\"bottom\":661.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":661.5,\"width\":494,\"height\":38,\"top\":661.5,\"right\":970,\"bottom\":699.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":699.5,\"width\":494,\"height\":48.75,\"top\":699.5,\"right\":970,\"bottom\":748.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"rgba(91, 91, 214, 0.1) 0px 0px 0px 3px\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"undefined"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"[{\"cls\":\"select is-open\",\"rect\":{\"x\":469,\"y\":327.5,\"width\":510,\"height\":32,\"top\":327.5,\"right\":979,\"bottom\":359.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"rgba(91, 91, 214, 0.1) 0px 0px 0px 3px\",\"radius\":\"6px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":478,\"y\":333.5,\"width\":20,\"height\":20,\"top\":333.5,\"right\":498,\"bottom\":353.5,\"left\":478},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"ext-detail__md\",\"rect\":{\"x\":469,\"y\":398,\"width\":510,\"height\":275,\"top\":398,\"right\":979,\"bottom\":673,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"none\",\"radius\":\"6px\"},{\"cls\":\"md\",\"rect\":{\"x\":486,\"y\":411,\"width\":468,\"height\":2300.875,\"top\":411,\"right\":954,\"bottom\":2711.875,\"left\":486},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"0px\"},{\"cls\":\"select-menu is-scroll\",\"rect\":{\"x\":469,\"y\":365.5,\"width\":510,\"height\":320,\"top\":365.5,\"right\":979,\"bottom\":685.5,\"left\":469},\"bg\":\"rgb(255, 255, 255)\",\"shadow\":\"rgba(0, 0, 0, 0.12) 0px 6px 24px 0px\",\"radius\":\"12px\"},{\"cls\":\"select-menu__opt has-sub is-on is-active\",\"rect\":{\"x\":476,\"y\":372.5,\"width\":494,\"height\":48.75,\"top\":372.5,\"right\":970,\"bottom\":421.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0.043)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-icon\",\"rect\":{\"x\":484,\"y\":383.875,\"width\":26,\"height\":26,\"top\":383.875,\"right\":510,\"bottom\":409.875,\"left\":484},\"bg\":\"rgba(91, 91, 214, 0.12)\",\"shadow\":\"none\",\"radius\":\"50%\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":460.75,\"width\":494,\"height\":38,\"top\":460.75,\"right\":970,\"bottom\":498.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":498.75,\"width\":494,\"height\":38,\"top\":498.75,\"right\":970,\"bottom\":536.75,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":536.75,\"width\":494,\"height\":48.75,\"top\":536.75,\"right\":970,\"bottom\":585.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":585.5,\"width\":494,\"height\":38,\"top\":585.5,\"right\":970,\"bottom\":623.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":623.5,\"width\":494,\"height\":38,\"top\":623.5,\"right\":970,\"bottom\":661.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt\",\"rect\":{\"x\":476,\"y\":661.5,\"width\":494,\"height\":38,\"top\":661.5,\"right\":970,\"bottom\":699.5,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"},{\"cls\":\"select-menu__opt has-sub\",\"rect\":{\"x\":476,\"y\":699.5,\"width\":494,\"height\":48.75,\"top\":699.5,\"right\":970,\"bottom\":748.25,\"left\":476},\"bg\":\"rgba(0, 0, 0, 0)\",\"shadow\":\"none\",\"radius\":\"8px\"}]"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(0.5px)"}}}
+ 
+{"id":1,"result":{"result":{"type":"string","value":"translateY(1px)"}}}
+ 
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+MCP detail wheel -0.0 -> 185.0 height 673.5 view 489.0
+TEXT SHIFT 0 PySide6.QtCore.QPointF(486.000000, 411.000000)
+TEXT SHIFT 0.5 PySide6.QtCore.QPointF(486.000000, 411.500000)
+TEXT SHIFT 1 PySide6.QtCore.QPointF(486.000000, 412.000000)
+MENU_CAP_AND_KEYBOARD_OK
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
+INITIAL runtime {'status': 'connected', 'tools': [{'name': 'echo', 'description': 'Echo input'}, {'name': 'read_file', 'description': 'Read a file from the workspace and return the complete contents with line numbers for review.'}, {'name': 'list_files', 'description': 'List workspace files'}], 'lastError': ''}
+VISIBLE list states ['Connected', 'Connection failed']
+MCP detail wheel -0.0 -> 185.0 height 673.5 view 489.0
+TEXT SHIFT 0 PySide6.QtCore.QPointF(486.000000, 411.000000)
+TEXT SHIFT 0.5 PySide6.QtCore.QPointF(486.000000, 411.500000)
+TEXT SHIFT 1 PySide6.QtCore.QPointF(486.000000, 412.000000)
+MENU_CAP_AND_KEYBOARD_OK
+file:///home/agent/shared_workspace/ai_upper/app/src/qml/Main.qml:66: TypeError: Cannot read property 'saveError' of null
