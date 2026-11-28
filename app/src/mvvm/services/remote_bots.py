@@ -30,9 +30,11 @@ def RemoteBots(shell):
         changed=Signal()
         status=Signal(str,str)
         delivered=Signal(object)
+        scanChanged=Signal('QVariantMap')
     
         def __init__(self,shell):
             super().__init__(shell);self.shell=shell;self.workers={};self.states={};self.turns={};self.streams={};self.link_cancel=threading.Event();self.pairing={}
+            self.scan_cancel=threading.Event();self.scan_id=''
             self.delivered.connect(self.receive,QtCore.Qt.QueuedConnection)
             QtCore.QCoreApplication.instance().aboutToQuit.connect(self.close)
             for bot in self.list():
@@ -90,6 +92,20 @@ def RemoteBots(shell):
         def cancelPair(self,identity):
             self.pairing.pop(identity,None)
             self.status.emit('配对邀请已取消','')
+
+        @Slot()
+        def startFeishuScan(self):
+            from mvvm.services.feishu_onboard import scan
+            self.cancelScan();self.scan_cancel=threading.Event();self.scan_id=uuid.uuid4().hex
+            current=self.scan_id;cancel=self.scan_cancel
+            self.scanChanged.emit({'status':'loading'})
+            threading.Thread(target=scan,args=(cancel,lambda result:self.delivered.emit(
+                {'kind':'scan','scanId':current,**result})),daemon=True).start()
+
+        @Slot()
+        def cancelScan(self):
+            self.scan_cancel.set();self.scan_id=''
+            self.scanChanged.emit({'status':'cancelled'})
 
         @Slot(result=str)
         def webPairTicket(self):
@@ -174,6 +190,20 @@ def RemoteBots(shell):
         @Slot(object)
         def receive(self,data):
             kind=data['kind']
+            if kind=='scan':
+                if data['scanId']!=self.scan_id or self.scan_cancel.is_set():return
+                if data['status']=='done':
+                    result=data['result'];identity='feishu_'+uuid.uuid4().hex[:12]
+                    if not self.shell._vault.set_secret('remote:'+identity+':appSecret',result['client_secret']).get('ok'):
+                        self.scanChanged.emit({'status':'error','error':'系统密钥存储不可用，无法安全保存机器人凭据。'});return
+                    owner=result.get('user_info',{}).get('open_id')
+                    bot={'id':identity,'platform':'feishu','name':result.get('name') or 'Deva','enabled':True,
+                         'createdAt':int(time.time()*1000),'replyMode':'final','scope':{'mode':'all','sessions':[],'personas':[]},
+                         'users':[{'id':owner,'chatId':'','pairedAt':int(time.time()*1000)}] if owner else [],'bindings':{},
+                         'settings':{'appId':result['client_id'],'domain':data['domain']}}
+                    self.save(self.list()+[bot]);self.start(bot)
+                    self.scanChanged.emit({'status':'done','botId':identity});return
+                self.scanChanged.emit({k:v for k,v in data.items() if k not in ('kind','scanId')});return
             if kind=='feishu-event':
                 event=data['event'].get('event',{});message=event.get('message',{});sender=event.get('sender',{}).get('sender_id',{}).get('open_id','')
                 if message.get('chat_type')!='p2p' or message.get('message_type')!='text':return
@@ -200,8 +230,13 @@ def RemoteBots(shell):
                             if user['id']==data['userId']:user.pop('push',None)
                     self.save(rows)
                 self.status.emit(json.dumps(data['result'],ensure_ascii=False),'');return
-            if kind=='link':self.status.emit('',data['url']);return
-            if kind=='link-error':self.status.emit(data['message'],'');return
+            if kind=='link':
+                from mvvm.services.qr_image import qr_image
+                self.scanChanged.emit({'status':'waiting','url':data['url'],'qr':qr_image(data['url']),'expiresAt':int((time.time()+600)*1000)})
+                self.status.emit('',data['url']);return
+            if kind=='link-error':
+                self.scanChanged.emit({'status':'error','error':data['message']})
+                self.status.emit(data['message'],'');return
             if kind=='state':
                 self.states[data['id']]=data['state']
                 # Feishu owns its reconnect timer; keep it available for disable/close.
@@ -216,7 +251,7 @@ def RemoteBots(shell):
                     'enabled':True,'createdAt':int(time.time()*1000),'replyMode':'final','scope':{'mode':'all','personas':[],'sessions':[]},
                     'users':[{'id':str(user['id']),'name':user.get('first_name',''),'chatId':data['chat'],'pairedAt':int(time.time()*1000)}],
                     'bindings':{},'settings':{'botId':me['id'],'username':me['username']}}
-                self.save(rows+[bot]);self.start(bot);self.status.emit('','');return
+                self.save(rows+[bot]);self.start(bot);self.scanChanged.emit({'status':'done','botId':identity});self.status.emit('','');return
             if kind!='message':return
             rows=self.list();bot=next((b for b in rows if b['id']==data['id']),None);m=data['message']
             if not bot or not bot.get('enabled') or m.get('chat',{}).get('type')!='private':return
@@ -314,6 +349,7 @@ def RemoteBots(shell):
     
         def close(self):
             self.link_cancel.set()
+            self.scan_cancel.set()
             for stop in self.workers.values():stop.set()
 
     return Controller(shell)

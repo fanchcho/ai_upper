@@ -1,0 +1,243 @@
+{
+  "boundary": "local HTTP registration fixture, NOT real Feishu app creation",
+  "results": [
+    {
+      "theme": "dark",
+      "home": "/tmp/ai-upper-scan-699257e43b0d4d59983cc263a93203c7/home",
+      "created": {
+        "id": "feishu_306a5c8fc4a7",
+        "platform": "feishu",
+        "name": "Deva",
+        "enabled": true,
+        "createdAt": 1795825205322,
+        "replyMode": "final",
+        "scope": {
+          "mode": "all",
+          "sessions": [],
+          "personas": []
+        },
+        "users": [
+          {
+            "id": "ou_local_owner",
+            "chatId": "",
+            "pairedAt": 1795825205322
+          }
+        ],
+        "bindings": {},
+        "settings": {
+          "appId": "cli_local_protocol_fixture",
+          "domain": "feishu"
+        }
+      },
+      "denied": {
+        "error": "{\"error\": \"access_denied\", \"error_description\": \"LOCAL FIXTURE: user rejected creation\"}",
+        "status": "denied"
+      },
+      "cancelled": true,
+      "invite_cancel_and_regenerate": true,
+      "deleted": true
+    },
+    {
+      "theme": "light",
+      "home": "/tmp/ai-upper-scan-cf64adcb61d04fa3bc3f73afc78f8f74/home",
+      "created": {
+        "id": "feishu_d3042f45e8ca",
+        "platform": "feishu",
+        "name": "Deva",
+        "enabled": true,
+        "createdAt": 1795825212771,
+        "replyMode": "final",
+        "scope": {
+          "mode": "all",
+          "sessions": [],
+          "personas": []
+        },
+        "users": [
+          {
+            "id": "ou_local_owner",
+            "chatId": "",
+            "pairedAt": 1795825212771
+          }
+        ],
+        "bindings": {},
+        "settings": {
+          "appId": "cli_local_protocol_fixture",
+          "domain": "feishu"
+        }
+      },
+      "denied": {
+        "error": "{\"error\": \"access_denied\", \"error_description\": \"LOCAL FIXTURE: user rejected creation\"}",
+        "status": "denied"
+      },
+      "cancelled": true,
+      "invite_cancel_and_regenerate": true,
+      "deleted": true
+    }
+  ],
+  "http_requests": [
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "begin"
+      ],
+      "archetype": [
+        "PersonalAgent"
+      ],
+      "auth_method": [
+        "client_secret"
+      ],
+      "request_user_info": [
+        "open_id"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    },
+    {
+      "action": [
+        "poll"
+      ],
+      "device_code": [
+        "fixture"
+      ]
+    }
+  ]
+}

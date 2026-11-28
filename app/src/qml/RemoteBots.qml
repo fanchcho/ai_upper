@@ -12,6 +12,7 @@ Rectangle {
     property string query: ""
     property string selectedId: ""
     property var selected: null
+    property var scan: ({status:"idle"})
     function select(id) { selectedId=id; selected=rows.find(function(r){return r.id===id}) || null }
 
     color: Theme.bg
@@ -22,6 +23,7 @@ Rectangle {
         target: root.api
         function onChanged() { root.refresh() }
         function onStatus(error,link) { root.error = error; root.link = link }
+        function onScanChanged(state) { root.scan=state; if(state.status==="done")root.select(state.botId) }
     }
     SettingsButton { x: 20; y: 20; text: I18n.t("common.back"); onClicked: root.shell.page = "chat" }
     Text { x: 120; y: 26; text: "机器人"; font.pixelSize: 20; color: Theme.fg }
@@ -33,6 +35,7 @@ Rectangle {
             SettingsButton { text: "取消配对"; onClicked: { root.api.cancelLink(); root.link = "" } }
         }
         Row { spacing:8
+            SettingsButton { objectName:"feishuScan"; text:"扫码创建飞书应用"; onClicked:root.api.startFeishuScan() }
             SettingsField { id:feishuId; objectName:"feishuId"; width:200; placeholderText:"飞书 App ID" }
             SettingsField { id:feishuSecret; objectName:"feishuSecret"; width:200; placeholderText:"App Secret"; echoMode:TextInput.Password }
             ComboBox { id:feishuDomain; objectName:"feishuDomain"; width:110; model:["feishu","lark"] }
@@ -78,5 +81,17 @@ Rectangle {
         api: root.api
         onBack: root.select("")
         onAction: function(action,value) { root.act(root.selectedId,action,value) }
+    }
+    Rectangle {
+        anchors.centerIn:parent; width:480; height:520; z:10
+        visible:["loading","waiting","error","denied","expired"].indexOf(root.scan.status)>=0
+        color:Theme.bgPanel; border.color:Theme.border; radius:Theme.radiusSm
+        Column { anchors.fill:parent; anchors.margins:20; spacing:12
+            Text { text:"扫码创建 / 认领机器人"; color:Theme.fg; font.pixelSize:20 }
+            Image { objectName:"botScanQr"; width:320; height:320; anchors.horizontalCenter:parent.horizontalCenter; source:root.scan.qr || ""; smooth:false }
+            Text { objectName:"botScanStatus"; width:parent.width; wrapMode:Text.Wrap; color:Theme.fg
+                text:root.scan.error || (root.scan.status==="waiting" ? "请在应用中扫码并确认；二维码仅本次有效" : "正在获取二维码…") }
+            SettingsButton { objectName:"botScanCancel"; text:"关闭 / 取消扫码"; onClicked:{root.api.cancelScan();root.api.cancelLink();root.scan={status:"cancelled"}} }
+        }
     }
 }
