@@ -893,6 +893,7 @@ Item {
 
                 Rectangle {
                     id: detailWarn
+                    objectName: "providerMissingKeyWarning"
                     visible: modPane.detail.warn === true
                     y: detailHead.y + detailHead.height + 12   // head 下间距 20 + `.provider-warn` margin-top -8
                     width: parent.width
@@ -900,7 +901,8 @@ Item {
                     radius: Theme.radiusSm
                     color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.08)
                     border.width: 1
-                    border.color: Qt.rgba(Theme.warning.r, Theme.warning.g, Theme.warning.b, 0.4)
+                    // CSS color-mix(warning 40%, border), not translucent warning over the fill.
+                    border.color: Qt.rgba(Theme.warning.r * 0.4 + Theme.border.r * 0.6, Theme.warning.g * 0.4 + Theme.border.g * 0.6, Theme.warning.b * 0.4 + Theme.border.b * 0.6, 1)
 
                     Row {
                         id: detailWarnRow
@@ -914,7 +916,9 @@ Item {
                         }
                         Text {
                             text: modPane.text.keyMissingWarn || ""
-                            color: Theme.fgMuted
+                            // Original warning text in dark mode; light warning has <3:1
+                            // contrast, so use the existing foreground token for readable copy.
+                            color: Theme.dark ? Theme.warning : Theme.fg
                             font.family: Theme.sansFamily
                             font.pixelSize: 12
                         }

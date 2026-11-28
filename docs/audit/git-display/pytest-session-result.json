@@ -1,0 +1,7 @@
+{
+  "session_id": 3653,
+  "chunk_id": "d4c91e",
+  "exit_code": 143,
+  "output": "",
+  "observation": "pytest-full.log has complete 1486 passed, 9 skipped summary; no fatal traceback; session exit did not report 0"
+}

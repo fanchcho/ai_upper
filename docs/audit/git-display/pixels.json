@@ -1,0 +1,476 @@
+{
+  "dark": {
+    "before": {
+      "samples": {
+        "panel": {
+          "xy": [
+            870,
+            600
+          ],
+          "hex": "#2a2a2e"
+        },
+        "status_panel": {
+          "xy": [
+            900,
+            460
+          ],
+          "hex": "#252528"
+        },
+        "status_border": {
+          "xy": [
+            880,
+            500
+          ],
+          "hex": "#2f2f33"
+        },
+        "separator": {
+          "xy": [
+            1200,
+            806
+          ],
+          "hex": "#2f2f33"
+        },
+        "input_background": {
+          "xy": [
+            1100,
+            910
+          ],
+          "hex": "#ffffff"
+        },
+        "input_left_border": {
+          "xy": [
+            880,
+            900
+          ],
+          "hex": "#ababab"
+        },
+        "secondary_border": {
+          "xy": [
+            1200,
+            830
+          ],
+          "hex": "#3d3d42"
+        },
+        "primary_fill": {
+          "xy": [
+            1680,
+            890
+          ],
+          "hex": "#2a2a2e"
+        },
+        "danger_fill": {
+          "xy": [
+            1060,
+            814
+          ],
+          "hex": "#2a2a2e"
+        },
+        "warning_fill": {
+          "xy": [
+            1100,
+            844
+          ],
+          "hex": "#363227"
+        },
+        "warning_border": {
+          "xy": [
+            1100,
+            832
+          ],
+          "hex": "#7b6422"
+        },
+        "placeholder": {
+          "xy": [
+            956,
+            905
+          ],
+          "hex": "#808080"
+        },
+        "input_actual_border": {
+          "xy": [
+            880,
+            908
+          ],
+          "hex": "#ababab"
+        },
+        "input_actual_background": {
+          "xy": [
+            1110,
+            908
+          ],
+          "hex": "#ffffff"
+        },
+        "warning_text": {
+          "xy": [
+            1031,
+            856
+          ],
+          "hex": "#a1a1aa"
+        }
+      },
+      "input_rect": [
+        440.0,
+        442.0,
+        120.0,
+        24.0
+      ],
+      "warning_contrast": 4.989,
+      "placeholder_contrast": 3.949
+    },
+    "after": {
+      "samples": {
+        "panel": {
+          "xy": [
+            870,
+            600
+          ],
+          "hex": "#2a2a2e"
+        },
+        "status_panel": {
+          "xy": [
+            900,
+            460
+          ],
+          "hex": "#252528"
+        },
+        "status_border": {
+          "xy": [
+            880,
+            500
+          ],
+          "hex": "#2f2f33"
+        },
+        "separator": {
+          "xy": [
+            1200,
+            806
+          ],
+          "hex": "#2f2f33"
+        },
+        "input_background": {
+          "xy": [
+            1100,
+            910
+          ],
+          "hex": "#2a2a2e"
+        },
+        "input_left_border": {
+          "xy": [
+            880,
+            900
+          ],
+          "hex": "#3d3d42"
+        },
+        "secondary_border": {
+          "xy": [
+            1200,
+            830
+          ],
+          "hex": "#3d3d42"
+        },
+        "primary_fill": {
+          "xy": [
+            1680,
+            890
+          ],
+          "hex": "#7c7cf0"
+        },
+        "danger_fill": {
+          "xy": [
+            1060,
+            814
+          ],
+          "hex": "#ff6b6b"
+        },
+        "warning_fill": {
+          "xy": [
+            1100,
+            844
+          ],
+          "hex": "#363227"
+        },
+        "warning_border": {
+          "xy": [
+            1100,
+            832
+          ],
+          "hex": "#816b29"
+        },
+        "placeholder": {
+          "xy": [
+            907,
+            909
+          ],
+          "hex": "#a1a1aa"
+        },
+        "input_actual_border": {
+          "xy": [
+            880,
+            914
+          ],
+          "hex": "#3d3d42"
+        },
+        "input_actual_background": {
+          "xy": [
+            1168,
+            914
+          ],
+          "hex": "#2a2a2e"
+        },
+        "warning_text": {
+          "xy": [
+            1031,
+            856
+          ],
+          "hex": "#fcc419"
+        }
+      },
+      "input_rect": [
+        440.0,
+        440.0,
+        149.0,
+        34.0
+      ],
+      "warning_contrast": 7.945,
+      "placeholder_contrast": 5.577
+    },
+    "original_light_warning_contrast": null
+  },
+  "light": {
+    "before": {
+      "samples": {
+        "panel": {
+          "xy": [
+            870,
+            600
+          ],
+          "hex": "#ffffff"
+        },
+        "status_panel": {
+          "xy": [
+            900,
+            460
+          ],
+          "hex": "#f7f7f8"
+        },
+        "status_border": {
+          "xy": [
+            880,
+            500
+          ],
+          "hex": "#e6e6ea"
+        },
+        "separator": {
+          "xy": [
+            1200,
+            806
+          ],
+          "hex": "#e6e6ea"
+        },
+        "input_background": {
+          "xy": [
+            1100,
+            910
+          ],
+          "hex": "#ffffff"
+        },
+        "input_left_border": {
+          "xy": [
+            880,
+            900
+          ],
+          "hex": "#ababab"
+        },
+        "secondary_border": {
+          "xy": [
+            1200,
+            830
+          ],
+          "hex": "#d5d5db"
+        },
+        "primary_fill": {
+          "xy": [
+            1680,
+            890
+          ],
+          "hex": "#ffffff"
+        },
+        "danger_fill": {
+          "xy": [
+            1060,
+            814
+          ],
+          "hex": "#ffffff"
+        },
+        "warning_fill": {
+          "xy": [
+            1100,
+            844
+          ],
+          "hex": "#f5efe6"
+        },
+        "warning_border": {
+          "xy": [
+            1100,
+            832
+          ],
+          "hex": "#ebca99"
+        },
+        "placeholder": {
+          "xy": [
+            956,
+            905
+          ],
+          "hex": "#808080"
+        },
+        "input_actual_border": {
+          "xy": [
+            880,
+            908
+          ],
+          "hex": "#ababab"
+        },
+        "input_actual_background": {
+          "xy": [
+            1110,
+            908
+          ],
+          "hex": "#ffffff"
+        },
+        "warning_text": {
+          "xy": [
+            1031,
+            856
+          ],
+          "hex": "#5c5c66"
+        }
+      },
+      "input_rect": [
+        440.0,
+        442.0,
+        120.0,
+        24.0
+      ],
+      "warning_contrast": 5.781,
+      "placeholder_contrast": 3.949
+    },
+    "after": {
+      "samples": {
+        "panel": {
+          "xy": [
+            870,
+            600
+          ],
+          "hex": "#ffffff"
+        },
+        "status_panel": {
+          "xy": [
+            900,
+            460
+          ],
+          "hex": "#f7f7f8"
+        },
+        "status_border": {
+          "xy": [
+            880,
+            500
+          ],
+          "hex": "#e6e6ea"
+        },
+        "separator": {
+          "xy": [
+            1200,
+            806
+          ],
+          "hex": "#e6e6ea"
+        },
+        "input_background": {
+          "xy": [
+            1100,
+            910
+          ],
+          "hex": "#ffffff"
+        },
+        "input_left_border": {
+          "xy": [
+            880,
+            900
+          ],
+          "hex": "#d5d5db"
+        },
+        "secondary_border": {
+          "xy": [
+            1200,
+            830
+          ],
+          "hex": "#d5d5db"
+        },
+        "primary_fill": {
+          "xy": [
+            1680,
+            890
+          ],
+          "hex": "#5b5bd6"
+        },
+        "danger_fill": {
+          "xy": [
+            1060,
+            814
+          ],
+          "hex": "#e5484d"
+        },
+        "warning_fill": {
+          "xy": [
+            1100,
+            844
+          ],
+          "hex": "#f5efe6"
+        },
+        "warning_border": {
+          "xy": [
+            1100,
+            832
+          ],
+          "hex": "#e1c091"
+        },
+        "placeholder": {
+          "xy": [
+            907,
+            909
+          ],
+          "hex": "#5c5c66"
+        },
+        "input_actual_border": {
+          "xy": [
+            880,
+            914
+          ],
+          "hex": "#d5d5db"
+        },
+        "input_actual_background": {
+          "xy": [
+            1168,
+            914
+          ],
+          "hex": "#ffffff"
+        },
+        "warning_text": {
+          "xy": [
+            1031,
+            856
+          ],
+          "hex": "#1f1f24"
+        }
+      },
+      "input_rect": [
+        440.0,
+        440.0,
+        149.0,
+        34.0
+      ],
+      "warning_contrast": 14.356,
+      "placeholder_contrast": 6.608
+    },
+    "original_light_warning_contrast": 2.494
+  }
+}

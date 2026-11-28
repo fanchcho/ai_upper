@@ -1,0 +1,61 @@
+{
+  "boundary": "Read-only original CSS rendered in Electron component specimen, not original client state",
+  "electron": "33.4.11",
+  "chrome": "130.0.6723.191",
+  "styles": {
+    ".provider-warn": {
+      "background": "color(srgb 0.85098 0.52549 0.0431373 / 0.08)",
+      "border": "color(srgb 0.881569 0.751373 0.567843)",
+      "text": "rgb(217, 134, 11)",
+      "height": "36px",
+      "padding": "8px 10px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(217, 134, 11)"
+    },
+    ".input": {
+      "background": "rgb(255, 255, 255)",
+      "border": "rgb(213, 213, 219)",
+      "text": "rgb(31, 31, 36)",
+      "height": "32px",
+      "padding": "0px 12px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(117, 117, 117)"
+    },
+    ".btn": {
+      "background": "rgb(255, 255, 255)",
+      "border": "rgb(213, 213, 219)",
+      "text": "rgb(31, 31, 36)",
+      "height": "30px",
+      "padding": "0px 12px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(31, 31, 36)"
+    },
+    ".btn--primary": {
+      "background": "rgb(91, 91, 214)",
+      "border": "rgb(91, 91, 214)",
+      "text": "rgb(255, 255, 255)",
+      "height": "30px",
+      "padding": "0px 12px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(255, 255, 255)"
+    },
+    ".btn--danger": {
+      "background": "rgb(229, 72, 77)",
+      "border": "rgb(229, 72, 77)",
+      "text": "rgb(255, 255, 255)",
+      "height": "30px",
+      "padding": "0px 12px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(255, 255, 255)"
+    },
+    ".btn--ghost": {
+      "background": "rgba(0, 0, 0, 0)",
+      "border": "rgba(0, 0, 0, 0)",
+      "text": "rgb(31, 31, 36)",
+      "height": "30px",
+      "padding": "0px 12px",
+      "borderWidth": "1px",
+      "placeholder": "rgb(31, 31, 36)"
+    }
+  }
+}

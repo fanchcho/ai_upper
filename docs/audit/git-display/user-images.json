@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/home/agent/.hermes-web-ui/upload/default/dcf8eecef6de5557.png",
+    "size": [
+      1134,
+      140
+    ],
+    "sha256": "6a25988e6187e3a3b8eac50c18c31e0a68ef11c5420b25758e9455b40face6c5"
+  },
+  {
+    "path": "/home/agent/.hermes-web-ui/upload/default/84978b1ef406aa95.png",
+    "size": [
+      1022,
+      1596
+    ],
+    "sha256": "14a5bc0c8eff3e17ff08fd9e53ba6a6a23e75b134ead283d94cc3aa3809fc78a"
+  }
+]

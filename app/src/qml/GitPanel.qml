@@ -1,6 +1,7 @@
 // Git 面板最小子集：状态/暂存/提交/分支/日志（原版 GitWidget.tsx 的常用操作）。
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
+import QtQuick.Layouts
 import "."
 
 Popup {
@@ -18,6 +19,8 @@ Popup {
     property string diffText: ""
     property string branchName: ""
     property string notice: ""
+    property bool remoteSucceeded: false
+    onNoticeChanged: remoteSucceeded = false
     property string genReq: ""
     property bool generating: false
     width: 480; height: 760; padding: 12
@@ -67,16 +70,18 @@ Popup {
         var result = action === "fetch" ? shellBridge.gitFetch(repoRoot)
                    : action === "pull" ? shellBridge.gitPull(repoRoot)
                    : shellBridge.gitPush(repoRoot, status.upstream ? "" : status.branch)
-        if (result.ok) reload(); else notice = result.error || "远程操作失败"
+        notice = result.ok ? action.charAt(0).toUpperCase() + action.slice(1) + " 完成" : result.error || "远程操作失败"
+        remoteSucceeded = result.ok === true
+        if (result.ok) reload()
     }
 
     Column {
         width: parent.width
         spacing: 8
-        Row {
+        RowLayout {
             width: parent.width
-            Text { text: "Git · " + ((root.status.branch || "") || "detached"); color: Theme.fg; font.pixelSize: 18; font.weight: 700; width: parent.width - 60 }
-            SettingsButton { objectName: "gitRefresh"; text: "刷新"; onClicked: root.reload() }
+            Text { text: "Git · " + ((root.status.branch || "") || "detached"); color: Theme.fg; font.pixelSize: 18; font.weight: 700; Layout.fillWidth: true }
+            SettingsButton { implicitHeight: 34; objectName: "gitRefresh"; text: "刷新"; onClicked: root.reload() }
         }
         Text { text: "分支：" + root.branchesText; color: Theme.fgMuted; font.pixelSize: 12; width: parent.width; elide: Text.ElideRight }
         Rectangle {
@@ -94,47 +99,52 @@ Popup {
         }
         Row {
             width: parent.width; spacing: 8
-            SettingsButton { objectName: "gitStageAll"; text: "全部暂存"; onClicked: root.stageAll() }
-            SettingsButton { objectName: "gitDiscardAll"; text: "丢弃全部"; destructive: true; onClicked: root.discardAll() }
-            SettingsButton { objectName: "gitFetch"; text: "Fetch"; onClicked: root.runRemote("fetch") }
-            SettingsButton { objectName: "gitPull"; text: "Pull"; onClicked: root.runRemote("pull") }
-            SettingsButton { objectName: "gitPush"; text: "Push"; onClicked: root.runRemote("push") }
+            SettingsButton { implicitHeight: 34; objectName: "gitStageAll"; text: "全部暂存"; onClicked: root.stageAll() }
+            SettingsButton { implicitHeight: 34; objectName: "gitDiscardAll"; text: "丢弃全部"; destructive: true; onClicked: root.discardAll() }
+            SettingsButton { implicitHeight: 34; objectName: "gitFetch"; text: "Fetch"; onClicked: root.runRemote("fetch") }
+            SettingsButton { implicitHeight: 34; objectName: "gitPull"; text: "Pull"; onClicked: root.runRemote("pull") }
+            SettingsButton { implicitHeight: 34; objectName: "gitPush"; text: "Push"; onClicked: root.runRemote("push") }
+        }
+        RowLayout {
+            width: parent.width; spacing: 6
+            SettingsField { id: gitName; objectName: "gitIdentityName"; Layout.fillWidth: true; Layout.preferredWidth: 120; Layout.minimumWidth: 48; Layout.preferredHeight: 34; placeholderText: "user.name"; color: Theme.fg; font.pixelSize: 12 }
+            SettingsField { id: gitEmail; objectName: "gitIdentityEmail"; Layout.fillWidth: true; Layout.preferredWidth: 180; Layout.minimumWidth: 48; Layout.preferredHeight: 34; placeholderText: "user.email"; color: Theme.fg; font.pixelSize: 12 }
+            SettingsButton { implicitHeight: 34; objectName: "gitSetConfig"; primary: true; text: "保存身份"; onClicked: { var r = shellBridge.gitSetConfig(repoRoot, gitName.text, gitEmail.text, false); if (!r.ok) root.notice = r.message || r.reason } }
         }
         Row {
             width: parent.width; spacing: 6
-            TextField { id: gitName; objectName: "gitIdentityName"; width: 120; placeholderText: "user.name"; color: Theme.fg; font.pixelSize: 12 }
-            TextField { id: gitEmail; objectName: "gitIdentityEmail"; width: 180; placeholderText: "user.email"; color: Theme.fg; font.pixelSize: 12 }
-            SettingsButton { objectName: "gitSetConfig"; text: "保存身份"; onClicked: { var r = shellBridge.gitSetConfig(repoRoot, gitName.text, gitEmail.text, false); if (!r.ok) root.notice = r.message || r.reason } }
+            SettingsButton { implicitHeight: 34; objectName: "gitGenerateMessage"; ghost: true; text: root.generating ? "生成中…" : "AI 提交信息"; enabled: !root.generating; onClicked: { root.genReq = "git-" + Date.now(); root.generating = true; root.notice = ""; if (!shellBridge.generateCommitMessage(repoRoot, root.genReq)) { root.generating = false; root.notice = "无法启动生成" } } }
+            SettingsButton { implicitHeight: 34; objectName: "gitCancelMessage"; ghost: true; text: "取消生成"; enabled: root.generating; onClicked: shellBridge.cancelCommitMessage(root.genReq) }
         }
-        Row {
-            width: parent.width; spacing: 6
-            SettingsButton { objectName: "gitGenerateMessage"; text: root.generating ? "生成中…" : "AI 提交信息"; enabled: !root.generating; onClicked: { root.genReq = "git-" + Date.now(); root.generating = true; root.notice = ""; if (!shellBridge.generateCommitMessage(repoRoot, root.genReq)) { root.generating = false; root.notice = "无法启动生成" } } }
-            SettingsButton { objectName: "gitCancelMessage"; text: "取消生成"; enabled: root.generating; onClicked: shellBridge.cancelCommitMessage(root.genReq) }
-        }
-        TextField {
-            id: commitMessage; objectName: "gitCommitMessage"; width: parent.width
+        SettingsField {
+            id: commitMessage; objectName: "gitCommitMessage"; width: parent.width; height: 34
             placeholderText: "提交说明"; text: root.message
             onTextChanged: root.message = text
             color: Theme.fg; font.pixelSize: 12
-            background: Rectangle { color: Theme.bgPanel; border.color: Theme.border; radius: Theme.radiusSm }
         }
-        Row {
+        RowLayout {
             width: parent.width; spacing: 8
-            TextField { id: branchName; objectName: "gitBranchName"; width: 140; placeholderText: "分支名"; text: root.branchName; onTextChanged: root.branchName = text; color: Theme.fg; font.pixelSize: 12 }
-            SettingsButton { objectName: "gitCheckoutBranch"; text: "切换分支"; onClicked: { var r = shellBridge.gitCheckout(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error || r.reason } }
-            SettingsButton { objectName: "gitCreateBranch"; text: "新建分支"; onClicked: { var r = shellBridge.gitCreateBranch(repoRoot, root.branchName); if (r.ok) { root.branchName = ""; root.reload() } else root.notice = r.error } }
-            SettingsButton { objectName: "gitMerge"; text: "合并"; onClicked: { var r = shellBridge.gitMerge(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error } }
+            SettingsField { id: branchName; objectName: "gitBranchName"; Layout.fillWidth: true; Layout.preferredWidth: 140; Layout.minimumWidth: 48; Layout.preferredHeight: 34; placeholderText: "分支名"; text: root.branchName; onTextChanged: root.branchName = text; color: Theme.fg; font.pixelSize: 12 }
+            SettingsButton { implicitHeight: 34; objectName: "gitCheckoutBranch"; text: "切换分支"; onClicked: { var r = shellBridge.gitCheckout(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error || r.reason } }
+            SettingsButton { implicitHeight: 34; objectName: "gitCreateBranch"; primary: true; text: "新建分支"; onClicked: { var r = shellBridge.gitCreateBranch(repoRoot, root.branchName); if (r.ok) { root.branchName = ""; root.reload() } else root.notice = r.error } }
+            SettingsButton { implicitHeight: 34; objectName: "gitMerge"; text: "合并"; onClicked: { var r = shellBridge.gitMerge(repoRoot, root.branchName); if (r.ok) root.reload(); else root.notice = r.error } }
         }
         TextArea { objectName: "gitDiffText"; width: parent.width; height: 80; readOnly: true; text: root.diffText; color: Theme.fg; font.pixelSize: 11; wrapMode: TextArea.NoWrap; background: Rectangle { color: Theme.bgPanel } }
-        Text { text: "最近提交：" + ((root.commits || []).slice(0, 3).join(" · ")); color: Theme.fgMuted; font.pixelSize: 11; width: parent.width; elide: Text.ElideRight }
-        Text { text: "远程：" + ((root.remotes || []).join(", ") || "无"); color: Theme.fgMuted; font.pixelSize: 12; width: parent.width; elide: Text.ElideRight }
-        Row {
-            width: parent.width; spacing: 6
-            TextField { id: remoteName; objectName: "gitRemoteName"; width: 100; placeholderText: "remote 名"; text: root.remoteName; onTextChanged: root.remoteName = text; color: Theme.fg; font.pixelSize: 12 }
-            TextField { id: remoteUrl; objectName: "gitRemoteUrl"; width: 180; placeholderText: "URL"; text: root.remoteUrl; onTextChanged: root.remoteUrl = text; color: Theme.fg; font.pixelSize: 12 }
-            SettingsButton { objectName: "gitAddRemote"; text: "添加"; onClicked: { var r = shellBridge.gitAddRemote(repoRoot, root.remoteName, root.remoteUrl); if (r.ok) { root.remoteName = ""; root.remoteUrl = ""; root.reload() } else root.notice = r.error } }
-            SettingsButton { objectName: "gitRemoveRemote"; text: "删除"; onClicked: { var r = shellBridge.gitRemoveRemote(repoRoot, root.remoteName); if (r.ok) root.reload(); else root.notice = r.error } }
+        Text {
+            objectName: "gitRecentCommits"
+            text: "最近提交：" + (root.commits.length ? root.commits.slice(0, 3).map(function (entry) {
+                return entry.short + " · " + entry.subject
+            }).join("\n") : "暂无提交")
+            color: Theme.fgMuted; font.pixelSize: 12; width: parent.width; wrapMode: Text.Wrap
         }
-        Text { objectName: "gitNotice"; text: root.notice; color: Theme.danger; font.pixelSize: 12; visible: text.length > 0 }
+        Text { text: "远程：" + ((root.remotes || []).join(", ") || "无"); color: Theme.fgMuted; font.pixelSize: 12; width: parent.width; elide: Text.ElideRight }
+        RowLayout {
+            width: parent.width; spacing: 6
+            SettingsField { id: remoteName; objectName: "gitRemoteName"; Layout.fillWidth: true; Layout.preferredWidth: 100; Layout.minimumWidth: 48; Layout.preferredHeight: 34; placeholderText: "remote 名"; text: root.remoteName; onTextChanged: root.remoteName = text; color: Theme.fg; font.pixelSize: 12 }
+            SettingsField { id: remoteUrl; objectName: "gitRemoteUrl"; Layout.fillWidth: true; Layout.preferredWidth: 180; Layout.minimumWidth: 48; Layout.preferredHeight: 34; placeholderText: "URL"; text: root.remoteUrl; onTextChanged: root.remoteUrl = text; color: Theme.fg; font.pixelSize: 12 }
+            SettingsButton { implicitHeight: 34; objectName: "gitAddRemote"; primary: true; text: "添加"; onClicked: { var r = shellBridge.gitAddRemote(repoRoot, root.remoteName, root.remoteUrl); if (r.ok) { root.remoteName = ""; root.remoteUrl = ""; root.reload() } else root.notice = r.error } }
+            SettingsButton { implicitHeight: 34; objectName: "gitRemoveRemote"; destructive: true; text: "删除"; onClicked: { var r = shellBridge.gitRemoveRemote(repoRoot, root.remoteName); if (r.ok) root.reload(); else root.notice = r.error } }
+        }
+        Text { objectName: "gitNotice"; text: root.notice; color: root.remoteSucceeded ? Theme.success : Theme.danger; width: parent.width; wrapMode: Text.Wrap; font.pixelSize: 12; visible: text.length > 0 }
     }
 }

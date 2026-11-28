@@ -1,0 +1,26 @@
+{
+  "baseline": "dd3f91ebf411c74aa3957f46866a486a2bd28cdf",
+  "application_sha256": {
+    "app/src/qml/GitPanel.qml": "584213a5210146a8f5cca0cc7509dfe4c408a943611c29ac131f4794e112c2d0",
+    "app/src/qml/SettingsButton.qml": "3d2d853748b4527da795f4a66741b70c58af1cf0e10a163d75a29e0311560c66",
+    "app/src/qml/SettingsModal.qml": "6de0dfba231c2ed23c084a9a5a307b4c04ffe59f98b46f4b6c4651ec08b05111"
+  },
+  "pytest": {
+    "passed": 1486,
+    "skipped": 9,
+    "failed": 0,
+    "seconds": 557.93,
+    "exit_code": null,
+    "exec_session_exit_code": 143,
+    "exit_status_note": "Full pytest pass summary exists; tool session ended 143. Cause not established. No claim of normal process exit."
+  },
+  "tests_diff": "",
+  "environment": {
+    "QPA": "offscreen",
+    "backend": "software",
+    "DPR": 2,
+    "app_data": "/tmp/ai-upper-git-display-*",
+    "external_model_turn": false,
+    "remote": "local bare git fixture"
+  }
+}
