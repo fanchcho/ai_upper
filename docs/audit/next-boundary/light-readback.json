@@ -1,0 +1,25 @@
+{
+  "committedText": "你好",
+  "qt": "6.8.2",
+  "preedit": [
+    "n",
+    "ni",
+    "ni h",
+    "ni ha",
+    "ni hao",
+    ""
+  ],
+  "storedTitle": "你好",
+  "messages": [
+    {
+      "role": "user",
+      "text": "你好"
+    },
+    {
+      "role": "assistant",
+      "text": "本地 fixture 收到你好"
+    }
+  ],
+  "sessionId": "qml-mwztajx72b7861",
+  "path": "/tmp/ai-upper-full-ime-light-local-1/data/chats/qml-mwztajx72b7861.json"
+}
