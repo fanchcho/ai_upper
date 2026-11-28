@@ -1,0 +1,2 @@
+{"repo": "/tmp/ai-upper-branches-_uer324_/home/repo", "scope": 1, "name": "Scope User", "email": "scope@example.invalid", "commit": "identity verified"}
+file:///home/agent/shared_workspace/pc/ai_upper/app/src/qml/Main.qml:69: TypeError: Cannot read property 'saveError' of null

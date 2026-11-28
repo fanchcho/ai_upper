@@ -130,8 +130,9 @@ Popup {
     Text {text:"配置 Git 提交身份";color:Theme.fg}
     SettingsField {id:name;objectName:"gitNewIdentityName";placeholderText:"user.name";Layout.fillWidth:true}
     SettingsField {id:email;objectName:"gitNewIdentityEmail";placeholderText:"user.email";Layout.fillWidth:true}
-    CheckBox {id:globalScope;text:"全局（所有仓库）"}
-    SettingsButton {text:"保存并验证";primary:true;enabled:name.text.trim().length>0&&email.text.trim().length>0;onClicked:if(root.result(shellBridge.gitSetConfig(root.repoRoot,name.text,email.text,globalScope.checked),"身份已保存并验证，请重试提交"))root.identityNeeded=false}
+    Text {text:"作用范围";color:Theme.fg}
+    ComboBox {id:globalScope;objectName:"gitIdentityScope";Layout.fillWidth:true;implicitHeight:32;model:["当前仓库","全局（所有仓库）"];font.pixelSize:13;palette.text:Theme.fg;palette.buttonText:Theme.fg;palette.base:Theme.bgElevated;palette.button:Theme.bgElevated;background:Rectangle{color:Theme.bgElevated;border.color:Theme.borderStrong;radius:Theme.radiusSm}}
+    SettingsButton {objectName:"gitIdentitySave";text:"保存并验证";primary:true;enabled:name.text.trim().length>0&&email.text.trim().length>0;onClicked:if(root.result(shellBridge.gitSetConfig(root.repoRoot,name.text,email.text,globalScope.currentIndex===1),"身份已保存并验证，请重试提交"))root.identityNeeded=false}
    }
    Text {Layout.fillWidth:true;text:root.notice;color:Theme.fgMuted;wrapMode:Text.Wrap;visible:text.length>0}
    RowLayout {

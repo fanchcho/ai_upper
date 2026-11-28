@@ -37,6 +37,16 @@ elif phase=='merge':
  git('checkout','-b','conflict');(repo/'a').write_text('branch');git('commit','-am','branch change');git('checkout','main');(repo/'a').write_text('main');git('commit','-am','main change')
  click('gitChip');click('gitMenu_branches');click('gitMenu_merge');click('gitMenu_branch_conflict');click('gitBranchConfirm');shot('conflict');data['files']=item('gitConflictFiles').property('text');assert '\na' in data['files']
  click('gitConflictAbort');data['status']=git('status','--porcelain');r=subprocess.run(['git','-C',str(repo),'rev-parse','--verify','MERGE_HEAD'],capture_output=True,text=True);data['merge_head']={'exit':r.returncode,'stderr':r.stderr};assert data['status']=='' and r.returncode!=0
+elif phase=='identity':
+ os.environ['GIT_CONFIG_GLOBAL']=str(home/'global.gitconfig');os.environ['GIT_CONFIG_NOSYSTEM']='1'
+ git('config','--unset','user.name');git('config','--unset','user.email');git('config','user.useConfigOnly','true');(repo/'a').write_text('identity change')
+ click('gitChip');click('gitMenu_commit');assert not item('gitNewIdentityName').property('visible')
+ def typein(n,value):
+  click(n);QTest.keyClick(w,Qt.Key_A,Qt.ControlModifier)
+  for ch in value:QTest.keyClick(w,ch)
+  pump()
+ typein('gitNewCommitMessage','identity verified');click('gitNewSubmit');assert item('gitNewIdentityName').property('visible');shot('missing')
+ typein('gitNewIdentityName','Scope User');typein('gitNewIdentityEmail','scope@example.invalid');click('gitIdentityScope');QTest.keyClick(w,Qt.Key_Down);QTest.keyClick(w,Qt.Key_Return);pump();data['scope']=item('gitIdentityScope').property('currentIndex');assert data['scope']==1;shot('scope');click('gitIdentitySave');data['name']=git('config','--global','--get','user.name');data['email']=git('config','--global','--get','user.email');assert data['name']=='Scope User';assert not item('gitNewIdentityName').property('visible');click('gitNewSubmit');data['commit']=git('log','-1','--format=%s');assert data['commit']=='identity verified'
 elif phase=='remote':
  git('branch','remote-delete');git('push','origin','remote-delete');data['before']=git('ls-remote','--heads','origin','remote-delete')
  open_branch('origin/remote-delete');click('gitMenu_delete');shot('confirm');click('gitBranchConfirm');data['after']=git('ls-remote','--heads','origin','remote-delete');assert data['before'] and not data['after']
