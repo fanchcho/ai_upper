@@ -1,0 +1,4 @@
+Get:1 http://deb.debian.org/debian trixie/main arm64 libqt6svg6 arm64 6.8.2-3 [167 kB]
+Get:2 http://deb.debian.org/debian trixie/main arm64 qt6-svg-plugins arm64 6.8.2-3 [31.9 kB]
+Fetched 198 kB in 0s (538 kB/s)
+W: Download is performed unsandboxed as root as file '/home/agent/shared_workspace/ai_upper/.tmp/full-ime/libqt6svg6_6.8.2-3_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)

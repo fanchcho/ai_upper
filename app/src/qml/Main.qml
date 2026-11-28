@@ -40,7 +40,6 @@ ApplicationWindow {
              | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
              | Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint
            : Qt.Window | Qt.FramelessWindowHint
-    topPadding: 0
     width: 1280
     height: 820
     minimumWidth: 940
@@ -48,7 +47,11 @@ ApplicationWindow {
     title: I18n.t("finish.brand")
     color: Theme.bg
 
-    Component.onCompleted: if (shellBridge) sidebarWidth = shellBridge.sidebarWidth()
+    Component.onCompleted: {
+        // ApplicationWindow safe-area padding exists only since Qt 6.9.
+        if ("topPadding" in window) window["topPadding"] = 0
+        if (shellBridge) sidebarWidth = shellBridge.sidebarWidth()
+    }
     TurnListPopup {
         id: turnList
         onChosen: function(turn) {

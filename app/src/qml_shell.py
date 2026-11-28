@@ -687,8 +687,12 @@ class ShellBridge(QtCore.QObject):
             )
         )
 
-    def emit(self, payload: Dict[str, Any]) -> None:
+    def emit(self, payload: Dict[str, Any], *args: Any) -> None:
         """宿主回调（可能来自回合线程）：只入队，GUI 线程的 tick 再动界面。"""
+        # Older PySide6 dispatches bound Qt signals through QObject.emit.
+        if isinstance(payload, str):
+            super().emit(payload, *args)
+            return
         self._events.put(payload)
 
     # ── QML → Python ──────────────────────────────────────────────────────
